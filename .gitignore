@@ -71,3 +71,6 @@ Thumbs.db
 !.yarn/versions
 .DS_Store
 *.pem
+
+.vercel
+.env*
