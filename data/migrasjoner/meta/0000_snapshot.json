@@ -1,0 +1,1131 @@
+{
+  "id": "16c1c7be-edbc-4c29-8294-35d9d3a2f6c7",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.avsnitt": {
+      "name": "avsnitt",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tekst_id": {
+          "name": "tekst_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nummer": {
+          "name": "nummer",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "innhold": {
+          "name": "innhold",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "er_overskrift": {
+          "name": "er_overskrift",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "er_generert_etikett": {
+          "name": "er_generert_etikett",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "avsnitt_tekst_idx": {
+          "name": "avsnitt_tekst_idx",
+          "columns": [
+            {
+              "expression": "tekst_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "avsnitt_tekst_id_tekst_id_fk": {
+          "name": "avsnitt_tekst_id_tekst_id_fk",
+          "tableFrom": "avsnitt",
+          "tableTo": "tekst",
+          "columnsFrom": [
+            "tekst_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "avsnitt_tekst_nummer_unik": {
+          "name": "avsnitt_tekst_nummer_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tekst_id",
+            "nummer"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.begrep": {
+      "name": "begrep",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "begrepssett_id": {
+          "name": "begrepssett_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uttrykk": {
+          "name": "uttrykk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "forklaring": {
+          "name": "forklaring",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "viktighetsrangering": {
+          "name": "viktighetsrangering",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kildeavsnitt_id": {
+          "name": "kildeavsnitt_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "merking": {
+          "name": "merking",
+          "type": "oevekort_merking",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "begrep_begrepssett_idx": {
+          "name": "begrep_begrepssett_idx",
+          "columns": [
+            {
+              "expression": "begrepssett_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "begrep_begrepssett_id_begrepssett_id_fk": {
+          "name": "begrep_begrepssett_id_begrepssett_id_fk",
+          "tableFrom": "begrep",
+          "tableTo": "begrepssett",
+          "columnsFrom": [
+            "begrepssett_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "begrep_kildeavsnitt_id_avsnitt_id_fk": {
+          "name": "begrep_kildeavsnitt_id_avsnitt_id_fk",
+          "tableFrom": "begrep",
+          "tableTo": "avsnitt",
+          "columnsFrom": [
+            "kildeavsnitt_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.begrepssett": {
+      "name": "begrepssett",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tekst_id": {
+          "name": "tekst_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "promptversjon": {
+          "name": "promptversjon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modell": {
+          "name": "modell",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "begrepssett_tekst_id_tekst_id_fk": {
+          "name": "begrepssett_tekst_id_tekst_id_fk",
+          "tableFrom": "begrepssett",
+          "tableTo": "tekst",
+          "columnsFrom": [
+            "tekst_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "begrepssett_tekst_unik": {
+          "name": "begrepssett_tekst_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tekst_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.fagsamtale": {
+      "name": "fagsamtale",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tekst_id": {
+          "name": "tekst_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "promptversjon": {
+          "name": "promptversjon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modell": {
+          "name": "modell",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avsluttet": {
+          "name": "avsluttet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "fagsamtale_tekst_idx": {
+          "name": "fagsamtale_tekst_idx",
+          "columns": [
+            {
+              "expression": "tekst_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fagsamtale_tekst_id_tekst_id_fk": {
+          "name": "fagsamtale_tekst_id_tekst_id_fk",
+          "tableFrom": "fagsamtale",
+          "tableTo": "tekst",
+          "columnsFrom": [
+            "tekst_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forekomst": {
+      "name": "forekomst",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "begrep_id": {
+          "name": "begrep_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avsnitt_id": {
+          "name": "avsnitt_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start": {
+          "name": "start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slutt": {
+          "name": "slutt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "forekomst_avsnitt_idx": {
+          "name": "forekomst_avsnitt_idx",
+          "columns": [
+            {
+              "expression": "avsnitt_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "forekomst_begrep_id_begrep_id_fk": {
+          "name": "forekomst_begrep_id_begrep_id_fk",
+          "tableFrom": "forekomst",
+          "tableTo": "begrep",
+          "columnsFrom": [
+            "begrep_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "forekomst_avsnitt_id_avsnitt_id_fk": {
+          "name": "forekomst_avsnitt_id_avsnitt_id_fk",
+          "tableFrom": "forekomst",
+          "tableTo": "avsnitt",
+          "columnsFrom": [
+            "avsnitt_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "forekomst_unik": {
+          "name": "forekomst_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "begrep_id",
+            "avsnitt_id",
+            "start"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.minnevers": {
+      "name": "minnevers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tekst_id": {
+          "name": "tekst_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "innhold": {
+          "name": "innhold",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "er_suno_prompt": {
+          "name": "er_suno_prompt",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "promptversjon": {
+          "name": "promptversjon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modell": {
+          "name": "modell",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "minnevers_tekst_idx": {
+          "name": "minnevers_tekst_idx",
+          "columns": [
+            {
+              "expression": "tekst_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "minnevers_tekst_id_tekst_id_fk": {
+          "name": "minnevers_tekst_id_tekst_id_fk",
+          "tableFrom": "minnevers",
+          "tableTo": "tekst",
+          "columnsFrom": [
+            "tekst_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.morsmaalsvalg": {
+      "name": "morsmaalsvalg",
+      "schema": "",
+      "columns": {
+        "konto_id": {
+          "name": "konto_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "spraak": {
+          "name": "spraak",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nivaa": {
+          "name": "nivaa",
+          "type": "morsmaal_nivaa",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endret": {
+          "name": "endret",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quiz": {
+      "name": "quiz",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tekst_id": {
+          "name": "tekst_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "promptversjon": {
+          "name": "promptversjon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modell": {
+          "name": "modell",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "quiz_tekst_id_tekst_id_fk": {
+          "name": "quiz_tekst_id_tekst_id_fk",
+          "tableFrom": "quiz",
+          "tableTo": "tekst",
+          "columnsFrom": [
+            "tekst_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quiz_tekst_unik": {
+          "name": "quiz_tekst_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tekst_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quizforsoek": {
+      "name": "quizforsoek",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "quiz_id": {
+          "name": "quiz_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "svar": {
+          "name": "svar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "antall_riktige": {
+          "name": "antall_riktige",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "antall_totalt": {
+          "name": "antall_totalt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gjennomfoert": {
+          "name": "gjennomfoert",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "quizforsoek_quiz_idx": {
+          "name": "quizforsoek_quiz_idx",
+          "columns": [
+            {
+              "expression": "quiz_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "quizforsoek_quiz_id_quiz_id_fk": {
+          "name": "quizforsoek_quiz_id_quiz_id_fk",
+          "tableFrom": "quizforsoek",
+          "tableTo": "quiz",
+          "columnsFrom": [
+            "quiz_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.quizsporsmal": {
+      "name": "quizsporsmal",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "quiz_id": {
+          "name": "quiz_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nummer": {
+          "name": "nummer",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sporsmal": {
+          "name": "sporsmal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "er_flervalg": {
+          "name": "er_flervalg",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alternativer": {
+          "name": "alternativer",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "riktig_svar": {
+          "name": "riktig_svar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kildeavsnitt_id": {
+          "name": "kildeavsnitt_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "quizsporsmal_quiz_idx": {
+          "name": "quizsporsmal_quiz_idx",
+          "columns": [
+            {
+              "expression": "quiz_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "quizsporsmal_quiz_id_quiz_id_fk": {
+          "name": "quizsporsmal_quiz_id_quiz_id_fk",
+          "tableFrom": "quizsporsmal",
+          "tableTo": "quiz",
+          "columnsFrom": [
+            "quiz_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "quizsporsmal_kildeavsnitt_id_avsnitt_id_fk": {
+          "name": "quizsporsmal_kildeavsnitt_id_avsnitt_id_fk",
+          "tableFrom": "quizsporsmal",
+          "tableTo": "avsnitt",
+          "columnsFrom": [
+            "kildeavsnitt_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "quizsporsmal_nummer_unik": {
+          "name": "quizsporsmal_nummer_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "quiz_id",
+            "nummer"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.samtalerunde": {
+      "name": "samtalerunde",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "fagsamtale_id": {
+          "name": "fagsamtale_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nummer": {
+          "name": "nummer",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sporsmal": {
+          "name": "sporsmal",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kildeavsnitt_id": {
+          "name": "kildeavsnitt_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "maal": {
+          "name": "maal",
+          "type": "oppfoelgingsmaal",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "elevsvar": {
+          "name": "elevsvar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "svarvurdering": {
+          "name": "svarvurdering",
+          "type": "svartilstand",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vurderingsbegrunnelse": {
+          "name": "vurderingsbegrunnelse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revurdert": {
+          "name": "revurdert",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "samtalerunde_fagsamtale_idx": {
+          "name": "samtalerunde_fagsamtale_idx",
+          "columns": [
+            {
+              "expression": "fagsamtale_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "samtalerunde_fagsamtale_id_fagsamtale_id_fk": {
+          "name": "samtalerunde_fagsamtale_id_fagsamtale_id_fk",
+          "tableFrom": "samtalerunde",
+          "tableTo": "fagsamtale",
+          "columnsFrom": [
+            "fagsamtale_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "samtalerunde_kildeavsnitt_id_avsnitt_id_fk": {
+          "name": "samtalerunde_kildeavsnitt_id_avsnitt_id_fk",
+          "tableFrom": "samtalerunde",
+          "tableTo": "avsnitt",
+          "columnsFrom": [
+            "kildeavsnitt_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "samtalerunde_nummer_unik": {
+          "name": "samtalerunde_nummer_unik",
+          "nullsNotDistinct": false,
+          "columns": [
+            "fagsamtale_id",
+            "nummer"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tekst": {
+      "name": "tekst",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "konto_id": {
+          "name": "konto_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tittel": {
+          "name": "tittel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "raatekst": {
+          "name": "raatekst",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "redigert_tekst": {
+          "name": "redigert_tekst",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tilstand": {
+          "name": "tilstand",
+          "type": "tekst_tilstand",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'innlest'"
+        },
+        "vei": {
+          "name": "vei",
+          "type": "innlesingsvei",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "forkunnskapssvar": {
+          "name": "forkunnskapssvar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opprettet": {
+          "name": "opprettet",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "laast_tidspunkt": {
+          "name": "laast_tidspunkt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "tekst_konto_idx": {
+          "name": "tekst_konto_idx",
+          "columns": [
+            {
+              "expression": "konto_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.innlesingsvei": {
+      "name": "innlesingsvei",
+      "schema": "public",
+      "values": [
+        "liming",
+        "pdf",
+        "bilde"
+      ]
+    },
+    "public.morsmaal_nivaa": {
+      "name": "morsmaal_nivaa",
+      "schema": "public",
+      "values": [
+        "kvalitetssikret",
+        "modellstoettet"
+      ]
+    },
+    "public.oevekort_merking": {
+      "name": "oevekort_merking",
+      "schema": "public",
+      "values": [
+        "kan",
+        "maa_oeve"
+      ]
+    },
+    "public.oppfoelgingsmaal": {
+      "name": "oppfoelgingsmaal",
+      "schema": "public",
+      "values": [
+        "nytt_aspekt",
+        "peker_mot_manglende",
+        "motsigende_avsnitt",
+        "ber_om_utdyping",
+        "deler_opp"
+      ]
+    },
+    "public.svartilstand": {
+      "name": "svartilstand",
+      "schema": "public",
+      "values": [
+        "dekkende",
+        "delvis",
+        "misoppfatning",
+        "uklart",
+        "utenfor"
+      ]
+    },
+    "public.tekst_tilstand": {
+      "name": "tekst_tilstand",
+      "schema": "public",
+      "values": [
+        "innlest",
+        "aktivert",
+        "laast"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
