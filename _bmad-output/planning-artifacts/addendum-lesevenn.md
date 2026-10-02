@@ -65,7 +65,7 @@ Ikke krav, men de valgene PRD-ens krav er dimensjonert for. Hører nedstrøms i 
 | **Svarvurdering og oppfølgingsspørsmål** | **`claude-sonnet-5`** | **Høy** | Den vanskeligste oppgaven i appen: klassifisering i fem tilstander pluss et oppfølgingsspørsmål som skal reagere på innholdet. FR-21 har en blokkerende sikkerhetsport som tolererer null misoppfatninger lest som dekkende. Sonnet framfor Opus fordi den er halv pris og fortsatt langt sterkere enn Haiku; Opus 5 er oppgraderingsveien hvis målingen krever det |
 | Oversettelse | `claude-haiku-4-5` | Middels til høy | Vanskeligheten varierer sterkt med språket, og det er nettopp poenget i FR-42 om skjevhet. Måles mot FR-28 |
 | Minnevers | `claude-haiku-4-5` | Lav | Men faktasjekken i FR-31 er ikke lav |
-| Bildeuttrekk | `claude-haiku-4-5` *(må verifiseres)* | Middels | Krever multimodal modell. **Ikke bekreftet at Haiku 4.5 er multimodal** — sjekk før implementasjon, og flytt til Sonnet 5 hvis ikke |
+| Bildeuttrekk | `claude-haiku-4-5` | Middels | Krever multimodal modell. Bekreftet av Arve 2. oktober at Haiku 4.5 tar bilder som inndata, så bildeuttrekket blir på den billige modellen |
 
 **Kostnadsgrunnlaget for fordelingen.** Én Tekst gjennom hele løypen er grovt 25 000 tokens inn og 7 000 ut. Med alt på Opus 5 ($5/$25 per million) blir semesteret rundt $90, altså over budsjettrammen i §6.4. Med alt på Haiku 4.5 ($1/$5) rundt $18. Den blandede fordelingen legger de dyre tokenene der kvaliteten faktisk avgjør noe, og de billige der volumet er. Anslagene er estimater fra datamodellen, og prisene bør kontrolleres mot gjeldende prisliste.
 
