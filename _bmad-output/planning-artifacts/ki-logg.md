@@ -2,7 +2,7 @@
 title: KI-logg — Lesevenn
 status: løpende
 created: 2026-09-25
-updated: 2026-09-28
+updated: 2026-10-02
 ---
 
 # KI-logg
@@ -182,7 +182,7 @@ Modellen hadde dessuten selv erklært at den ikke burde være kilde på Anthropi
 Alle tre skal inn i addendumets seksjon om leverandørvilkår, med URL og dato.
 ## Status mot FR-38, per 2. oktober
 
-Åtte oppføringer der KI-forslaget ble forkastet, vesentlig endret, eller ikke godtatt uten uavhengig kontroll:
+Ni oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -194,6 +194,7 @@ Alle tre skal inn i addendumets seksjon om leverandørvilkår, med URL og dato.
 | 6 | Omfanget for tekstinnlesing | Teknisk begrunnelse utdatert, og en manglende antakelse avdekket |
 | 7 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
 | 8 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
+| 9 | Innstillinger som ikke lot seg finne | Funn om verktøyet, gjort av en oppgave som ikke lyktes |
 
 Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke en grunn til å slutte å føre loggen — poenget er at den skal vise utviklingen gjennom semesteret, og implementasjonsfasen kommer til å gi flere og mer tekniske oppføringer. Særlig ventet: kodegjennomgangen av innlogging og lagring (FR-41), der kravet er minst tre dokumenterte feil eller svakheter i KI-generert kode med hvordan de ble funnet.
 
@@ -217,3 +218,19 @@ Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke e
 
 **Konsekvens:** 
 ```
+
+---
+
+## 2026-10-02 — FUNN I VERKTØYET: innstillingen jeg ikke fant
+
+**Verktøy:** Claude Code og claude.ai, egne kontoinnstillinger.
+
+**Hva jeg forsøkte:** å slå av trening på mine egne samtaler, og å korte ned oppbevaringstiden på Claude Code-sesjonstranskripsjoner. Forbrukervilkårene sier at trening skjer «unless you opt out of training through your account settings», og lagringsdokumentasjonen sier seks år «by default» med henvisning til en innstilling under organisasjonsinnstillinger.
+
+**Hva som skjedde:** jeg fant ingen av dem, til tross for grundig leting. Ordlyden i lagringsdokumentasjonen peker mot organisasjonskontoer, og jeg har en individuell Pro-konto.
+
+**Hva jeg gjorde med det:** skrev det inn i refleksjonen som et funn framfor å la det stå som et hull i teksten. Spørsmålet jeg endte med er: er det ikke litt uetisk å framstille noe som et valg, men gjøre det lite tilgjengelig?
+
+**Hvorfor dette hører i KI-loggen og ikke bare i rapporten:** det er en observasjon om verktøyet prosjektet er bygget med, gjort under arbeidet, og den er etterprøvbar — en annen kan forsøke det samme. Den sier dessuten noe om grensen for hvor mye kontroll man faktisk har over KI-assistert utvikling, som er noe annet enn hvor mye kontroll vilkårene beskriver.
+
+**Gjenstår:** å undersøke om innstillingene finnes for individuelle kontoer i en annen form, eller bare for organisasjoner.

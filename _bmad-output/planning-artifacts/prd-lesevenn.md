@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-09-28
+updated: 2026-10-02
 ---
 
 # PRD: Lesevenn
@@ -731,6 +731,8 @@ Rapporten drøfter ærlig hva det betyr å la en språkmodell vurdere en elevs f
 - Før første innsending sier appen tydelig at teksten sendes til en ekstern språkmodell-leverandør for behandling. Eleven skal vite hvor teksten går.
 - Ingen tredjeparts analyse- eller sporingsverktøy.
 - Sletting virker og sletter faktisk (FR-37).
+- **Oppbevaringstid for elevens tekster: dokumentert som intensjon, ikke implementert i v1.** Policyen er ett skoleår — tekster lagt inn ved skolestart skal være tilgjengelige ved eksamen på slutten av året, og det setter gulvet. Lengre enn det, for eksempel hele skolegangen, er vanskelig å begrunne som et reelt behov. Skulle det implementeres, må det samtidig komme tydelig fram at data slettes ved skoleslutt, slik at den som vil beholde noe får sjansen.
+- **v1 har ingen automatisk sletting.** Eleven sletter selv (FR-37). Automatisk sletting med varsel i forkant er ny funksjonalitet, og marginen skal ikke fylles med nye funksjoner (SM-C2). Begrunnelsen for policyen står i `addendum-lesevenn.md` §6, slik at spørsmålet «leverandøren lagrer i X, hva gjør du?» har et svar selv om v1 ikke håndhever det.
 - Brukergruppen er **delt**: elever på Vg1 og Vg2 er i hovedsak mindreårige (15–17), mens mange på Vg3 er myndige (18–19). Datainnsamlingen holdes like kort uansett, fordi den må være forsvarlig for den yngste brukeren og ikke for gjennomsnittet.
 - Aldersdelingen gjør én praktisk ting lettere: testbrukere kan rekrutteres blant myndige elever på Vg3, slik at samtykke fra foresatt ikke er nødvendig for å prøve appen. `[ANTAKELSE: testbrukere i v1 er myndige elever, eller mindreårige med samtykke fra foresatt. Reell klasseromsbruk krever databehandleravtale og ligger utenfor v1 (§2.2).]`
 
