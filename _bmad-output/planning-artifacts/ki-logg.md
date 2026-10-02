@@ -120,44 +120,6 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 ---
 
-## Status mot FR-38, per 27. september
-
-Sju oppføringer der KI-forslaget ble forkastet, vesentlig endret, eller ikke godtatt uten uavhengig kontroll:
-
-| # | Oppføring | Type |
-|---|---|---|
-| 1 | Målgruppen var ungdomstrinnet i hele dokumentet | Ubegrunnet antakelse i utdataet, korrigert |
-| 2 | Testsettet dekket bare ett programområde | Ufullstendig dekning, utvidet |
-| 3 | Mapper beholdt som betinget | Anbefaling forkastet *(senere omgjort, se 6)* |
-| 4 | Fagsamtalen lagt i M0 i full form | Anbefaling forkastet |
-| 5 | Innleveringsfristen | Påstand ikke godtatt uten uavhengig kontroll |
-| 6 | Omfanget for tekstinnlesing | Teknisk begrunnelse utdatert, og en manglende antakelse avdekket |
-| 7 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
-
-Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke en grunn til å slutte å føre loggen — poenget er at den skal vise utviklingen gjennom semesteret, og implementasjonsfasen kommer til å gi flere og mer tekniske oppføringer. Særlig ventet: kodegjennomgangen av innlogging og lagring (FR-41), der kravet er minst tre dokumenterte feil eller svakheter i KI-generert kode med hvordan de ble funnet.
-
-**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 6 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
----
-
-## Mal for nye oppføringer
-
-```
-## ÅÅÅÅ-MM-DD — [GODTATT / ENDRET / FORKASTET]: kort tittel
-
-**Verktøy:** 
-
-**Hva jeg ba om:** 
-
-**Hva som kom tilbake:** 
-
-**Hva jeg gjorde:** 
-
-**Begrunnelse:** 
-
-**Konsekvens:** 
-```
-
----
 
 ## 2026-09-30 — ENDRET: leverandørgrense tvang om to krav
 
@@ -192,3 +154,66 @@ Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke e
 **Konsekvens:** åpent spørsmål 11 i PRD §11 er delvis besvart — leverandør for M0 er valgt, men kravene i §6.2 om treningsbruk, behandlingssted og daterte vilkår må fortsatt dokumenteres. Sammenligningen før M1 er en egen oppgave i planen.
 
 **Merknad verdt å ta med i refleksjonsrapporten:** at modellen selv flagget interessekonflikten framfor å anbefale sin egen leverandør, er en observasjon om hvor KI var til å stole på og hvor jeg måtte ta over. Den motsatte oppførselen — en umerket anbefaling av eget produkt — ville vært vanskelig å oppdage.
+
+---
+
+## 2026-10-02 — FANGET KI-FEIL: en bekreftelse som hvilte på feil grunnlag
+
+**Verktøy:** Claude Code (Claude Opus 5), arbeid med §6.2-dokumentasjonen.
+
+**Hva jeg ba om:** jeg hadde selv lest forbrukervilkårene og API-dokumentasjonen om datalagring, og ba om en vurdering av om jeg hadde forstått dem riktig. Jeg trodde at mitt private Pro-abonnement gjorde at dataene mine kunne brukes til trening.
+
+**Hva som kom tilbake:** modellen rettet lesningen min — forbrukervilkårene sier selv at de ikke dekker API-nøkler, og at Commercial Terms gjør det. To separate avtaleforhold med samme selskap, avgrenset etter aktivitet og ikke etter konto. Den flagget også et åpent punkt jeg ikke hadde sett: «Covered Models» krever 30 dagers lagring, så unntaket kan gjelde modellen jeg velger.
+
+**Hva jeg gjorde:** spurte om det virkelig var så tydelig at all data faller inn under Commercial Terms i det øyeblikket man bruker et API.
+
+**Hva det avdekket:** modellen hadde **karakterisert Commercial Terms ut fra hva forbrukervilkårene sier om dem**, uten å ha lest Commercial Terms selv. Konklusjonen var sannsynligvis riktig, men grunnlaget var et dokument som uttalte seg om et annet dokument. Den skilte heller ikke klart nok mellom to ulike spørsmål: hvilket avtaledokument som gjelder, og hvordan data faktisk behandles. Det andre besvares av lagringsdokumentasjonen, ikke av vilkårenes virkeområde.
+
+**Hvorfor dette er den mest lærerike oppføringen så langt:** det er samme feilmønster som CVE-begrunnelsen i AD-8 — en påstand som er riktig, men som hviler på et grunnlag som ikke bærer den. Den typen feil er vanskeligere å oppdage enn en gal påstand, fordi den framstår like sikker. Og den ble bare funnet fordi jeg stilte et oppfølgingsspørsmål framfor å ta bekreftelsen til etterretning.
+
+Modellen hadde dessuten selv erklært at den ikke burde være kilde på Anthropics vilkår, siden den er laget av Anthropic. Den gikk likevel ett skritt lenger enn grunnlaget tillot da jeg spurte direkte. Verdt å merke seg: en erklært interessekonflikt fjerner ikke risikoen for at svaret blir for sikkert.
+
+**Gjenstår å undersøke selv:**
+
+1. Commercial Terms sin egen virkeområde-klausul — ikke bare hva forbrukervilkårene sier om den
+2. Om modellen jeg bruker er en «Covered Model» med 30 dagers lagring
+3. Hva treningsinnstillingen på mitt eget Pro-abonnement står på — den styrer utviklingssamtalene, ikke appen, men det hører i det ærlige bildet av hvordan prosjektet ble til
+
+Alle tre skal inn i addendumets seksjon om leverandørvilkår, med URL og dato.
+## Status mot FR-38, per 2. oktober
+
+Åtte oppføringer der KI-forslaget ble forkastet, vesentlig endret, eller ikke godtatt uten uavhengig kontroll:
+
+| # | Oppføring | Type |
+|---|---|---|
+| 1 | Målgruppen var ungdomstrinnet i hele dokumentet | Ubegrunnet antakelse i utdataet, korrigert |
+| 2 | Testsettet dekket bare ett programområde | Ufullstendig dekning, utvidet |
+| 3 | Mapper beholdt som betinget | Anbefaling forkastet *(senere omgjort, se 6)* |
+| 4 | Fagsamtalen lagt i M0 i full form | Anbefaling forkastet |
+| 5 | Innleveringsfristen | Påstand ikke godtatt uten uavhengig kontroll |
+| 6 | Omfanget for tekstinnlesing | Teknisk begrunnelse utdatert, og en manglende antakelse avdekket |
+| 7 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
+| 8 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
+
+Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke en grunn til å slutte å føre loggen — poenget er at den skal vise utviklingen gjennom semesteret, og implementasjonsfasen kommer til å gi flere og mer tekniske oppføringer. Særlig ventet: kodegjennomgangen av innlogging og lagring (FR-41), der kravet er minst tre dokumenterte feil eller svakheter i KI-generert kode med hvordan de ble funnet.
+
+**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 6 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
+---
+
+## Mal for nye oppføringer
+
+```
+## ÅÅÅÅ-MM-DD — [GODTATT / ENDRET / FORKASTET]: kort tittel
+
+**Verktøy:** 
+
+**Hva jeg ba om:** 
+
+**Hva som kom tilbake:** 
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Konsekvens:** 
+```

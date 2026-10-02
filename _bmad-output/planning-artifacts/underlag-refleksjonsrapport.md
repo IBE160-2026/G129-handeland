@@ -2,7 +2,7 @@
 title: Underlag til refleksjonsrapporten — Lesevenn
 status: arbeidsdokument
 created: 2026-09-25
-updated: 2026-09-28
+updated: 2026-10-02
 ---
 
 # Underlag til refleksjonsrapporten
@@ -148,3 +148,40 @@ Hva designet faktisk begrenser: tegngrensen på 8 000, grensen på fire bilder, 
 En avveining verdt å navngi: en lokalt kjørt modell ville fjernet tredjepartsoverføringen helt. Den ble valgt bort fordi Svarvurderingen er den vanskeligste oppgaven i appen og krever god norsk. Det er personvern mot pedagogisk kvalitet, og det er ikke et valg som har et opplagt riktig svar.
 
 **En grense for hva KI-en kunne bidra med.** Modellen kunne strukturere problemstillingen, men avviste å slå fast hva åndsverkloven eller avtaleverket for skoleverket tillater, og la det inn som et åpent spørsmål som må besvares med en lest kilde. Den avviste også å spekulere om en navngitt person i en sak den ikke kjente. Verdt å nevne i drøftingen av hvor KI var nyttig og hvor den ikke var det.
+
+---
+
+## Etisk refleksjon rundt datadeling — utkast skrevet 2. oktober
+
+Skrevet av Arve. Faktagrunnlaget med sitater, kilder og lesedatoer ligger i `addendum-lesevenn.md` §6. Dette er refleksjonsdelen, som hører i rapporten framfor i faktadokumentet.
+
+### Refleksjon på egne vegne
+
+Det som er et lite tankekors er likevel i hvor stor grad mine data blir lagret og brukt. Fra første avsnitt kommer det frem at hele min samtale, og utviklingen av dette prosjektet, er data som Anthropic får lov til å trene modellene sine på. I tillegg er oppbevaringstiden for mine egne data på 6 år. Dette er noe som jeg synes det er litt vanskelig å forholde seg til. Det er en tanke som lurer på hvordan språkmodeller og verden ser ut om 6 år, og uforutsigbarheten i at mine data kan brukes i en slik kontekst, er litt guffen.
+
+I privacy controls sier de selv at de ikke selger data til tredjeparter, at man kan be om å få slettet data (og at det vanligvis etterfølges), og at de kan ha tjenester som henter inn og bruker mer data, men at dette kan man regulere. På en måte er dette betryggende, siden det gir innsikt og kontroll. Samtidig er det en bismak av: **«hva om jeg ikke har kontroll, men likevel har ansvaret for å følge med».** Premisset for dette emnet og prosjektet er jo at man skal lære å bruke agenter på en slik måte at det blir et veldig nyttig verktøy, og da er dette kanskje noen kameler man bare må svelge, til tross for litt ringsmak.
+
+### Innspill til videre arbeid med denne teksten
+
+Tre ting som gjør refleksjonen skarpere, i prioritert rekkefølge.
+
+**Datakjeden har to bein, og teksten bør si det rett ut.** Faktaseksjonene handler om elevenes data i drift. Denne seksjonen handler om mitt eget materiale under utvikling. Det er to separate datakjeder med ulike vilkår:
+
+| Bein | Hva | Hvilke vilkår |
+|---|---|---|
+| Lesevenn → API | elevenes tekster, i drift | Commercial Terms. Ikke trening på Customer Content |
+| Meg → Claude Code | prosjektmaterialet, under utvikling | Forbrukervilkår. Trening med mindre jeg melder meg av |
+
+Det andre beinet er det ingen tenker på, og det er det som har et konkret tall på seg. Å navngi skillet er det enkeltgrepet som løfter teksten mest.
+
+**Seksårstallet bør festes til riktig kategori.** De seks årene gjelder navngitte kategorier — Activity Feed, lokale og eksterne sesjonstranskripsjoner — ikke «mine data» generelt. Den presise påstanden er sterkere: *transkripsjoner fra Claude Code-sesjoner lagres i seks år som standard*. Det er verktøyet prosjektet ble bygget med, og det gjør funnet konkret framfor generelt.
+
+Merk også «som standard». Dokumentasjonen viser til en innstilling under `claude.ai → Organization settings → Data and privacy` som kan sette en kortere periode. Det svekker konklusjonen om manglende kontroll noe — og det er verdt å nevne begge veier, framfor bare den som støtter poenget.
+
+**Setningen om manglende kontroll er tekstens beste, og den tåler å stå alene.** «Hva om jeg ikke har kontroll, men likevel har ansvaret for å følge med» er en skarpere formulering av ansvarsforholdet enn noe KI-en foreslo i samtalen. Den treffer også noe reelt i prosjektet: i personvernsammenheng er det jeg som bestemmer over elevenes data og sender dem videre, ikke eleven. Ansvaret ligger hos meg uten at jeg eier systemet det går gjennom.
+
+### Gjenstår å undersøke
+
+1. Hva treningsinnstillingen på mitt eget Pro-abonnement står på. Fem minutter, og uten den har refleksjonen et hull i sitt eget premiss.
+2. Om oppbevaringsperioden for sesjonstranskripsjoner kan settes kortere på en individuell konto, eller om innstillingen bare finnes for organisasjoner.
+3. Punktene i `addendum-lesevenn.md` §6 under [MÅ RETTES FØR INNLEVERING].
