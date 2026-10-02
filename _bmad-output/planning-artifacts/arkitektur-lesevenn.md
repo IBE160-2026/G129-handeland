@@ -7,7 +7,7 @@ paradigm: lagdelt med rent generatorlag (ports-and-adapters på modellsiden)
 scope: Lesevenn v1 — hele systemet
 status: final
 created: '2026-09-29'
-updated: '2026-09-30'
+updated: 2026-10-02
 binds: [FR-1..FR-31, FR-35..FR-45]
 sources:
   - prd-lesevenn.md
@@ -224,7 +224,7 @@ Uten dette er FR-40 sitt krav om «én tabell som viser hver terskel med målt v
 | Drizzle ORM | 0.45.x, pinnes ved installasjon | Begrunnet valg, ikke et bransjestandardvalg — se under. **En brytende v1 er i beta.** Ikke oppgrader midt i målekjøringer som skal være sammenlignbare |
 | Better Auth | 1.7.x, pinnes ved installasjon | Offisiell guide dekker Next.js 16+ med proxy. `pg` og `drizzle-orm` er peer-avhengigheter |
 | pdfjs-dist (i nettleseren) | pinnes ved installasjon | Kjører klientside etter AD-16, så PDF-en aldri sendes til serveren. Gir tekst per side, som PF-1 trenger. `unpdf` sto her da parsing skulle skje på serveren, og er ikke lenger aktuelt |
-| LLM-API med strukturert utdata | Anthropic for M0, pinnes ved installasjon | Sammenlignes mot minst én annen leverandør før M1, målt på gullsettet i FR-8. Se Utsatt om vilkårene |
+| LLM-API med strukturert utdata | Anthropic. `claude-haiku-4-5` som standard, `claude-sonnet-5` for svarvurdering | Fordelingen per oppgave og kostnadsgrunnlaget står i `addendum-lesevenn.md` §3. Begge er utenfor Covered Models, så 30-dagerslagringen gjelder ikke. Uttrekket måles mot FR-8 før valget låses. Sammenlignes mot minst én annen leverandør før M1 |
 
 **Hvorfor Drizzle, presist.** Ingen autoritativ kilde utpeker Drizzle som *standardvalget* for Next.js og PostgreSQL — det er en vurdering, ikke et faktum, og et tidligere utkast av denne spinen overdrev det. Begrunnelsen som holder: ingen generate-steg, altså færre bevegelige deler når rammeverket også er nytt; SQL-nær så utvikleren lærer mer SQL, som er et uttalt mål; og `drizzle-kit studio` dekker behovet for å se på data i et grensesnitt under feilsøking. Prisma 7 ble vurdert og er mye lettere etter omskrivingen av spørremotoren; det ville også vært et forsvarlig valg.
 

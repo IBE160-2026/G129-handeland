@@ -58,13 +58,18 @@ Ikke krav, men de valgene PRD-ens krav er dimensjonert for. Hører nedstrøms i 
 
 **Modellvalg per oppgave.** PRD §6.4 sier at ulike oppgaver kan bruke ulike modeller, uten å velge. Den tekniske begrunnelsen: oppgavene har ulik vanskelighet, og kostnaden per kall varierer mye mellom modellklasser.
 
-| Oppgave | Vanskelighet | Merknad |
-|---|---|---|
-| Uttrekk av Faguttrykk | Middels | Kjøres én gang per Tekst og lagres. Kan bruke en rimeligere modell, men det er denne som måles hardest i FR-8 — mål begge før du velger |
-| Quizgenerering | Middels | Forankringskravet i FR-14 er det som skiller modellene, ikke språket |
-| Svarvurdering og oppfølgingsspørsmål | Høy | Den vanskeligste oppgaven i appen. Klassifisering i fem tilstander pluss et oppfølgingsspørsmål som skal reagere på innholdet. Bruk den sterkeste modellen prosjektet har råd til her, og spar penger andre steder |
-| Oversettelse | Middels til høy | Vanskeligheten varierer sterkt med språket, og det er nettopp poenget i FR-42 om skjevhet |
-| Minnevers | Lav | Men faktasjekken i FR-31 er ikke lav |
+| Oppgave | Modell | Vanskelighet | Begrunnelse |
+|---|---|---|---|
+| Uttrekk av Faguttrykk | `claude-haiku-4-5` | Middels | Kjøres per Tekst og lagres, så her ligger volumet og dermed pengene. **Måles mot FR-8-gullsettet før valget låses** — treffer Haiku presisjon 0,70 og gjenkalling 0,75, er det billigste modell på dyreste oppgave, dokumentert |
+| Quizgenerering | `claude-haiku-4-5` | Middels | Forankringskravet i FR-14 er det som skiller modellene, ikke språkforståelsen |
+| **Svarvurdering og oppfølgingsspørsmål** | **`claude-sonnet-5`** | **Høy** | Den vanskeligste oppgaven i appen: klassifisering i fem tilstander pluss et oppfølgingsspørsmål som skal reagere på innholdet. FR-21 har en blokkerende sikkerhetsport som tolererer null misoppfatninger lest som dekkende. Sonnet framfor Opus fordi den er halv pris og fortsatt langt sterkere enn Haiku; Opus 5 er oppgraderingsveien hvis målingen krever det |
+| Oversettelse | `claude-haiku-4-5` | Middels til høy | Vanskeligheten varierer sterkt med språket, og det er nettopp poenget i FR-42 om skjevhet. Måles mot FR-28 |
+| Minnevers | `claude-haiku-4-5` | Lav | Men faktasjekken i FR-31 er ikke lav |
+| Bildeuttrekk | `claude-haiku-4-5` *(må verifiseres)* | Middels | Krever multimodal modell. **Ikke bekreftet at Haiku 4.5 er multimodal** — sjekk før implementasjon, og flytt til Sonnet 5 hvis ikke |
+
+**Kostnadsgrunnlaget for fordelingen.** Én Tekst gjennom hele løypen er grovt 25 000 tokens inn og 7 000 ut. Med alt på Opus 5 ($5/$25 per million) blir semesteret rundt $90, altså over budsjettrammen i §6.4. Med alt på Haiku 4.5 ($1/$5) rundt $18. Den blandede fordelingen legger de dyre tokenene der kvaliteten faktisk avgjør noe, og de billige der volumet er. Anslagene er estimater fra datamodellen, og prisene bør kontrolleres mot gjeldende prisliste.
+
+**Og fordelingen er et utgangspunkt, ikke en konklusjon.** AD-4 stempler modellidentitet på alt generert innhold nettopp for at to måletall fra ulike modeller skal være sammenlignbare. Viser målingen at Haiku ikke holder på uttrekket, er oppgraderingen én linje — og da har du tallene som viser hvorfor.
 
 Et nyttig grep for både kvalitet og kostnad: strukturert utdata med skjema, slik at Kildeavsnitt og verbatim-krav (FR-7) kan valideres programmatisk framfor å tolkes ut av fritekst. Det gjør maskinsjekkene i PRD-en billige å implementere, og de er en forutsetning for målingene i §4.11.
 
