@@ -204,21 +204,21 @@ samme problem for eleven. Test lagt inn som sjekker at rådet ikke inneholder
 
 ## Funn 7 — Kappingen ofret 21 fagord for ingenting
 
-**Hvor:** , .
+**Hvor:** `generatorer/validering.ts`, funksjonen `kappEtterRangering`.
 
 **Hva:** første ekte kjøring mot en NDLA-tekst om elektromagnetisk stråling.
 Modellen fant 26 Faguttrykk, og **alle 26 passerte valideringen** — verbatim,
 kildeavsnitt, ikke-sirkulær forklaring. Kappingen kuttet 21 av dem, ned til
 gulvet på fem, og tetthetsmålet var *fortsatt* brutt.
 
-De fem som overlevde var det verste mulige settet:  og
- (samme begrep), pluss de tre mest gjentatte
-ordene. Bort gikk , , ,
- og  — altså nøyaktig de ordene en elev som strever
+De fem som overlevde var det verste mulige settet: `EM-bølger` og
+`elektromagnetiske bølger` (samme begrep), pluss de tre mest gjentatte
+ordene. Bort gikk `bølgelengde`, `ionosfæren`, `ozonlaget`,
+`sølvklorid` og `prisme` — altså nøyaktig de ordene en elev som strever
 trenger forklart.
 
 **Årsaken** var at to av de tre takene teller MARKERINGER, mens den eneste
-knappen i koden var å fjerne BEGREPER. Å fjerne , som står én
+knappen i koden var å fjerne BEGREPER. Å fjerne `sølvklorid`, som står én
 gang, fjerner én markering. Opphopningen kom fra de høyt rangerte ordene med
 fire–fem markeringer hver, som var vernet av rangeringen. Algoritmen ødela
 dekningen for å rette et problem de beholdte selv forårsaket — og den kuttet
