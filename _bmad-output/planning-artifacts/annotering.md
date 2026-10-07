@@ -2,7 +2,7 @@
 title: Annoteringsveiledning — gullsettet for faguttrykk
 status: arbeidsdokument
 created: 2026-10-07
-updated: 2026-10-07
+updated: 2026-10-08
 krav: FR-8, FR-40
 ---
 
@@ -40,16 +40,34 @@ PRD-en krever spredning over **fag** og **programområde**. Én tekst per celle;
 det gir ingen terskel per celle, men det viser en systematisk forskjell om den
 er stor.
 
-Et forslag til fordeling:
+FR-8 krever i tillegg at **tekstkilde** og **teksttype** varierer, og at hver tekst
+merkes med sin. Et forslag til fordeling som treffer alle tre aksene:
 
-| # | Fag | Programområde | Merknad |
-|---|---|---|---|
-| 1 | Naturfag | Studiespesialiserende | `em-egenskaper.txt` ligger alt i repoet |
-| 2 | Samfunnsfag | Studiespesialiserende | Vanskeligste tilfellet — se under |
-| 3 | Norsk | Studiespesialiserende | Litterære fagbegreper, ikke realfag |
-| 4 | Helse- og oppvekstfag | Yrkesfag | |
-| 5 | Bygg- og anleggsteknikk | Yrkesfag | |
-| 6 | Elektro eller TIP | Yrkesfag | |
+| # | Fag | Programområde | Kilde | Type |
+|---|---|---|---|---|
+| 1 | Naturfag | Studiespesialiserende | Digitalt læremiddel | Fokusert |
+| 2 | Naturfag | Yrkesfag | Mer autentisk | Oversikt |
+| 3 | Samfunnsfag | Studiespesialiserende | Mer autentisk | Fokusert |
+| 4 | Samfunnsfag | Yrkesfag | Digitalt læremiddel | Oversikt |
+| 5 | Norsk | Studiespesialiserende | Digitalt læremiddel | Fokusert |
+| 6 | Norsk | Yrkesfag | Mer autentisk | Oversikt |
+
+Tre av hver kilde, tre av hver type, og begge kilder i hvert fag. Med bare seks
+tekster lar ikke de tre aksene seg krysse fullt, så **kilde og type er noe du
+merker og rapporterer**, ikke noe du kan isolere. Det er godt nok: poenget er at
+en systematisk forskjell skal være synlig, ikke at den skal kunne tilskrives én
+årsak med sikkerhet.
+
+**Hvorfor teksttypen er med.** Det er målt, ikke antatt. Stabilitetsmålingen
+8. oktober ga Jaccard 0,770 på en fokusert tekst og 0,466 på en oversiktstekst,
+med samme prompt og samme modell. En oversiktstekst som dekker sju undertemaer
+har mange flere grensetilfeller, og grensetilfellene er det som vakler. Velger du
+seks fokuserte tekster, setter du terskelen på den lette halvparten.
+
+**Og om NDLA:** det er ikke en lettversjon. Elevene bruker NDLA, så det er en av
+tekstene de faktisk møter, og den hører derfor i settet på egne meritter.
+Forskjellen er at NDLA-tekst er språkvasket og korrekturlest, altså jevnere i
+form enn en lærebokside — så den dekker én reell tekstklasse, ikke begge.
 
 Krav til hver tekst:
 
@@ -58,9 +76,7 @@ Krav til hver tekst:
 - **Blanke linjer mellom avsnittene.** Hardt krav — `delIAvsnitt` deler på
   dem, og uten dem blir hele teksten ett avsnitt.
 - **To til fire overskrifter**, korte, uten punktum eller kolon til slutt.
-- **Kan deles i et offentlig repo.** NDLA er CC BY-SA 4.0 og dekker alle
-  cellene over. Kreditering og endringer føres som i
-  `testdata/eksempeltekst/LES-MEG.md`.
+- **Kan deles i et offentlig repo.** NDLA er CC BY-SA 4.0. Kreditering og endringer føres som i `testdata/eksempeltekst/LES-MEG.md`. Dette strammer utvalget av «mer autentisk» tekst: et fotografert lærebokoppslag kan brukes til å måle, men ikke uten videre legges i repoet. Alternativene er egenskrevet tekst i lærebokregister, eller åpent lisensiert materiale som ikke er NDLA. **Avklar dette før du begynner** — det er lettere enn å annotere noe du ikke kan levere.
 
 **Samfunnsfag er den vanskeligste cellen**, og det er verdt å vite på
 forhånd. Fagspråket der ligger nær det prompten eksplisitt forkaster som
@@ -127,6 +143,8 @@ poenget med at den er din.
   "tekst": "em-egenskaper.txt",
   "fag": "naturfag",
   "programomraade": "studiespesialiserende",
+  "kilde": "digitalt-laeremiddel",
+  "type": "oversikt",
   "annotert": "2026-10-12",
   "runde": 1,
   "faguttrykk": [
@@ -141,6 +159,11 @@ poenget med at den er din.
 `runde` er nødvendig for κ-målingen i steg 5. `annotert` er datoen, og den må
 være ekte — sju dagers avstand mellom runde 1 og 2 er et krav, ikke en
 anbefaling.
+
+`kilde` er `digitalt-laeremiddel` eller `autentisk`, og `type` er `fokusert`
+eller `oversikt`. Begge kreves av FR-8, fordi tallene skal rapporteres per
+kilde og per type — ikke bare per fag. Uten feltene kan ikke målingen gruppere,
+og da forsvinner den forskjellen vi alt vet er der.
 
 ---
 
@@ -225,11 +248,12 @@ avgjørelsene i steg 2 og skriver dem skarpere.
 
 ## 6. Sjekkliste før du kaller M0 ferdig
 
-- [ ] Seks tekster valgt, med fag og programområde fordelt
+- [ ] Seks tekster valgt, med fag, programområde, kilde og teksttype fordelt
+- [ ] Hver tekst merket med kilde (digitalt læremiddel / autentisk) og type (fokusert / oversikt)
 - [ ] Alle seks kan deles i et offentlig repo, med kreditering og lisens ført
 - [ ] Alle seks annotert **før** noen modellkjøring ble sett
 - [ ] Sammenligningsregelen skrevet ned **før** første måling
-- [ ] Gjenkalling og presisjon målt mot settet **etter kapping**, per fag og samlet
+- [ ] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
 - [ ] To tekster annotert to ganger, minst sju dager mellom
 - [ ] κ regnet, med sakssett-begrensningen oppgitt
 - [ ] Forklaringene gjennomgått for faglige feil — terskelen er **null**, og

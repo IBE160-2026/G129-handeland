@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-10-07
+updated: 2026-10-08
 ---
 
 # PRD: Lesevenn
@@ -293,13 +293,19 @@ Uttrekkets kvalitet måles mot et manuelt annotert Gullsett, og tallene er en le
 
 - Krysningen er grunnen til at det er nettopp seks tekster og ikke fem eller sju. Alle tre er fellesfag i begge programområder, men lærebøkene er ikke de samme: yrkesfaglige fagtekster har kortere setninger og mer praksisnær terminologi, studiespesialiserende har mer abstrakt og akademisk fagspråk. Et uttrekk som er kalibrert på bare den ene typen vil sannsynligvis treffe dårligere på den andre, og det er verdt å vite *før* det oppdages av en elev.
 - Utvikleren annoterer manuelt hvilke uttrykk som *skulle* vært markert, før uttrekket kjøres.
+- **De seks Tekstene varierer også i tekstkilde, og hver Tekst merkes med sin.** Lagt inn 8. oktober. To kilder skal være representert, fordi begge er reelle:
+  - **Digitalt læremiddel**, typisk NDLA. Dette er ikke en lettversjon av virkeligheten — elevene bruker NDLA, så det er en av tekstene de faktisk møter. Tekstene er språkvasket og korrekturlest av fagfolk, og er derfor jevnere i form enn en lærebokside.
+  - **Mer autentisk fagtekst**, altså lærebokutdrag og tekster som ikke har vært gjennom samme redaksjonelle bearbeiding. Disse er ujevnere, og det er der uttrekket får motstand.
+  Fordelingen skal være om lag halv om halv, og begge kilder skal forekomme i hvert fag. Med bare seks Tekster lar ikke kilde, fag og programområde seg krysse fullt — så kilden **merkes per Tekst og rapporteres sammen med tallene**, slik at en systematisk forskjell er synlig framfor skjult i et snitt.
+- **Teksttypen merkes også: fokusert eller oversikt.** Dette er lagt inn fordi det er målt, ikke antatt. Stabilitetsmålingen 8. oktober ga Jaccard 0,770 på en fokusert tekst om stråling fra radioaktive kilder og 0,466 på en oversiktstekst over sju undertemaer — med **samme prompt og samme modell**. Teksttypen betyr altså mer for stabiliteten enn faget gjør. En oversiktstekst har mange flere grensetilfeller, og grensetilfellene er det som vakler. Konsekvensen er todelt: Gullsettet skal inneholde begge typer, slik at terskelen ikke blir satt på den lette halvparten — og merkingen skal være der, slik at et brudd på FR-11 kan tilskrives teksttypen framfor å framstå som en generell svakhet.
+- **Alle seks Tekstene skal kunne deles i et offentlig repo**, med kreditering og lisens oppgitt. Det følger av FR-46 og av at målingen skal kunne kjøres om av andre. `[MERKNAD: dette strammer utvalget av «mer autentisk fagtekst». Et fotografert lærebokoppslag kan brukes til å måle, men ikke nødvendigvis legges i repoet. Alternativene er egenskrevet tekst i lærebokregister, eller åpent lisensiert materiale som ikke er NDLA. Må avklares før annoteringen starter.]`
 - **Fordelingen per programområde rapporteres, men har ingen terskel.** Med én tekst per celle er tallet per celle en observasjon, ikke en måling. Det er nok til å se en systematisk forskjell om den er stor, og det er alt det påstås å være. Samme regel som for fag.
 - **Gjenkalling ≥ 0,75** — minst tre av fire uttrykk i Gullsettet blir funnet.
 - **Presisjon ≥ 0,70** — høyst tre av ti markerte uttrykk er støy.
 - **Egen annoteringsstøy måles først.** To av de seks Tekstene annoteres to ganger, med minst sju dagers mellomrom, og samsvaret mellom de to egne annoteringene rapporteres (Cohens κ). Dette koster om lag én time og er den billigste enkeltmålingen i hele dokumentet: uten den vet ikke utvikleren om presisjon 0,70 ligger over eller under sin egen annoteringsusikkerhet, og da betyr tallet ingenting. Er κ lav, er det funnet — ikke noe å skjule.
 - **Ingen terskel per fag.** Med seks tekster er det om lag 20 annoterte uttrykk per fag, og konfidensintervallet for gjenkalling er da rundt ±0,19 — for bredt til å skille et godt fag fra et dårlig. Fordelingen per fag *rapporteres* fortsatt, som beskrivelse og som råstoff til skjevhetsdrøftingen i FR-42, men den er ikke en bestått/ikke bestått-grense.
 - **Forklaringenes riktighet:** utvikleren vurderer manuelt om forklaringen til hvert Faguttrykk i Gullsettet er faglig riktig og i samsvar med Kildeavsnittet. Antall gale forklaringer i det som vises eleven: **null**. Målingen bruker de samme seks Tekstene — annoteringen finnes alt, så dette er vurdering av utdata, ikke et nytt Gullsett. Begrunnelsen er at presisjon og gjenkalling bare måler *hvilke* uttrykk som ble funnet, ikke om det som står om dem er sant: forklaringene er nettopp det eleven pugger på Øvekortene (FR-16), og en gal forklaring pugges like godt som en riktig. Minneverset har en tilsvarende faktasjekk i FR-31, og forklaringene fortjener den mer.
-- Presisjon, gjenkalling og F1 rapporteres per fag, ikke bare som snitt. Et uttrekk som er godt i naturfag og dårlig i norsk er et kjent og dokumentert funn, ikke et gjennomsnitt som skjuler det.
+- Presisjon, gjenkalling og F1 rapporteres per fag, **per tekstkilde og per teksttype**, ikke bare som snitt. Et uttrekk som er godt i naturfag og dårlig i norsk er et kjent og dokumentert funn, ikke et gjennomsnitt som skjuler det — og det samme gjelder et uttrekk som er godt på digitalt læremiddel og dårlig på lærebokutdrag. Ingen av disse inndelingene har egen terskel; begrunnelsen er den samme som for fag, at én eller to Tekster per celle er en observasjon og ikke en måling.
 - Målingen kjøres på nytt for hver versjon i Promptregisteret (FR-39), og resultatene lagres per versjon.
 
 #### FR-9: Markering i Lesevisningen
@@ -325,8 +331,12 @@ Eleven får forklaringen på et markert Faguttrykk uten navigasjon bort fra Lese
 Samme Tekst gir i praksis samme Begrepssett.
 
 **Konsekvenser (testbare):**
-- Samme Tekst sendt inn to ganger gir **minst 0,80 overlapp** (Jaccard) i uttrekkssettet, målt over Gullsettets seks Tekster.
+- Samme Tekst sendt inn to ganger gir **minst 0,80 overlapp** (Jaccard) i det **ferdig kappede Begrepssettet** — altså det eleven faktisk ser — målt over Gullsettets seks Tekster.
+- **Presisert 8. oktober: målingen gjelder det kappede settet, ikke modellens råsvar.** Den første formuleringen sa «uttrekkssettet», og det er tvetydig: råsvaret fra modellen og det kappede settet er ulike sett og gir ulike tall. En uavklart definisjon gjør kravet ikke-etterprøvbart, uansett hvilket av de to man velger. Valget falt på det kappede settet fordi kravets egen begrunnelse handler om Øvekortene, og Øvekortene lages av det kappede settet. Et stabilt råsvar som kappes ulikt fra gang til gang ville innfridd kravet uten å løse problemet kravet finnes for.
+- **Råsvarets stabilitet rapporteres ved siden av, uten terskel.** Den er diagnostisk: skiller de to tallene seg mye, ligger ustabiliteten i kappingen og ikke i uttrekket, og det er to helt ulike ting å rette.
 - Begrunnelsen er ikke estetisk: Øvekortene og Minneverset kommer fra Begrepssettet, så et ustabilt uttrekk gir et øvekortsett eleven ikke kan stole på fra en dag til den neste.
+- **Målingen trenger ikke annoteringene, bare Tekstene.** Stabilitet er en sammenligning av appen med seg selv, så dette kravet kan måles så snart de seks Tekstene er valgt — uavhengig av om de er annotert. Det er verdt å vite, fordi det gjør FR-11 til en av de første målingene som kan kjøres, og fordi et resultat her kan påvirke både modellvalget og hvilke Tekster som velges.
+- `[MÅLT 8. oktober, promptversjon v1, claude-haiku-5-5: Jaccard 0,770 på en fokusert tekst og 0,466 på en oversiktstekst, ti kjøringer per celle. Terskelen er altså ikke innfridd ennå, men den er heller ikke vist uoppnåelig. Selvkonsistens — å kjøre uttrekket N ganger og beholde uttrykk som er med i minst k av dem — er den kjente løsningen og er ikke forsøkt. Terskelen skal ikke senkes før den er det.]`
 - Begrepssettet lagres på Teksten ved første kjøring og gjenbrukes deretter. Det genereres ikke på nytt ved hver visning — både for stabilitet og for kostnad.
 
 #### FR-12: Leseinnstillinger
@@ -658,7 +668,11 @@ Appens egne prompter er versjonert, med måleresultat per versjon.
 **Konsekvenser (testbare):**
 - Hver kjøretidsprompt — uttrekk av Faguttrykk, quizgenerering, svarvurdering, oppfølgingsspørsmål, oversettelse, minnevers — ligger i repoet med versjonsnummer.
 - For hver versjon er de relevante målingene fra FR-8, FR-14, FR-21, FR-28 og FR-31 lagret med tall og dato.
-- Minst én prompt viser en dokumentert forbedring over minst to versjoner, med tallene som viser den. Det er dette som gjør prompting til et håndverk i rapporten og ikke en anekdote.
+- **Hvert promptforsøk er ført med tallene sine, også de som ikke virket.** For hver versjon: hva som ble endret, hvilken hypotese endringen hvilte på, og hva målingen viste. Minst ett av forsøkene skal vise en dokumentert forbedring, med tallene som viser den.
+- **Omformulert 8. oktober, og grunnen hører i rapporten.** Kravet sa tidligere bare «minst én prompt viser en dokumentert forbedring over minst to versjoner». Det belønner utelukkende det som lyktes, og skaper dermed et stille insentiv til å rapportere forsøket som virket og la de andre ligge. Det er stikk motsatt av hva §4.11 finnes for, og det er samme feilmåte som SM-C4: å la dokumentasjonen bli en samling treff framfor en beskrivelse av arbeidet.
+
+  Anledningen var konkret. Prompt v2 for uttrekk av Faguttrykk ble skrevet 8. oktober for å rette en målt ustabilitet, med fem navngitte endringer og en klar hypotese. Den **forbedret ikke** hovedmålet: Jaccard gikk fra 0,466 til 0,458 på den ene Teksten og fra 0,770 til 0,682 på den andre. Diagnosen etterpå var mer verdifull enn en suksess ville vært — regelen «ved tvil, utelat» krympet settet uten å gjøre beslutningene mer deterministiske, og Jaccard straffer samme vakling hardere i et lite sett. Som kravet opprinnelig sto, telte ikke det arbeidet.
+- Det er dette som gjør prompting til et håndverk i rapporten og ikke en anekdote: at forsøkene er etterprøvbare, ikke at de alle lyktes.
 
 #### FR-40: Testsett og måleresultater i repoet
 
