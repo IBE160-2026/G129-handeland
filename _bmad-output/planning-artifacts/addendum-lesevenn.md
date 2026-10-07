@@ -174,7 +174,32 @@ Her vil det også være naturlig å stille spørsmål ved min egen oppbevaringst
 - Anthropic (08.10.2025), *Consumer Terms of Service*, https://www.anthropic.com/legal/consumer-terms — lest 02.10.2026
 - Claude Platform Docs (u.d.), *API and data retention*, https://platform.claude.com/docs/en/manage-claude/api-and-data-retention#how-anthropic-approaches-data-retention — lest 02.10.2026
 
+### Covered Models-sjekk for `claude-haiku-5-5` — 8. oktober 2026
+
+Modellen appen bruker ble 8. oktober endret til `claude-haiku-5-5` (utgitt samme dag). Konklusjonen over om at elevenes data ikke lagres, hvilte på at modellen ikke er en Covered Model, så sjekken ble gjort på nytt mot to primærkilder.
+
+**Prinsippet**, fra Claude Platform Docs:
+
+> «Conversation content (your prompts and Claude's outputs) is not retained by default; the exception is Covered Models, which require 30-day retention.»
+
+**Hvilke modeller som er dekket**, fra samme side:
+
+> «Claude Fable 5.1, Claude Mythos 5.1, Claude Fable 5, and Claude Mythos 5 are designated Covered Models […] and require 30-day data retention; ZDR is therefore not available for any of them unless expressly authorized by Anthropic.»
+
+**Og fra støtteartikkelen** som siden viser til, der en Covered Model defineres som en modell hvis evner representerer «a significant step up from previous generations» og som skaper «elevated risk if misused». Artikkelen lister fire modeller med designeringsdato: Claude Mythos 5.1 og Claude Fable 5.1 (31.08.2026), Claude Mythos 5 og Claude Fable 5 (09.06.2026). **Claude Haiku står ikke på listen i noen versjon.**
+
+**Konklusjon:** `claude-haiku-5-5` er ikke en Covered Model, 30-dagerslagringen gjelder ikke, og konklusjonen i denne seksjonen står uendret for den nye modellen.
+
+**Forbeholdet, som må med:** støtteartikkelen er sist oppdatert **1. september 2026**, mens `claude-haiku-5-5` ble utgitt **7. oktober 2026**. Listen er altså eldre enn modellen. At modellen ikke står der kan derfor bety to ting — at den ikke er dekket, eller at listen ikke er oppdatert ennå. Dokumentasjonssiden lister de samme fire, men har ingen synlig dato.
+
+Jeg vurderer risikoen som liten, fordi Fable og Mythos er modellene som beskrives som et betydelig steg opp i evner, mens Haiku er den lille og raske i familien. **Men det er en slutning jeg gjør, ikke noe kildene sier.** Sjekken bør gjøres på nytt nærmere innlevering, og den kan ikke besvares empirisk: 400-feilen som avviser Covered Models utløses bare for organisasjoner med ZDR-avtale, og dette prosjektet har ingen.
+
+**Kilder for denne sjekken:**
+
+- Claude Platform Docs (u.d.), *API and data retention*, <https://platform.claude.com/docs/en/manage-claude/api-and-data-retention> — lest 08.10.2026
+- Anthropic Support (01.09.2026), *Covered Models*, <https://support.claude.com/en/articles/15425695> — lest 08.10.2026
+
 ### Hva som fortsatt er åpent
 
-1. **Hvilken modell appen bruker er ikke bestemt.** Listen over Covered Models er nå belagt med kilde, men arkitekturspinen pinner ingen modell. Konklusjonen om elevenes data gjelder bare hvis modellen som velges ikke er dekket. Står som åpent spørsmål 11 i PRD §11, og må avklares før generatorkoden skrives.
+1. **Covered Models-listen er eldre enn modellen vi bruker.** Se forbeholdet i sjekken over. Må kontrolleres på nytt nærmere innlevering.
 2. **Treningsinnstillingen på egen Pro-konto er forsøkt endret uten å lykkes.** Det er dokumentert som et funn i refleksjonen framfor som et hull, og hører i `underlag-refleksjonsrapport.md`.
