@@ -33,7 +33,11 @@ export type Feilkode =
   | "modellfeil"
   | "ugyldig_utdata"
   | "tidsavbrudd"
-  | "lagret_svar_mangler";
+  | "lagret_svar_mangler"
+  /** Nøkkelen mangler, er utløpt, trukket tilbake, eller mangler rettighet. */
+  | "tilgang_avslaatt"
+  /** Kvote eller takt overskredet. Den ene feilen der «prøv igjen» er sant. */
+  | "for_mange_kall";
 
 /**
  * Alle feil fra generatorlaget har denne formen. Kravet i §5 om at ingen
@@ -151,9 +155,10 @@ function klient(): Anthropic {
   if (klientbuffer) return klientbuffer;
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new GeneratorFeil(
-      "modellfeil",
+      "tilgang_avslaatt",
       "Lesevenn mangler tilgangen den trenger for å behandle teksten.",
-      "Dette er en feil hos oss, ikke noe du har gjort.",
+      "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er lagret, " +
+        "og du kan lese den videre uten markeringer mens vi retter det.",
     );
   }
   klientbuffer = new Anthropic();
@@ -286,14 +291,51 @@ export async function kjoerGenerator<S extends z.ZodType>({
   } catch (e) {
     if (e instanceof GeneratorFeil) throw e;
 
-    // Mest spesifikk først. Tidsavbrudd skilles ut fordi eleven skal få en
-    // annen anbefaling enn ved en reell feil — «prøv igjen» hjelper mot det
-    // ene og ikke mot det andre.
+    /*
+     * Mest spesifikk først. Oppdelingen her er ikke pedanteri: §5 krever at
+     * hver feil tilbyr minst én KONKRET ting eleven kan gjøre videre, og
+     * «prøv igjen» er sant for noen av disse og usant for andre. Et råd som
+     * aldri kan virke er en blindvei med et skilt på, og det er verre enn å
+     * si rett ut at eleven ikke kan gjøre noe.
+     */
     if (e instanceof Anthropic.APIConnectionTimeoutError) {
       throw new GeneratorFeil(
         "tidsavbrudd",
         "Det tok for lang tid å behandle teksten.",
         "Prøv igjen. Er teksten lang, kan et kortere utdrag gå raskere.",
+        e,
+      );
+    }
+
+    /*
+     * 401 og 403: nøkkelen er utløpt, trukket tilbake, feil, eller mangler
+     * rettigheten. Ingen av dem lar seg rette av eleven, og ingen av dem
+     * blir bedre av å vente — derfor ikke «prøv igjen om litt».
+     *
+     * Dette er feilen en utløpt API-nøkkel gir, og den er verdt å skille ut
+     * nettopp fordi den er usynlig for alt annet: testene kaller ikke
+     * modellen, bygget kaller ikke modellen, og helsesjekken går mot
+     * databasen. Alt er grønt mens appen ikke virker.
+     */
+    if (
+      e instanceof Anthropic.AuthenticationError ||
+      e instanceof Anthropic.PermissionDeniedError
+    ) {
+      throw new GeneratorFeil(
+        "tilgang_avslaatt",
+        "Lesevenn mangler tilgangen den trenger for å behandle teksten.",
+        "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er " +
+          "lagret, og du kan lese den videre uten markeringer mens vi retter det.",
+        e,
+      );
+    }
+
+    // 429: den ene feilen der «prøv igjen om litt» faktisk er riktig råd.
+    if (e instanceof Anthropic.RateLimitError) {
+      throw new GeneratorFeil(
+        "for_mange_kall",
+        "Lesevenn har for mye å gjøre akkurat nå.",
+        "Vent et minutt og prøv igjen. Teksten din er lagret.",
         e,
       );
     }

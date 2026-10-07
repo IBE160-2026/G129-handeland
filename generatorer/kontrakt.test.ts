@@ -13,11 +13,13 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
+import { z } from "zod";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import {
   GeneratorFeil,
   formaterAvsnitt,
   hentPrompt,
+  kjoerGenerator,
   type Oppgave,
 } from "./kontrakt";
 
@@ -102,6 +104,44 @@ describe("AD-14 — manifestet bestemmer hva som er gjeldende", () => {
       expect(oppføring.modell, `${oppgave} mangler modell`).toMatch(
         /^claude-/,
       );
+    }
+  });
+});
+
+describe("§5 — tilgangsfeil gir ikke rådet «prøv igjen»", () => {
+  test("manglende nøkkel gir tilgang_avslaatt, ikke modellfeil", async () => {
+    // Samme feilkode som en utløpt eller tilbaketrukket nøkkel gir, fordi det
+    // er samme problem for eleven: appen kommer ikke til modellen, og det er
+    // ingenting eleven kan gjøre med det.
+    //
+    // Det som gjør skillet verdt en egen kode er RÅDET. Den generelle
+    // modellfeil-grenen sier «prøv igjen om litt», og det kan aldri virke mot
+    // en utløpt nøkkel. §5 krever minst én konkret ting eleven kan gjøre, og
+    // et råd som ikke kan virke er ikke det.
+    const foerModus = process.env.LESEVENN_TESTMODUS;
+    const foerNoekkel = process.env.ANTHROPIC_API_KEY;
+    process.env.LESEVENN_TESTMODUS = "av";
+    delete process.env.ANTHROPIC_API_KEY;
+
+    try {
+      await kjoerGenerator({
+        oppgave: "faguttrykk",
+        skjema: z.object({ noe: z.string() }),
+        brukermelding: "hva som helst",
+      });
+      throw new Error("skulle kastet");
+    } catch (e) {
+      expect(e).toBeInstanceOf(GeneratorFeil);
+      const f = e as GeneratorFeil;
+      expect(f.kode).toBe("tilgang_avslaatt");
+      expect(f.anbefaltHandling).not.toMatch(/prøv igjen/i);
+      // Og eleven skal få vite at arbeidet ikke er tapt.
+      expect(f.anbefaltHandling).toMatch(/lagret/i);
+    } finally {
+      if (foerModus === undefined) delete process.env.LESEVENN_TESTMODUS;
+      else process.env.LESEVENN_TESTMODUS = foerModus;
+      if (foerNoekkel === undefined) delete process.env.ANTHROPIC_API_KEY;
+      else process.env.ANTHROPIC_API_KEY = foerNoekkel;
     }
   });
 });

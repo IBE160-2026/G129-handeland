@@ -50,7 +50,7 @@ vertsnavnet i `DATABASE_URL`, så ingenting må endres i koden.
 ### Tester
 
 ```bash
-npm test         # 88 tester, ingen av dem kaller språkmodellen
+npm test         # 89 tester, ingen av dem kaller språkmodellen
 npx tsc --noEmit # typesjekk
 npm run build    # verifiser før push
 ```

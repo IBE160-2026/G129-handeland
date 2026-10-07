@@ -167,18 +167,53 @@ oppførselen fast med begrunnelsen i kommentaren.
 
 ---
 
+## Funn 6 — Et råd som aldri kan virke
+
+**Hvor:** `generatorer/kontrakt.ts`, `catch`-blokken i `kjoerGenerator`.
+
+**Hva:** alle feil fra modellkallet som ikke var tidsavbrudd falt til én felles
+gren, med meldingen «Lesevenn fikk ikke behandlet teksten» og rådet «Prøv igjen
+om litt. Står det ved, er det en feil hos oss.»
+
+Det er riktig råd ved en forbigående feil. Det er feil råd ved en **utløpt eller
+tilbaketrukket API-nøkkel**, som gir 401: der kan eleven prøve igjen så mye den
+vil uten at noe endrer seg. §5 i PRD-en krever at hver feiltilstand tilbyr minst
+én *konkret* ting eleven kan gjøre videre, og et råd som ikke kan virke oppfyller
+ikke kravet — det er en blindvei med et skilt på, som er verre enn å si rett ut
+at eleven ikke kan gjøre noe.
+
+**Hvordan det ble funnet:** ved å svare på spørsmålet «hva skjer når
+API-nøkkelen løper ut?». Svaret krevde at kallveien ble fulgt til ende, og da
+var det tydelig at 401 havnet i den generelle grenen.
+
+**Hvorfor det er verdt å ha med:** feilen er usynlig for alt vi måler.
+Enhetstestene kaller ikke modellen, bygget kaller ikke modellen, og
+helsesjekken går mot databasen. En utløpt nøkkel gir derfor **grønt på hele
+linja mens appen ikke virker** — og den eneste tilbakemeldingen er en melding
+som sender eleven i ring. Det er den klassen feil som koster mest i drift,
+fordi ingenting varsler om den.
+
+**Hva som ble gjort:** 401 og 403 skilt ut som `tilgang_avslaatt`, med et råd
+som ikke lover at venting hjelper, og som sier at teksten er lagret. 429 skilt
+ut som `for_mange_kall` — den ene feilen der «prøv igjen om litt» faktisk er
+sant. Den manglende nøkkelen bruker nå samme kode som den utløpte, siden det er
+samme problem for eleven. Test lagt inn som sjekker at rådet ikke inneholder
+«prøv igjen».
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — fem funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — seks funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
 | Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Ikke startet — §4.10 er ikke bygget ennå |
 
-**Et mønster til refleksjonsrapporten.** Ingen av de fem funnene ble oppdaget av
+**Et mønster til refleksjonsrapporten.** Ingen av de seks funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som
-treffer hver gren, funn 2 av å feilsøke noe annet, og funn 3, 4 og 5 av å ta
+treffer hver gren, funn 2 av å feilsøke noe annet, og funn 3, 4, 5 og 6 av å ta
 koden i bruk — å skrive den første ekte generatoren og følge kallveien til ende.
 Funn 3 og 4 er dessuten samme klasse: kode som var internt konsistent, hadde
 grønne tester, og var kommentert med en begrunnelse som pekte på riktig
