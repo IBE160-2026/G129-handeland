@@ -110,7 +110,37 @@ function lagDb(): Database {
  * endring, og uten dette ville hver omlasting åpnet en ny pool.
  */
 const globalForDb = globalThis as unknown as { lesevennDb?: Database };
-export const db: Database = globalForDb.lesevennDb ?? lagDb();
-if (process.env.NODE_ENV !== "production") globalForDb.lesevennDb = db;
 
-export type Db = typeof db;
+function faktiskDb(): Database {
+  if (!globalForDb.lesevennDb) {
+    globalForDb.lesevennDb = lagDb();
+  }
+  return globalForDb.lesevennDb;
+}
+
+/**
+ * Klienten opprettes ved FØRSTE SPØRRING, ikke ved import.
+ *
+ * Forskjellen er ikke akademisk. Den første utgaven kalte `lagDb()` på
+ * modulnivå, og da må `DATABASE_URL` finnes i det øyeblikket noen importerer
+ * fila — ikke når noen faktisk spør databasen. To steder der det slo feil:
+ *
+ * 1. En integrasjonstest som laster `.env.local` med dotenv. ES-importer
+ *    heises over kallet til `config()`, så modulen ble initialisert før
+ *    variabelen fantes, og testen feilet med «DATABASE_URL mangler» selv om
+ *    den sto i fila.
+ * 2. `next build`, som importerer alt for å analysere det. Et bygg skal ikke
+ *    trenge en databasetilkobling for å lykkes.
+ *
+ * Proxyen gjør at kallstedene er uendret — `db.select(...)` virker som før —
+ * mens konstruksjonen skjer ved første egenskapsoppslag. Alternativet var å
+ * eksportere en `hentDb()`-funksjon og endre hvert kallsted, som ville gjort
+ * det lettere å glemme på ett av dem.
+ */
+export const db: Database = new Proxy({} as Database, {
+  get(_maal, egenskap) {
+    return faktiskDb()[egenskap as keyof Database];
+  },
+});
+
+export type Db = Database;
