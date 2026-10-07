@@ -336,7 +336,8 @@ Samme Tekst gir i praksis samme Begrepssett.
 - **Råsvarets stabilitet rapporteres ved siden av, uten terskel.** Den er diagnostisk: skiller de to tallene seg mye, ligger ustabiliteten i kappingen og ikke i uttrekket, og det er to helt ulike ting å rette.
 - Begrunnelsen er ikke estetisk: Øvekortene og Minneverset kommer fra Begrepssettet, så et ustabilt uttrekk gir et øvekortsett eleven ikke kan stole på fra en dag til den neste.
 - **Målingen trenger ikke annoteringene, bare Tekstene.** Stabilitet er en sammenligning av appen med seg selv, så dette kravet kan måles så snart de seks Tekstene er valgt — uavhengig av om de er annotert. Det er verdt å vite, fordi det gjør FR-11 til en av de første målingene som kan kjøres, og fordi et resultat her kan påvirke både modellvalget og hvilke Tekster som velges.
-- `[MÅLT 8. oktober, promptversjon v1, claude-haiku-5-5: Jaccard 0,770 på en fokusert tekst og 0,466 på en oversiktstekst, ti kjøringer per celle. Terskelen er altså ikke innfridd ennå, men den er heller ikke vist uoppnåelig. Selvkonsistens — å kjøre uttrekket N ganger og beholde uttrykk som er med i minst k av dem — er den kjente løsningen og er ikke forsøkt. Terskelen skal ikke senkes før den er det.]`
+- **Jaccard rapporteres per teksttype og per tekstkilde, ikke bare som snitt over de seks.** Dette er et krav og ikke en anbefaling, av samme grunn som i SM-8: et snitt over seks Tekster kan ikke skille «jevnt middelmådig» fra «god på halvparten og svak på resten», og de to krever helt ulike tiltak.
+- `[MÅLT 8. oktober, prompt v2, claude-haiku-5-5 adaptiv, 15 kjøringer per Tekst med disjunkte aggregater. Enkeltkjøring: 0,734 på fokusert tekst, 0,441 på oversiktstekst. Med selvkonsistens over fem kjøringer og flertallskrav: 0,865 og 0,564. Tre kjøringer med minst to: 0,801 og 0,526. Konklusjonen er at terskelen er oppnåelig med selvkonsistens på fokusert tekst, og ikke oppnåelig på oversiktstekst med noen av de målte oppsettene. Terskelen beholdes likevel — begrunnelsen står under SM-8 i §10.]`
 - Begrepssettet lagres på Teksten ved første kjøring og gjenbrukes deretter. Det genereres ikke på nytt ved hver visning — både for stabilitet og for kostnad.
 
 #### FR-12: Leseinnstillinger
@@ -808,7 +809,8 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 - **Lesevenn vurderer ikke elever.** Ingen karakter, ingen diagnose, ingen profil av hva eleven er svak i. Diagnostikk på tvers av økter krever reell brukshistorikk for å være troverdig, og den historikken finnes ikke i v1.
 - **Lesevenn er ikke et lærerverktøy i v1.** Ingen klasseoversikt, ingen innsyn, ingen eksport til Kahoot eller Blooket.
 - **Lesevenn er ikke en oversetter.** Morsmålsstøtten er tre definerte punkter i leseløypen, ikke en generell oversettelsesknapp.
-- **Lesevenn leser ikke bilder.** Ingen OCR, ingen bildeinnlesing, ingen URL-innlesing.
+- **Lesevenn leser ikke tekst fra URL.** Innlesing skjer ved liming, PDF med tekstlag, eller bilder av boksider (FR-44). `[RETTET 8. oktober: punktet sa tidligere «Lesevenn leser ikke bilder. Ingen OCR, ingen bildeinnlesing, ingen URL-innlesing». Det var en rest fra før 2. oktober, da bildeinnlesing ble tatt inn i v1 som FR-44 og FR-45. Ikke-målet motsa altså kravet i samme dokument. Feilen er samme klasse som den emneansvarlig påpekte mellom briefen og PRD-en, bare internt i PRD-en.]`
+- **Lesevenn tar ikke imot tekst på andre språk enn norsk i v1.** Engelsk er det nærliggende tilfellet, og utelatelsen er et valg og ikke en forglemmelse — tidligere sa dokumentet ingenting om språk i det hele tatt. Begrunnelsen er at engelsk kilde endrer oppgaven på tre punkter: faguttrykkene blir engelske mens forklaringen skal være norsk, `erSirkulaer` bruker en norsk fyllordliste, og morsmålsstøttens bærende invariant om at «det norske fagbegrepet står alltid sammen med oversettelsen» (§4.7) gjelder ikke når kilden ikke er norsk — eleven ville fått tre språk i samme visning. Engelsk er et fellesfag på linje med de tre i Gullsettet, så dette er en reell avgrensning av noe nyttig, ikke en uinteressant utelatelse. Naturlig utvidelse etter v1.
 - **Lesevenn er ikke en plattform.** Ingen deling, ingen samarbeid, ingen sosiale funksjoner, ingen offentlige profiler.
 - **Lesevenn er ikke et skolesystem.** Ingen Feide, ingen administrasjon, ingen roller utover eleven selv.
 
@@ -928,7 +930,17 @@ Demoløypen er skrevet ned som en sjekkliste i repoet, og kjøres ved hver milep
 **Sekundære**
 
 - **SM-7: Quizen er forankret.** Minst 90 prosent av genererte spørsmål passerer forankringskravet, null uforankrede spørsmål vises eleven. Validerer FR-14.
-- **SM-8: Begrepssettet er stabilt.** Overlapp ≥ 0,80 mellom to kjøringer av samme Tekst. Validerer FR-11.
+- **SM-8: Begrepssettet er stabilt.** Overlapp ≥ 0,80 (Jaccard) mellom to kjøringer av samme Tekst, i det ferdig kappede Begrepssettet, målt over alle Gullsettets seks Tekster. Validerer FR-11. **Terskelen beholdes på 0,80 over hele Gullsettet, og et brudd rapporteres som et brudd** — se avgjørelsen under.
+
+**Om SM-8, og hvorfor tallet er verdiløst uten merkingen**
+
+Terskelen på 0,80 ble satt uten måling. Målingen 8. oktober viste at den er oppnåelig på én teksttype og ikke på en annen: med selvkonsistens over fem kjøringer ga en fokusert tekst 0,865, mens en oversiktstekst ga 0,629 med samme teknikk, prompt og modell.
+
+Tre veier var mulige: beholde 0,80 over alle seks og rapportere et eventuelt brudd, sette egen terskel per teksttype, eller senke terskelen til noe oppnåelig på tvers. **Valget er den første.** Å justere en terskel fordi målingen viser at den ble satt i blinde er legitimt, men det kan ikke skilles utenfra fra å justere den for å gjøre et brudd til en bestått prøve — og en terskel som flyttes etter at tallet er kjent, beviser ingenting uansett hvor god begrunnelsen er.
+
+**Men da hviler alt på merkingen i FR-8, og det er ikke en formalitet.** Et enkelt snitt over seks Tekster er uleselig: 0,72 kan bety at teknikken er jevnt middelmådig, eller at den gir 0,87 på tre Tekster og 0,57 på tre andre. Det er to helt ulike funn med helt ulike konsekvenser — det første sier at metoden ikke holder, det andre at metoden holder og at teksttypen er variabelen. Uten merking per tekstkilde og teksttype er SM-8 derfor bare et tall som enten består eller ikke, og prosjektet lærer ingenting av det.
+
+Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på seks fokuserte Tekster, kan snittet bestå — og da ville en bestått SM-8 skyldes tekstutvalget framfor kvaliteten. Begge feilretninger lukkes av samme krav. **Derfor er fordelingen tre og tre, bestemt før annoteringen starter og ikke etter at tallene er kjent.**
 - **SM-9: Kjerneløypen virker på telefon.** Demoløypens steg 1–7 fullføres på telefon i portrettmodus. Validerer §5.
 - **SM-10: Én testbruker utenfor utvikleren kommer gjennom løypen uten hjelp.** Én elev eller annen frivillig fullfører Kjerneløypen uten instruksjon, og friksjonspunktene skrives ned — særlig om det obligatoriske gjennomsynssteget (FR-3) er der de stopper, siden det er friksjon Lesevenn legger til med vilje. `[ANTAKELSE: én testbruker er oppnåelig innen fristen. Én er nok til å finne det som er åpenbart galt, og langt bedre enn ingen.]`
 - **SM-11: En elev med papirbok kommer gjennom løypen.** Bildeinnlesing av inntil fire sider gir en Råtekst som eleven kan rette i gjennomsynet og fullføre Kjerneløypen fra. Demonstreres i demoløypens steg 13. Validerer FR-44, FR-45. **Merk at dette ikke er en kvalitetspåstand:** metrikken sier at veien finnes og virker ende til ende, ikke at uttrekket er treffsikkert. Det siste er umålt i v1, og det står i FR-45.

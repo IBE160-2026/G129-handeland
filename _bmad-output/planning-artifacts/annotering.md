@@ -58,6 +58,15 @@ merker og rapporterer**, ikke noe du kan isolere. Det er godt nok: poenget er at
 en systematisk forskjell skal være synlig, ikke at den skal kunne tilskrives én
 årsak med sikkerhet.
 
+**Fordelingen tre og tre må bestemmes nå, ikke etter at tallene er kjent.** Det
+er en direkte følge av beslutningen under SM-8: terskelen på 0,80 beholdes over
+hele gullsettet, og et brudd rapporteres som et brudd. Da verner merkingen i to
+retninger samtidig. Uten den er et snitt på 0,72 uleselig — det kan bety at
+metoden er jevnt middelmådig, eller at den gir 0,87 på tre tekster og 0,57 på
+tre andre, som er helt ulike funn. Og havner settet ved et uhell på seks
+fokuserte tekster, kan snittet bestå *fordi* du valgte lette tekster. Begge
+feilretninger lukkes av at fordelingen er låst på forhånd og merket i fila.
+
 **Hvorfor teksttypen er med.** Det er målt, ikke antatt. Stabilitetsmålingen
 8. oktober ga Jaccard 0,770 på en fokusert tekst og 0,466 på en oversiktstekst,
 med samme prompt og samme modell. En oversiktstekst som dekker sju undertemaer
