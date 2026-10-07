@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-10-02
+updated: 2026-10-07
 ---
 
 # PRD: Lesevenn
@@ -13,7 +13,7 @@ En nettapp som fører eleven gjennom en lesestrategi-sekvens for fagtekst, med K
 
 Dokumentet er skrevet for én leser: utvikleren som skal bygge Lesevenn alene i løpet av høstsemesteret 2026, i emnet IBE160 Programmering med KI ved Høgskolen i Molde. Det bygger på `product-brief-lesevenn.md` i samme mappe og gjentar ikke begrunnelsen som ligger der — briefen svarer på *hvorfor*, dette dokumentet svarer på *hva som skal virke, og hvordan man vet at det virker*.
 
-Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-45, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
+Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-46, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
 
 Emnets mappevurdering høsten 2026 har to deler: prosjektkode og funksjonalitet teller 70 prosent, og «dokumentasjon må vise hvordan KI ble brukt, og hvordan studentene har kvalitetssikret koden». Refleksjonsrapporten teller 30 prosent. Det er nesten en tredjedel av karakteren som ikke er kode, og formuleringen sier *koden* — ikke bare det KI-genererte innholdet appen produserer. Dokumentasjonsleveransen er derfor modellert som en funksjonsseksjon med egne krav (§4.11), på linje med resten, og milepælsplanen i §9 verner tid til den. Tekniske valg som er løsning og ikke krav, ligger i `addendum-lesevenn.md`.
 
@@ -705,6 +705,18 @@ Rapporten drøfter ærlig hva det betyr å la en språkmodell vurdere en elevs f
 - Den alvorligste feilmåten navngis og drøftes: at en Misoppfatning leses som Dekkende, altså at eleven får bekreftet en feil forståelse. Det er den feilen som gjør skade, og den skal stå i rapporten selv om den er ubehagelig for produktet.
 - Valget om at Svarvurderingen aldri er en karakter (FR-23) begrunnes som en konsekvens av nettopp disse grensene.
 
+#### FR-46: Appen kan kjøres av noen andre, uten prosjektets nøkler
+
+Lagt inn 7. oktober etter tilbakemelding fra emneansvarlig. Kravet manglet, og det er et hull som fortjener å navngis: Lesevenn er nesten utelukkende språkmodellkall mot en betalt API-nøkkel, oppå en database som ligger i en skytjeneste utvikleren eier. Uten dette kravet kan appen bare kjøres av utvikleren selv — og en app ingen andre kan kjøre, kan ingen andre vurdere. Det er ikke bare et vurderingsproblem: det er også den eneste praktiske kostnadskontrollen under utvikling, siden hver demonstrasjon ellers er et nytt sett betalte kall.
+
+**Konsekvenser (testbare):**
+- **Kjerneløypen kan fullføres uten API-nøkkel.** Generatorlaget har en testmodus som leser modellsvaret fra fil i stedet for å kalle modellen. Modusen settes med én miljøvariabel, og `.env.example` har den slått på som standard, slik at den som følger README havner i den billige veien uten å velge den aktivt.
+- **Lagrede svar går gjennom samme validering som ferske.** Skjemavalideringen i AD-11 kjøres på det leste svaret. Dette er kravets kjerne og ikke en detalj: en testmodus som hopper over valideringen demonstrerer en kodevei som ikke finnes i drift, og beviser dermed ingenting om appen.
+- **Databasen kan kjøres lokalt.** `docker compose` starter en Postgres på samme hovedversjon som driftsdatabasen, og migrasjonene kjøres mot den med ett skript. Samme hovedversjon er med vilje: enum-typene og de unike indeksene i AD-15 er nettopp det som kan oppføre seg ulikt mellom versjoner.
+- **Nøyaktig én dekket tekst er nok, og begrensningen vises.** Testmodus dekker eksempelteksten som ligger i repoet. En annen tekst gir en feilmelding som sier at testmodus bare dekker eksempelteksten, og hva man kan gjøre i stedet. Et oppslag som «nesten traff» og viste svaret til en annen tekst, ville vært verre enn en tydelig feil.
+- **README er testet av å bli fulgt.** Stegene i README kjøres på en maskin uten `.env.local` og uten prosjektets nøkler, og det dokumenteres at kjerneløypen gikk gjennom. Et README som bare er skrevet, er ikke et README som virker.
+- **Testmodus er ikke standard i drift.** En uleselig eller glemt verdi i miljøvariabelen faller til «av», altså til et ekte kall. Det motsatte valget — å falle til lagrede svar — ville gitt en app i drift som stille viser andres svar til eleven.
+
 ## 5. Tverrgående krav
 
 - **Ingen KI-utdata uten kilde.** Alt generert innhold som påstår noe om Teksten — forklaringer, quizspørsmål, samtalespørsmål, oppsummeringer, vers — har et Kildeavsnitt. Kravet er arkitektonisk, ikke kosmetisk: klarer ikke en generator å oppgi Kildeavsnitt, er utdataen ikke gyldig.
@@ -794,6 +806,7 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 - Minnevers eller Suno-prompt, med faktasjekk.
 - Brukerkonto med lagring, historikk og sletting.
 - Dokumentasjonsleveransen i §4.11: KI-logg, Promptregister, Gullsett med tall i repoet, kodekvalitetssikring, etikk og jus, refleksjon.
+- Kjørbarhet for andre (FR-46): testmodus med lagrede modellsvar for eksempelteksten, og lokal database i Docker, slik at hele Kjerneløypen kan gås gjennom uten prosjektets API-nøkkel.
 
 ### 8.2 Utenfor v1
 
@@ -901,6 +914,7 @@ Demoløypen er skrevet ned som en sjekkliste i repoet, og kjøres ved hver milep
 - **SM-9: Kjerneløypen virker på telefon.** Demoløypens steg 1–7 fullføres på telefon i portrettmodus. Validerer §5.
 - **SM-10: Én testbruker utenfor utvikleren kommer gjennom løypen uten hjelp.** Én elev eller annen frivillig fullfører Kjerneløypen uten instruksjon, og friksjonspunktene skrives ned — særlig om det obligatoriske gjennomsynssteget (FR-3) er der de stopper, siden det er friksjon Lesevenn legger til med vilje. `[ANTAKELSE: én testbruker er oppnåelig innen fristen. Én er nok til å finne det som er åpenbart galt, og langt bedre enn ingen.]`
 - **SM-11: En elev med papirbok kommer gjennom løypen.** Bildeinnlesing av inntil fire sider gir en Råtekst som eleven kan rette i gjennomsynet og fullføre Kjerneløypen fra. Demonstreres i demoløypens steg 13. Validerer FR-44, FR-45. **Merk at dette ikke er en kvalitetspåstand:** metrikken sier at veien finnes og virker ende til ende, ikke at uttrekket er treffsikkert. Det siste er umålt i v1, og det står i FR-45.
+- **SM-12: Noen andre kan kjøre appen.** Kjerneløypen fullføres fra et rent utsjekk av repoet, etter stegene i README, uten prosjektets API-nøkkel og uten tilgang til driftsdatabasen. Validerer FR-46. **Dette er ikke en kvalitetspåstand om modellsvarene** — de er lagret på forhånd, og sier derfor ingenting om hvordan appen svarer på en ny tekst. Metrikken sier at kodeveien finnes, er validert og kan vises fram av noen som ikke er utvikleren.
 - **Merknad om briefens mappekriterium.** Briefen listet «flere tekster samlet i en mappe med én felles quiz» som et funksjonelt suksesskriterium. Det er ikke innfridd i v1, fordi Mapper er tatt ut (§4.9). Det skal stå i rapporten som et bevisst bytte med begrunnelse, ikke forsvinne fordi metrikken ble fjernet sammen med funksjonen.
 
 **Motmetrikker — skal ikke optimaliseres**

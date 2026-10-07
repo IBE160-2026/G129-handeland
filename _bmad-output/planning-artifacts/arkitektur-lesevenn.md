@@ -199,6 +199,16 @@ Følger av dette: PDF-parsing hører i klientkoden, ikke i en serverfunksjon —
 - **Rule:** **manuelle dommer lagres som datafiler i repoet**, i en fast form, ved siden av gullsettene: hvilken sak, hvilken dom, hvilken promptversjon og modell, hvilken dato. `npm run maal` er den ene eieren av oppsummeringstabellen FR-40 krever, og den bygger tabellen av tre kilder — resultatene fra `npm test`, sine egne målinger, og de lagrede manuelle dommene. Hver terskel i PRD-en har én rad med målt verdi og bestått eller ikke.
 
 Uten dette er FR-40 sitt krav om «én tabell som viser hver terskel med målt verdi og bestått/ikke bestått» ikke tildelt noen. AD-5 deler kontrollene over to kjøringer, og ingen AD sa hvordan de møtes igjen. De manuelle dommene er den halvparten som er lettest å miste: relevansvurderingen i FR-21, forklaringenes riktighet i FR-8, forankringen i FR-14, tonen i FR-23 og den eksterne vurderingen i FR-28 er alle menneskelige dommer som må kunne kjøres om og vises fram.
+### AD-18 — Kjørbarhet uten prosjektets nøkler er en egenskap ved generatorlaget, ikke en demo ved siden av
+
+- **Binds:** FR-46, AD-1, AD-7, AD-10, AD-11, AD-14
+- **Prevents:** at «sensor kan kjøre appen» løses med en parallell demovei — falske data, en hardkodet eksempelside, eller en gren som ikke er den som kjører i drift — og dermed demonstrerer kode som ikke finnes
+- **Rule:** **testmodus er et bytte inne i `kjoerGenerator`, over skjemavalideringen.** Tre tilstander, styrt av én miljøvariabel: `av` kaller modellen, `les` henter svaret fra `testdata/modellsvar/`, `skriv` kaller modellen og lagrer svaret. Et lagret svar går gjennom samme skjemavalidering som et ferskt (AD-11), og nøkkelen inkluderer promptversjonen, slik at et svar lagret under v1 aldri leveres som om det var v2 (AD-14). En ukjent eller glemt verdi faller til `av`. Databasen velges på samme måte: `data/db.ts` leser vertsnavnet i tilkoblingsstrengen og bruker Neons driver mot Neon, `pg` ellers — så en lokal Postgres i Docker er samme kodebase, ikke en variant av den.
+
+Dette er AD-7 pekt mot appen i stedet for harnessen. AD-7 sa alt at rå modellsvar lagres som filer i repoet og at måletall regnes om fra lagrede svar framfor nye kall; det eneste nye her er at kjøretidsveien kan lese de samme filene. Derfor er plasseringen viktigere enn mekanismen: legges byttet over valideringen, demonstrerer testmodus en kodevei som ikke finnes i drift, og da beviser den ingenting om appen. Legges det under, er det ett `if` fra å være den ekte veien.
+
+Driverbyttet hører i samme AD fordi det løser samme problem og ville ellers vært en løs ende: en testmodus for modellkallene hjelper ikke om databasen fortsatt bare finnes i en skytjeneste utvikleren eier.
+
 ## Konsistenskonvensjoner
 
 | Område | Konvensjon |

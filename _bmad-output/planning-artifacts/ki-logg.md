@@ -180,9 +180,44 @@ Modellen hadde dessuten selv erklært at den ikke burde være kilde på Anthropi
 3. Hva treningsinnstillingen på mitt eget Pro-abonnement står på — den styrer utviklingssamtalene, ikke appen, men det hører i det ærlige bildet av hvordan prosjektet ble til
 
 Alle tre skal inn i addendumets seksjon om leverandørvilkår, med URL og dato.
-## Status mot FR-38, per 2. oktober
 
-Ni oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet kom ut av arbeidet:
+## 2026-10-02 — FUNN I VERKTØYET: innstillingen jeg ikke fant
+
+**Verktøy:** Claude Code og claude.ai, egne kontoinnstillinger.
+
+**Hva jeg forsøkte:** å slå av trening på mine egne samtaler, og å korte ned oppbevaringstiden på Claude Code-sesjonstranskripsjoner. Forbrukervilkårene sier at trening skjer «unless you opt out of training through your account settings», og lagringsdokumentasjonen sier seks år «by default» med henvisning til en innstilling under organisasjonsinnstillinger.
+
+**Hva som skjedde:** jeg fant ingen av dem, til tross for grundig leting. Ordlyden i lagringsdokumentasjonen peker mot organisasjonskontoer, og jeg har en individuell Pro-konto.
+
+**Hva jeg gjorde med det:** skrev det inn i refleksjonen som et funn framfor å la det stå som et hull i teksten. Spørsmålet jeg endte med er: er det ikke litt uetisk å framstille noe som et valg, men gjøre det lite tilgjengelig?
+
+**Hvorfor dette hører i KI-loggen og ikke bare i rapporten:** det er en observasjon om verktøyet prosjektet er bygget med, gjort under arbeidet, og den er etterprøvbar — en annen kan forsøke det samme. Den sier dessuten noe om grensen for hvor mye kontroll man faktisk har over KI-assistert utvikling, som er noe annet enn hvor mye kontroll vilkårene beskriver.
+
+**Gjenstår:** å undersøke om innstillingene finnes for individuelle kontoer i en annen form, eller bare for organisasjoner.
+
+## 2026-10-07 — FANGET AV MENNESKE: PRD-en manglet et krav som teller 10 prosent
+
+**Verktøy:** Claude Code (Claude Opus 5), hele planleggingsfasen — brief, PRD og arkitekturspine.
+
+**Hva jeg ba om:** en PRD med testbare krav og realistisk omfang, og senere en arkitekturspine rettet mot bygging.
+
+**Hva som kom tilbake:** 42 funksjonskrav med gullsett og tallfestede terskler, kuttrekkefølge, motmetrikker, og 17 bindende invarianter. Emneansvarlig kalte planleggingen «svært grundig» i tilbakemeldingen sin.
+
+**Hva som avdekket feilen:** tilbakemelding fra emneansvarlig 6. oktober. Sensorveiledningen for del 1 har «README og kjørbarhet» som eget kriterium med 10 prosent vekt, formulert som at løsningen skal kunne kjøres lokalt uten gruppens nøkler eller betalte kontoer. PRD-en hadde **ingen** funksjonskrav for det. Appen kunne i praksis bare kjøres av meg: hvert eneste steg i kjerneløypen er et kall til et betalt API, oppå en database som ligger i en skytjeneste på min konto.
+
+**Hvorfor dette er den mest lærerike oppføringen i loggen så langt:** feilen er ikke en gal påstand, men et **fravær**. Alle kvalitetsmekanismene i PRD-en — gullsettene, tersklene, motmetrikkene, regelen om at en modells egen vurdering ikke er bevis — måler om det som *står der* holder. Ingen av dem spør om noe mangler. En utelatelse gir ingen advarsel: det finnes ingen setning å være uenig i.
+
+Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen heller ikke fanget det. Gjennomgangene vurderte dokumentet mot seg selv og mot rubrikken de fikk oppgitt — ikke mot sensorveiledningen, som jeg ikke hadde gitt dem. Modellen kan holde et dokument internt konsistent, men den kjenner bare de kravene jeg har nevnt. Det er samme mønster som oppføring 6, bare med et vurderingskriterium i stedet for et tilgangsproblem.
+
+**Hva jeg gjorde:** la inn FR-46 (kjørbarhet uten prosjektets nøkler) og AD-18 (testmodus som et bytte inne i generatorlaget, over skjemavalideringen), og bygde begge: lagrede modellsvar med tre moduser, og driverbytte i `data/db.ts` slik at en lokal Postgres i Docker er samme kodebase som drift. Briefen ble samtidig oppdatert med aldersgruppe, PRD-ens måltall i stedet for de vage kriteriene, og mapper flyttet ut av v1.
+
+**Konsekvens for refleksjonsrapporten:** dette er det konkrete eksempelet på hva KI-assistert planlegging ikke oppdager. Det er ikke at modellen tar feil — den var presis på alt den ble gitt grunnlag for. Det er at *grunnlaget* var mitt ansvar, og at en grundig plan bygget på et ufullstendig grunnlag ser like overbevisende ut som en fullstendig.
+
+---
+
+## Status mot FR-38, per 7. oktober
+
+Ti oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -195,10 +230,12 @@ Ni oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt u
 | 7 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
 | 8 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
 | 9 | Innstillinger som ikke lot seg finne | Funn om verktøyet, gjort av en oppgave som ikke lyktes |
+| 10 | PRD-en manglet kravet om kjørbarhet | Utelatelse i utdataet, fanget av emneansvarlig og ikke av seks gjennomganger |
 
 Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke en grunn til å slutte å føre loggen — poenget er at den skal vise utviklingen gjennom semesteret, og implementasjonsfasen kommer til å gi flere og mer tekniske oppføringer. Særlig ventet: kodegjennomgangen av innlogging og lagring (FR-41), der kravet er minst tre dokumenterte feil eller svakheter i KI-generert kode med hvordan de ble funnet.
 
 **Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 6 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
+
 ---
 
 ## Mal for nye oppføringer
@@ -220,17 +257,3 @@ Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke e
 ```
 
 ---
-
-## 2026-10-02 — FUNN I VERKTØYET: innstillingen jeg ikke fant
-
-**Verktøy:** Claude Code og claude.ai, egne kontoinnstillinger.
-
-**Hva jeg forsøkte:** å slå av trening på mine egne samtaler, og å korte ned oppbevaringstiden på Claude Code-sesjonstranskripsjoner. Forbrukervilkårene sier at trening skjer «unless you opt out of training through your account settings», og lagringsdokumentasjonen sier seks år «by default» med henvisning til en innstilling under organisasjonsinnstillinger.
-
-**Hva som skjedde:** jeg fant ingen av dem, til tross for grundig leting. Ordlyden i lagringsdokumentasjonen peker mot organisasjonskontoer, og jeg har en individuell Pro-konto.
-
-**Hva jeg gjorde med det:** skrev det inn i refleksjonen som et funn framfor å la det stå som et hull i teksten. Spørsmålet jeg endte med er: er det ikke litt uetisk å framstille noe som et valg, men gjøre det lite tilgjengelig?
-
-**Hvorfor dette hører i KI-loggen og ikke bare i rapporten:** det er en observasjon om verktøyet prosjektet er bygget med, gjort under arbeidet, og den er etterprøvbar — en annen kan forsøke det samme. Den sier dessuten noe om grensen for hvor mye kontroll man faktisk har over KI-assistert utvikling, som er noe annet enn hvor mye kontroll vilkårene beskriver.
-
-**Gjenstår:** å undersøke om innstillingene finnes for individuelle kontoer i en annen form, eller bare for organisasjoner.
