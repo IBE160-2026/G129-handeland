@@ -50,7 +50,7 @@ vertsnavnet i `DATABASE_URL`, så ingenting må endres i koden.
 ### Tester
 
 ```bash
-npm test         # 60 tester, ingen av dem kaller språkmodellen
+npm test         # 88 tester, ingen av dem kaller språkmodellen
 npx tsc --noEmit # typesjekk
 npm run build    # verifiser før push
 ```
@@ -67,6 +67,7 @@ Alt planleggingsmateriale ligger i [`_bmad-output/planning-artifacts/`](_bmad-ou
 | `proposal-lesevenn.md` | Arbeidskravet, godkjent 25.09.2026 |
 | `fremdriftsplan.md` | Milepæler, timeregnskap og kuttrekkefølge |
 | `ki-logg.md` | Løpende logg over KI-bruk i utviklingen (FR-38) |
+| `kodefunn.md` | Feil og svakheter funnet i KI-generert kode, med hvordan (FR-41) |
 | `underlag-refleksjonsrapport.md` | Råstoff til refleksjonsrapporten |
 | `addendum-lesevenn.md` | Emnekontekst, teknologivurderinger, forkastede alternativer |
 | `tilbakemelding-product-brief.md` | Tilbakemelding fra emneansvarlig, 06.10.2026 |

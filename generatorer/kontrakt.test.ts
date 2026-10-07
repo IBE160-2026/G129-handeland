@@ -31,11 +31,18 @@ describe("AD-14 — manifestet bestemmer hva som er gjeldende", () => {
     expect(p.tekst.length).toBeGreaterThan(100);
   });
 
-  test("promptteksten inneholder plassholderen for avsnittene", async () => {
-    // Uten den havner teksten aldri i prompten, og modellen får ingenting
-    // å jobbe med — en feil som gir rare svar framfor en feilmelding.
+  test("promptteksten beskriver avsnittsformatet den faktisk får", async () => {
+    // Teksten sendes som brukermelding, ikke bakt inn i systemprompten.
+    // Da må systemprompten beskrive formatet i stedet — ellers må modellen
+    // gjette hva merkelappene betyr, og kildeavsnittene blir upålitelige.
+    //
+    // Denne testen erstatter en tidligere som sjekket at prompten inneholdt
+    // plassholderen {{AVSNITT}}. Plassholderen ble aldri fylt ut av noen:
+    // `kjoerGenerator` sender prompten som system og teksten som melding.
+    // Testen bestod, og beskyttet ingenting.
     const p = await hentPrompt("faguttrykk");
-    expect(p.tekst).toContain("{{AVSNITT}}");
+    expect(p.tekst).toContain("[avsnitt 1, overskrift]");
+    expect(p.tekst).not.toContain("{{");
   });
 
   test("harnessen kan overstyre versjonen", async () => {

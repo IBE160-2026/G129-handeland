@@ -15,6 +15,7 @@
 
 import type { Avsnitt } from "../tekst/avsnittsdeling";
 import { antallOrd } from "../tekst/avsnittsdeling";
+import type { Forekomst } from "../tekst/forekomster";
 
 /** Et kandidatbegrep slik generatoren leverer det, før validering. */
 export type Begrepskandidat = {
@@ -24,12 +25,14 @@ export type Begrepskandidat = {
   kildeavsnittNummer: number;
 };
 
-/** En enkelt markering i teksten. AD-13. */
-export type Forekomst = {
-  avsnittNummer: number;
-  start: number;
-  slutt: number;
-};
+/**
+ * En enkelt markering i teksten. AD-13.
+ *
+ * Typen eies av `tekst/forekomster.ts`, der regnestykket som lager settet
+ * ligger. Den re-eksporteres her fordi tetthetsmålingene under tar den som
+ * inndata, og et kallsted skal ikke trenge to importer for én operasjon.
+ */
+export type { Forekomst };
 
 /* ------------------------------------------------------------------ *
  * Elementnivå — FR-7
@@ -163,7 +166,9 @@ export const TETTHETSTAK = {
 } as const;
 
 export type Tetthetsmaal = {
+  /** Antall markeringer eleven ser. */
   antallForekomster: number;
+  /** Antall ulike Faguttrykk blant markeringene. */
   antallUnike: number;
   antallOrd: number;
   andelAvOrd: number;
@@ -173,8 +178,17 @@ export type Tetthetsmaal = {
 };
 
 /**
- * Regner alle tre målene i FR-7 på FOREKOMSTSETTET, ikke på antall unike
- * uttrykk. Det er AD-13: taket skal virke på det eleven faktisk ser.
+ * Regner alle tre målene i FR-7.
+ *
+ * To av dem gjelder MARKERINGENE, altså det eleven faktisk ser (AD-13):
+ * andelen av løpende ord, og det høyeste antallet i et vindu på 100 ord.
+ *
+ * Det tredje gjelder UNIKE FAGUTTRYKK, fordi FR-7 sier «høyst 12 unike
+ * Faguttrykk per 1 000 ord». Skillet er ikke pedantisk: tre begreper som står
+ * fem ganger hver, og femten begreper som står én gang, gir samme antall
+ * markeringer men er helt ulike sider. Det første er en tekst med tre
+ * gjennomgangsbegreper, det andre er et gult teppe. En tidligere versjon av
+ * denne funksjonen telte unike *posisjoner* og kunne derfor ikke skille dem.
  */
 export function maalTetthet(
   forekomster: Forekomst[],
@@ -182,7 +196,7 @@ export function maalTetthet(
 ): Tetthetsmaal {
   const ord = antallOrd(avsnitt);
   const unike = new Set(
-    forekomster.map((f) => `${f.avsnittNummer}:${f.start}:${f.slutt}`),
+    forekomster.map((f) => f.uttrykk.trim().toLowerCase()),
   ).size;
 
   const andel = ord === 0 ? 0 : forekomster.length / ord;

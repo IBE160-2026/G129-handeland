@@ -143,14 +143,30 @@ describe("AD-11 — elementbrudd forkastes, med årsak", () => {
 /* ------------------------------------------------------------------ */
 
 describe("FR-7 og AD-13 — tetthet regnes på forekomstsettet", () => {
-  test("teller forekomster, ikke unike uttrykk", () => {
-    // Samme uttrykk to steder er to markeringer for eleven.
+  test("skiller markeringer fra unike uttrykk", () => {
+    // Samme uttrykk to steder er to markeringer for eleven, men ett
+    // Faguttrykk. FR-7 har ulike tak for de to, så de må kunne skilles:
+    // andelen av løpende ord gjelder markeringene, mens taket på 12 per
+    // 1 000 ord gjelder unike uttrykk.
     const forekomster: Forekomst[] = [
-      { avsnittNummer: 2, start: 0, slutt: 6 },
-      { avsnittNummer: 2, start: 50, slutt: 56 },
+      { uttrykk: "mitose", avsnittNummer: 2, start: 0, slutt: 6 },
+      { uttrykk: "mitose", avsnittNummer: 2, start: 50, slutt: 56 },
     ];
     const m = maalTetthet(forekomster, TEKST);
     expect(m.antallForekomster).toBe(2);
+    expect(m.antallUnike).toBe(1);
+  });
+
+  test("ulik bøyning av samme skrivemåte teller som ett uttrykk", () => {
+    // Store og små bokstaver skal ikke gjøre ett begrep til to i målingen.
+    const m = maalTetthet(
+      [
+        { uttrykk: "Mitose", avsnittNummer: 2, start: 0, slutt: 6 },
+        { uttrykk: "mitose", avsnittNummer: 2, start: 50, slutt: 56 },
+      ],
+      TEKST,
+    );
+    expect(m.antallUnike).toBe(1);
   });
 
   test("et tomt sett er innenfor", () => {
@@ -161,10 +177,10 @@ describe("FR-7 og AD-13 — tetthet regnes på forekomstsettet", () => {
     // Fire markeringer tett sammen i starten av ett avsnitt. Andelen over hele
     // teksten er lav, men vinduet på 100 ord bryter taket på 3.
     const tett: Forekomst[] = [
-      { avsnittNummer: 2, start: 0, slutt: 6 },
-      { avsnittNummer: 2, start: 7, slutt: 9 },
-      { avsnittNummer: 2, start: 10, slutt: 13 },
-      { avsnittNummer: 2, start: 14, slutt: 22 },
+      { uttrykk: "ett", avsnittNummer: 2, start: 0, slutt: 6 },
+      { uttrykk: "to", avsnittNummer: 2, start: 7, slutt: 9 },
+      { uttrykk: "tre", avsnittNummer: 2, start: 10, slutt: 13 },
+      { uttrykk: "fire", avsnittNummer: 2, start: 14, slutt: 22 },
     ];
     const m = maalTetthet(tett, TEKST);
 
@@ -193,7 +209,7 @@ describe("AD-11 — settbrudd kappes etter rangering, ikke forkastes", () => {
   // Hver kandidat har én forekomst, alle tett sammen i avsnitt 2.
   const forekomsterFor = (uttrykk: string): Forekomst[] => {
     const i = mange.findIndex((k) => k.uttrykk === uttrykk);
-    return i === -1 ? [] : [{ avsnittNummer: 2, start: i, slutt: i + 1 }];
+    return i === -1 ? [] : [{ uttrykk, avsnittNummer: 2, start: i, slutt: i + 1 }];
   };
 
   test("beholder de høyest rangerte og kutter nedenfra", () => {
