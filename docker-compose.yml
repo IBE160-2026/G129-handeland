@@ -1,0 +1,38 @@
+# Lokal database for utvikling og for den som skal kjore appen uten
+# tilgang til prosjektets Neon-instans.
+#
+# Versjonen er satt til 17 med vilje: Neon kjorer Postgres 17, og en lokal
+# database pa en annen hovedversjon kan oppfore seg ulikt pa presis de
+# detaljene skjemaet vart bruker - enum-typer og unike indekser.
+#
+#   npm run db:opp      start databasen
+#   npm run db:migrer   lag tabellene
+#   npm run db:ned      stopp databasen (dataene beholdes)
+#
+# Dataene ligger i et navngitt volum, sa de overlever `db:ned`. For a slette
+# alt: `docker compose down -v`.
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: lesevenn-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lesevenn
+      POSTGRES_PASSWORD: lesevenn
+      POSTGRES_DB: lesevenn
+    ports:
+      - "5432:5432"
+    volumes:
+      - lesevenn-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Uten denne sier `docker compose up` at tjenesten er klar i det
+      # containeren starter, mens Postgres fortsatt holder pa a initialisere.
+      # En migrasjon rett etterpa feiler da med "connection refused".
+      test: ["CMD-SHELL", "pg_isready -U lesevenn -d lesevenn"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  lesevenn-pgdata:

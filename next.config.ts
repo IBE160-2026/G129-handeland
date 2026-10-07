@@ -10,10 +10,15 @@ const nextConfig: NextConfig = {
    * feilmelding om at fila ikke finnes. Det er nøyaktig den klassen feil
    * arkitekturspinen kaller stille, og den er verdt å kjenne: Next.js har
    * ingen måte å gjette at `prompts/` trengs.
+   *
+   * `testdata/` er med av samme grunn (AD-18). I drift står testmodus på `av`,
+   * så filene leses aldri der — men en forhåndsvisning satt opp med testmodus
+   * ville ellers feilet med at fila ikke finnes, og det er den samme fella
+   * oppdaget to ganger.
    */
   outputFileTracingIncludes: {
-    "/api/**": ["./prompts/**/*"],
-    "/**": ["./prompts/**/*"],
+    "/api/**": ["./prompts/**/*", "./testdata/**/*"],
+    "/**": ["./prompts/**/*", "./testdata/**/*"],
   },
 };
 

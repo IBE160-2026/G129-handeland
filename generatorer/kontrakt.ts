@@ -21,6 +21,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { z } from "zod";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
+import { hentLagret, lagreSvar, testmodus } from "./lagretsvar";
 
 /* ------------------------------------------------------------------ *
  * Feilform (§5 — ingen feiltilstand er en blindvei)
@@ -31,7 +32,8 @@ export type Feilkode =
   | "ukjent_oppgave"
   | "modellfeil"
   | "ugyldig_utdata"
-  | "tidsavbrudd";
+  | "tidsavbrudd"
+  | "lagret_svar_mangler";
 
 /**
  * Alle feil fra generatorlaget har denne formen. Kravet i §5 om at ingen
@@ -206,6 +208,44 @@ export async function kjoerGenerator<S extends z.ZodType>({
   maksTokens?: number;
 }): Promise<Resultat<z.infer<S>>> {
   const prompt = await hentPrompt(oppgave, overstyrVersjon);
+  const modus = testmodus();
+
+  /*
+   * Testmodus `les`: svaret kommer fra disk, og modellen kalles ikke.
+   *
+   * Merk at skjemavalideringen kjører likevel, på presis samme måte som for et
+   * ferskt svar. En testmodus som hoppet over den ville demonstrert en kodevei
+   * som ikke finnes i drift.
+   */
+  if (modus === "les") {
+    const lagret = await hentLagret(oppgave, prompt.versjon, brukermelding);
+
+    if (!lagret) {
+      throw new GeneratorFeil(
+        "lagret_svar_mangler",
+        "Lesevenn kjører i testmodus, og det finnes ikke noe lagret svar for denne teksten.",
+        "Testmodus dekker bare eksempelteksten som ligger i repoet. Bruk den, " +
+          "eller sett LESEVENN_TESTMODUS=av og legg inn en egen API-nøkkel for å " +
+          "kjøre mot modellen.",
+      );
+    }
+
+    const validert = skjema.safeParse(lagret.data);
+    if (!validert.success) {
+      throw new GeneratorFeil(
+        "ugyldig_utdata",
+        "Det lagrede svaret passer ikke formen Lesevenn forventer.",
+        "Fila er sannsynligvis lagret under en eldre utgave av skjemaet. " +
+          "Lag den på nytt med LESEVENN_TESTMODUS=skriv.",
+      );
+    }
+
+    return {
+      data: validert.data as z.infer<S>,
+      promptversjon: lagret.promptversjon,
+      modell: lagret.modell,
+    };
+  }
 
   try {
     const svar = await klient().messages.parse({
@@ -222,6 +262,19 @@ export async function kjoerGenerator<S extends z.ZodType>({
         "ugyldig_utdata",
         "Lesevenn fikk et svar den ikke kunne bruke.",
         "Prøv igjen. Skjer det på nytt med samme tekst, kan teksten være vanskelig å behandle — prøv et kortere utdrag.",
+      );
+    }
+
+    // Testmodus `skriv`: dette er hvordan filene i testdata/ lages. Lagringen
+    // skjer etter valideringen over, så et svar som ikke holdt formen havner
+    // aldri på disk.
+    if (modus === "skriv") {
+      await lagreSvar(
+        oppgave,
+        prompt.versjon,
+        prompt.modell,
+        brukermelding,
+        svar.parsed_output,
       );
     }
 

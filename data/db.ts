@@ -5,19 +5,24 @@
  * denne fila — det er AD-10, og det er den regelen som gjør at måleharnessen
  * kan kjøre uten database.
  *
- * ## Hvorfor Neons driver og ikke node-postgres
+ * ## To drivere, valgt ut fra tilkoblingsstrengen
  *
- * Driveren er `@neondatabase/serverless` over WebSocket, ikke `pg` over TCP.
- * To grunner, i rekkefølge etter hvor tungt de veier:
+ * Appen kjører mot Neon i drift og mot en vanlig Postgres lokalt, og de to
+ * krever ulike drivere. Neons `@neondatabase/serverless` går over WebSocket
+ * gjennom Neons egen proxy og kan ikke snakke med en Postgres som ikke står
+ * bak den proxyen. `pg` snakker standard Postgres-protokoll over TCP, men mot
+ * Neon fra et nett som sperrer 5432 kommer den ikke fram.
  *
- * 1. **Porten.** `pg` kobler på 5432, og det nettet utviklingen skjer fra
- *    slipper ikke gjennom på den porten — verifisert 2. oktober: TCP til 443
- *    gikk, TCP til 5432 tidsavbrøt. Neons driver går gjennom deres proxy på
- *    standard web-porter, så sperren slutter å være et problem.
- * 2. **Én kodevei.** Samme driver i utvikling og i drift betyr én oppførsel å
- *    feilsøke framfor to.
+ * Valget tas derfor på vertsnavnet: peker URL-en på Neon, brukes Neons driver;
+ * ellers brukes `pg`. Det betyr at samme kodebase kjører både i drift og mot en
+ * lokal database i Docker, uten at noen må bytte driver for hånd.
  *
- * ## Hvorfor WebSocket og ikke HTTP
+ * Grunnen til at det i det hele tatt skal være mulig å kjøre lokalt: en app som
+ * bare kan kjøres av den som eier skytjenestene og nøklene, kan ingen
+ * utenforstående vurdere. Se også testmodus i `generatorer/lagretsvar.ts`, som
+ * gjør det samme for språkmodellkallene.
+ *
+ * ## Hvorfor WebSocket og ikke HTTP på Neon-siden
  *
  * Neon tilbyr begge. HTTP-varianten (`drizzle-orm/neon-http`) er raskere for
  * enkeltspørringer, men støtter bare ikke-interaktive batcher. `laasTekst` i
@@ -26,16 +31,18 @@
  * med en låst Tekst uten avsnitt — nøyaktig korrupsjonen AD-9 og AD-15 finnes
  * for å hindre, siden alt generert innhold peker på avsnittsnumre.
  *
- * ## Migrasjoner er et unntak
+ * ## Migrasjoner
  *
- * `drizzle-kit` bruker `pg` over 5432 og `DATABASE_URL_UNPOOLED` (se
- * `drizzle.config.ts`). Migrasjoner må derfor kjøres fra et nett som slipper
- * gjennom på 5432. Det er akseptabelt fordi de kjøres sjelden og bevisst, men
- * det er verdt å kjenne før man står fast.
+ * `drizzle-kit` bruker alltid `pg` (se `drizzle.config.ts`). Mot Neon går den
+ * på 5432 og må derfor kjøres fra et nett som slipper gjennom der; mot en
+ * lokal database er det aldri et problem.
  */
 
-import { Pool, neonConfig } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-serverless";
+import { Pool as NeonPool, neonConfig } from "@neondatabase/serverless";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-serverless";
+import type { NeonDatabase } from "drizzle-orm/neon-serverless";
+import { drizzle as drizzlePg } from "drizzle-orm/node-postgres";
+import { Pool as PgPool } from "pg";
 import * as skjema from "./skjema";
 
 /**
@@ -47,24 +54,63 @@ if (typeof globalThis.WebSocket !== "undefined") {
   neonConfig.webSocketConstructor = globalThis.WebSocket;
 }
 
-function lagPool(): Pool {
+/**
+ * Typen er Neon-variantens. De to drizzle-adapterne har identisk
+ * spørringsflate — forskjellen ligger under, i hvordan de snakker med
+ * databasen — men typene deres er nominelt ulike. Å la den ene bære typen og
+ * kaste den andre til den holder alle kallsteder uendret, og er her det
+ * ærligste alternativet: alternativet var en unionstype som hadde tvunget hvert
+ * kallsted til å håndtere et skille som ikke finnes i praksis.
+ */
+type Database = NeonDatabase<typeof skjema>;
+
+function hentUrl(): string {
   const url = process.env.DATABASE_URL;
   if (!url) {
     throw new Error(
-      "DATABASE_URL mangler. Lokalt: kjør `npx vercel env pull .env.local`. " +
+      "DATABASE_URL mangler. Lokalt: kopier .env.example til .env.local, " +
+        "eller kjør `npx vercel env pull .env.local` for å hente fra Vercel. " +
         "I drift: variabelen settes av Neon-integrasjonen i Vercel.",
     );
   }
-  return new Pool({ connectionString: url });
+  return url;
 }
 
 /**
- * Én pool per prosess. Under `next dev` lastes moduler på nytt ved hver
+ * Peker tilkoblingsstrengen på Neon?
+ *
+ * Sjekken går på vertsnavnet og ikke på hele strengen, slik at et passord som
+ * tilfeldigvis inneholder «neon» ikke velger driver.
+ */
+export function erNeon(url: string): boolean {
+  try {
+    return new URL(url).hostname.endsWith(".neon.tech");
+  } catch {
+    return false;
+  }
+}
+
+function lagDb(): Database {
+  const url = hentUrl();
+
+  if (erNeon(url)) {
+    const pool = new NeonPool({ connectionString: url });
+    return drizzleNeon(pool, { schema: skjema, casing: "snake_case" });
+  }
+
+  const pool = new PgPool({ connectionString: url });
+  return drizzlePg(pool, {
+    schema: skjema,
+    casing: "snake_case",
+  }) as unknown as Database;
+}
+
+/**
+ * Én klient per prosess. Under `next dev` lastes moduler på nytt ved hver
  * endring, og uten dette ville hver omlasting åpnet en ny pool.
  */
-const globalForDb = globalThis as unknown as { lesevennPool?: Pool };
-const pool = globalForDb.lesevennPool ?? lagPool();
-if (process.env.NODE_ENV !== "production") globalForDb.lesevennPool = pool;
+const globalForDb = globalThis as unknown as { lesevennDb?: Database };
+export const db: Database = globalForDb.lesevennDb ?? lagDb();
+if (process.env.NODE_ENV !== "production") globalForDb.lesevennDb = db;
 
-export const db = drizzle(pool, { schema: skjema, casing: "snake_case" });
 export type Db = typeof db;
