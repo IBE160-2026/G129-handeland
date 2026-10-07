@@ -254,16 +254,67 @@ fra første tredjedel av teksten. Ført som åpent punkt i FR-7.
 
 ---
 
+## Funn 8 — En heuristikk som gjettet riktig på to modeller og galt som regel
+
+**Hvor:** `generatorer/kontrakt.ts`, funksjonen som satte tenkekonfigurasjonen.
+
+**Hva:** modusen ble gjettet fra modellnavnet:
+
+```ts
+if (modell.startsWith("claude-haiku")) {
+  return { type: "enabled", budget_tokens: 4000 };
+}
+return { type: "adaptive" };
+```
+
+Det var riktig for `claude-haiku-4-5` og `claude-sonnet-5`, altså de to
+modellene prosjektet hadde valgt. Men modellistens egne kapabiliteter viser at
+regelen ikke holder:
+
+| Modell | `thinking.types.enabled` | `thinking.types.adaptive` |
+|---|---|---|
+| `claude-haiku-4-5` | støttet | **ikke** støttet |
+| `claude-haiku-5-5` | **ikke** støttet | støttet |
+
+Samme familie, motsatt krav. Et bytte til Haiku 5.5 — ett ord i manifestet —
+ville sendt `budget_tokens` til en modell som avviser det, og kallet ville
+feilet med 400.
+
+**Hvordan det ble funnet:** ved å verifisere at en ny API-nøkkel virket. Svaret
+fra `GET /v1/models` inneholdt `claude-haiku-5-5`, utgitt samme dag, og
+kapabilitetsfeltet gjorde det tydelig at navnet ikke bærer informasjonen koden
+leste ut av det.
+
+**Hvorfor det er verdt å ha med:** feilen er usynlig til den utløses, og den
+utløses av å *endre én ting og forvente at resten virker* — altså den
+situasjonen man er minst forberedt på å feilsøke. Den er også et eksempel på en
+klasse som går igjen i denne loggen: kode som er korrekt for de tilfellene som
+fantes da den ble skrevet, og som koder inn en antakelse ingen har skrevet ned.
+Her var antakelsen «Haiku betyr budsjett».
+
+Merk at ingen test kunne fanget den. Testene kaller ikke modellen (AD-5), og
+mot den modellen manifestet faktisk pekte på var oppførselen riktig.
+
+**Hva som ble gjort:** tenkemodusen er flyttet til manifestet, ved siden av
+modellen, med gyldige verdier `budsjett`, `adaptiv` og `av`. Det følger AD-14:
+en modell kan ikke forfremmes uten at det samtidig oppgis hvordan den skal
+kalles. En test håndhever at feltet finnes og er gyldig for hver oppgave, så
+den neste som bytter modell blir minnet på spørsmålet framfor å oppdage det i
+drift. Hva en modell støtter, slås opp i `capabilities.thinking` fra
+`GET /v1/models`.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — sju funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — åtte funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
 | Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Ikke startet — §4.10 er ikke bygget ennå |
 
-**Et mønster til refleksjonsrapporten.** Ingen av de seks funnene ble oppdaget av
+**Et mønster til refleksjonsrapporten.** Ingen av de åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som
 treffer hver gren, funn 2 av å feilsøke noe annet, og funn 3, 4, 5 og 6 av å ta
 koden i bruk — å skrive den første ekte generatoren og følge kallveien til ende.

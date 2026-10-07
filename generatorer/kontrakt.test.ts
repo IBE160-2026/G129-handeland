@@ -93,6 +93,35 @@ describe("AD-14 — manifestet bestemmer hva som er gjeldende", () => {
     }
   });
 
+  test("hver oppføring oppgir en gyldig tenkemodus", async () => {
+    // Dette er testen som hindrer feilen heuristikken gjorde mulig: Haiku 4.5
+    // tar `budget_tokens` og avviser `adaptive`, mens Haiku 5.5 gjør det
+    // motsatte. Samme familie, motsatt krav. Å gjette fra modellnavnet gir
+    // derfor 400 ved neste modellbytte, så modusen må stå i manifestet — og
+    // da må noe håndheve at den faktisk gjør det.
+    const manifest = JSON.parse(
+      await readFile(path.join(PROMPTROT, "gjeldende.json"), "utf8"),
+    ) as { oppgaver: Record<string, { tenkning?: string }> };
+
+    const gyldige = ["budsjett", "adaptiv", "av"];
+
+    for (const [oppgave, oppføring] of Object.entries(manifest.oppgaver)) {
+      expect(
+        oppføring.tenkning,
+        `${oppgave} mangler tenkemodus. Gyldige: ${gyldige.join(", ")}`,
+      ).toBeDefined();
+      expect(
+        gyldige,
+        `${oppgave} har ugyldig tenkemodus «${oppføring.tenkning}»`,
+      ).toContain(oppføring.tenkning);
+    }
+  });
+
+  test("hentPrompt gir tenkemodusen videre", async () => {
+    const p = await hentPrompt("faguttrykk");
+    expect(p.tenkning).toBe("budsjett");
+  });
+
   test("hver oppføring navngir en modell", async () => {
     // AD-4: modellidentitet stemples på alt generert. Mangler den i
     // manifestet, har stempelet ingen kilde.

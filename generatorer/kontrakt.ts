@@ -70,8 +70,14 @@ export class GeneratorFeil extends Error {
 
 export type Oppgave = "faguttrykk";
 
+/** Tenkemodusene manifestet kan oppgi. Se `_om_tenkning` der. */
+export type Tenkemodus = "budsjett" | "adaptiv" | "av";
+
 type Manifest = {
-  oppgaver: Record<string, { versjon: string; modell: string }>;
+  oppgaver: Record<
+    string,
+    { versjon: string; modell: string; tenkning: Tenkemodus }
+  >;
 };
 
 const PROMPTROT = path.join(process.cwd(), "prompts");
@@ -102,6 +108,7 @@ async function lesManifest(): Promise<Manifest> {
 export type Promptvalg = {
   versjon: string;
   modell: string;
+  tenkning: Tenkemodus;
   tekst: string;
 };
 
@@ -134,7 +141,12 @@ export async function hentPrompt(
       path.join(PROMPTROT, oppgave, `${versjon}.md`),
       "utf8",
     );
-    return { versjon, modell: oppføring.modell, tekst };
+    return {
+      versjon,
+      modell: oppføring.modell,
+      tenkning: oppføring.tenkning,
+      tekst,
+    };
   } catch (e) {
     throw new GeneratorFeil(
       "prompt_mangler",
@@ -165,22 +177,37 @@ function klient(): Anthropic {
   return klientbuffer;
 }
 
+/** Tokenbudsjettet når manifestet sier `budsjett`. */
+const TENKEBUDSJETT = 4000;
+
 /**
- * Tenkekonfigurasjon per modell.
+ * Oversetter manifestets tenkemodus til API-formen.
  *
- * Haiku 4.5 og Sonnet 5 har ULIK API-form her, og det er en direkte følge av
- * at §6.4 bruker ulike modeller til ulike oppgaver: Haiku tar
- * `{type: "enabled", budget_tokens: N}`, mens Sonnet 5 tar
- * `{type: "adaptive"}`. Å sende adaptiv til Haiku, eller `effort` til Haiku
- * i det hele tatt, feiler.
+ * ## Hvorfor dette leses fra manifestet og ikke gjettes fra modellnavnet
  *
- * Forskjellen er samlet her slik at ingen generator trenger å kjenne den.
+ * Den første utgaven gjettet: `modell.startsWith("claude-haiku")` ga
+ * `budget_tokens`, alt annet ga `adaptive`. Det var riktig for de to modellene
+ * som fantes da, og feil som regel. Modellisten fra API-et viser hvorfor:
+ *
+ *   claude-haiku-4-5   thinking.types.enabled  støttet, adaptive IKKE
+ *   claude-haiku-5-5   thinking.types.enabled  IKKE,    adaptive støttet
+ *
+ * Samme familie, motsatt krav. Heuristikken ville altså sendt `budget_tokens`
+ * til en modell som avviser det, og kallet ville feilet med 400 — ved et
+ * modellbytte, altså presis når man endrer én ting og forventer at resten
+ * virker.
+ *
+ * Nå står modusen i manifestet ved siden av modellen. Det følger AD-14: en
+ * modell kan ikke forfremmes uten at det samtidig oppgis hvordan den skal
+ * kalles. Hva en modell faktisk støtter, slås opp i `capabilities.thinking`
+ * fra `GET /v1/models`.
  */
-function tenkning(modell: string) {
-  if (modell.startsWith("claude-haiku")) {
-    return { type: "enabled" as const, budget_tokens: 4000 };
+function tilApiform(modus: Tenkemodus) {
+  if (modus === "budsjett") {
+    return { type: "enabled" as const, budget_tokens: TENKEBUDSJETT };
   }
-  return { type: "adaptive" as const };
+  if (modus === "adaptiv") return { type: "adaptive" as const };
+  return { type: "disabled" as const };
 }
 
 export type Resultat<T> = {
@@ -256,7 +283,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     const svar = await klient().messages.parse({
       model: prompt.modell,
       max_tokens: maksTokens,
-      thinking: tenkning(prompt.modell),
+      thinking: tilApiform(prompt.tenkning),
       system: prompt.tekst,
       messages: [{ role: "user", content: brukermelding }],
       output_config: { format: zodOutputFormat(skjema) },

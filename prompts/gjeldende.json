@@ -1,6 +1,11 @@
 {
   "_om": "AD-14: dette manifestet bestemmer hva som er gjeldende. Generatoren laster BARE versjoner som står her, og avviser andre. Å legge en promptfil i mappa er derfor ikke nok til å ta den i bruk — forfremmelsen er en endring her. Modellen står med, slik at AD-4s stempel har én kilde.",
+  "_om_tenkning": "Hvilken tenkemodus modellen tar. Dette er DATA og ikke en gjetning på modellnavnet, fordi de to ikke henger sammen: claude-haiku-4-5 tar 'budsjett' og avviser 'adaptiv', mens claude-haiku-5-5 gjør det motsatte — samme familie, motsatt krav. En heuristikk på navnet ville derfor feilet med 400 ved neste modellbytte. Gyldige verdier: budsjett, adaptiv, av. Hva en modell faktisk støtter, står i capabilities.thinking.types fra GET https://api.anthropic.com/v1/models.",
   "oppgaver": {
-    "faguttrykk": { "versjon": "v1", "modell": "claude-haiku-4-5" }
+    "faguttrykk": {
+      "versjon": "v1",
+      "modell": "claude-haiku-4-5",
+      "tenkning": "budsjett"
+    }
   }
 }
