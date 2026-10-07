@@ -1,0 +1,6 @@
+{
+  "_om": "AD-14: dette manifestet bestemmer hva som er gjeldende. Generatoren laster BARE versjoner som står her, og avviser andre. Å legge en promptfil i mappa er derfor ikke nok til å ta den i bruk — forfremmelsen er en endring her. Modellen står med, slik at AD-4s stempel har én kilde.",
+  "oppgaver": {
+    "faguttrykk": { "versjon": "v1", "modell": "claude-haiku-4-5" }
+  }
+}
