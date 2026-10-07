@@ -26,10 +26,18 @@ import {
 const PROMPTROT = path.join(process.cwd(), "prompts");
 
 describe("AD-14 — manifestet bestemmer hva som er gjeldende", () => {
-  test("hentPrompt gir versjonen manifestet navngir", async () => {
+  test("hentPrompt gir det manifestet navngir, ikke noe hardkodet", async () => {
+    // Sammenlignes mot manifestet og ikke mot konstanter. Ellers tester denne
+    // fila hva manifestet TILFELDIGVIS inneholder, og brekker hver gang en
+    // versjon eller modell forfremmes legitimt — altså akkurat den handlingen
+    // AD-14 finnes for å gjøre trygg.
+    const manifest = JSON.parse(
+      await readFile(path.join(PROMPTROT, "gjeldende.json"), "utf8"),
+    ) as { oppgaver: Record<string, { versjon: string; modell: string }> };
+
     const p = await hentPrompt("faguttrykk");
-    expect(p.versjon).toBe("v1");
-    expect(p.modell).toBe("claude-haiku-4-5");
+    expect(p.versjon).toBe(manifest.oppgaver.faguttrykk.versjon);
+    expect(p.modell).toBe(manifest.oppgaver.faguttrykk.modell);
     expect(p.tekst.length).toBeGreaterThan(100);
   });
 
@@ -117,9 +125,48 @@ describe("AD-14 — manifestet bestemmer hva som er gjeldende", () => {
     }
   });
 
-  test("hentPrompt gir tenkemodusen videre", async () => {
+  test("hentPrompt gir tenkemodusen og konsistensen videre", async () => {
+    const manifest = JSON.parse(
+      await readFile(path.join(PROMPTROT, "gjeldende.json"), "utf8"),
+    ) as {
+      oppgaver: Record<
+        string,
+        {
+          tenkning: string;
+          konsistens?: { kjoeringer: number; minstEnighet: number };
+        }
+      >;
+    };
+    const o = manifest.oppgaver.faguttrykk;
     const p = await hentPrompt("faguttrykk");
-    expect(p.tenkning).toBe("budsjett");
+
+    expect(p.tenkning).toBe(o.tenkning);
+    expect(p.konsistens).toEqual(o.konsistens);
+  });
+
+  test("konsistens, om den er oppgitt, krever flertall og ikke mer", async () => {
+    // FR-11: minstEnighet maa vaere minst 2 for at det skal vaere enighet i
+    // det hele tatt, og hoeyst kjoeringer — et krav om seks av fem er
+    // umulig og ville gitt tomt Begrepssett for hver tekst.
+    const manifest = JSON.parse(
+      await readFile(path.join(PROMPTROT, "gjeldende.json"), "utf8"),
+    ) as {
+      oppgaver: Record<
+        string,
+        { konsistens?: { kjoeringer: number; minstEnighet: number } }
+      >;
+    };
+
+    for (const [oppgave, o] of Object.entries(manifest.oppgaver)) {
+      if (!o.konsistens) continue;
+      const { kjoeringer, minstEnighet } = o.konsistens;
+      expect(kjoeringer, `${oppgave}: for få kjøringer`).toBeGreaterThan(1);
+      expect(minstEnighet, `${oppgave}: enighet må være minst 2`).toBeGreaterThan(1);
+      expect(
+        minstEnighet,
+        `${oppgave}: krever ${minstEnighet} av ${kjoeringer} — umulig`,
+      ).toBeLessThanOrEqual(kjoeringer);
+    }
   });
 
   test("hver oppføring navngir en modell", async () => {

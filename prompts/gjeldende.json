@@ -1,11 +1,14 @@
 {
   "_om": "AD-14: dette manifestet bestemmer hva som er gjeldende. Generatoren laster BARE versjoner som står her, og avviser andre. Å legge en promptfil i mappa er derfor ikke nok til å ta den i bruk — forfremmelsen er en endring her. Modellen står med, slik at AD-4s stempel har én kilde.",
   "_om_tenkning": "Hvilken tenkemodus modellen tar. Dette er DATA og ikke en gjetning på modellnavnet, fordi de to ikke henger sammen: claude-haiku-4-5 tar 'budsjett' og avviser 'adaptiv', mens claude-haiku-5-5 gjør det motsatte — samme familie, motsatt krav. En heuristikk på navnet ville derfor feilet med 400 ved neste modellbytte. Gyldige verdier: budsjett, adaptiv, av. Hva en modell faktisk støtter, står i capabilities.thinking.types fra GET https://api.anthropic.com/v1/models.",
+  "_om_konsistens": "Selvkonsistens (FR-11): kjør uttrekket N ganger og behold uttrykk minst k av kjøringene fant. Tallene er målt 8. oktober, ikke valgt: med ett kall var Jaccard 0,734 på en fokusert tekst, med fem kall og flertallskrav 0,865. Tre kall med minst to krysset også 0,80 (0,801), så 3/2 er det billigere alternativet om kostnaden blir et problem. Utelates feltet, gjøres ett enkelt kall.",
+  "_UAVKLART": "claude-haiku-5-5 er IKKE sjekket mot Anthropics «Covered Models»-liste. Konklusjonen i addendum §6 om at elevenes data ikke lagres i 30 dager gjelder claude-haiku-4-5 og claude-sonnet-5, som ble verifisert 2. oktober (åpent spørsmål 11 i PRD-en). Sjekken MÅ gjøres før appen tar imot data fra en reell elev. Den er ikke en blokker for måling mot gullsettet, siden gullsettekstene er åpent lisensierte og ikke elevdata.",
   "oppgaver": {
     "faguttrykk": {
-      "versjon": "v1",
-      "modell": "claude-haiku-4-5",
-      "tenkning": "budsjett"
+      "versjon": "v2",
+      "modell": "claude-haiku-5-5",
+      "tenkning": "adaptiv",
+      "konsistens": { "kjoeringer": 5, "minstEnighet": 3 }
     }
   }
 }

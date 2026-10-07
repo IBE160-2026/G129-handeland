@@ -73,10 +73,26 @@ export type Oppgave = "faguttrykk";
 /** Tenkemodusene manifestet kan oppgi. Se `_om_tenkning` der. */
 export type Tenkemodus = "budsjett" | "adaptiv" | "av";
 
+/**
+ * Selvkonsistens: kjør N ganger, behold det minst k av dem fant.
+ *
+ * Dette hører i manifestet og ikke i koden, av samme grunn som `tenkning`:
+ * det er en del av hvordan en oppgave kalles, og AD-14 sier at manifestet er
+ * den ene kilden til det. En ny modell kan trenge andre tall, og da skal de
+ * endres der versjonen forfremmes — ikke i en konstant et annet sted.
+ */
+export type Konsistens = { kjoeringer: number; minstEnighet: number };
+
 type Manifest = {
   oppgaver: Record<
     string,
-    { versjon: string; modell: string; tenkning: Tenkemodus }
+    {
+      versjon: string;
+      modell: string;
+      tenkning: Tenkemodus;
+      /** Utelatt betyr ett enkelt kall. */
+      konsistens?: Konsistens;
+    }
   >;
 };
 
@@ -109,6 +125,8 @@ export type Promptvalg = {
   versjon: string;
   modell: string;
   tenkning: Tenkemodus;
+  /** Utelatt betyr ett enkelt kall. */
+  konsistens?: Konsistens;
   tekst: string;
 };
 
@@ -145,6 +163,7 @@ export async function hentPrompt(
       versjon,
       modell: oppføring.modell,
       tenkning: oppføring.tenkning,
+      konsistens: oppføring.konsistens,
       tekst,
     };
   } catch (e) {

@@ -22,7 +22,7 @@ import {
   finnForekomster,
   type Forekomst,
 } from "../tekst/forekomster";
-import { formaterAvsnitt, kjoerGenerator } from "./kontrakt";
+import { formaterAvsnitt, hentPrompt, kjoerGenerator } from "./kontrakt";
 import {
   filtrerUgyldige,
   kappEtterRangering,
@@ -93,6 +93,12 @@ export type Faguttrykksresultat = {
   tetthet: Tetthetsmaal;
   /** Hvilket kappetrinn som fikk settet innenfor. Rapporteres, ikke skjules. */
   kappetrinn: Kappet["trinn"];
+  /**
+   * Selvkonsistensen som faktisk ble brukt, eller null ved ett enkelt kall.
+   * Rapporteres fordi et tall maalt med fem kjoeringer ikke er sammenlignbart
+   * med et maalt med ett (AD-4, samme grunn som promptversjon og modell).
+   */
+  konsistens: { kjoeringer: number; minstEnighet: number } | null;
   /** AD-4. */
   promptversjon: string;
   modell: string;
@@ -128,6 +134,78 @@ function slaaSammenDuplikater(
 }
 
 /**
+ * Slår sammen flere uavhengige kjøringer til ett sett — selvkonsistens.
+ *
+ * ## Hvorfor
+ *
+ * Enkeltkjøringer er ustabile. Målt 8. oktober på prompt v2 og
+ * claude-haiku-5-5: Jaccard 0,734 mellom to kjøringer av en fokusert tekst, og
+ * 0,441 på en oversiktstekst. FR-11 krever 0,80. Promptarbeid ble forsøkt
+ * først (v1 mot v2) og hjalp ikke på stabiliteten.
+ *
+ * Med fem kjøringer og flertallskrav ble de samme tallene 0,865 og 0,564.
+ * Teknikken virker, og den gjør settet deterministisk ved konstruksjon framfor
+ * ved håp.
+ *
+ * ## Hvordan rangeringen blir bedre på veien
+ *
+ * Enighet er et bedre signal på hvor sentralt et uttrykk er enn modellens egen
+ * rangering. Den rangeringen hadde dessuten elendig oppløsning — 26 uttrykk
+ * fordelt på fire nivåer, der ti delte nivå 2, slik at kappingen i praksis
+ * avgjordes av utdatarekkefølgen. Her sorteres det primært på hvor mange
+ * kjøringer som fant uttrykket, og bare sekundært på modellens tall. Et
+ * uttrykk alle fem kjøringene fant er mer sentralt enn et modellen kalte
+ * «1» i én kjøring og overså i fire.
+ */
+function slaaSammenKjoeringer(
+  kjoeringer: Begrepskandidat[][],
+  minstEnighet: number,
+): Begrepskandidat[] {
+  type Oppsamling = {
+    beste: Begrepskandidat;
+    enighet: number;
+  };
+  const samlet = new Map<string, Oppsamling>();
+
+  for (const kjoering of kjoeringer) {
+    // Innenfor ÉN kjøring teller samme uttrykk bare én gang, ellers ville en
+    // kjøring som nevnte et ord to ganger fått dobbel stemmevekt.
+    const settIKjoering = new Map<string, Begrepskandidat>();
+    for (const k of kjoering) {
+      const n = k.uttrykk.trim().toLowerCase();
+      const finnes = settIKjoering.get(n);
+      if (!finnes || k.viktighetsrangering < finnes.viktighetsrangering) {
+        settIKjoering.set(n, k);
+      }
+    }
+
+    for (const [n, k] of settIKjoering) {
+      const f = samlet.get(n);
+      if (!f) {
+        samlet.set(n, { beste: k, enighet: 1 });
+      } else {
+        f.enighet += 1;
+        // Representanten er oppføringen med best rangering blant kjøringene
+        // som fant uttrykket. Deterministisk, og uavhengig av rekkefølgen.
+        if (k.viktighetsrangering < f.beste.viktighetsrangering) f.beste = k;
+      }
+    }
+  }
+
+  return [...samlet.values()]
+    .filter((o) => o.enighet >= minstEnighet)
+    .sort(
+      (a, b) =>
+        b.enighet - a.enighet ||
+        a.beste.viktighetsrangering - b.beste.viktighetsrangering ||
+        a.beste.uttrykk.localeCompare(b.beste.uttrykk, "nb"),
+    )
+    // Rangeringen settes på nytt, 1 og oppover uten hull. Kappingen i AD-11
+    // forutsetter at rangeringen skiller, og enigheten gjør den nå det.
+    .map((o, i) => ({ ...o.beste, viktighetsrangering: i + 1 }));
+}
+
+/**
  * Henter Faguttrykkene i en tekst.
  *
  * `avsnitt` skal komme fra `delIAvsnitt` (AD-12) — ikke fra en egen deling,
@@ -138,24 +216,75 @@ export async function hentFaguttrykk(
   avsnitt: Avsnitt[],
   valg: { overstyrVersjon?: string } = {},
 ): Promise<Faguttrykksresultat> {
-  const svar = await kjoerGenerator({
-    oppgave: "faguttrykk",
-    skjema: FaguttrykkSkjema,
-    brukermelding: formaterAvsnitt(avsnitt),
-    overstyrVersjon: valg.overstyrVersjon,
-  });
+  const brukermelding = formaterAvsnitt(avsnitt);
+  const oppsett = await hentPrompt("faguttrykk", valg.overstyrVersjon);
+  const k = oppsett.konsistens;
 
-  const raa: Begrepskandidat[] = svar.data.faguttrykk.map((f) => ({
-    uttrykk: f.uttrykk,
-    forklaring: f.forklaring,
-    viktighetsrangering: f.viktighetsrangering,
-    kildeavsnittNummer: f.kildeavsnitt,
-  }));
+  const kall = () =>
+    kjoerGenerator({
+      oppgave: "faguttrykk",
+      skjema: FaguttrykkSkjema,
+      brukermelding,
+      overstyrVersjon: valg.overstyrVersjon,
+    });
 
-  const { bestaatt, forkastet } = filtrerUgyldige(
-    slaaSammenDuplikater(raa),
-    avsnitt,
-  );
+  const tilKandidater = (
+    svar: Awaited<ReturnType<typeof kall>>,
+  ): Begrepskandidat[] =>
+    svar.data.faguttrykk.map((f) => ({
+      uttrykk: f.uttrykk,
+      forklaring: f.forklaring,
+      viktighetsrangering: f.viktighetsrangering,
+      kildeavsnittNummer: f.kildeavsnitt,
+    }));
+
+  let svar: Awaited<ReturnType<typeof kall>>;
+  let raa: Begrepskandidat[];
+  let enighetBrukt: Faguttrykksresultat["konsistens"];
+
+  if (!k || k.kjoeringer <= 1) {
+    svar = await kall();
+    raa = slaaSammenDuplikater(tilKandidater(svar));
+    enighetBrukt = null;
+  } else {
+    /*
+     * Kallene går parallelt. Fem sekvensielle kall ville tatt et halvt minutt
+     * og gjort §5-kravet om synlig ventetid til et løfte vi måtte innfri;
+     * parallelt tar de omtrent like lang tid som ett.
+     */
+    const utfall = await Promise.allSettled(
+      Array.from({ length: k.kjoeringer }, () => kall()),
+    );
+    const vellykkede = utfall.filter(
+      (u): u is PromiseFulfilledResult<Awaited<ReturnType<typeof kall>>> =>
+        u.status === "fulfilled",
+    );
+
+    /*
+     * Vi trenger bare `minstEnighet` kjøringer for å kunne avgjøre noe, så et
+     * par feilede kall skal ikke felle hele operasjonen. Men faller vi under
+     * den grensen, er det ikke lenger selvkonsistens — og da kastes den
+     * første feilen framfor å levere et sett som ser ut som et flertall uten
+     * å være det.
+     */
+    if (vellykkede.length < k.minstEnighet) {
+      const foersteFeil = utfall.find((u) => u.status === "rejected");
+      throw (foersteFeil as PromiseRejectedResult | undefined)?.reason ??
+        new Error("Ingen av kjøringene lyktes.");
+    }
+
+    svar = vellykkede[0].value;
+    raa = slaaSammenKjoeringer(
+      vellykkede.map((u) => tilKandidater(u.value)),
+      k.minstEnighet,
+    );
+    enighetBrukt = {
+      kjoeringer: vellykkede.length,
+      minstEnighet: k.minstEnighet,
+    };
+  }
+
+  const { bestaatt, forkastet } = filtrerUgyldige(raa, avsnitt);
 
   /*
    * Et uttrykk kan bestå verbatim-kravet og likevel ikke få noen markering:
@@ -219,6 +348,7 @@ export async function hentFaguttrykk(
     forkastet: [...utenMarkering, ...kappet],
     tetthet: maalTetthet(samlet, avsnitt),
     kappetrinn: kapping.trinn,
+    konsistens: enighetBrukt,
     promptversjon: svar.promptversjon,
     modell: svar.modell,
   };

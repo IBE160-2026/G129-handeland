@@ -16,8 +16,16 @@ import { rm } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { z } from "zod";
-import { GeneratorFeil, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, hentPrompt, kjoerGenerator } from "./kontrakt";
 import { hentLagret, lagreSvar, noekkel, testmodus } from "./lagretsvar";
+
+/**
+ * Versjonen hentes fra manifestet framfor aa hardkodes. Ellers brekker hele
+ * testfila hver gang en promptversjon forfremmes legitimt (AD-14), og da
+ * tester den manifestets innhold i stedet for mekanismen den skal teste.
+ */
+const GJELDENDE = await hentPrompt("faguttrykk");
+const ANNEN_VERSJON = GJELDENDE.versjon === "v1" ? "v2" : "v1";
 
 const MELDING = "__test__ denne strengen finnes ikke i noen ekte tekst";
 
@@ -52,7 +60,7 @@ afterEach(async () => {
       "testdata",
       "modellsvar",
       "faguttrykk",
-      `${noekkel("faguttrykk", "v1", MELDING)}.json`,
+      `${noekkel("faguttrykk", GJELDENDE.versjon, MELDING)}.json`,
     ),
     { force: true },
   );
@@ -84,27 +92,27 @@ describe("modusvalget", () => {
 
 describe("nøkkelen", () => {
   test("er stabil for samme inndata", () => {
-    expect(noekkel("faguttrykk", "v1", MELDING)).toBe(
-      noekkel("faguttrykk", "v1", MELDING),
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING)).toBe(
+      noekkel("faguttrykk", GJELDENDE.versjon, MELDING),
     );
   });
 
   test("endrer seg med promptversjonen", () => {
     // Et svar lagret under v1 er ikke dokumentasjon på hva v2 gjør.
-    expect(noekkel("faguttrykk", "v1", MELDING)).not.toBe(
-      noekkel("faguttrykk", "v2", MELDING),
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING)).not.toBe(
+      noekkel("faguttrykk", ANNEN_VERSJON, MELDING),
     );
   });
 
   test("endrer seg med teksten", () => {
-    expect(noekkel("faguttrykk", "v1", MELDING)).not.toBe(
-      noekkel("faguttrykk", "v1", `${MELDING} mer`),
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING)).not.toBe(
+      noekkel("faguttrykk", GJELDENDE.versjon, `${MELDING} mer`),
     );
   });
 
   test("endrer seg med oppgaven", () => {
-    expect(noekkel("faguttrykk", "v1", MELDING)).not.toBe(
-      noekkel("quiz", "v1", MELDING),
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING)).not.toBe(
+      noekkel("quiz", GJELDENDE.versjon, MELDING),
     );
   });
 });
@@ -112,18 +120,20 @@ describe("nøkkelen", () => {
 describe("lagring og henting", () => {
   test("det som lagres kan hentes tilbake", async () => {
     const data = { uttrykk: [{ ord: "mitosen", kildeavsnitt: 2 }] };
-    await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", MELDING, data);
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, MELDING, data);
 
-    const lagret = await hentLagret("faguttrykk", "v1", MELDING);
+    const lagret = await hentLagret("faguttrykk", GJELDENDE.versjon, MELDING);
     expect(lagret).not.toBeNull();
     expect(lagret?.data).toEqual(data);
     // AD-4: promptversjon og modell stemples, også på lagrede svar.
-    expect(lagret?.modell).toBe("claude-haiku-4-5");
-    expect(lagret?.promptversjon).toBe("v1");
+    expect(lagret?.modell).toBe(GJELDENDE.modell);
+    expect(lagret?.promptversjon).toBe(GJELDENDE.versjon);
   });
 
   test("et svar som ikke finnes gir null, ikke en feil", async () => {
-    expect(await hentLagret("faguttrykk", "v1", "finnes ikke")).toBeNull();
+    expect(
+      await hentLagret("faguttrykk", GJELDENDE.versjon, "finnes ikke"),
+    ).toBeNull();
   });
 });
 
@@ -133,7 +143,7 @@ describe("les-modus i generatoren", () => {
     process.env.LESEVENN_TESTMODUS = "les";
 
     const data = { uttrykk: [{ ord: "mitosen", kildeavsnitt: 2 }] };
-    await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", MELDING, data);
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, MELDING, data);
 
     const r = await kjoerGenerator({
       oppgave: "faguttrykk",
@@ -142,8 +152,8 @@ describe("les-modus i generatoren", () => {
     });
 
     expect(r.data).toEqual(data);
-    expect(r.promptversjon).toBe("v1");
-    expect(r.modell).toBe("claude-haiku-4-5");
+    expect(r.promptversjon).toBe(GJELDENDE.versjon);
+    expect(r.modell).toBe(GJELDENDE.modell);
   });
 
   test("manglende svar gir en feil som sier hva man kan gjøre", async () => {
@@ -172,7 +182,7 @@ describe("les-modus i generatoren", () => {
     delete process.env.ANTHROPIC_API_KEY;
     process.env.LESEVENN_TESTMODUS = "les";
 
-    await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", MELDING, {
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, MELDING, {
       uttrykk: [{ ord: "mitosen", kildeavsnitt: "to" }],
     });
 

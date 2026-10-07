@@ -17,8 +17,11 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentFaguttrykk } from "./faguttrykk";
-import { formaterAvsnitt } from "./kontrakt";
+import { formaterAvsnitt, hentPrompt } from "./kontrakt";
 import { lagreSvar, noekkel } from "./lagretsvar";
+
+/** Fra manifestet, slik at en forfremmelse ikke brekker testfila. */
+const GJELDENDE = await hentPrompt("faguttrykk");
 
 const TEKST =
   "Celledeling\n\n" +
@@ -55,7 +58,7 @@ afterEach(async () => {
       "testdata",
       "modellsvar",
       "faguttrykk",
-      `${noekkel("faguttrykk", "v1", melding)}.json`,
+      `${noekkel("faguttrykk", GJELDENDE.versjon, melding)}.json`,
     ),
     { force: true },
   );
@@ -63,7 +66,7 @@ afterEach(async () => {
 
 /** Legger et modellsvar i lageret, slik at les-modus finner det. */
 async function gittSvar(faguttrykk: unknown[]) {
-  await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", melding, {
+  await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, melding, {
     faguttrykk,
   });
 }
@@ -93,8 +96,8 @@ describe("hentFaguttrykk — den gyldige veien", () => {
     expect(r.begreper[0].forekomster.length).toBeGreaterThan(0);
     expect(r.forekomster.length).toBeGreaterThan(0);
     // AD-4: begge stemples.
-    expect(r.promptversjon).toBe("v1");
-    expect(r.modell).toBe("claude-haiku-4-5");
+    expect(r.promptversjon).toBe(GJELDENDE.versjon);
+    expect(r.modell).toBe(GJELDENDE.modell);
   });
 
   test("begrepene kommer i rangeringsrekkefølge, ikke modellens rekkefølge", async () => {
@@ -281,7 +284,7 @@ describe("hentFaguttrykk — tetthet", () => {
     );
     const langMelding = formaterAvsnitt(lang);
 
-    await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", langMelding, {
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, langMelding, {
       faguttrykk: [
         {
           uttrykk: "kontrollpunkter",
@@ -307,7 +310,7 @@ describe("hentFaguttrykk — tetthet", () => {
           "testdata",
           "modellsvar",
           "faguttrykk",
-          `${noekkel("faguttrykk", "v1", langMelding)}.json`,
+          `${noekkel("faguttrykk", GJELDENDE.versjon, langMelding)}.json`,
         ),
         { force: true },
       );
@@ -339,7 +342,7 @@ describe("hentFaguttrykk — tetthet", () => {
     );
     const tettMelding = formaterAvsnitt(tett);
 
-    await lagreSvar("faguttrykk", "v1", "claude-haiku-4-5", tettMelding, {
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, tettMelding, {
       faguttrykk: [
         {
           uttrykk: "Arvestoffet",
@@ -370,7 +373,7 @@ describe("hentFaguttrykk — tetthet", () => {
           "testdata",
           "modellsvar",
           "faguttrykk",
-          `${noekkel("faguttrykk", "v1", tettMelding)}.json`,
+          `${noekkel("faguttrykk", GJELDENDE.versjon, tettMelding)}.json`,
         ),
         { force: true },
       );
