@@ -1,0 +1,57 @@
+Stråling fra radioaktive kilder
+
+Hvorfor er noen kjerner radioaktive?
+
+Atomkjerner består av protoner og nøytroner. Har du tenkt på hvordan det kan ha seg at positive protoner og nøytrale nøytroner kan henge sammen i en atomkjerne? Positive ladninger frastøter jo hverandre!
+
+Grunnen til at dette er mulig, er at det finnes en helt egen kraft, sterk kjernekraft, som bare virker på partiklene i kjernen. Denne kraften er veldig sterk, men rekker ikke lenger enn til et par nabopartikler. Innenfor atomkjernen vinner den over den elektriske frastøtningen mellom protonene, slik at kjernen henger sammen.
+
+I store atomkjerner blir det dermed mer og mer elektrisk frastøtning mellom protonene etter hvert som atomkjernen blir større (høyere atomnummer). Da henger ikke den sterke kjernekraften med lenger, og atomkjernen blir ustabil, det vil si radioaktiv.
+
+Ulike typer stråling fra radioaktive kilder
+
+De ustabile kjernene kan bli stabile igjen ved å sende ut stråling: alfa-, beta- og gammastråling.
+
+Alfastråling (α-stråling)
+
+En ustabil kjerne kan bli mer stabil ved å sende ut partikler som består av to protoner og to nøytroner. Dette er det samme som kjernen i heliumatomer, og kalles i denne sammenhengen alfapartikler. Siden alfapartiklene er store og tunge, er alfastråling svært energirik.
+
+Når en atomkjerne sender ut en alfapartikkel, blir den omdannet til et nytt grunnstoff. Atomnummeret til det nye grunnstoffet vil være 2 lavere enn det opprinnelige, siden to positive protoner har forsvunnet.
+
+Eksempel
+
+Når en radiumkjerne (Ra) sender ut en alfapartikkel (heliumkjerne) i voldsom fart, blir den til et nytt grunnstoff med en kjerne som har to protoner og to nøytroner færre enn den opprinnelige radiumkjernen. Den nye kjernen er en radonkjerne (Rn).
+
+Denne prosessen kalles
+
+desintegrasjon. Reaksjonslikningen kan skrives slik:
+
+R88226a→R86222n+H24e
+
+Tenk gjennom
+
+Som eksempel kan vi ta uran, som har atomnummer 92. Hvilket nytt grunnstoff blir dannet hvis en urankjerne sender ut en alfapartikkel?
+
+Betastråling (β-stråling)
+
+Betastråling er en annen måte ustabile kjerner omdannes på. Betastråling består av elektroner med stor fart. Da lurer du sikkert på hvordan det kan komme elektroner fra atomkjernen – der er det jo bare protoner og nøytroner! Svaret er at et nøytron kan omdannes til et proton og et elektron.
+
+Tenk gjennom
+
+En spesiell karbonisotop, karbon-14, består av 6 protoner og 8 nøytroner og sender ut betastråling. Hvilket grunnstoff blir dannet når ett av disse nøytronene omdannes til et proton og et elektron?
+
+Gammastråling (γ-stråling)
+
+Gammastråling er elektromagnetisk stråling med høy energi som sendes ut fra ustabile atomkjerner. Røntgenstråling og gammastråling overlapper i det elektromagnetiske spekteret, men skiller seg fra hverandre i hvordan de oppstår.
+
+Røntgenstråling oppstår ved nedbremsing av svært raske elektroner, mens gammastråling skyldes endringer i atomkjernen og er derfor radioaktiv stråling.
+
+Vanligvis følger gammastråling etter at atomkjernen har sendt ut en alfa- eller betapartikkel, og vi kan se på gammastrålingen som en slags opprydding for å gjøre strukturen i den nye atomkjernen mest mulig stabil.
+
+Film om radioaktivitet
+
+Denne filmen (lengde 4:46) handler om hvordan radioaktivitet oppstår, de ulike typene stråling som er knyttet til dette, og hvordan vi kan avgjøre om et atom er stabilt eller ustabilt.
+
+Oppgaver
+
+Velg riktig alternativ.

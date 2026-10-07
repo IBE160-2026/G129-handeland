@@ -1,0 +1,167 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-4-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-07T13:08:55.224Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "EM-bølger",
+        "forklaring": "Forkortelse for elektromagnetiske bølger, som er bølger dannet av samspillet mellom elektriske og magnetiske felt.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 1
+      },
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som oppstår fra samspillet mellom elektriske og magnetiske felt, som for eksempel radiobølger, lys og røntgenstråler.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, som er godt egnet til å sende signaler over lange avstander.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger eller bølgekammer per sekund en bølge gjennomfører.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to påfølgende topper (eller bunner) på en bølge.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "brytning",
+        "forklaring": "Når en bølge endrer retning når den passerer fra ett stoff til et annet, for eksempel når lys passerer fra luft til vann.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "bøyning",
+        "forklaring": "Når en bølge bøyer seg omkring hindringer eller gjennom små åpninger, snarere enn å gå rett fram.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "overlagring",
+        "forklaring": "Når to eller flere bølger møtes og påvirker hverandre, slik at deres effekter legger seg sammen eller opphever hverandre.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som oppstår når en bølge reflekteres og møter seg selv på nytt, slik at bølgen virker å stå på stedet.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag i atmosfæren, 80–400 km over jordoverflata, som reflekterer radiobølger tilbake mot bakken.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med høyere frekvens og kortere bølgelengde enn radiobølger, brukt blant annet i mikrobølgeovner.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling som gir varme, med energi mindre enn synlig lys, og som huden kan føle som strålevarmе.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "synlig lys",
+        "forklaring": "Elektromagnetisk stråling som menneskeøyet kan oppfatte, med bølgelengder som gir oss inntrykk av farger fra rødt til fiolett.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "spekteret",
+        "forklaring": "Rekkefølgen eller området av alle elektromagnetiske bølger ordnet etter bølgelengde eller frekvens.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "molekylbevegelser",
+        "forklaring": "Hvordan molekylene vibrerer og beveger seg som følge av temperatur, og som danner grunnlaget for infrarød stråling.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "Infrarøde bølger",
+        "forklaring": "Elektromagnetiske bølger som oppstår fra molekylbevegelser og som sendes ut fra gjenstander basert på deres temperatur.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "lysbrytning",
+        "forklaring": "Når lysstråler endrer retning når de passerer fra ett stoff til et annet, som når lys passerer gjennom vanndråper.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "linser",
+        "forklaring": "Buet glass som kan fokusere eller spre lysstråler, brukt i brilleglass, mikroskoper og teleskoper.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "prisme",
+        "forklaring": "Et klart glassformet objekt som kan dele hvitt lys opp i sine bestanddeler, altså de ulike fargene.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "spektralfargene",
+        "forklaring": "De syv fargene som hvitt lys består av: rødt, oransje, gul, grønn, blå, indigo og fiolett.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling med høyere energi og kortere bølgelengde enn synlig lys, som kan forårsake solbrenning og hudkreft.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "sølvklorid",
+        "forklaring": "En kjemisk forbindelse som blir mørknet når den utsettes for ultrafiolett stråling, brukt i gammelt fotopapir.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "UV-stråling",
+        "forklaring": "Forkortelse for ultrafiolett stråling, delt inn i tre typer (UV-A, UV-B og UV-C) med økende energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "ozonlaget",
+        "forklaring": "Et lag i atmosfæren som absorberer og blokkerer tilnærmet all UV-C stråling fra solen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "Røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med meget høy energi og kort bølgelengde, brukt til å gjennomlyse gjenstander og lage medisinsk bilder.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "røntgenbilder",
+        "forklaring": "Bilder dannet ved å sende røntgenstråler gjennom et objekt, brukt for eksempel til å se beinstrukturen i kroppen.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 24
+      }
+    ]
+  }
+}
