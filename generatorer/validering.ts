@@ -260,29 +260,135 @@ function hoeyesteVindu(forekomster: Forekomst[], avsnitt: Avsnitt[]): number {
 }
 
 /**
- * AD-11, settnivå: bryter settet en tetthetsgrense, KAPPES det etter
- * viktighetsrangering — lavest først — framfor å forkastes.
+ * Hvor mange Faguttrykk antallstaket tillater i en tekst av denne lengden.
  *
- * Gulvet er «inntil 5», ikke «minst 5». Finnes det tre gyldige Faguttrykk,
- * beholdes tre. Finnes det null, beholdes null. Et gulv ville tvunget
- * modellen til å finne opp uttrykk, i strid med verbatim-kravet i samme FR.
+ * Dette er tallet FR-7 alt har bestemt — «høyst 12 unike Faguttrykk per
+ * 1 000 ord» — bare regnet ut. For 794 ord blir det 9.
+ *
+ * Gulvet gjelder korte tekster: for 200 ord ville taket gitt 2, og FR-7 sier
+ * at inntil 5 kan beholdes likevel, slik at en kort tekst ikke ender med ett
+ * markert ord. Merk at det er et TAK og ikke et mål: finnes det tre gyldige
+ * Faguttrykk, beholdes tre.
+ */
+export function begrepsbudsjett(avsnitt: Avsnitt[]): number {
+  const ord = antallOrd(avsnitt);
+  const fraTak = Math.floor((TETTHETSTAK.unikePerTusenOrd * ord) / 1000);
+  return Math.max(fraTak, TETTHETSTAK.gulvForKorteTekster);
+}
+
+export type Kappet = {
+  beholdt: Begrepskandidat[];
+  /** Markeringene som skal vises. Kan være færre enn alle forekomstene. */
+  forekomster: Forekomst[];
+  /** Hvilket trinn som fikk settet innenfor. Rapporteres, ikke skjules. */
+  trinn:
+    | "ingen"
+    | "antallstak"
+    | "en_per_avsnitt"
+    | "en_per_begrep"
+    | "rapportert_brutt";
+};
+
+/**
+ * AD-11, settnivå: bryter settet en tetthetsgrense, kappes det — framfor å
+ * forkastes.
+ *
+ * ## Hvorfor dette er fire trinn og ikke én løkke
+ *
+ * Den første utgaven kuttet bare hele Faguttrykk nedenfra, og den oppførte
+ * seg galt på en måte som først ble synlig i en ekte kjøring: på en NDLA-tekst
+ * med 26 gyldige Faguttrykk kuttet den 21 av dem, ned til gulvet på 5, og
+ * tetthetsmålet var *fortsatt* brutt.
+ *
+ * Grunnen var at to av de tre takene teller MARKERINGER, mens den eneste
+ * knappen var å fjerne BEGREPER. Å fjerne «sølvklorid», som står én gang,
+ * fjerner én markering — mens opphopningen kom fra «radiobølger» og «synlig
+ * lys» med fem markeringer hver, som var vernet av høy rangering. Den ofret
+ * altså dekningen for å rette et problem de beholdte selv forårsaket, og den
+ * kuttet forbi de 9 begrepene antallstaket faktisk tillater.
+ *
+ * Rekkefølgen under retter det ved å bruke den billigste knappen først:
+ *
+ *   1. antallstak        kutt til `begrepsbudsjett`. Deterministisk, og det er
+ *                        tallet kravet alt har bestemt.
+ *   2. én per avsnitt    hvert Faguttrykk markeres høyst én gang per avsnitt.
+ *                        Beholder hjelp der leseren er.
+ *   3. én per begrep     hvert Faguttrykk markeres bare første gang.
+ *
+ * Begreper fjernes BARE i trinn 1, altså bare for antallstaket. Et fjernet
+ * Faguttrykk er et fagord eleven ikke får forklart, mens en fjernet markering
+ * bare er samme ord uthevet én gang mindre. Er vindustaket fortsatt brutt
+ * etter trinn 3, rapporteres det som brutt — se begrunnelsen nederst i
+ * funksjonen, som er målt og ikke antatt.
  */
 export function kappEtterRangering(
   kandidater: Begrepskandidat[],
   forekomsterFor: (uttrykk: string) => Forekomst[],
   avsnitt: Avsnitt[],
-): Begrepskandidat[] {
+): Kappet {
   const sortert = [...kandidater].sort(
     (a, b) => a.viktighetsrangering - b.viktighetsrangering,
   );
 
-  let beholdt = sortert;
-  while (beholdt.length > 0) {
-    const forekomster = beholdt.flatMap((k) => forekomsterFor(k.uttrykk));
-    if (maalTetthet(forekomster, avsnitt).innenfor) break;
-    if (beholdt.length <= TETTHETSTAK.gulvForKorteTekster) break;
-    beholdt = beholdt.slice(0, -1);
+  // Trinn 1 — antallstaket. Skjer alltid, uavhengig av om noe er brutt.
+  let beholdt = sortert.slice(0, begrepsbudsjett(avsnitt));
+
+  const alle = () => beholdt.flatMap((k) => forekomsterFor(k.uttrykk));
+
+  const enPerAvsnitt = () =>
+    beholdt.flatMap((k) => {
+      const sett = new Set<number>();
+      return forekomsterFor(k.uttrykk).filter((f) => {
+        if (sett.has(f.avsnittNummer)) return false;
+        sett.add(f.avsnittNummer);
+        return true;
+      });
+    });
+
+  const enPerBegrep = () =>
+    beholdt.flatMap((k) => forekomsterFor(k.uttrykk).slice(0, 1));
+
+  const innenfor = (f: Forekomst[]) => maalTetthet(f, avsnitt).innenfor;
+
+  let forekomster = alle();
+  if (innenfor(forekomster)) {
+    return {
+      beholdt,
+      forekomster,
+      trinn: beholdt.length < sortert.length ? "antallstak" : "ingen",
+    };
   }
 
-  return beholdt;
+  forekomster = enPerAvsnitt();
+  if (innenfor(forekomster)) {
+    return { beholdt, forekomster, trinn: "en_per_avsnitt" };
+  }
+
+  forekomster = enPerBegrep();
+
+  /*
+   * Og her stopper kappingen, også når vindustaket fortsatt er brutt.
+   *
+   * Grunnen er målt og ikke antatt. På NDLA-teksten ligger førsteforekomstene
+   * til de fem viktigste Faguttrykkene i avsnitt 1, 2, 3, 3 og 22 — fire av
+   * dem innenfor de første hundre ordene, fordi åpningsavsnittet er der
+   * fagspråket introduseres. Vindustaket kan dermed IKKE oppfylles så lenge
+   * hvert beholdt Faguttrykk skal ha minst én markering. Ordene står der de
+   * står.
+   *
+   * En tidligere utgave kuttet videre for å jage vinduet. Den endte på fem
+   * begreper av 26 og brøt taket likevel — altså ofret 21 fagord eleven ikke
+   * fikk forklart, for ingenting. Å kutte et Faguttrykk er det dyreste
+   * virkemidlet vi har, og det skal bare brukes for antallstaket, som er det
+   * taket som faktisk handler om hvor mange begreper en tekst tåler.
+   *
+   * Vindustaket rapporteres derfor som brutt når det er brutt. Det er samme
+   * regel FR-7 alt fastsetter for gulvet: tetthetstallene er måletall, ikke
+   * garantier om det eleven ser.
+   */
+  return {
+    beholdt,
+    forekomster,
+    trinn: innenfor(forekomster) ? "en_per_begrep" : "rapportert_brutt",
+  };
 }

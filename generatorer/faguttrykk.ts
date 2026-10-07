@@ -28,6 +28,7 @@ import {
   kappEtterRangering,
   maalTetthet,
   type Begrepskandidat,
+  type Kappet,
   type Tetthetsmaal,
 } from "./validering";
 
@@ -90,6 +91,8 @@ export type Faguttrykksresultat = {
   forkastet: { kandidat: Begrepskandidat; aarsak: string }[];
   /** Målt på det endelige settet. Rapporteres, også når det er innenfor. */
   tetthet: Tetthetsmaal;
+  /** Hvilket kappetrinn som fikk settet innenfor. Rapporteres, ikke skjules. */
+  kappetrinn: Kappet["trinn"];
   /** AD-4. */
   promptversjon: string;
   modell: string;
@@ -181,20 +184,23 @@ export async function hentFaguttrykk(
    * dekker samme tekst, og kapper derfor marginalt hardere enn strengt
    * nødvendig. Retningen er med vilje: SM-C1 sier at flere markeringer ikke
    * er bedre, så en feilmargin som gir færre markeringer er den trygge.
+   *
+   * Kappingen bestemmer BÅDE hvilke begreper som beholdes og hvilke
+   * markeringer som vises — de to kan ikke avgjøres hver for seg, fordi to av
+   * de tre takene teller markeringer og ett teller begreper.
    */
-  const beholdt = kappEtterRangering(
+  const kapping = kappEtterRangering(
     medMarkering,
     (uttrykk) => finnForekomster(uttrykk, avsnitt),
     avsnitt,
   );
+  const beholdt = kapping.beholdt;
 
   const kappet = medMarkering
     .filter((k) => beholdt.includes(k) === false)
     .map((kandidat) => ({ kandidat, aarsak: "kappet av tetthetstaket" }));
 
-  const samlet = fjernOverlapp(
-    beholdt.flatMap((k) => finnForekomster(k.uttrykk, avsnitt)),
-  );
+  const samlet = fjernOverlapp(kapping.forekomster);
 
   const begreper: Begrep[] = beholdt
     .map((k) => ({
@@ -212,6 +218,7 @@ export async function hentFaguttrykk(
     forekomster: samlet,
     forkastet: [...utenMarkering, ...kappet],
     tetthet: maalTetthet(samlet, avsnitt),
+    kappetrinn: kapping.trinn,
     promptversjon: svar.promptversjon,
     modell: svar.modell,
   };

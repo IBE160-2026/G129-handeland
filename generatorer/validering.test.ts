@@ -15,6 +15,7 @@ import {
   filtrerUgyldige,
   maalTetthet,
   kappEtterRangering,
+  begrepsbudsjett,
   TETTHETSTAK,
   type Begrepskandidat,
   type Forekomst,
@@ -198,47 +199,137 @@ describe("FR-7 og AD-13 — tetthet regnes på forekomstsettet", () => {
   });
 });
 
-describe("AD-11 — settbrudd kappes etter rangering, ikke forkastes", () => {
-  const mange: Begrepskandidat[] = Array.from({ length: 12 }, (_, i) => ({
-    uttrykk: `uttrykk${i}`,
-    forklaring: `Forklaring nummer ${i} med reelt innhold.`,
-    viktighetsrangering: i + 1,
-    kildeavsnittNummer: 2,
-  }));
+/* ------------------------------------------------------------------ */
 
-  // Hver kandidat har én forekomst, alle tett sammen i avsnitt 2.
-  const forekomsterFor = (uttrykk: string): Forekomst[] => {
-    const i = mange.findIndex((k) => k.uttrykk === uttrykk);
-    return i === -1 ? [] : [{ uttrykk, avsnittNummer: 2, start: i, slutt: i + 1 }];
-  };
-
-  test("beholder de høyest rangerte og kutter nedenfra", () => {
-    const beholdt = kappEtterRangering(mange, forekomsterFor, TEKST);
-
-    expect(beholdt.length).toBeLessThan(mange.length);
-    // Rangering 1 er høyest prioritet og skal alltid overleve.
-    expect(beholdt[0].viktighetsrangering).toBe(1);
-    // Kappingen skjer nedenfra, så rangeringene er sammenhengende fra 1.
-    expect(beholdt.map((b) => b.viktighetsrangering)).toEqual(
-      beholdt.map((_, i) => i + 1),
-    );
+describe("FR-7 — begrepsbudsjettet er antallstaket regnet ut", () => {
+  test("12 per tusen ord gir 9 for 794 ord", () => {
+    // Tallet fra NDLA-teksten vi måler mot. floor(12 × 794/1000) = 9.
+    const lang = delIAvsnitt("ord ".repeat(794).trim());
+    expect(begrepsbudsjett(lang)).toBe(9);
   });
 
-  test("kapper aldri under gulvet på fem", () => {
-    const beholdt = kappEtterRangering(mange, forekomsterFor, TEKST);
-    expect(beholdt.length).toBeGreaterThanOrEqual(
-      TETTHETSTAK.gulvForKorteTekster,
-    );
+  test("korte tekster får gulvet, ikke taket", () => {
+    // 200 ord ville gitt 2. FR-7 sier inntil 5 kan beholdes likevel, slik at
+    // en kort tekst ikke ender med ett markert ord.
+    const kort = delIAvsnitt("ord ".repeat(200).trim());
+    expect(begrepsbudsjett(kort)).toBe(TETTHETSTAK.gulvForKorteTekster);
+  });
+
+  test("budsjettet er et tak, ikke et mål", () => {
+    // Tom tekst gir gulvet, men gulvet betyr «inntil», og kappingen under
+    // legger aldri til noe. Jf. «ingen nedre grense» i FR-7.
+    expect(begrepsbudsjett([])).toBe(TETTHETSTAK.gulvForKorteTekster);
+  });
+});
+
+describe("AD-11 — kappingen bruker den billigste knappen først", () => {
+  /** Lang tekst, så budsjettet blir 9 og ikke gulvet. */
+  const LANG = delIAvsnitt(
+    "Overskrift\n\n" + "fyllord ".repeat(800).trim(),
+  );
+
+  const kandidater = (antall: number): Begrepskandidat[] =>
+    Array.from({ length: antall }, (_, i) => ({
+      uttrykk: `uttrykk${i}`,
+      forklaring: `Forklaring nummer ${i} med reelt innhold.`,
+      viktighetsrangering: i + 1,
+      kildeavsnittNummer: 2,
+    }));
+
+  /** Hvert uttrykk står én gang, spredt utover avsnitt 2. */
+  const spredt =
+    (alle: Begrepskandidat[]) =>
+    (uttrykk: string): Forekomst[] => {
+      const i = alle.findIndex((k) => k.uttrykk === uttrykk);
+      return i === -1
+        ? []
+        : [{ uttrykk, avsnittNummer: 2, start: i * 400, slutt: i * 400 + 5 }];
+    };
+
+  test("trinn 1: kutter til budsjettet, ikke til gulvet", () => {
+    // Dette er feilen fra den ekte kjøringen: 26 kandidater ble kuttet til 5
+    // (gulvet) når budsjettet var 9. Nå skal den stoppe på budsjettet.
+    const alle = kandidater(26);
+    const r = kappEtterRangering(alle, spredt(alle), LANG);
+
+    expect(r.beholdt).toHaveLength(begrepsbudsjett(LANG));
+    expect(r.beholdt.length).toBeGreaterThan(TETTHETSTAK.gulvForKorteTekster);
+    expect(r.beholdt[0].viktighetsrangering).toBe(1);
+  });
+
+  test("er settet innenfor fra før, røres ingenting", () => {
+    const alle = kandidater(4);
+    const r = kappEtterRangering(alle, spredt(alle), LANG);
+    expect(r.beholdt).toHaveLength(4);
+    expect(r.trinn).toBe("ingen");
+    expect(r.forekomster).toHaveLength(4);
+  });
+
+  test("trinn 2: markeringer begrenses før begreper fjernes", () => {
+    // Fem begreper som hvert står tjue ganger, tett sammen. Alle fem er
+    // innenfor budsjettet, så svaret skal være å vise færre markeringer —
+    // ikke å fjerne fagord eleven da ikke får forklart.
+    // Hvert begrep har sin egen klynge, langt fra de andre: første forekomst
+    // ligger ~150 ord fra forrige begreps, mens de åtte innenfor klyngen står
+    // tett. Da er det klyngene som bryter vinduet, og ikke antallet begreper —
+    // som er nøyaktig situasjonen fra NDLA-kjøringen.
+    const alle = kandidater(5);
+    const mange = (uttrykk: string): Forekomst[] => {
+      const i = alle.findIndex((k) => k.uttrykk === uttrykk);
+      if (i === -1) return [];
+      return Array.from({ length: 8 }, (_, j) => ({
+        uttrykk,
+        avsnittNummer: 2,
+        start: i * 1200 + j * 40,
+        slutt: i * 1200 + j * 40 + 5,
+      }));
+    };
+
+    const r = kappEtterRangering(alle, mange, LANG);
+
+    // Alle fem begrepene beholdt.
+    expect(r.beholdt).toHaveLength(5);
+    // Men ikke alle hundre markeringene.
+    expect(r.forekomster.length).toBeLessThan(40);
+    expect(r.trinn).not.toBe("ingen");
+    expect(r.trinn).not.toBe("kuttet_videre");
+  });
+
+  test("uoppnåelig vindustak rapporteres, begrepene ofres ikke", () => {
+    // Umulig sett: alle begrepene har markeringer på samme sted, så ingen
+    // begrensning av markeringer kan få vinduet innenfor. Dette er NDLA-
+    // tilfellet i rendyrket form — fagspråket introduseres samlet, og
+    // førsteforekomstene klumper seg.
+    //
+    // Den gamle utgaven kuttet da begreper til den nådde gulvet, og brøt
+    // taket likevel. Nå beholdes budsjettet, og bruddet rapporteres.
+    const alle = kandidater(26);
+    const umulig = (uttrykk: string): Forekomst[] =>
+      Array.from({ length: 20 }, (_, j) => ({
+        uttrykk,
+        avsnittNummer: 2,
+        start: j,
+        slutt: j + 1,
+      }));
+
+    const r = kappEtterRangering(alle, umulig, LANG);
+
+    expect(r.beholdt).toHaveLength(begrepsbudsjett(LANG));
+    expect(r.trinn).toBe("rapportert_brutt");
+    // Én markering per begrep, altså det billigste virkemidlet brukt fullt ut.
+    expect(r.forekomster).toHaveLength(begrepsbudsjett(LANG));
+    expect(maalTetthet(r.forekomster, LANG).innenfor).toBe(false);
   });
 
   test("gulvet er «inntil fem», ikke «minst fem»", () => {
-    // Tre gyldige kandidater skal gi tre — ikke fem oppdiktede.
-    const tre = mange.slice(0, 3);
-    const beholdt = kappEtterRangering(tre, forekomsterFor, TEKST);
-    expect(beholdt).toHaveLength(3);
+    const alle = kandidater(3);
+    const r = kappEtterRangering(alle, spredt(alle), LANG);
+    expect(r.beholdt).toHaveLength(3);
   });
 
   test("null kandidater gir null, ikke et gulv", () => {
-    expect(kappEtterRangering([], forekomsterFor, TEKST)).toHaveLength(0);
+    const r = kappEtterRangering([], spredt([]), LANG);
+    expect(r.beholdt).toHaveLength(0);
+    expect(r.forekomster).toHaveLength(0);
   });
 });

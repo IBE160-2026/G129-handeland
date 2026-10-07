@@ -314,21 +314,23 @@ describe("hentFaguttrykk — tetthet", () => {
     }
   });
 
-  test("ETT begrep som gjentas bryter taket, og kappingen kan ikke redde det", async () => {
-    // Funn fra å kjøre dette: et eneste Faguttrykk som forfatteren gjentar
-    // ofte bryter tetthetstakene alene — både andelen av løpende ord og
-    // vinduet på 100 ord — selv om det bare er ett unikt uttrykk i settet.
+  test("ETT begrep som gjentas: markeringene begrenses, begrepet beholdes", async () => {
+    // Denne testen dokumenterte opprinnelig en feil: kappingen kuttet bare
+    // hele begreper, så et enkelt Faguttrykk som forfatteren gjentar ofte
+    // brøt vindustaket uten at noe kunne gjøres med det.
     //
-    // Og kappingen kan ikke gjøre noe med det: `kappEtterRangering` kutter
-    // hele begreper nedenfra og stopper ved gulvet på fem. Med ett begrep er
-    // det ingenting å kutte. Settet leveres altså med `innenfor: false`.
+    // Etter omskrivingen av `kappEtterRangering` er det rettet. Kappingen
+    // begrenser nå markeringer før den fjerner begreper, så uttrykket får én
+    // markering i stedet for åtte, og vinduet er ikke lenger et problem.
     //
-    // Det er riktig oppførsel — alternativet ville vært å droppe tekstens
-    // viktigste begrep fordi forfatteren gjentar det — men det betyr at
-    // tetthetstakene IKKE er en garanti om det eleven ser. De er måletall som
-    // kan stå som brutt, fordi FR-7s kapping er grovkornet med vilje: den
-    // kutter begreper, ikke enkeltmarkeringer. Verdt å vite før noen leser
-    // `innenfor` som et løfte, eller bygger en sperre på det.
+    // Men konklusjonen fra den gamle testen står likevel, og det er grunnen
+    // til at den er beholdt: teksten her er 76 ord, og ETT unikt uttrykk gir
+    // 13,2 per tusen ord — over taket på 12. Gulvet beholder begrepet, og
+    // `innenfor` er fortsatt false.
+    //
+    // `tetthet.innenfor` er altså et MÅLETALL og ikke et løfte om det eleven
+    // ser. En sperre bygget på det feltet ville fjernet markeringene i enhver
+    // kort tekst. Bare mekanismen som gjør det sant er en annen nå.
     const tett = delIAvsnitt(
       "Arvestoff\n\n" +
         ("Arvestoffet kopieres før delingen. Arvestoffet må være helt likt i " +
@@ -350,12 +352,15 @@ describe("hentFaguttrykk — tetthet", () => {
 
     try {
       const r = await hentFaguttrykk(tett);
-      // Ett unikt uttrykk, mange markeringer — det er hele poenget.
       expect(r.tetthet.antallUnike).toBe(1);
-      expect(r.tetthet.antallForekomster).toBeGreaterThan(5);
-      expect(r.tetthet.hoeyesteVindu).toBeGreaterThan(3);
+      // Markeringene er begrenset: teksten har uttrykket åtte ganger.
+      expect(r.tetthet.antallForekomster).toBe(1);
+      expect(r.tetthet.hoeyesteVindu).toBeLessThanOrEqual(3);
+      expect(r.kappetrinn).not.toBe("ingen");
+      // Men antallstaket er fortsatt brutt, fordi teksten er kort.
+      expect(r.tetthet.unikePerTusenOrd).toBeGreaterThan(12);
       expect(r.tetthet.innenfor).toBe(false);
-      // Og begrepet leveres likevel, med alle markeringene sine.
+      // Og begrepet leveres likevel. Det er gulvet som gjør det.
       expect(r.begreper).toHaveLength(1);
       expect(r.forkastet).toEqual([]);
     } finally {

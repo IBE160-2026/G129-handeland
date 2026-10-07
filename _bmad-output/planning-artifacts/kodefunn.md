@@ -202,11 +202,63 @@ samme problem for eleven. Test lagt inn som sjekker at rådet ikke inneholder
 
 ---
 
+## Funn 7 — Kappingen ofret 21 fagord for ingenting
+
+**Hvor:** , .
+
+**Hva:** første ekte kjøring mot en NDLA-tekst om elektromagnetisk stråling.
+Modellen fant 26 Faguttrykk, og **alle 26 passerte valideringen** — verbatim,
+kildeavsnitt, ikke-sirkulær forklaring. Kappingen kuttet 21 av dem, ned til
+gulvet på fem, og tetthetsmålet var *fortsatt* brutt.
+
+De fem som overlevde var det verste mulige settet:  og
+ (samme begrep), pluss de tre mest gjentatte
+ordene. Bort gikk , , ,
+ og  — altså nøyaktig de ordene en elev som strever
+trenger forklart.
+
+**Årsaken** var at to av de tre takene teller MARKERINGER, mens den eneste
+knappen i koden var å fjerne BEGREPER. Å fjerne , som står én
+gang, fjerner én markering. Opphopningen kom fra de høyt rangerte ordene med
+fire–fem markeringer hver, som var vernet av rangeringen. Algoritmen ødela
+dekningen for å rette et problem de beholdte selv forårsaket — og den kuttet
+forbi de ni begrepene antallstaket faktisk tillater.
+
+**Hvordan det ble funnet:** ved å kjøre generatoren mot en reell fagtekst for
+første gang. Ikke av noen test. Alle 94 testene var grønne, fordi de brukte
+konstruerte sett der hvert begrep hadde én forekomst — altså presis det
+tilfellet feilen ikke rammer.
+
+**Hvorfor det er verdt å ha med:** dette er den dyreste feilen i loggen, og
+den klassen er verdt å kjenne igjen. Koden gjorde det kravet sa, kravet var
+internt konsistent, og testene bekreftet begge. Feilen lå i at ingen av oss
+hadde regnet på hva reglene gjør mot en tekst der ord gjentas — og konstruerte
+testdata gjentar sjelden noe.
+
+Og én ting mer: jeg foreslo først å begrense gjentakelse som løsning. Målingen
+viste at det **ikke** var nok — vindustaket var fortsatt tre ganger
+overskredet. Først da jeg målte fordelingen framfor å resonnere om den, kom det
+fram at det bindende taket er antallet begreper, og at vindustaket er
+uoppnåelig når fagspråket introduseres samlet i åpningsavsnittet.
+
+**Hva som ble gjort:** kappingen skrevet om til å bruke det billigste
+virkemidlet først — kutt til antallstaket, så én markering per avsnitt, så én
+per begrep — og Faguttrykk fjernes aldri for prosentgrensen eller vindustaket.
+Resultatet gikk fra 5 til 9 beholdte begreper. FR-7 er oppdatert med
+rekkefølgen og med begrunnelsen for at vindustaket kan rapporteres som brutt.
+
+**Gjenstår:** rangeringen har for lav oppløsning. 26 begreper fordelt på fire
+rangeringer, der ti deler rangering 2, betyr at kappingen i praksis avgjøres av
+modellens utdatarekkefølge. Resultatet er at alle ni beholdte begreper kommer
+fra første tredjedel av teksten. Ført som åpent punkt i FR-7.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — seks funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — sju funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
 | Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Ikke startet — §4.10 er ikke bygget ennå |
