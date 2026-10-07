@@ -67,6 +67,7 @@ Alt planleggingsmateriale ligger i [`_bmad-output/planning-artifacts/`](_bmad-ou
 | `proposal-lesevenn.md` | Arbeidskravet, godkjent 25.09.2026 |
 | `fremdriftsplan.md` | Milepæler, timeregnskap og kuttrekkefølge |
 | `ki-logg.md` | Løpende logg over KI-bruk i utviklingen (FR-38) |
+| `annotering.md` | Oppskrift for gullsettet: utvalg, annotering, måling, Cohens κ (FR-8) |
 | `kodefunn.md` | Feil og svakheter funnet i KI-generert kode, med hvordan (FR-41) |
 | `underlag-refleksjonsrapport.md` | Råstoff til refleksjonsrapporten |
 | `addendum-lesevenn.md` | Emnekontekst, teknologivurderinger, forkastede alternativer |
