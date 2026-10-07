@@ -1,0 +1,28 @@
+
+######## em-egenskaper.txt
+  --- v1, 10 kjoeringer
+      antall per runde: 13, 14, 12, 16, 10, 13, 12, 17, 14, 13
+      JACCARD snitt 0.466 | median 0.467 | spenn 0.238-0.714
+      uttrykk sett minst én gang: 30 | i >=90% av kjoeringene: 6 | vaklende: 18
+      duplikate rangeringer totalt: 11
+      sikre: elektromagnetiske bølger, ionosfæren, stående bølger, ir-stråling, røntgenstråling, mikrobølger
+  --- v2, 10 kjoeringer
+      antall per runde: 9, 6, 11, 8, 7, 9, 8, 9, 7, 8
+      JACCARD snitt 0.458 | median 0.455 | spenn 0.250-1.000
+      uttrykk sett minst én gang: 21 | i >=90% av kjoeringene: 3 | vaklende: 10
+      duplikate rangeringer totalt: 0
+      sikre: ionosfæren, ir-stråling, bølgelengde
+
+######## straling-radioaktive-kilder.txt
+  --- v1, 10 kjoeringer
+      antall per runde: 10, 11, 9, 10, 9, 11, 10, 12, 11, 12
+      JACCARD snitt 0.770 | median 0.750 | spenn 0.583-1.000
+      uttrykk sett minst én gang: 15 | i >=90% av kjoeringene: 8 | vaklende: 5
+      duplikate rangeringer totalt: 0
+      sikre: sterk kjernekraft, atomnummer, alfastråling, desintegrasjon, betastråling, karbonisotop, gammastråling, røntgenstråling
+  --- v2, 10 kjoeringer
+      antall per runde: 7, 8, 7, 8, 8, 9, 7, 9, 8, 9
+      JACCARD snitt 0.682 | median 0.700 | spenn 0.333-1.000
+      uttrykk sett minst én gang: 14 | i >=90% av kjoeringene: 6 | vaklende: 4
+      duplikate rangeringer totalt: 0
+      sikre: sterk kjernekraft, radioaktiv, betastråling, gammastråling, atomnummer, desintegrasjon
