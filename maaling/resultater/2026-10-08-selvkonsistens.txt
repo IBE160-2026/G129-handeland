@@ -1,0 +1,16 @@
+
+######## straling-radioaktive-kilder.txt  (v2, 15 kjoeringer)
+  antall per kjoering: 8, 9, 7, 9, 9, 8, 7, 8, 9, 9, 9, 8, 9, 8, 8
+  1 kall (grunnlinje):        Jaccard 0.734   n=105 par
+  3 kall, behold hvis >=2:  Jaccard 0.801   settstoerrelse 8.0   OVER 0,80
+  5 kall, behold hvis >=2:  Jaccard 0.807   settstoerrelse 9.2   OVER 0,80
+  5 kall, behold hvis >=3:  Jaccard 0.865   settstoerrelse 7.7   OVER 0,80
+  7 kall, behold hvis >=4:  Jaccard 0.842   settstoerrelse 7.8   OVER 0,80
+
+######## em-egenskaper.txt  (v2, 15 kjoeringer)
+  antall per kjoering: 9, 9, 8, 7, 8, 11, 12, 6, 9, 7, 9, 8, 9, 5, 9
+  1 kall (grunnlinje):        Jaccard 0.441   n=105 par
+  3 kall, behold hvis >=2:  Jaccard 0.526   settstoerrelse 7.7   under
+  5 kall, behold hvis >=2:  Jaccard 0.629   settstoerrelse 11.5   under
+  5 kall, behold hvis >=3:  Jaccard 0.564   settstoerrelse 7.3   under
+  7 kall, behold hvis >=4:  Jaccard 0.626   settstoerrelse 6.7   under
