@@ -7,7 +7,7 @@ paradigm: lagdelt med rent generatorlag (ports-and-adapters på modellsiden)
 scope: Lesevenn v1 — hele systemet
 status: final
 created: '2026-09-29'
-updated: 2026-10-02
+updated: 2026-10-07
 binds: [FR-1..FR-31, FR-35..FR-45]
 sources:
   - prd-lesevenn.md
@@ -220,7 +220,9 @@ Uten dette er FR-40 sitt krav om «én tabell som viser hver terskel med målt v
 | --- | --- | --- |
 | Next.js (App Router) | **16.3.7 eller nyere** | 16.3.6 var nyeste utgitte per 29.09.2026, men Vercel varslet en sikkerhetsutgivelse 30.09.2026 med ni sårbarheter, én kritisk. Pinn 16.3.7+ og les varslene |
 | TypeScript | pinnes ved installasjon | |
-| PostgreSQL | pinnes ved installasjon | |
+| PostgreSQL (Neon) | pinnes ved installasjon | eu-central-1, Frankfurt |
+| `@neondatabase/serverless` 1.2.x | pinnes ved installasjon | **Appens driver i drift.** WebSocket over Neons proxy, ikke TCP på 5432 — se under |
+| `pg` 8.23.x | pinnes ved installasjon | **Bare til migrasjoner**, via drizzle-kit over 5432. Ikke importert av appkoden |
 | Drizzle ORM | 0.45.x, pinnes ved installasjon | Begrunnet valg, ikke et bransjestandardvalg — se under. **En brytende v1 er i beta.** Ikke oppgrader midt i målekjøringer som skal være sammenlignbare |
 | Better Auth | 1.7.x, pinnes ved installasjon | Offisiell guide dekker Next.js 16+ med proxy. `pg` og `drizzle-orm` er peer-avhengigheter |
 | pdfjs-dist (i nettleseren) | pinnes ved installasjon | Kjører klientside etter AD-16, så PDF-en aldri sendes til serveren. Gir tekst per side, som PF-1 trenger. `unpdf` sto her da parsing skulle skje på serveren, og er ikke lenger aktuelt |
@@ -230,13 +232,17 @@ Uten dette er FR-40 sitt krav om «én tabell som viser hver terskel med målt v
 
 **Hvorfor Better Auth, presist.** Det gir full eierskap til brukerdata i egen database, som passer både PostgreSQL-valget og målet om å forstå brukerhåndtering. Merk at to hendelser ofte blandes sammen: Better Auth-teamet overtok *vedlikeholdet* av Auth.js i september 2025, og Vercel kjøpte Better Auth i juli 2026. Det er to separate hendelser, ikke en kodebasesammensmelting.
 
-### Tre fotfeller ved oppsett
+### Fotfeller ved oppsett
 
 Alle tre er stille feil — de gir ikke feilmelding som peker på årsaken.
 
 **Middleware heter proxy.** Next.js 16 har døpt om middleware til `proxy.ts`, som kjører på Node-runtime. Enhver oppskrift skrevet for versjon 15 eller tidligere bruker det gamle navnet.
 
-**Turbopack mot webpack-konfigurasjon.** Next.js 16 kjører Turbopack som standard. De utbredte oppskriftene for `pg` og `drizzle-orm` bruker `webpack`-externals og `serverComponentsExternalPackages`, og kombinasjonen feiler bygget med «This build is using Turbopack, with a webpack config and no turbopack config». Samme klasse felle som proxy-navnet, og mer sannsynlig å treffe først.
+**Turbopack og webpack-konfigurasjon.** Next.js 16 kjører Turbopack som standard. De utbredte oppskriftene for `pg` og `drizzle-orm` fra Next.js 15-tiden legger inn `webpack`-externals og `serverComponentsExternalPackages`, og kombinasjonen feiler bygget med «This build is using Turbopack, with a webpack config and no turbopack config».
+
+`[VERIFISERT 7. oktober: fella rammer IKKE driverne i seg selv. Bygget går gjennom med både pg og @neondatabase/serverless importert i appkoden, uten noen webpack- eller turbopack-konfigurasjon. Et tidligere utkast av denne advarselen var for bredt formulert — risikoen ligger i å følge en utdatert oppskrift, ikke i å bruke databasedriveren. Verdt å merke seg i refleksjonsrapporten: en advarsel som er for bred koster tid på å omgå noe som ikke er et problem.]`
+
+**Databaseporten er ikke pålitelig på alle nett.** Verifisert 2. oktober: fra ett av nettene utviklingen skjer fra kom TCP til 5432 ikke gjennom, mens 443 gikk. Fra et annet nett, 7. oktober, virket 5432. Derfor går appen over `@neondatabase/serverless` på web-porter, og migrasjoner — som bruker `pg` på 5432 — må kjøres fra et nett som slipper gjennom.
 
 **Sidegrensene må bevares ved PDF-uttrekk.** `pdfjs-dist` gir tekst per side, og teksten skal holdes per side gjennom hele uttrekket. Slås sidene sammen til én streng underveis, mister PF-1 forutsetningen sin — terskelen på under 100 tegn *per side* kan ikke regnes ut. Ingenting feiler; deteksjonen slutter bare å virke. Dette var en navngitt felle i `unpdf` (`mergePages: true`), og den gjelder like fullt når man setter sammen sider selv.
 ## Strukturell grunnform
