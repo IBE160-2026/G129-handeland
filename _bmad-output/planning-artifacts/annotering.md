@@ -93,7 +93,7 @@ Sjekket 8. oktober 2026. Dette er ikke én regel per nettsted — to av de fire 
 
 | Kilde | Lisensmodell | Hvordan den sjekkes |
 |---|---|---|
-| **NDLA** | CC BY-SA 4.0 gjennomgående for tekst | Feltet `copyright.license` i `https://api.ndla.no/article-api/v2/articles/{id}`. Bildene har *egne* lisenser, ofte strengere. |
+| **NDLA** | CC BY-SA 4.0 for NDLAs **eget** stoff. Hostede tredjepartsverk er noe annet — se advarselen under | Feltet `copyright.license` i `https://api.ndla.no/article-api/v2/articles/{id}`, **men det feltet er ikke nok alene**. Bildene har egne lisenser, ofte strengere. |
 | **Wikipedia** | CC BY-SA 4.0 gjennomgående | Oppgitt i bunnteksten på hver side |
 | **Store norske leksikon** | **Per artikkel.** Enten «fri gjenbruk» (CC BY-SA 3.0) eller «begrenset gjenbruk», der leseren må spørre forfatteren | Står på artikkelen selv. `snl.no/datamaskin` er fri; neste artikkel må sjekkes for seg |
 | **forskning.no** | **Ikke tillatt.** Kan ikke brukes | Se sitatet under |
@@ -109,6 +109,33 @@ Dette er et uttrykkelig forbud, ikke et fravær av lisens, og det er en viktiger
 **En avtale er i prinsippet mulig** — formuleringen er «uten avtale med forskning.no» — men det er en henvendelse med usikkert utfall og ukjent svartid, og M0 er 30. oktober. Regn ikke med den.
 
 **Og det du var ute etter finnes andre steder.** Ønsket var tekst som er bearbeidet, men mindre stilisert enn NDLA. Wikipedia og SNL er nettopp det, med fri lisens — og de er oppslagsverk elever faktisk bruker, mens forskning.no er journalistikk *om* forskning.
+
+### Advarsel: lisensfeltet i NDLAs API er ikke nok alene
+
+Denne ble funnet 8. oktober, og den retter metoden rett over.
+
+NDLA publiserer **utdrag fra andres opphavsrettsbeskyttede verk** til bruk i undervisning. For artikkelen *To søstre (utdrag)* (id 21978) rapporterer API-et:
+
+```
+license:       CC-BY-SA-4.0
+creators:      Marthe Johanne Moe (writer)
+rightsholders: (ingen)
+origin:        (ingen)
+```
+
+Men innholdet er 2 587 ord av **Åsne Seierstads** roman. NDLA kan ikke lisensiere en annens roman under CC BY-SA — man kan ikke gi bort rettigheter man ikke har. Enten er metadataene ufullstendige, eller NDLA har en avtale som lar *dem* publisere utdraget uten at retten følger med til neste bruker. Uansett hvilket: **merkelappen kan ikke brukes som grunnlag for å legge teksten i repoet.**
+
+Tre signaler på at lisensfeltet ikke kan stoles på:
+
+- **Tittelen inneholder «utdrag»** eller på annen måte sier at dette er hentet fra et verk.
+- **Prosaen er åpenbart en navngitt forfatters**, mens `creators` lister en NDLA-redaktør som `writer`.
+- **`rightsholders` er tom** på noe som åpenbart har en rettighetshaver.
+
+Regelen blir derfor: lisensfeltet gjelder NDLAs **egne forklarende tekster**. Er teksten et skjønnlitterært eller journalistisk verk gjengitt hos NDLA, må rettighetene avklares med rettighetshaveren — og for dette prosjektet betyr det i praksis: velg en annen tekst.
+
+### Og en observasjon om NDLA i norskfaget
+
+Av fire kandidater til norsk-cellen hadde **tre null ord brødtekst**: innholdet ligger i innbygde videoer og interaktive elementer. `De retoriske appellformene`, `Hva er modernisme?` og `Språklige virkemidler` er alle tomme for API-et, selv om sidene ser innholdsrike ut i nettleseren. Lesevenn trenger tekst, så slike sider er ubrukelige uansett lisens — og det er verdt å sjekke ordtellingen før du leser en side og tror du har funnet noe.
 
 **Samfunnsfag er den vanskeligste cellen**, og det er verdt å vite på
 forhånd. Fagspråket der ligger nær det prompten eksplisitt forkaster som
