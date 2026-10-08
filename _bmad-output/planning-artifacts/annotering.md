@@ -393,7 +393,7 @@ avgjørelsene i steg 2 og skriver dem skarpere.
 
 ## 6. Sjekkliste før du kaller M0 ferdig
 
-- [ ] Seks tekster valgt, med fag, programområde, kilde og teksttype fordelt
+- [ ] Seks tekster valgt, med fag, fagtype, kilde og teksttype fordelt
 - [ ] Hver tekst merket med kilde (digitalt læremiddel / autentisk) og type (fokusert / oversikt)
 - [ ] Alle seks kan deles i et offentlig repo, med kreditering og lisens ført
 - [ ] Alle seks annotert **før** noen modellkjøring ble sett
