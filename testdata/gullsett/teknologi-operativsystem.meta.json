@@ -1,0 +1,19 @@
+{
+  "tekst": "teknologi-operativsystem.txt",
+  "tittel": "Operativsystem",
+  "fag": "teknologiforstaaelse",
+  "fagtype": "programfag",
+  "kilde": "autentisk",
+  "type": "oversikt",
+  "lisens": "CC-BY-SA-4.0",
+  "kreditering": [
+    "Wikipedia-bidragsytere (se artikkelens historikk)"
+  ],
+  "url": "https://no.wikipedia.org/wiki/Operativsystem",
+  "hentet": "2026-10-08",
+  "ord": 731,
+  "tegn": 5183,
+  "ordFoerKutt": 4022,
+  "kutt": "innledningen og de første delene, til om lag 850 ord",
+  "merknad": "Hentet som rentekst via Wikipedias action-API"
+}

@@ -1,0 +1,33 @@
+Operativsystem
+
+Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre programmer. Én type ressurs er eksterne enheter, som en skriver.  Operativsystemet passer for eksempel på at to programmer ikke samtidig sender informasjon til samme skriver, men at de legges i en venteliste før utskrivning. En annen type ressurs er interne enheter som minne og prosessorer. Dette er svært grunnleggende komponenter som operativsystemet også holder styr på.
+
+Man kan betrakte programvare som å være én av to typer: applikasjonsprogramvare eller systemprogramvare. Applikasjonsprogramvare er slikt som tekstbehandlere, regneark og andre programmer som brukeren har direkte kontakt med. Av systemprogramvare er operativsystemet den viktigste. Det holder styr på systemressursene og gjør programmererens jobb enklere. Tilleggsenheter som er koblet til datamaskinen er ofte kompliserte å bruke. En harddisk, for eksempel, trenger detaljerte instruksjoner om å starte motoren sin, stoppe den, flytte på lesehodene og mye annet. Operativsystemet bruker harddisken ved å kommunisere på en standard måte med et driverprogram laget spesielt for enheten. Et annet program som ønsker å skrive noe til harddisken gir bare beskjed til operativsystemet om for eksempel «å skrive teksten 'kongle' til filen "kongle.txt" på katalogen c:\». Operativsystemet, i samarbeid med driverprogrammet, tar seg så av resten av oppgaven.
+
+Operativsystemet er et program som alle andre i datamaskinen. Det er skrevet i et programmeringsspråk og følger vanlige regler for programmer. Forskjellen er at det er det første som lastes inn i minnet når maskinen startes, og det styrer «hverdagen» for alle programmer som lastes inn senere.
+
+Vanlige operativsystem
+
+Microsoft Windows er et av de mest brukte operativsystemene for personlige datamaskiner. Dets forløpere kom på begynnelsen av 1980-tallet med MS-DOS fra Microsoft og DR-DOS fra Digital Research. Forkortelsen DOS står for Disk Operating System.
+
+Unix er blant de eldste operativsystemene som fortsatt er i bruk.  Det frie operativsystemet Linux brukes også til personlige datamaskiner, men særlig tjenere, superdatamaskiner og forbrukerelektronikk. Linux er en avart av Unix. Blant andre Unix-varianter finner vi Berkeley Software Distribution (BSD).
+
+IBM hadde en periode suksess med sitt OS/2, og Macintosh-maskiner bruker Mac OS (tidligere rett og slett kalt systemet). Nye Macer kjører imidlertid Mac OS X, som er BSD-basert.
+
+Bakgrunn
+
+Et moderne datasystem består av komponenter som prosessorer, hovedminne, klokker, inn- og utenheter, lagringsenheter med mer.  Operativsystemet holder styr på komponentene og gir applikasjonsprogrammer tilgang til dem.  På denne måten behøver ikke hver programmerer kjenne til detaljene ved å bruke de ofte komplekse enhetene, eller hvordan et program skal dele disse med andre programmer.  Operativsystemet kan sees på som et lag som skiller applikasjonsprogramvaren fra den ofte mer komplekse maskinvaren.
+
+Forskjellige datamaskiner bruker forskjellige typer maskinvare. En applikasjon skrevet til en type datamaskin vil da ikke nødvendigvis kjøre på en annen. Imidlertid kan et operativsystem finnes til flere typer maskiner, noe som gjør at operativsystemet fungerer som en felles plattform utvikleren av en applikasjon kan benytte seg av, uten å tenke på de forskjellige typene maskinvare brukeren kan tenkes å ha.
+
+Kjente operativsystemer
+
+Operativsystemer kan grupperes på flere måter.  En av dem er etter bruksområde.  Stormaskiner har operativsystemer som er tilpasset deres bruk, minimaskiner sitt og tjenere har sine operativsystemer.  Felles for alle disse er at de ikke har interaksjon med brukeren som fokus.  På skrivebord og i private hjem finner vi det som tidligere kaltes mikrodatamaskiner, senere kalt hjemmedatamaskin og så PC.  Disse har egne operativsystemer, og fra sent på 1980-tallet ble Microsoft sine operativsystemer markedsledende der.  Håndholdte enheter som PDAer og mobiltelefoner har operativsystemer som er spesielt tilpasset maskinvaren.  En annen kategori OSer er sanntidsoperativsystemer.  Disse siste tilbyr tjenester hvor de garanterer responstid.  Eksempler er datamaskinen som kontrollerer tenning og drivstofftilførsel i en moderne bil.
+
+I tillegg til systemene nevnt i innledningen, som er de mest kjente, finnes det også flere alternative operativsystemer. Blant disse finner vi BeOS, som ikke lenger blir utviklet, men det er flere nye operativsystemer under utvikling som er kloner av eller inspirert av BeOS, et av disse er Haiku. Andre alternative operativsystemer under utvikling er Syllable og SkyOS.
+
+Også samtidens store teknologiske nyhet mobiltelefonen bruker operativsystem. Tidligere var disse ganske primitive, men etter hvert som mobilene har blitt kraftigere og fått flere bruksområder har også mobiltelefonoperativsystemene også blitt mer utbygde. Dette er særlig noe som har kommet samtidig med fargeskjermen og kameramobilene. Eksempler på operativsystemer for mobil er: Symbian, Windows CE, Linux, Android, IOS
+
+Historie
+
+Utdypende artikkel: Operativsystemets historie

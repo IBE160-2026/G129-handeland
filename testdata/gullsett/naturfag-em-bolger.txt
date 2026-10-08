@@ -1,0 +1,53 @@
+Egenskaper hos ulike EM-bølger
+
+Radiobølger
+
+Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et forsøk der han lagde elektriske svingninger som produserte radiobølger. Det er bølger med lav frekvens og lang bølgelengde, fra 1 meter til mange km.
+
+Han viste at de hadde bølgeegenskaper som for eksempel brytning, bøyning og overlagring. Ved å lage stående bølger av dem, greide han å måle farten, og den var 300 000 km/s, – akkurat som forutsagt for elektromagnetiske bølger!
+
+På grunn av den lange bølgelengden er radiobølger svært godt egnet til å sende signaler over store avstander. Bølger med korte bølgelengder spres lett, mens radiobølger går uforstyrret rett fram. I tillegg kan radiobølger bli reflektert av ionosfæren, 80–400 km over bakken, tilbake mot jordoverflata og dermed nå enda lenger.
+
+Mikrobølger
+
+Ved å øke svingefrekvensen i Hertz forsøk kunne man produsere elektromagnetiske bølger med høyere frekvens – mikrobølger. Denne gruppen av elektromagnetiske bølger har bølgelengder mellom 1 mm og 1 m. Du kjenner den nok best via mikrobølgeovnen.
+
+Grunnen til at mat varmes opp så raskt i en mikrobølgeovn, er at frekvensen til mikrobølgene passer godt sammen med frekvensen som både fett- og vannmolekyler naturlig vil svinge med. Dermed sørger mikrobølgeovnen for å «riste» på alle vannmolekylene i maten. Derfor blir maten varm fordi den inneholder vann, mens tallerkenen (som ikke inneholder vann) ikke blir det.
+
+Infrarød stråling
+
+IR-stråling er elektromagnetisk stråling som har litt mindre energi enn synlig lys. Den har bølgelengder i området 700 nm til 1 mm, og de korteste av disse kan vi føle med huden. Når vi føler strålevarmen fra en vedovn, er det IR-stråler som ligger ganske nærme den røde delen av spekteret.
+
+Når temperaturen til en gjenstand stiger, vil den begynne å sende ut synlig lys ved ca. 600°C. Da begynner gjenstanden å gløde. Dette kan du for eksempel observere på grillelementet i stekeovnen og på stråleovner.
+
+Digitale kameraer kan lages slik at de registrerer og viser infrarøde bølger. Dette kan for eksempel utnyttes til termofotografering for å finne varmelekkasjer i eldre hus, eller til varmesøkende kameraer.
+
+Infrarøde bølger skyldes molekylbevegelser. Siden molekylbevegelsene er raskere ved høyere temperaturer, vil molekylene sende ut mer og mer energirike IR-bølger ved økende temperatur. Av samme grunn vil bølgelengden til strålingen avta når temperaturen øker. (Husk at lav energi tilsvarer lang bølgelengde!)
+
+Synlig lys
+
+Siden synssansen vår er laget for å tolke synlig lys, har mange av egenskapene til lys vært kjent for mennesker langt tilbake i tid. Rundt år 1000 e.Kr. var prinsippene for lysbrytning kjente, og i Kina, Arabia og Persia ble regnbuen riktig forklart som brytning i vanndråper. På 1200-tallet hadde man lært å slipe glass til linser og lage de første brillene. Linsemakerne ble stadig bedre, og rundt år 1600 ble både det første mikroskopet og teleskopet laget.
+
+På 1670-tallet viste Isac Newton, ved hjelp av et prisme, at hvitt lys består av alle regnbuens farger. Han definerte de 7 spektralfargene som rødt, oransje, gul, grønn, blå, indigo og fiolett.
+
+Før 1860 hadde man altså god kjennskap til hvordan lysstråler oppfører seg, men det eksisterte ingen god forklaring på hva lys egentlig er.
+
+Ultrafiolett stråling
+
+Inspirert av Herschels oppdagelse av IR gjorde Johann W. Ritter forsøk på den andre siden av det synlige spekteret. I 1801 påviste han at sølvklorid (som seinere ble brukt i fotopapir) mørknet raskere utenfor det fiolette området enn inni. Altså måtte det være stråling der! Denne strålingen kalles ultrafiolett stråling, siden den ligger utenfor det fiolette området.
+
+UV-stråling ligger i bølgelengdeområdet fra 10 nm til 400 nm og er delt inn i tre «farger»: UV-A, UV-B og UV-C.
+
+UV-A ligger nærmest synlig lys og har lavest energi av de tre, mens UV-C har høyest energi. Sollyset inneholder i utgangspunktet alle de tre typene, men heldigvis blir tilnærmet all UV-C stoppet av oksygen (O2) og ozonlaget i atmosfæren, så vi trenger ikke å bekymre oss for den. UV-A og UV-B derimot kan gjøre oss solbrente og i verste tilfelle forårsake hudkreft.
+
+Røntgenstråling
+
+Røntgenstråling er elektromagnetisk stråling som er mer energirik enn UV-C og har bølgelengder kortere enn 10 nm.
+
+Wilhelm Røntgen oppdaget disse i 1895 da han eksperimenterte med oppbremsing av elektroner med svært høy hastighet. Strålene kalte han «X-Strahlen» som har blitt til x-rays på engelsk. Han oppdaget også at strålene kunne brukes for å gjennomlyse stoff som var ugjennomsiktig for vanlig lys og dermed skape bilder (røntgenbilder) av beinstrukturen til levende mennesker. Ved siden av ser du verdens første røntgenbilde. Det var av hånda til kona hans, Anna.
+
+Røntgenstråling er svært mye brukt til bildedannelse av indre strukturer i kroppen. Den har også vært et nyttig hjelpemiddel innen industri og til forskning for å avdekke strukturer i krystaller og molekyler.
+
+Gammastråling
+
+Gammastråling omtales på sider om stråling fra radioaktive kilder.

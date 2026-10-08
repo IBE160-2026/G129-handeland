@@ -1,0 +1,19 @@
+{
+  "tekst": "norsk-metafor.txt",
+  "tittel": "metafor",
+  "fag": "norsk",
+  "fagtype": "fellesfag",
+  "kilde": "autentisk",
+  "type": "oversikt",
+  "lisens": "CC-BY-SA-3.0 (fri gjenbruk)",
+  "kreditering": [
+    "Jan Grue (Universitetet i Oslo)"
+  ],
+  "url": "https://snl.no/metafor",
+  "hentet": "2026-10-08",
+  "ord": 721,
+  "tegn": 4543,
+  "ordFoerKutt": 721,
+  "kutt": null,
+  "merknad": "Skrapet fra HTML (ingen åpent API). Kontroller avsnittsdelingen for hånd. Sist oppdatert 2025-02-22."
+}
