@@ -81,6 +81,40 @@ describe("overskriftsgjenkjenning", () => {
     expect(erOverskrift("Tre ting skjer under mitose:")).toBe(false);
   });
 
+  /*
+   * Endret 8. oktober. Den gamle regelen avviste `?` og `!`, og ingen test
+   * fanget at den gjorde det — regelen ble endret og testpakken sa ingenting.
+   * Disse lukker hullet i begge retninger.
+   */
+  test("spørsmål er overskrift, fordi lærebokoverskrifter ofte er det", () => {
+    // «Hva er allegori?» er en seksjonsoverskrift hos NDLA. Leses den som
+    // brødtekst, mister aktiveringssiden i FR-5 tekstens struktur.
+    expect(erOverskrift("Hva er allegori?")).toBe(true);
+    expect(erOverskrift("Hvorfor modernisme?")).toBe(true);
+  });
+
+  test("utropstegn er overskrift", () => {
+    // «Du som er i himmelen!» er en overskrift i NDLAs artikkel om allusjon.
+    expect(erOverskrift("Du som er i himmelen!")).toBe(true);
+  });
+
+  test("over ti ord er ikke overskrift, selv under 100 tegn", () => {
+    // Dette er grunnen til at ordgrensen kom samtidig som `?` ble tillatt:
+    // tegngrensen alene slipper gjennom en hel setning. Denne er 98 tegn.
+    const setning =
+      'Under ser du orda som Jacobsen bruker om "jeget" og "duet". Hvilke konnotasjoner vekker disse?';
+    expect(setning.length).toBeLessThanOrEqual(100);
+    expect(setning.split(/\s+/).length).toBeGreaterThan(10);
+    expect(erOverskrift(setning)).toBe(false);
+  });
+
+  test("ti ord er innenfor, elleve er utenfor", () => {
+    expect(erOverskrift("ett to tre fire fem seks sju aatte ni ti")).toBe(true);
+    expect(erOverskrift("ett to tre fire fem seks sju aatte ni ti elleve")).toBe(
+      false,
+    );
+  });
+
   test("overskrifter kan plukkes ut for Aktiveringen (FR-5)", () => {
     const a = delIAvsnitt(
       "Celledeling\n\nAlle celler deler seg.\n\nMitose\n\nDette skjer i fire faser.",

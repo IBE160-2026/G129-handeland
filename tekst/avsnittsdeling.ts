@@ -32,8 +32,8 @@ export type Avsnitt = {
  * 4. Tomme blokker forkastes.
  * 5. En blokk er en OVERSKRIFT når alle disse holder:
  *      - den består av én linje etter sammenslåing
- *      - den er høyst 100 tegn
- *      - den slutter ikke med `.`, `!`, `?` eller `:`
+ *      - den er høyst 100 tegn OG høyst 10 ord
+ *      - den slutter ikke med `.` eller `:`
  *    Ellers er den brødtekst.
  *
  * KJENT BEGRENSNING, bevisst: finnes det ingen tomme linjer i teksten i det hele
@@ -67,11 +67,43 @@ function slaaSammenLinjer(blokk: string): string {
     .trim();
 }
 
-/** Regel 5. Eksportert fordi FR-5 og testene trenger den samme vurderingen. */
+/** Høyst så mange ord i en overskrift. Se begrunnelsen under. */
+const MAKS_ORD_I_OVERSKRIFT = 10;
+
+/**
+ * Regel 5. Eksportert fordi FR-5 og testene trenger den samme vurderingen.
+ *
+ * ## Hvorfor `?` og `!` er tillatt — endret 8. oktober, etter måling
+ *
+ * Den første utgaven avviste alt som sluttet på `.`, `!`, `?` eller `:`. Det
+ * koster ekte overskrifter, fordi norske lærebokoverskrifter svært ofte er
+ * spørsmål: «Hva er allegori?», «Hva er en allusjon?», «Hvorfor modernisme?».
+ * Leses de som brødtekst, mister aktiveringssiden i FR-5 tekstens struktur —
+ * altså det eleven skal aktivere forkunnskaper ut fra.
+ *
+ * Målt over Gullsettets seks Tekster gav endringen to ekte overskrifter
+ * tilbake, og kostet to blokker: et bibelsitat som FAKTISK er en overskrift i
+ * kilden, og én brødtekstsetning på 16 ord.
+ *
+ * ## Hvorfor ordgrensen kom med samtidig
+ *
+ * Den siste kostnaden er grunnen. Tegngrensen på 100 slipper gjennom en hel
+ * setning — «Under ser du orda som Jacobsen bruker om jeget og duet. Hvilke
+ * konnotasjoner vekker disse orda?» er 98 tegn. En overskrift er ikke lang,
+ * den er *kort*, og ord er et bedre mål på det enn tegn. Grensen fanger
+ * dessuten en feil som alt fantes: SSBs undertittel på elleve ord ble lest som
+ * overskrift før denne endringen.
+ *
+ * `.` og `:` er fortsatt avvisende. Et punktum markerer en setning, og et
+ * kolon markerer en innledning til en liste — ingen av dem er overskrifter.
+ */
 export function erOverskrift(innhold: string): boolean {
   if (innhold.length === 0) return false;
   if (innhold.length > 100) return false;
-  return /[.!?:]$/.test(innhold) === false;
+  if (innhold.split(/\s+/).filter((o) => o.length > 0).length > MAKS_ORD_I_OVERSKRIFT) {
+    return false;
+  }
+  return /[.:]$/.test(innhold) === false;
 }
 
 /**
