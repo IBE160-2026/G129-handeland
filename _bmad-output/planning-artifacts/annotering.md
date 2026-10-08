@@ -217,23 +217,59 @@ Nei:
 - Tall og datoer
 - Ord eleven åpenbart kan: «energi», «lys», «vann»
 
-### Fire avgjørelser du må ta nå, ikke senere
+### Fire regler som følger av koden
 
-Disse dukker opp i hver tekst, og hvis du avgjør dem underveis blir
-annoteringen inkonsekvent — og da måler κ din egen vakling framfor noe reelt.
+Disse er ikke noe du skal vurdere. De følger av hvordan appen faktisk
+oppfører seg, og annoterer du mot en annen regel, måler du noe appen ikke
+gjør. *(Rettet 9. oktober: dette sto tidligere som «fire avgjørelser du må
+ta», men overskriften lovet et valg som brødteksten tok for deg. De er
+regler.)*
 
-**Bøyning.** Prompten krever formen som står i teksten. Skriv derfor ned
-formen slik den faktisk forekommer: står det «mitosen», skriv «mitosen».
+**Bøyning — skriv formen som står i teksten.** Står det «mitosen», skriv
+«mitosen». Grunnen er at `erVerbatim` krever ordrett treff, så et uttrykk i
+grunnform blir forkastet før eleven ser det.
 
-**Flerordsuttrykk.** Står både «energi» og «indre energi» i teksten, og begge
-er faguttrykk? Regel: **ta det mest spesifikke** du mener trenger forklaring.
-Koden gjør det samme — `fjernOverlapp` lar lengste treff vinne.
+**Flerordsuttrykk — ta det mest spesifikke.** Står både «energi» og «indre
+energi», annoter «indre energi». `fjernOverlapp` lar lengste treff vinne, så
+det er det settet appen kan levere.
 
-**Sammensetninger.** «mitose» inni «mitosefasen» markeres ikke av koden, fordi
-`finnForekomster` krever ordgrenser. Annoter derfor bare ord som står alene.
+**Sammensetninger — bare ord som står alene.** «mitose» inni «mitosefasen»
+markeres ikke, fordi `finnForekomster` krever ordgrenser.
 
-**Gjentakelser.** Du annoterer **begreper**, ikke markeringer. Står ordet fem
-steder, er det fortsatt én oppføring i gullsettet.
+**Gjentakelser — én oppføring per begrep.** Du annoterer begreper, ikke
+markeringer. Står ordet fem steder, er det fortsatt én oppføring.
+
+### Tre avgjørelser som faktisk er dine
+
+Her finnes det ikke et riktig svar som følger av koden. Du må velge, og
+valget har målbare følger.
+
+**1. Hva gjør du ved tvil — ta med, eller utelate?**
+
+Dette er den viktigste, og den har en felle. Prompten (v2) sier til modellen:
+«Er du i tvil om et ord oppfyller begge kravene, ta det ikke med.» Velger du
+den motsatte regelen for deg selv, bygger du inn en **systematisk uenighet**:
+modellen utelater grensetilfellene, du tar dem med, og gjenkallingen faller
+for hvert eneste av dem — uten at modellen har gjort noe galt.
+
+Velger du samme regel som prompten, måler du om modellen *anvender* regelen
+like godt som deg. Velger du motsatt, måler du at dere har ulike regler, som
+du alt vet. **Anbefaling: samme regel som prompten.** Men det er ditt valg, og
+det skal skrives ned.
+
+**2. Hvilke begreper velger du når det er for mange?**
+
+Taket er 9 til 14 per tekst. Finner du tjue kandidater, må elleve ut, og
+hvilke er en faglig vurdering ingen regel kan ta for deg. Spørsmålet som
+hjelper: *hvilke ord stopper en elev som strever, og hvilke leser hun forbi?*
+
+Skriv ned prinsippet du bruker, slik at tekst seks får samme behandling som
+tekst én.
+
+**3. Hvor streng er sammenligningsregelen?**
+
+Er modellens «mitosen» et treff mot ditt «mitose»? Behandles i steg 4 — men
+avgjørelsen hører hit, fordi den skal tas **før** du ser et tall.
 
 ### Tidsbruk
 
@@ -361,6 +397,7 @@ avgjørelsene i steg 2 og skriver dem skarpere.
 - [ ] Hver tekst merket med kilde (digitalt læremiddel / autentisk) og type (fokusert / oversikt)
 - [ ] Alle seks kan deles i et offentlig repo, med kreditering og lisens ført
 - [ ] Alle seks annotert **før** noen modellkjøring ble sett
+- [ ] De tre avgjørelsene i steg 2 tatt og skrevet ned: tvilsregelen, prioriteringsprinsippet, og hvor streng sammenligningen er
 - [ ] Sammenligningsregelen skrevet ned **før** første måling
 - [ ] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
 - [ ] To tekster annotert to ganger, minst sju dager mellom
