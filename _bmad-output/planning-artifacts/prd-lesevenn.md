@@ -283,15 +283,26 @@ Lesevenn utvinner et Begrepssett fra Teksten: Faguttrykk med forklaring og Kilde
 Uttrekkets kvalitet måles mot et manuelt annotert Gullsett, og tallene er en leveranse — ikke en intern sjekk.
 
 **Konsekvenser (testbare):**
-- Gullsettet er **seks Tekster** på **videregående nivå (Vg1–Vg3)**, hver på 1 500–6 000 tegn, fullt krysset mellom tre fellesfag og begge programområder:
+- Gullsettet er **seks Tekster** på **videregående nivå (Vg1–Vg3)**, hver på 1 500–6 000 tegn, fordelt over fag, **fagtype**, tekstkilde og teksttype. Det konkrete settet står i tabellen under.
 
-| | Studiespesialiserende | Yrkesfag |
-|---|---|---|
-| **Naturfag** | 1 tekst | 1 tekst |
-| **Samfunnsfag** | 1 tekst | 1 tekst |
-| **Norsk** | 1 tekst | 1 tekst |
+**Aksen er fellesfag mot programfag — omformulert 8. oktober.** Kravet krysset tidligere tre fellesfag mot studiespesialiserende og yrkesfag. Begrunnelsen var at «yrkesfaglige fagtekster har kortere setninger og mer praksisnær terminologi». Men det er egentlig en beskrivelse av **programfag**: naturfag for et yrkesfaglig programområde er fortsatt naturfag, skrevet mot fellesfagets læreplan, mens det praksisnære fagspråket bor i programfagene. Den gamle aksen siktet altså på programfag og kalte det programområde. Nå heter den det den måler.
 
-- Krysningen er grunnen til at det er nettopp seks tekster og ikke fem eller sju. Alle tre er fellesfag i begge programområder, men lærebøkene er ikke de samme: yrkesfaglige fagtekster har kortere setninger og mer praksisnær terminologi, studiespesialiserende har mer abstrakt og akademisk fagspråk. Et uttrekk som er kalibrert på bare den ene typen vil sannsynligvis treffe dårligere på den andre, og det er verdt å vite *før* det oppdages av en elev.
+**Det konkrete Gullsettet, valgt og lisenssjekket 8. oktober:**
+
+| # | Fag | Fagtype | Tekst | Kilde | Type | Ord |
+|---|---|---|---|---|---|---|
+| 1 | Naturfag | fellesfag | NDLA *Egenskaper hos ulike EM-bølger* | læremiddel | oversikt | 779 |
+| 2 | Samfunnsfag | fellesfag | SSB *Høy prisvekst gir ny renteøkning* | autentisk | fokusert | ~1 100 |
+| 3 | Norsk | fellesfag | NDLA *Lyriske virkemidler*, forklarende del | læremiddel | fokusert | ~500 av 1 000 |
+| 4 | Norsk | fellesfag | SNL *metafor* | autentisk | oversikt | ~900 av 1 200 |
+| 5 | Teknologiforståelse | **programfag** | NDLA *Domeneoppbygning og toppdomene* | læremiddel | fokusert | 661 |
+| 6 | Teknologiforståelse | **programfag** | Wikipedia *Operativsystem*, innledning og første deler | autentisk | oversikt | ~800 av 4 070 |
+
+Tre læremiddel og tre autentiske; tre fokuserte og tre oversikter. Lisens, kreditering og hvert enkelt kutt er ført i `annotering.md`.
+
+**Doblingen av norsk og teknologi er et designvalg, ikke en forglemmelse.** De to fagene har hver sin læremiddel/autentisk-par, så tekstkilden kan sammenlignes **med faget holdt konstant**. Naturfag og samfunnsfag har én tekst hver. Alternativet — én tekst per fag over seks fag — ville gjort kilde og fag uatskillelige.
+
+**En begrensning som skal stå:** teksttypen og tekstkilden er ikke helt uavhengige, og det er en egenskap ved sjangrene og ikke ved utvalget. En oversiktstekst på 700–1 000 ord er i praksis en **læremiddelsjanger** — NDLA skriver dem, mens oppslagsverk og offentlige kilder skriver enten korte oppslag eller svært lange gjennomganger. Å lage en autentisk oversiktstekst krever derfor beskjæring, og en hardt beskåret oversiktsartikkel blir *fokusert* av konstruksjon. Tekst 6 er den eneste med et tungt kutt, og at den er autentisk er en skjevhet verdt å nevne når tallene per kilde leses.
 - Utvikleren annoterer manuelt hvilke uttrykk som *skulle* vært markert, før uttrekket kjøres.
 - **De seks Tekstene varierer også i tekstkilde, og hver Tekst merkes med sin.** Lagt inn 8. oktober. To kilder skal være representert, fordi begge er reelle:
   - **Digitalt læremiddel**, typisk NDLA. Dette er ikke en lettversjon av virkeligheten — elevene bruker NDLA, så det er en av tekstene de faktisk møter. Tekstene er språkvasket og korrekturlest av fagfolk, og er derfor jevnere i form enn en lærebokside.

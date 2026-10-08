@@ -40,17 +40,66 @@ PRD-en krever spredning over **fag** og **programområde**. Én tekst per celle;
 det gir ingen terskel per celle, men det viser en systematisk forskjell om den
 er stor.
 
-FR-8 krever i tillegg at **tekstkilde** og **teksttype** varierer, og at hver tekst
-merkes med sin. Et forslag til fordeling som treffer alle tre aksene:
+**Settet er valgt og lisenssjekket 8. oktober 2026.** Alle seks er klarert for et
+offentlig repo. Krediteringen under er en lisensplikt, ikke høflighet — den skal
+følge tekstfila slik `testdata/eksempeltekst/LES-MEG.md` viser.
 
-| # | Fag | Programområde | Kilde | Type |
+| # | Fag | Fagtype | Kilde | Type |
 |---|---|---|---|---|
-| 1 | Naturfag | Studiespesialiserende | Digitalt læremiddel | Fokusert |
-| 2 | Naturfag | Yrkesfag | Mer autentisk | Oversikt |
-| 3 | Samfunnsfag | Studiespesialiserende | Mer autentisk | Fokusert |
-| 4 | Samfunnsfag | Yrkesfag | Digitalt læremiddel | Oversikt |
-| 5 | Norsk | Studiespesialiserende | Digitalt læremiddel | Fokusert |
-| 6 | Norsk | Yrkesfag | Mer autentisk | Oversikt |
+| 1 | Naturfag | fellesfag | læremiddel | oversikt |
+| 2 | Samfunnsfag | fellesfag | autentisk | fokusert |
+| 3 | Norsk | fellesfag | læremiddel | fokusert |
+| 4 | Norsk | fellesfag | autentisk | oversikt |
+| 5 | Teknologiforståelse | programfag | læremiddel | fokusert |
+| 6 | Teknologiforståelse | programfag | autentisk | oversikt |
+
+**1. NDLA, *Egenskaper hos ulike EM-bølger*** (artikkel-id 22989), 779 ord.
+CC BY-SA 4.0. Astrid Johansen (forfatter), Kristin Bøhle (medforfatter), Kari
+Marlene Mulder (språk), Anne Lilleng (korrektur). **Ligger alt i repoet.**
+Brukes hel.
+
+**2. SSB, *Høy prisvekst gir ny renteøkning***, publisert 15.06.2026, ~1 100 ord,
+6 overskrifter. **CC BY 4.0** — den frieste lisensen i settet, uten share-alike.
+Krediteres «Statistisk sentralbyrå» med lenke til ssb.no. Brukes hel, eventuelt
+med et lett kutt ned mot 1 000 ord.
+<https://www.ssb.no/nasjonalregnskap-og-konjunkturer/konjunkturer/statistikk/konjunkturtendensene/artikler/hoy-prisvekst-gir-ny-renteokning>
+
+**3. NDLA, *Lyriske virkemidler*** (artikkel-id 21846), ~500 av 1 000 ord.
+CC BY-SA 4.0. Åsa Abusland, Marion Federl. **Kutt:** bare den forklarende delen
+brukes, fra «Litt om språklige bilder» til og med «Konnotasjoner». Fra «Del 2»
+går artikkelen over i oppgaver, og oppgavetekst er imperativer og spørsmål, ikke
+fagprosa.
+
+**4. SNL, *metafor***, sist oppdatert 22.02.2025, ~900 av 1 200 ord.
+CC BY-SA, **«fri gjenbruk»** — sjekket for denne artikkelen spesifikt. Jan Grue
+(Universitetet i Oslo). **Kutt:** lett beskjæring ned mot 900 ord.
+**Merket oversikt** fordi den behandler ett begrep gjennom fem fagfelt —
+litteraturvitenskap, språkvitenskap og kognitiv teori — og dermed bærer
+terminologi fra flere felt. Det er den egenskapen som gir grensetilfeller, og
+grensetilfellene er det som vakler.
+
+**5. NDLA, *Domeneoppbygning og toppdomene*** (artikkel-id 24326), 661 ord,
+3 overskrifter. CC BY-SA 4.0. Tron Bårdgård (opphav), Ida Marie Ellefsen
+(språk). Brukes hel.
+
+**6. Wikipedia, *Operativsystem***, ~800 av 4 070 ord. CC BY-SA 4.0, krediteres
+artikkelen og dens historikk. **Kutt:** innledningen og de første delene, som en
+selvstendig enhet. Dette er settets eneste tunge kutt — se begrensningen nederst
+i dette steget.
+
+### Tre tekster som ble vurdert og forkastet
+
+Verdt å ha med, fordi begrunnelsene er de samme du vil møte igjen.
+
+- **forskning.no** (to artikler) — uttrykkelig forbud mot gjenbruk. Se sitatet over.
+- **NDLA *To søstre (utdrag)*** — teksten er Åsne Seierstads roman, ikke NDLAs
+  eget stoff. Se advarselen om lisensfeltet under.
+- **SSB *Endringer i industriomsetningen*** — 385 ord, altså under gulvet, og bare
+  tre–fire reelle faguttrykk. Med så få gullsett-termer beveger gjenkallingen seg
+  i fjerdedeler: én bom lander presis på terskelen 0,75, to bommer stryker.
+  Målingen blir et utsagn om tilfeldigheter. URL-en roterer dessuten månedlig.
+- **SNL *retorikk*** — «begrenset gjenbruk». Samme nettsted som `metafor`, som er
+  fri. Lisensen må sjekkes per artikkel, ikke per kilde.
 
 Tre av hver kilde, tre av hver type, og begge kilder i hvert fag. Med bare seks
 tekster lar ikke de tre aksene seg krysse fullt, så **kilde og type er noe du
@@ -66,6 +115,8 @@ metoden er jevnt middelmådig, eller at den gir 0,87 på tre tekster og 0,57 på
 tre andre, som er helt ulike funn. Og havner settet ved et uhell på seks
 fokuserte tekster, kan snittet bestå *fordi* du valgte lette tekster. Begge
 feilretninger lukkes av at fordelingen er låst på forhånd og merket i fila.
+
+**En begrensning som skal stå.** Teksttype og tekstkilde er ikke helt uavhengige, og det er en egenskap ved sjangrene. En oversiktstekst på 700–1 000 ord er i praksis en læremiddelsjanger: NDLA skriver dem, mens oppslagsverk og offentlige kilder skriver enten korte oppslag eller svært lange gjennomganger. Å lage en autentisk oversiktstekst krever derfor beskjæring — og en hardt beskåret oversiktsartikkel blir fokusert av konstruksjon. Tekst 6 er settets eneste tunge kutt, og at den er autentisk er en skjevhet som skal nevnes når tallene per kilde leses.
 
 **Hvorfor teksttypen er med.** Det er målt, ikke antatt. Stabilitetsmålingen
 8. oktober ga Jaccard 0,770 på en fokusert tekst og 0,466 på en oversiktstekst,
