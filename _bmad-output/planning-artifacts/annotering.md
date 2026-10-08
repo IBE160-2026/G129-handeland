@@ -36,9 +36,9 @@ for på modellen.
 
 ## 1. Velg seks tekster
 
-PRD-en krever spredning over **fag** og **programområde**. Én tekst per celle;
-det gir ingen terskel per celle, men det viser en systematisk forskjell om den
-er stor.
+FR-8 krever spredning over **fag**, **fagtype** (fellesfag eller programfag),
+**tekstkilde** og **teksttype**. Én tekst per celle; det gir ingen terskel per
+celle, men det viser en systematisk forskjell om den er stor.
 
 **Settet er valgt og lisenssjekket 8. oktober 2026.** Alle seks er klarert for et
 offentlig repo. Krediteringen under er en lisensplikt, ikke høflighet — den skal
@@ -52,6 +52,11 @@ følge tekstfila slik `testdata/eksempeltekst/LES-MEG.md` viser.
 | 4 | Norsk | fellesfag | autentisk | oversikt |
 | 5 | Teknologiforståelse | programfag | læremiddel | fokusert |
 | 6 | Teknologiforståelse | programfag | autentisk | oversikt |
+
+Med bare seks tekster lar ikke aksene seg krysse fullt, så **kilde og type er
+noe du merker og rapporterer**, ikke noe du kan isolere. Det er godt nok:
+poenget er at en systematisk forskjell skal være synlig, ikke at den skal kunne
+tilskrives én årsak med sikkerhet.
 
 **1. NDLA, *Egenskaper hos ulike EM-bølger*** (artikkel-id 22989), 779 ord.
 CC BY-SA 4.0. Astrid Johansen (forfatter), Kristin Bøhle (medforfatter), Kari
@@ -87,7 +92,7 @@ artikkelen og dens historikk. **Kutt:** innledningen og de første delene, som e
 selvstendig enhet. Dette er settets eneste tunge kutt — se begrensningen nederst
 i dette steget.
 
-### Tre tekster som ble vurdert og forkastet
+### Fire tekster som ble vurdert og forkastet
 
 Verdt å ha med, fordi begrunnelsene er de samme du vil møte igjen.
 
@@ -100,12 +105,6 @@ Verdt å ha med, fordi begrunnelsene er de samme du vil møte igjen.
   Målingen blir et utsagn om tilfeldigheter. URL-en roterer dessuten månedlig.
 - **SNL *retorikk*** — «begrenset gjenbruk». Samme nettsted som `metafor`, som er
   fri. Lisensen må sjekkes per artikkel, ikke per kilde.
-
-Tre av hver kilde, tre av hver type, og begge kilder i hvert fag. Med bare seks
-tekster lar ikke de tre aksene seg krysse fullt, så **kilde og type er noe du
-merker og rapporterer**, ikke noe du kan isolere. Det er godt nok: poenget er at
-en systematisk forskjell skal være synlig, ikke at den skal kunne tilskrives én
-årsak med sikkerhet.
 
 **Fordelingen tre og tre må bestemmes nå, ikke etter at tallene er kjent.** Det
 er en direkte følge av beslutningen under SM-8: terskelen på 0,80 beholdes over
