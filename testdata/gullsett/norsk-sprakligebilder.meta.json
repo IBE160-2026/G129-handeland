@@ -16,9 +16,9 @@
   ],
   "url": "https://api.ndla.no/article-api/v2/articles/21846 , https://api.ndla.no/article-api/v2/articles/39109 , https://api.ndla.no/article-api/v2/articles/39688",
   "hentet": "2026-10-08",
-  "ord": 1212,
-  "tegn": 7132,
-  "ordFoerKutt": 1212,
+  "ord": 1208,
+  "tegn": 7108,
+  "ordFoerKutt": 1208,
   "kutt": null,
   "merknad": "Satt sammen av 3 NDLA-artikler (id 21846, 39109, 39688) til én tekst om språklige bilder. Dette er en redaksjonell konstruksjon og ikke en publisert artikkel — begrunnelsen står i hent-gullsett.mjs."
 }

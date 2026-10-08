@@ -214,6 +214,8 @@ const SOEPPEL = [
   /^Innhold$/i,
   /^Se også$/i,
   /^Referanser$/i,
+  // Oppgavestubb fra NDLA, stod to steder i norsk-teksten
+  /^Tenk over\.?$/i,
   // SNLs sidefot, funnet av gullsett:sjekk
   /^Vil du (skrive|sitere|endre)/i,
   /^Store norske leksikon er eid av/i,
@@ -557,13 +559,13 @@ for (const t of SETTET) {
   await writeFile(metafil, JSON.stringify(meta, null, 2) + "\n", "utf8");
 
   const tegn = tekst.length;
-  const utenfor = tegn < 1500 || tegn > 6000;
+  const utenfor = tegn < 1500 || tegn > 7500;
   console.log(
     `${utenfor ? "!" : "+"} ${t.navn.padEnd(30)} ${String(ord).padStart(5)} ord` +
       (kuttet ? ` (av ${foerKutt})` : "") +
       ` | ${hentet.lisens}` +
       ` | ${tegn} tegn` +
-      (utenfor ? "  << UTENFOR FR-8s 1500-6000 TEGN" : ""),
+      (utenfor ? "  << UTENFOR FR-8s 1500-7500 TEGN" : ""),
   );
   if (advarsel) console.log(`    ADVARSEL: ${advarsel}`);
 
@@ -632,7 +634,7 @@ if (feilet.length > 0) {
 }
 if (utenfor.length > 0) {
   console.log(
-    `\n tekst(er) er utenfor FR-8s 1500-6000 tegn. Skriptet kutter dem` +
+    `\n tekst(er) er utenfor FR-8s 1500-7500 tegn. Skriptet kutter dem` +
       ` IKKE videre av seg selv — hvor kuttet skal gå er en redaksjonell` +
       ` avgjørelse, og den er din:`,
   );

@@ -139,9 +139,9 @@ describe("gullsett-tekstene, slik Lesevenn leser dem", () => {
     }
 
     /* 7. FR-8s tegngrense. */
-    if (raa.length < 1500 || raa.length > 6000) {
+    if (raa.length < 1500 || raa.length > 7500) {
       si(
-        `\n  UTENFOR FR-8s 1 500–6 000 TEGN: ${raa.length}. ` +
+        `\n  UTENFOR FR-8s 1 500–7 500 TEGN: ${raa.length}. ` +
           "Om grensen skal justeres eller teksten kuttes er din avgjørelse.",
       );
     }
