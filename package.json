@@ -7,13 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run",
+    "test": "vitest run --exclude maaling/sjekk-gullsett.test.ts",
     "test:watch": "vitest",
     "db:opp": "docker compose up -d --wait",
     "db:ned": "docker compose down",
     "db:migrer": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "gullsett:hent": "node maaling/hent-gullsett.mjs"
+    "gullsett:hent": "node maaling/hent-gullsett.mjs",
+    "gullsett:sjekk": "vitest run maaling/sjekk-gullsett.test.ts --silent=false"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

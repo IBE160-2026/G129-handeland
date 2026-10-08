@@ -64,15 +64,41 @@ const SETTET = [
     kutt: null,
   },
   {
-    navn: "norsk-lyriske-virkemidler",
+    navn: "norsk-sprakligebilder",
     fag: "norsk",
     fagtype: "fellesfag",
     kilde: "laeremiddel",
     type: "fokusert",
-    henter: { slag: "ndla", id: 21846 },
-    // Fra «Del 2» går artikkelen over i oppgaver. Oppgavetekst er imperativer
-    // og spørsmål, ikke fagprosa, så den forklarende delen tas alene.
-    kutt: { tilOverskrift: "Del 2", beskrivelse: "bare den forklarende delen, til og med «Konnotasjoner»" },
+    /*
+     * TRE NDLA-ARTIKLER SATT SAMMEN til én tekst om språklige bilder.
+     *
+     * Grunnen er måletekniske og ikke estetisk. Alene gav «Lyriske
+     * virkemidler» 379 ord etter kuttet, og budsjettet i FR-7 blir da
+     * `floor(12 × 0,379)` = 4, med gulvet 5 — altså fem Faguttrykk. Da beveger
+     * gjenkallingen i FR-8 seg i femdeler, og én bom gir 0,80. Målingen blir
+     * mer et utsagn om tilfeldigheter enn om uttrekket.
+     *
+     * Samlet gir de tre om lag 1 400 ord og et budsjett på 17 Faguttrykk, som
+     * er en langt finere målestokk. Og de hører sammen: allegori og allusjon er
+     * dypere behandlinger av det første avsnittet introduserer, så dette er
+     * dybde på ett emne — ikke bredde. Teksten er derfor fortsatt merket
+     * `fokusert`.
+     *
+     * Alle tre er NDLAs eget stoff under CC BY-SA 4.0. Merk at NDLA også har
+     * CC BY-NC-SA-artikler om samme emner (id 16561 og 16565); de er utelatt
+     * for å holde hele Gullsettet fritt for NC-klausuler.
+     */
+    henter: {
+      slag: "ndla-flere",
+      deler: [
+        // Fra «Del 2» går artikkelen over i oppgaver. Oppgavetekst er
+        // imperativer og spørsmål, ikke fagprosa.
+        { id: 21846, tilOverskrift: "Del 2" },
+        { id: 39109 },
+        { id: 39688 },
+      ],
+    },
+    kutt: null,
   },
   {
     navn: "norsk-metafor",
@@ -188,6 +214,15 @@ const SOEPPEL = [
   /^Innhold$/i,
   /^Se også$/i,
   /^Referanser$/i,
+  // SNLs sidefot, funnet av gullsett:sjekk
+  /^Vil du (skrive|sitere|endre)/i,
+  /^Store norske leksikon er eid av/i,
+  /^Logg inn/i,
+  /^Vi bruker (cookies|informasjonskapsler)/i,
+  /^Abonner/i,
+  // Henvisning til et fjernet videoklipp, ofte med tidsstempel
+  /^Se delene? (om|fra|til)/i,
+  /fram til d{1,2}:d{2}/,
 ];
 
 /** Fjerner møblering, og slår sammen blokker splittet midt i en setning. */
@@ -251,9 +286,51 @@ async function fraNdla(h) {
       ...(c.creators ?? []),
       ...(c.processors ?? []),
       ...(c.rightsholders ?? []),
-    ].map((p) => `${p.name} (${p.type})`),
+      // Navnene trimmes: NDLA har etterfoelgende mellomrom i noen av dem, og
+      // da feiler dedupliseringen i fraNdlaFlere paa en usynlig forskjell.
+    ].map((p) => `${p.name.trim()} (${p.type})`),
     url: `https://api.ndla.no/article-api/v2/articles/${h.id}`,
     merknad: `NDLA artikkel-id ${h.id}`,
+  };
+}
+
+/**
+ * Flere NDLA-artikler satt sammen til én tekst.
+ *
+ * Krediteringen samles fra alle delene og dedupliseres — hver forfatter skal
+ * stå én gang, og ingen skal falle ut fordi de bidro på del to av tre.
+ * Lisensen må være den samme i alle delene; er den ikke det, kastes det,
+ * fordi den sammensatte teksten da ville hatt to sett vilkår uten at noe sa
+ * hvilket som gjaldt.
+ */
+async function fraNdlaFlere(h) {
+  const deler = [];
+  for (const d of h.deler) {
+    const a = await fraNdla({ id: d.id });
+    const { blokker } = bruKutt(reinsk(a.blokker), d.tilOverskrift ? { tilOverskrift: d.tilOverskrift } : null);
+    deler.push({ ...a, blokker, id: d.id });
+  }
+
+  const lisenser = [...new Set(deler.map((d) => d.lisens))];
+  if (lisenser.length > 1) {
+    throw new Error(
+      `delene har ulik lisens (${lisenser.join(", ")}) — en sammensatt tekst ` +
+        "kan ikke bære to sett vilkår",
+    );
+  }
+
+  return {
+    tittel: "Språklige bilder: metafor, allegori og allusjon",
+    // Hver del starter med sin egen tittel som overskrift, slik at
+    // avsnittsdelingen (AD-12) ser strukturen og eleven ser hvor delene går.
+    blokker: deler.flatMap((d) => [HMARK + d.tittel, ...d.blokker]),
+    lisens: lisenser[0],
+    kreditering: [...new Set(deler.flatMap((d) => d.kreditering))],
+    url: deler.map((d) => `https://api.ndla.no/article-api/v2/articles/${d.id}`).join(" , "),
+    merknad:
+      `Satt sammen av ${deler.length} NDLA-artikler (id ${deler.map((d) => d.id).join(", ")}) ` +
+      "til én tekst om språklige bilder. Dette er en redaksjonell konstruksjon og " +
+      "ikke en publisert artikkel — begrunnelsen står i hent-gullsett.mjs.",
   };
 }
 
@@ -383,6 +460,7 @@ async function finnes(p) {
 
 const HENTERE = {
   ndla: fraNdla,
+  "ndla-flere": fraNdlaFlere,
   wikipedia: fraWikipedia,
   ssb: (h) => fraNettside(h, "SSB"),
   snl: (h) => fraNettside(h, "SNL"),
@@ -516,7 +594,7 @@ if (feilet.length > 0) {
 }
 if (utenfor.length > 0) {
   console.log(
-    `\n${utenfor.length} tekst(er) er utenfor 400-1000 ord. Skriptet kutter dem` +
+    `\n tekst(er) er utenfor FR-8s 1500-6000 tegn. Skriptet kutter dem` +
       ` IKKE videre av seg selv — hvor kuttet skal gå er en redaksjonell` +
       ` avgjørelse, og den er din:`,
   );

@@ -1,0 +1,24 @@
+{
+  "tekst": "norsk-sprakligebilder.txt",
+  "tittel": "Språklige bilder: metafor, allegori og allusjon",
+  "fag": "norsk",
+  "fagtype": "fellesfag",
+  "kilde": "laeremiddel",
+  "type": "fokusert",
+  "lisens": "CC-BY-SA-4.0",
+  "kreditering": [
+    "Åsa Abusland (writer)",
+    "Marion Federl (writer)",
+    "Frøydis Lindtner (correction)",
+    "Elisabeth Lønning (writer)",
+    "Cecilie Isaksen Eftedal (writer)",
+    "Elisabeth Lønning (originator)"
+  ],
+  "url": "https://api.ndla.no/article-api/v2/articles/21846 , https://api.ndla.no/article-api/v2/articles/39109 , https://api.ndla.no/article-api/v2/articles/39688",
+  "hentet": "2026-10-08",
+  "ord": 1249,
+  "tegn": 7357,
+  "ordFoerKutt": 1249,
+  "kutt": null,
+  "merknad": "Satt sammen av 3 NDLA-artikler (id 21846, 39109, 39688) til én tekst om språklige bilder. Dette er en redaksjonell konstruksjon og ikke en publisert artikkel — begrunnelsen står i hent-gullsett.mjs."
+}

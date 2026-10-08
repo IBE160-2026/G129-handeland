@@ -12,8 +12,8 @@ Utvalget, aksene og hvert kutt er begrunnet i
 |---|---|---|---|---|---|---|
 | naturfag | fellesfag | laeremiddel | oversikt | Egenskaper hos ulike EM-bølger | CC-BY-SA-4.0 | 790 |
 | samfunnsfag | fellesfag | autentisk | fokusert | Høy prisvekst gir ny renteøkning | CC-BY-4.0 | 673 |
-| norsk | fellesfag | laeremiddel | fokusert | Lyriske virkemidler | CC-BY-SA-4.0 | 379 |
-| norsk | fellesfag | autentisk | oversikt | metafor | CC-BY-SA-3.0 (fri gjenbruk) | 721 |
+| norsk | fellesfag | laeremiddel | fokusert | Språklige bilder: metafor, allegori og allusjon | CC-BY-SA-4.0 | 1249 |
+| norsk | fellesfag | autentisk | oversikt | metafor | CC-BY-SA-3.0 (fri gjenbruk) | 701 |
 | teknologiforstaaelse | programfag | laeremiddel | fokusert | Domeneoppbygning og toppdomene | CC-BY-SA-4.0 | 634 |
 | teknologiforstaaelse | programfag | autentisk | oversikt | Operativsystem | CC-BY-SA-4.0 | 731 |
 
@@ -42,15 +42,15 @@ fordi opphavspersonene er navngitt og lisensen oppgitt.
   innbygde elementer fjernet; avsnitt skilt med blanke linjer.
 - **Merknad:** Skrapet fra HTML (ingen åpent API). Kontroller avsnittsdelingen for hånd. Publisert 2026-06-15.
 
-### Lyriske virkemidler
+### Språklige bilder: metafor, allegori og allusjon
 
 - **Lisens:** CC-BY-SA-4.0
-- **Kreditering:** Åsa Abusland (writer); Marion Federl (writer); Frøydis Lindtner (correction)
-- **Kilde:** <https://api.ndla.no/article-api/v2/articles/21846>
+- **Kreditering:** Åsa Abusland (writer); Marion Federl (writer); Frøydis Lindtner (correction); Elisabeth Lønning (writer); Cecilie Isaksen Eftedal (writer); Elisabeth Lønning (originator)
+- **Kilde:** <https://api.ndla.no/article-api/v2/articles/21846 , https://api.ndla.no/article-api/v2/articles/39109 , https://api.ndla.no/article-api/v2/articles/39688>
 - **Hentet:** 2026-10-08
 - **Endringer:** konvertert fra HTML til ren tekst; bilder, figurer, tabeller og
-  innbygde elementer fjernet; avsnitt skilt med blanke linjer. **Kuttet:** bare den forklarende delen, til og med «Konnotasjoner» (750 ord i originalen).
-- **Merknad:** NDLA artikkel-id 21846
+  innbygde elementer fjernet; avsnitt skilt med blanke linjer.
+- **Merknad:** Satt sammen av 3 NDLA-artikler (id 21846, 39109, 39688) til én tekst om språklige bilder. Dette er en redaksjonell konstruksjon og ikke en publisert artikkel — begrunnelsen står i hent-gullsett.mjs.
 
 ### metafor
 
