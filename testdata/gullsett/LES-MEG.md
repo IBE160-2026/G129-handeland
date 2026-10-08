@@ -12,7 +12,7 @@ Utvalget, aksene og hvert kutt er begrunnet i
 |---|---|---|---|---|---|---|
 | naturfag | fellesfag | laeremiddel | oversikt | Egenskaper hos ulike EM-bølger | CC-BY-SA-4.0 | 790 |
 | samfunnsfag | fellesfag | autentisk | fokusert | Høy prisvekst gir ny renteøkning | CC-BY-4.0 | 673 |
-| norsk | fellesfag | laeremiddel | fokusert | Språklige bilder: metafor, allegori og allusjon | CC-BY-SA-4.0 | 1249 |
+| norsk | fellesfag | laeremiddel | fokusert | Språklige bilder: metafor, allegori og allusjon | CC-BY-SA-4.0 | 1212 |
 | norsk | fellesfag | autentisk | oversikt | metafor | CC-BY-SA-3.0 (fri gjenbruk) | 701 |
 | teknologiforstaaelse | programfag | laeremiddel | fokusert | Domeneoppbygning og toppdomene | CC-BY-SA-4.0 | 634 |
 | teknologiforstaaelse | programfag | autentisk | oversikt | Operativsystem | CC-BY-SA-4.0 | 731 |

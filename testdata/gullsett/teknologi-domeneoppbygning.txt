@@ -20,13 +20,13 @@ De forskjellige typene topp-domener
 
 Det finnes flere kategorier av topp-domener. De to største og mest brukte av disse er:
 
-Nasjonale topp-domener (ccTLD)
+Nasjonale topp-domener (ccTLD).
 
 Eksempler på nasjonale topp-domener er .no, .se, .jp.
 
 Nasjonale topp-domener styres av hvert enkelt land, og disse bestemmer hvem som får bruke dem og hva kravene skal være for domener under sitt topp-domene.
 
-Generiske topp-domener (gTLD)
+Generiske topp-domener (gTLD).
 
 I starten var generiske topp-domener avgrenset til noen få spesielle kategorier eller nisjer. For eksempel var .com originalt bare for kommersielle aktører. .org var for ikke-kommersielle organisasjoner.
 

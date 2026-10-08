@@ -283,7 +283,28 @@ Lesevenn utvinner et Begrepssett fra Teksten: Faguttrykk med forklaring og Kilde
 Uttrekkets kvalitet måles mot et manuelt annotert Gullsett, og tallene er en leveranse — ikke en intern sjekk.
 
 **Konsekvenser (testbare):**
-- Gullsettet er **seks Tekster** på **videregående nivå (Vg1–Vg3)**, hver på 1 500–6 000 tegn, fordelt over fag, **fagtype**, tekstkilde og teksttype. Det konkrete settet står i tabellen under.
+- Gullsettet er **seks Tekster** på **videregående nivå (Vg1–Vg3)**, hver på **1 500–7 500 tegn**, fordelt over fag, **fagtype**, tekstkilde og teksttype. Det konkrete settet står i tabellen under.
+
+**Taket er hevet fra 6 000 til 7 500 tegn — 8. oktober, og ikke for å få en tekst til å passe.** Grunnen er målbarhet. Den opprinnelige norsk-teksten ble 379 ord etter at oppgavedelen var kuttet, og tetthetsbudsjettet i FR-7 er `floor(12 × ord/1000)` med gulv 5 — altså fem Faguttrykk. Gjenkallingen beveget seg da i femdeler, og én bom gav 0,80. Ved å sette sammen tre NDLA-artikler om samme emne ble teksten 1 255 ord og budsjettet 15, som er en langt finere målestokk. Taket på 6 000 tegn var satt uten måling og kostet målekvalitet; det er den samme typen tall som terskelen i SM-8, bare at dette ikke er en kvalitetsterskel og justeringen gjør målingen **bedre** framfor å gjøre et brudd til en bestått prøve.
+
+**Og en sammenheng som må stå, fordi den kan gjøre terskelen uoppnåelig:**
+
+Gjenkalling er `|G ∩ M| / |G|`, der `G` er din annotering og `M` er det Lesevenn faktisk leverer. Men `M` kan aldri være større enn tetthetsbudsjettet i FR-7. Annoterer du flere Faguttrykk enn budsjettet tillater, er gjenkallingen **strukturelt begrenset** — uansett hvor godt uttrekket er.
+
+Grensen er `|G| ≤ budsjett / 0,75`:
+
+| Tekst | Ord | Budsjett | Maks `|G|` for at 0,75 er nåbar |
+|---|---|---|---|
+| norsk-sprakligebilder | 1 255 | 15 | 20 |
+| naturfag-em-bolger | 794 | 9 | 12 |
+| teknologi-operativsystem | 731 | 8 | 10 |
+| norsk-metafor | 702 | 8 | 10 |
+| samfunnsfag-prisvekst | 673 | 8 | 10 |
+| teknologi-domeneoppbygning | 634 | 7 | 9 |
+
+Dette er ikke teoretisk: uttrekket fant 26 kandidater i `naturfag-em-bolger`. Annoteres 20 av dem, er maks gjenkalling 9/20 = 0,45, og FR-8 stryker før modellen har gjort noe galt.
+
+**Konsekvensen er at annoteringen ikke kan være uttømmende.** Oppgaven er å skrive ned de Faguttrykkene eleven *mest* trenger forklart, ikke alle som finnes — og det er samme prioritering tetthetstaket gjør. `[ÅPENT: om tallene holder må avgjøres av første måling. Er avstanden mellom det en tekst inneholder og det budsjettet tillater systematisk stor, er det taket i FR-7 som er for stramt, ikke annoteringen som er for raus. Da skal taket endres — men ikke før målingen finnes.]`
 
 **Aksen er fellesfag mot programfag — omformulert 8. oktober.** Kravet krysset tidligere tre fellesfag mot studiespesialiserende og yrkesfag. Begrunnelsen var at «yrkesfaglige fagtekster har kortere setninger og mer praksisnær terminologi». Men det er egentlig en beskrivelse av **programfag**: naturfag for et yrkesfaglig programområde er fortsatt naturfag, skrevet mot fellesfagets læreplan, mens det praksisnære fagspråket bor i programfagene. Den gamle aksen siktet altså på programfag og kalte det programområde. Nå heter den det den måler.
 

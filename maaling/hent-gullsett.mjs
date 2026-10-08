@@ -222,8 +222,43 @@ const SOEPPEL = [
   /^Abonner/i,
   // Henvisning til et fjernet videoklipp, ofte med tidsstempel
   /^Se delene? (om|fra|til)/i,
-  /fram til d{1,2}:d{2}/,
+  /^Se nærmere på /i,
+  /\bfram til \d{1,2}:\d{2}/,
+  /*
+   * Oppgavespørsmål, som ikke er fagprosa.
+   *
+   * Skillet mot en ekte overskrift er at oppgaven TILTALER LESEREN:
+   * «Hvilken effekt mener du …?» mot «Hva er allegori?». Begge er
+   * spørsmål, men bare den første har et «du» i seg. Det er en smalere og
+   * tryggere regel enn å kaste alt som slutter på spørsmålstegn — det ville
+   * tatt overskriftene med.
+   */
+  /^(Hv[ao]|Hvilke[nt]?|Hvorfor|Kan|Kjenner|Tror|Synes)\b[^?]*\bdu\b[^?]*\?$/i,
 ];
+
+/**
+ * Setter punktum på korte blokker som ikke var overskrifter i kilden.
+ *
+ * `erOverskrift` i AD-12 leser en linje på høyst 100 tegn som overskrift
+ * når den ikke slutter på .!?: — og det er riktig for en overskrift. Men et
+ * diktsitat, en kildeangivelse eller en ordliste oppfyller samme form, og
+ * ble derfor lest som struktur i teksten.
+ *
+ * Skriptet kan rette det, og appen kan ikke: HER vet vi hvilke blokker som
+ * faktisk var <h2> eller <h3> i kilden, fordi uthentingen merket dem.
+ * Appen ser bare ferdig tekst og må gjette ut fra formen.
+ *
+ * Endringen er ett punktum, og den er ført som endring i LES-MEG.
+ */
+function punktumPaaFalskeOverskrifter(blokker) {
+  return blokker.map((b) => {
+    if (b.startsWith(HMARK)) return b;
+    const t = b.trim();
+    if (t.length === 0 || t.length > 100) return b;
+    if (/[.!?:]$/.test(t)) return b;
+    return t + ".";
+  });
+}
 
 /** Fjerner møblering, og slår sammen blokker splittet midt i en setning. */
 function reinsk(blokker) {
@@ -307,7 +342,10 @@ async function fraNdlaFlere(h) {
   const deler = [];
   for (const d of h.deler) {
     const a = await fraNdla({ id: d.id });
-    const { blokker } = bruKutt(reinsk(a.blokker), d.tilOverskrift ? { tilOverskrift: d.tilOverskrift } : null);
+    const { blokker } = bruKutt(
+      punktumPaaFalskeOverskrifter(reinsk(a.blokker)),
+      d.tilOverskrift ? { tilOverskrift: d.tilOverskrift } : null,
+    );
     deler.push({ ...a, blokker, id: d.id });
   }
 
@@ -490,7 +528,7 @@ for (const t of SETTET) {
     continue;
   }
 
-  hentet.blokker = reinsk(hentet.blokker);
+  hentet.blokker = punktumPaaFalskeOverskrifter(reinsk(hentet.blokker));
   const foerKutt = ordtall(hentet.blokker.join(" ").replaceAll(HMARK, ""));
   const { blokker, kuttet, advarsel } = bruKutt(hentet.blokker, t.kutt);
   const rene = blokker.map((b) => b.replace(HMARK, ""));
