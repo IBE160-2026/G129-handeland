@@ -184,3 +184,19 @@ Datakjeden har tre ledd, og teksten dekker nå alle tre:
 | Meg → Claude Code, under utvikling | Anthropic, forbrukervilkår | Trening som standard, seks års lagring av transkripsjoner |
 
 Det tredje leddet er det ingen tenker på, og det er det med et konkret tall på seg.
+
+## Et kildevalg som ble forkastet på vilkårene — 8. oktober 2026
+
+**Hva som skjedde.** Til gullsettet i FR-8 ønsket jeg tekst som var bearbeidet, men mindre stilisert enn NDLA, og pekte på to artikler fra forskning.no. Claude Code hentet begge sidene og rapporterte at det ikke sto noen lisensmerknad noe sted — altså vanlig opphavsrett. Jeg lette videre selv og fant forskning.nos egen side om gjenbruk:
+
+> «Det er ikke tillatt å kopiere og/eller gjenbruke artikler eller annet materiale uten avtale med forskning.no, utover det sitatretten gir anledning til.»
+>
+> — forskning.no, *Om forskning.no*, overskriften «Gjenbruk», publisert 30.04.2022, lest 08.10.2026
+
+**Hvorfor det er verdt å skrive om.** Forskjellen mellom det Claude fant og det jeg fant er ikke akademisk. «Ingen lisensmerknad» er et fravær man kan bli fristet til å tolke mildt. «Det er ikke tillatt» kan ikke tolkes bort. Jeg endte altså på samme konklusjon, men på et grunnlag som faktisk bærer den — og det var jeg som fant grunnlaget.
+
+Det er samme mønster som i KI-logg oppføring 8, der Claude karakteriserte Anthropics Commercial Terms ut fra hva forbrukervilkårene sa om dem. Begge gangene var konklusjonen riktig og grunnlaget for tynt, og begge gangene kom det fram fordi jeg spurte etter kilden i stedet for å ta svaret.
+
+**Hva jeg gjorde.** Forskning.no er utelukket, og erstattet med Wikipedia og Store norske leksikon, som har fri lisens og gir samme språkregister. Lisensmodellene viste seg dessuten å variere *innenfor* en kilde: SNL har fri eller begrenset gjenbruk per artikkel, ikke per nettsted. Det står nå som en tabell i `annotering.md`, med hvordan hver kilde sjekkes.
+
+**Til FR-42.** Dette er et konkret tilfelle av at opphavsretten faktisk begrenset prosjektet, ikke bare ble nevnt. Et materiale jeg ville hatt ble forkastet på vilkårene, med sitat og dato. Det er bedre dokumentasjon enn at alt jeg brukte tilfeldigvis var fritt.

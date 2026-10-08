@@ -85,7 +85,30 @@ Krav til hver tekst:
 - **Blanke linjer mellom avsnittene.** Hardt krav — `delIAvsnitt` deler på
   dem, og uten dem blir hele teksten ett avsnitt.
 - **To til fire overskrifter**, korte, uten punktum eller kolon til slutt.
-- **Kan deles i et offentlig repo.** NDLA er CC BY-SA 4.0. Kreditering og endringer føres som i `testdata/eksempeltekst/LES-MEG.md`. Dette strammer utvalget av «mer autentisk» tekst: et fotografert lærebokoppslag kan brukes til å måle, men ikke uten videre legges i repoet. Alternativene er egenskrevet tekst i lærebokregister, eller åpent lisensiert materiale som ikke er NDLA. **Avklar dette før du begynner** — det er lettere enn å annotere noe du ikke kan levere.
+- **Kan deles i et offentlig repo.** Kreditering og endringer føres som i `testdata/eksempeltekst/LES-MEG.md`. Dette strammer utvalget av «mer autentisk» tekst: et fotografert lærebokoppslag kan brukes til å måle, men ikke uten videre legges i repoet. **Avklar lisensen før du annoterer** — det er lettere enn å annotere noe du ikke kan levere.
+
+### Lisensmodellene varierer, og de må sjekkes per kilde
+
+Sjekket 8. oktober 2026. Dette er ikke én regel per nettsted — to av de fire under har lisens som varierer *innenfor* samme kilde.
+
+| Kilde | Lisensmodell | Hvordan den sjekkes |
+|---|---|---|
+| **NDLA** | CC BY-SA 4.0 gjennomgående for tekst | Feltet `copyright.license` i `https://api.ndla.no/article-api/v2/articles/{id}`. Bildene har *egne* lisenser, ofte strengere. |
+| **Wikipedia** | CC BY-SA 4.0 gjennomgående | Oppgitt i bunnteksten på hver side |
+| **Store norske leksikon** | **Per artikkel.** Enten «fri gjenbruk» (CC BY-SA 3.0) eller «begrenset gjenbruk», der leseren må spørre forfatteren | Står på artikkelen selv. `snl.no/datamaskin` er fri; neste artikkel må sjekkes for seg |
+| **forskning.no** | **Ikke tillatt.** Kan ikke brukes | Se sitatet under |
+
+**forskning.no er utelukket, og det er verdt å ha sitatet:**
+
+> «Det er ikke tillatt å kopiere og/eller gjenbruke artikler eller annet materiale uten avtale med forskning.no, utover det sitatretten gir anledning til.»
+>
+> — forskning.no, *Om forskning.no*, under overskriften «Gjenbruk», publisert 30.04.2022, <https://www.forskning.no/om-forskningno/om-forskningno/990992> — lest 08.10.2026
+
+Dette er et uttrykkelig forbud, ikke et fravær av lisens, og det er en viktigere forskjell enn den ser ut: det første kan ikke tolkes bort. Sitatretten dekker korte sitater, ikke en hel tekst på 400–1 000 ord lagt i et repo.
+
+**En avtale er i prinsippet mulig** — formuleringen er «uten avtale med forskning.no» — men det er en henvendelse med usikkert utfall og ukjent svartid, og M0 er 30. oktober. Regn ikke med den.
+
+**Og det du var ute etter finnes andre steder.** Ønsket var tekst som er bearbeidet, men mindre stilisert enn NDLA. Wikipedia og SNL er nettopp det, med fri lisens — og de er oppslagsverk elever faktisk bruker, mens forskning.no er journalistikk *om* forskning.
 
 **Samfunnsfag er den vanskeligste cellen**, og det er verdt å vite på
 forhånd. Fagspråket der ligger nær det prompten eksplisitt forkaster som
