@@ -243,7 +243,19 @@ const SOEPPEL = [
   /^Logg inn/i,
   /^Vi bruker (cookies|informasjonskapsler)/i,
   /^Abonner/i,
+  /*
+   * Oppgaveblokk som peker paa en fjernet fasitboks.
+   *
+   * NDLA har «Se forslag i boksen «Fasit» under.» til slutt i en
+   * oppgaveblokk. Fasitboksen er alt filtrert, saa setningen peker paa
+   * ingenting — og blokka er oppgavetekst i sin helhet: et eksempel satt opp
+   * for å stille et spørsmål til leseren. Moensteret er derfor ikke ankret
+   * til blokkstart: hele blokka skal ut, ikke bare siste setning.
+   */
+  /Se forslag i boksen/i,
   // Henvisning til et fjernet videoklipp, ofte med tidsstempel
+  /^Se filmen$/i,
+  /^Film om /i,
   /^Se delene? (om|fra|til)/i,
   /^Se nærmere på /i,
   /\bfram til \d{1,2}:\d{2}/,

@@ -26,12 +26,21 @@ import { antallOrd, delIAvsnitt, erOverskrift } from "../tekst/avsnittsdeling";
 
 const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 
-/** Ord som avslører en henvisning til noe som ikke lenger står i teksten. */
+/**
+ * Henvisninger til noe som ikke lenger står i teksten.
+ *
+ * Mønstrene krever en PEKENDE sammenheng — «bildet under», «se figuren», «ved
+ * siden av» — og ikke bare ordet. Første utgave matchet `\bbildet\b` alene, og
+ * ropte da ulv fire ganger i teksten om språklige bilder: «Bildet får oss til å
+ * tenke på noe verdifullt» er metaforen, ikke et fotografi, og «bildekunst» er
+ * et fagfelt. En kontroll som flagger riktig tekst blir ignorert, og da
+ * beskytter den ingenting.
+ */
 const PEKER_PAA_BORTE = [
-  /\b(figuren?|bildet|illustrasjonen|tabellen|filmen|animasjonen|videoen|grafen)\b/i,
-  /\bved siden av\b/i,
+  /\b(figuren?|bildet|illustrasjonen|tabellen|filmen|animasjonen|videoen|grafen)\s+(under|over|nedenfor|ovenfor|til (høyre|venstre))\b/i,
+  /\bved siden av (ser|finner|kan)\b/i,
   /\b(under|over|nedenfor|ovenfor) (ser|finner|kan) du\b/i,
-  /\bse (filmen|videoen|animasjonen|bildet|figur)\b/i,
+  /\bse (filmen|videoen|animasjonen|bildet|figuren?|illustrasjonen)\b/i,
 ];
 
 /** Oppgavetekst, som ikke er fagprosa. */
