@@ -35,12 +35,35 @@ const filer = (await readdir(MAPPE))
 
 describe("annoteringene, før måling", () => {
   test.each(filer)("%s", async (fil) => {
-    const g = JSON.parse(await readFile(path.join(MAPPE, fil), "utf8")) as {
+    const raa = await readFile(path.join(MAPPE, fil), "utf8");
+
+    /*
+     * JSON-feil navngis, framfor å komme som en rå parsefeil.
+     *
+     * Fila redigeres for hånd, og de to feilene man gjør er et komma for mye
+     * på siste linje i lista, eller et manglende komma mellom to uttrykk.
+     * Begge gir en melding som ikke sier hva man skal gjøre, med mindre noen
+     * sier det.
+     */
+    let g: {
       tekst: string;
       tittel: string;
       annotert: string | null;
       faguttrykk: string[];
     };
+    try {
+      g = JSON.parse(raa);
+    } catch (e) {
+      throw new Error(
+        `${fil} er ikke gyldig JSON: ${e instanceof Error ? e.message : e}\n` +
+          "  Vanligste årsaker: komma etter siste uttrykk i lista, eller\n" +
+          "  manglende komma mellom to uttrykk. VS Code understreker begge i rødt.",
+      );
+    }
+    expect(
+      Array.isArray(g.faguttrykk),
+      `${fil}: «faguttrykk» må være en liste, [...]`,
+    ).toBe(true);
 
     if (g.faguttrykk.length === 0) {
       console.log(`\n= ${fil}: ikke annotert ennå.`);
