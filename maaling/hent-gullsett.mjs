@@ -114,7 +114,17 @@ const SETTET = [
       kreditering: ["Jan Grue (Universitetet i Oslo)"],
       oppdatert: "2025-02-22",
     },
-    kutt: null,
+    /*
+     * SNLs sidefot starter ved blokka «Bidra»: kommentarfelt, «Fagansvarlig
+     * for …», «Om Store norske leksikon». Ni blokker som ikke er artikkel.
+     *
+     * Det er ikke kosmetikk. Blokkene faar avsnittsnumre, og den siste
+     * inneholder ord som «forskningsformidling» og «oppslagsverk» — de staar
+     * ordrett i teksten og har et gyldig kildeavsnitt, saa de ville passert
+     * valideringen i AD-11 og dukket opp som faguttrykk i en norsktekst om
+     * metaforer.
+     */
+    kutt: { tilBlokk: "Bidra", beskrivelse: "artikkelen alene; SNLs sidefot fra «Bidra» og ned er utelatt" },
   },
   {
     navn: "teknologi-domeneoppbygning",
@@ -214,6 +224,17 @@ const SOEPPEL = [
   /^Innhold$/i,
   /^Se også$/i,
   /^Referanser$/i,
+  // SSBs bunnmeny og kildestubber, funnet ved gjennomlesning
+  /^Bunnmeny$/i,
+  /^Verktøy$/i,
+  /^Tjenester$/i,
+  /^Publikasjoner$/i,
+  /^Om SSB$/i,
+  /^Analyser, artikler og publikasjoner$/i,
+  /^Artikkelen er en del av serien$/i,
+  /^Tallene er hentet fra$/i,
+  // Wikipedias kryssreferanse til en annen artikkel
+  /^Utdypende artikk?el/i,
   // Oppgavestubb fra NDLA, stod to steder i norsk-teksten
   /^Tenk over\.?$/i,
   // SNLs sidefot, funnet av gullsett:sjekk
@@ -260,6 +281,27 @@ function punktumPaaFalskeOverskrifter(blokker) {
     if (/[.!?:]$/.test(t)) return b;
     return t + ".";
   });
+}
+
+/**
+ * Fjerner overskrifter som ikke har noe under seg.
+ *
+ * Wikipedia-artikkelen endte på «Historie» med bare en kryssreferanse
+ * under. Filtreres den bort, står overskriften alene og lover et avsnitt
+ * som ikke finnes — og den havner i aktiveringen (FR-5) som om teksten
+ * hadde en seksjon der.
+ *
+ * Kjøres til ingenting mer forsvinner, fordi to overskrifter kan stå
+ * etter hverandre på slutten.
+ */
+function fjernTommeOverskrifter(blokker) {
+  let ut = [...blokker];
+  for (;;) {
+    const siste = ut[ut.length - 1];
+    if (siste === undefined || !siste.startsWith(HMARK)) break;
+    ut = ut.slice(0, -1);
+  }
+  return ut;
 }
 
 /** Fjerner møblering, og slår sammen blokker splittet midt i en setning. */
@@ -344,10 +386,11 @@ async function fraNdlaFlere(h) {
   const deler = [];
   for (const d of h.deler) {
     const a = await fraNdla({ id: d.id });
-    const { blokker } = bruKutt(
-      punktumPaaFalskeOverskrifter(reinsk(a.blokker)),
+    const { blokker: kappet } = bruKutt(
+      fjernTommeOverskrifter(punktumPaaFalskeOverskrifter(reinsk(a.blokker))),
       d.tilOverskrift ? { tilOverskrift: d.tilOverskrift } : null,
     );
+    const blokker = fjernTommeOverskrifter(kappet);
     deler.push({ ...a, blokker, id: d.id });
   }
 
@@ -458,6 +501,21 @@ async function fraNettside(h, kilde) {
 function bruKutt(blokker, kutt) {
   if (!kutt) return { blokker, kuttet: false };
 
+  if (kutt.tilBlokk) {
+    const maal = kutt.tilBlokk.toLowerCase();
+    const i = blokker.findIndex((b) =>
+      b.replace(HMARK, "").trim().toLowerCase().startsWith(maal),
+    );
+    if (i === -1) {
+      return {
+        blokker,
+        kuttet: false,
+        advarsel: `fant ikke blokka «${kutt.tilBlokk}» — teksten er IKKE kuttet`,
+      };
+    }
+    return { blokker: blokker.slice(0, i), kuttet: true };
+  }
+
   if (kutt.tilOverskrift) {
     const i = blokker.findIndex(
       (b) => b.startsWith(HMARK) && b.slice(HMARK.length).startsWith(kutt.tilOverskrift),
@@ -530,9 +588,14 @@ for (const t of SETTET) {
     continue;
   }
 
-  hentet.blokker = punktumPaaFalskeOverskrifter(reinsk(hentet.blokker));
+  hentet.blokker = fjernTommeOverskrifter(
+    punktumPaaFalskeOverskrifter(reinsk(hentet.blokker)),
+  );
   const foerKutt = ordtall(hentet.blokker.join(" ").replaceAll(HMARK, ""));
-  const { blokker, kuttet, advarsel } = bruKutt(hentet.blokker, t.kutt);
+  const kapp = bruKutt(hentet.blokker, t.kutt);
+  // Kuttet kan selv etterlate en overskrift uten noe under seg.
+  const blokker = fjernTommeOverskrifter(kapp.blokker);
+  const { kuttet, advarsel } = kapp;
   const rene = blokker.map((b) => b.replace(HMARK, ""));
   const ord = ordtall(rene.join(" "));
 

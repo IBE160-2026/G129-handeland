@@ -27,7 +27,3 @@ Operativsystemer kan grupperes på flere måter.  En av dem er etter bruksområd
 I tillegg til systemene nevnt i innledningen, som er de mest kjente, finnes det også flere alternative operativsystemer. Blant disse finner vi BeOS, som ikke lenger blir utviklet, men det er flere nye operativsystemer under utvikling som er kloner av eller inspirert av BeOS, et av disse er Haiku. Andre alternative operativsystemer under utvikling er Syllable og SkyOS.
 
 Også samtidens store teknologiske nyhet mobiltelefonen bruker operativsystem. Tidligere var disse ganske primitive, men etter hvert som mobilene har blitt kraftigere og fått flere bruksområder har også mobiltelefonoperativsystemene også blitt mer utbygde. Dette er særlig noe som har kommet samtidig med fargeskjermen og kameramobilene. Eksempler på operativsystemer for mobil er: Symbian, Windows CE, Linux, Android, IOS
-
-Historie
-
-Utdypende artikkel: Operativsystemets historie.
