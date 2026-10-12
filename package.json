@@ -17,7 +17,8 @@
     "gullsett:sjekk": "vitest run maaling/sjekk-gullsett.test.ts --silent=false",
     "gullsett:maler": "node maaling/lag-annoteringsmaler.mjs",
     "maal": "vitest run maaling/maal-faguttrykk.test.ts --silent=false",
-    "maal:ferskt": "node maaling/maal-ferskt.mjs"
+    "maal:ferskt": "node maaling/maal-ferskt.mjs",
+    "gullsett:valider": "vitest run maaling/valider-annotering.test.ts --silent=false"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
