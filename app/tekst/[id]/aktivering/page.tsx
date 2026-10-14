@@ -13,24 +13,24 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { innloggingKlar, tilgang } from "../../../../data/konto";
+import { tilgang } from "../../../../data/konto";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
 import { lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema } from "../../../komponenter/Skjemaer";
-import { IkkeKlar } from "../../../komponenter/IkkeKlar";
 
 export default async function Aktivering({
   params,
 }: PageProps<"/tekst/[id]/aktivering">) {
-  // FR-35: ingen datatilgang uten noe som kan gi en Tilgang. Se konto.ts.
-  if (!innloggingKlar()) return <IkkeKlar />;
+  // FR-35: uten innlogging sendes eleven til innloggingssiden. Hentes før
+  // noen try-blokk, fordi omdirigeringen er et unntak en catch ville fanget.
+  const t = await tilgang();
 
   const { id } = await params;
 
   let tekst;
   try {
-    tekst = await hentTekst(tilgang(), id);
+    tekst = await hentTekst(t, id);
   } catch (e) {
     if (e instanceof IkkeFunnet) notFound();
     throw e;

@@ -7,11 +7,10 @@
  */
 
 import Link from "next/link";
-import { innloggingKlar, tilgang } from "../data/konto";
+import { tilgang } from "../data/konto";
 import { listTekster } from "../data/tilgang";
 import { limInnTekst } from "./handlinger";
 import { LimInnSkjema } from "./komponenter/Skjemaer";
-import { IkkeKlar } from "./komponenter/IkkeKlar";
 
 /** Hvor eleven skal fortsette, ut fra hvor langt Teksten har kommet (AD-9). */
 function nesteSteg(tilstand: "innlest" | "aktivert" | "laast", id: string) {
@@ -27,14 +26,17 @@ const TILSTANDSORD: Record<string, string> = {
 };
 
 export default async function Startside() {
-  // FR-35: ingen datatilgang uten noe som kan gi en Tilgang. Se konto.ts.
-  if (!innloggingKlar()) return <IkkeKlar />;
-
-  const tekster = await listTekster(tilgang());
+  // FR-35: uten innlogging sendes eleven til innloggingssiden.
+  const tekster = await listTekster(await tilgang());
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <h1 className="text-3xl font-semibold tracking-tight">Lesevenn</h1>
+      <div className="flex items-baseline justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">Lesevenn</h1>
+        <Link href="/konto" className="underline underline-offset-4">
+          Konto
+        </Link>
+      </div>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Lim inn en fagtekst. Du får se hva den handler om, lese den med
         fagordene forklart, og sjekke om du forsto den.

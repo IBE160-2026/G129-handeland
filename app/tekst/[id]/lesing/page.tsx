@@ -12,19 +12,18 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { hentBegrepssett } from "../../../../data/begrepssett";
-import { innloggingKlar, tilgang } from "../../../../data/konto";
+import { tilgang } from "../../../../data/konto";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../data/tilgang";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
-import { IkkeKlar } from "../../../komponenter/IkkeKlar";
 
 export default async function Lesing({
   params,
 }: PageProps<"/tekst/[id]/lesing">) {
-  // FR-35: ingen datatilgang uten noe som kan gi en Tilgang. Se konto.ts.
-  if (!innloggingKlar()) return <IkkeKlar />;
+  // FR-35: uten innlogging sendes eleven til innloggingssiden. Hentes før
+  // noen try-blokk, fordi omdirigeringen er et unntak en catch ville fanget.
+  const t = await tilgang();
 
   const { id } = await params;
-  const t = tilgang();
 
   let tekst;
   try {

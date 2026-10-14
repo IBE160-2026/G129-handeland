@@ -82,7 +82,7 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
     };
   }
 
-  const ny = await opprettTekst(tilgang(), {
+  const ny = await opprettTekst(await tilgang(), {
     tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
     raatekst,
     // Ved liming er råtekst og redigert tekst like til eleven endrer noe.
@@ -117,7 +117,7 @@ export async function lagreAktivering(
     };
   }
 
-  await lagreForkunnskapssvar(tilgang(), tekstId, svar);
+  await lagreForkunnskapssvar(await tilgang(), tekstId, svar);
   redirect(`/tekst/${tekstId}/gjennomsyn`);
 }
 
@@ -141,7 +141,7 @@ export async function laasOgGenerer(
     };
   }
 
-  const t = tilgang();
+  const t = await tilgang();
 
   let laast;
   try {
@@ -185,7 +185,7 @@ export async function genererPaaNytt(
   tekstId: string,
   _forrige: Handlingssvar,
 ): Promise<Handlingssvar> {
-  const t = tilgang();
+  const t = await tilgang();
 
   try {
     const alt = await hentBegrepssett(t, tekstId);
@@ -216,7 +216,7 @@ export async function genererPaaNytt(
  * ------------------------------------------------------------------ */
 
 export async function slett(tekstId: string) {
-  await slettTekst(tilgang(), tekstId);
+  await slettTekst(await tilgang(), tekstId);
   revalidatePath("/");
   redirect("/");
 }
