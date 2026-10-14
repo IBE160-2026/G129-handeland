@@ -7,7 +7,7 @@
   "kilde": "laeremiddel",
   "type": "fokusert",
   "runde": 1,
-  "annotert": null,
+  "annotert": "14.10.2026",
   "_budsjett_paaminnelse": "Lesevenn kan levere høyst 7 Faguttrykk for denne teksten (634 ord). Annoterer du mer enn 9, kan gjenkallingen ikke nå 0,75 uansett hvor godt uttrekket er.",
-  "faguttrykk": []
+  "faguttrykk": ["Domeneoppbygning", "toppdomene", "DNS-rotserverne","IP-adressene", "under-domene"]
 }

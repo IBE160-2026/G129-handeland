@@ -7,7 +7,7 @@
   "kilde": "autentisk",
   "type": "oversikt",
   "runde": 1,
-  "annotert": null,
+  "annotert": "14.10.2026",
   "_budsjett_paaminnelse": "Lesevenn kan levere høyst 8 Faguttrykk for denne teksten (726 ord). Annoterer du mer enn 10, kan gjenkallingen ikke nå 0,75 uansett hvor godt uttrekket er.",
-  "faguttrykk": []
+  "faguttrykk": ["operativsystem","programvaren", "minne", "prosessorer", "driverprogrammet", "systemprogramvare", "applikasjonsprogrammer", "maskinvare"]
 }

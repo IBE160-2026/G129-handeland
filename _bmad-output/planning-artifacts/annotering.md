@@ -271,6 +271,27 @@ tekst én.
 Er modellens «mitosen» et treff mot ditt «mitose»? Behandles i steg 4 — men
 avgjørelsen hører hit, fordi den skal tas **før** du ser et tall.
 
+### Avgjørelsene slik de ble tatt (runde 1)
+
+Skrevet ned av annotatøren **før** første tekst ble annotert (13.10.2026),
+gjengitt ordrett:
+
+> Hva jeg gjør ved tvil: ikke ta med
+>
+> Hvilke begreper velger jeg når det er for mange:
+> - Begreper som går igjen mange ganger i teksten, og er viktige
+> - Fagbegreper som oppleves som sentrale, men som ikke blir forklart
+
+**Sammenligningsregelen:** den strenge, slik den står i steg 4 og i
+`normaliser()` i `maaling/maal-faguttrykk.test.ts` — ufølsom for store og små
+bokstaver, følsom for bøyning, flerordsuttrykk må matche helt. Valgt før noen
+tall var sett.
+
+Tvilsregelen er den samme som prompten (v2) bruker. Prioriteringsprinsippet
+står **ikke** i prompten: modellen vet ikke at gjentakelse og manglende
+forklaring i teksten er det som avgjør. Det er en kjent forskjell mellom
+annotatør og modell, og den skal nevnes når tallene tolkes.
+
 ### Tidsbruk
 
 Regn **20–30 minutter per tekst**, altså to til tre timer for alle seks. Det
@@ -386,20 +407,20 @@ noe annet.
 
 Tolkning: over 0,8 er sterkt, 0,6–0,8 er brukbart, under 0,6 betyr at din egen
 annotering vakler mer enn forskjellen du prøver å måle. **Er κ lav, er det
-funnet** — ikke noe å skjule. Det er da du går tilbake til de fire
+funnet** — ikke noe å skjule. Det er da du går tilbake til de tre
 avgjørelsene i steg 2 og skriver dem skarpere.
 
 ---
 
 ## 6. Sjekkliste før du kaller M0 ferdig
 
-- [ ] Seks tekster valgt, med fag, fagtype, kilde og teksttype fordelt
-- [ ] Hver tekst merket med kilde (digitalt læremiddel / autentisk) og type (fokusert / oversikt)
-- [ ] Alle seks kan deles i et offentlig repo, med kreditering og lisens ført
-- [ ] Alle seks annotert **før** noen modellkjøring ble sett
-- [ ] De tre avgjørelsene i steg 2 tatt og skrevet ned: tvilsregelen, prioriteringsprinsippet, og hvor streng sammenligningen er
-- [ ] Sammenligningsregelen skrevet ned **før** første måling
-- [ ] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
+- [x] Seks tekster valgt, med fag, fagtype, kilde og teksttype fordelt
+- [x] Hver tekst merket med kilde (digitalt læremiddel / autentisk) og type (fokusert / oversikt)
+- [x] Alle seks kan deles i et offentlig repo, med kreditering og lisens ført
+- [ ] Alle seks annotert **før** noen modellkjøring ble sett — *brutt for fem av seks: modellutdata for «metafor» ble vist etter at den teksten var annotert, før de andre fem. Oppgis i rapporten.*
+- [x] De tre avgjørelsene i steg 2 tatt og skrevet ned: tvilsregelen, prioriteringsprinsippet, og hvor streng sammenligningen er
+- [x] Sammenligningsregelen skrevet ned **før** første måling
+- [x] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
 - [ ] To tekster annotert to ganger, minst sju dager mellom
 - [ ] κ regnet, med sakssett-begrensningen oppgitt
 - [ ] Forklaringene gjennomgått for faglige feil — terskelen er **null**, og
