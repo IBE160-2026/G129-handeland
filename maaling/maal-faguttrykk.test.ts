@@ -23,7 +23,17 @@ import { readFile, readdir, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { config } from "dotenv";
 import { describe, expect, test } from "vitest";
+
+/*
+ * Testmodus avgjøres FØR `.env.local` lastes. Den fila setter
+ * `LESEVENN_TESTMODUS=av`, som er riktig for appen — men lastet den først,
+ * ville «les»-standarden under aldri slått inn, og `npm run maal` gjorde da
+ * ekte kall uten å si fra: nye tall hver gang, og penger hver gang. Bare en
+ * verdi satt eksplisitt for denne kjøringen (som `maal:ferskt` gjør) teller.
+ */
+const modusFraKommandolinjen = process.env.LESEVENN_TESTMODUS;
 config({ path: ".env.local" });
+process.env.LESEVENN_TESTMODUS = modusFraKommandolinjen ?? "les";
 
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
@@ -32,7 +42,19 @@ const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
 const RUNDE = process.env.MAAL_RUNDE ?? "1";
 
-if (!process.env.LESEVENN_TESTMODUS) process.env.LESEVENN_TESTMODUS = "les";
+/*
+ * En kandidatprompt måles uten å forfremmes. Manifestet bestemmer hva appen
+ * bruker (AD-14), og det skal ikke endres for å få et tall: først måles
+ * kandidaten, så avgjøres forfremmelsen.
+ */
+const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
+
+/*
+ * Skiller gjentatte målinger av samme versjon samme dag. Gjentakelser kjøres
+ * med testmodus `av`, så de lagrede svarene fra den første målingen ikke
+ * overskrives — og da må rapportfila heller ikke overskrives.
+ */
+const ETIKETT = process.env.MAAL_ETIKETT ? `-${process.env.MAAL_ETIKETT}` : "";
 
 /* ------------------------------------------------------------------ *
  * Sammenligningsregelen — FR-8
@@ -124,7 +146,7 @@ describe(`FR-8 — uttrekket mot Gullsettet, runde ${RUNDE}`, () => {
 
     let r: Awaited<ReturnType<typeof hentFaguttrykk>>;
     try {
-      r = await hentFaguttrykk(avsnitt);
+      r = await hentFaguttrykk(avsnitt, { overstyrVersjon: PROMPTVERSJON });
     } catch (e) {
       const m = e instanceof Error ? e.message : String(e);
       if (m.includes("lagret_svar_mangler")) {
@@ -261,14 +283,17 @@ describe(`FR-8 — uttrekket mot Gullsettet, runde ${RUNDE}`, () => {
 
     await mkdir(RESULTATER, { recursive: true });
     const dato = new Date().toISOString().slice(0, 10);
+    // Versjonen i filnavnet, så en kandidatmåling ikke overskriver
+    // utgangspunktet den skal sammenlignes med.
+    const versjon = resultater[0].promptversjon;
     await writeFile(
-      path.join(RESULTATER, `${dato}-fr8-runde${RUNDE}.md`),
+      path.join(RESULTATER, `${dato}-fr8-runde${RUNDE}-${versjon}${ETIKETT}.md`),
       rapport,
       "utf8",
     );
     // Og som data, ikke bare som tabell (FR-40).
     await writeFile(
-      path.join(RESULTATER, `${dato}-fr8-runde${RUNDE}.json`),
+      path.join(RESULTATER, `${dato}-fr8-runde${RUNDE}-${versjon}${ETIKETT}.json`),
       `${JSON.stringify({ runde: RUNDE, dato, resultater }, null, 2)}\n`,
       "utf8",
     );
