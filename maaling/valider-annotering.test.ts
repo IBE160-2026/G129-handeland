@@ -138,14 +138,26 @@ describe("annoteringene, før måling", () => {
      * regnet ut fra hvert ords egen lengde, og da fikk «metafor» stammen
      * «meta» og «metaforer» stammen «metafo» — de ble ikke sammenlignet, og
      * testen min gikk gjennom med nettopp det paret i seg.
+     *
+     * Og resten må være en BØYNINGSENDELSE. Et rent prefiks-krav flagget
+     * «metafor» / «metaforteori» — et sammensatt ord er et eget begrep, ikke
+     * en annen form av det samme, og det advarte om noe som ikke var feil.
      */
+    const BOEYNINGSENDELSER = new Set([
+      "e", "en", "et", "er", "ene", "a", "s", "es", "ens", "ets", "ers", "enes",
+    ]);
     const norm = (u: string) => u.trim().toLowerCase();
     const toFormer: string[][] = [];
     const sett2 = [...new Set(g.faguttrykk.map(norm))];
     for (let i = 0; i < sett2.length; i++) {
       for (let j = i + 1; j < sett2.length; j++) {
         const [a, b] = [sett2[i], sett2[j]].sort((x, y) => x.length - y.length);
-        if (a.length >= 4 && b.startsWith(a)) toFormer.push([a, b]);
+        if (
+          a.length >= 4 &&
+          b.startsWith(a) &&
+          BOEYNINGSENDELSER.has(b.slice(a.length))
+        )
+          toFormer.push([a, b]);
       }
     }
     if (toFormer.length > 0) {
