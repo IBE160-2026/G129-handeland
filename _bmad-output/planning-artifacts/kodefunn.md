@@ -305,11 +305,59 @@ drift. Hva en modell støtter, slås opp i `capabilities.thinking` fra
 
 ---
 
+## Funn 9 — Fem kjøringer, én fil: selvkonsistens som stemte over ett svar
+
+**Hvor:** `generatorer/lagretsvar.ts`, funksjonen `noekkel`.
+
+**Hva:** nøkkelen for et lagret modellsvar var oppgave + promptversjon +
+tekst. Selvkonsistensen gjør fem parallelle kall med nøyaktig de tre
+verdiene, så alle fem fikk samme nøkkel. I `skriv` overskrev de hverandre, og
+bare det siste svaret ble liggende. I `les` leste alle fem den samme fila, og
+flertallsavstemningen fikk fem kopier av ett svar: hvert uttrykk fikk 5/5, og
+resultatet var ett enkelt kall som så ut som fem.
+
+**Hvordan det ble funnet:** ved å lese `lagretsvar.ts` før den første
+fullstendige målingen, for å vite om `npm run maal` kunne regne om metafor-
+teksten uten nye kall. Mappa hadde én fil for en tekst som var kjørt fem
+ganger. Ingen test feilet: hjelperen i testfila la ett svar på disk og stolte
+på nettopp kollisjonen for at alle fem kjøringene skulle finne det.
+
+**Rettelse:** `noekkel` tar et valgfritt kjøringsnummer, og selvkonsistensen
+sender 0–4. Enkeltkall beholder den gamle nøkkelen. En regresjonstest legger
+ulike svar per kjøring, med ett uttrykk i én kjøring færre enn flertallskravet,
+og krever at det faller ut.
+
+## Funn 10 — `npm run maal` var verken gratis eller gjentakbar
+
+**Hvor:** `maaling/maal-faguttrykk.test.ts`, de første linjene.
+
+**Hva:** fila lastet `.env.local` og satte deretter testmodus til `les` *hvis
+den ikke var satt*. Men `.env.local` setter `LESEVENN_TESTMODUS=av`, som er
+riktig for appen. Standarden slo dermed aldri inn, og hver «omregning fra
+lagrede svar» var ferske modellkall: nye tall hver gang, og penger hver gang.
+Løftet i AD-7 — tall som kan regnes om gratis og gi det samme — holdt ikke.
+
+**Hvordan det ble funnet:** etter rettelsen av funn 9 skulle en omregning gi
+nøyaktig de samme tallene som den ferske kjøringen. Den ga andre tall, og to
+omregninger på rad ga ulike tall igjen, og de brukte over et minutt. En
+omregning som er deterministisk kan ikke gjøre det.
+
+**Rettelse:** testmodus leses fra kommandolinjen *før* `.env.local` lastes, og
+settes til `les` med mindre kjøringen eksplisitt ba om noe annet (som
+`maal:ferskt` gjør med `skriv`). Verifisert: to omregninger på rad gir
+identiske tall, lik den ferske kjøringen, på under ett sekund.
+
+**Mønsteret, igjen:** begge funnene er kode med grønne tester og en kommentar
+som beskrev riktig oppførsel. Begge ble funnet ved å kreve at to ting som
+*skal* være like faktisk er like — ikke ved å lese koden og vurdere den.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — åtte funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — ti funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
 | Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Ikke startet — §4.10 er ikke bygget ennå |
