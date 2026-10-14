@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T09:38:16.662Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renta som Norges Bank setter som styringsverktøy for å påvirke de andre rentene i økonomien. Når styringsrenta økes, blir det dyrere å låne penger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet sentralbanken har satt for hvor mye prisene skal stige over tid, her 2 prosent. Når prisveksten er over målet, sier man at inflasjonen er for høy.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål for hvordan prisene på en fast kurv av varer og tjenester som husholdningene kjøper, utvikler seg over tid. Inflasjonen måles ofte ved hjelp av denne indeksen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene øker etter at prisstigningen er trukket fra. Reallønnsveksten viser hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på store oppgraderinger av eksisterende boliger. Tallet viser hvor mye boligbyggingen aktiviteten er.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter petroleumsvirksomheten og sjøfarten. Den brukes for å måle veksten i den øvrige norske økonomien.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "finanspolitikken",
+        "forklaring": "Statens bruk av skatter og offentlige utgifter for å påvirke økonomien. Høy offentlig etterspørsel fra finanspolitikken kan gjøre at økonomien vokser mer.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Den prosentvise økningen i bruttonasjonalproduktet, altså verdien av alt som produseres i et land eller en gruppe land i løpet av et år. Den viser hvor raskt økonomien vokser.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 26
+      }
+    ]
+  }
+}

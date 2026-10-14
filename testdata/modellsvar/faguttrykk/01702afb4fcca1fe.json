@@ -1,0 +1,71 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T09:37:34.178Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger der et elektrisk og et magnetisk felt svinger sammen og brer seg gjennom rommet. Lys, radiobølger og røntgenstråling er alle former for dem. Hastigheten er omtrent 300 000 km/s.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling med litt mindre energi enn synlig lys, med bølgelengder fra 700 nm til 1 mm. Vi kjenner den som varme på huden.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "Røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling som er mer energirik enn UV-C og har bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "UV-stråling",
+        "forklaring": "Elektromagnetisk stråling med bølgelengder fra 10 nm til 400 nm, altså utenfor det fiolette i synlig lys. Den kan gi solbrenthet og i verste fall hudkreft.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m. De brukes i mikrobølgeovner.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, fra 1 meter til mange kilometer. De brukes blant annet til å sende signaler over store avstander.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som ser ut til å stå stille, fordi to bølger med samme frekvens går i motsatt retning og legger seg oppå hverandre. Hertz brukte dem til å måle farten til radiobølger.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge. Den bestemmer hvilken type elektromagnetisk stråling det er.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "termofotografering",
+        "forklaring": "Fotografering av infrarød stråling, slik at man kan se hvor det er varme. Det brukes for eksempel til å finne varmelekkasjer i hus.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, ca. 80–400 km over bakken. Radiobølger kan reflekteres der og nå lenger enn rett fram.",
+        "viktighetsrangering": 10,
+        "kildeavsnitt": 5
+      }
+    ]
+  }
+}

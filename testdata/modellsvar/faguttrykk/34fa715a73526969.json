@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-14T09:38:20.847Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Den øverste delen av et domenenavn, det som står helt til høyre etter siste punktum, for eksempel .no. Det sier noe om hvilken type eller hvilket land adressen tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De sentrale serverne som nettleseren spør for å finne ut hvor et domenenavn hører hjemme. Punktumet bakerst i adressen viser at oppslaget går til dem.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om under ndla.no. Det styres av den samme DNS-serveren som hoveddomenet.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "nasjonale topp-domener (ccTLD)",
+        "forklaring": "Topp-domener knyttet til et bestemt land, som .no, .se og .jp. Hvert land bestemmer selv hvem som får bruke dem og hvilke krav som gjelder.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "generiske topp-domener (gTLD)",
+        "forklaring": "Topp-domener som ikke er knyttet til et land, som .com og .org. De styres av egne organisasjoner som har fått mandat til å ta vare på dem.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 18
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Generiske topp-domener som .google eller .android, der en bedrift eier domenet og ofte bare den bedriften får bruke det.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 22
+      }
+    ]
+  }
+}

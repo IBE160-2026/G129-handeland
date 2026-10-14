@@ -5,7 +5,7 @@
   "_covered_models": "Sjekket 8. oktober 2026 mot to primaerkilder: claude-haiku-5-5 er IKKE en Covered Model, saa 30-dagerslagringen gjelder ikke og konklusjonen i addendum §6 staar. Covered Models er Claude Fable 5.1, Mythos 5.1, Fable 5 og Mythos 5. FORBEHOLD: stoetteartikkelen med listen er sist oppdatert 1. september, mens modellen ble utgitt 7. oktober, saa listen er eldre enn modellen. Maa kontrolleres paa nytt naermere innlevering. Sitater og URL-er i addendum §6.",
   "oppgaver": {
     "faguttrykk": {
-      "versjon": "v2",
+      "versjon": "v3",
       "modell": "claude-haiku-5-5",
       "tenkning": "adaptiv",
       "konsistens": { "kjoeringer": 5, "minstEnighet": 3 }

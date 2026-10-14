@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T10:35:37.339Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten som Norges Bank bestemmer for bankenes utlån og innskudd. Når styringsrenta økes, blir det dyrere å låne penger, og når den settes ned, blir det billigere.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "prisveksten",
+        "forklaring": "Hvor mye de generelle prisene i økonomien stiger over et år. Hvis prisveksten er høy, betyr det at varer og tjenester blir stadig dyrere.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Hvor mye penger som brukes på å bygge nye boliger, og på større oppussing av eksisterende boliger. Hvis boliginvesteringene er lave, bygges det lite.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene øker etter at man har trukket fra prisveksten. Med reallønnsvekst får man faktisk mer kjøpekraft, ikke bare høyere nominell lønn.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter petroleumsvirksomheten og utenriks sjøfart. Den brukes ofte for å se på utviklingen i resten av økonomien.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "yrkesdeltakelsen",
+        "forklaring": "Andelen av befolkningen i arbeidsfør alder som enten er i jobb eller leter etter arbeid. Høy yrkesdeltakelse betyr at mange deltar i arbeidslivet.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet Norges Bank setter for hvor høy inflasjonen skal være over tid, som er 2 prosent. Det er referansepunktet for om prisveksten er for høy eller lav.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "runde": "1",
+  "dato": "2026-10-13",
+  "resultater": [
+    {
+      "tekst": "norsk-metafor.txt",
+      "tittel": "metafor",
+      "fag": "norsk",
+      "fagtype": "fellesfag",
+      "kilde": "autentisk",
+      "type": "oversikt",
+      "antallGull": 7,
+      "antallLevert": 5,
+      "budsjett": 7,
+      "treff": 3,
+      "gjenkalling": 0.42857142857142855,
+      "presisjon": 0.6,
+      "f1": 0.5,
+      "bommet": [
+        "betydningsområder",
+        "metaforteori",
+        "kognitiv",
+        "besjeling"
+      ],
+      "stoey": [
+        "domenene",
+        "kognitive metaforer"
+      ],
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    }
+  ]
+}

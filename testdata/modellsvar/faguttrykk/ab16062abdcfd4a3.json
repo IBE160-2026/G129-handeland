@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T10:35:57.480Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skriver, minne og prosessor, mellom de programmene som kjører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage andre programmer. Operativsystemet er den viktigste typen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Den andre hovedtypen programvare er systemprogramvare.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program som er laget spesielt for én enhet, for eksempel en harddisk, og som vet hvordan enheten styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer at systemet svarer innen en bestemt tid. Et eksempel er styringsdatamaskinen i en moderne bil.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "systemressursene",
+        "forklaring": "Datamaskinens ressurser, både eksterne enheter som skrivere og interne komponenter som minne og prosessorer. Operativsystemet holder styr på dem.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som utviklere kan bygge programmer på, slik at programmene kan brukes på ulike typer maskinvare uten at utvikleren må tenke på den.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 11
+      }
+    ]
+  }
+}

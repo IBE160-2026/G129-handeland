@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T09:38:37.193Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skrivere, minne og prosessorer, mellom programmene som kjører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage andre programmer. Operativsystemet er den viktigste typen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Den andre hovedtypen programvare er systemprogramvare.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én enhet, for eksempel en harddisk, som vet hvordan enheten skal styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "ressursene",
+        "forklaring": "Datamaskinens deler og funksjoner som programmene trenger, for eksempel eksterne enheter som skrivere og interne enheter som minne og prosessorer. Operativsystemet fordeler dem mellom programmene.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "maskinvaren",
+        "forklaring": "De fysiske delene av datamaskinen, i motsetning til programvaren. Operativsystemet skiller applikasjonene fra den ofte komplekse maskinvaren.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer en bestemt responstid, altså at de reagerer innen en fastsatt tid. Et eksempel er datamaskinen som styrer tenning og drivstofftilførsel i en bil.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 13
+      }
+    ]
+  }
+}

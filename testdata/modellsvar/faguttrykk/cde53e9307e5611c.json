@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T09:38:14.101Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten Norges Bank setter som styringsrente for landets rentenivå. Når den økes, blir det dyrere å låne penger, og prisveksten kan dempes.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål for hvor mye prisene på varer og tjenester som husholdningene vanligvis kjøper, har økt over tid. Inflasjonen måles ved hjelp av denne indeksen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det prisstigningsnivået sentralbanken skal holde inflasjonen rundt, som i Norge er 2 prosent. Når prisveksten er over målet, øker presset for å heve renten.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene vokser etter at prisveksten er trukket fra. Den viser om folk faktisk får større kjøpekraft.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. Når de er lave, betyr det at det bygges lite.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter olje- og gassvirksomheten og sjøfarten. Veksten i den måles separat for å få et bilde av den øvrige økonomien.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

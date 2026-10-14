@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T09:38:11.033Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten Norges Bank setter for å styre prisveksten i økonomien. Den påvirker hva det koster å låne penger i banken. Når den settes opp, blir lån dyrere.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål på hvordan prisene på varer og tjenester som vanlige husholdninger kjøper, utvikler seg over tid. Inflasjonen måles ved hjelp av den.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Hvor mye lønningene vokser etter at prisveksten er trukket fra. Den viser om folk faktisk får mer kjøpekraft.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "Arbeidskraftundersøkelsen (AKU)",
+        "forklaring": "En statistisk undersøkelse Statistisk sentralbyrå gjør for å måle ledigheten. Den bygger på intervjuer med et utvalg av befolkningen.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter olje- og gassvirksomhet og sjøfart på norsk sokkel og utenlands. Den måles for seg fordi oljesektoren svinger mye.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Summen av det husholdninger og bedrifter bruker på å bygge nye boliger og på større oppgraderinger av eksisterende boliger.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 12
+      }
+    ]
+  }
+}

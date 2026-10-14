@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T10:35:34.519Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renta som Norges Bank bestemmer for bankene. Når den settes opp, blir det dyrere å låne penger, og når den settes ned, blir det billigere.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonen",
+        "forklaring": "Den generelle prisstigningen i økonomien, altså hvor mye prisene på varer og tjenester i gjennomsnitt øker over tid.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Hvor mye lønningene øker etter at prisstigningen er trukket fra, altså hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "AKU-ledigheten",
+        "forklaring": "Andelen av arbeidsstyrken som er uten jobb, men som aktivt leter etter arbeid, målt gjennom en spørreundersøkelse blant befolkningen.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål for prisutviklingen, der man følger prisene på en fast kurv med varer og tjenester som vanlige husholdninger kjøper.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter olje- og gassvirksomheten og sjøfart med utenlandsk tilknytning.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Hvor mye den samlede verdien av varer og tjenester som produseres i et land øker fra ett år til det neste.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 26
+      },
+      {
+        "uttrykk": "finanspolitikken",
+        "forklaring": "Statens bruk av skatter og offentlige utgifter for å påvirke økonomien.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 20
+      }
+    ]
+  }
+}

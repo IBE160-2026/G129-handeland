@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] metafor [avsnitt 2] En metafor er et ord eller et uttrykk som brukes i overført eller billedlig betydning. Et par eksempler er å si «å holde hjulene i gang» om å sørge for at",
+  "lagret": "2026-10-14T10:35:17.310Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et ord eller uttrykk som brukes i overført eller billedlig betydning, slik at en ting settes i stedet for en annen ting for å beskrive den. For eksempel sier «han er en løve» om et menneske som er modig eller farlig.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "domenene",
+        "forklaring": "De to forestillingsområdene som en metafor knytter sammen. Det ene er det metaforen henter mening fra, og det andre er det den overfører mening til.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "similen",
+        "forklaring": "En sammenligning der noe settes ved siden av noe annet med ord som «som» eller «lik», for eksempel «gjorde det som en løve». I en simile står ordene for sammenligningen tydelig, mens de mangler i en metafor.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "kognitiv metafor",
+        "forklaring": "En metafor i tankene som styrer hvordan vi forstår og tenker om noe. Den kommer ikke bare til uttrykk i språket, men ligger til grunn for ideer, kunstverk og oppfatninger.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "språklige metaforer",
+        "forklaring": "Metaforer som finnes direkte i ordene vi bruker, for eksempel «hjertet står i brann» om forelskelse. De ses i kognitiv metaforteori som uttrykk for dypere tankemessige metaforer.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Å gi livløse ting menneskelige egenskaper, for eksempel å la vinden hviske. Det er en form for metaforisk bruk av språk, ofte i poesi.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 12
+      }
+    ]
+  }
+}

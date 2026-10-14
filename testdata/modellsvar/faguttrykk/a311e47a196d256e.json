@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T10:35:22.143Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et språklig bilde der noe beskrives ved å bruke et annet ord eller uttrykk i overført betydning, for eksempel «en uslepen diamant» om et fotballtalent.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås konkret, men også som et bilde på noe annet og større, ofte med en moral.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der man låner fra eller refererer til en kjent tekst, et kunstverk, en hendelse eller en person, slik at teksten får et ekstra lag med mening.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et språklig bilde der noe livløst får menneskelige egenskaper, for eksempel «Stillheten truet meg».",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et språklig bilde der noe livløst får liv eller handler som om det er levende, for eksempel «Kaffetrakteren sukket tungt».",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon som knyttes til et ord, i tillegg til den vanlige betydningen, og som kan skape stemning i et dikt.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling med dyr i hovedrollene som slutter med en moral, og som ofte kan leses allegorisk.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 33
+      }
+    ]
+  }
+}

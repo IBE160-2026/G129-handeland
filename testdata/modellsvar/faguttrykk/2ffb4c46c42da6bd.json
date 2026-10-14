@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-14T10:35:42.644Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Den siste delen av en domeneadresse, etter det siste punktumet, for eksempel .no. Det sier noe om hvilken type eller hvilket land adressen tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om i om.ndla.no. Det styres av samme DNS-server som hoveddomenet og brukes ofte til å skille ulike tjenester eller nettsider.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "Det øverste nivået i systemet som oversetter domenenavn til IP-adresser. Punktumet bakerst i adressen viser at oppslaget går til disse serverne.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En server som svarer på spørsmål om hvilke IP-adresser et domenenavn peker til. Den kan ha ansvar for et bestemt domene.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener (ccTLD)",
+        "forklaring": "Topp-domener som er knyttet til ett bestemt land, og som hvert land selv bestemmer bruken og kravene til.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "Generiske topp-domener (gTLD)",
+        "forklaring": "Topp-domener som ikke er knyttet til ett land, for eksempel .com eller .org. De styres av organisasjoner som har fått mandat til det.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "Sponsede topp-domener",
+        "forklaring": "Generiske topp-domener som er knyttet til et bestemt fagfelt eller en bransje, for eksempel .aero for flyindustrien.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Topp-domener som er navnet på et firma, for eksempel .google. Firmaet eier og styrer domenet og bruker det ofte bare selv.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 22
+      }
+    ]
+  }
+}

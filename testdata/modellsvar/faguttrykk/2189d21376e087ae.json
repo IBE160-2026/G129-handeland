@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T09:37:50.457Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklige bilder",
+        "forklaring": "Uttrykk som brukes i overført betydning for å beskrive noe, slik at leseren får assosiasjoner til noe annet. Et eksempel er å kalle et fotballtalent for «en uslepen diamant».",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "overført betydning",
+        "forklaring": "At et ord eller uttrykk brukes om noe annet enn det bokstavelig betyr, for å skape et bilde eller en sammenligning.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "Allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større. Teksten kan leses konkret, men også som en symbolsk framstilling av noe i virkeligheten.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allegorisk",
+        "forklaring": "Å tolke en tekst som et bilde på noe annet og større, i stedet for bare bokstavelig.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 38
+      },
+      {
+        "uttrykk": "Allusjon",
+        "forklaring": "Et språklig virkemiddel der teksten låner fra eller refererer til en kjent tekst, et kunstverk, en historisk hendelse eller en kjent person, for å skape et ekstra lag med mening.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der teksten viser til noe kjent fra før, slik at leseren får en ekstra betydning når den gjenkjennes.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 58
+      },
+      {
+        "uttrykk": "Konnotasjon",
+        "forklaring": "En felles assosiasjon som knyttes til et ord, utover ordets vanlige betydning. For eksempel gir fargen svart gjerne assosiasjoner til noe dystert.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "Besjeling",
+        "forklaring": "Et språklig bilde der livløse ting eller fenomener gis menneskelige egenskaper eller handlinger, som når solen «smilte».",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "Personifikasjon",
+        "forklaring": "Et språklig bilde der en gjenstand, et dyr eller et abstrakt begrep framstilles som et menneske, for eksempel «Døden lurer bak svingen».",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 13
+      }
+    ]
+  }
+}

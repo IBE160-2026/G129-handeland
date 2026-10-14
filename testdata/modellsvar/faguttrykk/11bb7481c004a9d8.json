@@ -1,0 +1,41 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T10:35:07.624Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetisk stråling",
+        "forklaring": "Stråling som består av svingende elektriske og magnetiske felt som brer seg som bølger, og som ikke trenger noe stoff for å bevege seg. Lys, radiobølger og røntgenstråling er alle eksempler.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to bølgetopper i en bølge. Kort bølgelengde gir høy energi og lang bølgelengde gir lav energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, omtrent 80 til 400 km over bakken. Det kan reflektere radiobølger tilbake mot jordoverflaten.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "ozonlaget",
+        "forklaring": "Et lag i atmosfæren med mye ozon, som stopper mesteparten av den kortbølgede UV-strålingen fra sola.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "spektralfargene",
+        "forklaring": "De sju fargene i regnbuen, som hvitt lys kan deles i når det brytes i et prisme. Newton definerte dem som rødt, oransje, gul, grønn, blå, indigo og fiolett.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 16
+      }
+    ]
+  }
+}

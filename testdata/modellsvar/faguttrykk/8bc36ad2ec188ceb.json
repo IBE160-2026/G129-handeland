@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-14T09:38:26.695Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Det øverste nivået i et domenenavn, som står helt til høyre, for eksempel .no. Det sier noe om hvilket land eller hvilken kategori domenet tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "gTLD",
+        "forklaring": "Generiske topp-domener, som er topp-domener ikke knyttet til ett land, for eksempel .com og .org. De styres av enkeltorganisasjoner som har fått mandat til det.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "ccTLD",
+        "forklaring": "Nasjonale topp-domener, som er topp-domener knyttet til ett land, for eksempel .no, .se og .jp. Hvert land styrer sitt eget topp-domene.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En datamaskin som svarer på spørsmål om hvilke IP-adresser et domenenavn peker til. Den holder styr på adressene for domener den har ansvar for.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no under ndla.no. Det brukes gjerne for å skille ut ulike tjenester eller nettsider.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De øverste DNS-serverne i systemet. Når en adresse slutter med punktum, betyr det at innholdet ligger under disse serverne.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "IP-adressene",
+        "forklaring": "Nummerkoder som identifiserer datamaskiner eller tjenester på internett. Et domenenavn må oversettes til en IP-adresse før nettleseren kan finne fram.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 6
+      }
+    ]
+  }
+}

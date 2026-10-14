@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T09:38:35.013Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skriver, minne og prosessorer, mellom programmene som kjører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens systemressurser og gjør det lettere for programmerere å lage programmer. Operativsystemet er den viktigste typen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én enhet, for eksempel en harddisk. Det vet hvordan enheten skal styres, og operativsystemet kommuniserer med det på en standard måte.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer responstid, altså at systemet reagerer innen en bestemt tid. Et eksempel er styringen av tenning og drivstoff i en bil.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "DOS",
+        "forklaring": "Forkortelse for Disk Operating System, et av de tidlige operativsystemene for personlige datamaskiner.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "eksterne enheter",
+        "forklaring": "Ressurser som er koblet til utsiden av datamaskinen, for eksempel en skriver. Operativsystemet styrer hvordan programmene bruker dem.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 2
+      }
+    ]
+  }
+}

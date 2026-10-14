@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T10:35:08.687Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetisk stråling",
+        "forklaring": "Stråling som består av svingende elektriske og magnetiske felt og som kan bevege seg gjennom tomt rom. Lys, radiobølger og røntgenstråler er alle former for dette.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper på en bølge. Den bestemmer hvilken type elektromagnetisk stråling det er, og den er omvendt proporsjonal med frekvensen og energien.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger eller bølger som passerer et punkt per sekund. Høy frekvens gir høy energi og kort bølgelengde.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, elektromagnetisk stråling med litt mindre energi enn synlig lys. Den kjennes som varme på huden.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling utenfor den fiolette enden av det synlige spekteret, med bølgelengder mellom 10 og 400 nm. Den kan gi solbrenthet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, 80–400 km over bakken. Det kan reflektere radiobølger tilbake mot jorda.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som ser ut til å stå stille, fordi to bølger med samme frekvens og amplitude går i motsatt retning og overlagrer hverandre.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "spektralfargene",
+        "forklaring": "De fargene hvitt lys deles i når det brytes i et prisme. Newton definerte sju av dem.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 16
+      }
+    ]
+  }
+}

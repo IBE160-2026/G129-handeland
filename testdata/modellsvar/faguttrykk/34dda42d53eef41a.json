@@ -1,0 +1,77 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T09:37:32.425Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og kan spre seg uten noe stoff å bevege seg gjennom. Lys, radiobølger og røntgenstråling er alle elektromagnetiske bølger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger bølgen gjør per sekund. Høy frekvens gir mer energirik stråling, og lav frekvens gir mindre energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge. Bølgelengden og frekvensen henger sammen, slik at kort bølgelengde gir høy frekvens.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m, som brukes i mikrobølgeovner. De har frekvens som passer til hvordan vannmolekyler svinger.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag i atmosfæren, omtrent 80–400 km over bakken, der ladde partikler finnes. Radiobølger kan reflekteres av dette laget og komme tilbake til jorda.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som ser ut til å stå stille, fordi to bølger med samme frekvens går mot hverandre og gir faste knuter og bukter. Hertz brukte dem til å måle bølgefarten.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling med litt mindre energi enn synlig lys, også kalt infrarød stråling. Vi kan føle den som varme.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "brytning",
+        "forklaring": "At lys eller bølger endrer retning når de går fra ett stoff til et annet, for eksempel fra luft til vann. Regnbuen oppstår blant annet ved brytning i vanndråper.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Stråling med kortere bølgelengde enn fiolett lys, utenfor det synlige spekteret. Den kan gi solbrenthet og er delt i UV-A, UV-B og UV-C.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "termofotografering",
+        "forklaring": "Fotografering som viser varmestrålingen fra gjenstander ved hjelp av kameraer som registrerer infrarøde bølger. Metoden brukes for eksempel til å finne varmelekkasjer.",
+        "viktighetsrangering": 10,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoffer som er ugjennomsiktige for vanlig lys.",
+        "viktighetsrangering": 11,
+        "kildeavsnitt": 23
+      }
+    ]
+  }
+}

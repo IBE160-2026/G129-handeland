@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T09:37:31.344Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og kan spre seg uten noe medium, for eksempel lys og radiobølger. Alle beveger seg med samme fart i vakuum.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to bølgetopper etter hverandre. Den bestemmer hvilken type elektromagnetisk stråling det er.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m. Mikrobølgeovnen bruker dem til å varme mat.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling med litt mindre energi enn synlig lys, og bølgelengder fra 700 nm til 1 mm. Vi kan føle den som varme.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "UV-stråling",
+        "forklaring": "Elektromagnetisk stråling med bølgelengder fra 10 nm til 400 nm, utenfor det fiolette i synlig lys. Den kan gi solbrenthet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gjennomlyse stoff som er ugjennomsiktig for vanlig lys.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag i atmosfæren, omtrent 80–400 km over bakken. Radiobølger kan reflekteres der, slik at de når lenger.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger der to bølger med samme frekvens går mot hverandre og gir faste knuter og bukker. Hertz brukte dem til å måle farten til radiobølger.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger eller bølger som kommer per sekund. Høy frekvens gir kort bølgelengde og mer energi.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 3
+      }
+    ]
+  }
+}

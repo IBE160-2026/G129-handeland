@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T09:37:31.589Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger der et elektrisk og et magnetisk felt svinger sammen og brer seg gjennom rommet. Lys, radiobølger og røntgenstråling er alle former for elektromagnetiske bølger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper på en bølge. Bølgelengden og frekvensen bestemmer hvilken type elektromagnetisk stråling det er snakk om.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, fra cirka 1 meter til mange kilometer. De brukes til å sende signaler over lange avstander.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling med litt mindre energi enn synlig lys. Vi kan kjenne den som varme på huden.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m. De brukes i mikrobølgeovner, der frekvensen får vannmolekyler i maten til å svinge.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling utenfor den fiolette enden av det synlige spekteret. Den kalles også UV-stråling og kan gi solbrenthet.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "Røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys, og brukes til bilder av indre strukturer.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, cirka 80–400 km over bakken. Radiobølger kan reflekteres der og sendes tilbake mot jorda.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som ser ut til å stå stille, med faste knutepunkter og buker, fordi bølger med samme frekvens går mot hverandre og overlapper. Hertz brukte dem til å måle farten til radiobølger.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 4
+      }
+    ]
+  }
+}

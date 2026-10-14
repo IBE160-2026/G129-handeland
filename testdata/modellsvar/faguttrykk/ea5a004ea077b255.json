@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-14T09:38:20.847Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Den øverste delen av et domenenavn, som står helt bakerst etter punktumet, for eksempel .no. Det sier noe om hvilken type eller hvilket land adressen tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De øverste DNS-serverne på internett, som vet hvor informasjon om hvert topp-domene ligger. Punktumet bakerst i adressen viser at oppslaget går til dem.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no der om ligger under ndla. Det styres av samme DNS-server som hoveddomenet.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener (ccTLD)",
+        "forklaring": "Topp-domener som er knyttet til ett enkelt land, som .no for Norge. Hvert land bestemmer selv hvem som får bruke dem og hva kravene er.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "Generiske topp-domener (gTLD)",
+        "forklaring": "Topp-domener som ikke er knyttet til ett land, som .com og .org. De styres av organisasjoner som har fått ansvar for dem.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Nye generiske topp-domener som eies og styres av en bedrift, for eksempel .google, og som ofte bare bedriften selv kan bruke.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 22
+      }
+    ]
+  }
+}

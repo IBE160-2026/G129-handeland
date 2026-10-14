@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T09:38:36.322Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Det fordeler datamaskinens ressurser, som skrivere, minne og prosessorer, mellom de programmene som kjører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det enklere for programmerere å bruke maskinvaren. Operativsystemet er den viktigste typen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et spesialprogram laget for én bestemt enhet, for eksempel en harddisk. Det oversetter operativsystemets standardkommandoer til de detaljerte instruksjonene enheten trenger.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer en bestemt responstid, slik at systemet alltid reagerer innen en fastsatt tid. De brukes for eksempel i bilens styresystemer.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "En felles grunnlag som utviklere kan bygge programmer på, uten å måtte tilpasse dem til hver type maskinvare. Et operativsystem kan fungere som en slik plattform.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 11
+      },
+      {
+        "uttrykk": "DOS",
+        "forklaring": "Forkortelse for Disk Operating System, et tidlig operativsystem fra begynnelsen av 1980-tallet. Forløperne til Microsoft Windows var blant annet MS-DOS og DR-DOS.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 6
+      }
+    ]
+  }
+}

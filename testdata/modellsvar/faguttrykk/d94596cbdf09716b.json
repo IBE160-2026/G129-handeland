@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T10:35:56.830Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skrivere, minne og prosessorer, mellom programmene, slik at de ikke kolliderer.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egen maskinvare og gjør det enklere for programmerere å bruke den. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Det motsatte av systemprogramvare.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program som er laget spesielt for én enhet, for eksempel en harddisk, og som oversetter operativsystemets standardkommandoer til instruksjoner enheten forstår.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer responstid, altså at systemet reagerer innen en bestemt tid. Brukes for eksempel i styringssystemer i biler.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som programmer kan bygges på og kjøres på. Et operativsystem på flere maskintyper gir utviklere én plattform å forholde seg til.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 11
+      }
+    ]
+  }
+}

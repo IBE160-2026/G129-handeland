@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T10:35:21.582Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et språklig bilde der noe beskrives ved å gi det egenskaper fra noe annet, uten at det sies at det er likt. Eksempelet er «en uslepen diamant» om et fotballtalent.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "språklige bilder",
+        "forklaring": "Uttrykk som brukes i overført betydning for å beskrive noen eller noe. Dette er hovedbegrepet for tekstens tema.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større. Teksten kan leses konkret, men også som en overført betydning, ofte med en moral.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 33
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der man låner fra eller viser til en kjent tekst, film, sang, kunstverk, historisk hendelse eller person. Leseren får et ekstra lag med mening når hun kjenner referansen.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et bilde der noe livløst får menneskelige egenskaper, for eksempel «Døden lurer bak svingen».",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et bilde der noe livløst får levende egenskaper, for eksempel «Sola smilte den dagen».",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon som vi knytter til et ord, i tillegg til den vanlige betydningen. For eksempel gir fargen svart ofte tanker om noe dystert.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som handlende personer, som slutter med en moral. Fabelen kan ofte leses allegorisk.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 33
+      }
+    ]
+  }
+}

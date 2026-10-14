@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T10:35:58.283Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler ressursene i maskinen, som skriver, minne og prosessorer, mellom de andre programmene.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage programmer. Operativsystemet er den viktigste typen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Den andre hovedtypen programvare er systemprogramvare.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én bestemt enhet, for eksempel en harddisk. Det oversetter operativsystemets standardkommandoer til instruksjoner enheten forstår.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer en bestemt responstid. De brukes der det må reageres innen en gitt tid, for eksempel i styringen av en bil.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "maskinvare",
+        "forklaring": "De fysiske delene av en datamaskin, som prosessorer, minne og harddisker. Det motsatte er programvare.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som programmer kan bygges på og kjøres fra. Operativsystemet kan være en slik plattform, slik at utvikleren ikke må tenke på den konkrete maskinvaren.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 11
+      },
+      {
+        "uttrykk": "DOS",
+        "forklaring": "Forkortelse for Disk Operating System, et tidlig operativsystem for personlige datamaskiner. Microsoft Windows har sitt opphav i MS-DOS.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 6
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T09:37:56.887Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklige bilde",
+        "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe. Bildet får leseren til å tenke på noe annet enn det ord-for-ord betyr.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der teksten låner fra eller viser til en kjent tekst, film, sang, kunstverk, historisk hendelse eller kjent person. Leseren får et ekstra lag med mening når hen gjenkjenner referansen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan tolkes som et bilde på noe annet og større. Den forteller en konkret historie, men det egentlige budskapet ligger bak handlingen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon som mange knytter til et ord, for eksempel at svart ofte vekker tanker om noe dystert. Konnotasjonen er ikke den vanlige betydningen av ordet.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "besjelinger",
+        "forklaring": "Et virkemiddel der noe livløst gis menneskelige egenskaper, for eksempel at en kaffetrakter sukker. Teksten viser eksempler på dette.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "personifikasjoner",
+        "forklaring": "Et virkemiddel der en ting, et dyr eller et abstrakt begrep får menneskelige trekk og handlinger, for eksempel at døden lurer. Teksten viser eksempler på dette.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som handlende personer, som slutter med en moral eller lærdom. Fabelen kan ofte leses allegorisk.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 38
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et grep forfatteren eller kunstneren bruker for å påvirke leseren eller skape en bestemt følelse hos hen. Allusjon er et eksempel på et slikt virkemiddel.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 49
+      }
+    ]
+  }
+}

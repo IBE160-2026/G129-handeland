@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T10:35:56.735Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Det fordeler datamaskinens ressurser, som skrivere, minne og prosessorer, mellom programmene, og holder orden på dem.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage andre programmer. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Det er den andre hovedtypen programvare i teksten, ved siden av systemprogramvare.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes for eksempel i styringssystemer i biler.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én maskinvareenhet, som forklarer operativsystemet hvordan enheten skal styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som programmer kan bygges på og kjøre fra. Et operativsystem kan fungere som plattform, slik at utvikleren ikke trenger å tenke på hvilken maskinvare brukeren har.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 11
+      }
+    ]
+  }
+}

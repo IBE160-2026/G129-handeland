@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T09:37:49.267Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklige bilder",
+        "forklaring": "Uttrykk som brukes i overført betydning for å beskrive noen eller noe, slik at leseren får assosiasjoner. Et eksempel er å kalle et fotballtalent for «en uslepen diamant».",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "overført betydning",
+        "forklaring": "Betydningen et ord eller uttrykk får når det brukes om noe annet enn det bokstavelig betyr.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon vi knytter til et ord utover den bokstavelige betydningen. For eksempel gir fargen svart gjerne assosiasjoner til noe dystert.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større, i tillegg til den konkrete historien den forteller. Ofte brukes den for å formidle en moral.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der man låner fra eller viser til en kjent tekst, film, sang, kunstverk, historisk hendelse eller person. Den gir et ekstra lag med mening for leseren som kjenner referansen.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som avsluttes med en moral. Fabelen kan ofte leses allegorisk.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 38
+      }
+    ]
+  }
+}

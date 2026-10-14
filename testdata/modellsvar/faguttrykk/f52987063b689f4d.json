@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T10:35:22.455Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et språklig bilde der noe beskrives ved å bruke et uttrykk fra en annen sammenheng, uten at det sies at det er en sammenlikning. Eksempelet «en uslepen diamant» om et fotballtalent er en metafor.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 1
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan leses konkret, men som også er et bilde på noe annet og større, for eksempel en samfunnsforhold eller en moral.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der en tekst lager en referanse til en kjent tekst, et kunstverk, en hendelse eller en person, slik at leseren får et ekstra lag med mening.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "språklige bilder",
+        "forklaring": "Uttrykk som brukes i overført betydning for å beskrive noen eller noe.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et språklig bilde der en livløs ting eller et abstrakt begrep får menneskelige egenskaper, for eksempel «Døden lurer bak svingen».",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et språklig bilde der en livløs ting gis menneskelige handlinger eller følelser, for eksempel «Kaffetrakteren sukket tungt».",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon eller bibetydning som vi knytter til et ord, i tillegg til den vanlige betydningen.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som slutter med en moral.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 33
+      }
+    ]
+  }
+}

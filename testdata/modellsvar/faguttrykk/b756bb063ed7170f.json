@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T10:35:09.487Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetisk stråling",
+        "forklaring": "Stråling som består av svingende elektriske og magnetiske felt og som kan bre seg gjennom tomt rom. Lys, radiobølger og røntgenstråling er alle eksempler på dette.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to påfølgende bølgetopper. Bølgelengden bestemmer hvilken type elektromagnetisk stråling det er, og den henger sammen med energien.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger en bølge gjør per sekund. Høy frekvens gir høy energi, og lav frekvens gir lav energi.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler høyt oppe i atmosfæren, rundt 80–400 km over bakken. Radiobølger kan reflekteres der og sendes tilbake mot jorda.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "UV-stråling",
+        "forklaring": "Ultrafiolett stråling, elektromagnetisk stråling med bølgelengder mellom 10 nm og 400 nm. Den ligger utenfor det fiolette området i det synlige spekteret.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, elektromagnetisk stråling med litt lavere energi enn synlig lys. Den sendes ut av varme gjenstander og kan kjennes som varme på huden.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "spektrum",
+        "forklaring": "Et område der elektromagnetisk stråling er ordnet etter bølgelengde eller frekvens, fra lange radiobølger til korte gammastråler. Synlig lys er bare en liten del av spekteret.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med bølgelengder kortere enn 10 nm og høyere energi enn UV-C. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "termofotografering",
+        "forklaring": "Fotografering som bruker infrarødt lys for å vise temperaturforskjeller på overflater. Brukes for eksempel til å finne varmelekkasjer i hus.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 12
+      }
+    ]
+  }
+}

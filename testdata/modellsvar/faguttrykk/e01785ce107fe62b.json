@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T09:38:06.854Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklig bilde",
+        "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe. Bildet får leseren til å tenke på noe annet, slik at en egenskap framheves.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der man låner fra eller viser til en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får et ekstra lag med mening når hen kjenner igjen referansen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større, i tillegg til den konkrete historien den forteller.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 33
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et virkemiddel der en ting, et dyr eller et abstrakt begrep får menneskelige egenskaper, for eksempel at stillheten truer noen.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et virkemiddel der noe livløst gis levende egenskaper, for eksempel at sola smiler eller at en kaffetrakter sukker.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon vi knytter til et ord, utover den bokstavelige betydningen. For eksempel gir svart ofte tanker om noe dystert.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr, som slutter med en moral. Fabelen kan ofte leses allegorisk.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 33
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et virkemiddel som forfatteren eller kunstneren bruker for å påvirke leseren eller skape en bestemt følelse hos hen.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 49
+      }
+    ]
+  }
+}

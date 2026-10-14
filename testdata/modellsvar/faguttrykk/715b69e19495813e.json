@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-14T10:35:49.426Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Det øverste nivået i et domenenavn, som står helt til høyre, for eksempel .no. Det sier noe om hvilken type eller hvilket land adressen tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "Generiske topp-domener",
+        "forklaring": "Topp-domener som ikke er knyttet til et land, men til en type virksomhet eller formål, for eksempel .com. De styres av enkeltorganisasjoner som har fått mandat til det.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener",
+        "forklaring": "Topp-domener som hører til et bestemt land, for eksempel .no, .se og .jp. Hvert land bestemmer selv hvem som får bruke dem og hvilke krav som gjelder.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En server som svarer på spørsmål om hvilken IP-adresse et domenenavn tilhører. Den fungerer som en slags adressebok på internett.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no under ndla.no. Det brukes ofte til å skille ulike tjenester eller nettsider innenfor samme domene.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Nye generiske topp-domener som eies av en bedrift og som ofte bare bedriften selv får bruke, for eksempel .google.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 22
+      },
+      {
+        "uttrykk": "Geografiske topp-domener",
+        "forklaring": "Nye generiske topp-domener som knytter seg til et område, enten flere land i en region eller en by eller region i ett land, for eksempel .asia eller .tokyo.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "IP-adresser",
+        "forklaring": "Nummeriske adresser som identifiserer datamaskiner eller tjenester på internett. Et domenenavn kan peke til en eller flere IP-adresser.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 7
+      }
+    ]
+  }
+}

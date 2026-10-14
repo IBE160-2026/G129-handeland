@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-14T09:38:34.802Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skriver, minne og prosessorer, mellom programmene som kjører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Det er én av de to hovedtypene programvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én enhet, for eksempel en harddisk. Det gjør at operativsystemet kan kommunisere med enheten på en standard måte.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens ressurser og gjør det enklere for programmererne. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer responstid, altså at de reagerer innen en bestemt tid. Et eksempel er styringen av tenning og drivstoff i en moderne bil.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "eksterne enheter",
+        "forklaring": "Ressurser som er koblet til utenfor datamaskinen, for eksempel en skriver. Operativsystemet sørger for at de ikke brukes av to programmer samtidig.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som programmer kan bygges og kjøre på. Et operativsystem som finnes for flere maskintyper, fungerer som en slik plattform.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 11
+      }
+    ]
+  }
+}

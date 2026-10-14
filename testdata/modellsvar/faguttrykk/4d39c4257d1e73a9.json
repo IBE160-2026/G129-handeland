@@ -1,0 +1,41 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T10:35:32.239Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten Norges Bank setter som styringsverktøy for å påvirke rentene i økonomien og inflasjonen. Når styringsrenta økes, blir det dyrere å låne penger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet sentralbanken har satt for hvor mye prisene skal stige per år, her 2 prosent. Når prisveksten er over målet, sier man at inflasjonen er for høy.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "En indeks som måler hvor mye prisene på en fast kurv med varer og tjenester som husholdningene kjøper, har steget. Inflasjonen måles ofte ved hjelp av den.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på store oppgraderinger av eksisterende boliger. Når boliginvesteringene er lave, bygges det lite.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Lønnsveksten justert for prisveksten, altså hvor mye kjøpekraften til lønna øker. Er lønnsveksten 4 prosent og prisveksten 3 prosent, blir reallønnsveksten omtrent 1 prosent.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 20
+      }
+    ]
+  }
+}

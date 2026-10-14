@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T09:38:12.761Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "konjunkturtendensene",
+        "forklaring": "Konjunkturtendensene er de vise utviklingstrekkene i økonomien, altså om aktiviteten går opp eller ned over tid. Rapporten beskriver hvordan norsk og utenlandsk økonomi utvikler seg.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Konsumprisindeksen måler hvordan prisene på en fast kurv av varer og tjenester som husholdningene kjøper, endrer seg over tid. Inflasjonen i teksten er målt med denne indeksen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Reallønnsveksten er hvor mye lønnene øker etter at prisveksten er trukket fra. Den viser hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Styringsrenta er renten Norges Bank setter for hva bankene må betale for å låne penger. Den påvirker rentene folk og bedrifter betaler, og er verktøyet sentralbanken bruker mot inflasjon.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Inflasjonsmålet er den prisveksten sentralbanken sikter mot på lang sikt, her 2 prosent. Når prisveksten er over målet, øker det presset for at renten settes opp.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Boliginvesteringene er de samlede pengene som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. Når de er lave, bygges det lite.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "Arbeidskraftundersøkelsen",
+        "forklaring": "Arbeidskraftundersøkelsen (AKU) er en statistisk undersøkelse der utvalgte personer spørres om de har arbeid eller er arbeidsledige. Den brukes til å beregne ledigheten.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "AKU-ledigheten",
+        "forklaring": "AKU-ledigheten er andelen av arbeidsstyrken som er arbeidsledig etter AKU-definisjonen. Den bygger på intervjuer og er et annet mål enn den registrerte ledigheten hos Nav.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Fastlandsøkonomien er den delen av norsk økonomi som ikke omfatter olje- og gassvirksomhet og sjøfart, og som dermed kan vise den underliggende utviklingen i økonomien.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

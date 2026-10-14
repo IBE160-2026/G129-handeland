@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T10:35:34.520Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten som Norges Bank styrer for å påvirke hvor dyrt det er å låne penger i Norge. Når styringsrenta øker, blir lån dyrere, og det bremser normalt økonomien og prisveksten.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet sentralbanken har satt for hvor mye prisene skal stige per år. I Norge er målet 2 prosent årlig prisvekst.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Hvor mye lønningene vokser etter at prisveksten er trukket fra. Hvis lønnen øker 4 prosent og prisene 3 prosent, er reallønnsveksten omtrent 1 prosent.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål for hvordan prisene på varer og tjenester som vanlige husholdninger kjøper, endrer seg over tid. Inflasjonen måles ofte med denne indeksen.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på store oppgraderinger av eksisterende boliger. Når boliginvesteringene er lave, bygges det lite.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "AKU-ledigheten",
+        "forklaring": "Andelen av arbeidsstyrken som er uten jobb og aktivt leter etter arbeid, målt gjennom Statistisk sentralbyrå sin arbeidskraftundersøkelse. Den skiller seg fra den registrerte ledigheten hos Nav.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den norske økonomien uten olje- og gassutvinning og sjøtransport. Den brukes for å vise den underliggende utviklingen i økonomien.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Hvor mye den samlede verdiproduksjonen i et land, bruttonasjonalproduktet, øker fra ett år til et annet. Det er et mål på hvor raskt økonomien vokser.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 26
+      },
+      {
+        "uttrykk": "lønnsoppgjøret",
+        "forklaring": "Forhandlingene mellom arbeidsgivere og fagforeninger der det blir avtalt hvor mye lønningene skal øke. Rammen er den samlede lønnsøkningen som er avtalt.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 4
+      }
+    ]
+  }
+}

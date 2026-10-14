@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-14T09:38:16.257Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renta som sentralbanken, her Norges Bank, setter som styringsverktøy. Den påvirker hva bankene tar for å låne ut penger, og dermed hvor dyrt det er å låne i hele økonomien.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det prisstigningsnivået sentralbanken sikter mot på lang sikt, her 2 prosent årlig prisvekst. Når prisveksten er over målet, sier man at inflasjonen er for høy.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "En indeks som måler hvordan prisene på varer og tjenester som husholdningene kjøper, endrer seg over tid. Inflasjonen beregnes ut fra denne indeksen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. Dette er en viktig del av investeringene i økonomien.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene øker etter at prisveksten er trukket fra. Hvis lønna øker mer enn prisene, får man reell kjøpekraftvekst.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter petroleumsvirksomheten og sjøfart med utenlandske skip. Veksten i denne måles separat fra total økonomisk vekst.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

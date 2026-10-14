@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T09:37:30.425Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og kan bevege seg gjennom tomrom. Lys, radiobølger og røntgenstråling er alle former for dem.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge. Den bestemmer hvilken type elektromagnetisk stråling bølgen er.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger bølgen gjør per sekund. Høy frekvens gir kort bølgelengde og lav frekvens gir lang bølgelengde.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, fra cirka 1 meter til mange kilometer. De brukes til å sende signaler over lange avstander.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag i atmosfæren ca. 80–400 km over bakken. Det kan reflektere radiobølger tilbake mot jordoverflaten.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengde mellom 1 mm og 1 m. Frekvensen deres passer godt sammen med svingningene til vann- og fettmolekyler, og det er derfor de brukes i mikrobølgeovner.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "Infrarød stråling",
+        "forklaring": "Elektromagnetisk stråling med litt mindre energi enn synlig lys. Den sender ut varme, og vi kan føle den med huden.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling utenfor den fiolette delen av synlig lys, med bølgelengder fra 10 nm til 400 nm. Den kan gi solbrenthet og hudkreft.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling som har mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys, og brukes til røntgenbilder.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 23
+      }
+    ]
+  }
+}

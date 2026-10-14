@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T10:35:08.940Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetisk stråling",
+        "forklaring": "Stråling som består av svingende elektriske og magnetiske felt og kan bre seg gjennom tomt rom. Radiobølger, mikrobølger, infrarødt lys, synlig lys, ultrafiolett, røntgen og gammastråling er alle former for dette.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to påfølgende bølgetopper. Den bestemmer hvilken type elektromagnetisk stråling det er, og lang bølgelengde betyr lav energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger per sekund en bølge har. Høy frekvens gir høy energi, og lav frekvens gir lav energi.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, omtrent 80–400 km over bakken. Det kan reflektere radiobølger tilbake mot jorda.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, elektromagnetisk stråling med litt mindre energi enn synlig lys. Den kan kjennes som varme på huden.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling med bølgelengder kortere enn synlig fiolett lys, mellom 10 nm og 400 nm. Den kan gi solbrenthet og hudkreft.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling som har mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gjennomlyse stoff som synlig lys ikke går gjennom.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "spektralfarger",
+        "forklaring": "De fargene man får når hvitt lys splittes i et prisme, til sammen et spekter. Newton definerte 7 slike farger.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 16
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-14T10:35:21.981Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et språklig bilde der noe beskrives ved å kalles noe annet, uten at det sies at det er likt, for eksempel \"en uslepen diamant\" om et fotballtalent.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større, og som ofte har en moral. Den kan leses konkret, men også som et bilde på noe annet.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der man låner fra eller viser til en kjent tekst, et kunstverk, en historisk hendelse eller en kjent person, slik at teksten får et ekstra lag med mening.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et språklig bilde der noe livløst gis menneskelige egenskaper, for eksempel \"Døden lurer bak svingen\".",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et språklig bilde der noe livløst gis levende egenskaper, for eksempel \"Kaffetrakteren sukket tungt\".",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 9
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En felles assosiasjon som knyttes til et ord, i tillegg til den vanlige betydningen. For eksempel gir fargen svart ofte en dyster assosiasjon.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling med dyr som handlende personer, som avsluttes med en moral. Fabler kan ofte leses allegorisk.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 33
+      },
+      {
+        "uttrykk": "sammenlikning",
+        "forklaring": "Et språklig bilde der to ting settes opp mot hverandre med et ord som \"som\" eller \"like\", for å vise at de har en felles egenskap.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 5
+      }
+    ]
+  }
+}

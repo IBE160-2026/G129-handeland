@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-14T10:35:08.197Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetisk stråling",
+        "forklaring": "Stråling som består av svingende elektriske og magnetiske felt og som kan bevege seg gjennom tomt rom. Lys, radiobølger og røntgenstråling er alle former for denne.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper på en bølge. Den bestemmer hvilken type elektromagnetisk stråling det er, og henger sammen med frekvens og energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger en bølge gjør per sekund. Høy frekvens gir høy energi og kort bølgelengde.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladede partikler i atmosfæren, omtrent 80 til 400 km over bakken. Det kan reflektere radiobølger tilbake mot jorda.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling med kortere bølgelengde enn synlig lys, fra ca. 10 nm til 400 nm. Den kan gi solbrenthet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mye energi og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som lys ikke kommer gjennom.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "gammastråling",
+        "forklaring": "Elektromagnetisk stråling fra radioaktive kilder. Teksten sier lite mer om den enn dette.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 27
+      }
+    ]
+  }
+}
