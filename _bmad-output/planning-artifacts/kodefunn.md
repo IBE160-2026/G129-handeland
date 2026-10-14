@@ -353,14 +353,47 @@ som beskrev riktig oppførsel. Begge ble funnet ved å kreve at to ting som
 
 ---
 
+## Funn 11 — Innloggingsskjemaet ville gått forbi sperren mot passordgjetting
+
+**Hvor:** planen for innloggingen, før koden ble skrevet. Skjemaene skulle
+være server actions som kalte `auth.api.signInEmail` og `auth.api.signUpEmail`
+— det mønsteret Better Auths egen Next.js-guide viser, med `nextCookies()` for
+å sette cookien.
+
+**Hva:** Better Auths begrensning av innloggingsforsøk ligger i HTTP-ruterne
+under `/api/auth/*`. Et kall til `auth.api.*` fra serveren går rett til
+endepunktet og forbi den. Målt mot en database i minnet med begrensningen slått
+på: åtte feil passord på rad via `auth.api.signInEmail` ga åtte vanlige avslag
+(401) og ingen sperre. Samme forsøk mot HTTP-ruten ble stoppet med 429 innen seks forsøk.
+
+Med det første mønsteret ville innloggingsskjemaet altså vært en ubegrenset
+vei til å gjette passord, mens HTTP-ruten — som ingen bruker — var beskyttet.
+
+**Hvordan det ble funnet:** den første testen av begrensningen gikk mot
+HTTP-ruten og besto. Før skjemaene ble skrevet, ble det spurt om testen gikk
+gjennom den samme veien som skjemaene skulle bruke. Den gjorde ikke det, og en
+ny test mot `auth.api` viste hullet. Dokumentasjonen sier ikke noe om det.
+
+**Rettelse:** skjemaene bruker Better Auths klient i nettleseren
+(`app/komponenter/authKlient.ts`), som går via HTTP-rutene. Eleven og en
+angriper går da gjennom samme dør, med samme sperre. Invitasjonskoden sjekkes i
+en krok i Better Auth og ikke i skjemaet, av samme grunn: ellers ville en POST
+rett mot `/api/auth/sign-up/email` gått forbi den. Begge veier er testet i
+`data/auth.test.ts`.
+
+**Mønsteret:** en test som består, men som går en annen vei enn koden den
+skal beskytte. Det er samme klasse som funn 3: grønt, og likevel uten dekning.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — ti funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — elleve funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
-| Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Ikke startet — §4.10 er ikke bygget ennå |
+| Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Koden er skrevet og testet (`data/auth.ts`, `data/konto.ts`, `app/komponenter/KontoSkjemaer.tsx`, `data/auth.test.ts`). Linje-for-linje-gjennomgangen gjenstår, og gjøres av utvikleren |
 
 **Et mønster til refleksjonsrapporten.** Ingen av de åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som

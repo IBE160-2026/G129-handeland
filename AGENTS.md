@@ -26,14 +26,16 @@ Leseforstaaelsesapp for videregaaende. Planleggingsdokumentene ligger i `_bmad-o
 4. **AD-11:** generert utdata valideres mot skjema foer lagring. Ugyldige elementer forkastes, for store sett kappes etter rangering.
 5. **AD-16:** binaerdata lagres aldri. PDF parses i nettleseren, bilder krympes i klienten.
 
-**GJENSTÅR, HØYT PRIORITERT: innlogging (FR-35).** Kjerneløypen bruker en midlertidig utviklingskonto i `data/konto.ts`. Appen er derfor sperret i drift og viser en forklaring i stedet. Better Auth er valgt men ikke installert. `tekst.kontoId` mangler fremmednøkkel til brukertabellen til dette er gjort.
+**Innlogging (FR-35):** Better Auth, e-post og passord, registrering bare med invitasjonskode (`LESEVENN_INVITASJONSKODE`). Oppsettet står i `data/auth.ts`; `data/konto.ts` er det eneste stedet en `Tilgang` lages. **Gjenstår:** linje-for-linje-gjennomgangen FR-41 krever, som utvikleren gjør selv.
 
-**Fem stille feller i oppsettet:**
+**Stille feller i oppsettet:**
 
 - Middleware heter `proxy.ts` og kjoerer paa Node-runtime. Oppskrifter for 15 og tidligere bruker det gamle navnet.
 - Turbopack er standard. `webpack`-externals i pg/drizzle-oppskrifter feiler bygget.
 - Sidegrenser maa bevares ved PDF-uttrekk, ellers mister PF-1 terskelen paa tegn per side.
-- En sperre i rotlayouten hindrer IKKE at sidene kjoerer. Next evaluerer sidesegmentet selv om layouten ikke rendrer children, saa en sjekk som skal stoppe datatilgang maa staa i hver side.
+- En sperre i rotlayouten hindrer IKKE at sidene kjoerer. Next evaluerer sidesegmentet selv om layouten ikke rendrer children, saa `await tilgang()` maa staa i hver side.
+- `tilgang()` omdirigerer ved aa KASTE. Kall den foer en try-blokk, ellers fanger catch omdirigeringen.
+- `auth.api.*` fra serveren gaar FORBI begrensningen av innloggingsforsoek. Innlogging, registrering og sletting skal gaa via `authKlient` og HTTP-rutene (kodefunn 11).
 - `.env.example` setter `LESEVENN_TESTMODUS=les`, saa en frisk utsjekk kaller IKKE modellen (AD-18). Et generatorkall som gir samme svar hver gang, eller feiler med `lagret_svar_mangler`, er testmodus - ikke en feil i generatoren. Sett `=av` for aa kalle modellen.
 
 **Spraak:** domenebegreper i kode bruker ordlistens norske termer (Tekst, Avsnitt, Begrep, Fagsamtale). ASCII-translitterering der verktoey krever det: oe, aa, ae.

@@ -26,6 +26,15 @@ npm run db:migrer            # lager tabellene
 npm run dev                  # http://localhost:3000
 ```
 
+Opprett en konto på <http://localhost:3000/registrer> med invitasjonskoden
+`lokal` fra `.env.example`. Kontoen finnes bare i den lokale databasen.
+
+**Uten Docker.** `npx pglite-server --port=5433` starter en Postgres i minnet
+(PGlite, ligger i devDependencies). Sett
+`DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5433/postgres` i
+`.env.local`, og kjør `npm run db:migrer` og `npm run dev` som over. Dataene
+forsvinner når serveren stoppes.
+
 Hele kjerneløypen kan gås gjennom slik: lese inn eksempelteksten, aktivering,
 lesevisning med faguttrykk markert, quiz, og fagsamtale. `npm run db:ned`
 stopper databasen; dataene beholdes. `docker compose down -v` sletter dem.
@@ -50,7 +59,7 @@ vertsnavnet i `DATABASE_URL`, så ingenting må endres i koden.
 ### Tester
 
 ```bash
-npm test         # 89 tester, ingen av dem kaller språkmodellen
+npm test         # ingen av testene kaller språkmodellen eller rører Neon
 npx tsc --noEmit # typesjekk
 npm run build    # verifiser før push
 ```
