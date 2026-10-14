@@ -110,6 +110,16 @@ describe("nøkkelen", () => {
     );
   });
 
+  test("endrer seg med kjøringsnummeret, og enkeltkall beholder sin nøkkel", () => {
+    // Selvkonsistensens kall må ha hver sin fil, ellers overskriver de hverandre.
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING, 0)).not.toBe(
+      noekkel("faguttrykk", GJELDENDE.versjon, MELDING, 1),
+    );
+    expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING, 0)).not.toBe(
+      noekkel("faguttrykk", GJELDENDE.versjon, MELDING),
+    );
+  });
+
   test("endrer seg med oppgaven", () => {
     expect(noekkel("faguttrykk", GJELDENDE.versjon, MELDING)).not.toBe(
       noekkel("quiz", GJELDENDE.versjon, MELDING),

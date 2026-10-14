@@ -220,12 +220,13 @@ export async function hentFaguttrykk(
   const oppsett = await hentPrompt("faguttrykk", valg.overstyrVersjon);
   const k = oppsett.konsistens;
 
-  const kall = () =>
+  const kall = (kjoering?: number) =>
     kjoerGenerator({
       oppgave: "faguttrykk",
       skjema: FaguttrykkSkjema,
       brukermelding,
       overstyrVersjon: valg.overstyrVersjon,
+      kjoering,
     });
 
   const tilKandidater = (
@@ -253,7 +254,7 @@ export async function hentFaguttrykk(
      * parallelt tar de omtrent like lang tid som ett.
      */
     const utfall = await Promise.allSettled(
-      Array.from({ length: k.kjoeringer }, () => kall()),
+      Array.from({ length: k.kjoeringer }, (_, i) => kall(i)),
     );
     const vellykkede = utfall.filter(
       (u): u is PromiseFulfilledResult<Awaited<ReturnType<typeof kall>>> =>

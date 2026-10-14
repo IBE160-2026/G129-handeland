@@ -251,12 +251,15 @@ export async function kjoerGenerator<S extends z.ZodType>({
   brukermelding,
   overstyrVersjon,
   maksTokens = 8000,
+  kjoering,
 }: {
   oppgave: Oppgave;
   skjema: S;
   brukermelding: string;
   overstyrVersjon?: string;
   maksTokens?: number;
+  /** Nummeret i selvkonsistensen. Skiller de lagrede svarene, se `noekkel`. */
+  kjoering?: number;
 }): Promise<Resultat<z.infer<S>>> {
   const prompt = await hentPrompt(oppgave, overstyrVersjon);
   const modus = testmodus();
@@ -269,7 +272,12 @@ export async function kjoerGenerator<S extends z.ZodType>({
    * som ikke finnes i drift.
    */
   if (modus === "les") {
-    const lagret = await hentLagret(oppgave, prompt.versjon, brukermelding);
+    const lagret = await hentLagret(
+      oppgave,
+      prompt.versjon,
+      brukermelding,
+      kjoering,
+    );
 
     if (!lagret) {
       throw new GeneratorFeil(
@@ -326,6 +334,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
         prompt.modell,
         brukermelding,
         svar.parsed_output,
+        kjoering,
       );
     }
 

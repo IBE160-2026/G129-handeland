@@ -63,13 +63,22 @@ const LAGERROT = path.join(process.cwd(), "testdata", "modellsvar");
  * en lekkasje: et oppslag som «nesten traff» ville vist et svar som hører til
  * en annen tekst, og det er verre enn en tydelig feilmelding.
  */
+/*
+ * `kjoering` skiller de parallelle kallene i selvkonsistensen. Uten den skrev
+ * alle fem til samme fil, bare den siste ble liggende, og i `les` fikk
+ * flertallsavstemningen fem kopier av ett svar: alle uttrykk fikk 5/5, og
+ * målingen var ett kall som så ut som fem. Enkeltkall (ingen kjøringsnummer)
+ * beholder den gamle nøkkelen.
+ */
 export function noekkel(
   oppgave: string,
   promptversjon: string,
   brukermelding: string,
+  kjoering?: number,
 ): string {
+  const kjoeringsdel = kjoering === undefined ? "" : `\n#${kjoering}`;
   return createHash("sha256")
-    .update(`${oppgave}\n${promptversjon}\n${brukermelding}`)
+    .update(`${oppgave}\n${promptversjon}\n${brukermelding}${kjoeringsdel}`)
     .digest("hex")
     .slice(0, 16);
 }
@@ -99,8 +108,9 @@ export async function hentLagret(
   oppgave: string,
   promptversjon: string,
   brukermelding: string,
+  kjoering?: number,
 ): Promise<Lagret | null> {
-  const n = noekkel(oppgave, promptversjon, brukermelding);
+  const n = noekkel(oppgave, promptversjon, brukermelding, kjoering);
   try {
     const rå = await readFile(sti(oppgave, n), "utf8");
     return JSON.parse(rå) as Lagret;
@@ -116,8 +126,9 @@ export async function lagreSvar(
   modell: string,
   brukermelding: string,
   data: unknown,
+  kjoering?: number,
 ): Promise<string> {
-  const n = noekkel(oppgave, promptversjon, brukermelding);
+  const n = noekkel(oppgave, promptversjon, brukermelding, kjoering);
   const filsti = sti(oppgave, n);
   await mkdir(path.dirname(filsti), { recursive: true });
 

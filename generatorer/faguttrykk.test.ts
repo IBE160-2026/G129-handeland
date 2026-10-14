@@ -52,23 +52,48 @@ afterEach(async () => {
   if (foer.noekkel === undefined) delete process.env.ANTHROPIC_API_KEY;
   else process.env.ANTHROPIC_API_KEY = foer.noekkel;
 
-  await rm(
-    path.join(
-      process.cwd(),
-      "testdata",
-      "modellsvar",
-      "faguttrykk",
-      `${noekkel("faguttrykk", GJELDENDE.versjon, melding)}.json`,
-    ),
-    { force: true },
-  );
+  await ryddOpp(melding);
 });
 
-/** Legger et modellsvar i lageret, slik at les-modus finner det. */
-async function gittSvar(faguttrykk: unknown[]) {
-  await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, melding, {
-    faguttrykk,
-  });
+/** Fjerner de lagrede svarene for én melding, alle kjøringer. */
+async function ryddOpp(m: string) {
+  for (const kjoering of kjoeringer()) {
+    await rm(
+      path.join(
+        process.cwd(),
+        "testdata",
+        "modellsvar",
+        "faguttrykk",
+        `${noekkel("faguttrykk", GJELDENDE.versjon, m, kjoering)}.json`,
+      ),
+      { force: true },
+    );
+  }
+}
+
+/**
+ * Kjøringsnumrene manifestet gir: `[undefined]` for ett kall, ellers 0..n-1.
+ * Selvkonsistensen slår opp ett lagret svar per kjøring.
+ */
+function kjoeringer(): (number | undefined)[] {
+  const k = GJELDENDE.konsistens;
+  return !k || k.kjoeringer <= 1
+    ? [undefined]
+    : Array.from({ length: k.kjoeringer }, (_, i) => i);
+}
+
+/** Legger samme modellsvar i lageret for hver kjøring, slik at les-modus finner det. */
+async function gittSvar(faguttrykk: unknown[], m: string = melding) {
+  for (const kjoering of kjoeringer()) {
+    await lagreSvar(
+      "faguttrykk",
+      GJELDENDE.versjon,
+      GJELDENDE.modell,
+      m,
+      { faguttrykk },
+      kjoering,
+    );
+  }
 }
 
 describe("hentFaguttrykk — den gyldige veien", () => {
@@ -76,13 +101,15 @@ describe("hentFaguttrykk — den gyldige veien", () => {
     await gittSvar([
       {
         uttrykk: "Mitose",
-        forklaring: "Celledeling der arvestoffet kopieres og cellen deler seg i to like celler.",
+        forklaring:
+          "Celledeling der arvestoffet kopieres og cellen deler seg i to like celler.",
         viktighetsrangering: 1,
         kildeavsnitt: 2,
       },
       {
         uttrykk: "mutasjon",
-        forklaring: "En endring i arvestoffet, ofte etter en feil i kopieringen.",
+        forklaring:
+          "En endring i arvestoffet, ofte etter en feil i kopieringen.",
         viktighetsrangering: 2,
         kildeavsnitt: 4,
       },
@@ -273,19 +300,19 @@ describe("hentFaguttrykk — tetthet", () => {
     // tetthet, ikke om en feil i regnestykket.
     const lang = delIAvsnitt(
       "Celledeling\n\n" +
-        ("Mitose er den vanligste formen for celledeling hos planter og dyr. " +
+        (
+          "Mitose er den vanligste formen for celledeling hos planter og dyr. " +
           "Cellen kopierer arvestoffet sitt og deler seg deretter i to nye celler " +
           "som hver inneholder en fullstendig kopi av det opprinnelige arvestoffet. " +
           "Prosessen er nøye styrt av en rekke kontrollpunkter underveis, og dersom " +
           "noe går galt, stopper cellen opp framfor å dele seg videre med en feil. " +
-          "Dette er en viktig del av kroppens forsvar mot skadelige endringer. ").repeat(
-          3,
-        ),
+          "Dette er en viktig del av kroppens forsvar mot skadelige endringer. "
+        ).repeat(3),
     );
     const langMelding = formaterAvsnitt(lang);
 
-    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, langMelding, {
-      faguttrykk: [
+    await gittSvar(
+      [
         {
           uttrykk: "kontrollpunkter",
           forklaring:
@@ -294,7 +321,8 @@ describe("hentFaguttrykk — tetthet", () => {
           kildeavsnitt: 2,
         },
       ],
-    });
+      langMelding,
+    );
 
     try {
       const r = await hentFaguttrykk(lang);
@@ -304,16 +332,7 @@ describe("hentFaguttrykk — tetthet", () => {
       expect(r.tetthet.hoeyesteVindu).toBeLessThanOrEqual(3);
       expect(r.tetthet.innenfor).toBe(true);
     } finally {
-      await rm(
-        path.join(
-          process.cwd(),
-          "testdata",
-          "modellsvar",
-          "faguttrykk",
-          `${noekkel("faguttrykk", GJELDENDE.versjon, langMelding)}.json`,
-        ),
-        { force: true },
-      );
+      await ryddOpp(langMelding);
     }
   });
 
@@ -336,14 +355,16 @@ describe("hentFaguttrykk — tetthet", () => {
     // kort tekst. Bare mekanismen som gjør det sant er en annen nå.
     const tett = delIAvsnitt(
       "Arvestoff\n\n" +
-        ("Arvestoffet kopieres før delingen. Arvestoffet må være helt likt i " +
+        (
+          "Arvestoffet kopieres før delingen. Arvestoffet må være helt likt i " +
           "begge de nye cellene, og arvestoffet sjekkes derfor nøye underveis. " +
-          "Er arvestoffet skadet, stopper prosessen. ").repeat(3),
+          "Er arvestoffet skadet, stopper prosessen. "
+        ).repeat(3),
     );
     const tettMelding = formaterAvsnitt(tett);
 
-    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, tettMelding, {
-      faguttrykk: [
+    await gittSvar(
+      [
         {
           uttrykk: "Arvestoffet",
           forklaring: "Molekylet som bærer cellens oppskrift, altså DNA-et.",
@@ -351,7 +372,8 @@ describe("hentFaguttrykk — tetthet", () => {
           kildeavsnitt: 2,
         },
       ],
-    });
+      tettMelding,
+    );
 
     try {
       const r = await hentFaguttrykk(tett);
@@ -367,16 +389,7 @@ describe("hentFaguttrykk — tetthet", () => {
       expect(r.begreper).toHaveLength(1);
       expect(r.forkastet).toEqual([]);
     } finally {
-      await rm(
-        path.join(
-          process.cwd(),
-          "testdata",
-          "modellsvar",
-          "faguttrykk",
-          `${noekkel("faguttrykk", GJELDENDE.versjon, tettMelding)}.json`,
-        ),
-        { force: true },
-      );
+      await ryddOpp(tettMelding);
     }
   });
 
@@ -398,5 +411,46 @@ describe("hentFaguttrykk — tetthet", () => {
       (f) => `${f.avsnittNummer}:${f.start}:${f.slutt}`,
     );
     expect(new Set(nøkler).size).toBe(nøkler.length);
+  });
+});
+
+describe("hentFaguttrykk — selvkonsistens fra lagrede svar", () => {
+  /*
+   * Regresjon. Nøkkelen skilte ikke kjøringene, så alle fem skrev til samme
+   * fil, og i `les` stemte fem kopier av ett svar. Et uttrykk som bare to av
+   * fem kjøringer fant, kom da gjennom med 5/5.
+   */
+  test("hver kjøring leser sitt eget svar, og flertallet avgjør", async () => {
+    const k = GJELDENDE.konsistens;
+    if (!k || k.kjoeringer <= 1) return; // gjelder bare med selvkonsistens
+
+    const mitose = {
+      uttrykk: "Mitose",
+      forklaring: "Celledeling der cellen deler seg i to like celler.",
+      viktighetsrangering: 1,
+      kildeavsnitt: 2,
+    };
+    const mutasjon = {
+      uttrykk: "mutasjon",
+      forklaring: "En endring i arvestoffet.",
+      viktighetsrangering: 2,
+      kildeavsnitt: 4,
+    };
+
+    // «mutasjon» i én kjøring færre enn flertallskravet.
+    for (let i = 0; i < k.kjoeringer; i++) {
+      await lagreSvar(
+        "faguttrykk",
+        GJELDENDE.versjon,
+        GJELDENDE.modell,
+        melding,
+        { faguttrykk: i < k.minstEnighet - 1 ? [mitose, mutasjon] : [mitose] },
+        i,
+      );
+    }
+
+    const r = await hentFaguttrykk(avsnitt);
+    expect(r.begreper.map((b) => b.uttrykk)).toEqual(["Mitose"]);
+    expect(r.konsistens?.kjoeringer).toBe(k.kjoeringer);
   });
 });
