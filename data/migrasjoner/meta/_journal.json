@@ -8,6 +8,13 @@
       "when": 1790775828073,
       "tag": "0000_grunnskjema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791981798582,
+      "tag": "0001_innlogging",
+      "breakpoints": true
     }
   ]
 }
