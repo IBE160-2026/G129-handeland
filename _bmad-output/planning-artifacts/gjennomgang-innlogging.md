@@ -41,7 +41,7 @@ mutasjonstesten den heller ikke.
 × en POST rett mot ruten uten kode avvises 120ms
 × serverkallet går også gjennom sjekken 122ms
 
-Altså riktig kode godtas ikke, og feil eller manglende slippes gjennom; Uten kode i miløet er registrering åpen, osv.
+Altså: riktig kode ble fortsatt godtatt, og feil kode ble fortsatt stoppet. Det eneste som endret seg, var at manglende kode slapp gjennom, både når eleven lot feltet stå tomt og når koden mangler i Vercel. Da er registreringen åpen for alle. Testen «riktig kode godtas, feil eller manglende avvises» feilet fordi den sjekker alle tre tilfellene samtidig, og ett av dem brøt.
 - Status: Satt tilbake
 
 ### 2. Koden sjekkes for hver registrering
@@ -71,7 +71,7 @@ Kjørt 15.10.2026: **7 av 7 brudd ble oppdaget av testene.** Full tabell i
 Nr. 1 og 2 er de samme som jeg gjorde for hånd i del 1, og skriptet fikk samme
 resultat som meg.
 
-- Hva jeg tenker om resultatet:
+- Hva jeg tenker om resultatet: som forventet at det gikk gjennom, og bra at det ble testet.
 
 ## Del 3 — tester i appen
 
@@ -101,5 +101,4 @@ Tabellene i databasen ser du i Neon-konsollen → prosjektet → *Tables*.
 
 ## Oppsummering
 
-*Fylles ut til slutt: hva gjennomgangen viste, om noe ble endret, hva som står
-uavklart, og hva metoden ikke kan avdekke.*
+Gjennomgangen viste at det har blitt tenkt på mange scenarioer som gjelder for innlogging, og at testene viser at det er som forventet. 
