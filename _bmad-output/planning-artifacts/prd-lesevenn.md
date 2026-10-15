@@ -726,7 +726,9 @@ Den KI-genererte koden er gjennomgått, testet og sporbar.
 **Konsekvenser (testbare):**
 - Versjonskontroll brukes gjennom hele semesteret, med commit-meldinger som gjør det mulig å følge utviklingen. Ikke én stor innlevering på slutten.
 - De sju PDF-feiltilstandene (FR-4), forankringskravet (FR-14) og de maskinsjekkbare kravene i FR-7, FR-20, FR-25 og FR-31 har automatiserte tester som kjører grønt.
-- KI-generert kode i de delene som håndterer innlogging, lagring og sletting (§4.10) er gjennomgått linje for linje, og gjennomgangen er dokumentert. Dette er delene der en KI-generert snarvei gjør mest skade.
+- KI-generert kode i de delene som håndterer innlogging, lagring og sletting (§4.10) er gjennomgått med forklaring, verifisert ved testing i appen, og dekket av automatiske tester som er vist å oppdage feil når koden ødelegges med vilje (mutasjonstesting, `npm run sjekk:innlogging`). Gjennomgangen er dokumentert. Dette er delene der en KI-generert snarvei gjør mest skade.
+
+  *Endret 15.10.2026 fra «gjennomgått linje for linje».* Utvikleren er nybegynner i programmering, og en lesing linje for linje viste seg i praksis ikke å gi en reell vurdering: det er vanskelig å se om kode gjør det kommentaren sier uten å kunne lese den flytende. Metodene over krever ikke det, og de er etterprøvbare — mutasjonstesten kan kjøres om av sensor. Begrensningen: de dekker reglene noen har tenkt på å teste, ikke feil ingen har forestilt seg.
 - Minst tre konkrete feil eller svakheter i KI-generert kode er dokumentert med hvordan de ble funnet — test, gjennomgang eller feilsøking i drift.
 
 #### FR-42: Etikk og jus
@@ -897,7 +899,7 @@ Uten dette finnes det ikke et produkt å vurdere. M0 inneholder Fagsamtalen i fu
 - Gullsettet for Faguttrykk er annotert og målt minst én gang, inkludert egen annoteringsstøy (FR-8). Dette skjer i M0 og ikke senere: målingen styrer promptarbeidet, og en måling som først kommer i desember har ikke styrt noe — den har bare beskrevet.
 - KI-loggen er i gang og har oppføringer fra hele perioden (FR-38).
 
-**Hva som ble flyttet ut for å gjøre plass.** Fagsamtalen hører i M0 fordi M0 uten den er nøyaktig det generiske «lim inn tekst, få en quiz»-verktøyet §1 definerer Lesevenn i motsetning til — et M0 som ikke kan demonstrere prosjektets egen tese er ikke et minimum, det er et annet produkt. Men funksjonen er den dyreste i dokumentet, så **målingene** av den flyttes til M1: Gullsettet på 36 tilfeller, sikkerhetsporten og avsnittstesten i FR-21 kjøres der. Det samme gjelder Quiz-gullsettet i FR-14. M0 bygger altså Fagsamtalen; M1 beviser den. Datoen er samtidig flyttet fra 23. til 30. oktober, fordi M0 nå også inneholder innlogging og lagring fra ingenting — den delen FR-41 krever gjennomgått linje for linje.
+**Hva som ble flyttet ut for å gjøre plass.** Fagsamtalen hører i M0 fordi M0 uten den er nøyaktig det generiske «lim inn tekst, få en quiz»-verktøyet §1 definerer Lesevenn i motsetning til — et M0 som ikke kan demonstrere prosjektets egen tese er ikke et minimum, det er et annet produkt. Men funksjonen er den dyreste i dokumentet, så **målingene** av den flyttes til M1: Gullsettet på 36 tilfeller, sikkerhetsporten og avsnittstesten i FR-21 kjøres der. Det samme gjelder Quiz-gullsettet i FR-14. M0 bygger altså Fagsamtalen; M1 beviser den. Datoen er samtidig flyttet fra 23. til 30. oktober, fordi M0 nå også inneholder innlogging og lagring fra ingenting — den delen FR-41 krever gjennomgått og dokumentert.
 
 ### 9.2 M1 — v1 slik den er lovet (mål: 20. november)
 

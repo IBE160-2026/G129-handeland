@@ -393,7 +393,7 @@ skal beskytte. Det er samme klasse som funn 3: grønt, og likevel uten dekning.
 | Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — elleve funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
-| Innlogging, lagring og sletting gjennomgått linje for linje og dokumentert | Koden er skrevet og testet (`data/auth.ts`, `data/konto.ts`, `app/komponenter/KontoSkjemaer.tsx`, `data/auth.test.ts`). Linje-for-linje-gjennomgangen gjenstår, og gjøres av utvikleren |
+| Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |
 
 **Et mønster til refleksjonsrapporten.** Ingen av de åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som
