@@ -171,18 +171,25 @@ function OppsummeringVisning({
       )}
 
       {/* FR-22: det som ble godtatt, listes også. Modellen kan ha tatt feil. */}
-      <h3 className="mt-4 font-semibold">Det som ble godtatt som dekkende</h3>
+      <h3 className="mt-4 font-semibold">Det du forklarte godt</h3>
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Se over disse også. Stemmer noe ikke med det du leste, kan vurderingen ha tatt feil.
+        Se over disse også, og sammenlign med teksten. Stemmer noe ikke med det du leste, kan
+        vurderingen ha tatt feil.
       </p>
       {o.dekkende.length === 0 ? (
         <p className="mt-1 text-slate-600 dark:text-slate-400">Ingen svar ble vurdert som dekkende.</p>
       ) : (
-        <ul className="mt-1 space-y-2">
+        <ul className="mt-2 space-y-3">
           {o.dekkende.map((r) => (
             <li key={r.nummer}>
-              Spørsmål {r.nummer}: «{r.elevsvar}»{" "}
-              <Link href={lenke(r.kildeavsnitt.nummer)} className="underline underline-offset-4">
+              <p>
+                <span className="font-medium">Spørsmål {r.nummer}:</span> «{r.elevsvar}»
+              </p>
+              {/* Begrunnelsen sier hva som var godt (prompten krever det ved dekkende). */}
+              <p className="mt-1 text-sm">
+                <span className="font-medium">Hvorfor det holdt:</span> {r.vurderingsbegrunnelse}
+              </p>
+              <Link href={lenke(r.kildeavsnitt.nummer)} className="text-sm underline underline-offset-4">
                 Les avsnittet
               </Link>
             </li>

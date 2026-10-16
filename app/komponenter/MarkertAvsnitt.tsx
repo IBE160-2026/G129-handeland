@@ -80,7 +80,12 @@ export function MarkertAvsnitt({ innhold, erOverskrift, markeringer, nummer }: P
   }
 
   return (
-    <p id={id} className="mb-5 scroll-mt-6 target:rounded-sm target:bg-sky-50 target:outline target:outline-2 target:outline-offset-4 target:outline-sky-400 dark:target:bg-sky-950/40">
+    // data-uthevet settes av UthevAvsnitt når en lenke viser hit. Etiketten
+    // sier det med ord, ikke bare med farge (§5).
+    <p
+      id={id}
+      className="relative mb-5 scroll-mt-24 rounded-sm transition-colors data-[uthevet=true]:-mx-3 data-[uthevet=true]:mt-8 data-[uthevet=true]:border-l-4 data-[uthevet=true]:border-sky-500 data-[uthevet=true]:bg-sky-50 data-[uthevet=true]:px-3 data-[uthevet=true]:py-2 data-[uthevet=true]:before:absolute data-[uthevet=true]:before:-top-6 data-[uthevet=true]:before:left-0 data-[uthevet=true]:before:text-sm data-[uthevet=true]:before:font-semibold data-[uthevet=true]:before:text-sky-800 data-[uthevet=true]:before:content-['Her_står_det'] dark:data-[uthevet=true]:bg-sky-950/40 dark:data-[uthevet=true]:before:text-sky-300"
+    >
       {deler}
     </p>
   );

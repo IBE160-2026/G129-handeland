@@ -15,6 +15,7 @@ import { hentBegrepssett } from "../../../../data/begrepssett";
 import { tilgang } from "../../../../data/konto";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../data/tilgang";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
+import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
 
 export default async function Lesing({
   params,
@@ -72,6 +73,7 @@ export default async function Lesing({
       <div className="mt-8 gap-10 lg:flex">
         {/* Linjelengden holdes på ca. 70 tegn med max-w-[34rem] (§5). */}
         <article className="max-w-[34rem] text-lg leading-[1.8]">
+          <UthevAvsnitt />
           {avsnitt.map((a) => (
             <MarkertAvsnitt
               key={a.nummer}
