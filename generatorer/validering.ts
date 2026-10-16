@@ -331,7 +331,7 @@ export function kappEtterRangering(
   );
 
   // Trinn 1 — antallstaket. Skjer alltid, uavhengig av om noe er brutt.
-  let beholdt = sortert.slice(0, begrepsbudsjett(avsnitt));
+  const beholdt = sortert.slice(0, begrepsbudsjett(avsnitt));
 
   const alle = () => beholdt.flatMap((k) => forekomsterFor(k.uttrykk));
 
