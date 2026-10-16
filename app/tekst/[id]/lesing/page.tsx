@@ -1,5 +1,5 @@
 /**
- * Lesevisningen — FR-9.
+ * Lesevisningen — FR-9, og morsmålsstøtten i FR-25 til FR-27.
  *
  * Den viktigste flaten i appen, og §5 sier at lesbarhet har forrang over pynt:
  * linjelengde rundt 70 tegn, romslig linjeavstand, høy kontrast, og ingen
@@ -7,17 +7,39 @@
  *
  * Markeringene kommer fra det LAGREDE forekomstsettet (AD-13). Siden søker
  * ikke etter uttrykkene selv — se begrunnelsen i `MarkertAvsnitt`.
+ *
+ * Med Morsmål valgt legges oversettelsene til UNDER det norske, aldri i
+ * stedet (FR-25). Mangler en oversettelse, tegnes siden uten, og
+ * `HentOversettelse` lager den etterpå — teksten venter aldri på den (FR-29).
  */
 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { hentBegrepssett } from "../../../../data/begrepssett";
 import { tilgang } from "../../../../data/konto";
+import {
+  hentMorsmaal,
+  hentOppsummering,
+  hentOversettelse,
+  hentUtpeking,
+  kildeHash,
+} from "../../../../data/morsmaal";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../data/tilgang";
+import {
+  begrepElementer,
+  oppsummeringElementer,
+  somOppslag,
+  utpekingElementer,
+} from "../../../../morsmaal/elementer";
+import { KVALITETSSIKRET } from "../../../../morsmaal/spraak";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
+import { HentOversettelse } from "../../../komponenter/Morsmaal";
+import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
-import { FinnFagordPaaNyttSkjema } from "../../../komponenter/Skjemaer";
-import { genererPaaNytt } from "../../../handlinger";
+import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
+import { genererPaaNytt, lagOppsummering, lagOversettelse } from "../../../handlinger";
+
+const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra fagspråket" } as const;
 
 export default async function Lesing({
   params,
@@ -38,10 +60,29 @@ export default async function Lesing({
 
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
-  const [avsnitt, sett] = await Promise.all([
+  const [avsnitt, sett, spraak, oppsummering] = await Promise.all([
     hentAvsnitt(t, id),
     hentBegrepssett(t, id),
+    hentMorsmaal(t),
+    hentOppsummering(t, id),
   ]);
+
+  // FR-27: utpekingen hører til Morsmål, og den trenger fagordene for å
+  // holde dem utenfor. Uten begge finnes den ikke.
+  const utpeking = spraak && sett ? await hentUtpeking(t, id) : null;
+
+  const oversatt = async (type: "begreper" | "oppsummering" | "utpekinger", el: { id: string; tekst: string }[]) =>
+    spraak && el.length > 0 ? hentOversettelse(t, id, spraak.kode, type, kildeHash(el)) : null;
+
+  const [begrepOversatt, oppsummeringOversatt, utpekingOversatt] = await Promise.all([
+    oversatt("begreper", begrepElementer(sett?.begreper ?? [])),
+    oversatt("oppsummering", oppsummeringElementer(oppsummering ?? [])),
+    oversatt("utpekinger", utpekingElementer(utpeking ?? [])),
+  ]);
+  const begrepMm = somOppslag(begrepOversatt);
+  const oppsummeringMm = somOppslag(oppsummeringOversatt);
+  const utpekingMm = somOppslag(utpekingOversatt);
+  const kvalitetssikret = spraak ? KVALITETSSIKRET.has(spraak.kode) : false;
 
   // Forekomstene grupperes per avsnitt én gang, framfor å filtreres på nytt
   // for hvert avsnitt som tegnes.
@@ -63,6 +104,9 @@ export default async function Lesing({
     }
   }
 
+  const lenke =
+    "underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -71,6 +115,12 @@ export default async function Lesing({
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}
       </h1>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        {spraak ? `Morsmål: ${spraak.navn}. ` : ""}
+        <Link href="/konto" className={lenke}>
+          {spraak ? "Endre morsmål" : "Velg morsmål"}
+        </Link>
+      </p>
 
       <div className="mt-8 gap-10 lg:flex">
         {/* Linjelengden holdes på ca. 70 tegn med max-w-[34rem] (§5). */}
@@ -114,24 +164,81 @@ export default async function Lesing({
               videre uten markeringer.
             </p>
           ) : (
-            <dl className="mt-3 space-y-4">
-              {sett.begreper.map((b) => (
-                <div key={b.id}>
-                  <dt className="font-medium">{b.uttrykk}</dt>
-                  {/*
-                    Id-en her er den MarkertAvsnitt peker på med
-                    aria-describedby, slik at en skjermleser får forklaringen
-                    når markeringen i teksten får fokus.
-                  */}
-                  <dd
-                    id={`forklaring-${b.id}`}
-                    className="text-sm text-slate-700 dark:text-slate-300"
-                  >
-                    {b.forklaring}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <>
+              {spraak && !begrepOversatt && (
+                <HentOversettelse handling={lagOversettelse.bind(null, id, "begreper")} hva="forklaringene" />
+              )}
+              <dl className="mt-3 space-y-4">
+                {sett.begreper.map((b) => (
+                  <div key={b.id}>
+                    <dt className="font-medium">{b.uttrykk}</dt>
+                    {/*
+                      Id-en her er den MarkertAvsnitt peker på med
+                      aria-describedby, slik at en skjermleser får forklaringen
+                      når markeringen i teksten får fokus.
+                    */}
+                    <dd
+                      id={`forklaring-${b.id}`}
+                      className="text-sm text-slate-700 dark:text-slate-300"
+                    >
+                      {b.forklaring}
+                    </dd>
+                    {spraak && begrepMm.has(`u:${b.id}`) && (
+                      /* FR-25: det norske uttrykket i parentes rett etter, satt av appen. */
+                      <dd className="mt-1 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
+                        <Morsmaalstekst spraak={spraak} tekst={begrepMm.get(`u:${b.id}`)} som="span" className="font-medium" />{" "}
+                        <span>({b.uttrykk})</span>
+                        <Morsmaalstekst spraak={spraak} tekst={begrepMm.get(`f:${b.id}`)} />
+                      </dd>
+                    )}
+                  </div>
+                ))}
+              </dl>
+            </>
+          )}
+
+          {spraak && sett && (
+            <section className="mt-10">
+              <h2 className="font-semibold tracking-tight">Uttrykk som kan være vanskelige</h2>
+              {(!utpeking || (utpeking.length > 0 && !utpekingOversatt)) && (
+                <HentOversettelse handling={lagOversettelse.bind(null, id, "utpekinger")} hva="uttrykkene" />
+              )}
+              {utpeking && utpeking.length === 0 && (
+                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                  Lesevenn fant ingen språklige bilder eller fagspråkord å forklare i denne teksten.
+                </p>
+              )}
+              {(["spraklig_bilde", "akademisk"] as const).map((k) => {
+                const liste = (utpeking ?? []).map((u, i) => ({ ...u, i })).filter((u) => u.kategori === k);
+                if (liste.length === 0) return null;
+                return (
+                  <div key={k} className="mt-4">
+                    <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400">{KATEGORINAVN[k]}</h3>
+                    <dl className="mt-2 space-y-3">
+                      {liste.map((u) => (
+                        <div key={u.i}>
+                          <dt className="font-medium">
+                            <a href={`#avsnitt-${u.kildeavsnitt}`} className={lenke}>
+                              {u.uttrykk}
+                            </a>
+                          </dt>
+                          <dd className="text-sm text-slate-700 dark:text-slate-300">{u.forklaring}</dd>
+                          <dd className="mt-1 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
+                            <Morsmaalstekst spraak={spraak} tekst={utpekingMm.get(`f${u.i}`)} />
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                );
+              })}
+            </section>
+          )}
+
+          {spraak && (
+            <div className="mt-8">
+              <Spraakmerknad spraak={spraak} kvalitetssikret={kvalitetssikret} />
+            </div>
           )}
 
           {sett && (
@@ -141,13 +248,48 @@ export default async function Lesing({
              * FR-40 krever, og det gjør at en rar markering kan knyttes til
              * hvilken promptversjon som lagde den.
              */
-            <p className="mt-8 text-xs text-slate-500">
+            <p className="mt-4 text-xs text-slate-500">
               Fagordene er funnet av {sett.modell}, prompt {sett.promptversjon}.
               Lesevenn kan ta feil — teksten er kilden.
             </p>
           )}
         </aside>
       </div>
+
+      {/* FR-26: oppsummeringen står nederst, etter teksten, og lages når eleven ber om den. */}
+      <section className="mt-12 max-w-[34rem]">
+        <h2 className="font-semibold tracking-tight">Oppsummering</h2>
+        {oppsummering === null ? (
+          <>
+            <p className="mt-1 text-slate-600 dark:text-slate-400">
+              Vil du se det viktigste i teksten samlet i noen få setninger?
+            </p>
+            <LagOppsummeringSkjema handling={lagOppsummering.bind(null, id)} />
+          </>
+        ) : (
+          <>
+            {spraak && !oppsummeringOversatt && (
+              <HentOversettelse handling={lagOversettelse.bind(null, id, "oppsummering")} hva="oppsummeringen" />
+            )}
+            <ol className="mt-3 space-y-3">
+              {oppsummering.map((s, i) => (
+                <li key={i}>
+                  <p>
+                    {s.tekst}{" "}
+                    <a href={`#avsnitt-${s.kildeavsnitt}`} className={`text-sm ${lenke}`}>
+                      (avsnitt {s.kildeavsnitt})
+                    </a>
+                  </p>
+                  {spraak && <Morsmaalstekst spraak={spraak} tekst={oppsummeringMm.get(`s${i}`)} className="mt-1" />}
+                </li>
+              ))}
+            </ol>
+            <p className="mt-3 text-xs text-slate-500">
+              Laget av en språkmodell ut fra teksten. Teksten er kilden — sjekk avsnittet om noe virker rart.
+            </p>
+          </>
+        )}
+      </section>
 
       <section className="mt-12 max-w-[34rem] rounded-md border border-slate-300 p-5 dark:border-slate-700">
         <h2 className="font-semibold tracking-tight">Ferdig med å lese?</h2>
@@ -164,10 +306,7 @@ export default async function Lesing({
       </section>
 
       <p className="mt-12 text-sm">
-        <Link
-          href="/"
-          className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
-        >
+        <Link href="/" className={lenke}>
           Tilbake til tekstene dine
         </Link>
       </p>

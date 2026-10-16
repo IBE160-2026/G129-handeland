@@ -52,3 +52,11 @@ ikke ville brukt.
 | Versjon | Dato | Endring og grunn | Målt | Status |
 |---|---|---|---|---|
 | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5 (tar bilder). Ordrett avskrift, avsnitt og overskrifter på egne linjer, uten sidetall og topptekst; `lesbar: false` når bildet ikke viser tekst. | **Bevisst umålt** etter FR-45 — ingen terskel og ingen påstand om treffsikkerhet. Ett ekte kall med et blankt bilde ga riktig BF-1 | **Gjeldende** |
+
+## Morsmål: oversettelse, oppsummering og utpeking (FR-24 til FR-29)
+
+| Oppgave | Versjon | Dato | Endring og grunn | Målt | Status |
+|---|---|---|---|---|---|
+| oversettelse | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. Bunt av korte elementer med id; norsk Faguttrykk i parentes i uendret form (FR-25); nekting, tall og navn beholdes (FR-28). Samme prompt brukes til tilbakeoversettelse. | Umålt. FR-28 måles på fire tekster fra FR-8-gullsettet for ukrainsk | **Gjeldende** |
+| oppsummering | v1 | 2026-10-16 | Første versjon. Høyst fem setninger på norsk, bare det teksten sier, hver med kildeavsnitt (FR-26). Lages på norsk og oversettes etterpå, så begge språk bygger på samme setninger. | Umålt. Vurderes av morsmålsbrukeren i FR-28 | **Gjeldende** |
+| utpeking | v1 | 2026-10-16 | Første versjon. Språklige bilder og akademisk allmennspråk, ordrett, utenom Faguttrykkene, høyst åtte per 1 000 ord per kategori (FR-27). | Umålt. Ingen terskel i PRD utover formkravene, som koden håndhever | **Gjeldende** |

@@ -555,6 +555,7 @@ Eleven velger Morsmål fra en lukket liste med to nivåer.
 **Konsekvenser (testbare):**
 - **Ukrainsk** vises først, som Kvalitetssikret språk, uten forbehold — forutsatt at det består målingen i FR-28. Nivået er bestemt av målingen, ikke av at språket er valgt ut.
 - Modellstøttede språk vises i samme liste, tydelig atskilt, med merknad om at kvaliteten ikke er kontrollert. Listen er lukket på om lag 15 språk; det finnes ikke fritekstfelt for språk i v1.
+- **Listen, bestemt 16. oktober 2026:** polsk, litauisk, arabisk, somali, urdu, tigrinja, tagalog, dari, russisk, persisk, thai, vietnamesisk, tyrkisk, rumensk, albansk og kurdisk (sorani) — 16 modellstøttede, i tillegg til ukrainsk. Grunnlaget er SSBs tabell over innvandrere og norskfødte med innvandrerforeldre etter landbakgrunn per 1. januar 2026 (<https://www.ssb.no/innvbef>): de største gruppene er gjort om til hovedspråk, og nordiske, tyske og engelsktalende grupper er holdt utenfor fordi de i liten grad trenger fagstøtte på morsmål. Sorani er tatt med fordi kurdisktalende fordeler seg over Irak, Syria, Iran og Tyrkia og derfor ikke synes som én gruppe i tabellen. Fem av språkene skrives høyre-til-venstre: arabisk, urdu, dari, persisk og sorani. `[MERK til FR-42: modellens kvalitet er trolig dårligst for nettopp de språkene med minst treningsdata — somali, tigrinja, dari — som er blant gruppene med størst behov. Det er skjevhetsaksen «mellom språk», og den skal drøftes, ikke skjules.]`
 - Er ingen språk kvalitetssikret, finnes ikke det øverste nivået i grensesnittet i det hele tatt. Appen viser ikke en tom «kvalitetssikret»-seksjon, og den forfremmer ikke et umålt språk for å ha noe å vise.
 - Valget lagres på kontoen og gjelder til eleven endrer det.
 - Valgt Morsmål påvirker bare Aktivering, avsluttende oppsummering og forklaring av Faguttrykk og språklige bilder. Resten av grensesnittet er på norsk.
@@ -575,7 +576,7 @@ Aktiveringssiden og den avsluttende oppsummeringen kan vises på Morsmål.
 
 **Konsekvenser (testbare):**
 - Overskriftene på aktiveringssiden vises på begge språk.
-- Den avsluttende oppsummeringen er høyst fem setninger, vises på begge språk, og inneholder ingen påstand som ikke står i Teksten.
+- Den avsluttende oppsummeringen er høyst fem setninger, vises på begge språk, og inneholder ingen påstand som ikke står i Teksten. **Den står nederst i Lesevisningen, etter teksten** (bestemt 16. oktober 2026), og lages når eleven ber om den — ikke for hver Tekst på forhånd.
 - Eleven kan skrive sitt eget svar på hvilket som helst språk. Svaret oversettes ikke og vurderes ikke.
 
 #### FR-27: Utpeking av språklige bilder og akademisk allmennspråk
@@ -598,7 +599,7 @@ Lesevenn peker ut de uttrykkene som stopper en andrespråksleser spesielt, og so
 Kvaliteten i Kvalitetssikrede språk måles, og det er målingen som gir språket sitt nivå.
 
 **Konsekvenser (testbare):**
-- Gullsettet er **fire Tekster** på ukrainsk, med oversatt aktiveringsside og oppsummering.
+- Gullsettet er **fire Tekster** på ukrainsk, med oversatt aktiveringsside og oppsummering. Tekstene hentes fra Gullsettet i FR-8 (bestemt 16. oktober 2026), fordi de alt er lisensklarert og annotert, og fordi Begrepssettet deres da er kjent når begrepsankeret måles.
 - **Primærmål — begrepsanker, maskinelt.** Minst **0,95** av Faguttrykkene i den oversatte teksten har det norske uttrykket i parentes etter seg, i uendret form. Dette er den *eneste* delen av oversettelseskvaliteten som kan måles hardt og billig, og det er samtidig den delen som bærer den pedagogiske hensikten i §1: eleven skal komme ut med det norske fagordet. Den er derfor primærmålet, ikke et støttemål.
 - **Ekstern vurdering — den eneste reelle kvalitetssikringen.** Én ukrainsk morsmålsbruker vurderer de fire tekstenes oversatte oppsummering på fire punkter: er terminologien riktig, er registeret rimelig for en elev på videregående, er noe uforståelig, og er noe direkte galt. Det er om lag 30 minutter av én persons tid, og det er det eneste stedet i denne seksjonen der noen utenfor systemet faktisk ser på utdataet. Består den ikke, er språket Modellstøttet.
 - **Tilbakeoversettelse — bare for tre ting.** Den oversatte oppsummeringen oversettes tilbake til norsk i et separat kall, og sammenlignes med originalen **utelukkende** for tapt nekting («ikke», «aldri», «uten»), endrede tall, og endrede egennavn. Antall avvik i disse tre kategoriene: **null**.

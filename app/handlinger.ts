@@ -17,6 +17,8 @@ import { redirect } from "next/navigation";
 import { hentBegrepssett, lagreBegrepssett } from "../data/begrepssett";
 import { tilgang } from "../data/konto";
 import {
+  hentAvsnitt,
+  hentTekst,
   lagreForkunnskapssvar,
   opprettTekst,
   slettTekst,
@@ -50,6 +52,26 @@ import { GeneratorFeil, hentPrompt } from "../generatorer/kontrakt";
 import { GRENSER } from "../opplasting/pdf-tekst";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
+import {
+  hentMorsmaal,
+  hentOppsummering,
+  hentOversettelse,
+  hentUtpeking,
+  kildeHash,
+  lagreOppsummering,
+  lagreOversettelse,
+  lagreUtpeking,
+  velgMorsmaal,
+  type Oversettelsestype,
+} from "../data/morsmaal";
+import { oppsummer, oversett, pekUt, type Element } from "../generatorer/morsmaal";
+import {
+  begrepElementer,
+  oppsummeringElementer,
+  overskriftElementer,
+  utpekingElementer,
+} from "../morsmaal/elementer";
+import { finnSpraak } from "../morsmaal/spraak";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
 export type Handlingssvar = {
@@ -648,4 +670,101 @@ export async function slett(tekstId: string): Promise<{ slettet: boolean }> {
   }
   revalidatePath("/");
   return { slettet: true };
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-24 til FR-29 — morsmål
+ * ------------------------------------------------------------------ */
+
+/** FR-24: lagrer valget på kontoen. Et tomt valg fjerner Morsmålet. */
+export async function velgMorsmaalHandling(
+  _forrige: Handlingssvar,
+  data: FormData,
+): Promise<Handlingssvar> {
+  const t = await tilgang();
+  const kode = String(data.get("spraak") ?? "").trim();
+  if (kode !== "" && !finnSpraak(kode)) {
+    return { feil: { melding: "Det språket står ikke på listen.", handling: "Velg et språk fra listen." } };
+  }
+  try {
+    await velgMorsmaal(t, kode === "" ? null : kode);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath("/", "layout");
+  return INGEN_FEIL;
+}
+
+/**
+ * FR-26: lager den norske oppsummeringen, når eleven ber om den. Lagres og
+ * gjenbrukes, så knappen koster ett kall per Tekst.
+ */
+export async function lagOppsummering(tekstId: string, _forrige: Handlingssvar): Promise<Handlingssvar> {
+  const t = await tilgang();
+  try {
+    if (!(await hentOppsummering(t, tekstId))) {
+      const avsnittene = await hentAvsnitt(t, tekstId);
+      const r = await oppsummer({ avsnitt: avsnittene });
+      await lagreOppsummering(t, tekstId, r.setninger, { promptversjon: r.promptversjon, modell: r.modell });
+    }
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/lesing`);
+  return INGEN_FEIL;
+}
+
+/**
+ * FR-25 til FR-27: lager én oversettelse som mangler. Kalles fra visningen
+ * etter at siden er tegnet, så teksten aldri venter på den (FR-29).
+ *
+ * For utpekingen lages det norske settet først, om det mangler. Det er det
+ * norske som vises likeverdig ved siden av, og det som valideres mot teksten.
+ */
+export async function lagOversettelse(tekstId: string, type: Oversettelsestype): Promise<Handlingssvar> {
+  const t = await tilgang();
+  const side = type === "overskrifter" ? "aktivering" : "lesing";
+  try {
+    const spraak = await hentMorsmaal(t);
+    if (!spraak) return INGEN_FEIL;
+
+    let elementer: Element[] = [];
+    let fagord: string[] = [];
+
+    if (type === "overskrifter") {
+      // Aktiveringen kommer før låsingen, så overskriftene regnes fra
+      // gjeldende tekst — samme utregning som siden gjør (AD-12).
+      const rad = await hentTekst(t, tekstId);
+      elementer = overskriftElementer(delIAvsnitt(rad.redigertTekst));
+    } else {
+      const sett = await hentBegrepssett(t, tekstId);
+      fagord = (sett?.begreper ?? []).map((b) => b.uttrykk);
+      if (type === "begreper") {
+        elementer = begrepElementer(sett?.begreper ?? []);
+      } else if (type === "oppsummering") {
+        elementer = oppsummeringElementer((await hentOppsummering(t, tekstId)) ?? []);
+      } else {
+        let norsk = await hentUtpeking(t, tekstId);
+        if (!norsk) {
+          const r = await pekUt({ avsnitt: await hentAvsnitt(t, tekstId), fagord });
+          await lagreUtpeking(t, tekstId, r.uttrykk, { promptversjon: r.promptversjon, modell: r.modell });
+          norsk = r.uttrykk;
+        }
+        elementer = utpekingElementer(norsk);
+      }
+    }
+
+    const hash = kildeHash(elementer);
+    if (elementer.length > 0 && !(await hentOversettelse(t, tekstId, spraak.kode, type, hash))) {
+      const r = await oversett({ spraak, elementer, fagord });
+      await lagreOversettelse(t, tekstId, spraak.kode, type, hash, r.oversatt, {
+        promptversjon: r.promptversjon,
+        modell: r.modell,
+      });
+    }
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/${side}`);
+  return INGEN_FEIL;
 }

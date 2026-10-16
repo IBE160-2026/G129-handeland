@@ -477,11 +477,74 @@ export const morsmaalsvalg = pgTable("morsmaalsvalg", {
     .primaryKey()
     .references(() => user.id, { onDelete: "cascade" }),
 
-  /** ISO 639-1, fra den lukkede listen i FR-24. */
+  /**
+   * BCP 47-koden fra den lukkede listen i FR-24 (morsmaal/spraak.ts). Ikke
+   * ISO 639-1, som et tidligere utkast sa: dari (prs) og sorani (ckb) har
+   * ingen tobokstavskode.
+   */
   spraak: text("spraak").notNull(),
   nivaa: morsmaalNivaa("nivaa").notNull(),
 
   endret: timestamp("endret", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * FR-25, FR-26: lagrede oversettelser. Én rad per Tekst, språk og type, så en
+ * oversettelse lages én gang (FR-36: lagring foran regenerering).
+ *
+ * `kildeHash` er et sammendrag av det norske som ble oversatt. Endres
+ * kilden — eleven retter en overskrift før aktivering — passer ikke hashen
+ * lenger, og oversettelsen lages på nytt framfor å vise en gammel.
+ */
+export const oversettelse = pgTable(
+  "oversettelse",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tekstId: uuid("tekst_id")
+      .notNull()
+      .references(() => tekst.id, { onDelete: "cascade" }),
+    spraak: text("spraak").notNull(),
+    /** overskrifter | begreper | oppsummering | utpekinger */
+    type: text("type").notNull(),
+    kildeHash: text("kilde_hash").notNull(),
+    /** Oversatte elementer, som { id, oversatt }[]. */
+    innhold: jsonb("innhold").notNull(),
+    promptversjon: text("promptversjon").notNull(),
+    modell: text("modell").notNull(),
+    opprettet: timestamp("opprettet", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [unique("oversettelse_unik").on(t.tekstId, t.spraak, t.type)],
+);
+
+/** FR-26: den norske oppsummeringen, høyst fem setninger, hver med kildeavsnitt (§5). */
+export const oppsummering = pgTable("oppsummering", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tekstId: uuid("tekst_id")
+    .notNull()
+    .unique()
+    .references(() => tekst.id, { onDelete: "cascade" }),
+  /** { tekst, kildeavsnitt }[] */
+  setninger: jsonb("setninger").notNull(),
+  promptversjon: text("promptversjon").notNull(),
+  modell: text("modell").notNull(),
+  opprettet: timestamp("opprettet", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * FR-27: språklige bilder og akademisk allmennspråk — et eget sett, atskilt fra
+ * Begrepssettet med vilje. Uttrykkene står ordrett i Teksten.
+ */
+export const utpekingssett = pgTable("utpekingssett", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tekstId: uuid("tekst_id")
+    .notNull()
+    .unique()
+    .references(() => tekst.id, { onDelete: "cascade" }),
+  /** { uttrykk, kategori, forklaring, kildeavsnitt }[] */
+  uttrykk: jsonb("uttrykk").notNull(),
+  promptversjon: text("promptversjon").notNull(),
+  modell: text("modell").notNull(),
+  opprettet: timestamp("opprettet", { withTimezone: true }).notNull().defaultNow(),
 });
 
 /** FR-30 og FR-31. Verset faktasjekkes før det vises (AD-11). */

@@ -14,9 +14,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { tilgang } from "../../../../data/konto";
+import { hentMorsmaal, hentOversettelse, kildeHash } from "../../../../data/morsmaal";
+import { overskriftElementer, somOppslag } from "../../../../morsmaal/elementer";
+import { KVALITETSSIKRET } from "../../../../morsmaal/spraak";
+import { HentOversettelse } from "../../../komponenter/Morsmaal";
+import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
-import { lagreAktivering } from "../../../handlinger";
+import { lagOversettelse, lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema } from "../../../komponenter/Skjemaer";
 
 export default async function Aktivering({
@@ -39,6 +44,16 @@ export default async function Aktivering({
   const avsnitt = delIAvsnitt(tekst.redigertTekst);
   const titler = overskrifter(avsnitt);
 
+  // FR-26: overskriftene på begge språk. Mangler oversettelsen, vises de på
+  // norsk med en gang, og oversettelsen hentes etterpå (FR-29).
+  const spraak = await hentMorsmaal(t);
+  const elementer = overskriftElementer(avsnitt);
+  const oversatt =
+    spraak && elementer.length > 0
+      ? await hentOversettelse(t, id, spraak.kode, "overskrifter", kildeHash(elementer))
+      : null;
+  const mm = somOppslag(oversatt);
+
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -51,13 +66,22 @@ export default async function Aktivering({
       {titler.length > 0 ? (
         <section className="mt-8">
           <h2 className="font-medium">Overskriftene i teksten</h2>
+          {spraak && !oversatt && (
+            <HentOversettelse handling={lagOversettelse.bind(null, id, "overskrifter")} hva="overskriftene" />
+          )}
           <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-4 dark:border-slate-700">
             {titler.map((o) => (
               <li key={o.nummer} className="text-lg">
                 {o.innhold}
+                {spraak && <Morsmaalstekst spraak={spraak} tekst={mm.get(`o${o.nummer}`)} className="text-base" />}
               </li>
             ))}
           </ul>
+          {spraak && (
+            <div className="mt-3">
+              <Spraakmerknad spraak={spraak} kvalitetssikret={KVALITETSSIKRET.has(spraak.kode)} />
+            </div>
+          )}
         </section>
       ) : (
         /*

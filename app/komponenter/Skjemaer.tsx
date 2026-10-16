@@ -166,3 +166,21 @@ export function FinnFagordPaaNyttSkjema({
     </form>
   );
 }
+
+/** FR-26: oppsummeringen lages når eleven ber om den, ikke på forhånd. */
+export function LagOppsummeringSkjema({
+  handling,
+}: {
+  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+}) {
+  const [svar, send] = useActionState(handling, TOMT);
+
+  return (
+    <form action={send} className="mt-4">
+      {svar.feil && (
+        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+      )}
+      <Send venter="Lager oppsummeringen…" klar="Vis en kort oppsummering" />
+    </form>
+  );
+}

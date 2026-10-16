@@ -32,8 +32,24 @@
       "versjon": "v1",
       "modell": "claude-haiku-5-5",
       "tenkning": "adaptiv"
+    },
+    "oversettelse": {
+      "versjon": "v1",
+      "modell": "claude-haiku-5-5",
+      "tenkning": "adaptiv"
+    },
+    "oppsummering": {
+      "versjon": "v1",
+      "modell": "claude-haiku-5-5",
+      "tenkning": "adaptiv"
+    },
+    "utpeking": {
+      "versjon": "v1",
+      "modell": "claude-haiku-5-5",
+      "tenkning": "adaptiv"
     }
   },
   "_om_fagsamtale": "Fagsamtalen (FR-18 til FR-23) bruker claude-sonnet-5-5 etter addendum §3: svarvurderingen er appens vanskeligste oppgave. Modellen støtter bare adaptiv tenkning (GET /v1/models, 16.10.2026). Sonnet er ikke en Covered Model; samme forbehold som for Haiku, listen er eldre enn modellen (utgitt 28.09.2026). MERK AD-6: v1 er satt som gjeldende uten at sikkerhetsporten i FR-21 er kjørt, fordi Gullsettet på 36 tilfeller er lagt til M1 (PRD §9.1: M0 bygger Fagsamtalen, M1 beviser den). Til porten er kjørt, er versjonen umålt, og grensesnittet sier at vurderingen kan være gal. v2 (16.10.2026) etter utviklerens testing: ett spørsmål om én ting (ikke bundet med «og hvorfor»), ingen avsnittsnumre i det eleven leser, dekkende krever poenget men ikke tekstens ordlyd, og «det går fint å ikke vite» står for seg selv. Også v2 er umålt mot FR-21.",
-  "_om_bildeuttrekk": "Bildeuttrekket (FR-44) bruker claude-haiku-5-5, som tar bilder (capabilities.image_input, sjekket 16.10.2026). Bevisst umålt etter FR-45: ingen terskel og ingen påstand om treffsikkerhet."
+  "_om_bildeuttrekk": "Bildeuttrekket (FR-44) bruker claude-haiku-5-5, som tar bilder (capabilities.image_input, sjekket 16.10.2026). Bevisst umålt etter FR-45: ingen terskel og ingen påstand om treffsikkerhet.",
+  "_om_morsmaal": "Morsmålsstøtten (FR-24 til FR-28) bruker claude-haiku-5-5 etter addendum §3 (der sto haiku-4-5, før byttet). Oversettelse måles mot FR-28 for ukrainsk; de andre språkene er Modellstøttet og umålt."
 }
