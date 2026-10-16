@@ -16,7 +16,36 @@
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { deflateSync } from "node:zlib";
 import { PDFDocument, PDFHexString, StandardFonts } from "pdf-lib";
+
+function crc32(b) {
+  let c = ~0;
+  for (const x of b) {
+    c ^= x;
+    for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1));
+  }
+  return ~c >>> 0;
+}
+function bit(type, data) {
+  const l = Buffer.alloc(4);
+  l.writeUInt32BE(data.length);
+  const td = Buffer.concat([Buffer.from(type), data]);
+  const c = Buffer.alloc(4);
+  c.writeUInt32BE(crc32(td));
+  return Buffer.concat([l, td, c]);
+}
+/** En gyldig, ensfarget PNG i gråtoner. */
+function graaPng(w, h, graa = 200) {
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0);
+  ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8; // bitdybde
+  ihdr[9] = 0; // gråtoner
+  const rader = Buffer.alloc((w + 1) * h, graa);
+  for (let y = 0; y < h; y++) rader[y * (w + 1)] = 0; // filtertype per rad
+  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), bit("IHDR", ihdr), bit("IDAT", deflateSync(rader)), bit("IEND", Buffer.alloc(0))]);
+}
 
 const UT = path.join(process.cwd(), "testdata", "pdf");
 await mkdir(UT, { recursive: true });
@@ -76,11 +105,10 @@ async function lagre(navn, doc) {
 /* PF-1: bare et bilde, ingen tekstlag. */
 {
   const doc = await PDFDocument.create();
-  // Et lite grått PNG-bilde (2×2 piksler), base64.
-  const png = Buffer.from(
-    "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAAAAABX3VL4AAAADklEQVR4nGNgYGBgYAAAAAUAAWpbVxcAAAAASUVORK5CYII=",
-    "base64",
-  );
+  // Et grått bilde, laget som en gyldig PNG. Den første utgaven brukte en
+  // håndskrevet PNG som pdf-lib godtok, men som API-et avviste («Could not
+  // process image») da bildeinnlesingen ble prøvd med den — så den var ugyldig.
+  const png = graaPng(200, 280);
   const bilde = await doc.embedPng(png);
   for (let s = 0; s < 2; s++) doc.addPage([595, 842]).drawImage(bilde, { x: 0, y: 0, width: 595, height: 842 });
   await lagre("pf1-skannet.pdf", doc);
