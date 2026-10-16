@@ -26,7 +26,7 @@ Dette er et anslag, ikke en måling. Timetallene er mine estimater ut fra kraven
 | 45 | 2.–8. nov | Bygging |
 | 46 | 9.–15. nov | Bygging |
 | 47 | 16.–22. nov | Bygging — **M1 mål 20. november** |
-| 48 | 23.–29. nov | Reserve og stabilisering — **kodefrys fredag 27. november** |
+| 48 | 23.–29. nov | Reserve, stabilisering og **designfase** — **kodefrys fredag 27. november** |
 | 49 | 30. nov – 4. des | Dokumentasjon og refleksjonsrapport |
 
 Med 25 timer i uka:
@@ -34,6 +34,8 @@ Med 25 timer i uka:
 - Bygging, uke 40–47: **200 timer**
 - Uke 48, reserve: **25 timer**
 - Uke 49, dokumentasjon: 25 timer
+
+**Designfase, bestemt av Arve 16. oktober.** Det settes av tid til en samlet designrunde mot slutten — felles farger, avstander, typografi og knapper over hele appen, og en runde på mobil — **senest i uken 20.–27. november**. Står M1 tidligere, kan den starte tidligere. Merk avveiningen: uka var ren reserve, og designfasen tar av den bufferen. Skrider M1, er det designfasen som krymper, ikke kodefrysen som flyttes. Brukervennlighetsfeil (at noe er vanskelig å se eller forstå) rettes fortløpende og venter ikke på designfasen.
 
 **Om uke 48.** Den er tilgjengelig for bygging, men planen sikter fortsatt mot at M1 står 20. november. Det er ikke en selvmotsigelse — det er slik reserve brukes. Timene er med i regnestykket, men de er ikke lovet bort til noe. Skrider M0 eller M1, absorberer uke 48 det. Skjer det ikke, går uka til polering, mobiltesting og et forsprang på dokumentasjonen.
 

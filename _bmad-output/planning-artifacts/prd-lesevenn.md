@@ -921,7 +921,9 @@ Dette er prosjektet i briefens forstand, og det nivået som svarer til påstande
 
 Det finnes **ikke** noe M2-nivå lenger. Mapper var det eneste betingede målet, og det er ute av v1 (§4.9). Uken mellom M1 og kodefrys er derfor ikke en funksjonsuke — den er slakk, og det er et bevisst valg framfor et tomrom.
 
-Uken brukes til det som alltid gjenstår og alltid undervurderes: feilretting funnet under målekjøringene, å få demoløypen til å gå tre ganger på rad uten inngrep, mobiltesting, og de siste tilgjengelighetskravene i §5. Skrider M1 ut, er dette bufferen som absorberer det — og da er det bedre at bufferen finnes i planen enn at den oppstår ved at noe annet ryker.
+**Designfase (bestemt 16. oktober).** En samlet designrunde — felles farger, avstander, typografi og knapper, og mobil — legges hit, senest i denne uka. Den tar av bufferen, og krymper først om M1 skrider. Brukervennlighetsfeil rettes fortløpende og venter ikke hit; §5 er funksjonskrav, ikke pynt.
+
+Uken brukes ellers til det som alltid gjenstår og alltid undervurderes: feilretting funnet under målekjøringene, å få demoløypen til å gå tre ganger på rad uten inngrep, mobiltesting, og de siste tilgjengelighetskravene i §5. Skrider M1 ut, er dette bufferen som absorberer det — og da er det bedre at bufferen finnes i planen enn at den oppstår ved at noe annet ryker.
 
 `[ANTAKELSE: at omfang og vanskelighetsgrad vektlegges i vurderingen, bygger på materiale fra emnets tidligere gjennomføring og er ikke publisert policy for 2026. Det taler for ikke å kutte mer enn nødvendig, men ikke for å fylle slakken med nye funksjoner — se SM-C2.]`
 ### 9.4 Kodefrys og dokumentasjonsvindu (28. november – 5. desember)
