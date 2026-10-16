@@ -1,0 +1,121 @@
+{
+  "oppgave": "quiz",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-16T07:32:37.189Z",
+  "data": {
+    "sporsmal": [
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilke egenskaper har radiobølger ifølge teksten?",
+        "alternativer": [
+          "Lav frekvens og lang bølgelengde",
+          "Høy frekvens og kort bølgelengde",
+          "Høy energi og svært kort bølgelengde",
+          "Lav frekvens og under 1 mm bølgelengde"
+        ],
+        "riktigSvar": "Lav frekvens og lang bølgelengde",
+        "kildeavsnitt": 3
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor er radiobølger godt egnet til å sende signaler over store avstander?",
+        "alternativer": [
+          "Fordi de har høy energi og går gjennom alt",
+          "Fordi de har lang bølgelengde og ikke spres lett",
+          "Fordi de spres lett og når områder rundt hjørner",
+          "Fordi de alltid reflekteres tilbake av ionosfæren"
+        ],
+        "riktigSvar": "Fordi de har lang bølgelengde og ikke spres lett",
+        "kildeavsnitt": 5
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, mens tallerkenen ikke blir det?",
+        "alternativer": [],
+        "riktigSvar": "Frekvensen til mikrobølgene passer med frekvensen som vann- og fettmolekylene naturlig svinger med, så mikrobølgene får molekylene i maten til å riste. Tallerkenen inneholder ikke vann, så den blir ikke varm.",
+        "kildeavsnitt": 8
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hva skjer med bølgelengden til infrarød stråling når temperaturen øker, og hvorfor?",
+        "alternativer": [],
+        "riktigSvar": "Bølgelengden blir kortere. Molekylbevegelsene blir raskere, så molekylene sender ut mer energirike IR-bølger, og energirik stråling har kort bølgelengde.",
+        "kildeavsnitt": 13
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor kunne Wilhelm Røntgen se beinstrukturen til levende mennesker?",
+        "alternativer": [
+          "Fordi røntgenstrålene er synlig lys med høy styrke",
+          "Fordi røntgenstrålene kunne gjennomlyse stoff som var ugjennomsiktig for vanlig lys",
+          "Fordi røntgenstrålene var svakere enn synlig lys",
+          "Fordi røntgenstrålene bare reflekteres av bein"
+        ],
+        "riktigSvar": "Fordi røntgenstrålene kunne gjennomlyse stoff som var ugjennomsiktig for vanlig lys",
+        "kildeavsnitt": 24
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor trenger vi ifølge teksten ikke bekymre oss for UV-C-stråling fra sollyset?",
+        "alternativer": [
+          "Fordi UV-C har lavest energi av de tre typene",
+          "Fordi UV-C bare finnes i kunstig lys",
+          "Fordi UV-C stoppes nesten helt av oksygen og ozonlaget",
+          "Fordi UV-C går rett gjennom atmosfæren uten å påvirke oss"
+        ],
+        "riktigSvar": "Fordi UV-C stoppes nesten helt av oksygen og ozonlaget",
+        "kildeavsnitt": 21
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva viste Isac Newton ved hjelp av et prisme?",
+        "alternativer": [
+          "At lys ikke kan brytes i et prisme",
+          "At hvitt lys består av alle regnbuens farger",
+          "At lys har lav energi og lite farge",
+          "At lys bare består av rødt og blått"
+        ],
+        "riktigSvar": "At hvitt lys består av alle regnbuens farger",
+        "kildeavsnitt": 16
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Ved omtrent hvilken temperatur begynner en gjenstand å sende ut synlig lys og gløde?",
+        "alternativer": [
+          "Ved ca. 100°C",
+          "Ved ca. 300°C",
+          "Ved ca. 600°C",
+          "Ved ca. 1000°C"
+        ],
+        "riktigSvar": "Ved ca. 600°C",
+        "kildeavsnitt": 11
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvordan sammenlignes infrarød stråling med synlig lys når det gjelder energi?",
+        "alternativer": [
+          "Den har litt mindre energi enn synlig lys",
+          "Den har litt mer energi enn synlig lys",
+          "Den har samme energi som synlig lys",
+          "Den har mye mer energi enn røntgenstråling"
+        ],
+        "riktigSvar": "Den har litt mindre energi enn synlig lys",
+        "kildeavsnitt": 10
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvordan ble mikrobølger produsert ifølge teksten?",
+        "alternativer": [
+          "Ved å senke svingefrekvensen i Hertz' forsøk",
+          "Ved å øke svingefrekvensen i Hertz' forsøk",
+          "Ved å bruke et prisme til å dele lyset",
+          "Ved å la sollys passere gjennom ozonlaget"
+        ],
+        "riktigSvar": "Ved å øke svingefrekvensen i Hertz' forsøk",
+        "kildeavsnitt": 7
+      }
+    ]
+  }
+}
