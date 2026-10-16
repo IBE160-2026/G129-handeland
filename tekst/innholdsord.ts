@@ -84,3 +84,28 @@ export function innfortAvEleven(elevsvar: string, sporsmal: string): Set<string>
   const iSporsmal = innholdsord(sporsmal);
   return new Set([...innholdsord(elevsvar)].filter((o) => !iSporsmal.has(o)));
 }
+
+/**
+ * Bøyningsendelser som regnes som samme ord i sporbarhetssjekken: eleven
+ * skrev «bevegelse», oppfølgingen sa «bevegelsen du nevner». Det er samme ord,
+ * og en sjekk som krevde lik bøyning, slo feil alarm (testing 16.10).
+ *
+ * Bare sporbarheten bruker dette. «Ingen gjentakelse» regnes fortsatt på
+ * eksakte ord, slik FR-20 beskriver normaliseringen.
+ */
+// De korte («n», «t», «r», «ne») trengs for ord som ender på -e: bevegelse → bevegelsen, rente → rentene.
+const ENDELSER = ["e", "en", "et", "er", "ene", "a", "s", "es", "ens", "ets", "ers", "enes", "n", "t", "r", "ne"];
+
+/** Er to ord samme ord, bortsett fra en vanlig bøyningsendelse? */
+export function sammeOrd(a: string, b: string): boolean {
+  if (a === b) return true;
+  const [kort, lang] = a.length <= b.length ? [a, b] : [b, a];
+  return kort.length >= 4 && lang.startsWith(kort) && ENDELSER.includes(lang.slice(kort.length));
+}
+
+/** Har `tekst` minst ett av ordene i `ord`, med bøyning tatt hensyn til? */
+export function brukerNoenAv(tekst: string, ordene: Set<string>): boolean {
+  const iTeksten = innholdsord(tekst);
+  for (const o of ordene) for (const t of iTeksten) if (sammeOrd(o, t)) return true;
+  return false;
+}

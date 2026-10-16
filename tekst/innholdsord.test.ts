@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "vitest";
-import { STOPPORD, innfortAvEleven, innholdsord, jaccard } from "./innholdsord";
+import { STOPPORD, brukerNoenAv, innfortAvEleven, innholdsord, jaccard, sammeOrd } from "./innholdsord";
 
 describe("innholdsord", () => {
   test("funksjonsord, tall og tegnsetting faller bort", () => {
@@ -46,5 +46,23 @@ describe("innfortAvEleven — sporbarhet", () => {
 
   test("«vet ikke» innfører ingenting", () => {
     expect(innfortAvEleven("Vet ikke", "Hva er mitose?").size).toBe(0);
+  });
+});
+
+describe("sammeOrd — bøyning i sporbarhetssjekken", () => {
+  test("vanlige endelser regnes som samme ord", () => {
+    expect(sammeOrd("bevegelse", "bevegelsen")).toBe(true);
+    expect(sammeOrd("konto", "kontoen")).toBe(true);
+    expect(sammeOrd("renter", "rentene")).toBe(false); // «renter» + «e» er ikke en endelse på «renter»
+    expect(sammeOrd("rente", "rentene")).toBe(true);
+  });
+
+  test("sammensatte ord og korte ord regnes ikke som samme", () => {
+    expect(sammeOrd("lån", "lånet")).toBe(false); // for kort til å skille trygt
+    expect(sammeOrd("konto", "kontoutskrift")).toBe(false);
+  });
+
+  test("brukerNoenAv finner ordet i bøyd form", () => {
+    expect(brukerNoenAv("Hva sier teksten om bevegelsen du nevner?", new Set(["bevegelse"]))).toBe(true);
   });
 });

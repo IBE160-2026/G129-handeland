@@ -14,6 +14,7 @@ import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import {
   MAAL_FOR,
   antallSporsmal,
+  bruddPaaStart,
   bruddPaaVurdering,
   formaterVurdering,
   startSamtale,
@@ -205,5 +206,35 @@ describe("startSamtale", () => {
     await lagreSvar("samtalestart", START.versjon, START.modell, m, { sporsmal: SPORSMAL, kildeavsnitt: 2 }, 1);
     const s = await startSamtale(avsnitt);
     expect(s.kildeavsnittNummer).toBe(2);
+  });
+});
+
+describe("ett spørsmål og ingen avsnittsnumre — funnet i testing 16.10", () => {
+  test("startspørsmålet fra testen var to spørsmål med ett spørsmålstegn", () => {
+    const s = { sporsmal: "Hva er forskjellen på renter og avdrag når man har et lån, og hvorfor må man betale begge deler?", kildeavsnitt: 2 };
+    const { harde, myke } = bruddPaaStart(s, avsnitt);
+    expect(harde).toEqual([]); // ett spørsmålstegn — tellingen alene fanget det ikke
+    expect(myke.join()).toMatch(/bundet sammen/);
+  });
+
+  test("et vanlig «og» mellom to ord er ikke et dobbeltspørsmål", () => {
+    const s = { sporsmal: "Hva er forskjellen på renter og avdrag?", kildeavsnitt: 2 };
+    expect(bruddPaaStart(s, avsnitt).myke).toEqual([]);
+  });
+
+  test("oppfølging med «og hva» og avsnittsnummer i begrunnelsen flagges", () => {
+    const v = {
+      ...god,
+      begrunnelse: "Avsnitt 7 beskriver forskjellen godt.",
+      oppfolging: { ...god.oppfolging, sporsmal: "Hva rister vannmolekylene av, og hva skjer med tallerkenen?" },
+    };
+    const myke = bruddPaaVurdering(v, kontekst()).myke.join();
+    expect(myke).toMatch(/bundet sammen/);
+    expect(myke).toMatch(/avsnittsnummer/);
+  });
+
+  test("«Les avsnitt 7 på nytt» i spørsmålet flagges", () => {
+    const v = { ...god, oppfolging: { ...god.oppfolging, sporsmal: "Les avsnitt 7 på nytt: hva skjer når vannmolekylene rister?" } };
+    expect(bruddPaaVurdering(v, kontekst()).myke.join()).toMatch(/avsnittsnummer/);
   });
 });

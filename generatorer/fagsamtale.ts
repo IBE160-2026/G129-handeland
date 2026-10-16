@@ -28,7 +28,7 @@
  */
 
 import { z } from "zod";
-import { innfortAvEleven, innholdsord, jaccard } from "../tekst/innholdsord";
+import { brukerNoenAv, innfortAvEleven, innholdsord, jaccard } from "../tekst/innholdsord";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
 import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
 
@@ -101,13 +101,31 @@ function sjekkAvsnitt(nummer: number, avsnitt: Avsnitt[]): string | null {
   return null;
 }
 
-export function bruddPaaStart(s: z.infer<typeof StartSkjema>, avsnitt: Avsnitt[]): string[] {
-  const brudd: string[] = [];
-  if (s.sporsmal.trim().length === 0) brudd.push("tomt spørsmål");
-  if (antallSporsmal(s.sporsmal) !== 1) brudd.push(`${antallSporsmal(s.sporsmal)} spørsmålstegn, ikke ett`);
+/**
+ * FR-20, «ett spørsmål»: to spørsmål bundet sammen med «og»/«eller» og et
+ * spørreord har ett spørsmålstegn, men er to spørsmål. Funnet i testing
+ * 16.10: «Hva er forskjellen på renter og avdrag, og hvorfor må man betale
+ * begge deler?» — eleven svarte på det første og ble vurdert som delvis fordi
+ * det andre manglet.
+ */
+export const SAMMENBUNDET = /\b(og|eller)\s+(hva|hvorfor|hvordan|hvilken|hvilket|hvilke|hvem|hvor|når)\b/i;
+
+/** Eleven ser ikke avsnittsnumre. «Les avsnitt 7» peker på noe hun ikke finner. */
+export const AVSNITTSNUMMER = /\bavsnitt(et)?\s+(nr\.?\s*)?\d+/i;
+
+export function bruddPaaStart(
+  s: z.infer<typeof StartSkjema>,
+  avsnitt: Avsnitt[],
+): { harde: string[]; myke: string[] } {
+  const harde: string[] = [];
+  const myke: string[] = [];
+  if (s.sporsmal.trim().length === 0) harde.push("tomt spørsmål");
+  if (antallSporsmal(s.sporsmal) !== 1) harde.push(`${antallSporsmal(s.sporsmal)} spørsmålstegn, ikke ett`);
   const a = sjekkAvsnitt(s.kildeavsnitt, avsnitt);
-  if (a) brudd.push(a);
-  return brudd;
+  if (a) harde.push(a);
+  if (SAMMENBUNDET.test(s.sporsmal)) myke.push("to spørsmål bundet sammen med «og/eller»");
+  if (AVSNITTSNUMMER.test(s.sporsmal)) myke.push("viser til et avsnittsnummer eleven ikke ser");
+  return { harde, myke };
 }
 
 export type Kontekst = {
@@ -144,12 +162,15 @@ export function bruddPaaVurdering(
   const a = sjekkAvsnitt(o.kildeavsnitt, k.avsnitt);
   if (a) harde.push(a);
   for (const m of FORBUDT) if (m.test(o.sporsmal)) harde.push(`oppfølgingen bruker «${m.source}»`);
+  if (SAMMENBUNDET.test(o.sporsmal)) myke.push("to spørsmål bundet sammen med «og/eller»");
+  if (AVSNITTSNUMMER.test(o.sporsmal) || AVSNITTSNUMMER.test(v.begrunnelse)) {
+    myke.push("viser til et avsnittsnummer eleven ikke ser");
+  }
 
   // Sporbarhet: gjelder bare når eleven faktisk innførte noe.
   const innfort = innfortAvEleven(k.elevsvar, k.sporsmal);
   if (innfort.size > 0) {
-    const iOppfolging = innholdsord(o.sporsmal);
-    if (![...innfort].some((w) => iOppfolging.has(w))) {
+    if (!brukerNoenAv(o.sporsmal, innfort)) {
       myke.push("oppfølgingen bruker ingen ord eleven selv innførte");
     }
   }
@@ -240,22 +261,32 @@ export type Startresultat = {
 export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
   const brukermelding = formaterAvsnitt(avsnitt);
   let siste: string[] = [];
-  for (let forsok = 0; forsok < 2; forsok++) {
+  let beste: { r: { data: z.infer<typeof StartSkjema>; promptversjon: string; modell: string }; myke: number } | null = null;
+  // Tre forsøk, ikke to: et dobbeltspørsmål her gir en urettferdig vurdering
+  // av elevens første svar, og prompten har gjort det sjeldnere, ikke borte
+  // (1 av 3 i prøvekjøringen 16.10). Startspørsmålet lages én gang per samtale.
+  for (let forsok = 0; forsok < 3; forsok++) {
     const r = await kjoerGenerator({
       oppgave: "samtalestart",
       skjema: StartSkjema,
       brukermelding,
       kjoering: forsok,
     });
-    siste = bruddPaaStart(r.data, avsnitt);
-    if (siste.length === 0) {
-      return {
-        sporsmal: r.data.sporsmal.trim(),
-        kildeavsnittNummer: r.data.kildeavsnitt,
-        promptversjon: r.promptversjon,
-        modell: r.modell,
-      };
+    const { harde, myke } = bruddPaaStart(r.data, avsnitt);
+    if (harde.length > 0) {
+      siste = harde;
+      continue;
     }
+    if (!beste || myke.length < beste.myke) beste = { r, myke: myke.length };
+    if (myke.length === 0) break;
+  }
+  if (beste) {
+    return {
+      sporsmal: beste.r.data.sporsmal.trim(),
+      kildeavsnittNummer: beste.r.data.kildeavsnitt,
+      promptversjon: beste.r.promptversjon,
+      modell: beste.r.modell,
+    };
   }
   throw new GeneratorFeil(
     "ugyldig_utdata",
