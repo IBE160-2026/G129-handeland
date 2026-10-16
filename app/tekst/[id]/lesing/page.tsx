@@ -16,6 +16,8 @@ import { tilgang } from "../../../../data/konto";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../data/tilgang";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
+import { FinnFagordPaaNyttSkjema } from "../../../komponenter/Skjemaer";
+import { genererPaaNytt } from "../../../handlinger";
 
 export default async function Lesing({
   params,
@@ -100,6 +102,7 @@ export default async function Lesing({
                 Det kan være at det gikk galt under genereringen. Du kan lese
                 teksten uten markeringer i mellomtiden — den er den samme.
               </p>
+              <FinnFagordPaaNyttSkjema handling={genererPaaNytt.bind(null, id)} />
             </div>
           ) : sett.begreper.length === 0 ? (
             /*

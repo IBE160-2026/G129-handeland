@@ -202,3 +202,27 @@ export function LagQuizSkjema({
     </form>
   );
 }
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * §5: når uttrekket av fagord har feilet, skal eleven ha en vei videre — ikke
+ * bare en forklaring. Handlingen `genererPaaNytt` fantes fra før, men ingen
+ * knapp brukte den.
+ */
+export function FinnFagordPaaNyttSkjema({
+  handling,
+}: {
+  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+}) {
+  const [svar, send] = useActionState(handling, TOMT);
+
+  return (
+    <form action={send} className="mt-3">
+      {svar.feil && (
+        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+      )}
+      <Send venter="Finner fagordene…" klar="Prøv å finne fagordene igjen" />
+    </form>
+  );
+}
