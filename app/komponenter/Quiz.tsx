@@ -129,6 +129,32 @@ export function Quiz({
         </div>
       )}
 
+      {fase === "svarer" && harKortsvar && (
+        <div className="mb-8 rounded-md border border-slate-300 p-5 dark:border-slate-700">
+          <p className="font-semibold">Slik fungerer quizen</p>
+          <ol className="mt-2 list-decimal space-y-1 pl-5">
+            <li>Svar på alle spørsmålene.</li>
+            <li>
+              Før du får se hva som var riktig, får du se et eksempelsvar på
+              spørsmålene du svarer på med egne ord. Der vurderer du selv om
+              svaret ditt var riktig.
+            </li>
+            <li>Så leverer du, og får se resultatet for alle spørsmålene.</li>
+          </ol>
+        </div>
+      )}
+
+      {fase === "vurderer" && (
+        <div role="status" className="mb-8 rounded-md border border-sky-400 bg-sky-50 p-5 dark:border-sky-600 dark:bg-sky-950/40">
+          <p className="font-semibold">Vurder svarene du skrev selv</p>
+          <p className="mt-1">
+            Sammenlign svaret ditt med eksempelsvaret og teksten, og kryss av
+            om du fikk med poenget. Flervalgssvarene dine er låst — du får se
+            om de var riktige når du leverer.
+          </p>
+        </div>
+      )}
+
       {feil && <Feilmelding {...feil} />}
 
       <ol className="space-y-8">
@@ -138,7 +164,7 @@ export function Quiz({
           const laast = fase !== "svarer";
           return (
             <li key={s.id} className="rounded-md border border-slate-200 p-5 dark:border-slate-800">
-              <fieldset disabled={laast && s.erFlervalg}>
+              <fieldset>
                 <legend className="font-medium">
                   <span className="text-slate-500">{s.nummer}.</span> {s.sporsmal}
                   {r && (
@@ -148,7 +174,50 @@ export function Quiz({
                   )}
                 </legend>
 
-                {s.erFlervalg ? (
+                {laast ? (
+                  /*
+                   * Låst visning: elevens svar med full kontrast. Ikke
+                   * `disabled`-felt — de gråtones av nettleseren, og i mørk
+                   * modus ble det skrevne svaret nesten usynlig.
+                   */
+                  s.erFlervalg ? (
+                    <ul className="mt-3 space-y-2">
+                      {s.alternativer.map((a) => {
+                        const valgt = svar[s.id]?.valgt === a;
+                        const fasit = r?.riktigSvar === a;
+                        return (
+                          <li
+                            key={a}
+                            className={`flex items-start justify-between gap-3 rounded-md border px-3 py-2 ${
+                              fasit
+                                ? "border-green-600 bg-green-50 dark:border-green-500 dark:bg-green-950/40"
+                                : valgt && r
+                                  ? "border-red-600 bg-red-50 dark:border-red-500 dark:bg-red-950/40"
+                                  : valgt
+                                    ? "border-slate-900 bg-slate-100 dark:border-slate-100 dark:bg-slate-800"
+                                    : "border-transparent text-slate-500 dark:text-slate-400"
+                            }`}
+                          >
+                            <span className={valgt || fasit ? "font-medium" : ""}>{a}</span>
+                            <span className="shrink-0 text-sm font-semibold">
+                              {fasit && valgt ? "Ditt svar — riktig" : fasit ? "Riktig svar" : valgt ? "Ditt svar" : ""}
+                            </span>
+                          </li>
+                        );
+                      })}
+                      {!svar[s.id]?.valgt && (
+                        <li className="text-sm text-slate-600 dark:text-slate-400">Du svarte ikke på dette spørsmålet.</li>
+                      )}
+                    </ul>
+                  ) : (
+                    <div className="mt-3 rounded-md border border-slate-900 bg-slate-100 p-3 dark:border-slate-100 dark:bg-slate-800">
+                      <p className="text-sm font-semibold">Ditt svar</p>
+                      <p className="mt-1 whitespace-pre-wrap leading-relaxed">
+                        {svar[s.id]?.skrevet?.trim() || <span className="text-slate-500">(ikke besvart)</span>}
+                      </p>
+                    </div>
+                  )
+                ) : s.erFlervalg ? (
                   <div className="mt-3 space-y-2">
                     {s.alternativer.map((a) => (
                       <label key={a} className="flex items-start gap-3">
@@ -168,11 +237,10 @@ export function Quiz({
                   <textarea
                     aria-label={`Svar på spørsmål ${s.nummer}`}
                     rows={3}
-                    readOnly={laast}
                     value={svar[s.id]?.skrevet ?? ""}
                     onChange={(e) => sett(s.id, { skrevet: e.target.value })}
                     placeholder="Svar med én eller to setninger."
-                    className="mt-3 w-full rounded-md border border-slate-300 p-3 leading-relaxed read-only:bg-slate-50 focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
+                    className="mt-3 w-full rounded-md border border-slate-300 p-3 leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
                   />
                 )}
               </fieldset>
@@ -219,9 +287,6 @@ export function Quiz({
               {/* Fase 3: FR-15 — feil svar viser hvor i teksten svaret står. */}
               {r && !r.riktig && s.erFlervalg && (
                 <div className="mt-4 space-y-3 rounded-md bg-slate-50 p-4 dark:bg-slate-900">
-                  <p>
-                    <span className="font-medium">Riktig svar:</span> {r.riktigSvar}
-                  </p>
                   <Kildeavsnitt tekstId={tekstId} {...r.kildeavsnitt} />
                 </div>
               )}
