@@ -43,66 +43,6 @@ function Send({ venter, klar }: { venter: string; klar: string }) {
 
 /* ------------------------------------------------------------------ */
 
-export function LimInnSkjema({
-  handling,
-}: {
-  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
-}) {
-  const [svar, send] = useActionState(handling, TOMT);
-
-  return (
-    <form action={send} className="space-y-4">
-      {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
-      )}
-
-      <div>
-        <label htmlFor="tittel" className="block font-medium">
-          Tittel <span className="font-normal text-slate-500">(valgfritt)</span>
-        </label>
-        <input
-          id="tittel"
-          name="tittel"
-          type="text"
-          placeholder="For eksempel: Naturfag, kapittel 4"
-          className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="tekst" className="block font-medium">
-          Teksten
-        </label>
-        <p id="tekst-hjelp" className="mt-1 text-slate-600 dark:text-slate-400">
-          Lim inn fagteksten du skal lese. La det stå en blank linje mellom
-          avsnittene — det er slik Lesevenn finner overskriftene.
-        </p>
-        <textarea
-          id="tekst"
-          name="tekst"
-          rows={16}
-          required
-          aria-describedby="tekst-hjelp"
-          className="mt-2 w-full rounded-md border border-slate-300 p-3 font-mono text-sm leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
-        />
-      </div>
-
-      {/*
-        §6.2: før første innsending skal eleven vite hvor teksten går. Står
-        rett over knappen, slik at den leses i det øyeblikket det betyr noe.
-        Behandlingsstedet varierer per kall (addendum §6), og det sies.
-      */}
-      <p className="text-sm text-slate-600 dark:text-slate-400">
-        Teksten du limer inn, sendes til Anthropic, som finner fagordene og
-        lager quizen med en språkmodell. Den kan bli behandlet i USA, Europa,
-        Asia eller Australia, og brukes ikke til å trene modeller.
-      </p>
-
-      <Send venter="Leser inn…" klar="Begynn" />
-    </form>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 
 export function AktiveringSkjema({

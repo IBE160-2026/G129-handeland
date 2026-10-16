@@ -47,6 +47,7 @@ import { merkOevekort, type Merking } from "../data/oevekort";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
 import { GeneratorFeil, hentPrompt } from "../generatorer/kontrakt";
+import { GRENSER } from "../opplasting/pdf-tekst";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
 
@@ -92,6 +93,12 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
       },
     };
   }
+
+  // FR-1: grensen håndheves her også, ikke bare i skjemaet. Skjemaet gir
+  // eleven valget (bruk begynnelsen eller del opp); dette er vernet om
+  // skjemaet blir gått forbi.
+  const forLang = sjekkTak(raatekst);
+  if (forLang) return forLang;
 
   // Avsnittsdelingen kjøres her bare for å kunne si noe om teksten med én
   // gang. Den LAGRES ikke — AD-9 sier at avsnittslisten fryses ved låsing,
@@ -364,6 +371,59 @@ export async function leverQuiz(
   } catch (e) {
     return somFeil(e);
   }
+}
+
+/** FR-1: taket på 8 000 tegn, felles for liming og PDF. */
+function sjekkTak(tekst: string): Handlingssvar | null {
+  if (tekst.length <= GRENSER.maksTegn) return null;
+  return {
+    feil: {
+      melding: `Teksten er på ${tekst.length.toLocaleString("nb-NO")} tegn. Lesevenn tar høyst ${GRENSER.maksTegn.toLocaleString("nb-NO")}.`,
+      handling: "Bruk de første 8 000 tegnene, eller del teksten i flere og legg dem inn hver for seg.",
+    },
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-2 — innlesing av PDF
+ * ------------------------------------------------------------------ */
+
+/** Rapporten kommer fra nettleseren og valideres før den lagres. */
+const RapportSkjema = z.object({
+  sider: z.number().int().min(1).max(GRENSER.maksSider),
+  fjernedeLinjer: z.array(z.string().max(500)).max(500),
+  sammenslaatteOrddelinger: z.number().int().min(0),
+  muligTabellEllerFormel: z.boolean(),
+});
+
+/**
+ * Tar imot teksten nettleseren har trukket ut av en PDF. Selve filen kommer
+ * aldri hit (AD-16, FR-2): bare teksten og rapporten om hva uttrekket gjorde.
+ */
+export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const tittel = String(data.get("tittel") ?? "").trim();
+  const raatekst = String(data.get("raatekst") ?? "");
+  let rapport;
+  try {
+    rapport = RapportSkjema.parse(JSON.parse(String(data.get("rapport") ?? "")));
+  } catch {
+    return { feil: { melding: "Opplastingen kom ikke fram i riktig form.", handling: "Velg filen på nytt og prøv igjen." } };
+  }
+  if (raatekst.trim().length === 0) {
+    return { feil: { melding: "Det kom ingen tekst fra filen.", handling: "Velg filen på nytt, eller lim inn teksten." } };
+  }
+  const forLang = sjekkTak(raatekst);
+  if (forLang) return forLang;
+
+  const avsnitt = delIAvsnitt(raatekst);
+  const ny = await opprettTekst(await tilgang(), {
+    tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
+    raatekst,
+    redigertTekst: raatekst,
+    vei: "pdf",
+    innlesingsrapport: rapport,
+  });
+  redirect(`/tekst/${ny.id}/aktivering`);
 }
 
 /* ------------------------------------------------------------------ *

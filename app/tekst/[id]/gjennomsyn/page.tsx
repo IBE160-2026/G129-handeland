@@ -18,6 +18,7 @@ import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt } from "../../../../tekst/avsnittsdeling";
 import { laasOgGenerer } from "../../../handlinger";
 import { GjennomsynSkjema } from "../../../komponenter/Skjemaer";
+import { Innlesingsrapport } from "../../../komponenter/Innlesingsrapport";
 
 export default async function Gjennomsyn({
   params,
@@ -63,6 +64,8 @@ export default async function Gjennomsyn({
         Lesevenn leser dette som <strong>{avsnitt.length} avsnitt</strong>, der{" "}
         <strong>{antallOverskrifter}</strong> er overskrifter.
       </p>
+
+      {tekst.innlesingsrapport && <Innlesingsrapport rapport={tekst.innlesingsrapport} />}
 
       <section className="mt-8">
         <GjennomsynSkjema

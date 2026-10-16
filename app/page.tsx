@@ -9,8 +9,8 @@
 import Link from "next/link";
 import { tilgang } from "../data/konto";
 import { listTekster } from "../data/tilgang";
-import { limInnTekst } from "./handlinger";
-import { LimInnSkjema } from "./komponenter/Skjemaer";
+import { limInnPdf, limInnTekst } from "./handlinger";
+import { Innlesing } from "./komponenter/Innlesing";
 import { SlettTekstKnapp } from "./komponenter/SlettTekstKnapp";
 
 /** Hvor eleven skal fortsette, ut fra hvor langt Teksten har kommet (AD-9). */
@@ -92,7 +92,7 @@ export default async function Startside() {
             fagordene forklart, og sjekke om du forsto den.
           </p>
           <div className="mt-8">
-            <LimInnSkjema handling={limInnTekst} />
+            <Innlesing limInn={limInnTekst} limInnPdf={limInnPdf} />
           </div>
         </section>
       </div>
