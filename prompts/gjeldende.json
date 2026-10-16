@@ -14,7 +14,7 @@
       }
     },
     "quiz": {
-      "versjon": "v1",
+      "versjon": "v2",
       "modell": "claude-haiku-5-5",
       "tenkning": "adaptiv"
     }
