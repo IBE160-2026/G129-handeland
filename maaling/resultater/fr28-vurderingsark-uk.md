@@ -15,7 +15,7 @@ Spørsmålene:
 - **C. Uforståelig:** Er noe vanskelig eller umulig å forstå?
 - **D. Direkte galt:** Sier oversettelsen noe annet enn det norske?
 
-**Når regnes oversettelsen som god nok?** En tekst er uten anmerkning når A og B er «ja» og C og D er «nei». Oversettelsen består når minst tre av de fire tekstene er uten anmerkning.
+**Når regnes oversettelsen som god nok?** Svaret ventes å være «ja» på A og B og «nei» på C og D. Et annet svar er en anmerkning. Oversettelsen består med høyst én anmerkning i alt, av de 16 svarene på arket.
 
 ---
 
