@@ -68,7 +68,7 @@ export class GeneratorFeil extends Error {
  * AD-14 — manifestet bestemmer hva som er gjeldende
  * ------------------------------------------------------------------ */
 
-export type Oppgave = "faguttrykk";
+export type Oppgave = "faguttrykk" | "quiz";
 
 /** Tenkemodusene manifestet kan oppgi. Se `_om_tenkning` der. */
 export type Tenkemodus = "budsjett" | "adaptiv" | "av";

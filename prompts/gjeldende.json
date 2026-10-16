@@ -8,7 +8,15 @@
       "versjon": "v3",
       "modell": "claude-haiku-5-5",
       "tenkning": "adaptiv",
-      "konsistens": { "kjoeringer": 5, "minstEnighet": 3 }
+      "konsistens": {
+        "kjoeringer": 5,
+        "minstEnighet": 3
+      }
+    },
+    "quiz": {
+      "versjon": "v1",
+      "modell": "claude-haiku-5-5",
+      "tenkning": "adaptiv"
     }
   }
 }
