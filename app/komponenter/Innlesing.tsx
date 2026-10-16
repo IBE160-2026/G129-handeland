@@ -12,7 +12,7 @@
  * dele teksten selv. Samme valg for liming og PDF.
  */
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { PdfFeil as PdfFeilKlasse, type PdfFeildetaljer, type PdfFeilkode, type Valg } from "../../opplasting/pdf-feil";
 import { trekkUtPdf, type Uttrekk } from "../../opplasting/pdf-les";
@@ -20,6 +20,9 @@ import { GRENSER, kuttVedTak } from "../../opplasting/pdf-tekst";
 import { hentPdfjs } from "../../opplasting/pdfjs-nettleser";
 import type { Handlingssvar } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
+import { BildeFeil as BildeFeilKlasse, type BildeFeildetaljer, type BildeFeilkode, type BildeValg } from "../../opplasting/bilde-feil";
+import { BILDEGRENSER, krympBilde, lesBilde, sjekkValg } from "../../opplasting/bilde";
+import { BildeFeil } from "./BildeFeil";
 import { PdfFeil } from "./PdfFeil";
 
 type Handling = (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
@@ -119,8 +122,10 @@ function kutt(tekst: string) {
 
 /* ------------------------------------------------------------------ */
 
-export function Innlesing({ limInn, limInnPdf }: { limInn: Handling; limInnPdf: Handling }) {
-  const [fane, setFane] = useState<"lim" | "pdf">("lim");
+type Fane = "lim" | "pdf" | "bilde";
+
+export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling; limInnPdf: Handling; limInnBilde: Handling }) {
+  const [fane, setFane] = useState<Fane>("lim");
   return (
     <div>
       <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="flex gap-2 border-b border-slate-200 dark:border-slate-800">
@@ -128,6 +133,7 @@ export function Innlesing({ limInn, limInnPdf }: { limInn: Handling; limInnPdf: 
           [
             ["lim", "Lim inn tekst"],
             ["pdf", "Last opp PDF"],
+            ["bilde", "Ta bilder"],
           ] as const
         ).map(([id, navn]) => (
           <button
@@ -145,7 +151,13 @@ export function Innlesing({ limInn, limInnPdf }: { limInn: Handling; limInnPdf: 
         ))}
       </div>
       <div className="mt-6">
-        {fane === "lim" ? <LimInn handling={limInn} /> : <Pdf handling={limInnPdf} tilLiming={() => setFane("lim")} />}
+        {fane === "lim" ? (
+          <LimInn handling={limInn} />
+        ) : fane === "pdf" ? (
+          <Pdf handling={limInnPdf} tilLiming={() => setFane("lim")} tilBilder={() => setFane("bilde")} />
+        ) : (
+          <Bilder handling={limInnBilde} tilLiming={() => setFane("lim")} />
+        )}
       </div>
     </div>
   );
@@ -203,7 +215,7 @@ function LimInn({ handling }: { handling: Handling }) {
   );
 }
 
-function Pdf({ handling, tilLiming }: { handling: Handling; tilLiming: () => void }) {
+function Pdf({ handling, tilLiming, tilBilder }: { handling: Handling; tilLiming: () => void; tilBilder: () => void }) {
   const [svar, send] = useActionState(handling, TOMT);
   const filfelt = useRef<HTMLInputElement>(null);
   const [fil, setFil] = useState<File | null>(null);
@@ -230,6 +242,7 @@ function Pdf({ handling, tilLiming }: { handling: Handling; tilLiming: () => voi
 
   function valg(v: Valg) {
     if (v === "lim_inn") tilLiming();
+    else if (v === "bilde") tilBilder();
     else if (v === "prov_igjen" && fil) les(fil);
     else if (v === "velg_annen") filfelt.current?.click();
   }
@@ -268,8 +281,7 @@ function Pdf({ handling, tilLiming }: { handling: Handling; tilLiming: () => voi
         </p>
       )}
 
-      {/* bildeTilgjengelig: false til bildeinnlesingen (FR-44) finnes. */}
-      {status === "feil" && feil && <PdfFeil kode={feil.kode} detaljer={feil.detaljer} bildeTilgjengelig={false} onValg={valg} />}
+      {status === "feil" && feil && <PdfFeil kode={feil.kode} detaljer={feil.detaljer} bildeTilgjengelig onValg={valg} />}
 
       {status === "ferdig" && uttrekk && (
         <form action={send} className="space-y-4">
@@ -300,6 +312,205 @@ function Pdf({ handling, tilLiming }: { handling: Handling; tilLiming: () => voi
           <Personvern />
           <Send venter="Lagrer…" klar="Begynn" deaktivert={forLang} />
         </form>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-44 — bilder av boksider
+ * ------------------------------------------------------------------ */
+
+type Valgt = { fil: File; url: string };
+
+function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: () => void }) {
+  const [svar, send] = useActionState(handling, TOMT);
+  const filfelt = useRef<HTMLInputElement>(null);
+  const [bilder, setBilder] = useState<Valgt[]>([]);
+  const [status, setStatus] = useState<"velger" | "leser" | "ferdig" | "feil">("velger");
+  const [framdrift, setFramdrift] = useState(0);
+  const [tekst, setTekst] = useState("");
+  const [kuttet, setKuttet] = useState<{ slutt: string; rest: string } | null>(null);
+  const [feil, setFeil] = useState<{ kode: BildeFeilkode; detaljer: BildeFeildetaljer } | null>(null);
+
+  // Forhåndsvisningene er lånt minne; gi det tilbake når komponenten går.
+  const bilderRef = useRef(bilder);
+  useEffect(() => {
+    bilderRef.current = bilder;
+  }, [bilder]);
+  useEffect(() => () => bilderRef.current.forEach((b) => URL.revokeObjectURL(b.url)), []);
+
+  function leggTil(filer: File[]) {
+    const f = sjekkValg([...bilder.map((b) => b.fil), ...filer]);
+    if (f) {
+      setFeil({ kode: f.kode, detaljer: f.detaljer });
+      setStatus("feil");
+      return;
+    }
+    setFeil(null);
+    setStatus("velger");
+    setBilder((x) => [...x, ...filer.map((fil) => ({ fil, url: URL.createObjectURL(fil) }))]);
+  }
+
+  function flytt(i: number, retning: -1 | 1) {
+    setBilder((x) => {
+      const ny = [...x];
+      const j = i + retning;
+      if (j < 0 || j >= ny.length) return x;
+      [ny[i], ny[j]] = [ny[j], ny[i]];
+      return ny;
+    });
+  }
+
+  function fjern(i: number) {
+    setBilder((x) => {
+      URL.revokeObjectURL(x[i].url);
+      return x.filter((_, k) => k !== i);
+    });
+  }
+
+  async function les() {
+    setStatus("leser");
+    setFeil(null);
+    setKuttet(null);
+    const deler: string[] = [];
+    try {
+      for (let i = 0; i < bilder.length; i++) {
+        setFramdrift(i + 1);
+        const { data } = await krympBilde(bilder[i].fil, i + 1);
+        deler.push(await lesBilde(data, i + 1));
+      }
+      setTekst(deler.join("\n\n"));
+      setStatus("ferdig");
+    } catch (e) {
+      setFeil(e instanceof BildeFeilKlasse ? { kode: e.kode, detaljer: e.detaljer } : { kode: "BF-5", detaljer: {} });
+      setStatus("feil");
+    }
+  }
+
+  function valg(v: BildeValg) {
+    if (v === "lim_inn") tilLiming();
+    else if (v === "prov_igjen") les();
+    else if (v === "ta_nytt") {
+      if (feil?.detaljer.bilde) fjern(feil.detaljer.bilde - 1);
+      setFeil(null);
+      setStatus("velger");
+      filfelt.current?.click();
+    } else {
+      setFeil(null);
+      setStatus("velger");
+    }
+  }
+
+  const forLang = tekst.length > GRENSER.maksTegn;
+
+  if (status === "ferdig") {
+    return (
+      <form action={send} className="space-y-4">
+        {svar.feil && <Feilmelding {...svar.feil} />}
+        {/* FR-45: umålt, og det sies. */}
+        <div role="status" className="rounded-md border border-amber-400 bg-amber-50 p-4 text-sm dark:border-amber-600 dark:bg-amber-950/40">
+          <p className="font-medium">Teksten er lest ut av {bilder.length === 1 ? "bildet" : `${bilder.length} bilder`}.</p>
+          <p className="mt-1">
+            Det blir ofte feil når tekst leses fra bilder. Les gjennom teksten ekstra nøye når du får se den, og
+            rett det som ikke stemmer.
+          </p>
+          {tekst.length < GRENSER.minTegnTotalt && (
+            // BF-4: lite tekst er ingen stopp — eleven kan skrive inn resten selv.
+            <p className="mt-2">
+              Det ble bare funnet {tall(tekst.length)} tegn. Du kan skrive inn resten selv når du ser gjennom teksten.
+            </p>
+          )}
+        </div>
+        {(forLang || kuttet) && (
+          <Tak
+            lengde={tekst.length}
+            kuttet={kuttet}
+            onKutt={() => {
+              const k = kutt(tekst);
+              setTekst(k.tekst);
+              setKuttet({ slutt: k.slutt, rest: k.rest });
+            }}
+          />
+        )}
+        <Tittel />
+        <input type="hidden" name="raatekst" value={tekst} />
+        <Personvern />
+        <Send venter="Lagrer…" klar="Begynn" deaktivert={forLang} />
+      </form>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* FR-44: påminnelsen kommer før første opplasting. */}
+      <div className="rounded-md border border-slate-300 p-4 text-sm dark:border-slate-700">
+        <p className="font-medium">Før du tar bildene</p>
+        <ul className="mt-1 list-disc pl-5">
+          <li>Ta bare bilde av sidene du skal lese — høyst {BILDEGRENSER.maksBilder}.</li>
+          <li>Én side per bilde, rett ovenfra, i godt lys.</li>
+          <li>Bildene krympes og sendes for å lese teksten, men lagres ikke. Det er bare teksten som tas vare på.</li>
+        </ul>
+      </div>
+
+      <div>
+        <label htmlFor="bilder" className="block font-medium">
+          Bilder av sidene
+        </label>
+        <input
+          ref={filfelt}
+          id="bilder"
+          type="file"
+          multiple
+          accept="image/jpeg,image/png,image/heic,image/heif,.heic,.heif"
+          onChange={(e) => {
+            const filer = [...(e.target.files ?? [])];
+            e.target.value = "";
+            if (filer.length) leggTil(filer);
+          }}
+          className="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-slate-900 file:px-4 file:py-2 file:font-medium file:text-white hover:file:bg-slate-700 dark:file:bg-slate-100 dark:file:text-slate-900"
+        />
+      </div>
+
+      {bilder.length > 0 && (
+        <ol className="space-y-2">
+          {bilder.map((b, i) => (
+            <li key={b.url} className="flex items-center gap-3 rounded-md border border-slate-200 p-2 dark:border-slate-800">
+              {/* eslint-disable-next-line @next/next/no-img-element -- lokal forhåndsvisning, ikke en ressurs fra serveren */}
+              <img src={b.url} alt={`Side ${i + 1}`} className="h-16 w-12 rounded object-cover" />
+              <span className="flex-1 text-sm">
+                Side {i + 1}: {b.fil.name}
+              </span>
+              <button type="button" onClick={() => flytt(i, -1)} disabled={i === 0} aria-label={`Flytt side ${i + 1} opp`} className="rounded border px-2 py-1 text-sm disabled:opacity-40">
+                ↑
+              </button>
+              <button type="button" onClick={() => flytt(i, 1)} disabled={i === bilder.length - 1} aria-label={`Flytt side ${i + 1} ned`} className="rounded border px-2 py-1 text-sm disabled:opacity-40">
+                ↓
+              </button>
+              <button type="button" onClick={() => fjern(i)} aria-label={`Fjern side ${i + 1}`} className="rounded border px-2 py-1 text-sm">
+                Fjern
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {status === "feil" && feil && <BildeFeil kode={feil.kode} detaljer={feil.detaljer} onValg={valg} />}
+
+      {status === "leser" ? (
+        <p aria-live="polite" className="text-slate-600 dark:text-slate-400">
+          Leser teksten fra bilde {framdrift} av {bilder.length}… Det tar noen sekunder per bilde.
+        </p>
+      ) : (
+        bilder.length > 0 && (
+          <button
+            type="button"
+            onClick={les}
+            className="rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+          >
+            Les teksten fra {bilder.length === 1 ? "bildet" : `de ${bilder.length} bildene`}
+          </button>
+        )
       )}
     </div>
   );

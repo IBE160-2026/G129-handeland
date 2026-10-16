@@ -400,6 +400,32 @@ const RapportSkjema = z.object({
  * Tar imot teksten nettleseren har trukket ut av en PDF. Selve filen kommer
  * aldri hit (AD-16, FR-2): bare teksten og rapporten om hva uttrekket gjorde.
  */
+/**
+ * FR-44: tar imot teksten som er lest ut av bildene. Bildene selv kom aldri
+ * hit — de ble sendt ett og ett til /api/bilde, holdt i minnet gjennom
+ * uttrekket, og er borte (AD-16). Det som lagres, er Råteksten.
+ */
+export async function limInnBilde(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const tittel = String(data.get("tittel") ?? "").trim();
+  const raatekst = String(data.get("raatekst") ?? "");
+  if (raatekst.trim().length === 0) {
+    return { feil: { melding: "Det kom ingen tekst fra bildene.", handling: "Ta bildene på nytt, eller lim inn teksten." } };
+  }
+  const forLang = sjekkTak(raatekst);
+  if (forLang) return forLang;
+
+  // BF-4: lite tekst stopper ikke. Gjennomsynet vises likevel, så eleven kan
+  // skrive inn resten — men delIAvsnitt må gi minst ett avsnitt.
+  const avsnitt = delIAvsnitt(raatekst);
+  const ny = await opprettTekst(await tilgang(), {
+    tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
+    raatekst,
+    redigertTekst: raatekst,
+    vei: "bilde",
+  });
+  redirect(`/tekst/${ny.id}/aktivering`);
+}
+
 export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
   const tittel = String(data.get("tittel") ?? "").trim();
   const raatekst = String(data.get("raatekst") ?? "");

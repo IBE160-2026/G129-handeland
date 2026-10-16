@@ -9,7 +9,7 @@
 import Link from "next/link";
 import { tilgang } from "../data/konto";
 import { listTekster } from "../data/tilgang";
-import { limInnPdf, limInnTekst } from "./handlinger";
+import { limInnBilde, limInnPdf, limInnTekst } from "./handlinger";
 import { Innlesing } from "./komponenter/Innlesing";
 import { SlettTekstKnapp } from "./komponenter/SlettTekstKnapp";
 
@@ -92,7 +92,7 @@ export default async function Startside() {
             fagordene forklart, og sjekke om du forsto den.
           </p>
           <div className="mt-8">
-            <Innlesing limInn={limInnTekst} limInnPdf={limInnPdf} />
+            <Innlesing limInn={limInnTekst} limInnPdf={limInnPdf} limInnBilde={limInnBilde} />
           </div>
         </section>
       </div>
