@@ -37,6 +37,7 @@ process.env.LESEVENN_TESTMODUS = modusFraKommandolinjen ?? "les";
 
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
+import { normaliser } from "./sammenligning";
 
 const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
@@ -56,31 +57,8 @@ const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
  */
 const ETIKETT = process.env.MAAL_ETIKETT ? `-${process.env.MAAL_ETIKETT}` : "";
 
-/* ------------------------------------------------------------------ *
- * Sammenligningsregelen — FR-8
- * ------------------------------------------------------------------ */
-
-/**
- * Normaliserer et uttrykk før sammenligning.
- *
- * Dette ER sammenligningsregelen, og den står på ett sted med vilje: den skal
- * kunne pekes på i rapporten, og den skal ikke kunne være litt forskjellig i
- * gjenkallingen og i presisjonen.
- *
- * Regelen, som fastsatt i annotering.md steg 4:
- *
- *   - ufølsom for store og små bokstaver — «Mitose» er «mitose»
- *   - FØLSOM for bøyning — «mitosen» er IKKE «mitose», fordi `erVerbatim`
- *     krever ordrett treff og en modell som svarer grunnformen får uttrykket
- *     forkastet. Å være mild her ville målt noe appen ikke gjør.
- *   - flerordsuttrykk må matche helt — «indre energi» er ikke «energi»
- *
- * Mellomrom normaliseres, fordi «indre  energi» og «indre energi» er samme
- * uttrykk og forskjellen er en skrivefeil, ikke en faglig uenighet.
- */
-function normaliser(uttrykk: string): string {
-  return uttrykk.trim().toLowerCase().replace(/\s+/g, " ");
-}
+// Sammenligningsregelen i FR-8 står i maaling/sammenligning.ts, fordi
+// κ-målingen må bruke nøyaktig den samme.
 
 type Maal = {
   tekst: string;
