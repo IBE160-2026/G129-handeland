@@ -158,9 +158,19 @@ Unntakene er modellene Fable 5.0 og 5.1 og Mythos 5.0 og 5.1 (Claude Platform Do
 
 ### Behandlingssted
 
-Jeg bruker tjenestene Vercel og Neon for å ha en plattform og database, hvor begge har region innenfor EU/EØS, som unngår aktivering av egne rettslige spørsmål, som hvis man hadde hatt overføringer til land utenfor EU/EØS.
+Jeg bruker tjenestene Vercel og Neon for å ha en plattform og database, hvor begge har region innenfor EU/EØS. For hosting og database unngår det overføringer til land utenfor EU/EØS.
 
-Konkret: Neon-databasen står i `eu-central-1` (Frankfurt) på AWS, og Vercel-funksjonene er satt til `fra1` i `vercel.json` for å matche. Hvor modellkallene behandles er et eget spørsmål som ikke er avklart her.
+Konkret: Neon-databasen står i `eu-central-1` (Frankfurt) på AWS, og Vercel-funksjonene er satt til `fra1` i `vercel.json` for å matche.
+
+**Modellkallene er et eget spørsmål, og der forlater dataene EU/EØS.** *[Lagt til 16.10.2026. Kildene er lest av Arve; teksten er skrevet med KI-assistanse og gjennomgått av Arve.]*
+
+Anthropics personvernsenter, artikkelen om serverlokasjon (Anthropic Privacy Center, 15.06.2026), gjelder kommersielle produkter, også API-et. Den sier at Anthropic som standard kan sende trafikken til «select countries in the US, Europe, Asia and Australia», med mindre noe annet er avtalt eller instruert, og at «data is stored in the US». Interne prosesser som sikkerhetsgjennomgang og brukerstøtte kan i tillegg skje i land der Anthropic har virksomhet. Hvilket land et enkelt kall behandles i, varierer altså. Brukere av Claude Developer Platform kan styre dette, men valget som finnes er å låse behandlingen til USA — ikke til EU. Ifølge tredjepartskilder er behandling i EU bare mulig gjennom en annen leverandør, som AWS Bedrock eller Google Vertex AI, med egne vilkår. Det er ikke bekreftet mot leverandørenes egen dokumentasjon, og står her som en opplysning til drøftingen, ikke som en kildebelagt påstand.
+
+**Valget: standardinnstillingen beholdes.** Å låse til USA gjør stedet mer forutsigbart, men dataene forlater EU/EØS uansett, så gevinsten er liten. Behandling i EU ville krevd ny leverandør, nye vilkår og kodeendringer, og er ikke realistisk innenfor v1. Det står som et bevisst bortvalg, på linje med den lokalt kjørte modellen: en avveining mellom personvern og fremdrift.
+
+**Overføringsgrunnlaget.** Commercial Terms del C sier at data «will be processed in accordance with the Anthropic Data Processing Addendum», som er en del av vilkårene. Databehandleravtalen (Anthropic, 24.02.2025) slår fast at «Customer is the controller and Anthropic is Customer's processor» — altså er jeg behandlingsansvarlig for elevenes data, og Anthropic er databehandleren min. For overføring ut av EU/EØS gjelder EUs standardkontrakter (SCC), modul to (behandlingsansvarlig til databehandler) og modul tre (databehandler til databehandler), der loven krever det.
+
+**Hva eleven får vite.** Før første innsending sier appen at teksten sendes til Anthropic, at den kan behandles i flere land, og at den ikke brukes til trening (PRD §6.2).
 
 ### Min egen oppbevaringstid
 
@@ -172,6 +182,8 @@ Her vil det også være naturlig å stille spørsmål ved min egen oppbevaringst
 
 - Anthropic (17.06.2025), *Commercial Terms of Service*, https://www.anthropic.com/legal/commercial-terms — lest 02.10.2026
 - Anthropic (08.10.2025), *Consumer Terms of Service*, https://www.anthropic.com/legal/consumer-terms — lest 02.10.2026
+- Anthropic Privacy Center (15.06.2026), *Where are your servers located? Do you host your models on EU servers?*, https://privacy.claude.com/en/articles/7996890-where-are-your-servers-located-do-you-host-your-models-on-eu-servers — lest 16.10.2026
+- Anthropic (24.02.2025), *Data Processing Addendum*, https://www.anthropic.com/legal/data-processing-addendum — lest 16.10.2026
 - Claude Platform Docs (u.d.), *API and data retention*, https://platform.claude.com/docs/en/manage-claude/api-and-data-retention#how-anthropic-approaches-data-retention — lest 02.10.2026
 
 ### Covered Models-sjekk for `claude-haiku-5-5` — 8. oktober 2026
@@ -196,6 +208,8 @@ Jeg vurderer risikoen som liten, fordi Fable og Mythos er modellene som beskrive
 
 **Kilder for denne sjekken:**
 
+- Anthropic Privacy Center (15.06.2026), *Where are your servers located? Do you host your models on EU servers?*, https://privacy.claude.com/en/articles/7996890-where-are-your-servers-located-do-you-host-your-models-on-eu-servers — lest 16.10.2026
+- Anthropic (24.02.2025), *Data Processing Addendum*, https://www.anthropic.com/legal/data-processing-addendum — lest 16.10.2026
 - Claude Platform Docs (u.d.), *API and data retention*, <https://platform.claude.com/docs/en/manage-claude/api-and-data-retention> — lest 08.10.2026
 - Anthropic Support (01.09.2026), *Covered Models*, <https://support.claude.com/en/articles/15425695> — lest 08.10.2026
 

@@ -20,8 +20,8 @@ export default async function Registrer() {
         Lesevenn lagrer bare e-postadressen din, passordet (kryptert, så ingen
         kan lese det), og tekstene og svarene du selv legger inn. Ikke navn,
         skole, klasse eller alder. Du kan slette alt når du vil. Tekstene du
-        legger inn, sendes til språkmodellen til Anthropic for behandling, men
-        brukes ikke til å trene modeller.
+        legger inn, sendes til språkmodellen til Anthropic for behandling — i USA,
+        Europa, Asia eller Australia — men brukes ikke til å trene modeller.
       </p>
       <section className="mt-8">
         <RegistreringSkjema />

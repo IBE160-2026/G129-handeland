@@ -318,7 +318,7 @@ To miljøer: lokal utvikling og én driftet produksjon. **Ingen staging** — so
 | Utsatt | Hvorfor det kan vente |
 | --- | --- |
 | Valg av konkret skyleverandør | **Må avklares før M0, ikke etter.** Et tidligere utkast sa at det ikke påvirker hvordan noe bygges, og det er galt — valget avgjør om PDF-uttrekk med native avhengigheter kan kjøre, om opplastinger kan holdes i minnet (AD-16), og om lange modellkall rekker innenfor tidsavbruddet. Utsatt bare i den forstand at biblioteksvalgene over ikke henger på det |
-| Oppsett og vilkår hos LLM-leverandøren | **Leverandør er valgt for M0 — Anthropic** — med sammenligning mot minst én annen før M1, målt på gullsettet i FR-8. Det som gjenstår er kravene i PRD §6.2, altså at inndata ikke brukes til trening, at behandlingsstedet er kjent, og at vilkårene er lest og datert. Må dokumenteres før M0 |
+| Oppsett og vilkår hos LLM-leverandøren | **Leverandør er valgt for M0 — Anthropic** — med sammenligning mot minst én annen før M1, målt på gullsettet i FR-8. Kravene i PRD §6.2 er dokumentert i addendum §6: inndata brukes ikke til trening (lest 2.10), lagring (2.10), og behandlingssted og overføringsgrunnlag (16.10 — modellkallene kan behandles i USA, Europa, Asia eller Australia, dekket av standardkontraktene i databehandleravtalen) |
 | Overvåking og logging utover feilsporing | Én bruker, ett miljø. Kan ikke gjøre to enheter uforenlige |
 | Hastighetsbegrensning | Ingen åpen registrering i v1, kostnadstakene i §6.4 er den reelle grensen |
 | Sikkerhetskopiering | Ingen produksjonsdata med verdi i v1 (§2.2) |
