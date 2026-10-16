@@ -29,9 +29,23 @@ import {
   rettQuiz,
   type Elevsvar,
 } from "../data/quiz";
+import {
+  avsluttFagsamtale,
+  hentFagsamtale,
+  lagreNyVurdering,
+  lagreSvar as lagreSamtalesvar,
+  opprettFagsamtale,
+  type Runde,
+} from "../data/fagsamtale";
+import {
+  MAKS_RUNDER,
+  startSamtale,
+  vurderSvar,
+  type TidligereRunde,
+} from "../generatorer/fagsamtale";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
-import { GeneratorFeil } from "../generatorer/kontrakt";
+import { GeneratorFeil, hentPrompt } from "../generatorer/kontrakt";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
 
@@ -349,6 +363,159 @@ export async function leverQuiz(
   } catch (e) {
     return somFeil(e);
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-18 til FR-23 — fagsamtale
+ * ------------------------------------------------------------------ */
+
+/** FR-18: starter en ny samtale om en låst Tekst, og sender eleven dit. */
+export async function startFagsamtale(
+  tekstId: string,
+  _forrige: Handlingssvar,
+): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let samtaleId: string;
+  try {
+    const laast = await hentLaast(t, tekstId);
+    const start = await startSamtale(laast.avsnitt);
+    // AD-4: samtalen bruker to prompter, og begge stemples. Vurderingens
+    // versjon er den som er gjeldende når samtalen starter.
+    const vurdering = await hentPrompt("svarvurdering");
+    samtaleId = await opprettFagsamtale(laast, {
+      ...start,
+      promptversjon: `samtalestart ${start.promptversjon}, svarvurdering ${vurdering.versjon}`,
+    });
+  } catch (e) {
+    return somFeil(e);
+  }
+  redirect(`/tekst/${tekstId}/samtale/${samtaleId}`);
+}
+
+/** De besvarte rundene før en gitt runde, i formen generatoren tar. */
+function tidligereRunder(runder: Runde[], foer: number): TidligereRunde[] {
+  return runder
+    .filter((r) => r.nummer < foer && r.elevsvar !== null && r.svarvurdering !== null)
+    .map((r) => ({
+      nummer: r.nummer,
+      sporsmal: r.sporsmal,
+      kildeavsnittNummer: r.kildeavsnitt.nummer,
+      elevsvar: r.elevsvar!,
+      tilstand: r.svarvurdering!,
+      begrunnelse: r.vurderingsbegrunnelse ?? "",
+    }));
+}
+
+/** Øvre grense for et svar. Et svar i en fagsamtale er et par setninger. */
+const MAKS_SVARLENGDE = 3000;
+
+/** FR-19, FR-20: vurderer elevens svar og legger til neste spørsmål. */
+export async function svarISamtale(
+  samtaleId: string,
+  nummer: number,
+  _forrige: Handlingssvar,
+  data: FormData,
+): Promise<Handlingssvar> {
+  const t = await tilgang();
+  const svar = String(data.get("svar") ?? "").trim();
+  if (svar.length === 0) {
+    return {
+      feil: {
+        melding: "Du har ikke skrevet noe ennå.",
+        handling:
+          "Skriv svaret med egne ord. Vet du ikke, kan du skrive det — da får du et enklere spørsmål.",
+      },
+    };
+  }
+  if (svar.length > MAKS_SVARLENGDE) {
+    return {
+      feil: {
+        melding: `Svaret er lengre enn ${MAKS_SVARLENGDE} tegn.`,
+        handling: "Prøv å si det kortere — et par setninger holder.",
+      },
+    };
+  }
+
+  let tekstId: string;
+  try {
+    const s = await hentFagsamtale(t, samtaleId);
+    tekstId = s.tekstId;
+    if (s.avsluttet) {
+      return { feil: { melding: "Samtalen er avsluttet.", handling: "Start en ny samtale fra oppgavesiden." } };
+    }
+    const runde = s.runder.find((r) => r.nummer === nummer && r.elevsvar === null);
+    if (!runde) {
+      return { feil: { melding: "Dette spørsmålet er alt besvart.", handling: "Last siden på nytt." } };
+    }
+    const laast = await hentLaast(t, s.tekstId);
+    const v = await vurderSvar({
+      avsnitt: laast.avsnitt,
+      tidligere: tidligereRunder(s.runder, nummer),
+      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+      elevsvar: svar,
+      sisteRunde: nummer >= MAKS_RUNDER,
+    });
+    await lagreSamtalesvar(t, samtaleId, nummer, svar, v, v.oppfolging);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/samtale/${samtaleId}`);
+  return INGEN_FEIL;
+}
+
+/**
+ * FR-22: «jeg tror du misforsto svaret mitt». Én gang per runde: knappen er
+ * en mulighet til å bli lest på nytt, ikke en måte å be om ny vurdering til
+ * den blir den eleven vil ha.
+ */
+export async function revurderRunde(samtaleId: string, nummer: number): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let tekstId: string;
+  try {
+    const s = await hentFagsamtale(t, samtaleId);
+    tekstId = s.tekstId;
+    const runde = s.runder.find((r) => r.nummer === nummer);
+    if (!runde || runde.elevsvar === null) {
+      return { feil: { melding: "Denne runden har ikke noe svar å vurdere.", handling: "Last siden på nytt." } };
+    }
+    if (runde.revurdert) {
+      return {
+        feil: {
+          melding: "Denne runden er alt vurdert på nytt.",
+          handling: "Les avsnittet det lenkes til, og se om teksten sier noe annet enn du tenkte.",
+        },
+      };
+    }
+    const laast = await hentLaast(t, s.tekstId);
+    const v = await vurderSvar({
+      avsnitt: laast.avsnitt,
+      tidligere: tidligereRunder(s.runder, nummer),
+      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+      elevsvar: runde.elevsvar,
+      sisteRunde: nummer >= MAKS_RUNDER,
+      nyVurdering: true,
+    });
+    await lagreNyVurdering(t, samtaleId, nummer, v, v.oppfolging);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/samtale/${samtaleId}`);
+  return INGEN_FEIL;
+}
+
+/** FR-22: eleven avslutter selv. */
+export async function avsluttSamtale(samtaleId: string): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let tekstId: string;
+  try {
+    const s = await hentFagsamtale(t, samtaleId);
+    tekstId = s.tekstId;
+    await avsluttFagsamtale(t, samtaleId);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/samtale/${samtaleId}`);
+  return INGEN_FEIL;
 }
 
 /* ------------------------------------------------------------------ *

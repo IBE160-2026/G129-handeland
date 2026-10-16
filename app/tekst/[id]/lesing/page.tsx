@@ -147,14 +147,14 @@ export default async function Lesing({
       <section className="mt-12 max-w-[34rem] rounded-md border border-slate-300 p-5 dark:border-slate-700">
         <h2 className="font-semibold tracking-tight">Ferdig med å lese?</h2>
         <p className="mt-1 text-slate-600 dark:text-slate-400">
-          Sjekk om du fikk med deg det viktigste. Står du fast på et spørsmål,
-          får du se hvor i teksten svaret står.
+          Sjekk om du fikk med deg det viktigste — med en quiz, eller i en
+          fagsamtale der du forklarer med egne ord.
         </p>
         <Link
-          href={`/tekst/${id}/quiz`}
+          href={`/tekst/${id}/oppgaver`}
           className="mt-4 inline-block rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
         >
-          Ta quizen
+          Til oppgavene
         </Link>
       </section>
 

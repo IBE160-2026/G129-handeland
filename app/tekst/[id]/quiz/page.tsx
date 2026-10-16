@@ -90,10 +90,10 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
 
       <p className="mt-12 text-sm">
         <Link
-          href={`/tekst/${id}/lesing`}
+          href={`/tekst/${id}/oppgaver`}
           className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
         >
-          Tilbake til teksten
+          Tilbake til oppgavene
         </Link>
       </p>
     </main>

@@ -66,7 +66,7 @@ export default async function Startside() {
                     </li>
                     <li>
                       {t.tilstand === "laast" ? (
-                        <Link href={`/tekst/${t.id}/quiz`} className={UNDERLENKE}>
+                        <Link href={`/tekst/${t.id}/oppgaver`} className={UNDERLENKE}>
                           Oppgaver
                         </Link>
                       ) : (
