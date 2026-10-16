@@ -34,6 +34,7 @@ Leseforstaaelsesapp for videregaaende. Planleggingsdokumentene ligger i `_bmad-o
 - Turbopack er standard. `webpack`-externals i pg/drizzle-oppskrifter feiler bygget.
 - Sidegrenser maa bevares ved PDF-uttrekk, ellers mister PF-1 terskelen paa tegn per side.
 - En sperre i rotlayouten hindrer IKKE at sidene kjoerer. Next evaluerer sidesegmentet selv om layouten ikke rendrer children, saa `await tilgang()` maa staa i hver side.
+- `public/pdf.worker.min.mjs` er IKKE i git. Den kopieres fra pdfjs-dist av `predev`/`prebuild` (opplasting/kopier-pdf-worker.mjs). Mangler den, er PDF-innlesingen i nettleseren doed uten feilmelding paa serveren.
 - `tilgang()` omdirigerer ved aa KASTE. Kall den foer en try-blokk, ellers fanger catch omdirigeringen.
 - `auth.api.*` fra serveren gaar FORBI begrensningen av innloggingsforsoek. Innlogging, registrering og sletting skal gaa via `authKlient` og HTTP-rutene (kodefunn 11).
 - `.env.example` setter `LESEVENN_TESTMODUS=les`, saa en frisk utsjekk kaller IKKE modellen (AD-18). Et generatorkall som gir samme svar hver gang, eller feiler med `lagret_svar_mangler`, er testmodus - ikke en feil i generatoren. Sett `=av` for aa kalle modellen.

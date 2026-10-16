@@ -23,7 +23,10 @@
     "maal:ferskt": "node maaling/maal-ferskt.mjs",
     "gullsett:valider": "vitest run maaling/valider-annotering.test.ts --silent=false",
     "gullsett:samsvar": "vitest run maaling/kappa.test.ts --silent=false",
-    "samtalesett": "node maaling/samtalesett-kjor.mjs"
+    "samtalesett": "node maaling/samtalesett-kjor.mjs",
+    "kopier-pdf-worker": "node opplasting/kopier-pdf-worker.mjs",
+    "predev": "node opplasting/kopier-pdf-worker.mjs",
+    "prebuild": "node opplasting/kopier-pdf-worker.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
@@ -32,6 +35,7 @@
     "better-auth": "1.7.7",
     "drizzle-orm": "^0.45.3",
     "next": "16.3.7",
+    "pdfjs-dist": "6.4.299",
     "pg": "^8.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -49,6 +53,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
+    "pdf-lib": "1.17.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.3"
