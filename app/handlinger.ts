@@ -43,6 +43,7 @@ import {
   vurderSvar,
   type TidligereRunde,
 } from "../generatorer/fagsamtale";
+import { merkOevekort, type Merking } from "../data/oevekort";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
 import { GeneratorFeil, hentPrompt } from "../generatorer/kontrakt";
@@ -363,6 +364,29 @@ export async function leverQuiz(
   } catch (e) {
     return somFeil(e);
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-17 — øvekort
+ * ------------------------------------------------------------------ */
+
+/** Lagrer elevens merking av ett øvekort, slik at neste økt starter der denne sluttet. */
+export async function merkKort(
+  tekstId: string,
+  begrepId: string,
+  merking: Merking | null,
+): Promise<Handlingssvar> {
+  const t = await tilgang();
+  if (merking !== null && merking !== "kan" && merking !== "maa_oeve") {
+    return { feil: { melding: "Merkingen kom ikke fram riktig.", handling: "Last siden på nytt og prøv igjen." } };
+  }
+  try {
+    await merkOevekort(t, tekstId, begrepId, merking);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/oppgaver`);
+  return INGEN_FEIL;
 }
 
 /* ------------------------------------------------------------------ *

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { listFagsamtaler } from "../../../../data/fagsamtale";
 import { tilgang } from "../../../../data/konto";
+import { hentOevekort } from "../../../../data/oevekort";
 import { hentQuiz, listForsoek } from "../../../../data/quiz";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { startFagsamtale } from "../../../handlinger";
@@ -40,11 +41,15 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
   }
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
-  const [quiz, forsoek, samtaler] = await Promise.all([
+  const [quiz, forsoek, samtaler, oevekort] = await Promise.all([
     hentQuiz(t, id),
     listForsoek(t, id),
     listFagsamtaler(t, id),
+    hentOevekort(t, id),
   ]);
+  const kort = oevekort.status === "klar" ? oevekort.kort : [];
+  const kan = kort.filter((k) => k.merking === "kan").length;
+  const maaOeve = kort.filter((k) => k.merking === "maa_oeve").length;
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
@@ -55,6 +60,31 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
       </p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <section className="rounded-md border border-slate-300 p-5 dark:border-slate-700">
+          <h2 className="text-lg font-semibold tracking-tight">Øvekort</h2>
+          <p className="mt-1 text-slate-600 dark:text-slate-400">
+            Ett kort per fagord i teksten. Snu, og merk om du kan det.
+          </p>
+          {oevekort.status === "klar" ? (
+            <>
+              <p className="mt-4">
+                <Link href={`/tekst/${id}/oevekort`} className={LENKE}>
+                  {kan + maaOeve === 0 ? "Øv på fagordene" : "Fortsett med øvekortene"}
+                </Link>
+              </p>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                {kort.length} kort · kan {kan} · må øve {maaOeve} · ikke merket {kort.length - kan - maaOeve}
+              </p>
+            </>
+          ) : (
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+              {oevekort.status === "tomt"
+                ? "Teksten har ingen fagord, så det er ingen kort å øve på."
+                : "Fagordene er ikke funnet ennå. Gå til teksten for å prøve igjen."}
+            </p>
+          )}
+        </section>
+
         <section className="rounded-md border border-slate-300 p-5 dark:border-slate-700">
           <h2 className="text-lg font-semibold tracking-tight">Quiz</h2>
           <p className="mt-1 text-slate-600 dark:text-slate-400">
