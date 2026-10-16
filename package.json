@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run --exclude \"maaling/**\"",
+    "test": "vitest run --exclude \"maaling/{maal-faguttrykk,sjekk-gullsett,valider-annotering,kappa}.test.ts\"",
     "test:watch": "vitest",
     "db:opp": "docker compose up -d --wait",
     "db:ned": "docker compose down",
@@ -21,7 +21,8 @@
     "gullsett:maler": "node maaling/lag-annoteringsmaler.mjs",
     "maal": "vitest run maaling/maal-faguttrykk.test.ts --silent=false",
     "maal:ferskt": "node maaling/maal-ferskt.mjs",
-    "gullsett:valider": "vitest run maaling/valider-annotering.test.ts --silent=false"
+    "gullsett:valider": "vitest run maaling/valider-annotering.test.ts --silent=false",
+    "gullsett:samsvar": "vitest run maaling/kappa.test.ts --silent=false"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
