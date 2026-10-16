@@ -1,0 +1,3 @@
+# Testfilene for PDF-feiltilstandene (FR-4) er binære. Uten dette kan git
+# gjøre om linjeskift, og da stemmer ikke byteposisjonene en PDF bygger på.
+testdata/pdf/*.pdf binary
