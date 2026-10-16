@@ -21,7 +21,16 @@ import {
   opprettTekst,
   slettTekst,
 } from "../data/tilgang";
+import { z } from "zod";
+import {
+  hentQuiz,
+  lagreForsoek,
+  lagreQuiz,
+  rettQuiz,
+  type Elevsvar,
+} from "../data/quiz";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
+import { genererQuiz } from "../generatorer/quiz";
 import { GeneratorFeil } from "../generatorer/kontrakt";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
@@ -209,6 +218,137 @@ export async function genererPaaNytt(
 
   revalidatePath(`/tekst/${tekstId}/lesing`);
   return INGEN_FEIL;
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-13 til FR-15 — quiz
+ * ------------------------------------------------------------------ */
+
+/**
+ * Lager Quizen for en låst Tekst, første gang eleven åpner den.
+ *
+ * Ved åpning og ikke ved låsing: modellkallet tar flere sekunder, og eleven
+ * som bare vil lese skal ikke vente på en quiz hun kanskje ikke tar. Quizen
+ * lagres og gjenbrukes etterpå (FR-13), så kallet skjer én gang per Tekst.
+ */
+export async function lagQuiz(
+  tekstId: string,
+  _forrige: Handlingssvar,
+): Promise<Handlingssvar> {
+  const t = await tilgang();
+  try {
+    if (!(await hentQuiz(t, tekstId))) {
+      const laast = await hentLaast(t, tekstId);
+      const resultat = await genererQuiz(laast.avsnitt);
+      await lagreQuiz(laast, resultat);
+    }
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/quiz`);
+  return INGEN_FEIL;
+}
+
+export type Eksempelsvar = {
+  sporsmalId: string;
+  eksempelsvar: string;
+  kildeavsnitt: { nummer: number; innhold: string };
+};
+
+/**
+ * Eksempelsvarene til kortsvarsspørsmålene, for selvvurderingen.
+ *
+ * Gir BARE kortsvarene. Fasiten til flervalgsspørsmålene sendes aldri til
+ * nettleseren før quizen er levert — ellers kunne den leses i nettleserens
+ * utviklerverktøy, og forsøkene i FR-15 ville ikke sagt noe.
+ */
+export async function hentEksempelsvar(tekstId: string): Promise<Eksempelsvar[]> {
+  const t = await tilgang();
+  const q = await hentQuiz(t, tekstId);
+  if (!q) return [];
+  return q.sporsmal
+    .filter((s) => !s.erFlervalg)
+    .map((s) => ({
+      sporsmalId: s.id,
+      eksempelsvar: s.riktigSvar,
+      kildeavsnitt: s.kildeavsnitt,
+    }));
+}
+
+/** Det nettleseren sender. Valideres, fordi alt fra nettleseren kan være laget for hånd. */
+const ElevsvarSkjema = z
+  .array(
+    z.object({
+      sporsmalId: z.string().uuid(),
+      valgt: z.string().max(2000).optional(),
+      skrevet: z.string().max(5000).optional(),
+      selvvurdertRiktig: z.boolean().optional(),
+    }),
+  )
+  .max(20);
+
+export type Leveringssvar = Handlingssvar & {
+  resultat?: {
+    antallRiktige: number;
+    antallTotalt: number;
+    per: {
+      sporsmalId: string;
+      riktig: boolean;
+      riktigSvar: string;
+      kildeavsnitt: { nummer: number; innhold: string };
+    }[];
+  };
+};
+
+/**
+ * Retter og lagrer et forsøk (FR-15). Rettingen skjer HER, på serveren, mot
+ * fasiten i databasen — nettleseren sender bare hva eleven svarte.
+ */
+export async function leverQuiz(
+  tekstId: string,
+  svar: unknown,
+): Promise<Leveringssvar> {
+  const t = await tilgang();
+  const tolket = ElevsvarSkjema.safeParse(svar);
+  if (!tolket.success) {
+    return {
+      feil: {
+        melding: "Svarene kom ikke fram i riktig form.",
+        handling: "Last siden på nytt og prøv igjen.",
+      },
+    };
+  }
+
+  try {
+    const q = await hentQuiz(t, tekstId);
+    if (!q) {
+      return {
+        feil: {
+          melding: "Fant ikke quizen.",
+          handling: "Gå tilbake til teksten og åpne quizen på nytt.",
+        },
+      };
+    }
+    const elevsvar: Elevsvar[] = tolket.data;
+    const retting = rettQuiz(q.sporsmal, elevsvar);
+    await lagreForsoek(t, tekstId, elevsvar, retting);
+
+    revalidatePath(`/tekst/${tekstId}/quiz`);
+    return {
+      resultat: {
+        antallRiktige: retting.antallRiktige,
+        antallTotalt: retting.antallTotalt,
+        per: q.sporsmal.map((s) => ({
+          sporsmalId: s.id,
+          riktig: retting.per.find((p) => p.sporsmalId === s.id)?.riktig ?? false,
+          riktigSvar: s.riktigSvar,
+          kildeavsnitt: s.kildeavsnitt,
+        })),
+      },
+    };
+  } catch (e) {
+    return somFeil(e);
+  }
 }
 
 /* ------------------------------------------------------------------ *

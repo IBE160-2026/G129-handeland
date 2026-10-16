@@ -47,7 +47,7 @@ export default async function Gjennomsyn({
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 2 av 3 — se gjennom
+        Steg 2 av 4 — se gjennom
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}

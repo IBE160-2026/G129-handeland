@@ -171,3 +171,23 @@ export function GjennomsynSkjema({
     </form>
   );
 }
+
+/* ------------------------------------------------------------------ */
+
+/** FR-13: lager Quizen første gang. Modellkallet tar noen sekunder (§5). */
+export function LagQuizSkjema({
+  handling,
+}: {
+  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+}) {
+  const [svar, send] = useActionState(handling, TOMT);
+
+  return (
+    <form action={send}>
+      {svar.feil && (
+        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+      )}
+      <Send venter="Lager quizen…" klar="Lag quizen" />
+    </form>
+  );
+}

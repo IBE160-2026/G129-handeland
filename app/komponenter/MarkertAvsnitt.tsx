@@ -31,9 +31,12 @@ type Props = {
   innhold: string;
   erOverskrift: boolean;
   markeringer: Markering[];
+  /** Gir avsnittet et anker, slik at quizen kan lenke rett til det (FR-15). */
+  nummer?: number;
 };
 
-export function MarkertAvsnitt({ innhold, erOverskrift, markeringer }: Props) {
+export function MarkertAvsnitt({ innhold, erOverskrift, markeringer, nummer }: Props) {
+  const id = nummer === undefined ? undefined : `avsnitt-${nummer}`;
   // Sorteres på posisjon. Settet er alt uten overlapp (fjernOverlapp), så
   // enkel gjennomgang fra venstre til høyre er nok.
   const sortert = [...markeringer].sort((a, b) => a.start - b.start);
@@ -70,11 +73,15 @@ export function MarkertAvsnitt({ innhold, erOverskrift, markeringer }: Props) {
 
   if (erOverskrift) {
     return (
-      <h2 className="mt-10 mb-3 text-xl font-semibold tracking-tight">
+      <h2 id={id} className="mt-10 mb-3 scroll-mt-6 text-xl font-semibold tracking-tight">
         {deler}
       </h2>
     );
   }
 
-  return <p className="mb-5">{deler}</p>;
+  return (
+    <p id={id} className="mb-5 scroll-mt-6 target:rounded-sm target:bg-sky-50 target:outline target:outline-2 target:outline-offset-4 target:outline-sky-400 dark:target:bg-sky-950/40">
+      {deler}
+    </p>
+  );
 }

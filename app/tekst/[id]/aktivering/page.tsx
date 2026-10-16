@@ -42,7 +42,7 @@ export default async function Aktivering({
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 1 av 3 — før du leser
+        Steg 1 av 4 — før du leser
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}

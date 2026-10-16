@@ -63,7 +63,7 @@ export default async function Lesing({
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 3 av 3 — les teksten
+        Steg 3 av 4 — les teksten
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}
@@ -78,6 +78,7 @@ export default async function Lesing({
               innhold={a.innhold}
               erOverskrift={a.erOverskrift}
               markeringer={perAvsnitt.get(a.nummer) ?? []}
+              nummer={a.nummer}
             />
           ))}
         </article>
@@ -142,6 +143,20 @@ export default async function Lesing({
           )}
         </aside>
       </div>
+
+      <section className="mt-12 max-w-[34rem] rounded-md border border-slate-300 p-5 dark:border-slate-700">
+        <h2 className="font-semibold tracking-tight">Ferdig med å lese?</h2>
+        <p className="mt-1 text-slate-600 dark:text-slate-400">
+          Sjekk om du fikk med deg det viktigste. Står du fast på et spørsmål,
+          får du se hvor i teksten svaret står.
+        </p>
+        <Link
+          href={`/tekst/${id}/quiz`}
+          className="mt-4 inline-block rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+        >
+          Ta quizen
+        </Link>
+      </section>
 
       <p className="mt-12 text-sm">
         <Link
