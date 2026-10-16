@@ -238,3 +238,15 @@ describe("ett spørsmål og ingen avsnittsnumre — funnet i testing 16.10", () 
     expect(bruddPaaVurdering(v, kontekst()).myke.join()).toMatch(/avsnittsnummer/);
   });
 });
+
+describe("testmodus med bare første forsøk lagret", () => {
+  test("et mykt brudd uten lagret andre forsøk gir det første svaret, ikke en feil", async () => {
+    // Demoen og måleverktøyet har ofte bare kjøring 0 lagret. Uten dette
+    // feilet hele runden med «lagret svar mangler» (funnet 16.10).
+    const svak = { ...god, oppfolging: { ...god.oppfolging, sporsmal: "Hva skjer med en tallerken i ovnen?" } };
+    await gittVurdering(0, svak);
+    const v = await vurderSvar(inn);
+    expect(v.tilstand).toBe("dekkende");
+    expect(v.svakheter.join()).toMatch(/ingen ord eleven/);
+  });
+});

@@ -250,6 +250,25 @@ export function formaterVurdering(
  * Generatorene
  * ------------------------------------------------------------------ */
 
+/**
+ * Et ekstra forsøk etter et mykt brudd. I testmodus `les` finnes det ofte bare
+ * et lagret svar for første forsøk — da skal det beste svaret vi alt har,
+ * brukes, framfor at hele runden feiler med «lagret svar mangler». Funnet da
+ * måleverktøyet for FR-21 ble prøvd med lagrede svar.
+ *
+ * Returnerer null når forsøket skal droppes.
+ */
+type Generert<T> = { data: T; promptversjon: string; modell: string };
+
+async function nyttForsok<T>(forsok: number, harEtSvar: boolean, kall: () => Promise<T>): Promise<T | null> {
+  try {
+    return await kall();
+  } catch (e) {
+    if (forsok > 0 && harEtSvar && e instanceof GeneratorFeil && e.kode === "lagret_svar_mangler") return null;
+    throw e;
+  }
+}
+
 export type Startresultat = {
   sporsmal: string;
   kildeavsnittNummer: number;
@@ -266,12 +285,10 @@ export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
   // av elevens første svar, og prompten har gjort det sjeldnere, ikke borte
   // (1 av 3 i prøvekjøringen 16.10). Startspørsmålet lages én gang per samtale.
   for (let forsok = 0; forsok < 3; forsok++) {
-    const r = await kjoerGenerator({
-      oppgave: "samtalestart",
-      skjema: StartSkjema,
-      brukermelding,
-      kjoering: forsok,
-    });
+    const r: Generert<z.infer<typeof StartSkjema>> | null = await nyttForsok(forsok, beste !== null, () =>
+      kjoerGenerator({ oppgave: "samtalestart", skjema: StartSkjema, brukermelding, kjoering: forsok }),
+    );
+    if (!r) break;
     const { harde, myke } = bruddPaaStart(r.data, avsnitt);
     if (harde.length > 0) {
       siste = harde;
@@ -333,12 +350,10 @@ export async function vurderSvar(inn: {
   let sisteHarde: string[] = [];
 
   for (let forsok = 0; forsok < 2; forsok++) {
-    const r = await kjoerGenerator({
-      oppgave: "svarvurdering",
-      skjema: VurderingSkjema,
-      brukermelding,
-      kjoering: forsok,
-    });
+    const r: Generert<Vurderingsutkast> | null = await nyttForsok(forsok, beste !== null, () =>
+      kjoerGenerator({ oppgave: "svarvurdering", skjema: VurderingSkjema, brukermelding, kjoering: forsok }),
+    );
+    if (!r) break;
     const { harde, myke } = bruddPaaVurdering(r.data, kontekst);
     if (harde.length > 0) {
       sisteHarde = harde;
