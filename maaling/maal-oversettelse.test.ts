@@ -179,6 +179,8 @@ function vurderingsark(resultater: Tekstmaal[], spraaknavn: string): string {
     "- **C. Uforståelig:** Er noe vanskelig eller umulig å forstå?",
     "- **D. Direkte galt:** Sier oversettelsen noe annet enn det norske?",
     "",
+    "**Når regnes oversettelsen som god nok?** En tekst er uten anmerkning når A og B er «ja» og C og D er «nei». Oversettelsen består når minst tre av de fire tekstene er uten anmerkning.",
+    "",
   ];
 
   resultater.forEach((r, i) => {
