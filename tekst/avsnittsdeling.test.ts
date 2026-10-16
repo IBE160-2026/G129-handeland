@@ -202,3 +202,44 @@ describe("ordtelling for tetthetstakene i FR-7", () => {
     expect(antallOrd(a)).toBe(3);
   });
 });
+
+describe("regel 6 — overskrift på egen linje uten tom linje under", () => {
+  test("tekst limt inn fra en nettside: overskriften skilles ut", () => {
+    // Slik rente-teksten kom inn 16.10: ett linjeskift etter overskriften.
+    const a = delIAvsnitt(
+      "Renter på lån\nRenten er vanligvis en viss prosent av de pengene man har lånt.",
+    );
+    expect(a.map((x) => [x.innhold, x.erOverskrift])).toEqual([
+      ["Renter på lån", true],
+      ["Renten er vanligvis en viss prosent av de pengene man har lånt.", false],
+    ]);
+  });
+
+  test("PDF-tekst brutt i linjer: en linje uten punktum foran et egennavn blir IKKE overskrift", () => {
+    // Linjene er omtrent like lange, slik de er når et avsnitt brytes på
+    // sidebredden. Første linje mangler punktum og neste begynner med stor
+    // bokstav — men den er ikke kort nok til å være en overskrift.
+    const a = delIAvsnitt(
+      "Hvor høy renten skal være, bestemmes til slutt av\nNorges Bank, som setter styringsrenten flere ganger i året.",
+    );
+    expect(a).toHaveLength(1);
+    expect(a[0].erOverskrift).toBe(false);
+  });
+
+  test("fortsettelse med liten bokstav er samme setning, ikke ny", () => {
+    const a = delIAvsnitt("Renter på lån\nkan være høye eller lave avhengig av mange ting i økonomien.");
+    expect(a).toHaveLength(1);
+  });
+
+  test("uklart tilfelle faller tilbake til regel 3: kort brødtekst under en overskrift", () => {
+    // «Renter» er ikke tydelig kortere enn «Se under.», så ingenting skilles
+    // ut. Eleven kan rette det i gjennomsynet.
+    const a = delIAvsnitt("Renter\nSe under.");
+    expect(a).toHaveLength(1);
+  });
+
+  test("med tom linje virker alt som før", () => {
+    const a = delIAvsnitt("Renter på lån\n\nRenten er vanligvis en viss prosent.");
+    expect(a.map((x) => x.erOverskrift)).toEqual([true, false]);
+  });
+});

@@ -35,6 +35,19 @@ export type Avsnitt = {
  *      - den er høyst 100 tegn OG høyst 10 ord
  *      - den slutter ikke med `.` eller `:`
  *    Ellers er den brødtekst.
+ * 6. Unntak fra regel 3: står en overskrift på egen linje rett over
+ *    brødteksten, uten tom linje mellom, skilles den ut som eget avsnitt —
+ *    men BARE når alle disse holder:
+ *      - linjen er en overskrift etter regel 5
+ *      - neste linje begynner med stor bokstav eller tall (en ny setning)
+ *      - linjen er høyst 60 prosent så lang som neste linje
+ *    Tekst limt inn fra nettsider har ofte bare ett linjeskift etter
+ *    overskriftene; uten regelen ble «Renter på lån» og avsnittet under ett
+ *    avsnitt. Lengdekravet er vernet mot PDF-tekst: der er et avsnitt brutt
+ *    i linjer av omtrent lik lengde, og en linje som tilfeldigvis mangler
+ *    punktum og etterfølges av et egennavn, skal ikke bli en overskrift.
+ *    Er tilfellet ikke tydelig, gjelder regel 3, og gjennomsynet er der
+ *    eleven kan rette.
  *
  * KJENT BEGRENSNING, bevisst: finnes det ingen tomme linjer i teksten i det hele
  * tatt, blir hele teksten ett avsnitt. Det er riktig oppførsel framfor å gjette
@@ -47,7 +60,7 @@ export function delIAvsnitt(tekst: string): Avsnitt[] {
 
   const blokker = normalisert
     .split(/\n[ \t]*\n+/)
-    .map(slaaSammenLinjer)
+    .flatMap(delBlokk)
     .filter((blokk) => blokk.length > 0);
 
   return blokker.map((innhold, i) => ({
@@ -57,14 +70,31 @@ export function delIAvsnitt(tekst: string): Avsnitt[] {
   }));
 }
 
-/** Regel 3: enkle linjeskift innenfor en blokk blir mellomrom. */
-function slaaSammenLinjer(blokk: string): string {
-  return blokk
+/**
+ * Regel 3 og 6: enkle linjeskift innenfor en blokk blir mellomrom, unntatt
+ * en overskrift på egen linje øverst, som skilles ut.
+ */
+function delBlokk(blokk: string): string[] {
+  const linjer = blokk
     .split("\n")
     .map((linje) => linje.trim())
-    .filter((linje) => linje.length > 0)
-    .join(" ")
-    .trim();
+    .filter((linje) => linje.length > 0);
+
+  const ut: string[] = [];
+  while (linjer.length >= 2 && erOverskriftslinje(linjer[0], linjer[1])) {
+    ut.push(linjer.shift()!);
+  }
+  if (linjer.length > 0) ut.push(linjer.join(" ").trim());
+  return ut;
+}
+
+/** Regel 6. */
+function erOverskriftslinje(linje: string, neste: string): boolean {
+  return (
+    erOverskrift(linje) &&
+    /^[\p{Lu}\p{N}]/u.test(neste) &&
+    linje.length <= 0.6 * neste.length
+  );
 }
 
 /** Høyst så mange ord i en overskrift. Se begrunnelsen under. */
