@@ -11,6 +11,7 @@ import { tilgang } from "../data/konto";
 import { listTekster } from "../data/tilgang";
 import { limInnTekst } from "./handlinger";
 import { LimInnSkjema } from "./komponenter/Skjemaer";
+import { SlettTekstKnapp } from "./komponenter/SlettTekstKnapp";
 
 /** Hvor eleven skal fortsette, ut fra hvor langt Teksten har kommet (AD-9). */
 function nesteSteg(tilstand: "innlest" | "aktivert" | "laast", id: string) {
@@ -75,6 +76,9 @@ export default async function Startside() {
                       )}
                     </li>
                   </ul>
+                  <div className="mt-2">
+                    <SlettTekstKnapp tekstId={t.id} tittel={t.tittel} />
+                  </div>
                 </li>
               ))}
             </ul>

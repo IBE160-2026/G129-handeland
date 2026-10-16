@@ -355,8 +355,20 @@ export async function leverQuiz(
  * FR-37 — sletting
  * ------------------------------------------------------------------ */
 
-export async function slett(tekstId: string) {
-  await slettTekst(await tilgang(), tekstId);
+/**
+ * Sletter én Tekst og alt generert innhold knyttet til den.
+ *
+ * Svarer med om det gikk, framfor å omdirigere: knappen som kaller den
+ * (SlettTekstKnapp) må kunne vise en feil, og en omdirigering inne i en
+ * try/catch i nettleseren er ikke noe den skal måtte skille fra en feil.
+ */
+export async function slett(tekstId: string): Promise<{ slettet: boolean }> {
+  const t = await tilgang();
+  try {
+    await slettTekst(t, tekstId);
+  } catch {
+    return { slettet: false };
+  }
   revalidatePath("/");
-  redirect("/");
+  return { slettet: true };
 }
