@@ -87,6 +87,18 @@ export function LimInnSkjema({
         />
       </div>
 
+      {/*
+        §6.2: før første innsending skal eleven vite hvor teksten går. Står
+        rett over knappen, slik at den leses i det øyeblikket det betyr noe.
+        Sier ikke noe om behandlingssted, fordi det ikke er avklart
+        (addendum §6).
+      */}
+      <p className="text-sm text-slate-600 dark:text-slate-400">
+        Teksten du limer inn, sendes til Anthropic, som finner fagordene og
+        lager quizen med en språkmodell. Teksten brukes ikke til å trene
+        modeller.
+      </p>
+
       <Send venter="Leser inn…" klar="Begynn" />
     </form>
   );

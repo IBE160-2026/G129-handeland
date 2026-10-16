@@ -19,7 +19,9 @@ export default async function Registrer() {
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Lesevenn lagrer bare e-postadressen din, passordet (kryptert, så ingen
         kan lese det), og tekstene og svarene du selv legger inn. Ikke navn,
-        skole, klasse eller alder. Du kan slette alt når du vil.
+        skole, klasse eller alder. Du kan slette alt når du vil. Tekstene du
+        legger inn, sendes til språkmodellen til Anthropic for behandling, men
+        brukes ikke til å trene modeller.
       </p>
       <section className="mt-8">
         <RegistreringSkjema />
