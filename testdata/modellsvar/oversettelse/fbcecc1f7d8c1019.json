@@ -1,0 +1,31 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Norsk bokmål\", \"kode\": \"nb\" }, \"fagord\": [], \"elementer\": [ { \"id\": \"s0\", \"type\": \"setning\", \"tekst\": \"Високе зростання цін (Prisvekst)",
+  "lagret": "2026-10-16T19:41:36.343Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "Høy prisvekst (prisvekst) fører til ny renteøkning (renteøkning), fordi konflikten i Midtøsten og høy lønnsvekst holder prisveksten (prisvekst) på et høyt nivå."
+      },
+      {
+        "id": "s1",
+        "oversatt": "Styringsrenta (styringsrenta) ble hevet til 4,25 prosent i mai, og Thomas von Brasch venter en ny renteøkning fra Norges Bank i år."
+      },
+      {
+        "id": "s2",
+        "oversatt": "Investeringene i boliger var fortsatt lave gjennom 2025, og prognosene viser ingen tegn til oppgang i boligbyggingen i nærmeste framtid."
+      },
+      {
+        "id": "s3",
+        "oversatt": "Prognosene tilsier at økonomien i Fastlands-Norge vokser nær et normalt nivå, med en vekst på litt over 1,5 prosent."
+      },
+      {
+        "id": "s4",
+        "oversatt": "Konflikten i Midtøsten har ført til høyere priser på energi og råvarer, og dermed høyere inflasjon (inflasjon) hos Norges handelspartnere."
+      }
+    ]
+  }
+}

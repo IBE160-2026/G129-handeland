@@ -1,0 +1,27 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Ukrainsk\", \"kode\": \"uk\" }, \"fagord\": [ \"operativsystem\", \"programvaren\", \"minne\", \"prosessorer\", \"driverprogrammet\", \"systemprogramvare",
+  "lagret": "2026-10-16T19:42:04.085Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "o1",
+        "oversatt": "операційна система (operativsystem)"
+      },
+      {
+        "id": "o5",
+        "oversatt": "Звичайні операційні системи (operativsystem)"
+      },
+      {
+        "id": "o9",
+        "oversatt": "Передумови"
+      },
+      {
+        "id": "o12",
+        "oversatt": "Відомі операційні системи (operativsystem)"
+      }
+    ]
+  }
+}

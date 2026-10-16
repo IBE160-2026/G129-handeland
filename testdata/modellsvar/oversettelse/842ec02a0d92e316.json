@@ -1,0 +1,43 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Ukrainsk\", \"kode\": \"uk\" }, \"fagord\": [ \"EM-bølger\", \"Radiobølger\", \"frekvens\", \"bølgelengde\", \"mikrobølger\", \"Infrarød stråling\", \"",
+  "lagret": "2026-10-16T19:41:10.981Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "o1",
+        "oversatt": "Властивості різних електромагнітних хвиль (EM-bølger)"
+      },
+      {
+        "id": "o2",
+        "oversatt": "Радіохвилі (Radiobølger)"
+      },
+      {
+        "id": "o6",
+        "oversatt": "Мікрохвилі (mikrobølger)"
+      },
+      {
+        "id": "o9",
+        "oversatt": "Інфрачервоне випромінювання (Infrarød stråling)"
+      },
+      {
+        "id": "o14",
+        "oversatt": "Видиме світло"
+      },
+      {
+        "id": "o18",
+        "oversatt": "Ультрафіолетове випромінювання (ultrafiolett stråling)"
+      },
+      {
+        "id": "o22",
+        "oversatt": "Рентгенівське випромінювання (røntgenstråling)"
+      },
+      {
+        "id": "o26",
+        "oversatt": "Гамма-випромінювання (gammastråling)"
+      }
+    ]
+  }
+}

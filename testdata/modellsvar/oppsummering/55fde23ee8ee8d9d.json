@@ -1,0 +1,31 @@
+{
+  "oppgave": "oppsummering",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-16T19:42:00.221Z",
+  "data": {
+    "setninger": [
+      {
+        "tekst": "Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det tildeler de forskjellige ressursene i datamaskinen til andre programmer.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Operativsystemet holder styr på både eksterne enheter, som en skriver, og interne enheter, som minne og prosessorer.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Av systemprogramvare er operativsystemet den viktigste, fordi det holder styr på systemressursene og gjør programmererens jobb enklere.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Operativsystemet er et program som alle andre i datamaskinen, men det lastes inn i minnet først når maskinen startes, og styrer alle programmer som lastes inn senere.",
+        "kildeavsnitt": 4
+      },
+      {
+        "tekst": "Et moderne datasystem består av komponenter som operativsystemet holder styr på, og det gir applikasjonsprogrammer tilgang til dem, slik at applikasjonsprogramvaren skilles fra den mer komplekse maskinvaren.",
+        "kildeavsnitt": 10
+      }
+    ]
+  }
+}

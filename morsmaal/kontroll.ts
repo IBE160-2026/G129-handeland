@@ -75,7 +75,7 @@ export function ankerandel(maal: Ankermaal[]): number {
 
 /**
  * Nektingsordene FR-28 nevner, og de nærmeste slektningene. Teller som avvik
- * bare når tilbakeoversettelsen har FÆRRE enn originalen: en nekting som er
+ * bare når tilbakeoversettelsen har FÆRRE nektinger i alt enn originalen: en nekting som er
  * borte, snur meningen, mens en ekstra er sjelden og ufarlig å overse.
  */
 export const NEKTINGSORD = ["ikke", "aldri", "uten", "ingen", "intet", "ingenting", "verken"];
@@ -108,11 +108,13 @@ export type Avvik = { kategori: "nekting" | "tall" | "navn"; detalj: string };
 export function sammenlignTilbake(original: string, tilbake: string): Avvik[] {
   const avvik: Avvik[] = [];
 
-  for (const ord of NEKTINGSORD) {
-    const foer = antallTreff(original, ord);
-    const etter = antallTreff(tilbake, ord);
-    if (etter < foer) avvik.push({ kategori: "nekting", detalj: `«${ord}» ${foer} → ${etter}` });
-  }
+  // Ordene telles samlet, ikke hvert for seg: «tyder ikke på noen oppgang»
+  // tilbake som «viser ingen oppgang» er samme nekting med et annet ord. Det
+  // første målet på fire tekster ga nettopp det falske avviket.
+  const nektinger = (t: string) => NEKTINGSORD.reduce((s, o) => s + antallTreff(t, o), 0);
+  const foer = nektinger(original);
+  const etter = nektinger(tilbake);
+  if (etter < foer) avvik.push({ kategori: "nekting", detalj: `${foer} → ${etter}` });
 
   const a = tall(original);
   const b = tall(tilbake);

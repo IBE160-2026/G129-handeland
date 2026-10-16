@@ -13,12 +13,14 @@
 
 import { spawn } from "node:child_process";
 
+// Første argument kan være en annen målefil (FR-28: maal-oversettelse).
+const egenFil = process.argv[2]?.endsWith(".test.ts");
 const argv = [
   "vitest",
   "run",
-  "maaling/maal-faguttrykk.test.ts",
+  egenFil ? process.argv[2] : "maaling/maal-faguttrykk.test.ts",
   "--silent=false",
-  ...process.argv.slice(2),
+  ...process.argv.slice(egenFil ? 3 : 2),
 ];
 
 console.log(

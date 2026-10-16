@@ -1,0 +1,31 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Norsk bokmål\", \"kode\": \"nb\" }, \"fagord\": [], \"elementer\": [ { \"id\": \"s0\", \"type\": \"setning\", \"tekst\": \"Операційна система (operativsyst",
+  "lagret": "2026-10-16T19:42:14.770Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "Operativsystemet (OS) er den grunnleggende programvaren på datamaskinen, og det fordeler ulike ressurser på datamaskinen mellom andre programmer."
+      },
+      {
+        "id": "s1",
+        "oversatt": "Operativsystemet holder øye med både eksterne enheter, for eksempel skriveren, og interne, for eksempel minnet og prosessorene."
+      },
+      {
+        "id": "s2",
+        "oversatt": "Blant systemprogramvare er operativsystemet det viktigste, fordi det holder oversikt over systemressursene og gjør jobben enklere for programmereren."
+      },
+      {
+        "id": "s3",
+        "oversatt": "Operativsystemet er et program, som alle andre i datamaskinen, men det lastes inn i minnet først når maskinen starter, og det styrer alle programmene som lastes inn senere."
+      },
+      {
+        "id": "s4",
+        "oversatt": "Et moderne datasystem består av komponenter som operativsystemet holder øye med, og det gir applikasjonsprogrammene tilgang til dem, slik at applikasjonsprogramvaren skilles fra den mer kompliserte maskinvaren."
+      }
+    ]
+  }
+}

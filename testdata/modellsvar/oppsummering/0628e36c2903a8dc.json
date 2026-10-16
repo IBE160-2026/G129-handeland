@@ -1,0 +1,31 @@
+{
+  "oppgave": "oppsummering",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-16T19:41:44.762Z",
+  "data": {
+    "setninger": [
+      {
+        "tekst": "Et språklig bilde er et uttrykk som blir brukt i overført betydning for å beskrive noen eller noe, og de fire vanligste er sammenlikning, metafor, personifikasjon og besjeling.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Lyrikken uttrykker stemninger, følelser og inntrykk, og forfatterne bruker ofte språklige bilder som personifikasjon og besjeling for å formidle dette.",
+        "kildeavsnitt": 7
+      },
+      {
+        "tekst": "En konnotasjon er en felles assosiasjon som vi knytter til et ord, og ordvalget til dikteren er med på å skape stemning i diktet.",
+        "kildeavsnitt": 24
+      },
+      {
+        "tekst": "En allegori er en tekst som kan tolkes som et bilde på noe annet, og noen ganger brukes den for å få fram en moral, slik som i en fabel.",
+        "kildeavsnitt": 35
+      },
+      {
+        "tekst": "En allusjon er et språklig virkemiddel der vi låner fra eller refererer til en annen tekst, og den gir et ekstra lag med mening når mottakeren skjønner allusjonen.",
+        "kildeavsnitt": 52
+      }
+    ]
+  }
+}

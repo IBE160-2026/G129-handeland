@@ -1,0 +1,35 @@
+{
+  "oppgave": "oppsummering",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-16T19:41:04.040Z",
+  "data": {
+    "setninger": [
+      {
+        "tekst": "Heinrich Hertz lagde i 1887 elektriske svingninger som produserte radiobølger, med lav frekvens og lang bølgelengde.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Hertz viste at radiobølger har bølgeegenskaper som brytning, bøyning og overlagring, og at farten var 300 000 km/s, akkurat som forutsagt for elektromagnetiske bølger.",
+        "kildeavsnitt": 4
+      },
+      {
+        "tekst": "Radiobølger er godt egnet til å sende signaler over store avstander, og kan reflekteres av ionosfæren.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Mikrobølger har bølgelengder mellom 1 mm og 1 m, og i mikrobølgeovnen passer frekvensen deres godt med svingefrekvensen til fett- og vannmolekyler, slik at maten varmes opp.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "IR-stråling har litt mindre energi enn synlig lys og bølgelengder fra 700 nm til 1 mm, og jo høyere temperatur, desto mer energirike IR-bølger sendes ut.",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "UV-stråling har bølgelengder fra 10 nm til 400 nm og er delt inn i UV-A, UV-B og UV-C, der UV-C stoppes nesten helt av ozonlaget.",
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

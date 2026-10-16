@@ -1,0 +1,370 @@
+{
+  "krav": "FR-28",
+  "spraak": "uk",
+  "dato": "2026-10-16",
+  "tekster": [
+    "naturfag-em-bolger",
+    "samfunnsfag-prisvekst",
+    "norsk-sprakligebilder",
+    "teknologi-operativsystem"
+  ],
+  "begrepsanker": {
+    "andel": 0.9811320754716981,
+    "terskel": 0.95,
+    "bestaatt": true
+  },
+  "tilbakeoversettelse": {
+    "avvik": 0,
+    "maal": 0,
+    "bestaatt": true
+  },
+  "eksternVurdering": "Ikke gjort. Se vurderingsarket.",
+  "resultater": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "tittel": "Egenskaper hos ulike EM-bølger",
+      "overskrifter": [
+        {
+          "norsk": "Egenskaper hos ulike EM-bølger",
+          "oversatt": "Властивості різних електромагнітних хвиль (EM-bølger)"
+        },
+        {
+          "norsk": "Radiobølger",
+          "oversatt": "Радіохвилі (Radiobølger)"
+        },
+        {
+          "norsk": "Mikrobølger",
+          "oversatt": "Мікрохвилі (mikrobølger)"
+        },
+        {
+          "norsk": "Infrarød stråling",
+          "oversatt": "Інфрачервоне випромінювання (Infrarød stråling)"
+        },
+        {
+          "norsk": "Synlig lys",
+          "oversatt": "Видиме світло"
+        },
+        {
+          "norsk": "Ultrafiolett stråling",
+          "oversatt": "Ультрафіолетове випромінювання (ultrafiolett stråling)"
+        },
+        {
+          "norsk": "Røntgenstråling",
+          "oversatt": "Рентгенівське випромінювання (røntgenstråling)"
+        },
+        {
+          "norsk": "Gammastråling",
+          "oversatt": "Гамма-випромінювання (gammastråling)"
+        }
+      ],
+      "oppsummering": [
+        {
+          "norsk": "Heinrich Hertz lagde i 1887 elektriske svingninger som produserte radiobølger, med lav frekvens og lang bølgelengde.",
+          "oversatt": "Генріх Герц у 1887 році створив електричні коливання, які породжували радіохвилі (Radiobølger) з низькою частотою (frekvens) і великою довжиною хвилі (bølgelengde).",
+          "tilbake": "Heinrich Hertz skapte i 1887 elektriske svingninger som ga radiobølger med lav frekvens og stor bølgelengde.",
+          "avvik": []
+        },
+        {
+          "norsk": "Hertz viste at radiobølger har bølgeegenskaper som brytning, bøyning og overlagring, og at farten var 300 000 km/s, akkurat som forutsagt for elektromagnetiske bølger.",
+          "oversatt": "Герц показав, що радіохвилі (Radiobølger) мають хвильові властивості, як-от заломлення, дифракцію (bøyning) і суперпозицію, а швидкість становила 300 000 км/с, точно як було передбачено для електромагнітних хвиль (EM-bølger).",
+          "tilbake": "Hertz viste at radiobølger har bølgeegenskaper, for eksempel brytning, diffraksjon og superposisjon, og at hastigheten var 300 000 km/s, akkurat slik det var forutsagt for elektromagnetiske bølger (EM-bølger).",
+          "avvik": []
+        },
+        {
+          "norsk": "Radiobølger er godt egnet til å sende signaler over store avstander, og kan reflekteres av ionosfæren.",
+          "oversatt": "Радіохвилі (Radiobølger) добре підходять для передавання сигналів на великі відстані і можуть відбиватися від іоносфери.",
+          "tilbake": "Radiobølger er godt egnet til å overføre signaler over store avstander, og de kan reflekteres fra ionosfæren.",
+          "avvik": []
+        },
+        {
+          "norsk": "Mikrobølger har bølgelengder mellom 1 mm og 1 m, og i mikrobølgeovnen passer frekvensen deres godt med svingefrekvensen til fett- og vannmolekyler, slik at maten varmes opp.",
+          "oversatt": "Мікрохвилі (mikrobølger) мають довжини хвиль (bølgelengde) від 1 мм до 1 м, а в мікрохвильовій печі їхня частота (frekvens) добре збігається з частотою коливань молекул жиру та води, тому їжа нагрівається.",
+          "tilbake": "Mikrobølger har bølgelengder fra 1 mm til 1 m, og i en mikrobølgeovn samsvarer frekvensen deres godt med svingefrekvensen til fett- og vannmolekyler, derfor blir maten varm.",
+          "avvik": []
+        },
+        {
+          "norsk": "IR-stråling har litt mindre energi enn synlig lys og bølgelengder fra 700 nm til 1 mm, og jo høyere temperatur, desto mer energirike IR-bølger sendes ut.",
+          "oversatt": "ІЧ-випромінювання (Infrarød stråling) має трохи меншу енергію (energi), ніж видиме світло, і довжини хвиль (bølgelengde) від 700 нм до 1 мм, а чим вища температура, тим енергійніші ІЧ-хвилі випромінюються.",
+          "tilbake": "Infrarød stråling har litt lavere energi enn synlig lys og bølgelengder fra 700 nm til 1 mm, og jo høyere temperatur, desto mer energirike infrarøde bølger sendes ut.",
+          "avvik": []
+        }
+      ],
+      "anker": {
+        "forventet": 15,
+        "funnet": 15,
+        "mangler": []
+      },
+      "promptversjoner": {
+        "oppsummering": "v1",
+        "oversettelse": "v1"
+      },
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "tittel": "Høy prisvekst gir ny renteøkning",
+      "overskrifter": [
+        {
+          "norsk": "Høy prisvekst gir ny renteøkning",
+          "oversatt": "Високе зростання цін (Prisvekst) — нове підвищення ставки (renteøkning)"
+        },
+        {
+          "norsk": "Ny renteøkning i år",
+          "oversatt": "Нове підвищення ставки (renteøkning) цього року"
+        },
+        {
+          "norsk": "Fortsatt svake utsikter for boligbyggingen",
+          "oversatt": "Перспективи житлового будівництва і далі слабкі"
+        },
+        {
+          "norsk": "Sysselsettingsvekst trekker ledigheten ned",
+          "oversatt": "Зростання зайнятості (Sysselsettingsvekst) знижує безробіття"
+        },
+        {
+          "norsk": "Norsk økonomi ventes å vokse nær normalt",
+          "oversatt": "Економіка Норвегії, за прогнозами, зростатиме близько до звичайного рівня"
+        },
+        {
+          "norsk": "Konflikten i Midtøsten gir høyere inflasjon hos våre handelspartnere",
+          "oversatt": "Конфлікт на Близькому Сході підвищує інфляцію (inflasjon) у наших торговельних партнерів"
+        }
+      ],
+      "oppsummering": [
+        {
+          "norsk": "Høy prisvekst gir ny renteøkning, fordi Konflikten i Midtøsten og høy lønnsvekst holder prisveksten oppe.",
+          "oversatt": "Високе зростання цін (Prisvekst) призводить до нового підвищення відсоткової ставки (renteøkning), оскільки конфлікт на Близькому Сході та високе зростання заробітних плат утримують зростання цін (Prisvekst) на високому рівні.",
+          "tilbake": "Høy prisvekst (prisvekst) fører til ny renteøkning (renteøkning), fordi konflikten i Midtøsten og høy lønnsvekst holder prisveksten (prisvekst) på et høyt nivå.",
+          "avvik": []
+        },
+        {
+          "norsk": "Styringsrenta ble økt til 4,25 prosent i mai, og Thomas von Brasch venter en ny renteheving fra Norges Bank i år.",
+          "oversatt": "Облікова ставка (styringsrenta) була підвищена до 4,25 відсотка в травні, і Томас фон Брашш очікує нового підвищення ставки з боку Norges Bank цього року.",
+          "tilbake": "Styringsrenta (styringsrenta) ble hevet til 4,25 prosent i mai, og Thomas von Brasch venter en ny renteøkning fra Norges Bank i år.",
+          "avvik": []
+        },
+        {
+          "norsk": "Boliginvesteringene holdt seg lave gjennom 2025, og prognosene tyder ikke på noen snarlig oppgang i boligbyggingen.",
+          "oversatt": "Інвестиції в житло залишалися низькими протягом 2025 року, і прогнози не вказують на жодне найближче пожвавлення житлового будівництва.",
+          "tilbake": "Investeringene i boliger var fortsatt lave gjennom 2025, og prognosene viser ingen tegn til oppgang i boligbyggingen i nærmeste framtid.",
+          "avvik": []
+        },
+        {
+          "norsk": "Ifølge prognosene vil fastlandsøkonomien vokse nær normalt, med vekst på drøyt 1,5 prosent.",
+          "oversatt": "За прогнозами, економіка материкової частини Норвегії зростатиме близько до нормального рівня, із зростанням трохи більше ніж 1,5 відсотка.",
+          "tilbake": "Prognosene tilsier at økonomien i Fastlands-Norge vokser nær et normalt nivå, med en vekst på litt over 1,5 prosent.",
+          "avvik": []
+        },
+        {
+          "norsk": "Konflikten i Midtøsten har gitt høyere energi- og råvarepriser, og dermed høyere inflasjon hos Norges handelspartnere.",
+          "oversatt": "Конфлікт на Близькому Сході призвів до зростання цін на енергоносії та сировину, а отже до вищої інфляції (inflasjon) у торговельних партнерів Норвегії.",
+          "tilbake": "Konflikten i Midtøsten har ført til høyere priser på energi og råvarer, og dermed høyere inflasjon (inflasjon) hos Norges handelspartnere.",
+          "avvik": []
+        }
+      ],
+      "anker": {
+        "forventet": 9,
+        "funnet": 8,
+        "mangler": [
+          "sysselsettingsvekst"
+        ]
+      },
+      "promptversjoner": {
+        "oppsummering": "v1",
+        "oversettelse": "v1"
+      },
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-sprakligebilder",
+      "tittel": "Språklige bilder: metafor, allegori og allusjon",
+      "overskrifter": [
+        {
+          "norsk": "Språklige bilder: metafor, allegori og allusjon",
+          "oversatt": "Мовні образи: метафора (metafor), алегорія (allegori) і алюзія (allusjon)"
+        },
+        {
+          "norsk": "Lyriske virkemidler",
+          "oversatt": "Ліричні засоби (Lyriske virkemidler)"
+        },
+        {
+          "norsk": "Litt om språklige bilder",
+          "oversatt": "Трохи про мовні образи"
+        },
+        {
+          "norsk": "Del 1: Vanlige virkemidler i dikt",
+          "oversatt": "Частина 1: Поширені художні засоби у віршах"
+        },
+        {
+          "norsk": "Besjeling",
+          "oversatt": "Одушевлення (besjeling)"
+        },
+        {
+          "norsk": "Personifikasjon",
+          "oversatt": "Уособлення (personifikasjon)"
+        },
+        {
+          "norsk": "Konnotasjoner",
+          "oversatt": "Конотації (konnotasjoner)"
+        },
+        {
+          "norsk": "Ord om \"jeget\"",
+          "oversatt": "Про «ліричне я»"
+        },
+        {
+          "norsk": "Ord om \"duet\"",
+          "oversatt": "Про «ти»"
+        },
+        {
+          "norsk": "Allegori",
+          "oversatt": "Алегорія (allegori)"
+        },
+        {
+          "norsk": "Før du leser",
+          "oversatt": "Перш ніж читати"
+        },
+        {
+          "norsk": "Hva er allegori?",
+          "oversatt": "Що таке алегорія (allegori)?"
+        },
+        {
+          "norsk": "Allegori i fabler og fortellinger",
+          "oversatt": "Алегорія у байках і оповіданнях (allegori)"
+        },
+        {
+          "norsk": "Allegori i en roman",
+          "oversatt": "Алегорія в романі (allegori)"
+        },
+        {
+          "norsk": "Allusjon",
+          "oversatt": "Алюзія (allusjon)"
+        },
+        {
+          "norsk": "Før du leser",
+          "oversatt": "Перш ніж читати"
+        },
+        {
+          "norsk": "Hva er en allusjon?",
+          "oversatt": "Що таке алюзія (allusjon)?"
+        },
+        {
+          "norsk": "Et eksempel fra litteraturen",
+          "oversatt": "Приклад з літератури"
+        },
+        {
+          "norsk": "Du som er i himmelen!",
+          "oversatt": "Ти, що на небесах!"
+        },
+        {
+          "norsk": "Allusjon i bilder",
+          "oversatt": "Алюзія в образах (allusjon)"
+        }
+      ],
+      "oppsummering": [
+        {
+          "norsk": "Et språklig bilde er et uttrykk som blir brukt i overført betydning for å beskrive noen eller noe, og de fire vanligste er sammenlikning, metafor, personifikasjon og besjeling.",
+          "oversatt": "Мовний образ — це вислів, який вживається в переносному значенні, щоб описати когось або щось, а найпоширеніші з них — порівняння, метафора (metafor), персоніфікація (personifikasjon) і одушевлення (besjeling).",
+          "tilbake": "Et språklig bilde er et uttrykk som brukes i overført betydning for å beskrive noen eller noe, og de vanligste er sammenligning, metafor, personifikasjon og besjeling.",
+          "avvik": []
+        },
+        {
+          "norsk": "Lyrikken uttrykker stemninger, følelser og inntrykk, og forfatterne bruker ofte språklige bilder som personifikasjon og besjeling for å formidle dette.",
+          "oversatt": "Лірика передає настрої, почуття і враження, і автори часто використовують мовні образи, такі як персоніфікація (personifikasjon) та одушевлення (besjeling), щоб передати це.",
+          "tilbake": "Lyrikk formidler stemninger, følelser og inntrykk, og forfattere bruker ofte språklige bilder, som personifikasjon og besjeling, for å formidle dette.",
+          "avvik": []
+        },
+        {
+          "norsk": "En konnotasjon er en felles assosiasjon som vi knytter til et ord, og ordvalget til dikteren er med på å skape stemning i diktet.",
+          "oversatt": "Конотація (konnotasjoner) — це спільна асоціація, яку ми пов'язуємо зі словом, а вибір слів поета допомагає створити настрій у вірші.",
+          "tilbake": "Konnotasjon er den felles assosiasjonen vi knytter til et ord, og dikterens valg av ord hjelper med å skape stemning i diktet.",
+          "avvik": []
+        },
+        {
+          "norsk": "En allegori er en tekst som kan tolkes som et bilde på noe annet, og noen ganger brukes den for å få fram en moral, slik som i en fabel.",
+          "oversatt": "Алегорія (allegori) — це текст, який можна тлумачити як образ чогось іншого, і іноді її використовують, щоб донести мораль, як у байці.",
+          "tilbake": "Allegori er en tekst som kan tolkes som et bilde på noe annet, og den brukes noen ganger for å formidle en moral, som i en fabel.",
+          "avvik": []
+        },
+        {
+          "norsk": "En allusjon er et språklig virkemiddel der vi låner fra eller refererer til en annen tekst, og den gir et ekstra lag med mening når mottakeren skjønner allusjonen.",
+          "oversatt": "Алюзія (allusjon) — це мовний засіб, у якому ми запозичуємо з іншого тексту або посилаємося на нього, і алюзія (allusjon) дає додатковий шар змісту, коли читач її розуміє.",
+          "tilbake": "Allusjon er et virkemiddel der vi låner fra eller viser til en annen tekst, og allusjonen gir et ekstra lag av mening når leseren forstår den.",
+          "avvik": []
+        }
+      ],
+      "anker": {
+        "forventet": 21,
+        "funnet": 21,
+        "mangler": []
+      },
+      "promptversjoner": {
+        "oppsummering": "v1",
+        "oversettelse": "v1"
+      },
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "tittel": "Operativsystem",
+      "overskrifter": [
+        {
+          "norsk": "Operativsystem",
+          "oversatt": "операційна система (operativsystem)"
+        },
+        {
+          "norsk": "Vanlige operativsystem",
+          "oversatt": "Звичайні операційні системи (operativsystem)"
+        },
+        {
+          "norsk": "Bakgrunn",
+          "oversatt": "Передумови"
+        },
+        {
+          "norsk": "Kjente operativsystemer",
+          "oversatt": "Відомі операційні системи (operativsystem)"
+        }
+      ],
+      "oppsummering": [
+        {
+          "norsk": "Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det tildeler de forskjellige ressursene i datamaskinen til andre programmer.",
+          "oversatt": "Операційна система (operativsystem) (OS) — це основне програмне забезпечення (programvaren) комп'ютера, і вона розподіляє різні ресурси комп'ютера між іншими програмами.",
+          "tilbake": "Operativsystemet (OS) er den grunnleggende programvaren på datamaskinen, og det fordeler ulike ressurser på datamaskinen mellom andre programmer.",
+          "avvik": []
+        },
+        {
+          "norsk": "Operativsystemet holder styr på både eksterne enheter, som en skriver, og interne enheter, som minne og prosessorer.",
+          "oversatt": "Операційна система (operativsystem) стежить як за зовнішніми пристроями, наприклад принтером, так і за внутрішніми, наприклад пам'яттю (minne) і процесорами (prosessorer).",
+          "tilbake": "Operativsystemet holder øye med både eksterne enheter, for eksempel skriveren, og interne, for eksempel minnet og prosessorene.",
+          "avvik": []
+        },
+        {
+          "norsk": "Av systemprogramvare er operativsystemet den viktigste, fordi det holder styr på systemressursene og gjør programmererens jobb enklere.",
+          "oversatt": "Серед системного програмного забезпечення (systemprogramvare) операційна система є найважливішою, тому що вона стежить за системними ресурсами і полегшує роботу програміста.",
+          "tilbake": "Blant systemprogramvare er operativsystemet det viktigste, fordi det holder oversikt over systemressursene og gjør jobben enklere for programmereren.",
+          "avvik": []
+        },
+        {
+          "norsk": "Operativsystemet er et program som alle andre i datamaskinen, men det lastes inn i minnet først når maskinen startes, og styrer alle programmer som lastes inn senere.",
+          "oversatt": "Операційна система (operativsystem) — це програма, як і всі інші в комп'ютері, але вона завантажується в пам'ять (minne) першою, коли машину запускають, і керує всіма програмами, які завантажуються пізніше.",
+          "tilbake": "Operativsystemet er et program, som alle andre i datamaskinen, men det lastes inn i minnet først når maskinen starter, og det styrer alle programmene som lastes inn senere.",
+          "avvik": []
+        },
+        {
+          "norsk": "Et moderne datasystem består av komponenter som operativsystemet holder styr på, og det gir applikasjonsprogrammer tilgang til dem, slik at applikasjonsprogramvaren skilles fra den mer komplekse maskinvaren.",
+          "oversatt": "Сучасна комп'ютерна система складається з компонентів, за якими стежить операційна система (operativsystem), і вона надає прикладним програмам (applikasjonsprogrammer) доступ до них, тож прикладне програмне забезпечення відокремлюється від складнішого апаратного забезпечення (maskinvare).",
+          "tilbake": "Et moderne datasystem består av komponenter som operativsystemet holder øye med, og det gir applikasjonsprogrammene tilgang til dem, slik at applikasjonsprogramvaren skilles fra den mer kompliserte maskinvaren.",
+          "avvik": []
+        }
+      ],
+      "anker": {
+        "forventet": 8,
+        "funnet": 8,
+        "mangler": []
+      },
+      "promptversjoner": {
+        "oppsummering": "v1",
+        "oversettelse": "v1"
+      },
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

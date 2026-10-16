@@ -76,7 +76,16 @@ describe("FR-28 — tilbakeoversettelsen, bare for tre ting", () => {
 
   test("tapt nekting fanges", () => {
     const a = sammenlignTilbake("Planter kan ikke leve uten lys.", "Planter kan leve uten lys.");
-    expect(a).toEqual([{ kategori: "nekting", detalj: "«ikke» 1 → 0" }]);
+    expect(a).toEqual([{ kategori: "nekting", detalj: "2 → 1" }]);
+  });
+
+  test("samme nekting med et annet ord er ikke et avvik", () => {
+    expect(
+      sammenlignTilbake(
+        "Prognosene tyder ikke på noen snarlig oppgang.",
+        "Prognosene viser ingen tegn til oppgang i nærmeste framtid.",
+      ),
+    ).toEqual([]);
   });
 
   test("en ekstra nekting er ikke et avvik", () => {

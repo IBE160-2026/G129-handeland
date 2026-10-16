@@ -1,0 +1,91 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Ukrainsk\", \"kode\": \"uk\" }, \"fagord\": [ \"metafor\", \"allegori\", \"allusjon\", \"Lyriske virkemidler\", \"personifikasjon\", \"besjeling\", \"k",
+  "lagret": "2026-10-16T19:41:53.312Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "o1",
+        "oversatt": "Мовні образи: метафора (metafor), алегорія (allegori) і алюзія (allusjon)"
+      },
+      {
+        "id": "o2",
+        "oversatt": "Ліричні засоби (Lyriske virkemidler)"
+      },
+      {
+        "id": "o3",
+        "oversatt": "Трохи про мовні образи"
+      },
+      {
+        "id": "o6",
+        "oversatt": "Частина 1: Поширені художні засоби у віршах"
+      },
+      {
+        "id": "o9",
+        "oversatt": "Одушевлення (besjeling)"
+      },
+      {
+        "id": "o13",
+        "oversatt": "Уособлення (personifikasjon)"
+      },
+      {
+        "id": "o23",
+        "oversatt": "Конотації (konnotasjoner)"
+      },
+      {
+        "id": "o26",
+        "oversatt": "Про «ліричне я»"
+      },
+      {
+        "id": "o28",
+        "oversatt": "Про «ти»"
+      },
+      {
+        "id": "o30",
+        "oversatt": "Алегорія (allegori)"
+      },
+      {
+        "id": "o31",
+        "oversatt": "Перш ніж читати"
+      },
+      {
+        "id": "o34",
+        "oversatt": "Що таке алегорія (allegori)?"
+      },
+      {
+        "id": "o37",
+        "oversatt": "Алегорія у байках і оповіданнях (allegori)"
+      },
+      {
+        "id": "o41",
+        "oversatt": "Алегорія в романі (allegori)"
+      },
+      {
+        "id": "o47",
+        "oversatt": "Алюзія (allusjon)"
+      },
+      {
+        "id": "o48",
+        "oversatt": "Перш ніж читати"
+      },
+      {
+        "id": "o50",
+        "oversatt": "Що таке алюзія (allusjon)?"
+      },
+      {
+        "id": "o53",
+        "oversatt": "Приклад з літератури"
+      },
+      {
+        "id": "o54",
+        "oversatt": "Ти, що на небесах!"
+      },
+      {
+        "id": "o61",
+        "oversatt": "Алюзія в образах (allusjon)"
+      }
+    ]
+  }
+}

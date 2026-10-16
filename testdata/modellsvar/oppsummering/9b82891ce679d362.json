@@ -1,0 +1,31 @@
+{
+  "oppgave": "oppsummering",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-16T19:41:21.960Z",
+  "data": {
+    "setninger": [
+      {
+        "tekst": "Høy prisvekst gir ny renteøkning, fordi Konflikten i Midtøsten og høy lønnsvekst holder prisveksten oppe.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Styringsrenta ble økt til 4,25 prosent i mai, og Thomas von Brasch venter en ny renteheving fra Norges Bank i år.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "Boliginvesteringene holdt seg lave gjennom 2025, og prognosene tyder ikke på noen snarlig oppgang i boligbyggingen.",
+        "kildeavsnitt": 12
+      },
+      {
+        "tekst": "Ifølge prognosene vil fastlandsøkonomien vokse nær normalt, med vekst på drøyt 1,5 prosent.",
+        "kildeavsnitt": 21
+      },
+      {
+        "tekst": "Konflikten i Midtøsten har gitt høyere energi- og råvarepriser, og dermed høyere inflasjon hos Norges handelspartnere.",
+        "kildeavsnitt": 24
+      }
+    ]
+  }
+}

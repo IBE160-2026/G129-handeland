@@ -1,0 +1,31 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Norsk bokmål\", \"kode\": \"nb\" }, \"fagord\": [], \"elementer\": [ { \"id\": \"s0\", \"type\": \"setning\", \"tekst\": \"Мовний образ — це вислів, який в",
+  "lagret": "2026-10-16T19:41:57.350Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "Et språklig bilde er et uttrykk som brukes i overført betydning for å beskrive noen eller noe, og de vanligste er sammenligning, metafor, personifikasjon og besjeling."
+      },
+      {
+        "id": "s1",
+        "oversatt": "Lyrikk formidler stemninger, følelser og inntrykk, og forfattere bruker ofte språklige bilder, som personifikasjon og besjeling, for å formidle dette."
+      },
+      {
+        "id": "s2",
+        "oversatt": "Konnotasjon er den felles assosiasjonen vi knytter til et ord, og dikterens valg av ord hjelper med å skape stemning i diktet."
+      },
+      {
+        "id": "s3",
+        "oversatt": "Allegori er en tekst som kan tolkes som et bilde på noe annet, og den brukes noen ganger for å formidle en moral, som i en fabel."
+      },
+      {
+        "id": "s4",
+        "oversatt": "Allusjon er et virkemiddel der vi låner fra eller viser til en annen tekst, og allusjonen gir et ekstra lag av mening når leseren forstår den."
+      }
+    ]
+  }
+}

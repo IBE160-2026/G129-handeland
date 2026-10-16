@@ -1,0 +1,31 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Norsk bokmål\", \"kode\": \"nb\" }, \"fagord\": [], \"elementer\": [ { \"id\": \"s0\", \"type\": \"setning\", \"tekst\": \"Генріх Герц у 1887 році створив",
+  "lagret": "2026-10-16T19:41:19.467Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "Heinrich Hertz skapte i 1887 elektriske svingninger som ga radiobølger med lav frekvens og stor bølgelengde."
+      },
+      {
+        "id": "s1",
+        "oversatt": "Hertz viste at radiobølger har bølgeegenskaper, for eksempel brytning, diffraksjon og superposisjon, og at hastigheten var 300 000 km/s, akkurat slik det var forutsagt for elektromagnetiske bølger (EM-bølger)."
+      },
+      {
+        "id": "s2",
+        "oversatt": "Radiobølger er godt egnet til å overføre signaler over store avstander, og de kan reflekteres fra ionosfæren."
+      },
+      {
+        "id": "s3",
+        "oversatt": "Mikrobølger har bølgelengder fra 1 mm til 1 m, og i en mikrobølgeovn samsvarer frekvensen deres godt med svingefrekvensen til fett- og vannmolekyler, derfor blir maten varm."
+      },
+      {
+        "id": "s4",
+        "oversatt": "Infrarød stråling har litt lavere energi enn synlig lys og bølgelengder fra 700 nm til 1 mm, og jo høyere temperatur, desto mer energirike infrarøde bølger sendes ut."
+      }
+    ]
+  }
+}

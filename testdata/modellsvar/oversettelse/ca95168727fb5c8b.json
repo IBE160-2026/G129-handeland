@@ -1,0 +1,35 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Ukrainsk\", \"kode\": \"uk\" }, \"fagord\": [ \"Prisvekst\", \" renteøkning\", \"konjunkturtendensene\", \"styringsrenta\", \"inflasjon\", \"sysselsettin",
+  "lagret": "2026-10-16T19:41:28.018Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "o1",
+        "oversatt": "Високе зростання цін (Prisvekst) — нове підвищення ставки (renteøkning)"
+      },
+      {
+        "id": "o7",
+        "oversatt": "Нове підвищення ставки (renteøkning) цього року"
+      },
+      {
+        "id": "o11",
+        "oversatt": "Перспективи житлового будівництва і далі слабкі"
+      },
+      {
+        "id": "o15",
+        "oversatt": "Зростання зайнятості (Sysselsettingsvekst) знижує безробіття"
+      },
+      {
+        "id": "o18",
+        "oversatt": "Економіка Норвегії, за прогнозами, зростатиме близько до звичайного рівня"
+      },
+      {
+        "id": "o22",
+        "oversatt": "Конфлікт на Близькому Сході підвищує інфляцію (inflasjon) у наших торговельних партнерів"
+      }
+    ]
+  }
+}
