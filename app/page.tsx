@@ -19,6 +19,9 @@ function nesteSteg(tilstand: "innlest" | "aktivert" | "laast", id: string) {
   return `/tekst/${id}/lesing`;
 }
 
+const UNDERLENKE =
+  "underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 focus:outline-2 focus:outline-offset-2 dark:hover:decoration-slate-100";
+
 const TILSTANDSORD: Record<string, string> = {
   innlest: "Ikke begynt",
   aktivert: "Venter på gjennomsyn",
@@ -30,44 +33,65 @@ export default async function Startside() {
   const tekster = await listTekster(await tilgang());
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <div className="flex items-baseline justify-between gap-4">
-        <h1 className="text-3xl font-semibold tracking-tight">Lesevenn</h1>
-        <Link href="/konto" className="underline underline-offset-4">
-          Konto
-        </Link>
-      </div>
-      <p className="mt-2 text-slate-600 dark:text-slate-400">
-        Lim inn en fagtekst. Du får se hva den handler om, lese den med
-        fagordene forklart, og sjekke om du forsto den.
-      </p>
-
-      <section className="mt-8">
-        <LimInnSkjema handling={limInnTekst} />
-      </section>
-
-      {tekster.length > 0 && (
-        <section className="mt-12">
-          <h2 className="text-xl font-semibold tracking-tight">
+    <main className="mx-auto w-full max-w-5xl px-4 py-10">
+      <div className="flex flex-col gap-12 lg:flex-row">
+        {/*
+          Sidekolonnen kommer først i koden, slik at den står til venstre på
+          store skjermer, men `order` legger den under skjemaet på mobil —
+          der er det å lime inn en ny tekst det første eleven skal se.
+        */}
+        <aside aria-labelledby="tekstene-dine" className="order-2 shrink-0 lg:order-1 lg:w-72">
+          <h2 id="tekstene-dine" className="text-lg font-semibold tracking-tight">
             Tekstene dine
           </h2>
-          <ul className="mt-4 divide-y divide-slate-200 dark:divide-slate-800">
-            {tekster.map((t) => (
-              <li key={t.id} className="py-3">
-                <Link
-                  href={nesteSteg(t.tilstand, t.id)}
-                  className="font-medium underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 focus:outline-2 focus:outline-offset-2 dark:hover:decoration-slate-100"
-                >
-                  {t.tittel}
-                </Link>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  {TILSTANDSORD[t.tilstand] ?? t.tilstand}
-                </p>
-              </li>
-            ))}
-          </ul>
+          {tekster.length === 0 ? (
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+              Tekstene du limer inn, havner her. Herfra kan du gå rett til
+              teksten eller oppgavene.
+            </p>
+          ) : (
+            <ul className="mt-3 space-y-4">
+              {tekster.map((t) => (
+                <li key={t.id} className="rounded-md border border-slate-200 p-3 dark:border-slate-800">
+                  <p className="font-medium">{t.tittel}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    {TILSTANDSORD[t.tilstand] ?? t.tilstand}
+                  </p>
+                  <ul className="mt-2 space-y-1 border-l-2 border-slate-200 pl-3 text-sm dark:border-slate-700">
+                    <li>
+                      <Link href={nesteSteg(t.tilstand, t.id)} className={UNDERLENKE}>
+                        Teksten
+                      </Link>
+                    </li>
+                    <li>
+                      {t.tilstand === "laast" ? (
+                        <Link href={`/tekst/${t.id}/quiz`} className={UNDERLENKE}>
+                          Oppgaver
+                        </Link>
+                      ) : (
+                        // Quizen bygger på den låste teksten (AD-15), så
+                        // oppgavene finnes først etter gjennomsynet.
+                        <span className="text-slate-500">Oppgaver — etter gjennomsynet</span>
+                      )}
+                    </li>
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+
+        <section className="order-1 min-w-0 flex-1 lg:order-2">
+          <h1 className="text-3xl font-semibold tracking-tight">Ny tekst</h1>
+          <p className="mt-2 text-slate-600 dark:text-slate-400">
+            Lim inn en fagtekst. Du får se hva den handler om, lese den med
+            fagordene forklart, og sjekke om du forsto den.
+          </p>
+          <div className="mt-8">
+            <LimInnSkjema handling={limInnTekst} />
+          </div>
         </section>
-      )}
+      </div>
     </main>
   );
 }
