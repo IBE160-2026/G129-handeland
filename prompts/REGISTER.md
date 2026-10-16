@@ -51,4 +51,4 @@ ikke ville brukt.
 
 | Versjon | Dato | Endring og grunn | Målt | Status |
 |---|---|---|---|---|
-| v1 | 2026-10-17 | Første versjon, claude-haiku-5-5 (tar bilder). Ordrett avskrift, avsnitt og overskrifter på egne linjer, uten sidetall og topptekst; `lesbar: false` når bildet ikke viser tekst. | **Bevisst umålt** etter FR-45 — ingen terskel og ingen påstand om treffsikkerhet. Ett ekte kall med et blankt bilde ga riktig BF-1 | **Gjeldende** |
+| v1 | 2026-10-16 | Første versjon, claude-haiku-5-5 (tar bilder). Ordrett avskrift, avsnitt og overskrifter på egne linjer, uten sidetall og topptekst; `lesbar: false` når bildet ikke viser tekst. | **Bevisst umålt** etter FR-45 — ingen terskel og ingen påstand om treffsikkerhet. Ett ekte kall med et blankt bilde ga riktig BF-1 | **Gjeldende** |
