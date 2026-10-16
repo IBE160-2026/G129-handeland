@@ -1,0 +1,29 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-16T20:15:57.408Z",
+  "data": {
+    "linjer": [
+      "Radiobølger har lav frekvens og lang bølgelengde,",
+      "de sender signaler langt, rett fram, over store avstander.",
+      "Mikrobølger har bølgelengder mellom en millimeter og en meter,",
+      "og i mikrobølgeovnen rister de vannet, så maten blir varm, men tallerkenen ikke.",
+      "Infrarød stråling har litt mindre energi enn synlig lys,",
+      "strålevarmen fra vedovnen kjenner du med huden din.",
+      "Røntgenstråling har bølgelengder kortere enn 10 nm,",
+      "og gjennomlyser stoff, så røntgenbilder kan lages."
+    ],
+    "faguttrykk": [
+      "Radiobølger",
+      "frekvens",
+      "bølgelengde",
+      "mikrobølger",
+      "energi",
+      "Infrarød stråling",
+      "røntgenstråling"
+    ],
+    "stil": ""
+  }
+}

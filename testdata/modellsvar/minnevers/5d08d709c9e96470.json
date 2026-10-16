@@ -1,0 +1,25 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-16T20:14:58.322Z",
+  "data": {
+    "linjer": [
+      "Operativsystemet, den grunnleggende programvaren,",
+      "fordeler minne og prosessorer i maskinvaren.",
+      "Driverprogrammet snakker med enheten på standard vis,",
+      "så applikasjonsprogrammer ber bare om det de vil, og resten tas på en god vis."
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "programvaren",
+      "minne",
+      "prosessorer",
+      "driverprogrammet",
+      "applikasjonsprogrammer",
+      "maskinvare"
+    ],
+    "stil": ""
+  }
+}

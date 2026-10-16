@@ -1,0 +1,27 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-16T20:16:14.294Z",
+  "data": {
+    "linjer": [
+      "Radiobølger har lav frekvens og lang bølgelengde,",
+      "fra en meter til mange kilometer, de går langt og vidt.",
+      "Mikrobølger måler mellom en millimeter og en meter,",
+      "i ovnen rister de vannmolekylene, og maten blir varm.",
+      "Infrarød stråling har litt mindre energi enn synlig lys,",
+      "røntgenstråling har mer energi enn UV-C, husk det klart."
+    ],
+    "faguttrykk": [
+      "Radiobølger",
+      "frekvens",
+      "bølgelengde",
+      "mikrobølger",
+      "Infrarød stråling",
+      "energi",
+      "røntgenstråling"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm"
+  }
+}

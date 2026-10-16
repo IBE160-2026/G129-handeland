@@ -1,0 +1,24 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-16T20:14:07.377Z",
+  "data": {
+    "linjer": [
+      "Metafor kalles et ord i billedlig forstand,",
+      "der to betydningsområder får forbindelse i bånd.",
+      "Simile: «som en løve», med ordet som som ledd,",
+      "metafor: «han er en løve», uten mellomledd.",
+      "I metaforteori henter den mening fra et felt,",
+      "og overfører den til et annet – slik er metaforen helt."
+    ],
+    "faguttrykk": [
+      "metafor",
+      "betydningsområder",
+      "simile",
+      "metaforteori"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm"
+  }
+}

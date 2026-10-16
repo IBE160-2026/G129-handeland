@@ -1,5 +1,5 @@
 /**
- * Oppgavene til en Tekst: Quiz og Fagsamtale side om side.
+ * Oppgavene til en Tekst: Øvekort, Quiz, Fagsamtale og Huskeregel side om side.
  *
  * FR-18: Fagsamtale er et alternativ til Quiz, ikke bare noe som kommer
  * etter. Derfor står de som to likeverdige valg, og ingen av dem er låst bak
@@ -129,6 +129,18 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
               </ul>
             </div>
           )}
+        </section>
+
+        <section className="rounded-md border border-slate-300 p-5 dark:border-slate-700">
+          <h2 className="text-lg font-semibold tracking-tight">Huskeregel</h2>
+          <p className="mt-1 text-slate-600 dark:text-slate-400">
+            Et kort rim med fagordene — som vers, eller som sangtekst du kan lage musikk av i Suno.
+          </p>
+          <p className="mt-4">
+            <Link href={`/tekst/${id}/minnevers`} className={LENKE}>
+              Lag en huskeregel
+            </Link>
+          </p>
         </section>
       </div>
 

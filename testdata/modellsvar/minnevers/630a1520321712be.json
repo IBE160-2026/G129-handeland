@@ -1,0 +1,23 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-16T20:14:24.010Z",
+  "data": {
+    "linjer": [
+      "Start bakerst: punktumet, som nettleseren ofte tar bort,",
+      "det viser at alt ligger under DNS-rotserverne, en trygg port.",
+      "Neste er .no, det norske toppdomene, der Norid fikk ansvar og makt,",
+      "fra norske myndigheter, og regulerer alle .no-adresser som vakt.",
+      "Så er .ndla selve domenet, og om et under-domene,",
+      "styrt av samme DNS-server, praktisk, ryddig og grei, en fin scene."
+    ],
+    "faguttrykk": [
+      "DNS-rotserverne",
+      "toppdomene",
+      "under-domene"
+    ],
+    "stil": ""
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "krav": "FR-31",
+  "vers": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Radiobølger har lav frekvens og lang bølgelengde,",
+        "de sender signaler langt, rett fram, over store avstander.",
+        "Mikrobølger har bølgelengder mellom en millimeter og en meter,",
+        "og i mikrobølgeovnen rister de vannet, så maten blir varm, men tallerkenen ikke.",
+        "Infrarød stråling har litt mindre energi enn synlig lys,",
+        "strålevarmen fra vedovnen kjenner du med huden din.",
+        "Røntgenstråling har bølgelengder kortere enn 10 nm,",
+        "og gjennomlyser stoff, så røntgenbilder kan lages."
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "bølgelengde",
+        "mikrobølger",
+        "Infrarød stråling",
+        "røntgenstråling",
+        "energi"
+      ],
+      "stil": "",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "suno",
+      "linjer": [
+        "Radiobølger har lav frekvens og lang bølgelengde,",
+        "fra en meter til mange kilometer, de går langt og vidt.",
+        "Mikrobølger måler mellom en millimeter og en meter,",
+        "i ovnen rister de vannmolekylene, og maten blir varm.",
+        "Infrarød stråling har litt mindre energi enn synlig lys,",
+        "røntgenstråling har mer energi enn UV-C, husk det klart."
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "bølgelengde",
+        "mikrobølger",
+        "Infrarød stråling",
+        "røntgenstråling",
+        "energi"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Høy prisvekst gir ny renteøkning i år,",
+        "styringsrenta går opp, det har Norges Bank varslet klart.",
+        "Inflasjonen er over målet, og det tar tid før den kommer ned mot 2 prosent,",
+        "sysselsettingsvekst trekker ledigheten ned, det er et lyspunkt i rapporten.",
+        "Reallønnsvekst gir husholdningene mer å bruke, så forbruket holder seg oppe.",
+        "Prisveksten holdes oppe, og renta ventes satt ned igjen fra midten av 2027."
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "renteøkning",
+        "styringsrenta",
+        "inflasjon",
+        "sysselsettingsvekst",
+        "reallønnsvekst"
+      ],
+      "stil": "",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "suno",
+      "linjer": [
+        "Høy prisvekst gir renteøkning, det er klart,",
+        "i mai gikk styringsrenta opp til fire og en kvart.",
+        "Sysselsettingsvekst trekker ledigheten ned,",
+        "og inflasjonsanslaget mot to prosent i 2029 tar tid, og tålmod er med."
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "renteøkning",
+        "styringsrenta",
+        "sysselsettingsvekst",
+        "inflasjonsanslaget"
+      ],
+      "stil": "upbeat folk pop, playful chorus, clear vocals, 100 bpm",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "En metafor er et ord i overført mening,",
+        "der to betydningsområder får en forbindelse i sving.",
+        "Simile sier «som», der ting sammenliknes med noe annet,",
+        "metaforen sier «er» og setter ting i stedet, rett og slett sant."
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "suno",
+      "linjer": [
+        "Metafor kalles et ord i billedlig forstand,",
+        "der to betydningsområder får forbindelse i bånd.",
+        "Simile: «som en løve», med ordet som som ledd,",
+        "metafor: «han er en løve», uten mellomledd.",
+        "I metaforteori henter den mening fra et felt,",
+        "og overfører den til et annet – slik er metaforen helt."
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "metaforteori",
+        "simile"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Start bakerst: punktumet, som nettleseren ofte tar bort,",
+        "det viser at alt ligger under DNS-rotserverne, en trygg port.",
+        "Neste er .no, det norske toppdomene, der Norid fikk ansvar og makt,",
+        "fra norske myndigheter, og regulerer alle .no-adresser som vakt.",
+        "Så er .ndla selve domenet, og om et under-domene,",
+        "styrt av samme DNS-server, praktisk, ryddig og grei, en fin scene."
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "suno",
+      "linjer": [
+        "Domeneoppbygning er enkelt: les adressen bakfra, da skjønner du hvordan den er bygd.",
+        "Punktumet først, der ligger innholdet under DNS-rotserverne, en god start.",
+        "Toppdomene .no er det norske, og Norid AS tar ansvaret for alle .no-adresser.",
+        "Så kommer .ndla, og om er et under-domene som styres av samme DNS-server.",
+        "Så er adressen klar, og du vet hvor du er i den, uten å gå deg vill."
+      ],
+      "faguttrykk": [
+        "Domeneoppbygning",
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet, den grunnleggende programvaren,",
+        "fordeler minne og prosessorer i maskinvaren.",
+        "Driverprogrammet snakker med enheten på standard vis,",
+        "så applikasjonsprogrammer ber bare om det de vil, og resten tas på en god vis."
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "programvaren",
+        "minne",
+        "prosessorer",
+        "driverprogrammet",
+        "applikasjonsprogrammer",
+        "maskinvare"
+      ],
+      "stil": "",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "suno",
+      "linjer": [
+        "Operativsystemet er et lag mellom programmer og maskin,",
+        "så ingen programmerer må kjenne hver enhet sin.",
+        "Den grunnleggende programvaren deler ut ressurser med vett,",
+        "og holder styr på minne og prosessorer, så det blir rett."
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "programvaren",
+        "minne",
+        "prosessorer"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm",
+      "promptversjon": "v1",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

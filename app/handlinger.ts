@@ -72,6 +72,8 @@ import {
   utpekingElementer,
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
+import { lagreMinnevers } from "../data/minnevers";
+import { lagMinnevers, type Versform } from "../generatorer/minnevers";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
 export type Handlingssvar = {
@@ -766,5 +768,23 @@ export async function lagOversettelse(tekstId: string, type: Oversettelsestype):
     return somFeil(e);
   }
   revalidatePath(`/tekst/${tekstId}/${side}`);
+  return INGEN_FEIL;
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-30 og FR-31 — minnevers
+ * ------------------------------------------------------------------ */
+
+/** Lager et nytt vers eller en ny Suno-prompt. Et nytt erstatter ikke det gamle i databasen, men vises i stedet. */
+export async function lagVers(tekstId: string, form: Versform, _forrige: Handlingssvar): Promise<Handlingssvar> {
+  const t = await tilgang();
+  try {
+    const [avsnittene, sett] = await Promise.all([hentAvsnitt(t, tekstId), hentBegrepssett(t, tekstId)]);
+    const r = await lagMinnevers({ avsnitt: avsnittene, begreper: sett?.begreper ?? [], form });
+    await lagreMinnevers(t, tekstId, r);
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/minnevers`);
   return INGEN_FEIL;
 }

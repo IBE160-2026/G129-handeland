@@ -60,3 +60,9 @@ ikke ville brukt.
 | oversettelse | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. Bunt av korte elementer med id; norsk Faguttrykk i parentes i uendret form (FR-25); nekting, tall og navn beholdes (FR-28). Samme prompt brukes til tilbakeoversettelse. | Umålt. FR-28 måles på fire tekster fra FR-8-gullsettet for ukrainsk | **Gjeldende** |
 | oppsummering | v1 | 2026-10-16 | Første versjon. Høyst fem setninger på norsk, bare det teksten sier, hver med kildeavsnitt (FR-26). Lages på norsk og oversettes etterpå, så begge språk bygger på samme setninger. | Umålt. Vurderes av morsmålsbrukeren i FR-28 | **Gjeldende** |
 | utpeking | v1 | 2026-10-16 | Første versjon. Språklige bilder og akademisk allmennspråk, ordrett, utenom Faguttrykkene, høyst åtte per 1 000 ord per kategori (FR-27). | Umålt. Ingen terskel i PRD utover formkravene, som koden håndhever | **Gjeldende** |
+
+## Minnevers og Suno-prompt (FR-30, FR-31)
+
+| Versjon | Dato | Endring og grunn | Målt | Status |
+|---|---|---|---|---|
+| v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. «Sannhet går foran rim»; bare det teksten sier; ingen fagord utenfor listen. Koden avviser vers med fagord utenfor Begrepssettet, færre enn tre fagord eller feil linjetall, og prøver én gang til (AD-11). | Maskinelt: 10 av 10 vers besto kontrollen (ett etter nytt forsøk). Usanne påstander: venter på utviklerens vurdering (`maaling/resultater/fr31-vurderingsark.md`) | **Gjeldende** |

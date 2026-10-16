@@ -184,3 +184,25 @@ export function LagOppsummeringSkjema({
     </form>
   );
 }
+
+/** En knapp som kjører én handling, med ventetekst (§5). Brukt av minneversene. */
+export function HandlingSkjema({
+  handling,
+  venter,
+  klar,
+}: {
+  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+  venter: string;
+  klar: string;
+}) {
+  const [svar, send] = useActionState(handling, TOMT);
+
+  return (
+    <form action={send} className="mt-4">
+      {svar.feil && (
+        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+      )}
+      <Send venter={venter} klar={klar} />
+    </form>
+  );
+}

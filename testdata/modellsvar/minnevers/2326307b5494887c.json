@@ -1,0 +1,26 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-16T20:16:57.419Z",
+  "data": {
+    "linjer": [
+      "Høy prisvekst gir ny renteøkning i år,",
+      "styringsrenta går opp, det har Norges Bank varslet klart.",
+      "Inflasjonen er over målet, og det tar tid før den kommer ned mot 2 prosent,",
+      "sysselsettingsvekst trekker ledigheten ned, det er et lyspunkt i rapporten.",
+      "Reallønnsvekst gir husholdningene mer å bruke, så forbruket holder seg oppe.",
+      "Prisveksten holdes oppe, og renta ventes satt ned igjen fra midten av 2027."
+    ],
+    "faguttrykk": [
+      "Prisvekst",
+      "renteøkning",
+      "styringsrenta",
+      "inflasjon",
+      "sysselsettingsvekst",
+      "reallønnsvekst"
+    ],
+    "stil": ""
+  }
+}

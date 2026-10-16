@@ -1,0 +1,22 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-16T20:15:19.698Z",
+  "data": {
+    "linjer": [
+      "Operativsystemet er et lag mellom programmer og maskin,",
+      "så ingen programmerer må kjenne hver enhet sin.",
+      "Den grunnleggende programvaren deler ut ressurser med vett,",
+      "og holder styr på minne og prosessorer, så det blir rett."
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "programvaren",
+      "minne",
+      "prosessorer"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm"
+  }
+}

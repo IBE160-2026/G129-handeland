@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-16T20:13:54.484Z",
+  "data": {
+    "linjer": [
+      "En metafor er et ord i overført mening,",
+      "der to betydningsområder får en forbindelse i sving.",
+      "Simile sier «som», der ting sammenliknes med noe annet,",
+      "metaforen sier «er» og setter ting i stedet, rett og slett sant."
+    ],
+    "faguttrykk": [
+      "metafor",
+      "betydningsområder",
+      "simile"
+    ],
+    "stil": ""
+  }
+}

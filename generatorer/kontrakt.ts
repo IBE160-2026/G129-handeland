@@ -77,7 +77,8 @@ export type Oppgave =
   | "bildeuttrekk"
   | "oversettelse"
   | "oppsummering"
-  | "utpeking";
+  | "utpeking"
+  | "minnevers";
 
 /** Tenkemodusene manifestet kan oppgi. Se `_om_tenkning` der. */
 export type Tenkemodus = "budsjett" | "adaptiv" | "av";

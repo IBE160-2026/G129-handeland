@@ -1,0 +1,23 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-16T20:14:39.896Z",
+  "data": {
+    "linjer": [
+      "Domeneoppbygning er enkelt: les adressen bakfra, da skjønner du hvordan den er bygd.",
+      "Punktumet først, der ligger innholdet under DNS-rotserverne, en god start.",
+      "Toppdomene .no er det norske, og Norid AS tar ansvaret for alle .no-adresser.",
+      "Så kommer .ndla, og om er et under-domene som styres av samme DNS-server.",
+      "Så er adressen klar, og du vet hvor du er i den, uten å gå deg vill."
+    ],
+    "faguttrykk": [
+      "Domeneoppbygning",
+      "DNS-rotserverne",
+      "toppdomene",
+      "under-domene"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm"
+  }
+}
