@@ -77,3 +77,4 @@ Thumbs.db
 
 # Avledet av pdfjs-dist, kopieres før dev og build (opplasting/kopier-pdf-worker.mjs)
 /public/pdf.worker.min.mjs
+.next-sjekk/

@@ -73,6 +73,8 @@ import {
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
 import { lagreMinnevers } from "../data/minnevers";
+import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
+import { tolkInnstillinger } from "../tekst/leseinnstillinger";
 import { lagMinnevers, type Versform } from "../generatorer/minnevers";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
@@ -786,5 +788,23 @@ export async function lagVers(tekstId: string, form: Versform, _forrige: Handlin
     return somFeil(e);
   }
   revalidatePath(`/tekst/${tekstId}/minnevers`);
+  return INGEN_FEIL;
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-12 — leseinnstillinger
+ * ------------------------------------------------------------------ */
+
+export async function lagreLesing(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const t = await tilgang();
+  try {
+    await lagreLeseinnstillinger(
+      t,
+      tolkInnstillinger({ tekststorrelse: data.get("tekststorrelse"), linjeavstand: data.get("linjeavstand") }),
+    );
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath("/tekst/[id]/lesing", "page");
   return INGEN_FEIL;
 }

@@ -17,6 +17,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { hentBegrepssett } from "../../../../data/begrepssett";
 import { tilgang } from "../../../../data/konto";
+import { hentLeseinnstillinger } from "../../../../data/leseinnstillinger";
+import { lesestil } from "../../../../tekst/leseinnstillinger";
+import { Leseinnstillinger } from "../../../komponenter/Leseinnstillinger";
 import {
   hentMorsmaal,
   hentOppsummering,
@@ -37,7 +40,7 @@ import { HentOversettelse } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
 import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
-import { genererPaaNytt, lagOppsummering, lagOversettelse } from "../../../handlinger";
+import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing } from "../../../handlinger";
 
 const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra fagspråket" } as const;
 
@@ -60,11 +63,12 @@ export default async function Lesing({
 
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
-  const [avsnitt, sett, spraak, oppsummering] = await Promise.all([
+  const [avsnitt, sett, spraak, oppsummering, innstillinger] = await Promise.all([
     hentAvsnitt(t, id),
     hentBegrepssett(t, id),
     hentMorsmaal(t),
     hentOppsummering(t, id),
+    hentLeseinnstillinger(t),
   ]);
 
   // FR-27: utpekingen hører til Morsmål, og den trenger fagordene for å
@@ -88,7 +92,14 @@ export default async function Lesing({
   // for hvert avsnitt som tegnes.
   const perAvsnitt = new Map<
     number,
-    { start: number; slutt: number; begrepId: string; uttrykk: string }[]
+    {
+      start: number;
+      slutt: number;
+      begrepId: string;
+      uttrykk: string;
+      forklaring: string;
+      morsmaal?: { tekst: string; kode: string; retning: "ltr" | "rtl" };
+    }[]
   >();
 
   for (const b of sett?.begreper ?? []) {
@@ -99,6 +110,15 @@ export default async function Lesing({
         slutt: f.slutt,
         begrepId: b.id,
         uttrykk: b.uttrykk,
+        forklaring: b.forklaring,
+        morsmaal:
+          spraak && begrepMm.has(`f:${b.id}`)
+            ? {
+                tekst: `${begrepMm.get(`u:${b.id}`) ?? ""} (${b.uttrykk}): ${begrepMm.get(`f:${b.id}`)}`,
+                kode: spraak.kode,
+                retning: spraak.retning,
+              }
+            : undefined,
       });
       perAvsnitt.set(f.avsnittNummer, liste);
     }
@@ -122,9 +142,11 @@ export default async function Lesing({
         </Link>
       </p>
 
+      <Leseinnstillinger handling={lagreLesing} valgt={innstillinger} malId="lesetekst" />
+
       <div className="mt-8 gap-10 lg:flex">
-        {/* Linjelengden holdes på ca. 70 tegn med max-w-[34rem] (§5). */}
-        <article className="max-w-[34rem] text-lg leading-[1.8]">
+        {/* FR-12: størrelse og linjeavstand fra kontoen; linjelengden i ch holder ca. 70 tegn. */}
+        <article id="lesetekst" style={lesestil(innstillinger)} className="min-w-0 flex-1">
           <UthevAvsnitt />
           {avsnitt.map((a) => (
             <MarkertAvsnitt

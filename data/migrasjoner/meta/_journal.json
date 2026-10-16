@@ -29,6 +29,13 @@
       "when": 1792178948769,
       "tag": "0003_morsmaal",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792181961991,
+      "tag": "0004_leseinnstillinger",
+      "breakpoints": true
     }
   ]
 }

@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * §5: synlig fokus overalt. Komponentene har egne fokusstiler; dette er
+ * gulvet for lenker og felt som mangler det, så ingen tastaturbruker mister
+ * oversikten over hvor hun er.
+ */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}

@@ -119,11 +119,17 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
         </p>
       </div>
 
-      {/* Kortet. aria-live, så skjermleseren leser baksiden når den snus. */}
+      {/*
+        Kortet. aria-live, så skjermleseren leser baksiden når den snus.
+
+        Knappen har med vilje INGEN aria-label. En slik etikett erstatter
+        innholdet for skjermleseren, og da hørte eleven «Snu kortet og se
+        forklaringen» — aldri selve fagordet. Funnet av axe-core 16.10.
+      */}
       <button
         type="button"
         onClick={() => setSnudd((s) => !s)}
-        aria-label={snudd ? "Snu tilbake til fagordet" : "Snu kortet og se forklaringen"}
+        aria-pressed={snudd}
         className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 focus:outline-2 focus:outline-offset-4 focus:outline-slate-900 dark:border-slate-600 dark:bg-slate-900"
       >
         <div aria-live="polite">

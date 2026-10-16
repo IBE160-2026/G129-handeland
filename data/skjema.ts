@@ -471,6 +471,20 @@ export const samtalerunde = pgTable(
  * Morsmål og minnevers
  * ------------------------------------------------------------------ */
 
+/**
+ * FR-12: leseinnstillingene huskes på kontoen. Verdiene er trinn, ikke
+ * piksler — hva et trinn betyr, står i tekst/leseinnstillinger.ts, så det kan
+ * justeres uten migrasjon.
+ */
+export const leseinnstillinger = pgTable("leseinnstillinger", {
+  kontoId: uuid("konto_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tekststorrelse: text("tekststorrelse").notNull(),
+  linjeavstand: text("linjeavstand").notNull(),
+  endret: timestamp("endret", { withTimezone: true }).notNull().defaultNow(),
+});
+
 /** FR-24: valget lagres på kontoen og gjelder til eleven endrer det. */
 export const morsmaalsvalg = pgTable("morsmaalsvalg", {
   kontoId: uuid("konto_id")

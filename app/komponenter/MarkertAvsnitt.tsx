@@ -18,13 +18,19 @@
  *
  * Markeringen bruker både bakgrunn OG understreking. §5 sier at ingen
  * informasjon formidles ved farge alene.
+ *
+ * Selve markeringen, med forklaringen ved ordet (FR-10), er `Fagord`.
  */
+
+import { Fagord } from "./Fagord";
 
 type Markering = {
   start: number;
   slutt: number;
   begrepId: string;
   uttrykk: string;
+  forklaring: string;
+  morsmaal?: { tekst: string; kode: string; retning: "ltr" | "rtl" };
 };
 
 type Props = {
@@ -54,14 +60,14 @@ export function MarkertAvsnitt({ innhold, erOverskrift, markeringer, nummer }: P
     }
 
     deler.push(
-      <button
+      <Fagord
         key={`${m.begrepId}-${m.start}`}
-        type="button"
-        aria-describedby={`forklaring-${m.begrepId}`}
-        className="rounded-sm bg-amber-100 px-0.5 underline decoration-amber-600 decoration-2 underline-offset-2 hover:bg-amber-200 focus:outline-2 focus:outline-offset-2 focus:outline-amber-700 dark:bg-amber-900/50 dark:decoration-amber-400 dark:hover:bg-amber-900"
-      >
-        {innhold.slice(m.start, m.slutt)}
-      </button>,
+        tekst={innhold.slice(m.start, m.slutt)}
+        uttrykk={m.uttrykk}
+        forklaring={m.forklaring}
+        beskrivelseId={`forklaring-${m.begrepId}`}
+        morsmaal={m.morsmaal}
+      />,
     );
 
     peker = m.slutt;
