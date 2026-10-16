@@ -28,7 +28,9 @@ import {
   unique,
   index,
   bigint,
+  jsonb,
 } from "drizzle-orm/pg-core";
+import type { Innlesingsrapport } from "../opplasting/pdf-les";
 
 /* ------------------------------------------------------------------ *
  * Kodeverk — lukkede sett, aldri fritekst (konsistenskonvensjonene)
@@ -197,6 +199,13 @@ export const tekst = pgTable(
     tilstand: tekstTilstand("tilstand").notNull().default("innlest"),
 
     vei: innlesingsvei("vei").notNull(),
+
+    /**
+     * FR-3: hva uttrekket gjorde — sider lest, linjer fjernet som topp-/
+     * bunntekst, orddelinger slått sammen. Vises i gjennomsynet, så ingenting
+     * er fjernet i det skjulte. Null ved liming.
+     */
+    innlesingsrapport: jsonb("innlesingsrapport").$type<Innlesingsrapport>(),
 
     /** FR-6. Vurderes ikke og rettes ikke. */
     forkunnskapssvar: text("forkunnskapssvar"),

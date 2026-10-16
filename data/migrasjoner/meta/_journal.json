@@ -15,6 +15,13 @@
       "when": 1791981798582,
       "tag": "0001_innlogging",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792176536194,
+      "tag": "0002_innlesingsrapport",
+      "breakpoints": true
     }
   ]
 }

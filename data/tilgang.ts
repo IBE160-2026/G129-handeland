@@ -110,6 +110,8 @@ export type NyTekst = {
   raatekst: string;
   redigertTekst: string;
   vei: "liming" | "pdf" | "bilde";
+  /** FR-3. Bare for PDF og bilde. */
+  innlesingsrapport?: TekstRad["innlesingsrapport"];
 };
 
 /**

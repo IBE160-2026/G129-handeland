@@ -1,0 +1,1 @@
+ALTER TABLE "tekst" ADD COLUMN "innlesingsrapport" jsonb;
