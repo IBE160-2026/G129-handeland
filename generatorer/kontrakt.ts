@@ -15,6 +15,7 @@
  * Inn: verdier. Ut: validert utdata. Kalleren lagrer.
  */
 
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
@@ -68,7 +69,7 @@ export class GeneratorFeil extends Error {
  * AD-14 — manifestet bestemmer hva som er gjeldende
  * ------------------------------------------------------------------ */
 
-export type Oppgave = "faguttrykk" | "quiz" | "samtalestart" | "svarvurdering";
+export type Oppgave = "faguttrykk" | "quiz" | "samtalestart" | "svarvurdering" | "bildeuttrekk";
 
 /** Tenkemodusene manifestet kan oppgi. Se `_om_tenkning` der. */
 export type Tenkemodus = "budsjett" | "adaptiv" | "av";
@@ -245,6 +246,12 @@ export type Resultat<T> = {
  * medlemskap og tetthetstakene — ligger i `validering.ts`, fordi den trenger
  * teksten å sammenligne mot.
  */
+/** Meldingen et lagret svar nøkles på når et bilde er med. Eksportert for testene. */
+export function noekkelMedBilde(brukermelding: string, bildedata: string): string {
+  const sammendrag = createHash("sha256").update(bildedata).digest("hex").slice(0, 32);
+  return `${brukermelding}\n[bilde ${sammendrag}]`;
+}
+
 export async function kjoerGenerator<S extends z.ZodType>({
   oppgave,
   skjema,
@@ -252,6 +259,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
   overstyrVersjon,
   maksTokens = 8000,
   kjoering,
+  bilde,
 }: {
   oppgave: Oppgave;
   skjema: S;
@@ -260,9 +268,19 @@ export async function kjoerGenerator<S extends z.ZodType>({
   maksTokens?: number;
   /** Nummeret i selvkonsistensen. Skiller de lagrede svarene, se `noekkel`. */
   kjoering?: number;
+  /**
+   * Et bilde sendt foran teksten (FR-44). Holdes bare i minnet — det skrives
+   * aldri til disk, heller ikke i testmodus `skriv`, der bare svaret lagres
+   * (AD-16).
+   */
+  bilde?: { mediaType: "image/jpeg" | "image/png"; data: string };
 }): Promise<Resultat<z.infer<S>>> {
   const prompt = await hentPrompt(oppgave, overstyrVersjon);
   const modus = testmodus();
+
+  // Nøkkelen for lagrede svar må skille bilder fra hverandre. Et sammendrag
+  // av bildet tas med, ikke bildet selv — det skal ikke ligge i repoet.
+  const noekkelmelding = bilde ? noekkelMedBilde(brukermelding, bilde.data) : brukermelding;
 
   /*
    * Testmodus `les`: svaret kommer fra disk, og modellen kalles ikke.
@@ -275,7 +293,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     const lagret = await hentLagret(
       oppgave,
       prompt.versjon,
-      brukermelding,
+      noekkelmelding,
       kjoering,
     );
 
@@ -312,7 +330,17 @@ export async function kjoerGenerator<S extends z.ZodType>({
       max_tokens: maksTokens,
       thinking: tilApiform(prompt.tenkning),
       system: prompt.tekst,
-      messages: [{ role: "user", content: brukermelding }],
+      messages: [
+        {
+          role: "user",
+          content: bilde
+            ? [
+                { type: "image", source: { type: "base64", media_type: bilde.mediaType, data: bilde.data } },
+                { type: "text", text: brukermelding },
+              ]
+            : brukermelding,
+        },
+      ],
       output_config: { format: zodOutputFormat(skjema) },
     });
 
@@ -332,7 +360,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
         oppgave,
         prompt.versjon,
         prompt.modell,
-        brukermelding,
+        noekkelmelding,
         svar.parsed_output,
         kjoering,
       );

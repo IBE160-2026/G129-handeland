@@ -46,3 +46,9 @@ overganger: «Du skrev at man får lov til å låne penger mot å betale renter.
 sier teksten om hvorfor renten på en sparekonto er høyere …?» Kravet er laget for
 å bevise at systemet leser svaret, og det gjør det; prisen er en overgang en lærer
 ikke ville brukt.
+
+## Bildeuttrekk (FR-44, FR-45)
+
+| Versjon | Dato | Endring og grunn | Målt | Status |
+|---|---|---|---|---|
+| v1 | 2026-10-17 | Første versjon, claude-haiku-5-5 (tar bilder). Ordrett avskrift, avsnitt og overskrifter på egne linjer, uten sidetall og topptekst; `lesbar: false` når bildet ikke viser tekst. | **Bevisst umålt** etter FR-45 — ingen terskel og ingen påstand om treffsikkerhet. Ett ekte kall med et blankt bilde ga riktig BF-1 | **Gjeldende** |
