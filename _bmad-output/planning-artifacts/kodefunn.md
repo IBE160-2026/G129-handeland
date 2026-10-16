@@ -386,11 +386,29 @@ skal beskytte. Det er samme klasse som funn 3: grønt, og likevel uten dekning.
 
 ---
 
+## Funn 12 — En metode for κ som aldri kunne gi et positivt tall
+
+**Hvor:** `annotering.md` steg 5, veiledningen for å måle egen annoteringsstøy, skrevet med KI-assistanse tidlig i oktober.
+
+**Hva:** veiledningen sa at sakssettet for Cohens κ skulle være unionen av ordene fra de to annoteringsrundene, og at κ da «overvurderer samsvaret noe». I unionen finnes det per definisjon ingen ord begge rundene sa nei til. Med d = 0 og n = a+b+c blir telleren i κ
+
+    a·n − (a+b)(a+c) − b·c = −2·b·c
+
+som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene er: 8 ord felles og 1 ulikt hver vei gir −0,11. Påstanden om at metoden «overvurderer» var omvendt — tallet var meningsløst.
+
+**Hvordan det ble funnet:** ved å regne ut formelen for hånd før verktøyet ble skrevet, 16. oktober — før noen runde 2 var annotert. Hadde verktøyet blitt skrevet etter veiledningen, ville første måling gitt et negativt tall som så ut som «du er uenig med deg selv».
+
+**Rettelse:** verktøyet (`maaling/samsvar.ts`, `npm run gullsett:samsvar`) rapporterer **positivt samsvar**, 2a / (2a+b+c), som er F1 mellom rundene og direkte sammenlignbart med modellens F1 mot Gullsettet, og **κ med alle ordformer i teksten som saker**. Beviset for at unionsmetoden ikke virker er en test i `maaling/samsvar.test.ts`. Veiledningen og PRD-en er rettet.
+
+**Mønsteret:** en metode som så rimelig ut i tekst, med en oppgitt «begrensning» som lot den virke gjennomtenkt. Begrensningen var gal i retning, ikke bare i størrelse. Det ble fanget av matematikk, ikke av lesing.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — elleve funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — tolv funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |

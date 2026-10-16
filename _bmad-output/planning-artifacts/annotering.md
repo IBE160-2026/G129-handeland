@@ -13,7 +13,7 @@ Dette er oppskriften for å lage gullsettet FR-8 måler mot. Den er skrevet for
 
 Målene som skal nås: **gjenkalling ≥ 0,75** og **presisjon ≥ 0,70**, pluss
 **null faglig gale forklaringer** i det eleven ser, pluss **egen
-annoteringsstøy** rapportert som Cohens κ.
+annoteringsstøy** rapportert som positivt samsvar og Cohens κ (steg 5).
 
 ---
 
@@ -376,14 +376,21 @@ et dårlig.
 
 ---
 
-## 5. Mål din egen støy — Cohens κ
+## 5. Mål din egen støy — positivt samsvar og Cohens κ
 
 Dette er den billigste enkeltmålingen i hele prosjektet, og uten den betyr
 presisjonstallet ingenting: du vet ikke om 0,70 ligger over eller under din
 egen usikkerhet.
 
-**Framgangsmåte.** Velg to av de seks tekstene. Annoter dem på nytt, minst sju
-dager etter første runde, **uten å se på runde 1**. Lagre som `runde: 2`.
+**Framgangsmåte.**
+
+1. Lag malene: `npm run gullsett:maler -- 2`. Det lager en `runde2`-fil per
+   tekst, ved siden av runde 1.
+2. Velg to av de seks tekstene. Annoter dem på nytt, minst sju dager etter
+   første runde, **uten å åpne runde 1-fila**. Sett `annotert` til datoen.
+3. Kjør `npm run gullsett:samsvar`. Den regner samsvaret, advarer om det er
+   færre enn sju dager mellom rundene, og skriver rapporten til
+   `maaling/resultater/`. De fire malene du ikke bruker, kan stå tomme.
 
 ### Hva som er problemet, og hvordan det løses
 
@@ -391,24 +398,40 @@ Cohens κ krever et fast sett *saker* som begge runder har gitt en *kategori*.
 «Hvilke ord plukket du fra en tekst» har ikke et slikt sett — det finnes ingen
 naturlig liste over alle kandidatord.
 
-Den praktiske løsningen, som må oppgis i rapporten:
+**Rettet 16.10.2026: den første løsningen her virket ikke.** Den foreslo å
+bruke *unionen* av ordene fra de to rundene som sakssett, og sa at κ da
+«overvurderer samsvaret noe». Det var feil. I unionen finnes det per
+definisjon ingen ord begge rundene sa nei til, og da blir κ **aldri positiv**,
+uansett hvor enig du er med deg selv: med 8 ord felles og 1 ulikt hver vei
+blir κ −0,11. Feilen ble funnet ved å regne ut formelen før verktøyet ble
+skrevet, og står som kodefunn 12. Beviset er en test i
+`maaling/samsvar.test.ts`.
 
-> Sakssettet er **unionen** av ordene fra runde 1 og runde 2. Hvert ord får
-> kategorien «ja» eller «nei» i hver runde. κ regnes over dette settet.
+Verktøyet rapporterer derfor to tall, begge med samme sammenligningsregel som
+FR-8:
 
-Vit hva det betyr: regelen ser bare ord minst én runde valgte. Ord begge
-rundene overså finnes ikke i settet, så κ overvurderer samsvaret noe. **Oppgi
-det.** En κ med en oppgitt begrensning er bedre enn en κ som later som den er
-noe annet.
-
-```
-κ = (p_observert − p_tilfeldig) / (1 − p_tilfeldig)
-```
+- **Positivt samsvar** — andelen av valgene som går igjen i begge runder:
+  `2·begge / (2·begge + bare runde 1 + bare runde 2)`. Det trenger ingen
+  «nei»-saker, og er det målet som anbefales når slike ikke finnes (Hripcsak
+  og Rothschild, 2005, *Agreement, the F-measure, and reliability in
+  information retrieval*, JAMIA 12(3) — slå opp originalen før du siterer
+  den). Det er også F1 mellom rundene, og kan derfor sammenlignes direkte med
+  F1 mellom modellen og Gullsettet. **Dette er hovedtallet.**
+- **Cohens κ med alle ordformer i teksten som saker.** Da finnes det
+  «nei»-saker, og κ kan regnes. Med mange ord ingen runde valgte, ligger κ
+  tett på det positive samsvaret — det er en egenskap ved metoden, ikke en
+  tilfeldighet. Rapporteres fordi PRD-en nevner κ, og fordi det viser at de
+  to tallene peker samme vei.
 
 Tolkning: over 0,8 er sterkt, 0,6–0,8 er brukbart, under 0,6 betyr at din egen
-annotering vakler mer enn forskjellen du prøver å måle. **Er κ lav, er det
-funnet** — ikke noe å skjule. Det er da du går tilbake til de tre
+annotering vakler mer enn forskjellen du prøver å måle. **Er tallet lavt, er
+det funnet** — ikke noe å skjule. Det er da du går tilbake til de tre
 avgjørelsene i steg 2 og skriver dem skarpere.
+
+**Hvordan det brukes mot FR-8.** Er ditt positive samsvar med deg selv for
+eksempel 0,70, kan modellen ikke forventes å treffe deg bedre enn det. Ligger
+modellens F1 nær tallet ditt, er den omtrent så enig med deg som du er med deg
+selv — og da er det kravet, ikke modellen, som bør vurderes.
 
 ---
 
@@ -422,7 +445,7 @@ avgjørelsene i steg 2 og skriver dem skarpere.
 - [x] Sammenligningsregelen skrevet ned **før** første måling
 - [x] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
 - [ ] To tekster annotert to ganger, minst sju dager mellom
-- [ ] κ regnet, med sakssett-begrensningen oppgitt
+- [ ] Positivt samsvar og κ regnet med `npm run gullsett:samsvar`, med metoden og grunnlaget (to tekster) oppgitt
 - [ ] Forklaringene gjennomgått for faglige feil — terskelen er **null**, og
       dette er en gjennomgang av leveransen, ikke en statistisk terskel
 - [ ] Tallene lagret som data i repoet, ikke bare i en tabell i rapporten
