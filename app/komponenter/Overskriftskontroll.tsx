@@ -39,9 +39,12 @@ function Godkjenn() {
 export function Overskriftskontroll({
   handling,
   plasser,
+  genererte,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   plasser: Overskriftsplass[];
+  /** FR-5: etikettene Lesevenn laget. Merkes så lenge eleven ikke har endret dem. */
+  genererte: string[];
 }) {
   const [svar, send] = useActionState(handling, TOMT);
   const [tekster, settTekster] = useState(plasser.map((p) => p.tekst));
@@ -97,6 +100,11 @@ export function Overskriftskontroll({
               <li key={p.nummer} className="rounded-md border border-slate-200 p-3 dark:border-slate-800">
                 <label htmlFor={`o-${p.nummer}`} className="text-sm font-medium text-slate-600 dark:text-slate-400">
                   Overskrift {i + 1} av {plasser.length}
+                  {genererte.includes(tekster[i].trim()) && (
+                    <span className="ml-2 rounded bg-slate-200 px-1.5 py-0.5 text-xs dark:bg-slate-700">
+                      laget av Lesevenn, ikke hentet fra teksten
+                    </span>
+                  )}
                 </label>
                 {slettet[i] ? (
                   <div className="mt-1 flex items-center gap-3">

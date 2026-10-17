@@ -79,6 +79,10 @@ export default async function Aktivering({
             {titler.map((o) => (
               <li key={o.nummer} className="text-lg">
                 {o.innhold}
+                {/* FR-5: synlig merket når Lesevenn laget den, ikke teksten. */}
+                {tekst.genererteOverskrifter?.includes(o.innhold) && (
+                  <span className="ml-2 align-middle text-xs text-slate-500">(laget av Lesevenn)</span>
+                )}
                 {spraak && <Morsmaalstekst spraak={spraak} tekst={mm.get(`o${o.nummer}`)} className="text-base" />}
               </li>
             ))}

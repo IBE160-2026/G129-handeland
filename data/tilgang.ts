@@ -20,7 +20,7 @@
  * komponenten, forsvinner proxy-dekningen stille.
  */
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { db } from "./db";
 import { avsnitt, tekst } from "./skjema";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
@@ -188,3 +188,24 @@ export async function godkjennOverskrifter(t: Tilgang, tekstId: string, redigert
     .returning({ id: tekst.id });
   if (oppdatert.length === 0) throw new IkkeFunnet("Teksten i tilstanden innlest");
 }
+
+/**
+ * FR-5: lagrer teksten med de genererte etikettene satt inn, og hvilke de er.
+ * Bare i `innlest`, og bare én gang — et andre kall skriver ikke over.
+ */
+export async function lagreEtiketter(t: Tilgang, tekstId: string, redigertTekst: string, etiketter: string[]): Promise<void> {
+  const oppdatert = await db
+    .update(tekst)
+    .set({ redigertTekst, genererteOverskrifter: etiketter })
+    .where(
+      and(
+        eq(tekst.id, tekstId),
+        eq(tekst.kontoId, t.kontoId),
+        eq(tekst.tilstand, "innlest"),
+        isNull(tekst.genererteOverskrifter),
+      ),
+    )
+    .returning({ id: tekst.id });
+  if (oppdatert.length === 0) throw new IkkeFunnet("Teksten uten etiketter");
+}
+

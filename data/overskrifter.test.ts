@@ -50,3 +50,15 @@ describe("FR-3 fase 3a", () => {
     await expect(godkjennOverskrifter(await nyKonto(), rad.id, TEKST)).rejects.toBeInstanceOf(IkkeFunnet);
   });
 });
+
+describe("FR-5 — genererte etiketter", () => {
+  test("lagres én gang, sammen med listen over hvilke de er", async () => {
+    const { lagreEtiketter } = await import("./tilgang");
+    const t = await nyKonto();
+    const rad = await ny(t);
+    await lagreEtiketter(t, rad.id, "Om celler\n\nMitose er celledeling.", ["Om celler"]);
+    const etter = await hentTekst(t, rad.id);
+    expect(etter.genererteOverskrifter).toEqual(["Om celler"]);
+    await expect(lagreEtiketter(t, rad.id, "Annet\n\nX.", ["Annet"])).rejects.toBeInstanceOf(IkkeFunnet);
+  });
+});

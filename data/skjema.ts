@@ -214,6 +214,13 @@ export const tekst = pgTable(
      */
     overskrifterGodkjent: timestamp("overskrifter_godkjent", { withTimezone: true }),
 
+    /**
+     * FR-5: etikettene Lesevenn laget fordi teksten manglet overskrifter. De
+     * merkes «laget av Lesevenn» så lenge eleven ikke har endret dem. Null
+     * betyr at ingen er laget.
+     */
+    genererteOverskrifter: jsonb("genererte_overskrifter").$type<string[]>(),
+
     /** FR-6. Vurderes ikke og rettes ikke. */
     forkunnskapssvar: text("forkunnskapssvar"),
 

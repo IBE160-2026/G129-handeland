@@ -90,10 +90,15 @@ export function MorsmaalVelger({
 export function HentOversettelse({
   handling,
   hva,
+  venterTekst,
+  feilTekst,
 }: {
   handling: () => Promise<Handlingssvar>;
   /** Hva som oversettes, til statusteksten: «overskriftene», «forklaringene» … */
   hva: string;
+  /** Overstyrer statusteksten, når det som lages ikke er en oversettelse (FR-5). */
+  venterTekst?: string;
+  feilTekst?: string;
 }) {
   const router = useRouter();
   const [venter, startOvergang] = useTransition();
@@ -120,7 +125,7 @@ export function HentOversettelse({
   if (feil) {
     return (
       <div className="my-3 rounded-md border border-slate-300 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-900">
-        <p>Oversettelsen av {hva} kom ikke fram. Den norske teksten står som før.</p>
+        <p>{feilTekst ?? `Oversettelsen av ${hva} kom ikke fram. Den norske teksten står som før.`}</p>
         <button
           type="button"
           onClick={kjoer}
@@ -134,7 +139,7 @@ export function HentOversettelse({
 
   return (
     <p aria-live="polite" className="my-3 text-sm text-slate-600 dark:text-slate-400">
-      {venter ? `Oversetter ${hva} …` : ""}
+      {venter ? (venterTekst ?? `Oversetter ${hva} …`) : ""}
     </p>
   );
 }

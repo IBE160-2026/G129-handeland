@@ -1,0 +1,1 @@
+ALTER TABLE "tekst" ADD COLUMN "genererte_overskrifter" jsonb;

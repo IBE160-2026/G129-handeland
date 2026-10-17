@@ -43,6 +43,13 @@
       "when": 1792226803602,
       "tag": "0005_overskriftskontroll",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792227679646,
+      "tag": "0006_etiketter",
+      "breakpoints": true
     }
   ]
 }

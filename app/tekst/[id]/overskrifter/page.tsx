@@ -14,7 +14,8 @@ import { notFound, redirect } from "next/navigation";
 import { tilgang } from "../../../../data/konto";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { overskriftsplasser } from "../../../../tekst/overskrifter";
-import { lagreOverskrifter } from "../../../handlinger";
+import { lagEtiketterHandling, lagreOverskrifter } from "../../../handlinger";
+import { HentOversettelse } from "../../../komponenter/Morsmaal";
 import { Overskriftskontroll } from "../../../komponenter/Overskriftskontroll";
 
 export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/overskrifter">) {
@@ -32,6 +33,10 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
   // Etter aktiveringen er overskriftene brukt, og kan ikke endres her (AD-9).
   if (tekst.tilstand !== "innlest") redirect(`/tekst/${id}/aktivering`);
 
+  const plasser = overskriftsplasser(tekst.redigertTekst);
+  // FR-5: uten overskrifter lager Lesevenn etiketter, etter at siden er tegnet.
+  const lagEtiketter = plasser.length === 0 && tekst.genererteOverskrifter === null;
+
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">Steg 1 av 4 — før du leser</p>
@@ -41,10 +46,22 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
         overskrift, og flytt dem om rekkefølgen er gal. Selve teksten ser du etterpå — først skal du gjette hva den
         handler om.
       </p>
+      {lagEtiketter && (
+        <HentOversettelse
+          handling={lagEtiketterHandling.bind(null, id)}
+          hva="etikettene"
+          venterTekst="Teksten har ingen overskrifter. Lesevenn lager noen korte etiketter du kan bruke …"
+          feilTekst="Lesevenn fikk ikke laget etiketter. Du kan legge til en overskrift selv, eller gå videre uten."
+        />
+      )}
       <div className="mt-8">
         <Overskriftskontroll
+          // Ny nøkkel når etikettene kommer, så skjemaet starter fra dem og
+          // ikke fra den tomme listen det først ble tegnet med.
+          key={plasser.map((p) => `${p.nummer}:${p.tekst}`).join("|")}
           handling={lagreOverskrifter.bind(null, id)}
-          plasser={overskriftsplasser(tekst.redigertTekst)}
+          plasser={plasser}
+          genererte={tekst.genererteOverskrifter ?? []}
         />
       </div>
       <p className="mt-10 text-sm">

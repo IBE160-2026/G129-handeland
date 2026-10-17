@@ -20,6 +20,7 @@ import {
   IkkeFunnet,
   godkjennOverskrifter,
   hentAvsnitt,
+  lagreEtiketter,
   hentTekst,
   lagreForkunnskapssvar,
   opprettTekst,
@@ -74,7 +75,8 @@ import {
   utpekingElementer,
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
-import { byttOverskrifter, overskriftsfeil, overskriftsplasser } from "../tekst/overskrifter";
+import { byttOverskrifter, overskriftsfeil, overskriftsplasser, settInnEtiketter } from "../tekst/overskrifter";
+import { lagEtiketter } from "../generatorer/etiketter";
 import { foreslaaTittel } from "../tekst/tittel";
 import { lagreMinnevers } from "../data/minnevers";
 import { harSjekketForstaaelsen } from "../data/sjekket";
@@ -887,3 +889,31 @@ export async function lagreOverskrifter(tekstId: string, _forrige: Handlingssvar
   }
   redirect(`/tekst/${tekstId}/aktivering`);
 }
+
+/**
+ * FR-5: lager avsnittsetiketter når teksten mangler overskrifter. Kalles fra
+ * fase 3a etter at siden er tegnet, så eleven aldri venter på den. Feiler det,
+ * går hun videre uten — slik som før funksjonen fantes.
+ */
+export async function lagEtiketterHandling(tekstId: string): Promise<Handlingssvar> {
+  const t = await tilgang();
+  try {
+    const rad = await hentTekst(t, tekstId);
+    const avsnittene = delIAvsnitt(rad.redigertTekst);
+    if (rad.tilstand !== "innlest" || rad.genererteOverskrifter !== null || avsnittene.some((a) => a.erOverskrift)) {
+      return INGEN_FEIL;
+    }
+    const r = await lagEtiketter(avsnittene);
+    await lagreEtiketter(
+      t,
+      tekstId,
+      settInnEtiketter(rad.redigertTekst, r.etiketter),
+      r.etiketter.map((e) => e.etikett),
+    );
+  } catch (e) {
+    return somFeil(e);
+  }
+  revalidatePath(`/tekst/${tekstId}/overskrifter`);
+  return INGEN_FEIL;
+}
+

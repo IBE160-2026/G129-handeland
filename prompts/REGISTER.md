@@ -67,3 +67,9 @@ ikke ville brukt.
 |---|---|---|---|---|
 | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. «Sannhet går foran rim»; bare det teksten sier; ingen fagord utenfor listen. Koden avviser vers med fagord utenfor Begrepssettet, færre enn tre fagord eller feil linjetall, og prøver én gang til (AD-11). | Maskinelt: 10 av 10 vers besto kontrollen (ett etter nytt forsøk). Usanne påstander: venter på utviklerens vurdering (`maaling/resultater/fr31-vurderingsark.md`) | **Gjeldende** (til v2 er vurdert) |
 | v2 | 2026-10-17 | Utløst av utviklerens spørsmål «hva er egentlig et minnevers?»: v1 ga rimfrie oppsummeringer med linjer på opptil 25 stavelser. Korte linjer (6–10 stavelser), parrim, fast rytme, ett poeng per linje, ingen tall; sannhetskravet uendret. Koden avviser linjer over 14 stavelser (først 12, hevet fordi lange fagord alene tar halve linjen). Tokentaket hevet fra 4 000 til 16 000: sju av ti kall gikk tom før svaret var ferdig. | Maskinelt: 10 av 10 etter nye forsøk (stavelsessjekken avviste ett vers fire ganger ved grense 12). Usanne påstander og «fungerer som huskeregel»: venter på utviklerens vurdering (`maaling/resultater/fr31-vurderingsark-v2.md`) | Kandidat |
+
+## Avsnittsetiketter (FR-5)
+
+| Versjon | Dato | Endring og grunn | Målt | Status |
+|---|---|---|---|---|
+| v1 | 2026-10-17 | Første versjon, claude-haiku-5-5. Tre til seks etiketter på to til seks ord, med avsnittet delen begynner i; et kart, ikke et sammendrag — røper ikke konklusjonene. Koden forkaster etiketter med ugyldig avsnitt, dubletter, feil rekkefølge og setninger, og kutter over seks. | Én prøve: prisvekst-teksten uten overskrifter ga seks gode etiketter av åtte foreslåtte (to kuttet av taket). Ikke målt mot et gullsett; FR-5 har ingen terskel | **Gjeldende** |

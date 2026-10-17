@@ -43,6 +43,17 @@ export function overskriftsfeil(tekst: string): string | null {
 }
 
 /**
+ * FR-5: setter genererte etiketter inn som overskrifter foran avsnittene de
+ * hører til. Brødteksten er urørt.
+ */
+export function settInnEtiketter(redigert: string, etiketter: { foranAvsnitt: number; etikett: string }[]): string {
+  const foran = new Map(etiketter.map((e) => [e.foranAvsnitt, e.etikett.trim()]));
+  return delIAvsnitt(redigert)
+    .flatMap((a) => (foran.has(a.nummer) ? [foran.get(a.nummer)!, a.innhold] : [a.innhold]))
+    .join("\n\n");
+}
+
+/**
  * Fører endringene inn i teksten.
  *
  * `endringer` har ny tekst per plass; tom tekst sletter overskriften. Plasser
