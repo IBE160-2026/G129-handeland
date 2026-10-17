@@ -576,7 +576,7 @@ Aktiveringssiden og den avsluttende oppsummeringen kan vises på Morsmål.
 
 **Konsekvenser (testbare):**
 - Overskriftene på aktiveringssiden vises på begge språk.
-- Den avsluttende oppsummeringen er høyst fem setninger, vises på begge språk, og inneholder ingen påstand som ikke står i Teksten. **Den står nederst i Lesevisningen, etter teksten** (bestemt 16. oktober 2026), og lages når eleven ber om den — ikke for hver Tekst på forhånd.
+- Den avsluttende oppsummeringen er høyst fem setninger, vises på begge språk, og inneholder ingen påstand som ikke står i Teksten. **Den står nederst i Lesevisningen, etter teksten** (bestemt 16. oktober 2026), og lages når eleven ber om den — ikke for hver Tekst på forhånd. **Den låses opp først når eleven har levert en Quiz eller svart i en Fagsamtale** (bestemt 17. oktober 2026), slik §6 krever; låsen håndheves på serveren, ikke bare ved at knappen skjules.
 - Eleven kan skrive sitt eget svar på hvilket som helst språk. Svaret oversettes ikke og vurderes ikke.
 
 #### FR-27: Utpeking av språklige bilder og akademisk allmennspråk

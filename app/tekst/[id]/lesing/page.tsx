@@ -17,6 +17,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { hentBegrepssett } from "../../../../data/begrepssett";
 import { tilgang } from "../../../../data/konto";
+import { harSjekketForstaaelsen } from "../../../../data/sjekket";
 import { hentLeseinnstillinger } from "../../../../data/leseinnstillinger";
 import { lesestil } from "../../../../tekst/leseinnstillinger";
 import { Leseinnstillinger } from "../../../komponenter/Leseinnstillinger";
@@ -63,12 +64,13 @@ export default async function Lesing({
 
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
-  const [avsnitt, sett, spraak, oppsummering, innstillinger] = await Promise.all([
+  const [avsnitt, sett, spraak, oppsummering, innstillinger, sjekket] = await Promise.all([
     hentAvsnitt(t, id),
     hentBegrepssett(t, id),
     hentMorsmaal(t),
     hentOppsummering(t, id),
     hentLeseinnstillinger(t),
+    harSjekketForstaaelsen(t, id),
   ]);
 
   // FR-27: utpekingen hører til Morsmål, og den trenger fagordene for å
@@ -278,10 +280,23 @@ export default async function Lesing({
         </aside>
       </div>
 
-      {/* FR-26: oppsummeringen står nederst, etter teksten, og lages når eleven ber om den. */}
-      <section className="mt-12 max-w-[34rem]">
+      {/*
+        FR-26: oppsummeringen står nederst, etter teksten, og lages når eleven
+        ber om den — men først når hun har sjekket forståelsen (PRD §6). Det er
+        med vilje strengt: en oppsummering før lesingen er sjekket, gjør
+        Lesevenn til et sammendragsverktøy, og det er det appen ikke er.
+      */}
+      <section id="oppsummering" className="mt-12 max-w-[34rem] scroll-mt-6">
         <h2 className="font-semibold tracking-tight">Oppsummering</h2>
-        {oppsummering === null ? (
+        {oppsummering === null && !sjekket ? (
+          <p className="mt-1 text-slate-600 dark:text-slate-400">
+            Oppsummeringen låses opp når du har sjekket deg selv — ta quizen eller svar i en fagsamtale først.
+            Det er med vilje: du lærer mer av å finne det viktigste selv før du ser det samlet.{" "}
+            <Link href={`/tekst/${id}/oppgaver`} className={lenke}>
+              Til oppgavene
+            </Link>
+          </p>
+        ) : oppsummering === null ? (
           <>
             <p className="mt-1 text-slate-600 dark:text-slate-400">
               Vil du se det viktigste i teksten samlet i noen få setninger?

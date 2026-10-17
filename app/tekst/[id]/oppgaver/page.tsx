@@ -144,6 +144,17 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
         </section>
       </div>
 
+      {(forsoek.length > 0 || samtaler.some((s) => s.antallRunder > 0)) && (
+        // PRD §6: nå er eleven sjekket, og oppsummeringen er låst opp.
+        <p className="mt-8 rounded-md border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
+          Du har sjekket deg selv. Nå kan du se{" "}
+          <Link href={`/tekst/${id}/lesing#oppsummering`} className={LENKE}>
+            en kort oppsummering av teksten
+          </Link>
+          .
+        </p>
+      )}
+
       <p className="mt-12 text-sm">
         <Link href={`/tekst/${id}/lesing`} className="underline decoration-slate-400 underline-offset-4">
           Tilbake til teksten

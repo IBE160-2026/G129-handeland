@@ -73,6 +73,7 @@ import {
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
 import { lagreMinnevers } from "../data/minnevers";
+import { harSjekketForstaaelsen } from "../data/sjekket";
 import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
 import { tolkInnstillinger } from "../tekst/leseinnstillinger";
 import { lagMinnevers, type Versform } from "../generatorer/minnevers";
@@ -706,6 +707,15 @@ export async function velgMorsmaalHandling(
 export async function lagOppsummering(tekstId: string, _forrige: Handlingssvar): Promise<Handlingssvar> {
   const t = await tilgang();
   try {
+    // PRD §6: ikke før eleven er sjekket. Sjekkes her og ikke bare i visningen.
+    if (!(await harSjekketForstaaelsen(t, tekstId))) {
+      return {
+        feil: {
+          melding: "Oppsummeringen kommer etter at du har sjekket deg selv.",
+          handling: "Ta quizen eller svar i en fagsamtale først, så kan du se den.",
+        },
+      };
+    }
     if (!(await hentOppsummering(t, tekstId))) {
       const avsnittene = await hentAvsnitt(t, tekstId);
       const r = await oppsummer({ avsnitt: avsnittene });
