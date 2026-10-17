@@ -72,6 +72,8 @@ export function Quiz({
     try {
       setEksempler(await hentEksempelsvar(tekstId));
       setFase("vurderer");
+      // Meldingen står øverst, og bare kortsvarene vises under den.
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
       setFeil({ melding: "Fikk ikke hentet eksempelsvarene.", handling: "Prøv igjen." });
     }
@@ -129,28 +131,18 @@ export function Quiz({
         </div>
       )}
 
-      {fase === "svarer" && harKortsvar && (
-        <div className="mb-8 rounded-md border border-slate-300 p-5 dark:border-slate-700">
-          <p className="font-semibold">Slik fungerer quizen</p>
-          <ol className="mt-2 list-decimal space-y-1 pl-5">
-            <li>Svar på alle spørsmålene.</li>
-            <li>
-              Før du får se hva som var riktig, får du se et eksempelsvar på
-              spørsmålene du svarer på med egne ord. Der vurderer du selv om
-              svaret ditt var riktig.
-            </li>
-            <li>Så leverer du, og får se resultatet for alle spørsmålene.</li>
-          </ol>
-        </div>
-      )}
-
+      {/*
+        Ingen instruks før quizen: eleven kommer raskere i gang uten
+        (utviklerens testing 17.10). Forklaringen kommer når den trengs —
+        etter «Lever», med bare spørsmålene som skal sammenlignes.
+      */}
       {fase === "vurderer" && (
-        <div role="status" className="mb-8 rounded-md border border-sky-400 bg-sky-50 p-5 dark:border-sky-600 dark:bg-sky-950/40">
-          <p className="font-semibold">Vurder svarene du skrev selv</p>
+        <div role="alert" className="mb-8 rounded-md border border-sky-400 bg-sky-50 p-5 dark:border-sky-600 dark:bg-sky-950/40">
+          <p className="font-semibold">Nesten ferdig — sjekk svarene du skrev selv</p>
           <p className="mt-1">
-            Sammenlign svaret ditt med eksempelsvaret og teksten, og kryss av
-            om du fikk med poenget. Flervalgssvarene dine er låst — du får se
-            om de var riktige når du leverer.
+            {eksempler.length === 1 ? "Ett spørsmål" : `${eksempler.length} spørsmål`} svarte du på med egne ord.
+            Sammenlign med eksempelsvaret og teksten, og kryss av om du fikk med poenget. Så får du se
+            resultatet for hele quizen.
           </p>
         </div>
       )}
@@ -158,7 +150,10 @@ export function Quiz({
       {feil && <Feilmelding {...feil} />}
 
       <ol className="space-y-8">
-        {sporsmal.map((s) => {
+        {sporsmal
+          // Under vurderingen vises bare kortsvarene — flervalgene er levert og venter på resultatet.
+          .filter((s) => fase !== "vurderer" || !s.erFlervalg)
+          .map((s) => {
           const r = resultatFor(s.id);
           const eksempel = eksempler.find((e) => e.sporsmalId === s.id);
           const laast = fase !== "svarer";
@@ -304,7 +299,7 @@ export function Quiz({
               onClick={harKortsvar ? visEksempelsvar : lever}
               className={KNAPP}
             >
-              {venter ? "Et øyeblikk…" : harKortsvar ? "Se eksempelsvar og vurder deg selv" : "Lever"}
+              {venter ? "Et øyeblikk…" : "Lever"}
             </button>
             {ubesvarte.length > 0 && (
               <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -315,7 +310,7 @@ export function Quiz({
         )}
         {fase === "vurderer" && (
           <button type="button" disabled={venter} onClick={lever} className={KNAPP}>
-            {venter ? "Retter…" : "Lever"}
+            {venter ? "Retter…" : "Se resultatet"}
           </button>
         )}
         {fase === "ferdig" && (
