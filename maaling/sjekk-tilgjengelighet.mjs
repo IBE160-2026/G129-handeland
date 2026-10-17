@@ -162,8 +162,26 @@ try {
   await pc.fill("#tittel", "EM-bølger");
   await pc.fill("#tekst", eksempel);
   await pc.click("button[type=submit]:visible:has-text(\"Begynn\")");
+
+  // FR-3 og FR-5: brødteksten er verken synlig eller i kildekoden — heller
+  // ikke i dataene Next legger ved siden. Et utdrag fra et langt avsnitt
+  // brukes som prøve.
+  const brod = eksempel
+    .split(/\r?\n\s*\r?\n/)
+    .map((b) => b.replace(/\s+/g, " ").trim())
+    .find((b) => b.split(" ").length > 20)
+    .split(" ")
+    .slice(0, 6)
+    .join(" ");
+  const lekker = async () => (await pc.content()).includes(brod);
+
+  await pc.waitForURL(/\/overskrifter$/);
+  await axe(pc, "overskriftskontroll (3a)");
+  sjekk("FR-3: brødteksten finnes ikke i kildekoden i fase 3a", !(await lekker()), `prøve: «${brod}»`);
+  await pc.click("text=Overskriftene stemmer — videre");
   await pc.waitForURL(/\/aktivering$/);
   await axe(pc, "aktivering");
+  sjekk("FR-5: brødteksten finnes ikke i kildekoden i aktiveringen", !(await lekker()));
   await pc.fill("#svar", "Noe om bølger og stråling.");
   await pc.click("text=Videre");
   await pc.waitForURL(/\/gjennomsyn$/);

@@ -17,6 +17,8 @@ import { redirect } from "next/navigation";
 import { hentBegrepssett, lagreBegrepssett } from "../data/begrepssett";
 import { tilgang } from "../data/konto";
 import {
+  IkkeFunnet,
+  godkjennOverskrifter,
   hentAvsnitt,
   hentTekst,
   lagreForkunnskapssvar,
@@ -72,6 +74,7 @@ import {
   utpekingElementer,
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
+import { byttOverskrifter, overskriftsfeil, overskriftsplasser } from "../tekst/overskrifter";
 import { lagreMinnevers } from "../data/minnevers";
 import { harSjekketForstaaelsen } from "../data/sjekket";
 import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
@@ -148,7 +151,7 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
     vei: "liming",
   });
 
-  redirect(`/tekst/${ny.id}/aktivering`);
+  redirect(`/tekst/${ny.id}/overskrifter`);
 }
 
 /* ------------------------------------------------------------------ *
@@ -161,21 +164,33 @@ export async function lagreAktivering(
   data: FormData,
 ) {
   const svar = String(data.get("svar") ?? "").trim();
+  const t = await tilgang();
 
-  // FR-6: svaret vurderes ikke og rettes ikke. Men et tomt svar er heller
-  // ikke en aktivering, så det blokkeres — med en begrunnelse, ikke bare et
-  // avslag.
-  if (svar.length === 0) {
+  // FR-3: fase 3a kan ikke hoppes over — heller ikke ved å sende skjemaet
+  // uten å gå via siden.
+  try {
+    const rad = await hentTekst(t, tekstId);
+    if (rad.tilstand === "innlest" && rad.overskrifterGodkjent === null) redirect(`/tekst/${tekstId}/overskrifter`);
+  } catch (e) {
+    if (e instanceof IkkeFunnet) return somFeil(e);
+    throw e;
+  }
+
+  // FR-6: svaret vurderes ikke og rettes ikke. Et tomt svar får ÉN
+  // oppfordring; sender eleven tomt igjen, slipper hun videre. Steget skal
+  // ikke bli en sperre for den som synes dette er vanskelig. (Før 17.10 ble
+  // tomt svar stoppet for godt — et avvik fra FR-6.)
+  if (svar.length === 0 && data.get("tomtEtterOppfordring") !== "1") {
     return {
       feil: {
         melding: "Du har ikke skrevet noe ennå.",
         handling:
-          "Skriv et par setninger om hva du tror teksten handler om. Det blir ikke vurdert — det er for din egen del.",
+          "Prøv å skrive et par ord om hva du tror teksten handler om — det blir ikke vurdert. Vil du heller gå rett videre, trykk «Videre» en gang til.",
       },
     };
   }
 
-  await lagreForkunnskapssvar(await tilgang(), tekstId, svar);
+  await lagreForkunnskapssvar(t, tekstId, svar);
   redirect(`/tekst/${tekstId}/gjennomsyn`);
 }
 
@@ -450,7 +465,7 @@ export async function limInnBilde(_forrige: Handlingssvar, data: FormData): Prom
     redigertTekst: raatekst,
     vei: "bilde",
   });
-  redirect(`/tekst/${ny.id}/aktivering`);
+  redirect(`/tekst/${ny.id}/overskrifter`);
 }
 
 export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
@@ -476,7 +491,7 @@ export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promis
     vei: "pdf",
     innlesingsrapport: rapport,
   });
-  redirect(`/tekst/${ny.id}/aktivering`);
+  redirect(`/tekst/${ny.id}/overskrifter`);
 }
 
 /* ------------------------------------------------------------------ *
@@ -817,4 +832,45 @@ export async function lagreLesing(_forrige: Handlingssvar, data: FormData): Prom
   }
   revalidatePath("/tekst/[id]/lesing", "page");
   return INGEN_FEIL;
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-3 fase 3a — overskriftskontrollen
+ * ------------------------------------------------------------------ */
+
+/**
+ * Lagrer overskriftene eleven har godkjent, og sender henne til aktiveringen.
+ * Feltene er `o-<nummer>` per plass (tomt sletter) og `topp` for en ny
+ * overskrift øverst. Plasser som ikke finnes i teksten, ignoreres.
+ */
+export async function lagreOverskrifter(tekstId: string, _forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let rad;
+  try {
+    rad = await hentTekst(t, tekstId);
+  } catch (e) {
+    return somFeil(e);
+  }
+  const endringer = new Map<number, string>();
+  for (const p of overskriftsplasser(rad.redigertTekst)) {
+    const ny = String(data.get(`o-${p.nummer}`) ?? p.tekst).trim();
+    const feil = ny === "" ? null : overskriftsfeil(ny);
+    if (feil) return { feil: { melding: `«${ny}»: ${feil}`, handling: "Gjør overskriften kortere, eller fjern punktumet." } };
+    endringer.set(p.nummer, ny);
+  }
+  const topp = String(data.get("topp") ?? "").trim();
+  const toppfeil = topp === "" ? null : overskriftsfeil(topp);
+  if (toppfeil) return { feil: { melding: `«${topp}»: ${toppfeil}`, handling: "Gjør overskriften kortere, eller fjern punktumet." } };
+
+  try {
+    await godkjennOverskrifter(t, tekstId, byttOverskrifter(rad.redigertTekst, endringer, topp));
+  } catch {
+    return {
+      feil: {
+        melding: "Overskriftene kunne ikke lagres.",
+        handling: "Teksten er kanskje alt aktivert. Gå videre til aktiveringen.",
+      },
+    };
+  }
+  redirect(`/tekst/${tekstId}/aktivering`);
 }

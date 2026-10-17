@@ -36,6 +36,13 @@
       "when": 1792181961991,
       "tag": "0004_leseinnstillinger",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792226803602,
+      "tag": "0005_overskriftskontroll",
+      "breakpoints": true
     }
   ]
 }

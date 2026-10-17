@@ -55,7 +55,11 @@ export function AktiveringSkjema({
   return (
     <form action={send} className="space-y-4">
       {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+        <>
+          <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+          {/* FR-6: etter én oppfordring kan eleven gå videre med tomt svar. */}
+          <input type="hidden" name="tomtEtterOppfordring" value="1" />
+        </>
       )}
 
       <div>
@@ -71,7 +75,6 @@ export function AktiveringSkjema({
           id="svar"
           name="svar"
           rows={6}
-          required
           aria-describedby="svar-hjelp"
           className="mt-2 w-full rounded-md border border-slate-300 p-3 leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
         />

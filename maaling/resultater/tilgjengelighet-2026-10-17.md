@@ -2,14 +2,17 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**42 av 42 sjekker bestått.**
+**45 av 45 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
 | ✓ | axe: registrering |  |
 | ✓ | axe: forsiden |  |
 | ✓ | hopp-lenken er første fokus | fikk «Hopp til innholdet» |
+| ✓ | axe: overskriftskontroll (3a) |  |
+| ✓ | FR-3: brødteksten finnes ikke i kildekoden i fase 3a | prøve: «Inspirert av Maxwells teorier for elektromagnetiske» |
 | ✓ | axe: aktivering |  |
+| ✓ | FR-5: brødteksten finnes ikke i kildekoden i aktiveringen |  |
 | ✓ | axe: gjennomsyn |  |
 | ✓ | axe: lesevisning |  |
 | ✓ | FR-10: fokus åpner forklaringen |  |

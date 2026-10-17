@@ -207,6 +207,13 @@ export const tekst = pgTable(
      */
     innlesingsrapport: jsonb("innlesingsrapport").$type<Innlesingsrapport>(),
 
+    /**
+     * FR-3 fase 3a: når eleven godkjente overskriftene. Aktiveringen venter
+     * på dette. Tekster lest inn før fasen fantes (17.10), fikk verdien satt
+     * av migrasjon 0005, så ingen elev blir sendt bakover i løypen.
+     */
+    overskrifterGodkjent: timestamp("overskrifter_godkjent", { withTimezone: true }),
+
     /** FR-6. Vurderes ikke og rettes ikke. */
     forkunnskapssvar: text("forkunnskapssvar"),
 

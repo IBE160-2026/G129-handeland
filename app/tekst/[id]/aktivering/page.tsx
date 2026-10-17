@@ -12,7 +12,7 @@
  */
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { tilgang } from "../../../../data/konto";
 import { hentMorsmaal, hentOversettelse, kildeHash } from "../../../../data/morsmaal";
 import { overskriftElementer, somOppslag } from "../../../../morsmaal/elementer";
@@ -39,6 +39,12 @@ export default async function Aktivering({
   } catch (e) {
     if (e instanceof IkkeFunnet) notFound();
     throw e;
+  }
+
+  // FR-3: fase 3a kan ikke hoppes over. Aktiveringen bygger på overskrifter
+  // eleven har godkjent.
+  if (tekst.tilstand === "innlest" && tekst.overskrifterGodkjent === null) {
+    redirect(`/tekst/${id}/overskrifter`);
   }
 
   const avsnitt = delIAvsnitt(tekst.redigertTekst);

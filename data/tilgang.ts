@@ -172,3 +172,19 @@ export async function lagreForkunnskapssvar(
     throw new IkkeFunnet("Teksten i tilstanden innlest");
   }
 }
+
+/**
+ * FR-3 fase 3a: lagrer de godkjente overskriftene i den redigerte teksten.
+ *
+ * Bare i tilstanden `innlest`: etter aktiveringen bygger svaret på
+ * overskriftene som var, og etter låsingen peker alt generert innhold på
+ * avsnittsnumrene (AD-9).
+ */
+export async function godkjennOverskrifter(t: Tilgang, tekstId: string, redigertTekst: string): Promise<void> {
+  const oppdatert = await db
+    .update(tekst)
+    .set({ redigertTekst, overskrifterGodkjent: new Date() })
+    .where(and(eq(tekst.id, tekstId), eq(tekst.kontoId, t.kontoId), eq(tekst.tilstand, "innlest")))
+    .returning({ id: tekst.id });
+  if (oppdatert.length === 0) throw new IkkeFunnet("Teksten i tilstanden innlest");
+}
