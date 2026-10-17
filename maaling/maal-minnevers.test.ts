@@ -36,6 +36,8 @@ const TEKSTER = [
 const FORMER: Versform[] = ["vers", "suno"];
 const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
+// En kandidatversjon måles før den forfremmes (AD-14), som i FR-8-harnessen.
+const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
 
 const tilfeller = TEKSTER.flatMap((t) => FORMER.map((f) => [t, f] as const));
 
@@ -54,9 +56,9 @@ describe("FR-31 — ti vers til vurdering", () => {
       avsnitt: delIAvsnitt(raa),
       begreper: gull.faguttrykk.map((uttrykk) => ({ uttrykk: uttrykk.trim(), forklaring: "" })),
       form,
+      overstyrVersjon: PROMPTVERSJON,
     }).catch((e: Error) => {
-      console.log(`
-= ${navn} (${form}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
+      console.log(`\n= ${navn} (${form}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
       throw e;
     });
     vers.push({ tekst: navn, tittel: gull.tittel, r });
@@ -66,12 +68,17 @@ describe("FR-31 — ti vers til vurdering", () => {
   test("vurderingsarket", async () => {
     expect(vers).toHaveLength(10);
     vers.sort((a, b) => tilfeller.findIndex(([t, f]) => t === a.tekst && f === a.r.form) - tilfeller.findIndex(([t, f]) => t === b.tekst && f === b.r.form));
+    const versjon = vers[0].r.promptversjon;
     const deler = [
-      "# Vurderingsark — minnevers (FR-31)",
+      `# Vurderingsark — minnevers (FR-31), prompt ${versjon}`,
       "",
       "Kravet: **ingen påstand i verset motsier Teksten.** Måltall: null usanne påstander i de ti versene.",
       "",
-      "For hvert vers: les det mot teksten (lenket under), og tell påstandene som er usanne eller ikke står i teksten. En forenkling som fortsatt er riktig, er ikke en usann påstand. Skriv funnet i kommentarfeltet — det brukes til å stramme prompten.",
+      "For hvert vers:",
+      "",
+      "1. **Usanne påstander:** les verset mot teksten, og tell påstandene som motsier den. En forenkling som fortsatt er riktig, er ikke usann.",
+      "2. **Huskeregel:** fungerer verset som en huskeregel — korte linjer, rim, rytme, noe som sitter? Ja eller nei. Ikke en del av FR-31, men av om funksjonen gjør det den lover.",
+      "3. **Kommentar:** én linje per funn — linje, sitat, hva teksten sier, og type (usann / utenfor teksten / misvisende). Brukes til å stramme prompten.",
       "",
     ];
     vers.forEach((v, i) => {
@@ -85,15 +92,17 @@ describe("FR-31 — ti vers til vurdering", () => {
         ...(v.r.form === "suno" ? [`Stil: \`${v.r.stil}\``, ""] : []),
         ...v.r.linjer.map((l) => `> ${l}  `),
         "",
-        "**Usanne påstander:** ____  **Kommentar:**",
+        "**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei",
+        "",
+        "**Kommentar:**",
         "",
       );
     });
-    deler.push("---", "", "**Sum usanne påstander:** ____ av mål 0", "");
+    deler.push("---", "", "**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av 10", "");
     await mkdir(RESULTATER, { recursive: true });
-    await writeFile(path.join(RESULTATER, "fr31-vurderingsark.md"), deler.join("\n"));
+    await writeFile(path.join(RESULTATER, `fr31-vurderingsark-${versjon}.md`), deler.join("\n"));
     await writeFile(
-      path.join(RESULTATER, "fr31-vers.json"),
+      path.join(RESULTATER, `fr31-vers-${versjon}.json`),
       JSON.stringify({ krav: "FR-31", vers: vers.map((v) => ({ tekst: v.tekst, ...v.r })) }, null, 2) + "\n",
     );
   });

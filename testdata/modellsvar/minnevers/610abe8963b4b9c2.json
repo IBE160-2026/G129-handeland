@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-17T06:53:11.844Z",
+  "data": {
+    "linjer": [
+      "Lav frekvens gir lang bølgelengde,",
+      "og radiobølger rekker lenger.",
+      "Høyt oppe speiler lufta dem",
+      "mot jorda, og de når enda frem."
+    ],
+    "faguttrykk": [
+      "frekvens",
+      "bølgelengde",
+      "Radiobølger"
+    ],
+    "stil": ""
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-17T06:54:39.155Z",
+  "data": {
+    "linjer": [
+      "Metafor har ikke «som» eller «lik»,",
+      "simile tar «som», metaforen er rik.",
+      "«Hjertet står i brann» sier man:",
+      "en språklig metafor, som kognitiv tanke kan."
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "kognitiv"
+    ],
+    "stil": ""
+  }
+}

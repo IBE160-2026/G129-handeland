@@ -26,6 +26,23 @@ export const MIN_LINJER = 4;
 export const MAKS_LINJER = 8;
 export const MIN_FAGUTTRYKK = 3;
 export const MAKS_STIL = 120;
+/**
+ * Et minnevers har korte linjer. v1 ga linjer på opptil 25 stavelser — en
+ * oppsummering med linjeskift, ikke et vers (funnet av utvikleren 17.10).
+ * Prompten ber om seks til ti; koden avviser over fjorten. Grensen var tolv,
+ * men lange fagord tar alene halve linjen («applikasjonsprogrammer» har seks
+ * stavelser), og et vers om operativsystem ble avvist fire ganger på rad.
+ */
+export const MAKS_STAVELSER = 14;
+
+/**
+ * Stavelser, grovt: grupper av vokaler. Norsk har få diftonger utenom «ei»,
+ * «øy», «au» og «ai», og de gir én gruppe her, som er riktig. Grovheten går
+ * begge veier med en stavelse eller to, og grensen er satt med slingring.
+ */
+export function stavelser(linje: string): number {
+  return (linje.toLowerCase().match(/[aeiouyæøå]+/g) ?? []).length;
+}
 
 /** Høyst så mange forsøk før generatoren gir opp (AD-11). */
 const FORSOEK = 2;
@@ -83,6 +100,10 @@ export function kontrollerVers(
   if (linjer.length < MIN_LINJER || linjer.length > MAKS_LINJER) {
     brudd.push(`${linjer.length} linjer, skal være ${MIN_LINJER}–${MAKS_LINJER}`);
   }
+  for (const l of linjer) {
+    const n = stavelser(l);
+    if (n > MAKS_STAVELSER) brudd.push(`linjen «${l}» har ${n} stavelser, høyst ${MAKS_STAVELSER}`);
+  }
   for (const f of svar.faguttrykk) {
     if (!sett.has(f.trim().toLowerCase())) brudd.push(`«${f}» står ikke i Begrepssettet`);
   }
@@ -133,7 +154,9 @@ export async function lagMinnevers({
       skjema: MinneversSkjema,
       brukermelding: melding,
       overstyrVersjon,
-      maksTokens: 4000,
+      // Rim krever mer tenking enn oppramsing: med 4000 gikk sju av ti v2-kall
+      // tom for tokens før svaret var ferdig (17.10).
+      maksTokens: 16000,
       kjoering: k === 1 ? undefined : k,
     });
     sisteBrudd = kontrollerVers(r.data, form, begrepssett);

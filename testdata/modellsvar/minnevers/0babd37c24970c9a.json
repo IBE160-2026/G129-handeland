@@ -1,0 +1,23 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-17T07:00:41.497Z",
+  "data": {
+    "linjer": [
+      "Minne og prosessorer står i kø,",
+      "Operativsystemet deler med ro.",
+      "Systemprogramvare, grunnlaget her,",
+      "applikasjonsprogrammer får mer."
+    ],
+    "faguttrykk": [
+      "minne",
+      "prosessorer",
+      "operativsystem",
+      "systemprogramvare",
+      "applikasjonsprogrammer"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-17T06:56:29.538Z",
+  "data": {
+    "linjer": [
+      "Domeneoppbygning, la oss gå:",
+      "fra toppdomene ned til under-domene nå.",
+      "Punktum bakerst, DNS-rotserverne står,",
+      "mange IP-adresser kan høre til ett navn, og det står."
+    ],
+    "faguttrykk": [
+      "Domeneoppbygning",
+      "toppdomene",
+      "DNS-rotserverne",
+      "IP-adressene",
+      "under-domene"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm"
+  }
+}

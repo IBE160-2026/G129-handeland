@@ -1,0 +1,190 @@
+{
+  "krav": "FR-31",
+  "vers": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Lav frekvens gir lang bølgelengde,",
+        "og radiobølger rekker lenger.",
+        "Høyt oppe speiler lufta dem",
+        "mot jorda, og de når enda frem."
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "bølgelengde"
+      ],
+      "stil": "",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "suno",
+      "linjer": [
+        "Infrarød stråling, varme å måle,",
+        "har litt mindre energi enn lysets stråle.",
+        "Røntgenstråling gjennomlyser",
+        "bein og det som lys ikke ser."
+      ],
+      "faguttrykk": [
+        "Infrarød stråling",
+        "røntgenstråling",
+        "energi"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Prisvekst holder seg på topp,",
+        "styringsrenta følger opp.",
+        "Energi fra Midtøsten blir dyr,",
+        "og inflasjonen hos oss er stor."
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "styringsrenta",
+        "inflasjon"
+      ],
+      "stil": "",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "suno",
+      "linjer": [
+        "Høy prisvekst, og renta går,",
+        "styringsrenta stiger i år.",
+        "Inflasjon kommer ned, men tar sin tid,",
+        "mot to prosent, sakte, uten strid."
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "styringsrenta",
+        "inflasjon"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, steady groove, 100 bpm",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "Metafor har ikke «som» eller «lik»,",
+        "simile tar «som», metaforen er rik.",
+        "«Hjertet står i brann» sier man:",
+        "en språklig metafor, som kognitiv tanke kan."
+      ],
+      "faguttrykk": [
+        "metafor",
+        "kognitiv",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "suno",
+      "linjer": [
+        "Metafor: ord byttet, uten «som» og lik,",
+        "Simile sier «som», det er sammenlikning slik.",
+        "Besjeling gir bordet en sjel og et ord,",
+        "bordbein og fjordarm: kroppsord, selv i fjord."
+      ],
+      "faguttrykk": [
+        "metafor",
+        "simile",
+        "besjeling"
+      ],
+      "stil": "upbeat folk pop, playful chorus, clear vocals, 100 bpm",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Bakerst står et punktum, rotens vakt,",
+        "og peker mot DNS-rotserverne rakt.",
+        "Så kommer toppdomenet, som .no, i stil,",
+        "der Norid kjenner IP-adressene til.",
+        "Om er et under-domene, under ndla tett,",
+        "styres av samme DNS-server, rett."
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "IP-adressene",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "suno",
+      "linjer": [
+        "Bakerst står punktum, rotens vei,",
+        "DNS-rotserverne, hei, hei!",
+        "Så kommer .no, det norske toppdomene,",
+        "og om er et under-domene."
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystem styrer kurs,",
+        "minne og prosessorer får sin tur.",
+        "Skrivejobber venter, en og en,",
+        "og ingen blander noe, alt er ren."
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "prosessorer"
+      ],
+      "stil": "",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "suno",
+      "linjer": [
+        "Minne og prosessorer står i kø,",
+        "Operativsystemet deler med ro.",
+        "Systemprogramvare, grunnlaget her,",
+        "applikasjonsprogrammer får mer."
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "prosessorer",
+        "systemprogramvare",
+        "applikasjonsprogrammer"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 100 bpm",
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

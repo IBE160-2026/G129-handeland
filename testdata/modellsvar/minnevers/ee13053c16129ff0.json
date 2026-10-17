@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-17T06:53:38.943Z",
+  "data": {
+    "linjer": [
+      "Infrarød stråling, varme å måle,",
+      "har litt mindre energi enn lysets stråle.",
+      "Røntgenstråling gjennomlyser",
+      "bein og det som lys ikke ser."
+    ],
+    "faguttrykk": [
+      "Infrarød stråling",
+      "energi",
+      "røntgenstråling"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm"
+  }
+}

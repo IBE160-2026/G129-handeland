@@ -1,0 +1,24 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-17T06:56:10.800Z",
+  "data": {
+    "linjer": [
+      "Bakerst står et punktum, rotens vakt,",
+      "og peker mot DNS-rotserverne rakt.",
+      "Så kommer toppdomenet, som .no, i stil,",
+      "der Norid kjenner IP-adressene til.",
+      "Om er et under-domene, under ndla tett,",
+      "styres av samme DNS-server, rett."
+    ],
+    "faguttrykk": [
+      "DNS-rotserverne",
+      "toppdomene",
+      "IP-adressene",
+      "under-domene"
+    ],
+    "stil": ""
+  }
+}

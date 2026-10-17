@@ -3,11 +3,11 @@
  */
 
 import { describe, expect, test } from "vitest";
-import { brukesIVers, kontrollerVers } from "./minnevers";
+import { brukesIVers, kontrollerVers, stavelser } from "./minnevers";
 
 const SETT = ["mitose", "meiose", "kromosom", "celledeling"];
 const vers = (linjer: string[], faguttrykk = ["mitose", "meiose", "kromosom"], stil = "") => ({ linjer, faguttrykk, stil });
-const GODT = ["Mitosen deler cella i to,", "meiose gir kjønnsceller å bo,", "hvert kromosom blir kopiert,", "så arvestoffet blir fordelt."];
+const GODT = ["Mitosen deler cella i to,", "meiose lager kjønnsceller, jo!", "Hvert kromosom blir kopiert,", "så arvestoff blir fordelt."];
 
 describe("brukesIVers — grunnform eller vanlig bøyning", () => {
   test.each([
@@ -21,7 +21,20 @@ describe("brukesIVers — grunnform eller vanlig bøyning", () => {
   });
 });
 
+describe("stavelser", () => {
+  test.each([
+    ["Tretti dager har september", 8],
+    ["Radiobølger har lav frekvens og lang bølgelengde", 14],
+    ["øy og stein", 3],
+  ])("«%s»: %i", (l, n) => expect(stavelser(l)).toBe(n));
+});
+
 describe("FR-30/31 — kontrollen", () => {
+  test("en oppramsing med lange linjer er ikke et minnevers", () => {
+    const langt = [...GODT.slice(0, 3), "Mikrobølger har bølgelengder mellom en millimeter og en meter"];
+    expect(kontrollerVers(vers(langt), "vers", SETT)[0]).toMatch(/stavelser, høyst 14/);
+  });
+
   test("et godt vers har ingen brudd", () => {
     expect(kontrollerVers(vers(GODT), "vers", SETT)).toEqual([]);
   });

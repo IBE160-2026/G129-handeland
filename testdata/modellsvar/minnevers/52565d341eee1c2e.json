@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-17T06:54:07.935Z",
+  "data": {
+    "linjer": [
+      "Høy prisvekst, og renta går,",
+      "styringsrenta stiger i år.",
+      "Inflasjon kommer ned, men tar sin tid,",
+      "mot to prosent, sakte, uten strid."
+    ],
+    "faguttrykk": [
+      "Prisvekst",
+      "styringsrenta",
+      "inflasjon"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, steady groove, 100 bpm"
+  }
+}

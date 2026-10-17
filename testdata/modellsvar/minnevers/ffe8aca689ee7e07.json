@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-17T06:56:53.190Z",
+  "data": {
+    "linjer": [
+      "Bakerst står punktum, rotens vei,",
+      "DNS-rotserverne, hei, hei!",
+      "Så kommer .no, det norske toppdomene,",
+      "og om er et under-domene."
+    ],
+    "faguttrykk": [
+      "DNS-rotserverne",
+      "toppdomene",
+      "under-domene"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm"
+  }
+}

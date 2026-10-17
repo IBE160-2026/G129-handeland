@@ -1,0 +1,21 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-17T06:55:27.322Z",
+  "data": {
+    "linjer": [
+      "Metafor: ord byttet, uten «som» og lik,",
+      "Simile sier «som», det er sammenlikning slik.",
+      "Besjeling gir bordet en sjel og et ord,",
+      "bordbein og fjordarm: kroppsord, selv i fjord."
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "besjeling"
+    ],
+    "stil": "upbeat folk pop, playful chorus, clear vocals, 100 bpm"
+  }
+}
