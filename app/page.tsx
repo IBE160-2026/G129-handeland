@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { tilgang } from "../data/konto";
 import { listTekster } from "../data/tilgang";
+import { filtrerTekster, tolkSortering } from "../data/tekstliste";
 import { limInnBilde, limInnPdf, limInnTekst } from "./handlinger";
 import { Innlesing } from "./komponenter/Innlesing";
 import { SlettTekstKnapp } from "./komponenter/SlettTekstKnapp";
@@ -29,9 +30,17 @@ const TILSTANDSORD: Record<string, string> = {
   laast: "Klar til lesing",
 };
 
-export default async function Startside() {
+const DATO = new Intl.DateTimeFormat("nb-NO", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/Oslo" });
+
+export default async function Startside({ searchParams }: PageProps<"/">) {
   // FR-35: uten innlogging sendes eleven til innloggingssiden.
-  const tekster = await listTekster(await tilgang());
+  const alle = await listTekster(await tilgang());
+  // FR-36: søk på tittel og sortering på dato, i adressen så de overlever en
+  // oppdatering — og et vanlig skjema, så det virker uten JavaScript.
+  const sp = await searchParams;
+  const sok = typeof sp.sok === "string" ? sp.sok.trim() : "";
+  const sortering = tolkSortering(sp.sorter);
+  const tekster = filtrerTekster(alle, sok, sortering);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
@@ -45,10 +54,47 @@ export default async function Startside() {
           <h2 id="tekstene-dine" className="text-lg font-semibold tracking-tight">
             Tekstene dine
           </h2>
-          {tekster.length === 0 ? (
+          {alle.length > 1 && (
+            <form role="search" className="mt-3 space-y-2 text-sm">
+              <label htmlFor="sok" className="sr-only">
+                Søk i titlene
+              </label>
+              <input
+                id="sok"
+                name="sok"
+                type="search"
+                defaultValue={sok}
+                placeholder="Søk i titlene"
+                className="w-full rounded-md border border-slate-300 px-3 py-1.5 dark:border-slate-700 dark:bg-slate-900"
+              />
+              <div className="flex items-center gap-2">
+                <label htmlFor="sorter">Sorter</label>
+                <select
+                  id="sorter"
+                  name="sorter"
+                  defaultValue={sortering}
+                  className="rounded-md border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <option value="nyest">Nyeste først</option>
+                  <option value="eldst">Eldste først</option>
+                </select>
+                <button type="submit" className="rounded-md border border-slate-400 px-3 py-1 font-medium hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800">
+                  Vis
+                </button>
+              </div>
+            </form>
+          )}
+          {alle.length === 0 ? (
             <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
               Tekstene du limer inn, havner her. Herfra kan du gå rett til
               teksten eller oppgavene.
+            </p>
+          ) : tekster.length === 0 ? (
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+              Ingen titler inneholder «{sok}».{" "}
+              <Link href="/" className={UNDERLENKE}>
+                Vis alle
+              </Link>
             </p>
           ) : (
             <ul className="mt-3 space-y-4">
@@ -56,7 +102,7 @@ export default async function Startside() {
                 <li key={t.id} className="rounded-md border border-slate-200 p-3 dark:border-slate-800">
                   <p className="font-medium">{t.tittel}</p>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
-                    {TILSTANDSORD[t.tilstand] ?? t.tilstand}
+                    {DATO.format(t.opprettet)} · {TILSTANDSORD[t.tilstand] ?? t.tilstand}
                   </p>
                   <ul className="mt-2 space-y-1 border-l-2 border-slate-200 pl-3 text-sm dark:border-slate-700">
                     <li>

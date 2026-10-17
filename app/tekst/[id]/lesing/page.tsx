@@ -20,6 +20,7 @@ import { tilgang } from "../../../../data/konto";
 import { harSjekketForstaaelsen } from "../../../../data/sjekket";
 import { hentLeseinnstillinger } from "../../../../data/leseinnstillinger";
 import { lesestil } from "../../../../tekst/leseinnstillinger";
+import { visFagtekstvarsel } from "../../../../tekst/fagtekstpreg";
 import { Leseinnstillinger } from "../../../komponenter/Leseinnstillinger";
 import {
   hentMorsmaal,
@@ -89,6 +90,8 @@ export default async function Lesing({
   const oppsummeringMm = somOppslag(oppsummeringOversatt);
   const utpekingMm = somOppslag(utpekingOversatt);
   const kvalitetssikret = spraak ? KVALITETSSIKRET.has(spraak.kode) : false;
+  // FR-7: mykt varsel, bare når Begrepssettet er tomt eller nær tomt.
+  const fagtekstvarsel = sett ? visFagtekstvarsel(tekst.redigertTekst, sett.begreper.length) : [];
 
   // Forekomstene grupperes per avsnitt én gang, framfor å filtreres på nytt
   // for hvert avsnitt som tegnes.
@@ -145,6 +148,15 @@ export default async function Lesing({
       </p>
 
       <Leseinnstillinger handling={lagreLesing} valgt={innstillinger} malId="lesetekst" />
+
+      {fagtekstvarsel.length > 0 && (
+        /* FR-7: en opplysning, ikke en sperre. Eleven leser videre som vanlig. */
+        <p className="mt-4 max-w-[70ch] rounded-md border border-slate-300 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-900">
+          Denne teksten ser ikke ut som en fagtekst ({fagtekstvarsel.join(", ")}), og Lesevenn fant få eller ingen
+          fagord. Du kan godt lese videre — men Lesevenn er laget for fagtekster, og quiz og fagsamtale blir best med
+          dem.
+        </p>
+      )}
 
       <div className="mt-8 gap-10 lg:flex">
         {/* FR-12: størrelse og linjeavstand fra kontoen; linjelengden i ch holder ca. 70 tegn. */}

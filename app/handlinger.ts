@@ -75,6 +75,7 @@ import {
 } from "../morsmaal/elementer";
 import { finnSpraak } from "../morsmaal/spraak";
 import { byttOverskrifter, overskriftsfeil, overskriftsplasser } from "../tekst/overskrifter";
+import { foreslaaTittel } from "../tekst/tittel";
 import { lagreMinnevers } from "../data/minnevers";
 import { harSjekketForstaaelsen } from "../data/sjekket";
 import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
@@ -124,6 +125,18 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
     };
   }
 
+  // FR-1: under 400 tegn er for lite til overskrifter, Begrepssett og Quiz.
+  // Antallet som mangler oppgis, så eleven vet hvor mye mer som trengs.
+  const lengde = raatekst.trim().length;
+  if (lengde < GRENSER.minTegnTotalt) {
+    return {
+      feil: {
+        melding: `Teksten er for kort: ${lengde} tegn. Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
+        handling: "Lim inn mer av teksten — gjerne hele delkapittelet. Overskrifter, fagord og quiz trenger nok tekst å bygge på.",
+      },
+    };
+  }
+
   // FR-1: grensen håndheves her også, ikke bare i skjemaet. Skjemaet gir
   // eleven valget (bruk begynnelsen eller del opp); dette er vernet om
   // skjemaet blir gått forbi.
@@ -144,7 +157,7 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
   }
 
   const ny = await opprettTekst(await tilgang(), {
-    tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
+    tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     // Ved liming er råtekst og redigert tekst like til eleven endrer noe.
     redigertTekst: raatekst,
@@ -460,7 +473,7 @@ export async function limInnBilde(_forrige: Handlingssvar, data: FormData): Prom
   // skrive inn resten — men delIAvsnitt må gi minst ett avsnitt.
   const avsnitt = delIAvsnitt(raatekst);
   const ny = await opprettTekst(await tilgang(), {
-    tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
+    tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     redigertTekst: raatekst,
     vei: "bilde",
@@ -485,7 +498,7 @@ export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promis
 
   const avsnitt = delIAvsnitt(raatekst);
   const ny = await opprettTekst(await tilgang(), {
-    tittel: tittel.length > 0 ? tittel : (avsnitt[0]?.innhold.slice(0, 80) ?? "Uten tittel"),
+    tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     redigertTekst: raatekst,
     vei: "pdf",
