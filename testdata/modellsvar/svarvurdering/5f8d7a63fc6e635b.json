@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Rudolf",
+  "lagret": "2026-10-18T19:46:04.404Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du forklarer godt at frekvensen til mikrobølgene passer med frekvensen vannmolekylene svinger med, slik at molekylene rister og maten blir varm.",
+    "oppfolging": {
+      "sporsmal": "Du nevnte at molekyler rister. Hva sier teksten om hva som skjer med den infrarøde strålingen fra molekylene når temperaturen stiger?",
+      "kildeavsnitt": 13,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

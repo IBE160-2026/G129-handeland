@@ -34,7 +34,8 @@
     "predev": "node opplasting/kopier-pdf-worker.mjs",
     "prebuild": "node opplasting/kopier-pdf-worker.mjs",
     "sjekk:tilgjengelighet": "node maaling/sjekk-tilgjengelighet.mjs",
-    "sjekk:readme": "node maaling/sjekk-readme.mjs"
+    "sjekk:readme": "node maaling/sjekk-readme.mjs",
+    "demotest": "node maaling/demotest.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

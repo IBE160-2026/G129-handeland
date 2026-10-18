@@ -56,7 +56,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
       <p className="text-sm text-slate-600 dark:text-slate-400">Steg 4 av 4 — sjekk forståelsen</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">Oppgaver: {tekst.tittel}</h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
-        Velg det som passer deg. Du kan gjøre begge, i den rekkefølgen du vil.
+        Velg det som passer deg. Du kan gjøre så mange du vil, i den rekkefølgen du vil.
       </p>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">

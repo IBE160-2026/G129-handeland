@@ -18,6 +18,10 @@
  *   av      (standard)  modellen kalles
  *   les                 svaret leses fra disk; mangler det, er det en feil
  *   skriv               modellen kalles, og svaret lagres til disk
+ *   fyll                svaret leses fra disk; mangler det, kalles modellen
+ *                       og svaret lagres. Laget for demotesten (§9.5): første
+ *                       kjøring koster, de neste er gratis og like hver gang,
+ *                       uten at svar som alt finnes, blir skrevet over
  *
  * `skriv` er hvordan filene lages: kjør kjerneløypen én gang med en ekte
  * nøkkel, og commit det som havner i `testdata/modellsvar/`. Etterpå kjører
@@ -34,7 +38,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-export type Testmodus = "av" | "les" | "skriv";
+export type Testmodus = "av" | "les" | "skriv" | "fyll";
 
 /**
  * Leses ved hvert kall, ikke bufret. Grunnen er testbarhet: en test som setter
@@ -44,6 +48,7 @@ export type Testmodus = "av" | "les" | "skriv";
 export function testmodus(): Testmodus {
   const v = process.env.LESEVENN_TESTMODUS?.trim().toLowerCase();
   if (v === "skriv") return "skriv";
+  if (v === "fyll") return "fyll";
   if (v === "les" || v === "1" || v === "true") return "les";
   return "av";
 }

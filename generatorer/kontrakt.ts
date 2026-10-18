@@ -306,14 +306,14 @@ export async function kjoerGenerator<S extends z.ZodType>({
    * ferskt svar. En testmodus som hoppet over den ville demonstrert en kodevei
    * som ikke finnes i drift.
    */
-  if (modus === "les") {
-    const lagret = await hentLagret(
-      oppgave,
-      prompt.versjon,
-      noekkelmelding,
-      kjoering,
-    );
+  // `fyll` leser som `les` når svaret finnes, og kaller og lagrer som
+  // `skriv` når det mangler.
+  const lagret =
+    modus === "les" || modus === "fyll"
+      ? await hentLagret(oppgave, prompt.versjon, noekkelmelding, kjoering)
+      : null;
 
+  if (modus === "les" || lagret) {
     if (!lagret) {
       throw new GeneratorFeil(
         "lagret_svar_mangler",
@@ -372,7 +372,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     // Testmodus `skriv`: dette er hvordan filene i testdata/ lages. Lagringen
     // skjer etter valideringen over, så et svar som ikke holdt formen havner
     // aldri på disk.
-    if (modus === "skriv") {
+    if (modus === "skriv" || modus === "fyll") {
       await lagreSvar(
         oppgave,
         prompt.versjon,

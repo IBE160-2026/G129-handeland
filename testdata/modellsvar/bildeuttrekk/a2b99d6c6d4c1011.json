@@ -1,0 +1,11 @@
+{
+  "oppgave": "bildeuttrekk",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "Skriv av teksten på denne siden. [bilde 4d83724670de9f9dc550d747005819c2]",
+  "lagret": "2026-10-18T19:47:34.483Z",
+  "data": {
+    "lesbar": true,
+    "tekst": "På grunn av den lange bølgelengden er radiobølger svært godt egnet til å sende signaler over store avstander. Bølger med korte bølgelengder spres lett, mens radiobølger går uforstyrret rett fram. I tillegg kan radiobølger bli reflektert av ionosfæren, 80–400 km over bakken, tilbake mot jordoverflata og dermed nå enda lenger.\n\nMikrobølger\n\nVed å øke svingefrekvensen i Hertz forsøk kunne man produsere elektromagnetiske bølger med høyere frekvens – mikrobølger. Denne gruppen av elektromagnetiske bølger har bølgelengder mellom 1 mm og 1 m. Du kjenner den nok best via mikrobølgeovnen.\n\nGrunnen til at mat varmes opp så raskt i en mikrobølgeovn, er at frekvensen til mikrobølgene passer godt sammen med frekvensen som både fett- og vannmolekyler naturlig vil svinge med. Dermed sørger mikrobølgeovnen for å «riste» på alle vannmolekylene i maten. Derfor blir maten varm fordi den inneholder vann, mens tallerkenen (som ikke inneholder vann) ikke blir det."
+  }
+}

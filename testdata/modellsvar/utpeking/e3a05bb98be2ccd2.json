@@ -1,0 +1,71 @@
+{
+  "oppgave": "utpeking",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "maksPerKategori: 6 fagord: [\"elektromagnetiske bølger\",\"radiobølger\",\"bølgelengde\",\"IR-stråling\",\"mikrobølger\",\"røntgenstråling\",\"ionosfæren\",\"ultrafiolett stråling\"] [avsnitt 1, overskrift] Egenskap",
+  "lagret": "2026-10-18T19:46:40.221Z",
+  "data": {
+    "uttrykk": [
+      {
+        "uttrykk": "riste på",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Her betyr det at mikrobølgene får vannmolekylene til å bevege seg kraftig, ikke at noe rister fysisk.",
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "i verste tilfelle",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Et fast uttrykk som betyr «på det verste», altså den alvorligste mulige konsekvensen.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "nå enda lenger",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr at radiobølgene kan dekke enda større avstander, ikke at de fysisk når lenger fram.",
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "på den andre siden av",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr her «i den andre enden av» spekteret, altså på motsatt side av det synlige lyset i bølgelengde.",
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "Inspirert av",
+        "kategori": "akademisk",
+        "forklaring": "Betyr at noe er påvirket av eller tar utgangspunkt i noe annet, for eksempel en idé eller en teori.",
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "tilsvarer",
+        "kategori": "akademisk",
+        "forklaring": "Betyr at to ting har samme verdi eller betyr det samme, for eksempel «lav energi tilsvarer lang bølgelengde».",
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "avta",
+        "kategori": "akademisk",
+        "forklaring": "Betyr å bli mindre eller svakere over tid eller når noe endrer seg.",
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "i utgangspunktet",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «fra begynnelsen av» eller «ved start», før noe eventuelt endres.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "tilnærmet",
+        "kategori": "akademisk",
+        "forklaring": "Betyr nesten, eller nær det fullstendige, for eksempel «tilnærmet all UV-C».",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "forårsake",
+        "kategori": "akademisk",
+        "forklaring": "Betyr å føre til eller være årsak til noe, for eksempel en sykdom.",
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

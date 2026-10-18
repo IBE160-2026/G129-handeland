@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Rudolf",
+  "lagret": "2026-10-18T19:45:55.496Z",
+  "data": {
+    "tilstand": "utenfor",
+    "begrunnelse": "Det går fint å ikke vite — delen om hvorfor mat varmes i mikrobølgeovnen forklarer hva mikrobølgene setter i bevegelse.",
+    "oppfolging": {
+      "sporsmal": "Hvilke to typer molekyler nevner teksten at frekvensen til mikrobølgene passer godt sammen med?",
+      "kildeavsnitt": 8,
+      "maal": "deler_opp"
+    }
+  }
+}

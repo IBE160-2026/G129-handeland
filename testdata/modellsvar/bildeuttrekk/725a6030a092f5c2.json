@@ -1,0 +1,11 @@
+{
+  "oppgave": "bildeuttrekk",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "Skriv av teksten på denne siden. [bilde b844879da6ed43f3a0110a84749ceb67]",
+  "lagret": "2026-10-18T19:47:31.525Z",
+  "data": {
+    "lesbar": true,
+    "tekst": "Egenskaper hos ulike EM-bølger\n\nRadiobølger\n\nInspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et forsøk der han lagde elektriske svingninger som produserte radiobølger. Det er bølger med lav frekvens og lang bølgelengde, fra 1 meter til mange km.\n\nHan viste at de hadde bølgeegenskaper som for eksempel brytning, bøyning og overlagring. Ved å lage stående bølger av dem, greide han å måle farten, og den var 300 000 km/s, – akkurat som forutsagt for elektromagnetiske bølger!"
+  }
+}

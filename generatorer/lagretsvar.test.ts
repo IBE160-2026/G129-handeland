@@ -84,6 +84,11 @@ describe("modusvalget", () => {
     expect(testmodus()).toBe("skriv");
   });
 
+  test("fyll gjenkjennes", () => {
+    process.env.LESEVENN_TESTMODUS = "fyll";
+    expect(testmodus()).toBe("fyll");
+  });
+
   test("ukjent verdi faller til av framfor å gjette", () => {
     process.env.LESEVENN_TESTMODUS = "kanskje";
     expect(testmodus()).toBe("av");
@@ -203,5 +208,24 @@ describe("les-modus i generatoren", () => {
       expect(e).toBeInstanceOf(GeneratorFeil);
       expect((e as GeneratorFeil).kode).toBe("ugyldig_utdata");
     }
+  });
+});
+
+describe("fyll-modus i generatoren (demotesten, §9.5)", () => {
+  test("et lagret svar leses, uten API-nøkkel", async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    process.env.LESEVENN_TESTMODUS = "fyll";
+    const data = { uttrykk: [{ ord: "fyllord", kildeavsnitt: 2 }] };
+    await lagreSvar("faguttrykk", GJELDENDE.versjon, GJELDENDE.modell, MELDING, data);
+    const r = await kjoerGenerator({ oppgave: "faguttrykk", skjema, brukermelding: MELDING });
+    expect(r.data).toEqual(data);
+  });
+
+  test("et manglende svar går videre til modellen — her stoppet av at nøkkelen mangler", async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    process.env.LESEVENN_TESTMODUS = "fyll";
+    await expect(
+      kjoerGenerator({ oppgave: "faguttrykk", skjema, brukermelding: `${MELDING} finnes ikke` }),
+    ).rejects.toMatchObject({ kode: "tilgang_avslaatt" });
   });
 });

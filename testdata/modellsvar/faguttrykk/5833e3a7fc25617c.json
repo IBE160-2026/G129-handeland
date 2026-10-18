@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Rudolf Hertz i 188",
+  "lagret": "2026-10-18T19:42:42.577Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og kan forplante seg uten å trenge et stoff. Lys, radiobølger og røntgenstråling er alle eksempler på slike bølger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, fra omtrent 1 meter til mange kilometer. De brukes blant annet til å sende signaler.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge. Jo lenger bølgelengde, desto lavere energi har bølgen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger en bølge gjør per sekund. Høy frekvens gir høy energi.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m og høyere frekvens enn radiobølger. De brukes i mikrobølgeovner.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Elektromagnetisk stråling med litt lavere energi enn synlig lys. Vi kan kjenne den som varme på huden.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling utenfor den fiolette enden av synlig lys, med bølgelengder fra omtrent 10 til 400 nm. Den kan gi solbrenthet.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "stående bølger",
+        "forklaring": "Bølger som ser ut til å stå stille, fordi to bølger med samme frekvens og amplitude går motsatt vei og overlagrer hverandre.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 4
+      }
+    ]
+  }
+}

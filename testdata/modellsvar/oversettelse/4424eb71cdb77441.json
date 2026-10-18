@@ -1,0 +1,43 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Arabisk\", \"kode\": \"ar\" }, \"fagord\": [], \"elementer\": [ { \"id\": \"o1\", \"type\": \"overskrift\", \"tekst\": \"Egenskaper hos ulike EM-bølger\"",
+  "lagret": "2026-10-18T19:46:12.089Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "o1",
+        "oversatt": "خصائص الموجات الكهرومغناطيسية المختلفة"
+      },
+      {
+        "id": "o2",
+        "oversatt": "حول الموجات الراديوية"
+      },
+      {
+        "id": "o6",
+        "oversatt": "الموجات الدقيقة"
+      },
+      {
+        "id": "o9",
+        "oversatt": "الأشعة تحت الحمراء"
+      },
+      {
+        "id": "o14",
+        "oversatt": "الضوء المرئي"
+      },
+      {
+        "id": "o18",
+        "oversatt": "الأشعة فوق البنفسجية"
+      },
+      {
+        "id": "o22",
+        "oversatt": "الأشعة السينية"
+      },
+      {
+        "id": "o26",
+        "oversatt": "أشعة غاما"
+      }
+    ]
+  }
+}

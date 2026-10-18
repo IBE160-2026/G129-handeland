@@ -1,0 +1,31 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Arabisk\", \"kode\": \"ar\" }, \"fagord\": [ \"elektromagnetiske bølger\", \"radiobølger\", \"bølgelengde\", \"IR-stråling\", \"mikrobølger\", \"røntgens",
+  "lagret": "2026-10-18T19:47:04.999Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "أنتج هاينريش رودولف هرتز في عام 1887 ذبذبات كهربائية تولّد موجات راديوية (radiobølger) ذات تردد منخفض وطول موجي (bølgelengde) كبير."
+      },
+      {
+        "id": "s1",
+        "oversatt": "أظهر هرتز أن الموجات الراديوية (radiobølger) تملك خصائص موجية مثل الانكسار والانحناء والتراكب، وقاس سرعتها فبلغت 300 000 km/s، كما تنبأت بذلك نظرية الموجات الكهرومغناطيسية (elektromagnetiske bølger)."
+      },
+      {
+        "id": "s2",
+        "oversatt": "للموجات الدقيقة (mikrobølger) أطوال موجية (bølgelengde) تتراوح بين 1 mm و1 m، وترددها يطابق تردد اهتزاز جزيئات الدهون والماء، فيتم تسخين الطعام."
+      },
+      {
+        "id": "s3",
+        "oversatt": "للإشعاع تحت الأحمر أطوال موجية (bølgelengde) من 700 nm إلى 1 mm، وكلما ارتفعت درجة الحرارة أصبحت موجات IR المنبعثة أغنى بالطاقة."
+      },
+      {
+        "id": "s4",
+        "oversatt": "للأشعة فوق البنفسجية (ultrafiolett stråling) أطوال موجية (bølgelengde) من 10 nm إلى 400 nm، وتنقسم إلى UV-A وUV-B وUV-C، ويُحجب UV-C إلى حد كبير بواسطة طبقة الأوزون."
+      }
+    ]
+  }
+}

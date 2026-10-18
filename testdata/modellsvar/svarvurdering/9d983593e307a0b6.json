@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Rudolf",
+  "lagret": "2026-10-18T19:45:50.536Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "Teksten sier at mikrobølgene setter vannmolekylene i selve maten i bevegelse, så det er ikke luften i ovnen som varmer maten.",
+    "oppfolging": {
+      "sporsmal": "Teksten sier ingenting om at luften i ovnen varmer maten, men hva sier den at mikrobølgene «rister» på?",
+      "kildeavsnitt": 8,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

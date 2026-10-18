@@ -1,0 +1,121 @@
+{
+  "oppgave": "quiz",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Rudolf Hertz i 188",
+  "lagret": "2026-10-18T19:43:12.851Z",
+  "data": {
+    "sporsmal": [
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva kjennetegner radiobølger?",
+        "alternativer": [
+          "Lav frekvens og lang bølgelengde",
+          "Høy frekvens og kort bølgelengde",
+          "Lav frekvens og kort bølgelengde",
+          "Høy energi og lang bølgelengde"
+        ],
+        "riktigSvar": "Lav frekvens og lang bølgelengde",
+        "kildeavsnitt": 3
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor er radiobølger godt egnet til å sende signaler over store avstander?",
+        "alternativer": [],
+        "riktigSvar": "Fordi de har lang bølgelengde, spres lite og går rett fram. I tillegg kan ionosfæren reflektere dem tilbake mot jordoverflata, slik at de når enda lenger.",
+        "kildeavsnitt": 5
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilken fart målte Hertz for radiobølgene?",
+        "alternativer": [
+          "300 000 km/s",
+          "30 000 km/s",
+          "3 000 km/s",
+          "300 km/s"
+        ],
+        "riktigSvar": "300 000 km/s",
+        "kildeavsnitt": 4
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor blir maten varm så raskt i en mikrobølgeovn?",
+        "alternativer": [
+          "Frekvensen til mikrobølgene passer med frekvensen fett- og vannmolekyler svinger med",
+          "Mikrobølgene har lavere frekvens enn molekylene i maten",
+          "Tallerkenen tar opp mikrobølgene og varmer opp maten",
+          "Mikrobølgene varmer luften, som så varmer opp maten"
+        ],
+        "riktigSvar": "Frekvensen til mikrobølgene passer med frekvensen fett- og vannmolekyler svinger med",
+        "kildeavsnitt": 8
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hva skjer med bølgelengden til infrarød stråling når temperaturen øker, og hvorfor?",
+        "alternativer": [],
+        "riktigSvar": "Bølgelengden blir kortere. Molekylene beveger seg raskere, så de sender ut mer energirike bølger, og høy energi gir kort bølgelengde.",
+        "kildeavsnitt": 13
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva er infrarød stråling?",
+        "alternativer": [
+          "Elektromagnetisk stråling med litt mindre energi enn synlig lys",
+          "Elektromagnetisk stråling med litt mer energi enn synlig lys",
+          "Stråling som bare kan oppdages med røntgenutstyr",
+          "Stråling med bølgelengder over 1 meter"
+        ],
+        "riktigSvar": "Elektromagnetisk stråling med litt mindre energi enn synlig lys",
+        "kildeavsnitt": 10
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva viste Isaac Newton med et prisme?",
+        "alternativer": [
+          "Hvitt lys består av alle regnbuens farger",
+          "Hvitt lys er en egen farge uten andre farger",
+          "Prismer kan ikke dele lys i ulike farger",
+          "Regnbuen består bare av rødt og blått lys"
+        ],
+        "riktigSvar": "Hvitt lys består av alle regnbuens farger",
+        "kildeavsnitt": 16
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor kalles ultrafiolett stråling for ultrafiolett?",
+        "alternativer": [
+          "Fordi den ligger utenfor det fiolette området",
+          "Fordi den har lavere energi enn synlig lys",
+          "Fordi den bare kan sees av insekter",
+          "Fordi den har bølgelengder over 1 mm"
+        ],
+        "riktigSvar": "Fordi den ligger utenfor det fiolette området",
+        "kildeavsnitt": 19
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilken type UV-stråling har lavest energi?",
+        "alternativer": [
+          "UV-A",
+          "UV-B",
+          "UV-C",
+          "Alle har like mye energi"
+        ],
+        "riktigSvar": "UV-A",
+        "kildeavsnitt": 21
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva kunne Røntgen bruke røntgenstrålene til, ifølge teksten?",
+        "alternativer": [
+          "Å gjennomlyse stoff som er ugjennomsiktig for vanlig lys og lage bilder av beinstrukturen",
+          "Å lage stående bølger og måle lysets fart",
+          "Å sende signaler over store avstander",
+          "Å finne varmelekkasjer i eldre hus"
+        ],
+        "riktigSvar": "Å gjennomlyse stoff som er ugjennomsiktig for vanlig lys og lage bilder av beinstrukturen",
+        "kildeavsnitt": 24
+      }
+    ]
+  }
+}
