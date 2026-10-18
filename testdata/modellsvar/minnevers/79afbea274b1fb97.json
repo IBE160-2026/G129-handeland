@@ -1,0 +1,42 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-18T19:14:27.275Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metafor gir et ord en ny mening,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "to betydningsområder i forening.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Simile sier «som» eller «lik»,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "metaforen dropper dem: «han er en løve», slik.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Kognitiv metafor ligger til grunn,",
+        "kildeavsnitt": 14
+      },
+      {
+        "tekst": "den taler gjennom språkets munn.",
+        "kildeavsnitt": 4
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "betydningsområder",
+      "simile",
+      "kognitiv"
+    ],
+    "stil": ""
+  }
+}

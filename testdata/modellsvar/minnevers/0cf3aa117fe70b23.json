@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-18T19:16:36.621Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet fordeler ressurs,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "skriver, minne, prosessorer – alt i kurs.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Først i minnet, ved start,",
+        "kildeavsnitt": 4
+      },
+      {
+        "tekst": "det styrer hverdagen for alt som lastes inn, smart.",
+        "kildeavsnitt": 4
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "prosessorer",
+      "minne"
+    ],
+    "stil": ""
+  }
+}

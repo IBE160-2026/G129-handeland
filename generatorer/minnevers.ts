@@ -7,6 +7,10 @@
  * bryter det, er et hardt brudd (AD-11): det vises ikke, og kallet prøves
  * én gang til. At ingen påstand i verset motsier Teksten, kan ikke kode se;
  * det måles manuelt på ti vers (maaling/maal-minnevers.test.ts).
+ *
+ * §5: «Ingen KI-utdata uten kilde» nevner vers spesielt. Fra v3 har hver
+ * linje et kildeavsnitt, og en linje som peker på et avsnitt som ikke finnes,
+ * eller på en overskrift, gjør verset ugyldig.
  */
 
 import { z } from "zod";
@@ -14,7 +18,14 @@ import type { Avsnitt } from "../tekst/avsnittsdeling";
 import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
 
 export const MinneversSkjema = z.object({
-  linjer: z.array(z.string()).describe("Fire til åtte linjer."),
+  linjer: z
+    .array(
+      z.object({
+        tekst: z.string().describe("Én linje i verset."),
+        kildeavsnitt: z.number().int().describe("Avsnittet linjen bygger på. Aldri en overskrift."),
+      }),
+    )
+    .describe("Fire til åtte linjer."),
   faguttrykk: z.array(z.string()).describe("Fagordene fra listen som er brukt, slik de står i listen."),
   stil: z.string().describe("Ved suno: musikkstilen på engelsk, høyst 120 tegn. Ved vers: tom streng."),
 });
@@ -50,6 +61,8 @@ const FORSOEK = 2;
 export type Minneversresultat = {
   form: Versform;
   linjer: string[];
+  /** Kildeavsnittet til hver linje, i samme rekkefølge (§5). */
+  kildeavsnitt: number[];
   /** Fagordene i verset, slik de står i Begrepssettet. */
   faguttrykk: string[];
   /** Tom ved vers. */
@@ -91,9 +104,16 @@ export function kontrollerVers(
   svar: z.infer<typeof MinneversSkjema>,
   form: Versform,
   begrepssett: string[],
+  avsnitt: Avsnitt[],
 ): string[] {
   const brudd: string[] = [];
-  const linjer = svar.linjer.map((l) => l.trim()).filter(Boolean);
+  const linjer = svar.linjer.map((l) => l.tekst.trim()).filter(Boolean);
+  const brodtekst = new Set(avsnitt.filter((a) => !a.erOverskrift).map((a) => a.nummer));
+  for (const l of svar.linjer) {
+    if (l.tekst.trim() && !brodtekst.has(l.kildeavsnitt)) {
+      brudd.push(`linjen «${l.tekst.trim()}» peker på avsnitt ${l.kildeavsnitt}, som ikke er et brødtekstavsnitt`);
+    }
+  }
   const vers = linjer.join("\n");
   const sett = new Map(begrepssett.map((b) => [b.trim().toLowerCase(), b.trim()]));
 
@@ -159,13 +179,15 @@ export async function lagMinnevers({
       maksTokens: 16000,
       kjoering: k === 1 ? undefined : k,
     });
-    sisteBrudd = kontrollerVers(r.data, form, begrepssett);
+    sisteBrudd = kontrollerVers(r.data, form, begrepssett, avsnitt);
     if (sisteBrudd.length === 0) {
-      const linjer = r.data.linjer.map((l) => l.trim()).filter(Boolean);
+      const gyldige = r.data.linjer.filter((l) => l.tekst.trim());
+      const linjer = gyldige.map((l) => l.tekst.trim());
       const vers = linjer.join("\n");
       return {
         form,
         linjer,
+        kildeavsnitt: gyldige.map((l) => l.kildeavsnitt),
         faguttrykk: begrepssett.filter((b) => brukesIVers(b, vers)),
         stil: form === "suno" ? r.data.stil.trim() : "",
         promptversjon: r.promptversjon,

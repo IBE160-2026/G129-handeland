@@ -1,0 +1,263 @@
+{
+  "krav": "FR-31",
+  "vers": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Lav frekvens, lang bølge, lang,",
+        "Radiobølger når langt, gang på gang,",
+        "Mikrobølger gir vannet fart,",
+        "og maten blir varm fra start."
+      ],
+      "kildeavsnitt": [
+        3,
+        5,
+        8,
+        8
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "mikrobølger"
+      ],
+      "stil": "",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "suno",
+      "linjer": [
+        "Radiobølger sender signaler langt,",
+        "lav frekvens, lang bølgelengde, gang på gang,",
+        "høyt oppe kastes de tilbake ned,",
+        "og når enda lenger, til et fjernt sted."
+      ],
+      "kildeavsnitt": [
+        5,
+        3,
+        5,
+        5
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "bølgelengde"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Prisvekst er en seig gjest,",
+        "styringsrenta steg, det er ingen fest.",
+        "Sysselsettingsvekst drar ledigheten ned,",
+        "reallønnsvekst gir kjøpekraft med."
+      ],
+      "kildeavsnitt": [
+        3,
+        8,
+        17,
+        20
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "styringsrenta",
+        "sysselsettingsvekst",
+        "reallønnsvekst"
+      ],
+      "stil": "",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "suno",
+      "linjer": [
+        "Styringsrenta steg i mai,",
+        "ny renteøkning ventes i år, prisvekst blir ikke lei.",
+        "Høy lønnsvekst og dyr energi gir inflasjon,",
+        "og det tar tid før den synker ned mot to i tone.",
+        "Sysselsettingsvekst trekker ledigheten ned,",
+        "og reallønnsvekst gir kjøpekraft, litt mer å bruke med."
+      ],
+      "kildeavsnitt": [
+        8,
+        9,
+        3,
+        5,
+        17,
+        6
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "renteøkning",
+        "styringsrenta",
+        "inflasjon",
+        "sysselsettingsvekst",
+        "reallønnsvekst"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "Metafor gir et ord en ny mening,",
+        "to betydningsområder i forening.",
+        "Simile sier «som» eller «lik»,",
+        "metaforen dropper dem: «han er en løve», slik.",
+        "Kognitiv metafor ligger til grunn,",
+        "den taler gjennom språkets munn."
+      ],
+      "kildeavsnitt": [
+        2,
+        3,
+        6,
+        6,
+        14,
+        4
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "kognitiv",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "suno",
+      "linjer": [
+        "Simile sier 'som', det er klart,",
+        "metafor hopper over 'som' og sier 'er' fra start.",
+        "To betydningsområder, én tråd,",
+        "og minnet får en knagg, et godt råd."
+      ],
+      "kildeavsnitt": [
+        6,
+        6,
+        3,
+        3
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "simile"
+      ],
+      "stil": "upbeat folk-pop, playful storytelling, clear vocals, light acoustic guitar, 100 bpm",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Bakerst et punktum, DNS-rotserverne her,",
+        "der innholdet ligger, som du ser.",
+        "Neste er .no, det norske toppdomene,",
+        "der Norid kjenner IP-adressene.",
+        "Om er et under-domene, ganske fint,",
+        "under .ndla, som et godt hint."
+      ],
+      "kildeavsnitt": [
+        5,
+        5,
+        6,
+        6,
+        8,
+        8
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "IP-adressene",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "suno",
+      "linjer": [
+        "Start bakerst, der punktet står,",
+        "rotserverne peker, IP-adressene går.",
+        "Toppdomene .no er norsk og rent,",
+        "under-domene .ndla, tydelig kjent."
+      ],
+      "kildeavsnitt": [
+        5,
+        7,
+        6,
+        8
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "IP-adressene",
+        "under-domene"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet fordeler ressurs,",
+        "skriver, minne, prosessorer – alt i kurs.",
+        "Først i minnet, ved start,",
+        "det styrer hverdagen for alt som lastes inn, smart."
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        4,
+        4
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "prosessorer"
+      ],
+      "stil": "",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "suno",
+      "linjer": [
+        "Operativsystemet, slik er dets natur,",
+        "det deler minne ut, hver til sin tur.",
+        "Maskinvare er vrien, det er klart,",
+        "og operativsystemet tar sin part."
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        3,
+        3
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "maskinvare"
+      ],
+      "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm",
+      "promptversjon": "v3",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

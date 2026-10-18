@@ -42,7 +42,7 @@ const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
 const tilfeller = TEKSTER.flatMap((t) => FORMER.map((f) => [t, f] as const));
 
 describe("FR-31 — ti vers til vurdering", () => {
-  const vers: { tekst: string; tittel: string; r: Minneversresultat }[] = [];
+  const vers: { tekst: string; tittel: string; r: Minneversresultat; avsnitt: Map<number, string> }[] = [];
 
   test.each(tilfeller)("%s (%s)", { timeout: 120000 }, async (navn, form) => {
     const raa = await readFile(path.join(MAPPE, `${navn}.txt`), "utf8");
@@ -61,7 +61,7 @@ describe("FR-31 — ti vers til vurdering", () => {
       console.log(`\n= ${navn} (${form}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
       throw e;
     });
-    vers.push({ tekst: navn, tittel: gull.tittel, r });
+    vers.push({ tekst: navn, tittel: gull.tittel, r, avsnitt: new Map(delIAvsnitt(raa).map((a) => [a.nummer, a.innhold])) });
     console.log(`\n= ${navn} (${form}): ${r.linjer.length} linjer, fagord: ${r.faguttrykk.join(", ")}`);
   });
 
@@ -76,7 +76,7 @@ describe("FR-31 — ti vers til vurdering", () => {
       "",
       "For hvert vers:",
       "",
-      "1. **Usanne påstander:** les verset mot teksten, og tell påstandene som motsier den. En forenkling som fortsatt er riktig, er ikke usann.",
+      "1. **Usanne påstander:** les verset mot teksten, og tell påstandene som motsier den. En forenkling som fortsatt er riktig, er ikke usann. Hver linje viser avsnittet den bygger på, og avsnittene står under verset (klikk «Avsnittene verset bygger på»). Peker en linje på et avsnitt som ikke sier det linjen sier, er det også et funn.",
       "2. **Huskeregel:** fungerer verset som en huskeregel — korte linjer, rim, rytme, noe som sitter? Ja eller nei. Ikke en del av FR-31, men av om funksjonen gjør det den lover.",
       "3. **Kommentar:** én linje per funn — linje, sitat, hva teksten sier, og type (usann / utenfor teksten / misvisende). Brukes til å stramme prompten.",
       "",
@@ -90,8 +90,18 @@ describe("FR-31 — ti vers til vurdering", () => {
         `Tekst: \`testdata/gullsett/${v.tekst}.txt\` · fagord i verset: ${v.r.faguttrykk.join(", ")}`,
         "",
         ...(v.r.form === "suno" ? [`Stil: \`${v.r.stil}\``, ""] : []),
-        ...v.r.linjer.map((l) => `> ${l}  `),
+        ...v.r.linjer.map((l, j) => `> ${l}${v.r.kildeavsnitt[j] !== undefined ? ` _(avsnitt ${v.r.kildeavsnitt[j]})_` : ""}  `),
         "",
+        // Avsnittene linjene peker på, så vurderingen kan gjøres uten å lete i teksten.
+        ...(v.r.kildeavsnitt.length > 0
+          ? [
+              "<details><summary>Avsnittene verset bygger på</summary>",
+              "",
+              ...[...new Set(v.r.kildeavsnitt)].sort((a, b) => a - b).map((n) => `**Avsnitt ${n}:** ${v.avsnitt.get(n) ?? "(finnes ikke)"}\n`),
+              "</details>",
+              "",
+            ]
+          : []),
         "**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei",
         "",
         "**Kommentar:**",

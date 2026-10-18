@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-18T19:12:04.329Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Lav frekvens, lang bølge, lang,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Radiobølger når langt, gang på gang,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Mikrobølger gir vannet fart,",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "og maten blir varm fra start.",
+        "kildeavsnitt": 8
+      }
+    ],
+    "faguttrykk": [
+      "frekvens",
+      "Radiobølger",
+      "mikrobølger"
+    ],
+    "stil": ""
+  }
+}

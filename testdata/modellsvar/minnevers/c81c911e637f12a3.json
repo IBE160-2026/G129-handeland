@@ -1,0 +1,34 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-18T19:13:18.982Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Prisvekst er en seig gjest,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "styringsrenta steg, det er ingen fest.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "Sysselsettingsvekst drar ledigheten ned,",
+        "kildeavsnitt": 17
+      },
+      {
+        "tekst": "reallønnsvekst gir kjøpekraft med.",
+        "kildeavsnitt": 20
+      }
+    ],
+    "faguttrykk": [
+      "Prisvekst",
+      "styringsrenta",
+      "sysselsettingsvekst",
+      "reallønnsvekst"
+    ],
+    "stil": ""
+  }
+}

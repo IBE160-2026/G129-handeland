@@ -111,7 +111,21 @@ export default async function Minnevers({ params, searchParams }: PageProps<"/te
 
           <blockquote className="mt-3 border-l-4 border-slate-300 pl-4 text-lg leading-relaxed dark:border-slate-700">
             {valgt.linjer.map((l, i) => (
-              <p key={i}>{l}</p>
+              <p key={i}>
+                {l}
+                {/* §5: hver linje viser hvor i teksten den kommer fra, så eleven kan sjekke. */}
+                {valgt.kildeavsnitt[i] !== undefined && (
+                  <>
+                    {" "}
+                    <Link
+                      href={`/tekst/${id}/lesing#avsnitt-${valgt.kildeavsnitt[i]}`}
+                      className="align-middle text-sm text-slate-500 underline decoration-slate-300 underline-offset-4 hover:text-slate-900 dark:hover:text-slate-100"
+                    >
+                      avsnitt {valgt.kildeavsnitt[i]}
+                    </Link>
+                  </>
+                )}
+              </p>
             ))}
           </blockquote>
           <div className="mt-3">

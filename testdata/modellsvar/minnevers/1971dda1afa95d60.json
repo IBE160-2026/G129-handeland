@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-18T19:14:55.687Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Simile sier 'som', det er klart,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "metafor hopper over 'som' og sier 'er' fra start.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "To betydningsområder, én tråd,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og minnet får en knagg, et godt råd.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "simile",
+      "metafor",
+      "betydningsområder"
+    ],
+    "stil": "upbeat folk-pop, playful storytelling, clear vocals, light acoustic guitar, 100 bpm"
+  }
+}

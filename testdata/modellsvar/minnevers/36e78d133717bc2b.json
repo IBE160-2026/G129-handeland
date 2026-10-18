@@ -1,0 +1,44 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-18T19:13:43.812Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Styringsrenta steg i mai,",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "ny renteøkning ventes i år, prisvekst blir ikke lei.",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "Høy lønnsvekst og dyr energi gir inflasjon,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og det tar tid før den synker ned mot to i tone.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Sysselsettingsvekst trekker ledigheten ned,",
+        "kildeavsnitt": 17
+      },
+      {
+        "tekst": "og reallønnsvekst gir kjøpekraft, litt mer å bruke med.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "styringsrenta",
+      "renteøkning",
+      "Prisvekst",
+      "inflasjon",
+      "sysselsettingsvekst",
+      "reallønnsvekst"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm"
+  }
+}

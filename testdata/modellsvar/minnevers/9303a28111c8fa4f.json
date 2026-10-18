@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-18T19:15:56.083Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Start bakerst, der punktet står,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "rotserverne peker, IP-adressene går.",
+        "kildeavsnitt": 7
+      },
+      {
+        "tekst": "Toppdomene .no er norsk og rent,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "under-domene .ndla, tydelig kjent.",
+        "kildeavsnitt": 8
+      }
+    ],
+    "faguttrykk": [
+      "toppdomene",
+      "under-domene",
+      "IP-adressene"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm"
+  }
+}

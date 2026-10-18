@@ -26,6 +26,7 @@ async function nyTekst(t: { kontoId: string }) {
 const r = (form: "vers" | "suno", linje: string): Minneversresultat => ({
   form,
   linjer: [linje],
+  kildeavsnitt: [2],
   faguttrykk: ["mitose"],
   stil: form === "suno" ? "pop" : "",
   promptversjon: "v1",

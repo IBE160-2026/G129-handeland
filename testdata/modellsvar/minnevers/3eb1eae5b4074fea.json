@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-18T19:17:07.752Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet, slik er dets natur,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "det deler minne ut, hver til sin tur.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Maskinvare er vrien, det er klart,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og operativsystemet tar sin part.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "minne",
+      "maskinvare"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear vocals, 110 bpm"
+  }
+}

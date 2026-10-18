@@ -18,6 +18,8 @@ export type LagretMinnevers = {
   id: string;
   form: Versform;
   linjer: string[];
+  /** Tom for vers laget før v3, som ikke hadde kildeavsnitt. */
+  kildeavsnitt: number[];
   faguttrykk: string[];
   stil: string;
   promptversjon: string;
@@ -37,7 +39,7 @@ export async function lagreMinnevers(t: Tilgang, tekstId: string, r: Minneversre
   await sjekkEierskap(t, tekstId);
   await db.insert(minnevers).values({
     tekstId,
-    innhold: JSON.stringify({ linjer: r.linjer, faguttrykk: r.faguttrykk, stil: r.stil }),
+    innhold: JSON.stringify({ linjer: r.linjer, kildeavsnitt: r.kildeavsnitt, faguttrykk: r.faguttrykk, stil: r.stil }),
     erSunoPrompt: r.form === "suno",
     promptversjon: r.promptversjon,
     modell: r.modell,
@@ -56,8 +58,15 @@ export async function hentMinnevers(
     .where(eq(minnevers.tekstId, tekstId))
     .orderBy(desc(minnevers.opprettet));
   const tolk = (r: (typeof rader)[number]): LagretMinnevers => {
-    const i = JSON.parse(r.innhold) as { linjer: string[]; faguttrykk: string[]; stil: string };
-    return { id: r.id, form: r.erSunoPrompt ? "suno" : "vers", ...i, promptversjon: r.promptversjon, modell: r.modell };
+    const i = JSON.parse(r.innhold) as { linjer: string[]; kildeavsnitt?: number[]; faguttrykk: string[]; stil: string };
+    return {
+      id: r.id,
+      form: r.erSunoPrompt ? "suno" : "vers",
+      ...i,
+      kildeavsnitt: i.kildeavsnitt ?? [],
+      promptversjon: r.promptversjon,
+      modell: r.modell,
+    };
   };
   const vers = rader.find((r) => !r.erSunoPrompt);
   const suno = rader.find((r) => r.erSunoPrompt);

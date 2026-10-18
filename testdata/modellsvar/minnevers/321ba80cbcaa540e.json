@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: suno fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-18T19:12:45.479Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Radiobølger sender signaler langt,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "lav frekvens, lang bølgelengde, gang på gang,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "høyt oppe kastes de tilbake ned,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "og når enda lenger, til et fjernt sted.",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "Radiobølger",
+      "frekvens",
+      "bølgelengde"
+    ],
+    "stil": "upbeat pop, catchy chorus, clear female vocals, 110 bpm"
+  }
+}
