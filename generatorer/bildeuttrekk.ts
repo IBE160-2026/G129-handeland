@@ -41,7 +41,6 @@ export async function lesTekstFraBilde(bilde: {
     skjema: BildeSkjema,
     brukermelding: "Skriv av teksten på denne siden.",
     bilde,
-    maksTokens: 8000,
   });
   const tekst = r.data.tekst.trim();
   if (!r.data.lesbar || tekst.length < MIN_TEGN_PER_BILDE) {

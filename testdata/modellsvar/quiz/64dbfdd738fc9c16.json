@@ -1,0 +1,121 @@
+{
+  "oppgave": "quiz",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-18T19:27:56.580Z",
+  "data": {
+    "sporsmal": [
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva indikerer punktumet bakerst i adressen om.ndla.no.?",
+        "alternativer": [
+          "At innholdet ligger under DNS-rotserverne",
+          "At adressen er en e-postadresse",
+          "At nettleseren skal lagre adressen",
+          "At adressen er et underdomene av www"
+        ],
+        "riktigSvar": "At innholdet ligger under DNS-rotserverne",
+        "kildeavsnitt": 5
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvem regulerer alle .no-adresser?",
+        "alternativer": [
+          "Norid AS",
+          "NDLA",
+          "Nettleserne",
+          "DNS-rotserverne"
+        ],
+        "riktigSvar": "Norid AS",
+        "kildeavsnitt": 6
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilken DNS-server styrer underdomenet om, slik teksten beskriver det?",
+        "alternativer": [
+          "En egen DNS-server for om",
+          "Den samme DNS-serveren som styrer .ndla-domenet",
+          "Norid AS sine DNS-servere",
+          "DNS-rotserverne"
+        ],
+        "riktigSvar": "Den samme DNS-serveren som styrer .ndla-domenet",
+        "kildeavsnitt": 8
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva står www for i en nettsideadresse?",
+        "alternativer": [
+          "World Wide Web",
+          "Web Wide Network",
+          "World Web Network",
+          "Worldwide Web Service"
+        ],
+        "riktigSvar": "World Wide Web",
+        "kildeavsnitt": 9
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva skjer når du skriver inn www.ndla.no?",
+        "alternativer": [
+          "Du blir videresendt til ndla.no",
+          "Du får en feilmelding",
+          "Adressen går til DNS-rotserverne",
+          "Du blir bedt om å registrere et domene"
+        ],
+        "riktigSvar": "Du blir videresendt til ndla.no",
+        "kildeavsnitt": 9
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvem bestemmer hvem som får bruke nasjonale topp-domener og hva kravene skal være?",
+        "alternativer": [
+          "Hvert enkelt land",
+          "Verdens DNS-rotserver",
+          "Den organisasjonen som eier det generiske domenet",
+          "Brukerne selv ved registrering"
+        ],
+        "riktigSvar": "Hvert enkelt land",
+        "kildeavsnitt": 14
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva var .org opprinnelig beregnet for?",
+        "alternativer": [
+          "Ikke-kommersielle organisasjoner",
+          "Kommersielle aktører",
+          "Skoler og utdanningsinstitusjoner",
+          "Myndigheter i ulike land"
+        ],
+        "riktigSvar": "Ikke-kommersielle organisasjoner",
+        "kildeavsnitt": 16
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvem eier og styrer merkenavn-toppdomener, som for eksempel .google?",
+        "alternativer": [
+          "En bedrift",
+          "Et land",
+          "Alle som kjøper et domene",
+          "En frivillig organisasjon"
+        ],
+        "riktigSvar": "En bedrift",
+        "kildeavsnitt": 22
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor kan man ikke lenger like lett si noe om en nettside ut fra hvilket topp-domene den ligger under?",
+        "alternativer": [],
+        "riktigSvar": "Tidligere hadde hvert topp-domene strenge krav, så domenet sa noe om nettsiden. Nå er kravene lavere og det er åpnet for mange flere, så domenet sier mindre.",
+        "kildeavsnitt": 25
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor velger mange å holde nettsidene sine på eldre topp-domener og nasjonale topp-domener?",
+        "alternativer": [],
+        "riktigSvar": "Fordi de nyere topp-domenene får mindre tillit, mens de eldre og nasjonale topp-domenene fortsatt har krav som må innfris, og det gir mer tillit.",
+        "kildeavsnitt": 26
+      }
+    ]
+  }
+}

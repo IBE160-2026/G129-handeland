@@ -71,7 +71,6 @@ export async function lagEtiketter(avsnitt: Avsnitt[]): Promise<{
     oppgave: "etiketter",
     skjema: EtikettSkjema,
     brukermelding: formaterAvsnitt(avsnitt),
-    maksTokens: 8000,
   });
   const k = kontrollerEtiketter(r.data.etiketter, avsnitt);
   const krav = Math.min(MIN_ETIKETTER, avsnitt.filter((a) => !a.erOverskrift).length);

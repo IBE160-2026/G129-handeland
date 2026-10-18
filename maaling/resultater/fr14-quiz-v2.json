@@ -1,0 +1,300 @@
+{
+  "krav": "FR-14",
+  "quizer": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "sporsmal": [
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva er radiobølger?",
+          "alternativer": [
+            "Bølger med høy frekvens og kort bølgelengde",
+            "Stråling som gjør at huden kjenner varme",
+            "Bølger med bølgelengde mellom 1 mm og 1 m",
+            "Bølger med lav frekvens og lang bølgelengde"
+          ],
+          "riktigSvar": "Bølger med lav frekvens og lang bølgelengde",
+          "kildeavsnittNummer": 3
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva fant Heinrich Hertz ut om radiobølgene?",
+          "alternativer": [
+            "De kunne ikke overlagres",
+            "De kunne ikke brytes eller bøyes",
+            "De hadde en fart på 3000 km/s",
+            "De hadde bølgeegenskaper, og farten var 300 000 km/s"
+          ],
+          "riktigSvar": "De hadde bølgeegenskaper, og farten var 300 000 km/s",
+          "kildeavsnittNummer": 4
+        },
+        {
+          "erFlervalg": false,
+          "sporsmal": "Hvorfor er radiobølger godt egnet til å sende signaler over store avstander?",
+          "alternativer": [],
+          "riktigSvar": "Radiobølger har lang bølgelengde, så de spres lite og går rett fram. I tillegg kan de reflekteres av ionosfæren tilbake mot jordoverflata og nå enda lenger.",
+          "kildeavsnittNummer": 5
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, mens tallerkenen ikke blir det?",
+          "alternativer": [
+            "Fordi maten inneholder metall",
+            "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til vannmolekylene i maten",
+            "Fordi tallerkenen reflekterer alle mikrobølgene",
+            "Fordi mikrobølgene varmer opp alle stoffer like mye"
+          ],
+          "riktigSvar": "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til vannmolekylene i maten",
+          "kildeavsnittNummer": 8
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva er infrarød stråling sammenlignet med synlig lys?",
+          "alternativer": [
+            "Stråling som bare øynene kan registrere",
+            "Stråling med litt mindre energi enn synlig lys",
+            "Stråling med bølgelengder under 400 nm",
+            "Stråling med litt mer energi enn synlig lys"
+          ],
+          "riktigSvar": "Stråling med litt mindre energi enn synlig lys",
+          "kildeavsnittNummer": 10
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva kan digitale kameraer lages til å registrere og vise?",
+          "alternativer": [
+            "Bare synlig lys",
+            "Radiobølger fra ionosfæren",
+            "Gammastråling fra radioaktive kilder",
+            "Infrarøde bølger"
+          ],
+          "riktigSvar": "Infrarøde bølger",
+          "kildeavsnittNummer": 12
+        },
+        {
+          "erFlervalg": false,
+          "sporsmal": "Hvorfor blir bølgelengden til infrarød stråling kortere når temperaturen øker?",
+          "alternativer": [],
+          "riktigSvar": "Når temperaturen stiger, beveger molekylene seg raskere. Da sender de ut mer energirike IR-bølger, og energirik stråling har kortere bølgelengde.",
+          "kildeavsnittNummer": 13
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva viste Isac Newton med et prisme?",
+          "alternativer": [
+            "At lys har en fart på 300 000 km/s",
+            "At regnbuen bare har tre farger",
+            "At hvitt lys består av alle regnbuens farger",
+            "At lys ikke kan brytes"
+          ],
+          "riktigSvar": "At hvitt lys består av alle regnbuens farger",
+          "kildeavsnittNummer": 16
+        }
+      ],
+      "forkastet": [],
+      "udekkedeDeler": [],
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-sprakligebilder",
+      "sporsmal": [
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva er et språklig bilde?",
+          "alternativer": [
+            "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe",
+            "En tekst som forteller en konkret historie om dyr",
+            "Et bilde som viser noe så nøyaktig som mulig",
+            "Et ord som brukes om en person i en sportsartikkel"
+          ],
+          "riktigSvar": "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe",
+          "kildeavsnittNummer": 4
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvilken konnotasjon vekker fargen hvitt, ifølge teksten?",
+          "alternativer": [
+            "Varme",
+            "Uskyld",
+            "Dystert",
+            "Kulde"
+          ],
+          "riktigSvar": "Uskyld",
+          "kildeavsnittNummer": 24
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva er en allegori?",
+          "alternativer": [
+            "En kort dyrefortelling som alltid slutter med en moral",
+            "Et ord som brukes i overført betydning om noe konkret",
+            "En felles assosiasjon som vi knytter til et ord",
+            "En tekst som kan tolkes som et bilde på noe annet"
+          ],
+          "riktigSvar": "En tekst som kan tolkes som et bilde på noe annet",
+          "kildeavsnittNummer": 35
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva inneholder ofte avslutningen på en fabel?",
+          "alternativer": [
+            "Et spørsmål som leseren må svare på",
+            "En lang beskrivelse av naturen",
+            "En konklusjon eller en moral",
+            "Et dikt om dyrene i fortellingen"
+          ],
+          "riktigSvar": "En konklusjon eller en moral",
+          "kildeavsnittNummer": 38
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvordan blir mannskapet behandlet i Haiene?",
+          "alternativer": [
+            "De får dårlig mat og lite lønn",
+            "De får god mat og høy lønn",
+            "De har mye makt over offiserene",
+            "De får bestemme over seilasen selv"
+          ],
+          "riktigSvar": "De får dårlig mat og lite lønn",
+          "kildeavsnittNummer": 45
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva betyr det latinske ordet alludere, som ordet allusjon kommer fra?",
+          "alternativer": [
+            "Sang",
+            "Kunst",
+            "Minne",
+            "Lek"
+          ],
+          "riktigSvar": "Lek",
+          "kildeavsnittNummer": 51
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvilken tekst er den kristne bønnen «Fader Vår» hentet fra, ifølge teksten?",
+          "alternativer": [
+            "Bibelen",
+            "Romanen Haiene",
+            "Nasjonalbiblioteket",
+            "Salmeboken"
+          ],
+          "riktigSvar": "Bibelen",
+          "kildeavsnittNummer": 57
+        },
+        {
+          "erFlervalg": false,
+          "sporsmal": "Hvorfor fungerer en allusjon bare hvis leseren skjønner den?",
+          "alternativer": [],
+          "riktigSvar": "Det er først når leseren kjenner igjen referansen at hun forstår det ekstra laget med mening. Uten å kjenne referansen går den nye betydningen tapt.",
+          "kildeavsnittNummer": 60
+        }
+      ],
+      "forkastet": [],
+      "udekkedeDeler": [],
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "sporsmal": [
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva indikerer punktumet bakerst i adressen om.ndla.no.?",
+          "alternativer": [
+            "At nettleseren skal lagre adressen",
+            "At adressen er et underdomene av www",
+            "At adressen er en e-postadresse",
+            "At innholdet ligger under DNS-rotserverne"
+          ],
+          "riktigSvar": "At innholdet ligger under DNS-rotserverne",
+          "kildeavsnittNummer": 5
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvem regulerer alle .no-adresser?",
+          "alternativer": [
+            "DNS-rotserverne",
+            "NDLA",
+            "Norid AS",
+            "Nettleserne"
+          ],
+          "riktigSvar": "Norid AS",
+          "kildeavsnittNummer": 6
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvilken DNS-server styrer underdomenet om, slik teksten beskriver det?",
+          "alternativer": [
+            "Norid AS sine DNS-servere",
+            "DNS-rotserverne",
+            "En egen DNS-server for om",
+            "Den samme DNS-serveren som styrer .ndla-domenet"
+          ],
+          "riktigSvar": "Den samme DNS-serveren som styrer .ndla-domenet",
+          "kildeavsnittNummer": 8
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva står www for i en nettsideadresse?",
+          "alternativer": [
+            "Web Wide Network",
+            "World Web Network",
+            "World Wide Web",
+            "Worldwide Web Service"
+          ],
+          "riktigSvar": "World Wide Web",
+          "kildeavsnittNummer": 9
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva skjer når du skriver inn www.ndla.no?",
+          "alternativer": [
+            "Adressen går til DNS-rotserverne",
+            "Du får en feilmelding",
+            "Du blir bedt om å registrere et domene",
+            "Du blir videresendt til ndla.no"
+          ],
+          "riktigSvar": "Du blir videresendt til ndla.no",
+          "kildeavsnittNummer": 9
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hvem bestemmer hvem som får bruke nasjonale topp-domener og hva kravene skal være?",
+          "alternativer": [
+            "Verdens DNS-rotserver",
+            "Den organisasjonen som eier det generiske domenet",
+            "Hvert enkelt land",
+            "Brukerne selv ved registrering"
+          ],
+          "riktigSvar": "Hvert enkelt land",
+          "kildeavsnittNummer": 14
+        },
+        {
+          "erFlervalg": true,
+          "sporsmal": "Hva var .org opprinnelig beregnet for?",
+          "alternativer": [
+            "Myndigheter i ulike land",
+            "Kommersielle aktører",
+            "Skoler og utdanningsinstitusjoner",
+            "Ikke-kommersielle organisasjoner"
+          ],
+          "riktigSvar": "Ikke-kommersielle organisasjoner",
+          "kildeavsnittNummer": 16
+        },
+        {
+          "erFlervalg": false,
+          "sporsmal": "Hvorfor kan man ikke lenger like lett si noe om en nettside ut fra hvilket topp-domene den ligger under?",
+          "alternativer": [],
+          "riktigSvar": "Tidligere hadde hvert topp-domene strenge krav, så domenet sa noe om nettsiden. Nå er kravene lavere og det er åpnet for mange flere, så domenet sier mindre.",
+          "kildeavsnittNummer": 25
+        }
+      ],
+      "forkastet": [],
+      "udekkedeDeler": [],
+      "promptversjon": "v2",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

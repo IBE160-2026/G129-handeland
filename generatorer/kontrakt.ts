@@ -267,7 +267,14 @@ export async function kjoerGenerator<S extends z.ZodType>({
   skjema,
   brukermelding,
   overstyrVersjon,
-  maksTokens = 8000,
+  /*
+   * Taket gjelder tenking OG svar til sammen. Med adaptiv tenking avgjør
+   * modellen selv hvor mye den tenker, og 8 000 holdt ikke: sju av ti
+   * minnevers (17.10) og én av tre quizer (18.10) ble kuttet midt i svaret,
+   * som da ikke var gyldig JSON. Ett felles tak her, ikke et lavere per
+   * generator, så samme feil ikke kan komme tilbake ett sted om gangen.
+   */
+  maksTokens = 16000,
   kjoering,
   bilde,
 }: {

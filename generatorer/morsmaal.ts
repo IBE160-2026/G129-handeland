@@ -165,7 +165,6 @@ export async function oppsummer({
     skjema: OppsummeringSkjema,
     brukermelding: formaterAvsnitt(avsnitt),
     overstyrVersjon,
-    maksTokens: 4000,
   });
   const { setninger, forkastet } = kontrollerOppsummering(r.data.setninger, avsnitt);
   if (setninger.length === 0) {
@@ -271,7 +270,6 @@ export async function pekUt({
     skjema: UtpekingSkjema,
     brukermelding: melding,
     overstyrVersjon,
-    maksTokens: 8000,
   });
   // Et tomt sett er et gyldig svar: en tekst kan mangle begge kategoriene.
   return { ...kontrollerUtpeking(r.data.uttrykk, avsnitt, fagord), promptversjon: r.promptversjon, modell: r.modell };

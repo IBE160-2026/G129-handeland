@@ -3,118 +3,118 @@
   "promptversjon": "v2",
   "modell": "claude-haiku-5-5",
   "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
-  "lagret": "2026-10-16T09:07:04.492Z",
+  "lagret": "2026-10-18T19:28:56.209Z",
   "data": {
     "sporsmal": [
       {
-        "type": "kortsvar",
-        "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, mens tallerkenen ikke blir det?",
-        "alternativer": [],
-        "riktigSvar": "Mikrobølgene har en frekvens som passer til svingefrekvensen til fett- og vannmolekyler, så de får molekylene til å riste. Maten inneholder vann og blir derfor varm, mens tallerkenen ikke har vann og ikke blir det.",
-        "kildeavsnitt": 8
+        "type": "flervalg",
+        "sporsmal": "Hva er radiobølger?",
+        "alternativer": [
+          "Bølger med høy frekvens og kort bølgelengde",
+          "Bølger med lav frekvens og lang bølgelengde",
+          "Bølger med bølgelengde mellom 1 mm og 1 m",
+          "Stråling som gjør at huden kjenner varme"
+        ],
+        "riktigSvar": "Bølger med lav frekvens og lang bølgelengde",
+        "kildeavsnitt": 3
       },
       {
         "type": "flervalg",
-        "sporsmal": "Hva skjer med bølgelengden til infrarød stråling når temperaturen øker?",
+        "sporsmal": "Hva fant Heinrich Hertz ut om radiobølgene?",
         "alternativer": [
-          "Den blir lengre",
-          "Den blir kortere",
-          "Den er den samme hele tiden",
-          "Den blir først lengre, så kortere"
+          "De kunne ikke brytes eller bøyes",
+          "De hadde bølgeegenskaper, og farten var 300 000 km/s",
+          "De hadde en fart på 3000 km/s",
+          "De kunne ikke overlagres"
         ],
-        "riktigSvar": "Den blir kortere",
-        "kildeavsnitt": 13
-      },
-      {
-        "type": "flervalg",
-        "sporsmal": "Hvilken fart målte Hertz for radiobølgene?",
-        "alternativer": [
-          "30 000 km/s",
-          "300 000 km/s",
-          "3 000 km/s",
-          "3 000 000 km/s"
-        ],
-        "riktigSvar": "300 000 km/s",
+        "riktigSvar": "De hadde bølgeegenskaper, og farten var 300 000 km/s",
         "kildeavsnitt": 4
-      },
-      {
-        "type": "flervalg",
-        "sporsmal": "Hvorfor kalles strålingen utenfor den fiolette enden av spekteret ultrafiolett?",
-        "alternativer": [
-          "Fordi den er synlig for øyet",
-          "Fordi den ligger utenfor det fiolette området",
-          "Fordi den har lavere energi enn rødt lys",
-          "Fordi den ble oppdaget av Newton"
-        ],
-        "riktigSvar": "Fordi den ligger utenfor det fiolette området",
-        "kildeavsnitt": 19
-      },
-      {
-        "type": "flervalg",
-        "sporsmal": "Hvilken bølgelengde har røntgenstråling?",
-        "alternativer": [
-          "Kortere enn 10 nm",
-          "Mellom 10 nm og 400 nm",
-          "Mellom 700 nm og 1 mm",
-          "Lengre enn 1 m"
-        ],
-        "riktigSvar": "Kortere enn 10 nm",
-        "kildeavsnitt": 23
       },
       {
         "type": "kortsvar",
         "sporsmal": "Hvorfor er radiobølger godt egnet til å sende signaler over store avstander?",
         "alternativer": [],
-        "riktigSvar": "Fordi de har lang bølgelengde, spres de lite og går rett fram. De kan også reflekteres av ionosfæren tilbake mot jorda og nå enda lenger.",
+        "riktigSvar": "Radiobølger har lang bølgelengde, så de spres lite og går rett fram. I tillegg kan de reflekteres av ionosfæren tilbake mot jordoverflata og nå enda lenger.",
         "kildeavsnitt": 5
       },
       {
         "type": "flervalg",
-        "sporsmal": "Hva viste Newton ved hjelp av et prisme?",
+        "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, mens tallerkenen ikke blir det?",
+        "alternativer": [
+          "Fordi tallerkenen reflekterer alle mikrobølgene",
+          "Fordi mikrobølgene varmer opp alle stoffer like mye",
+          "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til vannmolekylene i maten",
+          "Fordi maten inneholder metall"
+        ],
+        "riktigSvar": "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til vannmolekylene i maten",
+        "kildeavsnitt": 8
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva er infrarød stråling sammenlignet med synlig lys?",
+        "alternativer": [
+          "Stråling med litt mer energi enn synlig lys",
+          "Stråling med litt mindre energi enn synlig lys",
+          "Stråling som bare øynene kan registrere",
+          "Stråling med bølgelengder under 400 nm"
+        ],
+        "riktigSvar": "Stråling med litt mindre energi enn synlig lys",
+        "kildeavsnitt": 10
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor blir bølgelengden til infrarød stråling kortere når temperaturen øker?",
+        "alternativer": [],
+        "riktigSvar": "Når temperaturen stiger, beveger molekylene seg raskere. Da sender de ut mer energirike IR-bølger, og energirik stråling har kortere bølgelengde.",
+        "kildeavsnitt": 13
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva kan digitale kameraer lages til å registrere og vise?",
+        "alternativer": [
+          "Bare synlig lys",
+          "Infrarøde bølger",
+          "Radiobølger fra ionosfæren",
+          "Gammastråling fra radioaktive kilder"
+        ],
+        "riktigSvar": "Infrarøde bølger",
+        "kildeavsnitt": 12
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva viste Isac Newton med et prisme?",
         "alternativer": [
           "At lys ikke kan brytes",
+          "At regnbuen bare har tre farger",
           "At hvitt lys består av alle regnbuens farger",
-          "At regnbuen oppstår i skyene",
-          "At rødt lys har høyest energi"
+          "At lys har en fart på 300 000 km/s"
         ],
         "riktigSvar": "At hvitt lys består av alle regnbuens farger",
         "kildeavsnitt": 16
       },
       {
         "type": "flervalg",
-        "sporsmal": "Hvilken type UV-stråling stoppes nesten helt av oksygen og ozonlaget?",
+        "sporsmal": "Hvilken type UV-stråling har lavest energi av de tre?",
         "alternativer": [
           "UV-A",
           "UV-B",
           "UV-C",
-          "UV-A og UV-B"
+          "Alle tre har lik energi"
         ],
-        "riktigSvar": "UV-C",
+        "riktigSvar": "UV-A",
         "kildeavsnitt": 21
       },
       {
         "type": "flervalg",
-        "sporsmal": "Hvordan er energien i infrarød stråling sammenlignet med synlig lys?",
+        "sporsmal": "Hvem oppdaget røntgenstråling, og når skjedde det?",
         "alternativer": [
-          "Litt mindre",
-          "Litt mer",
-          "Mye mer",
-          "Mye mindre"
+          "Johann Ritter, i 1801",
+          "Heinrich Hertz, i 1887",
+          "Wilhelm Røntgen, i 1895",
+          "Isac Newton, på 1670-tallet"
         ],
-        "riktigSvar": "Litt mindre",
-        "kildeavsnitt": 10
-      },
-      {
-        "type": "flervalg",
-        "sporsmal": "Hvilke bølgelengder har radiobølger?",
-        "alternativer": [
-          "Fra 700 nm til 1 mm",
-          "Under 1 mm",
-          "Fra 1 meter til mange km",
-          "Fra 1 mm til 1 m"
-        ],
-        "riktigSvar": "Fra 1 meter til mange km",
-        "kildeavsnitt": 3
+        "riktigSvar": "Wilhelm Røntgen, i 1895",
+        "kildeavsnitt": 24
       }
     ]
   }

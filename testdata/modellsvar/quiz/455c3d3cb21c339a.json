@@ -1,0 +1,121 @@
+{
+  "oppgave": "quiz",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-18T19:27:42.318Z",
+  "data": {
+    "sporsmal": [
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva er et språklig bilde?",
+        "alternativer": [
+          "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe",
+          "Et bilde som viser noe så nøyaktig som mulig",
+          "Et ord som brukes om en person i en sportsartikkel",
+          "En tekst som forteller en konkret historie om dyr"
+        ],
+        "riktigSvar": "Et uttrykk som brukes i overført betydning for å beskrive noen eller noe",
+        "kildeavsnitt": 4
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva er en allegori?",
+        "alternativer": [
+          "En tekst som kan tolkes som et bilde på noe annet",
+          "En kort dyrefortelling som alltid slutter med en moral",
+          "En felles assosiasjon som vi knytter til et ord",
+          "Et ord som brukes i overført betydning om noe konkret"
+        ],
+        "riktigSvar": "En tekst som kan tolkes som et bilde på noe annet",
+        "kildeavsnitt": 35
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilken konnotasjon vekker fargen hvitt, ifølge teksten?",
+        "alternativer": [
+          "Dystert",
+          "Uskyld",
+          "Kulde",
+          "Varme"
+        ],
+        "riktigSvar": "Uskyld",
+        "kildeavsnitt": 24
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva inneholder ofte avslutningen på en fabel?",
+        "alternativer": [
+          "En konklusjon eller en moral",
+          "Et dikt om dyrene i fortellingen",
+          "En lang beskrivelse av naturen",
+          "Et spørsmål som leseren må svare på"
+        ],
+        "riktigSvar": "En konklusjon eller en moral",
+        "kildeavsnitt": 38
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvordan blir mannskapet behandlet i Haiene?",
+        "alternativer": [
+          "De får dårlig mat og lite lønn",
+          "De får god mat og høy lønn",
+          "De har mye makt over offiserene",
+          "De får bestemme over seilasen selv"
+        ],
+        "riktigSvar": "De får dårlig mat og lite lønn",
+        "kildeavsnitt": 45
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva betyr det latinske ordet alludere, som ordet allusjon kommer fra?",
+        "alternativer": [
+          "Lek",
+          "Kunst",
+          "Minne",
+          "Sang"
+        ],
+        "riktigSvar": "Lek",
+        "kildeavsnitt": 51
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvilken tekst er den kristne bønnen «Fader Vår» hentet fra, ifølge teksten?",
+        "alternativer": [
+          "Bibelen",
+          "Salmeboken",
+          "Nasjonalbiblioteket",
+          "Romanen Haiene"
+        ],
+        "riktigSvar": "Bibelen",
+        "kildeavsnitt": 57
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva er en allusjon?",
+        "alternativer": [
+          "Et språklig virkemiddel der vi låner fra eller refererer til en annen tekst eller et kunstverk",
+          "En beskrivelse av noe ved hjelp av sammenlikninger",
+          "Et uttrykk der en ting får menneskelige egenskaper",
+          "En kort fortelling der dyr representerer mennesker"
+        ],
+        "riktigSvar": "Et språklig virkemiddel der vi låner fra eller refererer til en annen tekst eller et kunstverk",
+        "kildeavsnitt": 52
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor fungerer en allusjon bare hvis leseren skjønner den?",
+        "alternativer": [],
+        "riktigSvar": "Det er først når leseren kjenner igjen referansen at hun forstår det ekstra laget med mening. Uten å kjenne referansen går den nye betydningen tapt.",
+        "kildeavsnitt": 60
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor kan romanen Haiene leses som en allegori?",
+        "alternativer": [],
+        "riktigSvar": "Seilbåten kan være et bilde på verden, og menneskene om bord kan stå for ulike folkegrupper. Konfliktene om bord kan da tolkes som konflikter og kriger i verden.",
+        "kildeavsnitt": 44
+      }
+    ]
+  }
+}
