@@ -35,8 +35,11 @@ Opprett en konto på <http://localhost:3000/registrer> med invitasjonskoden
 `.env.local`, og kjør `npm run db:migrer` og `npm run dev` som over. Dataene
 forsvinner når serveren stoppes.
 
-Hele kjerneløypen kan gås gjennom slik: lese inn eksempelteksten, aktivering,
-lesevisning med faguttrykk markert, quiz, og fagsamtale. `npm run db:ned`
+Hele kjerneløypen kan gås gjennom slik: lese inn eksempelteksten, kontroll av
+overskriftene, aktivering, gjennomsyn, lesevisning med faguttrykk markert, quiz
+og øvekort. Fagsamtale, morsmål, minnevers og bildeinnlesing kaller modellen med
+innhold eleven bestemmer, og krever derfor `LESEVENN_TESTMODUS=av` og en nøkkel.
+`npm run sjekk:readme` følger disse stegene i en ren klone og bekrefter det. `npm run db:ned`
 stopper databasen; dataene beholdes. `docker compose down -v` sletter dem.
 
 **Lagrede modellsvar.** `.env.example` setter `LESEVENN_TESTMODUS=les`, som
@@ -60,6 +63,8 @@ vertsnavnet i `DATABASE_URL`, så ingenting må endres i koden.
 
 ```bash
 npm test         # ingen av testene kaller språkmodellen eller rører Neon
+npm run sjekk:tilgjengelighet  # Chrome mot lokal database: axe-core, tastatur, telefon
+npm run sjekk:readme           # følger README i en ren klone, uten nøkler (FR-46)
 npx tsc --noEmit # typesjekk
 npm run build    # verifiser før push
 ```
