@@ -2,7 +2,7 @@
 title: Kodefunn — feil og svakheter i KI-generert kode
 status: løpende
 created: 2026-10-07
-updated: 2026-10-07
+updated: 2026-10-18
 krav: FR-41
 ---
 
@@ -404,16 +404,142 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 13 — En nektingssjekk som slo alarm på riktig oversettelse
+
+**Hvor:** `morsmaal/kontroll.ts`, sammenligningen av originalen med tilbakeoversettelsen i FR-28, 16. oktober.
+
+**Hva:** sjekken talte hvert nektingsord for seg — «ikke», «ingen», «aldri» — og meldte avvik når ett av dem forekom sjeldnere etter tilbakeoversettelsen. «Prognosene tyder **ikke** på noen oppgang» kom tilbake som «prognosene viser **ingen** tegn til oppgang»: samme nekting, et annet ord, og sjekken meldte «tapt nekting».
+
+**Hvordan det ble funnet:** den første ekte målingen på fire tekster ga ett avvik. Setningen ble lest før tallet ble godtatt.
+
+**Rettelse:** nektingsordene telles samlet. En test med akkurat dette setningsparet står i `morsmaal/kontroll.test.ts`.
+
+**Mønsteret:** en sjekk som aldri hadde vært sett feile. Alle testene var skrevet med eksempler der riktig svar var åpenbart, og ingen med en riktig oversettelse som brukte et annet ord.
+
+---
+
+## Funn 14 — Et tokentak som kuttet svaret midt i
+
+**Hvor:** `generatorer/kontrakt.ts`, standardverdien `maksTokens = 8000`, og lavere tak satt i enkeltgeneratorer.
+
+**Hva:** taket gjelder tenking og svar til sammen. Med adaptiv tenking bestemmer modellen selv hvor mye den tenker, og 8 000 holdt ikke: sju av ti minnevers (17.10) og én av tre quizer (18.10) ble avbrutt før svaret var ferdig, og det halve svaret var ikke gyldig JSON. Eleven ville fått «Lesevenn fikk et svar den ikke kunne bruke» uten at noen kunne si hvorfor.
+
+**Hvordan det ble funnet:** måleharnessene for FR-31 og FR-14 kjørte mange ekte kall på rad. Ett og ett kall i appen hadde ikke vist det, fordi feilen bare inntraff noen ganger.
+
+**Rettelse:** ett felles tak på 16 000 i kontrakten, og de lavere takene i enkeltgeneratorene fjernet, så feilen ikke kan komme tilbake én generator om gangen (AD-19).
+
+**Mønsteret:** en standardverdi som var riktig da den ble satt — før adaptiv tenking — og ble gal da modellen ble byttet. Samme klasse som funn 8.
+
+---
+
+## Funn 15 — «constructor» ble godtatt som et leseinnstillingstrinn
+
+**Hvor:** `tekst/leseinnstillinger.ts`, tolkingen av innsendte verdier, 17. oktober.
+
+**Hva:** gyldige trinn ble sjekket med `s in TEKSTSTORRELSER`. `in` ser også på egenskaper alle JavaScript-objekter arver, så `"constructor" in {}` er sant. En innsendt verdi som «constructor» ville blitt lagret som trinn, og visningen ville krasjet da den slo opp et trinn som ikke finnes.
+
+**Hvordan det ble funnet:** av en enhetstest skrevet for å sjekke at ukjente verdier gir standarden. Testen ble med vilje skrevet med en verdi som ligner en innebygd egenskap.
+
+**Rettelse:** `Object.hasOwn`. Testen står i `tekst/leseinnstillinger.test.ts`.
+
+**Mønsteret:** en språkfelle som ser riktig ut ved lesing. Den ble funnet fordi testen spurte «hva er den rareste verdien noen kan sende inn?», ikke «virker det med de vanlige?».
+
+---
+
+## Funn 16 — Øvekortet skjulte fagordet for skjermleseren
+
+**Hvor:** `app/komponenter/Oevekort.tsx`, knappen som snur kortet.
+
+**Hva:** knappen hadde `aria-label="Snu kortet og se forklaringen"`. En slik etikett erstatter innholdet for skjermleseren. En blind elev hørte dermed aldri fagordet på forsiden eller forklaringen på baksiden — bare instruksen om å snu.
+
+**Hvordan det ble funnet:** av axe-core (regelen `label-content-name-mismatch`) i tilgjengelighetssjekken som kjører appen i Chrome (`npm run sjekk:tilgjengelighet`, 17.10). For alle som ser, så knappen helt riktig ut.
+
+**Rettelse:** etiketten er fjernet; kortets innhold er knappens navn, og `aria-pressed` sier om kortet er snudd.
+
+**Mønsteret:** en tilgjengelighetsattributt lagt til i god tro, som gjorde det verre. Ingen visuell gjennomgang kan finne denne klassen feil.
+
+---
+
+## Funn 17 — En lukkeknapp som ikke lukket, og en boble utenfor skjermen
+
+**Hvor:** `app/komponenter/Fagord.tsx`, forklaringsboblen i FR-10, 17. oktober.
+
+**Hva:** to feil i samme komponent. (1) Lukkeknappen lukket boblen og flyttet fokus tilbake til ordet — og fokus på ordet åpnet boblen igjen med en gang. (2) På en 375 px bred telefon stakk boblen 63 px ut av skjermen for et ord langt til høyre i linjen; koden som skulle forskyve den, virket ikke i praksis.
+
+**Hvordan det ble funnet:** tilgjengelighetssjekken i Chrome, som trykker på lukkeknappen og måler boblens plassering med berøring på en smal skjerm. 38 av 42 sjekker besto første gang; disse var to av de fire som feilet.
+
+**Rettelse:** fokuset som settes tilbake etter lukking, åpner ikke boblen. På telefon ligger boblen fast nederst på skjermen i stedet for ved ordet.
+
+**Mønsteret:** samspillsfeil mellom to riktige regler (fokus åpner, lukking gir fokus tilbake). Hver regel for seg var riktig; feilen fantes bare når de møttes i en nettleser.
+
+---
+
+## Funn 18 — Seks krav var aldri bygget, og alle testene var grønne
+
+**Hvor:** PRD-en mot appen, 17. oktober: FR-3 fase 3a (overskriftskontrollen), FR-5 (etiketter når teksten mangler overskrifter), FR-6 (videre med tomt svar etter én oppfordring), FR-1 (minstelengde ved innliming og tittelforslag), FR-7 (mykt varsel om ikke-fagtekst) og FR-36 (søk og sortering i tekstlisten).
+
+**Hva:** funksjonene manglet helt, eller gjorde noe annet enn kravet. FR-6 var det motsatte: tomt svar ble stoppet for godt, mens kravet sier at eleven skal slippe videre.
+
+**Hvordan det ble funnet:** en systematisk gjennomgang av alle FR-er mot koden, utløst av at fase 3a manglet da demotesten skulle skrives. Ingen test kunne funnet det: tester sjekker det som er bygget.
+
+**Rettelse:** alle seks bygget, testet og satt i drift samme dag (migrasjon 0005 og 0006).
+
+**Mønsteret:** utelatelse. KI-assistert bygging går fort fra krav til krav, og det som ikke blir bedt om i øyeblikket, blir ikke laget. Den eneste kontrollen som fanger det, er å lese kravene mot appen.
+
+---
+
+## Funn 19 — Minneversene besto alle sjekker og var ikke vers
+
+**Hvor:** `prompts/minnevers/v1.md` og kontrollen i `generatorer/minnevers.ts`.
+
+**Hva:** v1 ga rimfrie oppsummeringer med linjer på opptil 25 stavelser. Kontrollen sjekket linjetall og fagord, og alle ti versene besto. Prompten hadde lagt så mye vekt på «bare det teksten sier» at modellen ramset opp fakta.
+
+**Hvordan det ble funnet:** utvikleren spurte «hva tenker du at et minnevers er?» før vurderingsarket ble fylt ut.
+
+**Rettelse:** v2 med korte linjer, parrim og ett poeng per linje, og en stavelsessjekk i koden (høyst 14). v3 la til kildeavsnitt per linje (§5). Vurderingsarket har fått punktet «fungerer som huskeregel».
+
+**Mønsteret:** testene målte det som var lett å måle, ikke det funksjonen lover. Samme klasse som funn 4, men i generert innhold i stedet for i kode.
+
+---
+
+## Funn 20 — En utrulling som «testet» uten å kunne stoppe
+
+**Hvor:** kommandoen KI-assistenten brukte for å teste, committe og rulle ut, 18. oktober.
+
+**Hva:** kommandoen var `npm test | grep -E "Tests|FAIL" && git commit … && vercel --prod`. `grep` lykkes når det finner linjen, også når linjen sier at testene feilet. Sju datatestfiler feilet, og endringen ble likevel committet og rullet ut. Årsaken til feilene var et tidsavbrudd i testoppsettet, ikke i koden, så ingenting galt havnet i drift — men det var flaks.
+
+**Hvordan det ble funnet:** ved å lese utskriften etter utrullingen.
+
+**Rettelse:** testoppsettet tåler nå at mange datatester starter samtidig (`vitest.config.ts`). Etterpå sjekkes testenes utgangskode før noe committes.
+
+**Mønsteret:** en kontroll som ikke kan feile, er ingen kontroll. Det er nøyaktig det PRD-en advarer mot i FR-21 om fagsamtaletesten — her i verktøyet rundt koden.
+
+---
+
+## Funn 21 — README lovet mer enn testmodus dekket
+
+**Hvor:** `README.md`, «Komme i gang».
+
+**Hva:** README sa at hele kjerneløypen, «og fagsamtale», kunne gås gjennom uten API-nøkkel. Fagsamtalen kaller modellen med det eleven skriver, og testmodus `les` kan bare dekke svar som er lagret på forhånd. En sensor som fulgte README, ville fått en feilmelding i fagsamtalen.
+
+**Hvordan det ble funnet:** da `npm run sjekk:readme` ble laget (18.10) — et skript som kloner repoet til en tom mappe og følger README. For å vite hva skriptet skulle sjekke, ble PRD-ens definisjon av kjerneløypen slått opp: aktivering, lesevisning og quiz. Fagsamtalen er ikke med.
+
+**Rettelse:** README sier hva testmodus dekker og hva som krever nøkkel. Skriptet bekrefter kjerneløypen, 8 av 8.
+
+**Mønsteret:** dokumentasjon skrevet ut fra intensjon, ikke prøvd. FR-46 krever med vilje at README «er testet av å bli fulgt».
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — tolv funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 21 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
-| Automatiserte tester for de maskinsjekkbare kravene | Delvis — FR-7 dekket, FR-4, FR-14, FR-20, FR-25 og FR-31 gjenstår |
+| Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |
 
-**Et mønster til refleksjonsrapporten.** Ingen av de åtte funnene ble oppdaget av
+**Et mønster til refleksjonsrapporten.** Ingen av de første åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som
 treffer hver gren, funn 2 av å feilsøke noe annet, og funn 3, 4, 5 og 6 av å ta
 koden i bruk — å skrive den første ekte generatoren og følge kallveien til ende.
@@ -422,3 +548,11 @@ grønne tester, og var kommentert med en begrunnelse som pekte på riktig
 arkitekturbeslutning — men som gjorde noe annet enn kravet sa. Det er feilformen
 KI-assistert utvikling produserer mest av, og den er langt vanskeligere å se enn
 kode som ikke virker.
+
+**Et andre mønster, fra funn 13–21.** Funnene fra 16.–18. oktober kom nesten alle
+fra å **kjøre noe i stor skala eller i en ekte nettleser**: målinger med mange
+ekte kall (13, 14), en nettleser som trykker og måler (16, 17), en ren klone som
+følger README (21). To kom fra spørsmål og gjennomlesning, ikke fra kjøring:
+utviklerens spørsmål om hva et minnevers er (19), og gjennomgangen av kravene mot
+appen (18). Det siste er det viktigste: tester finner feil i det som er bygget,
+men bare et menneske som leser kravene, finner det som mangler.

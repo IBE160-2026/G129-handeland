@@ -77,7 +77,7 @@ Alt planleggingsmateriale ligger i [`_bmad-output/planning-artifacts/`](_bmad-ou
 |---|---|
 | `product-brief-lesevenn.md` | Hvorfor appen finnes, hvem den er for, og hva som er med i v1 |
 | `prd-lesevenn.md` | Kravspesifikasjon, 43 funksjonskrav med testbare konsekvenser |
-| `arkitektur-lesevenn.md` | Arkitekturspine, 18 bindende invarianter |
+| `arkitektur-lesevenn.md` | Arkitekturspine, 20 bindende invarianter |
 | `proposal-lesevenn.md` | Arbeidskravet, godkjent 25.09.2026 |
 | `fremdriftsplan.md` | Milepæler, timeregnskap og kuttrekkefølge |
 | `ki-logg.md` | Løpende logg over KI-bruk i utviklingen (FR-38) |

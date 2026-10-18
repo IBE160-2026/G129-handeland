@@ -7,8 +7,8 @@ paradigm: lagdelt med rent generatorlag (ports-and-adapters på modellsiden)
 scope: Lesevenn v1 — hele systemet
 status: final
 created: '2026-09-29'
-updated: 2026-10-07
-binds: [FR-1..FR-31, FR-35..FR-45]
+updated: 2026-10-18
+binds: [FR-1..FR-31, FR-35..FR-46]
 sources:
   - prd-lesevenn.md
   - addendum-lesevenn.md
@@ -77,6 +77,8 @@ Pilene som **ikke** finnes er regelen: `Gen` peker aldri på `DB` eller `Web`.
 - **Prevents:** at «rapporteres, ingen terskel» presses inn i et testrammeverk som krever bestått eller ikke, og at det oppstår terskler på det som med vilje er beskrivelse
 - **Rule:** aksen er **om kontrollen kaller språkmodellen**, ikke om den er maskinsjekkbar. `npm test` er deterministiske sjekker mot lagrede eller konstruerte data — skjemavalidering, delstrengsjekken i FR-7 som funksjon, Jaccard-utregningen som funksjon, stoppordlisten. `npm run maal` er alt som gjør et modellkall, inkludert de maskinelle kravene i FR-20 og de maskinelle testene i FR-21.
 
+**Tredje kjøring, lagt til 17.–18. oktober: nettlesersjekkene.** `npm run sjekk:tilgjengelighet`, `npm run demotest` og `npm run sjekk:readme` kjører appen i Chrome mot en lokal database. De kaller ikke modellen — de leser lagrede svar (AD-18) — men de starter en server og en nettleser og tar minutter, ikke sekunder. De hører derfor ikke i `npm test`, men kjøres før en milepæl og etter endringer i grensesnittet. Rapportene lagres i `maaling/resultater/`.
+
 Et tidligere utkast delte på «maskinsjekkbar mot statistisk», og det plasserte flere krav feil. FR-20 sine fire krav og FR-21 sin måltest og avsnittstest er maskinsjekkbare med harde terskler, men de kan bare kontrolleres på et generert utdata — altså etter et modellkall. Etter den gamle regelen hørte de i `npm test` og skulle feile bygget, og da får prosjektet nøyaktig det PRD §9.5 advarer mot i sitt eget avsnitt: en port som feiler tilfeldig blir stille droppet etter tredje gang. I tillegg ville hver testkjøring kostet penger.
 
 ### AD-6 — Sikkerhetsporten er en utgivelsesport, ikke en byggtest
@@ -105,13 +107,13 @@ Begrunnelsen er strukturell, og den kan ikke patches bort: **en server action er
 
 - **Binds:** AD-2, FR-1, FR-2, FR-3, FR-5, FR-6, FR-44
 - **Prevents:** at kildeavsnitt-henvisninger peker på tekst som har flyttet seg — og at Aktiveringen kan gjøres om etter at eleven har sett brødteksten
-- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. `Aktivert` settes når elevens forkunnskapssvar er lagret, og først da blir brødteksten tilgjengelig for gjennomsyn. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. Vil eleven endre brødteksten, lager hun en ny Tekst.
+- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. Overgangen til `Aktivert` krever at eleven har godkjent overskriftene i fase 3a (`tekst.overskrifter_godkjent`, satt 17.10; eldre tekster fikk verdien ved migrasjon 0005). Mangler teksten overskrifter, settes genererte etiketter inn i `Innlest` (FR-5), og hvilke de er, lagres i `tekst.genererte_overskrifter` så de kan merkes. `Aktivert` settes når elevens forkunnskapssvar er lagret, og først da blir brødteksten tilgjengelig for gjennomsyn. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. Vil eleven endre brødteksten, lager hun en ny Tekst.
 
 ```mermaid
 stateDiagram-v2
     [*] --> Innlest : innlesing (liming, PDF, bilde)
-    Innlest --> Innlest : retting av overskrifter (fase 3a)
-    Innlest --> Aktivert : forkunnskapssvar lagret (FR-6)
+    Innlest --> Innlest : etiketter (FR-5) og retting av overskrifter (fase 3a)
+    Innlest --> Aktivert : fase 3a godkjent, forkunnskapssvar lagret (FR-6)
     Aktivert --> Aktivert : retting av broedtekst (fase 3b)
     Aktivert --> Laast : eleven godkjenner fase 3b
     Laast --> [*] : sletting
@@ -203,11 +205,27 @@ Uten dette er FR-40 sitt krav om «én tabell som viser hver terskel med målt v
 
 - **Binds:** FR-46, AD-1, AD-7, AD-10, AD-11, AD-14
 - **Prevents:** at «sensor kan kjøre appen» løses med en parallell demovei — falske data, en hardkodet eksempelside, eller en gren som ikke er den som kjører i drift — og dermed demonstrerer kode som ikke finnes
-- **Rule:** **testmodus er et bytte inne i `kjoerGenerator`, over skjemavalideringen.** Tre tilstander, styrt av én miljøvariabel: `av` kaller modellen, `les` henter svaret fra `testdata/modellsvar/`, `skriv` kaller modellen og lagrer svaret. Et lagret svar går gjennom samme skjemavalidering som et ferskt (AD-11), og nøkkelen inkluderer promptversjonen, slik at et svar lagret under v1 aldri leveres som om det var v2 (AD-14). En ukjent eller glemt verdi faller til `av`. Databasen velges på samme måte: `data/db.ts` leser vertsnavnet i tilkoblingsstrengen og bruker Neons driver mot Neon, `pg` ellers — så en lokal Postgres i Docker er samme kodebase, ikke en variant av den.
+- **Rule:** **testmodus er et bytte inne i `kjoerGenerator`, over skjemavalideringen.** Fire tilstander, styrt av én miljøvariabel: `av` kaller modellen, `les` henter svaret fra `testdata/modellsvar/`, `skriv` kaller modellen og lagrer svaret, og `fyll` (lagt til 18.10 for demotesten) leser når svaret finnes og kaller og lagrer når det mangler — uten å skrive over noe som alt er lagret. Et lagret svar går gjennom samme skjemavalidering som et ferskt (AD-11), og nøkkelen inkluderer promptversjonen, slik at et svar lagret under v1 aldri leveres som om det var v2 (AD-14). En ukjent eller glemt verdi faller til `av`. Databasen velges på samme måte: `data/db.ts` leser vertsnavnet i tilkoblingsstrengen og bruker Neons driver mot Neon, `pg` ellers — så en lokal Postgres i Docker er samme kodebase, ikke en variant av den.
 
 Dette er AD-7 pekt mot appen i stedet for harnessen. AD-7 sa alt at rå modellsvar lagres som filer i repoet og at måletall regnes om fra lagrede svar framfor nye kall; det eneste nye her er at kjøretidsveien kan lese de samme filene. Derfor er plasseringen viktigere enn mekanismen: legges byttet over valideringen, demonstrerer testmodus en kodevei som ikke finnes i drift, og da beviser den ingenting om appen. Legges det under, er det ett `if` fra å være den ekte veien.
 
 Driverbyttet hører i samme AD fordi det løser samme problem og ville ellers vært en løs ende: en testmodus for modellkallene hjelper ikke om databasen fortsatt bare finnes i en skytjeneste utvikleren eier.
+
+### AD-19 — Kallformen mot modellen har ett sted: tokentak og tenkemodus står i kontrakten og manifestet
+
+- **Binds:** AD-1, AD-14, alle generatorer
+- **Prevents:** at én generator får et lavere tokentak enn de andre, og at svaret kuttes midt i — en feil som bare inntreffer noen ganger og derfor ikke ses i enkeltkall
+- **Rule:** tokentaket har én standardverdi i `generatorer/kontrakt.ts` (16 000). En generator setter ikke et lavere tak. Tenkemodusen står per oppgave i `prompts/gjeldende.json` (AD-14), aldri som en antakelse i koden. Taket gjelder tenking og svar til sammen; med adaptiv tenking avgjør modellen selv hvor mye av det som går til tenking.
+
+Lagt til 18. oktober etter kodefunn 14: med 8 000, og lavere tak i enkelte generatorer, ble sju av ti minnevers og én av tre quizer avbrutt før svaret var ferdig. Taket var riktig da det ble satt, før adaptiv tenking, og ble galt da modellen ble byttet — samme klasse som kodefunn 8, der tenkemodusen ble gjettet ut fra modellnavnet.
+
+### AD-20 — En sperre i løypen håndheves i handlingen, ikke bare i visningen
+
+- **Binds:** AD-8, AD-9, FR-3, FR-26, PRD §6
+- **Prevents:** at et steg eleven skal gjøre først, kan hoppes over ved å sende skjemaet uten å gå via siden — en skjult knapp er ingen lås
+- **Rule:** hver sperre som sier «ikke før …» sjekkes i server-handlingen med samme predikat som visningen bruker til å skjule knappen. Predikatet ligger ett sted: `data/sjekket.ts` for oppsummeringen (først etter levert quiz eller svar i en fagsamtale, §6), og `tekst.overskrifter_godkjent` for aktiveringen (først etter fase 3a).
+
+Samme begrunnelse som AD-8: en server action er en POST som kan sendes uten skjemaet. Regelen er skrevet ned fordi sperrene kom til ved ulike tidspunkter (16.–17. oktober), og den første versjonen av hver av dem lå bare i visningen.
 
 ## Konsistenskonvensjoner
 
@@ -223,6 +241,8 @@ Driverbyttet hører i samme AD fordi det løser samme problem og ville ellers v�
 | Promptfiler | `prompts/<oppgave>/vN.md`, markdown, aldri innebygde strenger |
 | Målefiler | Gullsett, rå modellsvar og resultater ligger i repoet under `maaling/`, i versjonskontroll |
 | Tilstandsendring | All skriving til en Tekst går gjennom én modul som håndhever AD-9 |
+| Tilleggsinnhold | Innhold som ikke er en del av Kjerneløypen — oversettelser, utpeking, etiketter — genereres **etter** at siden er tegnet, av en klientkomponent som kaller en handling og oppdaterer siden. Feiler det, står det norske som før, med prøv igjen (FR-29). Siden venter aldri på et slikt kall |
+| Lagrede oversettelser | Én rad per Tekst, språk og type, med en hash av det norske som ble oversatt. Passer ikke hashen, regnes oversettelsen som borte og lages på nytt (FR-36). Elementene som oversettes, bygges ett sted (`morsmaal/elementer.ts`), så siden og handlingen alltid regner samme hash |
 
 ## Stack
 
@@ -236,7 +256,8 @@ Driverbyttet hører i samme AD fordi det løser samme problem og ville ellers v�
 | Drizzle ORM | 0.45.x, pinnes ved installasjon | Begrunnet valg, ikke et bransjestandardvalg — se under. **En brytende v1 er i beta.** Ikke oppgrader midt i målekjøringer som skal være sammenlignbare |
 | Better Auth | 1.7.x, pinnes ved installasjon | Offisiell guide dekker Next.js 16+ med proxy. `pg` og `drizzle-orm` er peer-avhengigheter |
 | pdfjs-dist (i nettleseren) | pinnes ved installasjon | Kjører klientside etter AD-16, så PDF-en aldri sendes til serveren. Gir tekst per side, som PF-1 trenger. `unpdf` sto her da parsing skulle skje på serveren, og er ikke lenger aktuelt |
-| LLM-API med strukturert utdata | Anthropic. `claude-haiku-4-5` som standard, `claude-sonnet-5` for svarvurdering | Fordelingen per oppgave og kostnadsgrunnlaget står i `addendum-lesevenn.md` §3. Begge er utenfor Covered Models, så 30-dagerslagringen gjelder ikke. Uttrekket måles mot FR-8 før valget låses. Sammenlignes mot minst én annen leverandør før M1 |
+| LLM-API med strukturert utdata | Anthropic. `claude-haiku-5-5` for alt unntatt fagsamtalen, `claude-sonnet-5-5` for startspørsmål og svarvurdering, begge med adaptiv tenking | Gjeldende fordeling står i `prompts/gjeldende.json` (AD-14), som er fasiten; kostnadsgrunnlaget i `addendum-lesevenn.md` §3. Oppdatert 18.10 — sto tidligere som `claude-haiku-4-5` og `claude-sonnet-5`, før byttet til 5.5-familien |
+| playwright-core og axe-core (bare utvikling) | 1.64.1 og 4.14.0 | Nettlesersjekkene (AD-5). playwright-core styrer Chrome som alt er installert, og laster ikke ned nettlesere. Ingen av dem er i appen som rulles ut |
 
 **Hvorfor Drizzle, presist.** Ingen autoritativ kilde utpeker Drizzle som *standardvalget* for Next.js og PostgreSQL — det er en vurdering, ikke et faktum, og et tidligere utkast av denne spinen overdrev det. Begrunnelsen som holder: ingen generate-steg, altså færre bevegelige deler når rammeverket også er nytt; SQL-nær så utvikleren lærer mer SQL, som er et uttalt mål; og `drizzle-kit studio` dekker behovet for å se på data i et grensesnitt under feilsøking. Prisma 7 ble vurdert og er mye lettere etter omskrivingen av spørremotoren; det ville også vært et forsvarlig valg.
 
@@ -273,6 +294,12 @@ erDiagram
     AVSNITT ||--o{ BEGREP : forankrer
     AVSNITT ||--o{ QUIZSPORSMAL : forankrer
     AVSNITT ||--o{ SAMTALERUNDE : forankrer
+    KONTO ||--o| MORSMAALSVALG : velger
+    KONTO ||--o| LESEINNSTILLINGER : har
+    TEKST ||--o{ OVERSETTELSE : "oversettes i"
+    TEKST ||--o| OPPSUMMERING : har
+    TEKST ||--o| UTPEKINGSSETT : har
+    TEKST ||--o{ MINNEVERS : har
 ```
 
 De tre `forankrer`-relasjonene er AD-2 i datamodellform. `FOREKOMST` er AD-13: hver enkelte markering, med avsnitt og tegnposisjon i det avsnittet — det er dette settet tetthetstaket regnes på og Lesevisningen rendrer fra.
@@ -281,6 +308,8 @@ De tre `forankrer`-relasjonene er AD-2 i datamodellform. `FOREKOMST` er AD-13: h
 
 Øvekortmerking henger på `BEGREP`; Øvekortsettet er ingen egen tabell, fordi FR-16 krever at det *er* Begrepssettet.
 
+**Kildeavsnitt i JSON.** `OPPSUMMERING`, `UTPEKINGSSETT` og `MINNEVERS` lagrer innholdet som JSON, med kildeavsnittet som avsnittsnummer per setning, uttrykk eller verslinje. Det er AD-2 slik det står — et nummer, ikke en fremmednøkkel — og numrene er bare gyldige fordi innholdet lages etter låsing (AD-9). Kontrollen av at nummeret finnes og er brødtekst, gjøres i generatoren (AD-11).
+
 ```text
 app/                  # ruter og server actions (Next.js App Router)
 opplasting/           # AD-16 — klientside PDF-parsing og bildekrymping, grensehaandheving
@@ -288,10 +317,12 @@ opplasting/           # AD-16 — klientside PDF-parsing og bildekrymping, grens
 generatorer/          # AD-1, AD-10 — ett modul per oppgave, rent lag
   kontrakt.ts         #   felles kontrakt: promptoppslag, skjemavalidering, feilform
 prompts/              # AD-3, AD-14 — <oppgave>/vN.md pluss gjeldende.json
-tekst/                # innlesing, laasing (AD-9, AD-15)
+morsmaal/             # FR-24..FR-28 — spraaklisten, elementene som oversettes, kontrollene i FR-28
+tekst/                # innlesing, laasing, overskriftskontroll, leseinnstillinger (AD-9, AD-15)
   avsnittsdeling.ts   #   AD-12 — den ene delingsfunksjonen, importeres ogsaa av maaling/
 data/                 # skjema, migrasjoner, datatilgang med eierskapssjekk (AD-8)
-maaling/              # AD-5, AD-7, AD-17 — CLI, gullsett, raa svar, manuelle dommer, resultater
+maaling/              # AD-5, AD-7, AD-17 — CLI, gullsett, raa svar, manuelle dommer, resultater,
+                      #   og nettlesersjekkene (tilgjengelighet, demotest, README)
 ```
 
 Mappetreet bærer tre invarianter direkte: `opplasting/` finnes fordi AD-16 trenger et sted, `tekst/avsnittsdeling.ts` er den ene funksjonen AD-12 krever at også `maaling/` importerer, og `generatorer/kontrakt.ts` er det AD-1 mener med felles kontrakt.
@@ -301,23 +332,27 @@ Merk at `data/` også holder `raatekst` ved siden av den redigerte teksten, som 
 
 | Område | Bor i | Styres av |
 | --- | --- | --- |
-| Innlesing og gjennomsyn (FR-1..FR-4, FR-44, FR-45) | `opplasting/`, `tekst/`, `app/` | AD-9, AD-11, AD-12, AD-16 |
+| Innlesing og gjennomsyn (FR-1..FR-6, FR-44, FR-45) | `opplasting/`, `tekst/`, `app/` | AD-9, AD-11, AD-12, AD-16, AD-20 |
 | Begrepssett og lesevisning (FR-7..FR-12) | `generatorer/`, `app/` | AD-1, AD-2, AD-11, AD-13, AD-15 |
 | Quiz (FR-13..FR-15) | `generatorer/`, `app/` | AD-1, AD-2, AD-15 |
 | Fagsamtale (FR-18..FR-23) | `generatorer/`, `app/` | AD-1, AD-2, AD-6, AD-14 |
-| Morsmål (FR-24..FR-29) | `generatorer/`, `app/` | AD-1, AD-11 |
+| Morsmål (FR-24..FR-29) | `generatorer/`, `morsmaal/`, `app/` | AD-1, AD-11, konvensjonene for tilleggsinnhold og lagrede oversettelser |
+| Minnevers (FR-30, FR-31) | `generatorer/`, `app/` | AD-1, AD-2, AD-11, AD-14 |
+| Tilgjengelighet og leseinnstillinger (FR-10, FR-12, §5) | `app/komponenter/`, `tekst/` | AD-5 (nettlesersjekkene) |
 | Konto og lagring (FR-35..FR-37) | `data/`, `app/` | AD-8 |
 | Dokumentasjon og måling (FR-38..FR-43) | `maaling/`, `prompts/` | AD-3, AD-4, AD-5, AD-7, AD-14, AD-17 |
 
 ## Driftsomslutning
 
-To miljøer: lokal utvikling og én driftet produksjon. **Ingen staging** — solobygg, og et tredje miljø koster mer enn det gir. Migrasjoner kjøres ved utrulling. Hemmeligheter som miljøvariabler, aldri i repoet. Utrulling fra Git.
+To miljøer: lokal utvikling og én driftet produksjon, Vercel og Neon i Frankfurt. **Ingen staging** — solobygg, og et tredje miljø koster mer enn det gir. Hemmeligheter som miljøvariabler i Vercel, aldri i repoet.
+
+**Rekkefølgen ved utrulling er fast:** migrasjoner først (`npm run db:migrer:https -- --kjoer`, over HTTPS fordi port 5432 ikke er pålitelig på alle nett), deretter `vercel --prod`. Omvendt rekkefølge gir en app som spør etter tabeller som ikke finnes. En migrasjon som legger til en sperre, setter verdien for eksisterende rader, så ingen elev sendes bakover i løypen (eksempel: 0005).
 
 ## Utsatt
 
 | Utsatt | Hvorfor det kan vente |
 | --- | --- |
-| Valg av konkret skyleverandør | **Må avklares før M0, ikke etter.** Et tidligere utkast sa at det ikke påvirker hvordan noe bygges, og det er galt — valget avgjør om PDF-uttrekk med native avhengigheter kan kjøre, om opplastinger kan holdes i minnet (AD-16), og om lange modellkall rekker innenfor tidsavbruddet. Utsatt bare i den forstand at biblioteksvalgene over ikke henger på det |
+| ~~Valg av konkret skyleverandør~~ | **Avgjort:** Vercel og Neon (Frankfurt). Sto her som «må avklares før M0» fordi valget avgjør om opplastinger kan holdes i minnet (AD-16) og om lange modellkall rekker innenfor tidsavbruddet. Begge holder i drift |
 | Oppsett og vilkår hos LLM-leverandøren | **Leverandør er valgt for M0 — Anthropic** — med sammenligning mot minst én annen før M1, målt på gullsettet i FR-8. Kravene i PRD §6.2 er dokumentert i addendum §6: inndata brukes ikke til trening (lest 2.10), lagring (2.10), og behandlingssted og overføringsgrunnlag (16.10 — modellkallene kan behandles i USA, Europa, Asia eller Australia, dekket av standardkontraktene i databehandleravtalen) |
 | Overvåking og logging utover feilsporing | Én bruker, ett miljø. Kan ikke gjøre to enheter uforenlige |
 | Hastighetsbegrensning | Ingen åpen registrering i v1, kostnadstakene i §6.4 er den reelle grensen |
