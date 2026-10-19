@@ -267,6 +267,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
   skjema,
   brukermelding,
   overstyrVersjon,
+  overstyrModell,
   /*
    * Taket gjelder tenking OG svar til sammen. Med adaptiv tenking avgjør
    * modellen selv hvor mye den tenker, og 8 000 holdt ikke: sju av ti
@@ -282,6 +283,12 @@ export async function kjoerGenerator<S extends z.ZodType>({
   skjema: S;
   brukermelding: string;
   overstyrVersjon?: string;
+  /**
+   * Harnessen kan prøve en kandidatversjon på en annen modell enn manifestets
+   * (FR-31, 19.10: v5 på Sonnet). Webappen gjør det aldri, se `hentPrompt`.
+   * Tenkemodusen er fortsatt manifestets.
+   */
+  overstyrModell?: string;
   maksTokens?: number;
   /** Nummeret i selvkonsistensen. Skiller de lagrede svarene, se `noekkel`. */
   kjoering?: number;
@@ -292,12 +299,18 @@ export async function kjoerGenerator<S extends z.ZodType>({
    */
   bilde?: { mediaType: "image/jpeg" | "image/png"; data: string };
 }): Promise<Resultat<z.infer<S>>> {
-  const prompt = await hentPrompt(oppgave, overstyrVersjon);
+  const valgt = await hentPrompt(oppgave, overstyrVersjon);
+  const prompt = overstyrModell ? { ...valgt, modell: overstyrModell } : valgt;
   const modus = testmodus();
 
   // Nøkkelen for lagrede svar må skille bilder fra hverandre. Et sammendrag
   // av bildet tas med, ikke bildet selv — det skal ikke ligge i repoet.
-  const noekkelmelding = bilde ? noekkelMedBilde(brukermelding, bilde.data) : brukermelding;
+  // En overstyrt modell skiller også, ellers ville svarene overskrive
+  // manifestmodellens svar på samme prompt. Uten overstyring er nøkkelen
+  // som før, så lagrede svar fortsatt treffer.
+  const medBilde = bilde ? noekkelMedBilde(brukermelding, bilde.data) : brukermelding;
+  const noekkelmelding = overstyrModell ? `${medBilde}
+[modell ${overstyrModell}]` : medBilde;
 
   /*
    * Testmodus `les`: svaret kommer fra disk, og modellen kalles ikke.
@@ -366,6 +379,8 @@ export async function kjoerGenerator<S extends z.ZodType>({
         "ugyldig_utdata",
         "Lesevenn fikk et svar den ikke kunne bruke.",
         "Prøv igjen. Skjer det på nytt med samme tekst, kan teksten være vanskelig å behandle — prøv et kortere utdrag.",
+        // Til loggen og harnessen: «max_tokens» betyr at tenkingen spiste taket.
+        new Error(`stop_reason=${svar.stop_reason}, output_tokens=${svar.usage.output_tokens}`),
       );
     }
 

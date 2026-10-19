@@ -39,13 +39,15 @@ const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
 // En kandidatversjon måles før den forfremmes (AD-14), som i FR-8-harnessen.
 const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
+// Og på en annen modell enn manifestets, når spørsmålet er om modellen er grensen.
+const MODELL = process.env.MAAL_MODELL || undefined;
 
 const tilfeller = TEKSTER.flatMap((t) => VARIANTER.map((v) => [t, v] as const));
 
 describe("FR-31 — ti vers til vurdering", () => {
   const vers: { tekst: string; variant: number; tittel: string; r: Minneversresultat; avsnitt: Map<number, string> }[] = [];
 
-  test.each(tilfeller)("%s (variant %s)", { timeout: 120000 }, async (navn, variant) => {
+  test.each(tilfeller)("%s (variant %s)", { timeout: 600000 }, async (navn, variant) => {
     const raa = await readFile(path.join(MAPPE, `${navn}.txt`), "utf8");
     const gull = JSON.parse(await readFile(path.join(MAPPE, `${navn}.runde1.gullsett.json`), "utf8")) as {
       tittel: string;
@@ -59,6 +61,9 @@ describe("FR-31 — ti vers til vurdering", () => {
       form: "vers",
       variant,
       overstyrVersjon: PROMPTVERSJON,
+      overstyrModell: MODELL,
+      // Under SDK-ens grense for kall uten strømming (~21 333).
+      maksTokens: MODELL ? 21000 : undefined,
     }).catch((e: Error) => {
       console.log(`\n= ${navn} (variant ${variant}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
       throw e;
@@ -72,7 +77,7 @@ describe("FR-31 — ti vers til vurdering", () => {
     vers.sort((a, b) => tilfeller.findIndex(([t, v]) => t === a.tekst && v === a.variant) - tilfeller.findIndex(([t, v]) => t === b.tekst && v === b.variant));
     const versjon = vers[0].r.promptversjon;
     const deler = [
-      `# Vurderingsark — minnevers (FR-31), prompt ${versjon}`,
+      `# Vurderingsark — minnevers (FR-31), prompt ${versjon}${MODELL ? ` (${vers[0].r.modell})` : ""}`,
       "",
       "Kravet: **ingen påstand i verset motsier Teksten.** Måltall: null usanne påstander i de ti versene.",
       "",
@@ -112,9 +117,10 @@ describe("FR-31 — ti vers til vurdering", () => {
     });
     deler.push("---", "", "**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av 10", "");
     await mkdir(RESULTATER, { recursive: true });
-    await writeFile(path.join(RESULTATER, `fr31-vurderingsark-${versjon}.md`), deler.join("\n"));
+    const navn = MODELL ? `${versjon}-${MODELL.replace(/^claude-/, "")}` : versjon;
+    await writeFile(path.join(RESULTATER, `fr31-vurderingsark-${navn}.md`), deler.join("\n"));
     await writeFile(
-      path.join(RESULTATER, `fr31-vers-${versjon}.json`),
+      path.join(RESULTATER, `fr31-vers-${navn}.json`),
       JSON.stringify({ krav: "FR-31", vers: vers.map((v) => ({ tekst: v.tekst, ...v.r })) }, null, 2) + "\n",
     );
   });

@@ -146,12 +146,22 @@ export async function lagMinnevers({
   begreper,
   form,
   overstyrVersjon,
+  overstyrModell,
+  maksTokens = 16000,
   variant = 0,
 }: {
   avsnitt: Avsnitt[];
   begreper: { uttrykk: string; forklaring: string }[];
   form: Versform;
   overstyrVersjon?: string;
+  /** Bare måleharnessen, se `kjoerGenerator`. */
+  overstyrModell?: string;
+  /**
+   * Rim krever mer tenking enn oppramsing: med 4000 gikk sju av ti v2-kall
+   * tom for tokens før svaret var ferdig (17.10). Sonnet tenker mer enn
+   * Haiku og gikk tom ved 16 000 (19.10), så harnessen kan heve det.
+   */
+  maksTokens?: number;
   /**
    * Flere vers fra samme tekst i måleharnessen (FR-31). Gir hvert sitt
    * lagringsnummer, så de lagrede svarene ikke overskriver hverandre. Appen
@@ -181,9 +191,8 @@ export async function lagMinnevers({
       skjema: MinneversSkjema,
       brukermelding: melding,
       overstyrVersjon,
-      // Rim krever mer tenking enn oppramsing: med 4000 gikk sju av ti v2-kall
-      // tom for tokens før svaret var ferdig (17.10).
-      maksTokens: 16000,
+      overstyrModell,
+      maksTokens,
       kjoering: variant > 0 ? variant * 10 + k : k === 1 ? undefined : k,
     });
     sisteBrudd = kontrollerVers(r.data, form, begrepssett, avsnitt);

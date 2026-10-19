@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T20:13:11.766Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Krigen i Midtøsten gir dyrere priser,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og Norges Bank varsler renteøkning, det viser",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "Høy lønnsvekst holder prisveksten oppe,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og inflasjonen tar tid å stoppe",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "prisvekst",
+      "renteøkning",
+      "inflasjon"
+    ],
+    "stil": ""
+  }
+}

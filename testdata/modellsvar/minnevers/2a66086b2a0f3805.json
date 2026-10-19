@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T20:11:44.969Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Lav energi gir lang bølge,",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "høy energi gir kort, en naturlig følge.",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "Radiobølger går langt og rett fram,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "lav frekvens gir lang bølge, altså som en sang.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "Radiobølger",
+      "frekvens",
+      "energi"
+    ],
+    "stil": ""
+  }
+}

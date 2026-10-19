@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T20:16:48.335Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Les adressen bakfra, trinn for trinn:",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "punktum, toppdomene, domene, under inn.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "Domenet kan gå til flere IP-adresser,",
+        "kildeavsnitt": 7
+      },
+      {
+        "tekst": "alt etter oppslaget, du ser.",
+        "kildeavsnitt": 7
+      }
+    ],
+    "faguttrykk": [
+      "toppdomene",
+      "under-domene",
+      "IP-adressene"
+    ],
+    "stil": ""
+  }
+}

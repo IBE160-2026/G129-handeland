@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T20:18:59.136Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Skriver, minne, prosessorene,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "OS-et bruker driverprogrammene.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Det lastes først og styrer alt.",
+        "kildeavsnitt": 4
+      },
+      {
+        "tekst": "Programmer som starter senere blir kalt.",
+        "kildeavsnitt": 4
+      }
+    ],
+    "faguttrykk": [
+      "minne",
+      "prosessorer",
+      "driverprogrammet"
+    ],
+    "stil": ""
+  }
+}

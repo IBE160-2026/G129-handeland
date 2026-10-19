@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T20:29:11.452Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Radiobølger har lav frekvens",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og lang bølgelengde. Konsekvens:",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Korte bølger spres lett,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "radiobølger går uforstyrret rett.",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "Radiobølger",
+      "frekvens",
+      "bølgelengde"
+    ],
+    "stil": ""
+  }
+}

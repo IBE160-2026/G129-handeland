@@ -1,0 +1,34 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T20:19:34.377Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Programmet ber, og OS-et tar",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "seg av resten, med driverprogrammet klar",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "OS-et holder styr på minne",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "og prosessorer, så programmene kan finne",
+        "kildeavsnitt": 2
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "driverprogrammet",
+      "minne",
+      "prosessorer"
+    ],
+    "stil": ""
+  }
+}

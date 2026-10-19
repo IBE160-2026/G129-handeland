@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T20:11:06.824Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Lav frekvens, lang bølgelengde,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "radiobølger går langt, rett fram.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Ionosfæren kaster dem tilbake,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "og de når enda lenger ut.",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "frekvens",
+      "bølgelengde",
+      "Radiobølger"
+    ],
+    "stil": ""
+  }
+}

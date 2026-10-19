@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T20:16:05.023Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Simile sier «som», metafor «er».",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Den andre bytter to betydningsområder, ikke mer.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "«Han er en løve»: metafor, sier vi.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "«Som en løve»: simile, det er lett å si.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

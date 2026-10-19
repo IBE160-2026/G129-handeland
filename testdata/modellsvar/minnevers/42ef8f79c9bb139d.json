@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v5",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T20:15:22.999Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metafor bruker ord i et annet felt,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "uten «som» eller «lik»: betydningsområder blir ett, ikke delt,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "simile setter «som» foran tingen,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "metafor kaller den noe annet, uten «som», ingen.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}
