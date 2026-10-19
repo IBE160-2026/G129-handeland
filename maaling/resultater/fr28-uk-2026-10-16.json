@@ -18,7 +18,14 @@
     "maal": 0,
     "bestaatt": true
   },
-  "eksternVurdering": "Ikke gjort. Se vurderingsarket.",
+  "eksternVurdering": {
+    "anmerkninger": 0,
+    "av": 16,
+    "maks": 1,
+    "bestaatt": true,
+    "dommer": "fr28-dommer-uk.json",
+    "vurdert": "2026-10-19"
+  },
   "resultater": [
     {
       "tekst": "naturfag-em-bolger",
@@ -366,5 +373,6 @@
       },
       "modell": "claude-haiku-5-5"
     }
-  ]
+  ],
+  "bestaatt": true
 }

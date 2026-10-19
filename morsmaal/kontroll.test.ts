@@ -19,9 +19,10 @@ describe("FR-24 — språklisten", () => {
     expect(rtl).toEqual(["ar", "ckb", "fa", "prs", "ur"]);
   });
 
-  test("ingen språk er kvalitetssikret før FR-28 er målt — heller ikke ukrainsk", () => {
-    expect(KVALITETSSIKRET.size).toBe(0);
-    expect(nivaaFor("uk")).toBe("modellstoettet");
+  test("bare ukrainsk er kvalitetssikret — det eneste språket som har bestått FR-28", () => {
+    expect([...KVALITETSSIKRET]).toEqual(["uk"]);
+    expect(nivaaFor("uk")).toBe("kvalitetssikret");
+    expect(nivaaFor("ar")).toBe("modellstoettet");
   });
 
   test("ukjent kode gir null, ikke et gjettet språk", () => {

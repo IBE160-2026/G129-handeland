@@ -1,0 +1,24 @@
+{
+  "krav": "FR-28",
+  "spraak": "uk",
+  "del": "ekstern vurdering",
+  "vurdertAv": "en ukrainsk morsmålsbruker (navn holdes utenfor rapporten etter avtale)",
+  "vurdert": "2026-10-19",
+  "grunnlag": "maaling/resultater/fr28-uk-2026-10-16.json (oversettelse v1, oppsummering v1, claude-haiku-5-5)",
+  "regel": "Bestått med høyst én anmerkning av 16 svar. Ventet svar: ja på A og B, nei på C og D (PRD FR-28, bestemt 16.10).",
+  "merknadOmUtfylling": "Svarene sto som «ja»/«nei» i kommentarkolonnen, ikke som avkrysning. Lest slik de står.",
+  "tekster": [
+    { "nummer": 1, "tekst": "naturfag-em-bolger", "A": true, "B": true, "C": false, "D": false },
+    { "nummer": 2, "tekst": "samfunnsfag-prisvekst", "A": true, "B": true, "C": false, "D": false },
+    { "nummer": 3, "tekst": "norsk-sprakligebilder", "A": true, "B": true, "C": false, "D": false },
+    { "nummer": 4, "tekst": "teknologi-operativsystem", "A": true, "B": true, "C": false, "D": false }
+  ],
+  "anmerkninger": 0,
+  "bestaatt": true,
+  "villeGittTilElev": "ja",
+  "endringer": [
+    { "norsk": "Besjeling", "modell": "Одушевлення", "morsmaalsbruker": "Оживлення", "type": "uvanlig ordvalg, ikke feil" },
+    { "norsk": "Personifikasjon", "modell": "Уособлення", "morsmaalsbruker": "персоніфікація", "type": "uvanlig ordvalg, ikke feil — og modellen brukte персоніфікація selv i oppsummeringen av samme tekst" },
+    { "norsk": "Fortsatt svake utsikter for boligbyggingen", "modell": "Перспективи житлового будівництва і далі слабкі", "morsmaalsbruker": "Перспективи житлового будівництва залишаються слабкими", "type": "formulering" }
+  ]
+}

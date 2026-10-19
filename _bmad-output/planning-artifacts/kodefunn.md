@@ -2,7 +2,7 @@
 title: Kodefunn — feil og svakheter i KI-generert kode
 status: løpende
 created: 2026-10-07
-updated: 2026-10-18
+updated: 2026-10-19
 krav: FR-41
 ---
 
@@ -530,11 +530,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 22 — Samme fagord fikk to oversettelser i samme tekst
+
+**Hvor:** `generatorer/morsmaal.ts` og `app/handlinger.ts` — overskriftene, forklaringene og oppsummeringen oversettes i hvert sitt kall.
+
+**Hva:** i teksten om språklige bilder ble «personifikasjon» oversatt som *уособлення* i overskriften og som *персоніфікація* i oppsummeringen. Begge er ukrainske ord for det samme, men en elev som ser to ulike ord, kan tro at det er to begreper. Ingen av kallene vet hva de andre valgte.
+
+**Hvordan det ble funnet:** av den ukrainske morsmålsbrukeren i den eksterne vurderingen i FR-28 (19.10). Hun rettet overskriften til *персоніфікація* og merket det som et uvanlig ordvalg, ikke en feil. At det var to ulike valg, kom fram da rettelsene hennes ble sammenlignet med de lagrede oversettelsene.
+
+**Rettelse:** ikke rettet ennå. FR-28 er bestått med null anmerkninger, så det er en forbedring, ikke et brudd. Den naturlige rettelsen er å sende oversettelsene fra tidligere kall med som en ordliste i senere kall for samme tekst og språk.
+
+**Mønsteret:** to riktige svar som til sammen er misvisende. Hvert kall består enhver kontroll av sitt eget utdata; inkonsistensen finnes bare på tvers. Ingen maskinell sjekk i prosjektet ser på tvers av kall — det gjorde en leser.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 21 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 22 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |

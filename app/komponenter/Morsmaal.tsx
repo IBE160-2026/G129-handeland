@@ -70,7 +70,10 @@ export function MorsmaalVelger({
       <p className="text-sm text-slate-600 dark:text-slate-400">
         Med morsmål valgt får du overskriftene før du leser, forklaringene av fagordene og
         oppsummeringen på begge språk. Norsk står alltid ved siden av. Oversettelsene er laget av en
-        språkmodell, og ingen har kontrollert dem.
+        språkmodell.{" "}
+        {sikre.length > 0
+          ? `${sikre.map((s) => s.navn).join(", ")} er kontrollert av en morsmålsbruker; de andre språkene har ingen kontrollert.`
+          : "Ingen har kontrollert dem."}
       </p>
       {svar.feil && (
         <p role="alert" className="text-sm text-red-800 dark:text-red-300">

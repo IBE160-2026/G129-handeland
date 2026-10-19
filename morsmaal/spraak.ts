@@ -48,9 +48,13 @@ export const SPRAAK: readonly Spraak[] = [
 
 /**
  * Språk som har bestått FR-28 (begrepsanker ≥ 0,95 OG ekstern vurdering).
- * Tom til målingen er gjort. Se maaling/resultater/ for målingen som ga nivået.
+ * Se maaling/resultater/ for målingene som ga nivået.
+ *
+ * Ukrainsk, 19.10.2026: begrepsanker 0,981 (≥ 0,95), tilbakeoversettelse 0
+ * avvik, og ekstern vurdering av en ukrainsk morsmålsbruker med 0
+ * anmerkninger av 16 (fr28-dommer-uk.json).
  */
-export const KVALITETSSIKRET: ReadonlySet<string> = new Set<string>();
+export const KVALITETSSIKRET: ReadonlySet<string> = new Set<string>(["uk"]);
 
 export function finnSpraak(kode: string | null | undefined): Spraak | null {
   return SPRAAK.find((s) => s.kode === kode) ?? null;

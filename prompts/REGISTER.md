@@ -57,7 +57,7 @@ ikke ville brukt.
 
 | Oppgave | Versjon | Dato | Endring og grunn | Målt | Status |
 |---|---|---|---|---|---|
-| oversettelse | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. Bunt av korte elementer med id; norsk Faguttrykk i parentes i uendret form (FR-25); nekting, tall og navn beholdes (FR-28). Samme prompt brukes til tilbakeoversettelse. | Umålt. FR-28 måles på fire tekster fra FR-8-gullsettet for ukrainsk | **Gjeldende** |
+| oversettelse | v1 | 2026-10-16 | Første versjon, claude-haiku-5-5. Bunt av korte elementer med id; norsk Faguttrykk i parentes i uendret form (FR-25); nekting, tall og navn beholdes (FR-28). Samme prompt brukes til tilbakeoversettelse. | **FR-28 bestått for ukrainsk (19.10):** begrepsanker 0,981 (≥ 0,95), tilbakeoversettelse 0 avvik, ekstern vurdering 0 anmerkninger av 16. Morsmålsbrukeren endret tre steder (to ordvalg, én formulering), ingen feil. Svakhet funnet: samme fagord kan oversettes ulikt i ulike kall (kodefunn 22) | **Gjeldende** |
 | oppsummering | v1 | 2026-10-16 | Første versjon. Høyst fem setninger på norsk, bare det teksten sier, hver med kildeavsnitt (FR-26). Lages på norsk og oversettes etterpå, så begge språk bygger på samme setninger. | Umålt. Vurderes av morsmålsbrukeren i FR-28 | **Gjeldende** |
 | utpeking | v1 | 2026-10-16 | Første versjon. Språklige bilder og akademisk allmennspråk, ordrett, utenom Faguttrykkene, høyst åtte per 1 000 ord per kategori (FR-27). | Umålt. Ingen terskel i PRD utover formkravene, som koden håndhever | **Gjeldende** |
 
