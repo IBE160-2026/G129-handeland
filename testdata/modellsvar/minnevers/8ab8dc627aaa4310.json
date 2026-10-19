@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T09:35:05.279Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "En metafor tar et ord fra et felt,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og bruker det om noe annet helt.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Ikke som i simile, ingen lik,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "to betydningsområder blir ett, slik.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

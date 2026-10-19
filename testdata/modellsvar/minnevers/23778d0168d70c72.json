@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T09:33:53.221Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Simile har et «som» eller «lik»,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "metafor sier «er», og det er slik.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Simile lar to betydningsområder stå,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "metafor skaper bånd, så ordet kan gå.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

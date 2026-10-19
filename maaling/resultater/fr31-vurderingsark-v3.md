@@ -29,9 +29,9 @@ Tekst: `testdata/gullsett/naturfag-em-bolger.txt` · fagord i verset: Radiobølg
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0 ** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:Ingenting å utsette**
 
 ---
 
@@ -54,9 +54,9 @@ Stil: `upbeat pop, catchy chorus, clear female vocals, 110 bpm`
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: Her syns jeg at linje 3 og 4 gjør mye ut av noe som ikke er så sentralt, og i tillegg opplever jeg nok at linje 4 er en misvisende forenkling. Hva menes med "til et fjernt sted"? I teksten virker det som at det at radiobølgene reflekteres mot jorda igjen er langt i seg selv.**
 
 ---
 
@@ -81,9 +81,9 @@ Tekst: `testdata/gullsett/samfunnsfag-prisvekst.txt` · fagord i verset: Prisvek
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:Fint**
 
 ---
 
@@ -116,9 +116,9 @@ Stil: `upbeat pop, catchy chorus, clear female vocals, 110 bpm`
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: Jeg syns at huskeregelen har mye bra, men den er ikke perfekt. Rimet "inflasjon og tone" er svakt, i tillegg til at "to i tone" ikke gir mening. Formuleringen "litt mer å bruke med" er unorsk. Man ville heller sagt "mer å rutte med".**
 
 ---
 
@@ -147,9 +147,9 @@ Tekst: `testdata/gullsett/norsk-metafor.txt` · fagord i verset: metafor, betydn
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:fint. De siste to linjene er litt svake, men gode nok. De krever litt tenkning, noe som kanskje kan være en svakhet med en huskeregel.**
 
 ---
 
@@ -172,9 +172,9 @@ Stil: `upbeat folk-pop, playful storytelling, clear vocals, light acoustic guita
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar:forstår ikke linje 4.**
 
 ---
 
@@ -199,9 +199,9 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt` · fagord i verset: to
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar:Innholdet er helt ok, men ikke det mest sentrale. Her er det veldig svake rimord, som ligner skriftlig, men som låter rart muntlig. fint har lang i, mens hint har kort, domene har lang e (nest siste), mens adressene har korte, her uttales som hær, mens ser uttales med e-lyd.**
 
 ---
 
@@ -228,9 +228,9 @@ Stil: `upbeat pop, catchy chorus, clear vocals, 110 bpm`
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: Ok**
 
 ---
 
@@ -251,9 +251,9 @@ Tekst: `testdata/gullsett/teknologi-operativsystem.txt` · fagord i verset: oper
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0** ____  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:Fint.**
 
 ---
 
@@ -276,10 +276,10 @@ Stil: `upbeat pop, catchy chorus, clear vocals, 110 bpm`
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander:0 ** ____  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: De to første linjene er veldig fine, de to neste er intetsigende**
 
 ---
 
-**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av 10
+**Sum usanne påstander:0** ____ av mål 0  ·  **Fungerer som huskeregel: 6** ____ av 10

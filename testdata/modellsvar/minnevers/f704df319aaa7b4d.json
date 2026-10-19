@@ -1,0 +1,32 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T09:29:47.263Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Mikrobølgens frekvens passer rett,",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "med vannets molekyler, som rister lett.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "Maten blir varm der vann finnes,",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "tallerkenen uten vann blir ikke varm, det minnes.",
+        "kildeavsnitt": 8
+      }
+    ],
+    "faguttrykk": [
+      "frekvens",
+      "mikrobølger"
+    ],
+    "stil": ""
+  }
+}

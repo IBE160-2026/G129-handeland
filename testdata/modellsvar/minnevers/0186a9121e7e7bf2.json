@@ -1,0 +1,35 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T09:30:15.462Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Kort bølgelengde gir høy energi,",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "røntgen og UV, det vet vi.",
+        "kildeavsnitt": 23
+      },
+      {
+        "tekst": "Radiobølger går langt, uforstyrret fram,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "ionosfæren speiler dem, og de når lenger fram.",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "bølgelengde",
+      "energi",
+      "røntgenstråling",
+      "ultrafiolett stråling",
+      "Radiobølger"
+    ],
+    "stil": ""
+  }
+}

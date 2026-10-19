@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T09:30:37.261Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Molekylene svinger fortere,",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "infrarød stråling blir kortere.",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "Mer energi, kortere bølgelengde,",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "mindre energi, lengre bølgelengde.",
+        "kildeavsnitt": 13
+      }
+    ],
+    "faguttrykk": [
+      "Infrarød stråling",
+      "bølgelengde",
+      "energi"
+    ],
+    "stil": ""
+  }
+}

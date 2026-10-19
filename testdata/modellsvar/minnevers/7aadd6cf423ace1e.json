@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T09:39:06.895Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet fordeler",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "skriver, minne og prosessorer deler.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Det lastes først i minnet ved start,",
+        "kildeavsnitt": 4
+      },
+      {
+        "tekst": "og styrer alle programmer, enkelt og smart.",
+        "kildeavsnitt": 4
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "minne",
+      "prosessorer"
+    ],
+    "stil": ""
+  }
+}

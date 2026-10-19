@@ -1,0 +1,34 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T09:31:06.286Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Når prisveksten er høy,",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "kommer en renteøkning ny.",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "Inflasjonen må først ned,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "så settes styringsrenta gradvis ned.",
+        "kildeavsnitt": 10
+      }
+    ],
+    "faguttrykk": [
+      "prisvekst",
+      "renteøkning",
+      "inflasjon",
+      "styringsrenta"
+    ],
+    "stil": ""
+  }
+}

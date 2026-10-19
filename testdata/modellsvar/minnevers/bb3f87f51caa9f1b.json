@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T09:31:48.484Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Prisveksten er høy i år,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "da stiger styringsrenta, det går.",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "Dyr energi holder prisene oppe,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og inflasjonen er seig å stoppe.",
+        "kildeavsnitt": 5
+      }
+    ],
+    "faguttrykk": [
+      "Prisvekst",
+      "styringsrenta",
+      "inflasjon"
+    ],
+    "stil": ""
+  }
+}

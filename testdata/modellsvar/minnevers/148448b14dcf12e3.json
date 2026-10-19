@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T09:39:57.772Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet deler ut tid,",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "så ingen to programmer havner i strid.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Et program ber om å skrive til en fil,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og driverprogrammet tar maskinvaren, i stil.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "driverprogrammet",
+      "maskinvare"
+    ],
+    "stil": ""
+  }
+}

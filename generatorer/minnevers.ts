@@ -146,11 +146,18 @@ export async function lagMinnevers({
   begreper,
   form,
   overstyrVersjon,
+  variant = 0,
 }: {
   avsnitt: Avsnitt[];
   begreper: { uttrykk: string; forklaring: string }[];
   form: Versform;
   overstyrVersjon?: string;
+  /**
+   * Flere vers fra samme tekst i måleharnessen (FR-31). Gir hvert sitt
+   * lagringsnummer, så de lagrede svarene ikke overskriver hverandre. Appen
+   * bruker den ikke.
+   */
+  variant?: number;
 }): Promise<Minneversresultat> {
   if (begreper.length < MIN_FAGUTTRYKK) {
     throw new GeneratorFeil(
@@ -177,7 +184,7 @@ export async function lagMinnevers({
       // Rim krever mer tenking enn oppramsing: med 4000 gikk sju av ti v2-kall
       // tom for tokens før svaret var ferdig (17.10).
       maksTokens: 16000,
-      kjoering: k === 1 ? undefined : k,
+      kjoering: variant > 0 ? variant * 10 + k : k === 1 ? undefined : k,
     });
     sisteBrudd = kontrollerVers(r.data, form, begrepssett, avsnitt);
     if (sisteBrudd.length === 0) {

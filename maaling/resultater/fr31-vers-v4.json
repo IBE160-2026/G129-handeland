@@ -1,0 +1,246 @@
+{
+  "krav": "FR-31",
+  "vers": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Kort bølgelengde gir høy energi,",
+        "røntgen og UV, det vet vi.",
+        "Radiobølger går langt, uforstyrret fram,",
+        "ionosfæren speiler dem, og de når lenger fram."
+      ],
+      "kildeavsnitt": [
+        13,
+        23,
+        5,
+        5
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "bølgelengde",
+        "energi"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Molekylene svinger fortere,",
+        "infrarød stråling blir kortere.",
+        "Mer energi, kortere bølgelengde,",
+        "mindre energi, lengre bølgelengde."
+      ],
+      "kildeavsnitt": [
+        13,
+        13,
+        13,
+        13
+      ],
+      "faguttrykk": [
+        "bølgelengde",
+        "Infrarød stråling",
+        "energi"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Når prisveksten er høy,",
+        "kommer en renteøkning ny.",
+        "Inflasjonen må først ned,",
+        "så settes styringsrenta gradvis ned."
+      ],
+      "kildeavsnitt": [
+        9,
+        9,
+        6,
+        10
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "renteøkning",
+        "styringsrenta",
+        "inflasjon"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Prisveksten er høy i år,",
+        "da stiger styringsrenta, det går.",
+        "Dyr energi holder prisene oppe,",
+        "og inflasjonen er seig å stoppe."
+      ],
+      "kildeavsnitt": [
+        6,
+        9,
+        3,
+        5
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "styringsrenta",
+        "inflasjon"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "Simile har et «som» eller «lik»,",
+        "metafor sier «er», og det er slik.",
+        "Simile lar to betydningsområder stå,",
+        "metafor skaper bånd, så ordet kan gå."
+      ],
+      "kildeavsnitt": [
+        6,
+        6,
+        6,
+        3
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "En metafor tar et ord fra et felt,",
+        "og bruker det om noe annet helt.",
+        "Ikke som i simile, ingen lik,",
+        "to betydningsområder blir ett, slik."
+      ],
+      "kildeavsnitt": [
+        3,
+        2,
+        6,
+        3
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Les adressen bakfra, fra enden og ned:",
+        "toppdomene, domene, under-domene med.",
+        "Punktet er roten, DNS-rotserverne står først,",
+        "under-domenet kommer sist, som det siste ledd."
+      ],
+      "kildeavsnitt": [
+        5,
+        8,
+        5,
+        8
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Start bakerst: punktet peker opp,",
+        "til DNS-rotserverne på topp.",
+        "Så kommer .no, toppdomenet,",
+        "så .ndla, og om, under-domenet."
+      ],
+      "kildeavsnitt": [
+        5,
+        5,
+        6,
+        8
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet fordeler",
+        "skriver, minne og prosessorer deler.",
+        "Det lastes først i minnet ved start,",
+        "og styrer alle programmer, enkelt og smart."
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        4,
+        4
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "prosessorer"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet deler ut tid,",
+        "så ingen to programmer havner i strid.",
+        "Et program ber om å skrive til en fil,",
+        "og driverprogrammet tar maskinvaren, i stil."
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        3,
+        3
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "driverprogrammet",
+        "maskinvare"
+      ],
+      "stil": "",
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

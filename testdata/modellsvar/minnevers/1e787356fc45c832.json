@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T09:37:28.965Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Systemet deler ressursene med",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "hvert program får minne på sitt sted.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Driveren kjenner maskinvare,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og programmet kjenner programvare.",
+        "kildeavsnitt": 10
+      }
+    ],
+    "faguttrykk": [
+      "minne",
+      "maskinvare",
+      "programvaren"
+    ],
+    "stil": ""
+  }
+}

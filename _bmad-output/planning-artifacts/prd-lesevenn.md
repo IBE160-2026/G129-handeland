@@ -629,6 +629,7 @@ Eleven kan få et Minnevers for Faguttrykkene i en Tekst, eller en ferdig Suno-p
 - Verset er på fire til åtte linjer og bruker minst tre Faguttrykk fra Begrepssettet.
 - Suno-prompten er ferdig til å limes inn i et eksternt verktøy og krever ingen redigering. Lesevenn genererer ikke lyd og kaller ikke Suno.
 - Eleven ser tydelig hvilket av de to hun får, og kan be om det andre.
+- **Suno-prompten er satt på pause** (bestemt 19. oktober 2026, etter vurderingen av minnevers v3). Fire linjer er ikke en sang, og en sangtekst med vers og refreng ville gitt flere påstander å faktasjekke i FR-31. Tiden brukes heller på at versene blir gode: ett tema i dybden framfor mange i bredden. Generatoren kan fortsatt lage formen, men appen tilbyr den ikke. Kommer den tilbake, er det som en hel sangtekst der refrenget er huskeregelen.
 
 #### FR-31: Faktasjekk av Minnevers
 

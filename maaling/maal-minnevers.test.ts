@@ -23,7 +23,7 @@ const modusFraKommandolinjen = process.env.LESEVENN_TESTMODUS;
 config({ path: ".env.local" });
 process.env.LESEVENN_TESTMODUS = modusFraKommandolinjen ?? "les";
 
-import { lagMinnevers, type Minneversresultat, type Versform } from "../generatorer/minnevers";
+import { lagMinnevers, type Minneversresultat } from "../generatorer/minnevers";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 
 const TEKSTER = [
@@ -33,18 +33,19 @@ const TEKSTER = [
   "teknologi-domeneoppbygning",
   "teknologi-operativsystem",
 ];
-const FORMER: Versform[] = ["vers", "suno"];
+// Suno er satt på pause (19.10): to vers per tekst i stedet for vers og Suno.
+const VARIANTER = [0, 1];
 const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
 // En kandidatversjon måles før den forfremmes (AD-14), som i FR-8-harnessen.
 const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
 
-const tilfeller = TEKSTER.flatMap((t) => FORMER.map((f) => [t, f] as const));
+const tilfeller = TEKSTER.flatMap((t) => VARIANTER.map((v) => [t, v] as const));
 
 describe("FR-31 — ti vers til vurdering", () => {
-  const vers: { tekst: string; tittel: string; r: Minneversresultat; avsnitt: Map<number, string> }[] = [];
+  const vers: { tekst: string; variant: number; tittel: string; r: Minneversresultat; avsnitt: Map<number, string> }[] = [];
 
-  test.each(tilfeller)("%s (%s)", { timeout: 120000 }, async (navn, form) => {
+  test.each(tilfeller)("%s (variant %s)", { timeout: 120000 }, async (navn, variant) => {
     const raa = await readFile(path.join(MAPPE, `${navn}.txt`), "utf8");
     const gull = JSON.parse(await readFile(path.join(MAPPE, `${navn}.runde1.gullsett.json`), "utf8")) as {
       tittel: string;
@@ -55,19 +56,20 @@ describe("FR-31 — ti vers til vurdering", () => {
     const r = await lagMinnevers({
       avsnitt: delIAvsnitt(raa),
       begreper: gull.faguttrykk.map((uttrykk) => ({ uttrykk: uttrykk.trim(), forklaring: "" })),
-      form,
+      form: "vers",
+      variant,
       overstyrVersjon: PROMPTVERSJON,
     }).catch((e: Error) => {
-      console.log(`\n= ${navn} (${form}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
+      console.log(`\n= ${navn} (variant ${variant}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
       throw e;
     });
-    vers.push({ tekst: navn, tittel: gull.tittel, r, avsnitt: new Map(delIAvsnitt(raa).map((a) => [a.nummer, a.innhold])) });
-    console.log(`\n= ${navn} (${form}): ${r.linjer.length} linjer, fagord: ${r.faguttrykk.join(", ")}`);
+    vers.push({ tekst: navn, variant, tittel: gull.tittel, r, avsnitt: new Map(delIAvsnitt(raa).map((a) => [a.nummer, a.innhold])) });
+    console.log(`\n= ${navn} (variant ${variant}): ${r.linjer.length} linjer, fagord: ${r.faguttrykk.join(", ")}`);
   });
 
   test("vurderingsarket", async () => {
     expect(vers).toHaveLength(10);
-    vers.sort((a, b) => tilfeller.findIndex(([t, f]) => t === a.tekst && f === a.r.form) - tilfeller.findIndex(([t, f]) => t === b.tekst && f === b.r.form));
+    vers.sort((a, b) => tilfeller.findIndex(([t, v]) => t === a.tekst && v === a.variant) - tilfeller.findIndex(([t, v]) => t === b.tekst && v === b.variant));
     const versjon = vers[0].r.promptversjon;
     const deler = [
       `# Vurderingsark — minnevers (FR-31), prompt ${versjon}`,
@@ -85,7 +87,7 @@ describe("FR-31 — ti vers til vurdering", () => {
       deler.push(
         "---",
         "",
-        `## ${i + 1}. ${v.tittel} — ${v.r.form === "suno" ? "Suno-prompt" : "vers"}`,
+        `## ${i + 1}. ${v.tittel} — vers ${v.variant + 1}`,
         "",
         `Tekst: \`testdata/gullsett/${v.tekst}.txt\` · fagord i verset: ${v.r.faguttrykk.join(", ")}`,
         "",

@@ -1,0 +1,40 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T09:32:47.840Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metaforen henter mening fra ett felt,",
+        "kildeavsnitt": 17
+      },
+      {
+        "tekst": "og gir den videre til et annet, helt.",
+        "kildeavsnitt": 17
+      },
+      {
+        "tekst": "Livet kalles en reise, med start,",
+        "kildeavsnitt": 18
+      },
+      {
+        "tekst": "et mål og mye underveis i tidens fart.",
+        "kildeavsnitt": 18
+      },
+      {
+        "tekst": "To betydningsområder, ett bindeledd,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og metaforen binder dem med.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

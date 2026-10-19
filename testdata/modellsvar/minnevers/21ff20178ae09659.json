@@ -1,0 +1,31 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T09:34:42.166Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Livet kalles en reise, og tiden går,",
+        "kildeavsnitt": 18
+      },
+      {
+        "tekst": "fra start til mål, med mye over år.",
+        "kildeavsnitt": 18
+      },
+      {
+        "tekst": "Metaforen låner en fast struktur",
+        "kildeavsnitt": 18
+      },
+      {
+        "tekst": "fra reisen: start, mål og det som skjer, en fast natur.",
+        "kildeavsnitt": 18
+      }
+    ],
+    "faguttrykk": [
+      "metafor"
+    ],
+    "stil": ""
+  }
+}
