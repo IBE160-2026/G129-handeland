@@ -7,7 +7,7 @@ updated: 2026-10-02
 
 # KI-logg
 
-Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kravet i PRD §4.11, FR-38. Skilles fra Promptregisteret, som gjelder appens egne kjøretidsprompter.
+Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kravet i PRD §4.11, FR-38. Skilles fra Promptregisteret, som gjelder appens egne kjøretidsprompter. Promptene selv, ordrett og med tidspunkt, står i [`promptlogg.md`](promptlogg.md); denne loggen er vurderingen av dem.
 
 **Hver oppføring skal ha:** hva jeg ba om, hvilket verktøy og hvilken modell, hva som kom tilbake, og hva jeg gjorde med det — godtatt, endret eller forkastet, med begrunnelse.
 
