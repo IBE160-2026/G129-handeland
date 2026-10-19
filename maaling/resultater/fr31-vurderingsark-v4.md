@@ -29,9 +29,9 @@ Tekst: `testdata/gullsett/naturfag-em-bolger.txt` · fagord i verset: Radiobølg
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: Ingen funn. L2 «det vet vi» er rimfyll; L1 viser til avsnitt 13 (IR), men regelen står i parentesen der.**
 
 ---
 
@@ -50,9 +50,9 @@ Tekst: `testdata/gullsett/naturfag-em-bolger.txt` · fagord i verset: bølgeleng
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: Huskeregel: L3–4 rimer på samme ord og gjentar samme regel snudd — pugging. L2 «stråling blir kortere» skulle vært bølgelengden (misvisende). Temperatur, som er årsaken, mangler.**
 
 ---
 
@@ -75,9 +75,9 @@ Tekst: `testdata/gullsett/samfunnsfag-prisvekst.txt` · fagord i verset: Prisvek
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: Huskeregel: L1–2 halvrim, L3–4 rimer på samme ord (andre gang). L1–2 gjør prognosen («ventes») til en sikker regel (forbehold borte). L3 viser til avsnitt 6, men bygger på avsnitt 10. Innholdet er en nyttig oppsummering.**
 
 ---
 
@@ -102,9 +102,9 @@ Tekst: `testdata/gullsett/samfunnsfag-prisvekst.txt` · fagord i verset: Prisvek
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: L1 viser til avsnitt 6, men «høy» står i avsnitt 3/5/9 (henvisning). L2 mister forbeholdet («venter» blir «stiger»). L3 utelater lønnsvekst, som er halve årsaken (misvisende).**
 
 ---
 
@@ -125,9 +125,9 @@ Tekst: `testdata/gullsett/norsk-metafor.txt` · fagord i verset: metafor, betydn
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: L2 generaliserer «er» fra ett eksempel; avsnitt 2 har metaforer uten «er» (misvisende). L3 betydningsområder om simile er utenfor teksten. L4 «så ordet kan gå» er forvirrende fyll.**
 
 ---
 
@@ -150,9 +150,9 @@ Tekst: `testdata/gullsett/norsk-metafor.txt` · fagord i verset: metafor, betydn
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: L1 dropper «vanligvis» (forbehold borte). L3 tungt formulert. L4 «blir ett»: teksten sier forbindelse mellom to — bildet er misvisende, nettopp fordi teksten bruker liknende språk. L4 forutsetter at man allerede har forstått det.**
 
 ---
 
@@ -173,9 +173,9 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt` · fagord i verset: to
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: L1 «bakfra … og ned» blander retninger (forvirrende). L2 viser til avsnitt 8, som ikke sier noe om rekkefølgen (henvisning). L3 «punktet er roten, rotserverne står først»: teksten sier punktumet indikerer at innholdet ligger under rotserverne (misvisende). L4 gjentar seg selv; rimet først/ledd bærer ikke.**
 
 ---
 
@@ -198,9 +198,9 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt` · fagord i verset: to
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** ☐ ja X nei
 
-**Kommentar:**
+**Kommentar: L1 «peker opp» er et bilde teksten ikke har (forvirrende). Oppramsing av ett eksempel (om.ndla.no) uten prinsippet. L3–4 rimer på samme ord (tredje gang). L4 tvetydig om hva som er under-domenet.**
 
 ---
 
@@ -221,9 +221,9 @@ Tekst: `testdata/gullsett/teknologi-operativsystem.txt` · fagord i verset: oper
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: Beste verset. L2 omvendt ordstilling: «prosessorer deler» leses som at prosessorene deler; mangler «til programmene». L4 «enkelt og smart» er fyll.**
 
 ---
 
@@ -244,10 +244,10 @@ Tekst: `testdata/gullsett/teknologi-operativsystem.txt` · fagord i verset: oper
 
 </details>
 
-**Usanne påstander:** ____  **Huskeregel:** ☐ ja ☐ nei
+**Usanne påstander: 0**  **Huskeregel:** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar: L1 «deler ut tid»: teksten sier ressurser, ikke tid (utenfor teksten — modellens egen fagkunnskap). L3–4 operativsystemet er tatt ut av kjeden; teksten sier program → OS → driver i samarbeid (misvisende). L4 «i stil» er fyll.**
 
 ---
 
-**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av 10
+**Sum usanne påstander:** 0 av mål 0  ·  **Fungerer som huskeregel:** 5 av 10

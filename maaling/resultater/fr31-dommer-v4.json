@@ -1,0 +1,97 @@
+{
+  "krav": "FR-31",
+  "promptversjon": "v4",
+  "vurdert": "2026-10-19",
+  "vurdertAv": "utvikleren",
+  "usannePaastander": {
+    "sum": 0,
+    "maal": 0,
+    "bestaatt": true
+  },
+  "huskeregel": {
+    "ja": 5,
+    "av": 10
+  },
+  "vers": [
+    {
+      "nummer": 1,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": true,
+      "kommentar": "Ingen funn. L2 «det vet vi» er rimfyll; L1 viser til avsnitt 13 (IR), men regelen står i parentesen der."
+    },
+    {
+      "nummer": 2,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": false,
+      "kommentar": "Huskeregel: L3–4 rimer på samme ord og gjentar samme regel snudd — pugging. L2 «stråling blir kortere» skulle vært bølgelengden (misvisende). Temperatur, som er årsaken, mangler."
+    },
+    {
+      "nummer": 3,
+      "tekst": "Høy prisvekst gir ny renteøkning",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": false,
+      "kommentar": "Huskeregel: L1–2 halvrim, L3–4 rimer på samme ord (andre gang). L1–2 gjør prognosen («ventes») til en sikker regel (forbehold borte). L3 viser til avsnitt 6, men bygger på avsnitt 10. Innholdet er en nyttig oppsummering."
+    },
+    {
+      "nummer": 4,
+      "tekst": "Høy prisvekst gir ny renteøkning",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": true,
+      "kommentar": "L1 viser til avsnitt 6, men «høy» står i avsnitt 3/5/9 (henvisning). L2 mister forbeholdet («venter» blir «stiger»). L3 utelater lønnsvekst, som er halve årsaken (misvisende)."
+    },
+    {
+      "nummer": 5,
+      "tekst": "metafor",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": true,
+      "kommentar": "L2 generaliserer «er» fra ett eksempel; avsnitt 2 har metaforer uten «er» (misvisende). L3 betydningsområder om simile er utenfor teksten. L4 «så ordet kan gå» er forvirrende fyll."
+    },
+    {
+      "nummer": 6,
+      "tekst": "metafor",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": false,
+      "kommentar": "L1 dropper «vanligvis» (forbehold borte). L3 tungt formulert. L4 «blir ett»: teksten sier forbindelse mellom to — bildet er misvisende, nettopp fordi teksten bruker liknende språk. L4 forutsetter at man allerede har forstått det."
+    },
+    {
+      "nummer": 7,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": false,
+      "kommentar": "L1 «bakfra … og ned» blander retninger (forvirrende). L2 viser til avsnitt 8, som ikke sier noe om rekkefølgen (henvisning). L3 «punktet er roten, rotserverne står først»: teksten sier punktumet indikerer at innholdet ligger under rotserverne (misvisende). L4 gjentar seg selv; rimet først/ledd bærer ikke."
+    },
+    {
+      "nummer": 8,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": false,
+      "kommentar": "L1 «peker opp» er et bilde teksten ikke har (forvirrende). Oppramsing av ett eksempel (om.ndla.no) uten prinsippet. L3–4 rimer på samme ord (tredje gang). L4 tvetydig om hva som er under-domenet."
+    },
+    {
+      "nummer": 9,
+      "tekst": "Operativsystem",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": true,
+      "kommentar": "Beste verset. L2 omvendt ordstilling: «prosessorer deler» leses som at prosessorene deler; mangler «til programmene». L4 «enkelt og smart» er fyll."
+    },
+    {
+      "nummer": 10,
+      "tekst": "Operativsystem",
+      "form": "vers",
+      "usannePaastander": 0,
+      "huskeregel": true,
+      "kommentar": "L1 «deler ut tid»: teksten sier ressurser, ikke tid (utenfor teksten — modellens egen fagkunnskap). L3–4 operativsystemet er tatt ut av kjeden; teksten sier program → OS → driver i samarbeid (misvisende). L4 «i stil» er fyll."
+    }
+  ]
+}
