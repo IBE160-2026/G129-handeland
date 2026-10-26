@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**314 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**316 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1967,7 +1967,15 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > 34 R, 35 R, 36 R, 37 R, 38 R, 39 R
 
-<details><summary>Commits i økta (13)</summary>
+**14:53**
+
+> Jeg stemmer for å rette v4
+
+**15:03**
+
+> Jeg tror jeg misforstod hva v4 var. Var dette det vi snakket om å hente forklaringer utenfra?
+
+<details><summary>Commits i økta (14)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
@@ -1982,5 +1990,6 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `3ee7063` Annotering §6: runde 2, samsvar og lagrede tall krysset av
 - `d362056` Vurderingsark for forklaringene til fagordene (FR-8)
 - `3f6cad7` FR-8 forklaringene vurdert: 0 gale av 39 (v3), kodefunn 23
+- `c2442cc` Faguttrykk v4 målt, og overskrift som kildeavsnitt forkastes (kodefunn 23)
 
 </details>
