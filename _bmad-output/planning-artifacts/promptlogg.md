@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**300 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**301 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1898,7 +1898,11 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > nå?
 
-<details><summary>Commits i økta (8)</summary>
+**13:03**
+
+> Jeg slettet den med vilje, og ønsker å beholde det slik.
+
+<details><summary>Commits i økta (9)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
@@ -1908,5 +1912,6 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `4d78540` KI-logg: skjelett til sju oppføringer 14.–26.10
 - `1d5c718` KI-logg: oppføringer 14.–19.10 skrevet, statustabellen oppdatert til 16
 - `ccef2de` Promptlogg: oppdatert
+- `1a015fe` KI-logg: septemberoppføringene med egne ord, fristoppføringen tatt ut
 
 </details>

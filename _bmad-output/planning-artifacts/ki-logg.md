@@ -33,7 +33,7 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** hele PRD-en var skrevet for ungdomstrinnet — definisjonen av Faguttrykk, nivået på forklaringene, testsettets tekster, tonekontrollen («ville truffet en fjortenåring dårlig»), og begge brukerreisene, der hovedpersonen gikk i 10. klasse.
 
-**Hva jeg gjorde:** Jeg innså at KI anntok at denne appen skulle brukes av ungdomsskole-elever, trolig pga. referanse til PISA, noe som satte et feil premiss for hele prosjektet. Målgruppen er videregående, Vg1–Vg3, altså 15–19 år, og jeg ba KI-om å endre dokumenter med hensyn til dette. 
+**Hva jeg gjorde:** Jeg innså at KI antok at denne appen skulle brukes av ungdomsskole-elever, trolig pga. referanse til PISA, noe som satte et feil premiss for hele prosjektet. Målgruppen er videregående, Vg1–Vg3, altså 15–19 år, og jeg ba KI om å endre dokumenter med hensyn til dette. 
 
 **Begrunnelse og hva det avslørte:** briefen sa aldri nivået direkte — den bygger på PISA-tall for 15-åringer på 10. trinn, og modellen leste det som at målgruppen var ungdomsskolen. Det er en ubegrunnet antakelse som ikke ble merket som antakelse noe sted, og som deretter forplantet seg til elleve steder i dokumentet, inkludert definisjonen som hele presisjonsmålingen i FR-8 hviler på. Dette er den mest lærerike feilen fra økten: utdataet var internt konsistent og virket gjennomarbeidet, og det er nettopp derfor feilen var vanskelig å se. Et dokument kan være sammenhengende og likevel bygget på noe som ikke stemmer.
 
@@ -47,7 +47,7 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva jeg gjorde:** Jeg presiserte at både studiespesialiserende og yrkesfag er en del av målgruppa.
 
-**Begrunnelse:** Jeg tenkte at det er godt mulig at disse to regningene trolig har litt forskjellige tekster, hvor studiespess trolig har mer teoretiske, vil det kanskje være mye mer "spisset" fagterminologi på yrkesfag. 
+**Begrunnelse:** Jeg tenkte at det er godt mulig at disse to retningene trolig har litt forskjellige tekster, hvor studiespess trolig har mer teoretiske, vil det kanskje være mye mer "spisset" fagterminologi på yrkesfag. 
 
 **Konsekvens:** testsettet ble omstrukturert til en full krysning, tre fellesfag × to programområder = seks tekster, én per celle. Antallet seks er nå begrunnet i strukturen framfor å være et anslag. Definisjonen av Faguttrykk ble utvidet til å dekke yrkesfagterminologi. Viktigst: det ga FR-42 en tredje skjevhetsakse — akademisk fagspråk er bedre representert i modellens treningsdata enn yrkesfaglig terminologi, så verktøyet kan virke dårligst der lesestøttebehovet er størst.
 
