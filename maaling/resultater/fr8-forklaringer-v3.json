@@ -1,0 +1,232 @@
+{
+  "krav": "FR-8, forklaringenes riktighet",
+  "promptversjon": "v3",
+  "modell": "claude-haiku-5-5",
+  "tekster": [
+    {
+      "tekst": "naturfag-em-bolger.txt",
+      "begreper": [
+        {
+          "uttrykk": "elektromagnetisk stråling",
+          "forklaring": "Stråling som består av svingende elektriske og magnetiske felt som brer seg som bølger, og som ikke trenger noe stoff for å bevege seg. Lys, radiobølger og røntgenstråling er alle eksempler.",
+          "kildeavsnitt": 23
+        },
+        {
+          "uttrykk": "bølgelengde",
+          "forklaring": "Avstanden mellom to bølgetopper i en bølge. Kort bølgelengde gir høy energi og lang bølgelengde gir lav energi.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "ionosfæren",
+          "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, omtrent 80 til 400 km over bakken. Det kan reflektere radiobølger tilbake mot jordoverflaten.",
+          "kildeavsnitt": 5
+        },
+        {
+          "uttrykk": "frekvens",
+          "forklaring": "Hvor mange svingninger en bølge gjør per sekund. Høy frekvens gir høy energi, og lav frekvens gir lav energi.",
+          "kildeavsnitt": 7
+        },
+        {
+          "uttrykk": "IR-stråling",
+          "forklaring": "Infrarød stråling, elektromagnetisk stråling med litt mindre energi enn synlig lys. Den kjennes som varme på huden.",
+          "kildeavsnitt": 10
+        },
+        {
+          "uttrykk": "ultrafiolett stråling",
+          "forklaring": "Elektromagnetisk stråling utenfor den fiolette enden av det synlige spekteret, med bølgelengder mellom 10 og 400 nm. Den kan gi solbrenthet.",
+          "kildeavsnitt": 19
+        },
+        {
+          "uttrykk": "røntgenstråling",
+          "forklaring": "Elektromagnetisk stråling med mye energi og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som lys ikke kommer gjennom.",
+          "kildeavsnitt": 23
+        }
+      ]
+    },
+    {
+      "tekst": "norsk-metafor.txt",
+      "begreper": [
+        {
+          "uttrykk": "metafor",
+          "forklaring": "Et ord eller uttrykk som brukes i overført eller billedlig betydning, slik at det står for noe annet enn det bokstavelig betyr. Eksempel: «han er en løve» om en modig person.",
+          "kildeavsnitt": 2
+        },
+        {
+          "uttrykk": "simile",
+          "forklaring": "En sammenligning der noe settes opp mot noe annet ved hjelp av ord som «som» eller «lik». Eksempelet «gjorde noe som en løve» er en simile, fordi sammenligningen sies eksplisitt.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "domenene",
+          "forklaring": "De to forestillingsområdene en metafor knytter sammen. Det ene er området metaforen henter mening fra, og det andre er området den overfører mening til.",
+          "kildeavsnitt": 17
+        },
+        {
+          "uttrykk": "kognitive metaforer",
+          "forklaring": "Metaforer som former måten vi tenker på, og som kommer til uttrykk gjennom språklige metaforer. Språket er bare synlig del av dem.",
+          "kildeavsnitt": 4
+        },
+        {
+          "uttrykk": "personifikasjon",
+          "forklaring": "Å gi døde ting eller abstrakte begreper menneskelige egenskaper, slik at de fremstår som levende. I diktet fra nasjonalsangen blir for eksempel frihet beskrevet som «blåøyd».",
+          "kildeavsnitt": 12
+        }
+      ]
+    },
+    {
+      "tekst": "norsk-sprakligebilder.txt",
+      "begreper": [
+        {
+          "uttrykk": "metafor",
+          "forklaring": "Et språklig bilde der noe beskrives ved å gi det egenskaper fra noe annet, uten at det sies at det er likt. Eksempelet er «en uslepen diamant» om et fotballtalent.",
+          "kildeavsnitt": 4
+        },
+        {
+          "uttrykk": "allegori",
+          "forklaring": "En tekst som kan forstås konkret, men også som et bilde på noe annet og større, ofte med en moral.",
+          "kildeavsnitt": 35
+        },
+        {
+          "uttrykk": "allusjon",
+          "forklaring": "Et språklig virkemiddel der man låner fra eller refererer til en kjent tekst, et kunstverk, en hendelse eller en person, slik at teksten får et ekstra lag med mening.",
+          "kildeavsnitt": 52
+        },
+        {
+          "uttrykk": "personifikasjon",
+          "forklaring": "Et språklig bilde der noe livløst får menneskelige egenskaper, for eksempel «Stillheten truet meg».",
+          "kildeavsnitt": 13
+        },
+        {
+          "uttrykk": "besjeling",
+          "forklaring": "Et språklig bilde der noe livløst får liv eller handler som om det er levende, for eksempel «Kaffetrakteren sukket tungt».",
+          "kildeavsnitt": 9
+        },
+        {
+          "uttrykk": "konnotasjon",
+          "forklaring": "En felles assosiasjon som knyttes til et ord, i tillegg til den vanlige betydningen, og som kan skape stemning i et dikt.",
+          "kildeavsnitt": 24
+        },
+        {
+          "uttrykk": "fabel",
+          "forklaring": "En kort fortelling med dyr i hovedrollene som slutter med en moral, og som ofte kan leses allegorisk.",
+          "kildeavsnitt": 33
+        }
+      ]
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst.txt",
+      "begreper": [
+        {
+          "uttrykk": "styringsrenta",
+          "forklaring": "Renta som Norges Bank bestemmer for bankene. Når den settes opp, blir det dyrere å låne penger, og når den settes ned, blir det billigere.",
+          "kildeavsnitt": 8
+        },
+        {
+          "uttrykk": "boliginvesteringene",
+          "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger.",
+          "kildeavsnitt": 12
+        },
+        {
+          "uttrykk": "inflasjonsmålet",
+          "forklaring": "Det målet sentralbanken har satt for hvor mye prisene skal stige per år, her 2 prosent. Når prisveksten er over målet, sier man at inflasjonen er for høy.",
+          "kildeavsnitt": 5
+        },
+        {
+          "uttrykk": "konsumprisindeksen",
+          "forklaring": "En indeks som måler hvor mye prisene på en fast kurv med varer og tjenester som husholdningene kjøper, har steget. Inflasjonen måles ofte ved hjelp av den.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "fastlandsøkonomien",
+          "forklaring": "Den delen av norsk økonomi som ikke omfatter petroleumsvirksomheten og utenriks sjøfart. Den brukes ofte for å se på utviklingen i resten av økonomien.",
+          "kildeavsnitt": 21
+        },
+        {
+          "uttrykk": "reallønnsvekst",
+          "forklaring": "Veksten i lønningene etter at man har trukket fra prisveksten. Den viser hvor mye kjøpekraften til lønnstakerne øker.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "BNP-veksten",
+          "forklaring": "Hvor mye den samlede verdien av varer og tjenester som produseres i et land øker fra ett år til det neste.",
+          "kildeavsnitt": 26
+        }
+      ]
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning.txt",
+      "begreper": [
+        {
+          "uttrykk": "topp-domenet",
+          "forklaring": "Den siste delen av en domeneadresse, etter det siste punktumet, for eksempel .no. Det sier noe om hvilken type eller hvilket land adressen tilhører.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "under-domene",
+          "forklaring": "Et domene som ligger under et annet domene, for eksempel om i om.ndla.no. Det styres av samme DNS-server som hoveddomenet og brukes ofte til å skille ulike tjenester eller nettsider.",
+          "kildeavsnitt": 8
+        },
+        {
+          "uttrykk": "Merkenavn-toppdomener",
+          "forklaring": "Nye generiske topp-domener som eies og styres av en bedrift, for eksempel .google, og som ofte bare bedriften selv kan bruke.",
+          "kildeavsnitt": 22
+        },
+        {
+          "uttrykk": "DNS-rotserverne",
+          "forklaring": "Det øverste nivået i systemet som oversetter domenenavn til IP-adresser. Punktumet bakerst i adressen viser at oppslaget går til disse serverne.",
+          "kildeavsnitt": 5
+        },
+        {
+          "uttrykk": "Nasjonale topp-domener (ccTLD)",
+          "forklaring": "Topp-domener som er knyttet til et bestemt land, for eksempel .no for Norge. Hvert land styrer sitt eget nasjonale topp-domene.",
+          "kildeavsnitt": 12
+        },
+        {
+          "uttrykk": "Generiske topp-domener (gTLD)",
+          "forklaring": "Topp-domener som ikke er knyttet til et land, for eksempel .com eller .org. De styres av organisasjoner som har fått ansvar for dem.",
+          "kildeavsnitt": 15
+        },
+        {
+          "uttrykk": "Sponsede topp-domener",
+          "forklaring": "Generiske topp-domener som er laget for en bestemt bransje eller interessegruppe, for eksempel .aero for flyindustrien.",
+          "kildeavsnitt": 20
+        }
+      ]
+    },
+    {
+      "tekst": "teknologi-operativsystem.txt",
+      "begreper": [
+        {
+          "uttrykk": "operativsystem",
+          "forklaring": "Den grunnleggende programvaren på en datamaskin. Den fordeler datamaskinens ressurser, som skriver, minne og prosessor, mellom de programmene som kjører.",
+          "kildeavsnitt": 2
+        },
+        {
+          "uttrykk": "systemprogramvare",
+          "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage andre programmer. Operativsystemet er den viktigste typen.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "applikasjonsprogramvare",
+          "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Den andre hovedtypen programvare er systemprogramvare.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "driverprogram",
+          "forklaring": "Et program som er laget spesielt for én enhet, for eksempel en harddisk, og som vet hvordan enheten styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "sanntidsoperativsystemer",
+          "forklaring": "Operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes for eksempel i styringssystemer i biler.",
+          "kildeavsnitt": 13
+        },
+        {
+          "uttrykk": "plattform",
+          "forklaring": "Et felles grunnlag som programmer kan bygges på og kjøres på. Et operativsystem på flere maskintyper gir utviklere én plattform å forholde seg til.",
+          "kildeavsnitt": 11
+        }
+      ]
+    }
+  ]
+}
