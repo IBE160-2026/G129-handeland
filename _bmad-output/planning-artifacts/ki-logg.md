@@ -2,7 +2,7 @@
 title: KI-logg — Lesevenn
 status: løpende
 created: 2026-09-25
-updated: 2026-10-02
+updated: 2026-10-26
 ---
 
 # KI-logg
@@ -215,13 +215,6 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 ---
 
-<!--
-  SKJELETT, satt opp av Claude 26.10. Feltene «Verktøy», «Hva jeg ba om», «Hva som kom tilbake» og «Spor» er fakta
-  hentet fra promptloggen, promptregisteret, kodefunn og git, og kan kontrolleres der. «Hva jeg gjorde» og
-  «Begrunnelse» er tomme med vilje: de skal skrives med mine egne ord. Typen i tittelen er et forslag.
-  Slett denne kommentaren når oppføringene er ferdige.
--->
-
 ## 2026-10-14 — ENDRET: mitt prioriteringsprinsipp inn i prompten for fagord
 
 **Verktøy:** Claude Code (Claude Opus 5.5). Appens uttrekk: claude-haiku-5-5.
@@ -230,15 +223,15 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** påpekningen at prioriteringsprinsippet mitt ikke sto i prompten, altså at modellen og jeg ble målt mot ulike regler. Prompt v3 med prinsippet ble laget og målt over tre kjøringer: presisjon 0,42 → 0,46, gjenkalling 0,36 → 0,38 (ingen sikker forskjell). FR-8 er ikke nådd.
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:**  Jeg la til nye mål for hvilke begrep som skulle velges. 
 
-**Begrunnelse:** 
+**Begrunnelse:** Jeg måtte prøve å finne en måte å systematisere hvilke valg jeg skulle ta dersom jeg fikk for mange begrep i en tekst. Dette hadde ikke blitt sagt mens testen ble utformet, og det måtte da lages en ny versjon, slik at vi gjorde målingene på samme grunnlag. 
 
 **Spor:** [promptlogg 14.10](promptlogg.md) · REGISTER, Faguttrykk v3 · commit `4e881df`, `0920b8f`
 
 ---
 
-## 2026-10-16 — FANGET KI-FEIL: metoden for κ kunne aldri gi et positivt tall
+## 2026-10-16 — KI fanget en feil selv ved iterasjon: metoden for κ kunne aldri gi et positivt tall
 
 **Verktøy:** Claude Code (Claude Opus 5.5).
 
@@ -246,9 +239,9 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** da formelen ble regnet ut før verktøyet ble skrevet, viste det seg at metoden i veiledningen (κ over unionen av ordene fra to runder) alltid gir κ ≤ 0. Veiledningen hadde i tillegg en «begrensning» som pekte feil vei («overvurderer samsvaret noe»). Rettet til positivt samsvar som hovedtall og κ over alle ordformer, med en test som beviser feilen.
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:** Jeg godtok endringen som KI-en pekte på som en feil.
 
-**Begrunnelse:** 
+**Begrunnelse:** Dette var nødvendig for at det skulle være vits å gjennomføre testen. 
 
 **Spor:** [kodefunn 12](kodefunn.md) · annotering.md §5 · commit `86c8b5d`, `ac04678`
 
@@ -262,9 +255,9 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** prompt v2 med krav om at det riktige alternativet skal bety det samme som teksten, og at to spørsmål ikke spør om det samme. Demoquizen ble laget på nytt. Umålt; observasjonen etterpå var flere faktaspørsmål, som følges opp i M1.
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:** Jeg testet en quiz som ble laget etter at en tekst ble lagt inn. Jeg observerte at det var feil i quizen, hvor den hadde blandet begreper, og definer renter som terminbeløp. Dette var kritisk, siden slikt kan bidra til misoppfatninger hos en elev som ikke har oversikten. 
 
-**Begrunnelse:** 
+**Begrunnelse:** Hvis quizen skal kunne brukes, må den tolke teksten riktig. 
 
 **Spor:** [promptlogg 16.10 kl. 10:39](promptlogg.md) · REGISTER, Quiz v2 · commit `d027947`, `81162ec`
 
@@ -278,9 +271,9 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** årsaken til det første funnet var at startspørsmålet egentlig var to spørsmål («… og hvorfor»). Prompt v2: ett spørsmål om én ting, ingen avsnittsnumre i vurderingen, «dekkende» krever poenget men ikke tekstens ordlyd, trøsten står for seg selv. Samme tilfeller på nytt: delvis ble dekkende. Dobbeltspørsmål i 1 av 3 startspørsmål, så koden fikk tre forsøk.
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:** Jeg testet fagsamtale-verktøyet, og kom med tilbakemeldinger som jeg ønsket at KI skulle utbedre på bakgrunn av. Når jeg hadde gjort dette testet jeg ut å la KIen ta seg av all utrulling av denne delen, uten å måtte spørre om ulike godkjennelser. Dette var noe som var interessant å teste ut, da det la mer ansvar på KI, men innenfor et område som jeg allerede hadde formet. 
 
-**Begrunnelse:** 
+**Begrunnelse:** Det er noe som jeg opplever er i tråd med det som blir undervist, og da var det artig å teste ut det. 
 
 **Spor:** [promptlogg 16.10 kl. 15:47](promptlogg.md) · REGISTER, Fagsamtale v2 · commit `9d74c1e`, `61d8ea3`
 
@@ -294,9 +287,9 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** v1 hadde bestått alle maskinelle kontroller (10 av 10), men versene var rimfrie oppsummeringer med linjer på opptil 25 stavelser. Prompt v2 med korte linjer, parrim og rytme, en kodegrense på 14 stavelser, og et nytt punkt på vurderingsarket: «fungerer som huskeregel».
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:** Jeg vurderte det som at minneversene ikke var til så mye hjelp, fordi de var lange og "kjedelige", det var ingenting i dem som hjalp meg å huske ting. 
 
-**Begrunnelse:** 
+**Begrunnelse:** Vi prøvde å gjøre minnevers om til noe som er lettere å huske, og satte derfor regler til lengde og rim.
 
 **Spor:** [promptlogg 17.10 kl. 08:45](promptlogg.md) · REGISTER, Minnevers v2 · commit `e7476ca`
 
@@ -310,33 +303,17 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 **Hva som kom tilbake:** v5 med flere regler (7/10 gjennom kontrollen, rim og fyll verre), Sonnet (1/10, tom for tokens), v6 med eksempel og kodekontroll mot rim på samme ord (9/10, vurderingen avbrutt etter vers 1). Da jeg skrev et eget vers, påpekte Claude at det jeg likte (lange linjer, fyllord med humor), var det jeg hadde trukket ned hos modellen. Fire alternativer ble lagt fram; anbefalingen var å beholde v3 og vurdere elevskrevne vers senere.
 
-**Hva jeg gjorde:** 
+**Hva jeg gjorde:**  Jeg tok initiativ til å lage nye versjoner, og teste med andre modeller. Etter testing valgte jeg å avslutte utbedringen.
 
-**Begrunnelse:** 
+**Begrunnelse:** Jeg så at resultatet ikke var som ønsket på minneversene. De led stadig av å ikke være catchy nok, samtidig som det stadig var noen "halvsannheter" eller for "forenklede" versjoner som slapp gjennom. Dette ble ikke bedre ved videre versjoner, og det ble etter hver for tidsslukende. 
 
 **Spor:** [promptlogg 19.–26.10](promptlogg.md) · REGISTER, Minnevers v4–v6 og avgjørelsen 26.10 · PRD §11 spørsmål 15 · commit `864818e`, `2edf5fd`, `8dccc9e`, `397a387`
 
 ---
 
-## 2026-10-26 — METODE: annoteringsrunde 2 uten at KI påvirket valgene
+## Status mot FR-38, per 26. oktober
 
-**Verktøy:** Claude Code (Claude Opus 5.5), bare som skriver.
-
-**Hva jeg ba om:** «Kan vi gå gjennom annoteringen i dette vinduet, og så bare fører du det inn?»
-
-**Hva som kom tilbake:** teksten ble vist ordrett uten markering og uten forslag, og runde 1-filene ble ikke åpnet før begge tekstene var ført inn. Claude fanget én ordform som ikke sto i teksten («prosessor», bare «prosessorer» står der) — og oppdaget underveis at sin egen første sjekk hadde sagt «ok» feilaktig. Resultat: positivt samsvar 0,62, κ 0,61 (Språklige bilder 0,77, Operativsystem 0,47); tre av tolv avvik er bare bøyning.
-
-**Hva jeg gjorde:** 
-
-**Begrunnelse:** 
-
-**Spor:** [promptlogg 26.10](promptlogg.md) · `maaling/resultater/2026-10-26-annoteringsstoey.md` · commit `548c8cc`
-
----
-
-## Status mot FR-38, per 7. oktober
-
-Ti oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+Seksten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -350,8 +327,14 @@ Ti oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt u
 | 8 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
 | 9 | Innstillinger som ikke lot seg finne | Funn om verktøyet, gjort av en oppgave som ikke lyktes |
 | 10 | PRD-en manglet kravet om kjørbarhet | Utelatelse i utdataet, fanget av emneansvarlig og ikke av seks gjennomganger |
+| 11 | Prioriteringsprinsippet inn i prompten for fagord | Prompt endret, så modell og annotatør måles mot samme regel |
+| 12 | κ-metoden kunne aldri gi et positivt tall | Feil i KI-skrevet metode, fanget av KI i et senere steg |
+| 13 | Feil fasit i quizen (renter som terminbeløp) | Feil i utdata, fanget ved egen testing |
+| 14 | Fagsamtalen etter egen testing | Endret etter testing; endringer og utrulling bevisst overlatt til KI |
+| 15 | «Hva tenker du at et minnevers er?» | Besto alle kontroller, men løste ikke oppgaven; fanget av menneske |
+| 16 | Minnevers v4–v6, og arbeidet stoppet på v3 | Forsøk forkastet, og en avgjørelse om å stoppe |
 
-Minimumskravet på fem er dermed innfridd alt i planleggingsfasen. Det er ikke en grunn til å slutte å føre loggen — poenget er at den skal vise utviklingen gjennom semesteret, og implementasjonsfasen kommer til å gi flere og mer tekniske oppføringer. Særlig ventet: kodegjennomgangen av innlogging og lagring (FR-41), der kravet er minst tre dokumenterte feil eller svakheter i KI-generert kode med hvordan de ble funnet.
+Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–10). Implementasjonsfasen (11–16) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (13, 15), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (16). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 
 **Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 6 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
 
