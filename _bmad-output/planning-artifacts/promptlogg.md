@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**292 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**298 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1865,10 +1865,39 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Jeg syns jo at de fleste av versene er for dårlige til å brukes. Likevel har du et godt poeng med at de tingene som jeg her liker, er ting jeg ikke har likt når en maskin har gjort det. Finnes det noen alternativer?
 
-<details><summary>Commits i økta (3)</summary>
+**11:11**
+
+> Da gjør vi som du sier. 1 nå, og tar en vurdering på 3 sener. Commit og push ved behov
+
+**11:16**
+
+> Okei, jeg går i gang med ki-loggen. Hva er det som må gjøres der?
+
+**11:29**
+
+> OKei, ta de med stjerne og fagsamtale v2 og quiz v2, og lag skjelett til dem.
+> 2. Hvor ligger tabellen?
+
+**11:59**
+
+> Kan du se over nå? Jeg fjernet den siste fra idag, den passa ikke så godt inn syns jeg
+
+**12:13**
+
+> hva mener du med statustabell?
+
+**12:20**
+
+> Jeg tror jeg er ferdig, slik at du kan endre tabellen
+
+<details><summary>Commits i økta (7)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
 - `26626fe` Promptlogg: oppdatert
+- `397a387` Minnevers: v3 blir stående, elevskrevet vers som åpent spørsmål
+- `1c70513` Promptlogg: oppdatert
+- `4d78540` KI-logg: skjelett til sju oppføringer 14.–26.10
+- `1d5c718` KI-logg: oppføringer 14.–19.10 skrevet, statustabellen oppdatert til 16
 
 </details>
