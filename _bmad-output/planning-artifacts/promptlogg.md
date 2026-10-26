@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**277 prompter i 28 økter**, 2026-09-17 til 2026-10-20.
+**288 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1780,8 +1780,63 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Prøv på ny, og se hvor den stopper
 
-<details><summary>Commits i økta (1)</summary>
+**00:10**
+
+> Ja til alt det!
+
+**00:20**
+
+> hva skjer nå?
+
+<details><summary>Commits i økta (2)</summary>
 
 - `2edf5fd` Minnevers v5 forsøkt og forkastet; harnessen kan måle på annen modell
+- `5e54d87` Promptlogg: hver prompt til Claude Code, ordrett, koblet til commits
 
 </details>
+
+---
+
+## 2026-10-21 · økt `cd0690c7` · claude-opus-5-5
+
+**14:17**
+
+> Du, dette var også ganske dårlig. Hjelper det hvis jeg forsøker å skrive noen egne?
+
+**14:20**
+
+> Okei, men da skal jeg kanskje ta gjennomlesning 2 først, slik at vi er enige om hvilke begreper som skal inkluderes?
+
+---
+
+## 2026-10-26 · økt `cd0690c7` · claude-opus-5-5
+
+**09:47**
+
+> [kommando: /compact]
+>
+>              Husk på det du har gjort, og husk på hva som gjenstår
+
+**09:49**
+
+> Kan vi gå gjennom annoteringen i dette vinduet, og så bare fører du det inn?
+
+**09:54**
+
+> Ok, kjør!
+
+**10:02**
+
+> Metafor, allegori, Allusjon, personifikasjon, besjeling, konnotasjon,
+
+**10:08**
+
+> Skal jeg bare sammenligne to tekster?
+
+**10:11**
+
+> 5
+
+**10:17**
+
+> Operativsystem, applikasjonsprogramvare, systemprogramvare, harddisk, driverprogram, prosessor, hovedminne, lagringsenheter, maskinvare,
