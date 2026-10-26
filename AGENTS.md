@@ -26,7 +26,7 @@ Leseforstaaelsesapp for videregaaende. Planleggingsdokumentene ligger i `_bmad-o
 4. **AD-11:** generert utdata valideres mot skjema foer lagring. Ugyldige elementer forkastes, for store sett kappes etter rangering.
 5. **AD-16:** binaerdata lagres aldri. PDF parses i nettleseren, bilder krympes i klienten.
 
-**Innlogging (FR-35):** Better Auth, e-post og passord, registrering bare med invitasjonskode (`LESEVENN_INVITASJONSKODE`). Oppsettet står i `data/auth.ts`; `data/konto.ts` er det eneste stedet en `Tilgang` lages. **Gjenstår:** linje-for-linje-gjennomgangen FR-41 krever, som utvikleren gjør selv.
+**Innlogging (FR-35):** Better Auth, e-post og passord, registrering bare med invitasjonskode (`LESEVENN_INVITASJONSKODE`). Oppsettet står i `data/auth.ts`; `data/konto.ts` er det eneste stedet en `Tilgang` lages. **FR-41:** gjennomgangen er gjort (metoden endret 15.10): to punkter for hånd, mutasjonstest (`npm run sjekk:innlogging`) og tre tester i appen, se `gjennomgang-innlogging.md`.
 
 **Stille feller i oppsettet:**
 

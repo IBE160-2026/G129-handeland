@@ -565,7 +565,7 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 | Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 23 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
-| Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |
+| Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |
 
 **Et mønster til refleksjonsrapporten.** Ingen av de første åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som
