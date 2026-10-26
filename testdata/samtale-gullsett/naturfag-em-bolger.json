@@ -1,0 +1,62 @@
+{
+  "_om": "Gullsettet for Fagsamtalen (FR-21). Fyll inn to startspørsmål og seks svar til hvert. Se samtalegullsett.md. Avsnittsnumrene står i naturfag-em-bolger.avsnitt.md.",
+  "tekst": "gullsett/naturfag-em-bolger.txt",
+  "tittel": "Egenskaper hos ulike EM-bølger",
+  "annotert": null,
+  "startsporsmal": [
+    {
+      "id": "A",
+      "sporsmal": "",
+      "kildeavsnitt": null,
+      "svar": {
+        "dekkende": {
+          "tekst": ""
+        },
+        "delvis": {
+          "tekst": ""
+        },
+        "misoppfatning1": {
+          "tekst": "",
+          "motsigendeAvsnitt": null
+        },
+        "misoppfatning2": {
+          "tekst": "",
+          "motsigendeAvsnitt": null
+        },
+        "uklart": {
+          "tekst": ""
+        },
+        "utenfor": {
+          "tekst": ""
+        }
+      }
+    },
+    {
+      "id": "B",
+      "sporsmal": "",
+      "kildeavsnitt": null,
+      "svar": {
+        "dekkende": {
+          "tekst": ""
+        },
+        "delvis": {
+          "tekst": ""
+        },
+        "misoppfatning1": {
+          "tekst": "",
+          "motsigendeAvsnitt": null
+        },
+        "misoppfatning2": {
+          "tekst": "",
+          "motsigendeAvsnitt": null
+        },
+        "uklart": {
+          "tekst": ""
+        },
+        "utenfor": {
+          "tekst": ""
+        }
+      }
+    }
+  ]
+}
