@@ -1,0 +1,34 @@
+{
+  "dato": "2026-10-26",
+  "rader": [
+    {
+      "tittel": "Språklige bilder: metafor, allegori og allusjon",
+      "dager": 12,
+      "s": {
+        "begge": 5,
+        "bareForste": 2,
+        "bareAndre": 1,
+        "ingen": 455,
+        "positivtSamsvar": 0.7692307692307693,
+        "kappa": 0.765964616680706
+      },
+      "r1": 7,
+      "r2": 6
+    },
+    {
+      "tittel": "Operativsystem",
+      "dager": 12,
+      "s": {
+        "begge": 4,
+        "bareForste": 4,
+        "bareAndre": 5,
+        "ingen": 326,
+        "positivtSamsvar": 0.47058823529411764,
+        "kappa": 0.457020822210357
+      },
+      "r1": 8,
+      "r2": 9
+    }
+  ],
+  "advarsler": []
+}

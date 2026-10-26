@@ -1,0 +1,23 @@
+{
+  "_om": "Faguttrykkene du mener Lesevenn BØR markere i denne teksten. Skriv formen slik den står i teksten, ikke grunnformen. Se annotering.md.",
+  "tekst": "teknologi-operativsystem.txt",
+  "tittel": "Operativsystem",
+  "fag": "teknologiforstaaelse",
+  "fagtype": "programfag",
+  "kilde": "autentisk",
+  "type": "oversikt",
+  "runde": 2,
+  "annotert": "2026-10-26",
+  "_budsjett_paaminnelse": "Lesevenn kan levere høyst 8 Faguttrykk for denne teksten (726 ord). Annoterer du mer enn 10, kan gjenkallingen ikke nå 0,75 uansett hvor godt uttrekket er.",
+  "faguttrykk": [
+    "Operativsystem",
+    "applikasjonsprogramvare",
+    "systemprogramvare",
+    "harddisk",
+    "driverprogram",
+    "prosessorer",
+    "hovedminne",
+    "lagringsenheter",
+    "maskinvare"
+  ]
+}
