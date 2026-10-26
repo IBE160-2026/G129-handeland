@@ -40,3 +40,7 @@ Leseforstaaelsesapp for videregaaende. Planleggingsdokumentene ligger i `_bmad-o
 - `.env.example` setter `LESEVENN_TESTMODUS=les`, saa en frisk utsjekk kaller IKKE modellen (AD-18). Et generatorkall som gir samme svar hver gang, eller feiler med `lagret_svar_mangler`, er testmodus - ikke en feil i generatoren. Sett `=av` for aa kalle modellen.
 
 **Spraak:** domenebegreper i kode bruker ordlistens norske termer (Tekst, Avsnitt, Begrep, Fagsamtale). ASCII-translitterering der verktoey krever det: oe, aa, ae.
+
+## Sesjonslogg
+
+Når en oppgave eller økt avsluttes, før sluttoppsummeringen, bruk `sesjonslogg`-skillen: dokumenter Oppgave + Plan + Resultat + åpne punkter i `.logs/<bruker>/`, og før åpne punkter i `.logs/<bruker>/issues.md`. Skillen committer loggfila lokalt; push gjør du selv. Gruppens egne regler for commit og språk gjelder foran dette.
