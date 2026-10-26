@@ -13,8 +13,6 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Kravet i FR-38:** minst fem oppføringer der KI-forslaget ble forkastet eller vesentlig endret, med begrunnelsen. En logg som bare viser treff dokumenterer flaks, ikke kvalitetssikring.
 
-> **Merknad til meg selv:** oppføringene fra planleggingsøktene 25. og 27. september er skrevet ut fra hva som faktisk skjedde, men de er utkast. Gå gjennom dem, kontroller at de stemmer med min egen hukommelse, og skriv begrunnelsene om til mine egne ord. En KI-logg som er formulert av KI-en den logger, er ikke verdt mye.
-
 ---
 
 ## 2026-09-25 — Planlegging: product brief → PRD
@@ -25,9 +23,9 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** en PRD på 43 funksjonskrav, et addendum med teknologivalg og forkastede alternativer, og tre gjennomganger av dokumentet — en kvalitetsrubrikk, en avstemming mot briefen, og en adversarisk gjennomgang av omfang og målbarhet.
 
-**Hva jeg gjorde:** godtok strukturen og de fem utdypingene. Den viktigste enkeltbeslutningen jeg godtok, var prinsippet om at ingen kvalitetspåstand teller uten måling mot et fast testsett — det ble bærende for hele §4.11.
+**Hva jeg gjorde:** Jeg godtok strukturen og de fem utdypingene. Den viktigste enkeltbeslutningen jeg godtok, var prinsippet om at ingen kvalitetspåstand teller uten måling mot et fast testsett — det ble bærende for hele §4.11.
 
-**Vurdering:** nyttig som utgangspunkt, men ikke riktig ut av boksen. Se de fem oppføringene under.
+**Vurdering:** Dette var et nyttig utgangspunkt, men det fulgte flere utfordringer som måtte rettes, som kan sees under. 
 
 ---
 
@@ -35,7 +33,7 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** hele PRD-en var skrevet for ungdomstrinnet — definisjonen av Faguttrykk, nivået på forklaringene, testsettets tekster, tonekontrollen («ville truffet en fjortenåring dårlig»), og begge brukerreisene, der hovedpersonen gikk i 10. klasse.
 
-**Hva jeg gjorde:** forkastet premisset. Målgruppen er videregående, Vg1–Vg3, altså 15–19 år.
+**Hva jeg gjorde:** Jeg innså at KI anntok at denne appen skulle brukes av ungdomsskole-elever, trolig pga. referanse til PISA, noe som satte et feil premiss for hele prosjektet. Målgruppen er videregående, Vg1–Vg3, altså 15–19 år, og jeg ba KI-om å endre dokumenter med hensyn til dette. 
 
 **Begrunnelse og hva det avslørte:** briefen sa aldri nivået direkte — den bygger på PISA-tall for 15-åringer på 10. trinn, og modellen leste det som at målgruppen var ungdomsskolen. Det er en ubegrunnet antakelse som ikke ble merket som antakelse noe sted, og som deretter forplantet seg til elleve steder i dokumentet, inkludert definisjonen som hele presisjonsmålingen i FR-8 hviler på. Dette er den mest lærerike feilen fra økten: utdataet var internt konsistent og virket gjennomarbeidet, og det er nettopp derfor feilen var vanskelig å se. Et dokument kan være sammenhengende og likevel bygget på noe som ikke stemmer.
 
@@ -47,9 +45,9 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** etter nivåkorreksjonen var testsettet seks tekster fordelt på tre fellesfag, uten hensyn til programområde.
 
-**Hva jeg gjorde:** presiserte at både studiespesialiserende og yrkesfag er målgruppe.
+**Hva jeg gjorde:** Jeg presiserte at både studiespesialiserende og yrkesfag er en del av målgruppa.
 
-**Begrunnelse:** fagspråket skiller seg reelt mellom programområdene — yrkesfaglige fagtekster har kortere setninger og mer praksisnær terminologi. Et uttrekk kalibrert på bare den ene typen vil treffe dårligere på den andre.
+**Begrunnelse:** Jeg tenkte at det er godt mulig at disse to regningene trolig har litt forskjellige tekster, hvor studiespess trolig har mer teoretiske, vil det kanskje være mye mer "spisset" fagterminologi på yrkesfag. 
 
 **Konsekvens:** testsettet ble omstrukturert til en full krysning, tre fellesfag × to programområder = seks tekster, én per celle. Antallet seks er nå begrunnet i strukturen framfor å være et anslag. Definisjonen av Faguttrykk ble utvidet til å dekke yrkesfagterminologi. Viktigst: det ga FR-42 en tredje skjevhetsakse — akademisk fagspråk er bedre representert i modellens treningsdata enn yrkesfaglig terminologi, så verktøyet kan virke dårligst der lesestøttebehovet er størst.
 
@@ -71,25 +69,13 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** anbefalingen var å holde M0 minimal og legge fagsamtalen i M1, fordi M0 alt var den milepælen som mest sannsynlig skrider ut, og fagsamtalen er den dyreste funksjonen i dokumentet.
 
-**Hva jeg gjorde:** forkastet anbefalingen og la fagsamtalen i M0 i full form.
+**Hva jeg gjorde:** Jeg valgte bort anbefalingen og la fagsamtalen i M0 i full form.
 
-**Begrunnelse:** et M0 uten fagsamtale er nøyaktig det generiske «lim inn tekst, få en quiz»-verktøyet prosjektet definerer seg i motsetning til. En minimumsversjon som ikke kan demonstrere prosjektets egen tese er ikke et minimum — det er et annet produkt.
+**Begrunnelse:** For meg virker det som at mye av egenarten i denne appen er nettopp fagsamtalene, og at uten den så vil man både kunne få et litt enkelt prosjekt, men også et produkt som ligner på mye annet som finnes fra før. En minimumsversjon som ikke kan demonstrere prosjektets egen tese er ikke et minimum — det er et annet produkt.
 
 **Konsekvens:** M0 flyttet fra 23. til 30. oktober, og *målingene* av fagsamtalen flyttet til M1. M0 bygger funksjonen, M1 beviser den. Dette var en byttehandel, ikke en gratis beslutning, og den er verdt å vurdere på nytt om M0 skrider ut.
 
 ---
-
-## 2026-09-25 — IKKE GODTATT PÅ TRO: innleveringsfristen
-
-**Hva som kom tilbake:** en frist på 5. desember, hentet fra en annen gruppes offentlige kurswiki, presentert med den forbeholdet at kilden var annenhånds.
-
-**Hva jeg gjorde:** godtok den ikke som grunnlag for planen. Spurte emneansvarlig direkte.
-
-**Begrunnelse:** hele milepælsplanen henger på den datoen, og kilden var påviselig unøyaktig på et annet punkt — den oppgav vektfordelingen 30/40/30, som er fjorårets. For 2026 er den 70/30, og muntlig eksamen er fjernet.
-
-**Utfall:** datoen var riktig. Fristen er 5. desember 2026, bekreftet. Men kilden hadde altså rett om det ene og feil om det andre samtidig, og det er poenget: å kontrollere hver påstand for seg var riktig framgangsmåte, ikke overdreven forsiktighet. Hadde jeg forkastet kilden i sin helhet, ville jeg mistet en riktig dato; hadde jeg godtatt den i sin helhet, ville jeg planlagt mot feil vekting av leveransen.
-
-**Samme runde:** fikk også bekreftet at solobygg er godkjent, til tross for at emnebeskrivelsen angir grupper på 4 ± 1.
 
 
 ## 2026-09-27 — FORKASTET RÅD: opprinnelig omfang for tekstinnlesing
@@ -98,7 +84,7 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva som kom tilbake:** PRD-en utelukket bildeinnlesing og tekstgjenkjenning fra v1, med begrunnelsen at det er «en egen kvalitetskjede med egne feilmåter». Begge inngangene som var med — innliming og PDF — forutsetter markerbar tekst.
 
-**Hva jeg gjorde:** stilte spørsmål om hva som skjer med innskannede bøker, og opplyste at en stor del av målgruppen har papirbok eller nettbok uten brukbar kopiering. Bildeinnlesing ble lagt inn i v1 (FR-44, FR-45), og Mapper tatt ut for å gi plass.
+**Hva jeg gjorde:** Jeg innså at det kunne være dumt å kutte innlesninger av bilder, siden det er mange elever som kun har fysiske bøker. Bildeinnlesing ble lagt inn i v1 (FR-44, FR-45), og Mapper tatt ut for å gi plass.
 
 **Begrunnelse og hva det avslørte:** to ting kom fram. For det første var den tekniske begrunnelsen utdatert: appen bruker allerede en multimodal modell, så bildeuttrekk er det samme API-kallet med en bildeblokk — ikke en ny pipeline. Modellen hadde resonnert som om tekstgjenkjenning måtte være en separat OCR-motor. For det andre manglet PRD-en en antakelse den var helt avhengig av: at eleven i det hele tatt får teksten inn. Den sto ikke i antakelsesregisteret, og uten bildeinngang er appen ikke tungvint for papirbok-elever — den er ubrukelig.
 
@@ -112,7 +98,7 @@ Løpende logg over hvordan KI er brukt i utviklingen av Lesevenn, ført etter kr
 
 **Hva jeg gjorde:** tok opp problemstillingen selv, og ba om at det ble skrevet ordentlig ut.
 
-**Begrunnelse:** appen tar imot opphavsrettsbeskyttet lærebokstoff og sender det til en kommersiell tredjepart. Å nøye seg med å opplyse om det, og å skrive i vilkårene at innlegging er «til eget studiebruk», er i praksis å legge ansvaret på en sekstenåring.
+**Begrunnelse:** appen tar imot opphavsrettsbeskyttet lærebokstoff og sender det til en kommersiell tredjepart. Dette måtte undersøkes, for å ikke legge alt ansvar over på elevene, men passe på at opphavsrett og personvern blir ivaretatt.
 
 **Konsekvens:** §6.2 fikk et leverandøruavhengig krav — inndata skal ikke brukes til trening, behandlingsstedet skal være kjent, vilkårene skal være lest og datert. §6.3 ble utvidet med hva designet faktisk gjør (tegngrense, bildegrense, forbud mot korpusbygging, bilder lagres ikke) og hva det ikke løser (ansvarsforskyvning, grensene for samtykke fra mindreårige). FR-42 fikk en fjerde skjevhetsakse om datakjeden. To nye åpne spørsmål: hvilken leverandør som oppfyller kravet, og hva avtaleverket for skoleverket faktisk tillater.
 
@@ -207,7 +193,7 @@ Alle tre skal inn i addendumets seksjon om leverandørvilkår, med URL og dato.
 
 **Hvorfor dette er den mest lærerike oppføringen i loggen så langt:** feilen er ikke en gal påstand, men et **fravær**. Alle kvalitetsmekanismene i PRD-en — gullsettene, tersklene, motmetrikkene, regelen om at en modells egen vurdering ikke er bevis — måler om det som *står der* holder. Ingen av dem spør om noe mangler. En utelatelse gir ingen advarsel: det finnes ingen setning å være uenig i.
 
-Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen heller ikke fanget det. Gjennomgangene vurderte dokumentet mot seg selv og mot rubrikken de fikk oppgitt — ikke mot sensorveiledningen, som jeg ikke hadde gitt dem. Modellen kan holde et dokument internt konsistent, men den kjenner bare de kravene jeg har nevnt. Det er samme mønster som oppføring 6, bare med et vurderingskriterium i stedet for et tilgangsproblem.
+Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen heller ikke fanget det. Gjennomgangene vurderte dokumentet mot seg selv og mot rubrikken de fikk oppgitt — ikke mot sensorveiledningen, som jeg ikke hadde gitt dem. Modellen kan holde et dokument internt konsistent, men den kjenner bare de kravene jeg har nevnt. Det er samme mønster som oppføring 5, bare med et vurderingskriterium i stedet for et tilgangsproblem.
 
 **Hva jeg gjorde:** la inn FR-46 (kjørbarhet uten prosjektets nøkler) og AD-18 (testmodus som et bytte inne i generatorlaget, over skjemavalideringen), og bygde begge: lagrede modellsvar med tre moduser, og driverbytte i `data/db.ts` slik at en lokal Postgres i Docker er samme kodebase som drift. Briefen ble samtidig oppdatert med aldersgruppe, PRD-ens måltall i stedet for de vage kriteriene, og mapper flyttet ut av v1.
 
@@ -313,30 +299,29 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 ## Status mot FR-38, per 26. oktober
 
-Seksten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+Femten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
 | 1 | Målgruppen var ungdomstrinnet i hele dokumentet | Ubegrunnet antakelse i utdataet, korrigert |
 | 2 | Testsettet dekket bare ett programområde | Ufullstendig dekning, utvidet |
-| 3 | Mapper beholdt som betinget | Anbefaling forkastet *(senere omgjort, se 6)* |
+| 3 | Mapper beholdt som betinget | Anbefaling forkastet *(senere omgjort, se 5)* |
 | 4 | Fagsamtalen lagt i M0 i full form | Anbefaling forkastet |
-| 5 | Innleveringsfristen | Påstand ikke godtatt uten uavhengig kontroll |
-| 6 | Omfanget for tekstinnlesing | Teknisk begrunnelse utdatert, og en manglende antakelse avdekket |
-| 7 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
-| 8 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
-| 9 | Innstillinger som ikke lot seg finne | Funn om verktøyet, gjort av en oppgave som ikke lyktes |
-| 10 | PRD-en manglet kravet om kjørbarhet | Utelatelse i utdataet, fanget av emneansvarlig og ikke av seks gjennomganger |
-| 11 | Prioriteringsprinsippet inn i prompten for fagord | Prompt endret, så modell og annotatør måles mot samme regel |
-| 12 | κ-metoden kunne aldri gi et positivt tall | Feil i KI-skrevet metode, fanget av KI i et senere steg |
-| 13 | Feil fasit i quizen (renter som terminbeløp) | Feil i utdata, fanget ved egen testing |
-| 14 | Fagsamtalen etter egen testing | Endret etter testing; endringer og utrulling bevisst overlatt til KI |
-| 15 | «Hva tenker du at et minnevers er?» | Besto alle kontroller, men løste ikke oppgaven; fanget av menneske |
-| 16 | Minnevers v4–v6, og arbeidet stoppet på v3 | Forsøk forkastet, og en avgjørelse om å stoppe |
+| 5 | Omfanget for tekstinnlesing | Teknisk begrunnelse utdatert, og en manglende antakelse avdekket |
+| 6 | Etikk rundt datahåndtering | For tynt dekket, utvidet på eget initiativ |
+| 7 | Vilkårstolkning | Bekreftelse som hvilte på feil grunnlag, fanget ved oppfølgingsspørsmål |
+| 8 | Innstillinger som ikke lot seg finne | Funn om verktøyet, gjort av en oppgave som ikke lyktes |
+| 9 | PRD-en manglet kravet om kjørbarhet | Utelatelse i utdataet, fanget av emneansvarlig og ikke av seks gjennomganger |
+| 10 | Prioriteringsprinsippet inn i prompten for fagord | Prompt endret, så modell og annotatør måles mot samme regel |
+| 11 | κ-metoden kunne aldri gi et positivt tall | Feil i KI-skrevet metode, fanget av KI i et senere steg |
+| 12 | Feil fasit i quizen (renter som terminbeløp) | Feil i utdata, fanget ved egen testing |
+| 13 | Fagsamtalen etter egen testing | Endret etter testing; endringer og utrulling bevisst overlatt til KI |
+| 14 | «Hva tenker du at et minnevers er?» | Besto alle kontroller, men løste ikke oppgaven; fanget av menneske |
+| 15 | Minnevers v4–v6, og arbeidet stoppet på v3 | Forsøk forkastet, og en avgjørelse om å stoppe |
 
-Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–10). Implementasjonsfasen (11–16) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (13, 15), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (16). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
+Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–9). Implementasjonsfasen (10–15) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (12, 14), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (15). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 
-**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 6 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
+**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 5 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
 
 ---
 
