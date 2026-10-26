@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**288 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**292 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1840,3 +1840,35 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 **10:17**
 
 > Operativsystem, applikasjonsprogramvare, systemprogramvare, harddisk, driverprogram, prosessor, hovedminne, lagringsenheter, maskinvare,
+
+**10:18**
+
+> skriv prosessorer
+
+**10:28**
+
+> Kan dy finne tekster til  meg?
+
+**10:59**
+
+> Må det være fire linjer? Nå ble jeg veldig fornøyd med dette:
+>
+> 1:
+> For et under, tenk at det går an,
+> planter lager glukose, av solenergi, karbondioksid og vann.
+> Blader tar karbondioksid, og av røttene vannet håndteres,
+> grønnkorn danner så glukose, det var dette som skulle produseres.
+> I tillegg lager planten oksygen, og javisst var det heldig,
+> at fotosyntesens biprodukt, er noe vi trenger så veldig.
+
+**11:08**
+
+> Jeg syns jo at de fleste av versene er for dårlige til å brukes. Likevel har du et godt poeng med at de tingene som jeg her liker, er ting jeg ikke har likt når en maskin har gjort det. Finnes det noen alternativer?
+
+<details><summary>Commits i økta (3)</summary>
+
+- `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
+- `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
+- `26626fe` Promptlogg: oppdatert
+
+</details>
