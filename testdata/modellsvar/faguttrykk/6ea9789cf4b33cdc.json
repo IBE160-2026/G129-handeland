@@ -1,0 +1,41 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-26T13:57:59.320Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin, som fordeler maskinens ressurser, for eksempel prosessor, minne og skrivere, mellom de andre programmene. Det fungerer som et mellomledd mellom programmene og maskinvaren.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på maskinens systemressurser og gjør det enklere for programmerere å bruke maskinvaren. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program laget spesielt for én bestemt enhet, for eksempel en harddisk, som vet hvordan enheten skal styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med, for eksempel tekstbehandlere og regneark. Det står i motsetning til systemprogramvare, som kjører under og støtter disse programmene.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes der rask og pålitelig respons er avgjørende, for eksempel i styringssystemer i biler.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      }
+    ]
+  }
+}

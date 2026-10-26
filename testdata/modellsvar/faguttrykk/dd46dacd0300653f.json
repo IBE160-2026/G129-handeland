@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-26T13:57:49.343Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Det øverste nivået i et domenenavn, det som står helt til høyre, for eksempel .no. Det sier hvilket land eller hvilken type organisasjon adressen hører til.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En server som oversetter domenenavn til IP-adresser, slik at nettleseren vet hvor innholdet ligger. Hvert domene har en slik server som har ansvar for det.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no under ndla.no. Det brukes ofte til å skille ulike tjenester eller nettsider innenfor samme domene.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener",
+        "forklaring": "Topp-domener knyttet til ett bestemt land, som .no, .se og .jp. Hvert land styrer selv hvem som får bruke dem og hva kravene er.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "generiske topp-domener",
+        "forklaring": "Topp-domener som ikke er knyttet til ett land, som .com og .org. De styres av enkeltorganisasjoner som har fått mandat til å ta vare på dem.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De øverste serverne i DNS-systemet, som peker videre til de riktige topp-domenene. Når punktumet bakerst i adressen står for rotnivået, betyr det at innholdet ligger under disse serverne.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 5
+      }
+    ]
+  }
+}

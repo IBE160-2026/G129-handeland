@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-26T13:56:58.521Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av et samspill mellom elektriske og magnetiske felt og som kan bre seg gjennom tomt rom. Lys, radiobølger og røntgenstråling er alle elektromagnetiske bølger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge. Jo kortere bølgelengde, desto høyere frekvens og energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger en bølge gjør per sekund, målt i hertz. Høy frekvens gir kort bølgelengde.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, en type elektromagnetisk stråling med bølgelengder litt lenger enn rødt lys. Den sendes ut av varme gjenstander og kan kjennes som varme.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling med kortere bølgelengde enn fiolett lys. Den ligger utenfor det synlige spekteret på den andre siden enn infrarød stråling.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med meget kort bølgelengde og høy energi. Den kan gå gjennom stoff som lys ikke går gjennom, og brukes til bilder av indre strukturer.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag i atmosfæren, noen hundre kilometer over bakken, med elektrisk ladde partikler. Det kan reflektere radiobølger tilbake mot jorda.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "UV-C",
+        "forklaring": "Den delen av ultrafiolett stråling som har kortest bølgelengde og høyest energi. Den blir nesten helt stoppet av ozonlaget.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m, og frekvens høyere enn radiobølger. De brukes i mikrobølgeovner.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 7
+      }
+    ]
+  }
+}

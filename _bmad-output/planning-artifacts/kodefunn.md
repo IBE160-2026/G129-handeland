@@ -552,7 +552,7 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 **Hvordan det ble funnet:** under utviklerens gjennomgang av forklaringene (FR-8) 26.10. Utvikleren ba om å få se hele kildeavsnittet for hver forklaring, og da ble det synlig at to av dem var overskrifter. Den samme visningen viste at flere forklaringer henter innhold fra et annet avsnitt enn det de viser til (EM-bølger nr. 6, metafor nr. 8), som ingen sjekk fanger.
 
-**Rettelse:** ikke rettet ennå. En rettelse endrer hvilke uttrykk som leveres, og dermed FR-8-tallene for v3; den bør gjøres sammen med neste promptversjon og måles om.
+**Rettelse:** 26.10 i `harGyldigKildeavsnitt`, med test. Målt på de lagrede v3-svarene falt *personifikasjon* og *besjeling* ut, og gjenkallingen for v3 gikk fra 0,396 til 0,348: modellen pekte på overskriften for to ord som er i Gullsettet. Prompt v4 sier derfor at kildeavsnittet skal være brødtekst. Kodefiksen alene er altså ikke nok; regelen må stå både i koden og i prompten.
 
 **Mønsteret:** samme regel håndhevet ett sted og ikke et annet. Regelen ble lagt inn i den generatoren der problemet først ble sett, ikke i det felles valideringslaget.
 

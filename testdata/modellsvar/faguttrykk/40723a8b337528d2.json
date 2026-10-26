@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-26T13:57:51.091Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Topp-domenet er den siste delen av et domenenavn, som .no i om.ndla.no. Det sier hvilket land eller hvilken type organisasjon domenet hører til.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener",
+        "forklaring": "Nasjonale topp-domener er topp-domener som er knyttet til ett bestemt land, for eksempel .no for Norge. Hvert land bestemmer selv hvem som kan bruke dem og hvilke krav som gjelder.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "generiske topp-domener",
+        "forklaring": "Generiske topp-domener er topp-domener som ikke er knyttet til et land, for eksempel .com og .org. De styres av organisasjoner som har fått ansvar for dem.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et under-domene er et domene som ligger under et annet domene, for eksempel om under ndla.no. Det brukes ofte for å skille ut ulike tjenester eller nettsider.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En DNS-server er en tjener som oversetter domenenavn til IP-adresser, slik at nettleseren vet hvor innholdet ligger.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "IP-adresser",
+        "forklaring": "En IP-adresse er et nummer som identifiserer en datamaskin eller tjener på nettet. Et domenenavn må oversettes til en IP-adresse for at man skal kunne nå innholdet.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-26T13:57:49.361Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Den øverste delen av et domenenavn, som står lengst til høyre, for eksempel .no. Det sier noe om hvilket land eller hvilken type organisasjon adressen hører til.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "domene",
+        "forklaring": "Et navn på en adresse på internett, som består av flere deler adskilt med punktum. Domenet peker til en bestemt samling nettsider, e-post eller andre tjenester.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En server som oversetter domenenavn til IP-adresser, slik at nettleseren vet hvor innholdet ligger. Den holder oversikt over hvilke domener den har ansvar for.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om under .ndla-domenet. Det brukes for å dele opp tjenester eller nettsider innenfor samme domene.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "Nasjonale topp-domener",
+        "forklaring": "Topp-domener som er knyttet til et bestemt land, for eksempel .no for Norge. Hvert land bestemmer selv hvem som kan bruke dem og hvilke krav som gjelder.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "Generiske topp-domener",
+        "forklaring": "Topp-domener som ikke er knyttet til et land, for eksempel .com og .org. De styres av organisasjoner som har fått ansvaret for dem.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 18
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De øverste DNS-serverne på internett, som til sammen vet hvor alle topp-domener ligger. Når adressen ender med punktum, starter oppslaget der.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "Geografiske topp-domener",
+        "forklaring": "Nye generiske topp-domener som er knyttet til et område, for eksempel .asia for en region med flere land eller .tokyo for en by.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Topp-domener som er navnet på et firma og som eies og styres av bedriften. Ofte er de bare tillatt brukt av den bedriften, for eksempel .google.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 22
+      }
+    ]
+  }
+}

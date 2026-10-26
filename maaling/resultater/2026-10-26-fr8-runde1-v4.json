@@ -1,0 +1,194 @@
+{
+  "runde": "1",
+  "dato": "2026-10-26",
+  "resultater": [
+    {
+      "tekst": "naturfag-em-bolger.txt",
+      "tittel": "Egenskaper hos ulike EM-bølger",
+      "fag": "naturfag",
+      "fagtype": "fellesfag",
+      "kilde": "laeremiddel",
+      "type": "oversikt",
+      "antallGull": 12,
+      "antallLevert": 8,
+      "budsjett": 9,
+      "treff": 5,
+      "gjenkalling": 0.4166666666666667,
+      "presisjon": 0.625,
+      "f1": 0.5,
+      "bommet": [
+        "em-bølger",
+        "radiobølger",
+        "infrarød stråling",
+        "energi",
+        "gammastråling",
+        "bøyning",
+        "radioaktive kilder"
+      ],
+      "stoey": [
+        "elektromagnetiske bølger",
+        "ir-stråling",
+        "ionosfæren"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    },
+    {
+      "tekst": "norsk-metafor.txt",
+      "tittel": "metafor",
+      "fag": "norsk",
+      "fagtype": "fellesfag",
+      "kilde": "autentisk",
+      "type": "oversikt",
+      "antallGull": 7,
+      "antallLevert": 6,
+      "budsjett": 7,
+      "treff": 2,
+      "gjenkalling": 0.2857142857142857,
+      "presisjon": 0.3333333333333333,
+      "f1": 0.30769230769230765,
+      "bommet": [
+        "betydningsområder",
+        "metaforteori",
+        "kognitiv",
+        "simile",
+        "besjeling"
+      ],
+      "stoey": [
+        "kognitive metaforer",
+        "språklige metaforer",
+        "forestillingsområdene",
+        "similen"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    },
+    {
+      "tekst": "norsk-sprakligebilder.txt",
+      "tittel": "Språklige bilder: metafor, allegori og allusjon",
+      "fag": "norsk",
+      "fagtype": "fellesfag",
+      "kilde": "laeremiddel",
+      "type": "fokusert",
+      "antallGull": 7,
+      "antallLevert": 8,
+      "budsjett": 14,
+      "treff": 4,
+      "gjenkalling": 0.5714285714285714,
+      "presisjon": 0.5,
+      "f1": 0.5333333333333333,
+      "bommet": [
+        "metafor",
+        "lyriske virkemidler",
+        "konnotasjoner"
+      ],
+      "stoey": [
+        "konnotasjon",
+        "fabel",
+        "språklig virkemiddel",
+        "språklig bilde"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst.txt",
+      "tittel": "Høy prisvekst gir ny renteøkning",
+      "fag": "samfunnsfag",
+      "fagtype": "fellesfag",
+      "kilde": "autentisk",
+      "type": "fokusert",
+      "antallGull": 8,
+      "antallLevert": 7,
+      "budsjett": 7,
+      "treff": 1,
+      "gjenkalling": 0.125,
+      "presisjon": 0.14285714285714285,
+      "f1": 0.13333333333333333,
+      "bommet": [
+        "prisvekst",
+        "renteøkning",
+        "konjunkturtendensene",
+        "inflasjon",
+        "sysselsettingsvekst",
+        "reallønnsvekst",
+        "inflasjonsanslaget"
+      ],
+      "stoey": [
+        "boliginvesteringene",
+        "bnp-veksten",
+        "fastlandsøkonomien",
+        "inflasjonsmålet",
+        "konsumprisindeksen",
+        "reallønnsveksten"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning.txt",
+      "tittel": "Domeneoppbygning og toppdomene",
+      "fag": "teknologiforstaaelse",
+      "fagtype": "programfag",
+      "kilde": "laeremiddel",
+      "type": "fokusert",
+      "antallGull": 5,
+      "antallLevert": 6,
+      "budsjett": 7,
+      "treff": 2,
+      "gjenkalling": 0.4,
+      "presisjon": 0.3333333333333333,
+      "f1": 0.3636363636363636,
+      "bommet": [
+        "domeneoppbygning",
+        "toppdomene",
+        "ip-adressene"
+      ],
+      "stoey": [
+        "topp-domenet",
+        "dns-server",
+        "generiske topp-domener",
+        "nasjonale topp-domener"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    },
+    {
+      "tekst": "teknologi-operativsystem.txt",
+      "tittel": "Operativsystem",
+      "fag": "teknologiforstaaelse",
+      "fagtype": "programfag",
+      "kilde": "autentisk",
+      "type": "oversikt",
+      "antallGull": 8,
+      "antallLevert": 6,
+      "budsjett": 8,
+      "treff": 2,
+      "gjenkalling": 0.25,
+      "presisjon": 0.3333333333333333,
+      "f1": 0.28571428571428575,
+      "bommet": [
+        "programvaren",
+        "minne",
+        "prosessorer",
+        "driverprogrammet",
+        "applikasjonsprogrammer",
+        "maskinvare"
+      ],
+      "stoey": [
+        "applikasjonsprogramvare",
+        "driverprogram",
+        "sanntidsoperativsystemer",
+        "plattform"
+      ],
+      "promptversjon": "v4",
+      "modell": "claude-haiku-5-5",
+      "konsistens": "5 kjøringer, minst 3"
+    }
+  ]
+}

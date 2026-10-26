@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-26T13:57:36.197Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten som Norges Bank setter for bankenes utlån og innskudd, og som brukes til å styre inflasjonen. Når styringsrenta økes, blir det dyrere å låne penger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet Norges Bank skal styre etter, nemlig at den årlige prisveksten skal være rundt 2 prosent. Ligger prisveksten over dette, sier man at inflasjonen er for høy.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Summen av det som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. Tallet viser hvor mye det bygges, og er et mål på aktiviteten i boligmarkedet.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "AKU-ledigheten",
+        "forklaring": "Ledigheten målt i Arbeidskraftundersøkelsen (AKU), der en person regnes som arbeidsledig hvis hun er uten jobb, leter etter jobb og kan starte raskt. Den skiller seg fra den registrerte ledigheten hos Nav.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke omfatter olje- og gassvirksomheten og skipsfart på sokkelen. Den brukes ofte for å vise utviklingen i resten av næringslivet og i offentlig sektor.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Hvor mye bruttonasjonalproduktet, altså verdien av alt som produseres i et land, øker fra ett år til det neste, målt i prosent. Den viser om økonomien vokser eller krymper.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 26
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål på hvordan prisene på en typisk husholdningskurv med varer og tjenester utvikler seg over tid. Inflasjonen måles ved å se hvor mye denne indeksen øker.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene øker etter at prisveksten er trukket fra. Reallønnsveksten viser hvor mye mer kjøpekraft lønnstakerne faktisk får.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 6
+      }
+    ]
+  }
+}

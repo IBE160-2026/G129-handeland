@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] metafor [avsnitt 2] En metafor er et ord eller et uttrykk som brukes i overført eller billedlig betydning. Et par eksempler er å si «å holde hjulene i gang» om å sørge for at",
+  "lagret": "2026-10-26T13:57:09.177Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "En metafor er et ord eller uttrykk som brukes i overført, billedlig betydning i stedet for den vanlige betydningen. Metaforen skaper en forbindelse mellom to betydningsområder.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "simile",
+        "forklaring": "En simile er en sammenligning der én ting settes ved siden av noe annet, ofte med ord som «som» eller «lik». For eksempel «gjorde det som en løve».",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "kognitive metaforer",
+        "forklaring": "Kognitive metaforer er grunnleggende måter å tenke om noe på, der én ting forstås gjennom en annen. De kommer til uttrykk gjennom språklige metaforer.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "domenene",
+        "forklaring": "Domenene er de to forestillingsområdene i en metafor: området metaforen henter mening fra, og området den overfører mening til.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Personifikasjon er en form for metafor der ting, dyr eller abstrakte størrelser gis menneskelige egenskaper, for eksempel at naturen «sover».",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "språklige metaforer",
+        "forklaring": "Språklige metaforer er metaforer som finnes i selve ordbruken, for eksempel «hjertet står i brann» om forelskelse. De står i motsetning til kognitive metaforer, som ligger under tenkningen.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 4
+      }
+    ]
+  }
+}

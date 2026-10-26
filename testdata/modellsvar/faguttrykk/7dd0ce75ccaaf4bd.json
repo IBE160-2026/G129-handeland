@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-26T13:57:38.714Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "prisveksten",
+        "forklaring": "Hvor raskt prisene på varer og tjenester stiger fra ett år til det neste, uttrykt i prosent. Når prisveksten er høy, kjøper pengene mindre.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten som Norges Bank setter for lån og innskudd mellom bankene. Den styrer hvor dyrt det er å låne penger i hele økonomien.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "En indeks som måler hvordan prisene på et representativt utvalg varer og tjenester som husholdningene kjøper, utvikler seg over tid. Den brukes til å måle inflasjonen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Det målet Norges Bank skal styre mot, som er en årlig prisvekst på 2 prosent. Når inflasjonen er over målet, sier man at prisveksten er for høy.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Lønnsveksten justert for prisveksten, altså hvor mye kjøpekraften til lønnen øker. Er reallønnsveksten positiv, har folk mer å kjøpe for.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det husholdningene og utbyggerne bruker på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. De måles ofte som en andel av økonomien.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "AKU-ledigheten",
+        "forklaring": "Andelen av arbeidsstyrken som er uten jobb, men som aktivt søker arbeid og kan begynne innen kort tid. Den måles gjennom Arbeidskraftundersøkelsen, en spørreundersøkelse Statistisk sentralbyrå gjennomfører.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke regnes med olje- og gassutvinning og sjøfart over havet. Den brukes ofte for å vise utviklingen i det øvrige næringslivet.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Hvor mye bruttonasjonalproduktet, altså den samlede verdien av varer og tjenester et land produserer, øker fra ett år til det neste. Den brukes til å måle hvor raskt økonomien vokser.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 26
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir informasjon om",
+  "lagret": "2026-10-26T13:57:50.809Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "topp-domenet",
+        "forklaring": "Det øverste nivået i et domenenavn, som står lengst til høyre, for eksempel .no. Det sier noe om hvilket land eller hvilken type virksomhet adressen tilhører.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "generiske topp-domener",
+        "forklaring": "Topp-domener som ikke er knyttet til et bestemt land, for eksempel .com og .org. De styres av organisasjoner som har fått ansvaret for dem.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "nasjonale topp-domener",
+        "forklaring": "Topp-domener knyttet til et bestemt land, for eksempel .no, .se og .jp. Hvert land bestemmer selv hvem som kan bruke dem og hva kravene er.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "DNS-server",
+        "forklaring": "En server som oversetter domenenavn til IP-adresser, slik at nettleseren vet hvor innholdet ligger. Teksten bruker begrepet om flere ulike servere med ansvar for domener.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "under-domene",
+        "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no under ndla.no. Det brukes for å dele opp et domene i flere tjenester eller nettsider.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "IP-adressene",
+        "forklaring": "Numeriske adresser som identifiserer datamaskiner og tjenester på internett. Et domenenavn må oversettes til en IP-adresse for at forespørselen skal nå riktig server.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "DNS-rotserverne",
+        "forklaring": "De øverste DNS-serverne på internett, som er utgangspunktet når et domenenavn skal slås opp. Herfra finner man videre hvilken server som har ansvar for hvert topp-domene.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "Sponsede topp-domener",
+        "forklaring": "Generiske topp-domener som er knyttet til en bestemt bransje eller gruppe, og der en organisasjon har ansvar for hvem som kan bruke dem. Eksempelet i teksten er .aero for flyindustrien.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "Merkenavn-toppdomener",
+        "forklaring": "Topp-domener som er et firmanavn eller merke, og som eies og styres av en bedrift. Ofte kan bare den bedriften bruke dem.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 22
+      }
+    ]
+  }
+}

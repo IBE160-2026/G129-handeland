@@ -1,0 +1,41 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] metafor [avsnitt 2] En metafor er et ord eller et uttrykk som brukes i overført eller billedlig betydning. Et par eksempler er å si «å holde hjulene i gang» om å sørge for at",
+  "lagret": "2026-10-26T13:57:11.218Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et ord eller uttrykk som brukes i overført, billedlig betydning, slik at to betydningsområder knyttes sammen. Eksempel: å si «å holde hjulene i gang» om at et samfunn fungerer som det skal.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "kognitive metaforer",
+        "forklaring": "Metaforer som ligger i tankemåten og styrer hvordan vi forstår verden, og som kommer til uttrykk gjennom språket. Eksempel: at livet forstås som en reise.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "språklige metaforer",
+        "forklaring": "Metaforer som finnes i selve ordvalget i språket, for eksempel «hjertet står i brann» om forelskelse. Teksten skiller dem fra kognitive metaforer, som er tankemønstrene bak.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "similen",
+        "forklaring": "En sammenligning der noe sies å være likt noe annet, markert med ord som «som» eller «lik». Eksempel: «gjorde noe som en løve».",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "forestillingsområdene",
+        "forklaring": "De to betydningsområdene en metafor knytter sammen: området metaforen henter mening fra, og området den overfører mening til. Eksempel: «å reise» som kilde for å forstå livet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 17
+      }
+    ]
+  }
+}

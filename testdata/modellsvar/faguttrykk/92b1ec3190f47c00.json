@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-26T13:58:00.336Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Den grunnleggende programvaren på en datamaskin, som fordeler datamaskinens ressurser mellom programmene som kjører på den. Det holder også styr på maskinvaren, slik at programmene ikke trenger å gjøre det selv.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Programvare som holder styr på datamaskinens egne ressurser og gjør det lettere for programmerere å lage andre programmer. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Programmer som brukeren har direkte kontakt med for å utføre oppgaver, for eksempel tekstbehandlere og regneark.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et program som er laget spesielt for én bestemt enhet og forklarer operativsystemet hvordan enheten skal styres. Operativsystemet kommuniserer med enheten gjennom dette programmet.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "eksterne enheter",
+        "forklaring": "Enheter som er koblet til utenfra datamaskinen, for eksempel en skriver.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "interne enheter",
+        "forklaring": "Grunnleggende komponenter inne i datamaskinen, for eksempel minne og prosessorer.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes der rask og pålitelig respons er avgjørende, for eksempel i styringen av en bil.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "plattform",
+        "forklaring": "Et felles grunnlag som programmer kan bygges på og kjøre fra, uavhengig av hvilken maskinvare brukeren har.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 11
+      }
+    ]
+  }
+}

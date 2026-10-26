@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-26T13:57:25.533Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklig bilde",
+        "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noe eller noen. Bildet får leseren til å tenke på noe annet enn det ordene bokstavelig talt betyr.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås konkret, men som også er et bilde på noe annet og større, ofte en moral eller en side ved virkeligheten. Den kan leses både bokstavelig og som bilde.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der teksten låner fra eller viser til en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får et ekstra lag med mening når hen kjenner igjen referansen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et virkemiddel der ting, dyr eller abstrakte størrelser gis menneskelige egenskaper og handlinger, slik at de framstår som mennesker.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et virkemiddel der ting eller fenomener får levende egenskaper, som om de hadde en sjel eller en livsånd, uten at de blir framstilt som mennesker.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En assosiasjon som mange i et språkfellesskap knytter til et ord, i tillegg til den vanlige betydningen. For eksempel gir ordet svart ofte en dyster assosiasjon.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "metafor",
+        "forklaring": "Et språklig bilde der noe kalles noe annet uten at man bruker ordet som eller lik, for eksempel at noen er en diamant. Med metaforen overføres egenskaper fra det ene til det andre.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som avsluttes med en moral. Fabler kan ofte leses allegorisk.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 38
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et grep forfatteren eller kunstneren bruker bevisst for å påvirke leseren eller skape en bestemt følelse. Allusjon og de andre bildene i teksten er eksempler på slike virkemidler.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 49
+      }
+    ]
+  }
+}

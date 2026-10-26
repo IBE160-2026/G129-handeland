@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-26T13:57:25.869Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklig bilde",
+        "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noe. Bildet får leseren til å tenke på noe annet som har egenskaper til felles med det som beskrives.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås som et bilde på noe annet og større, for eksempel samfunn eller mennesker. Den konkrete historien har en dypere betydning bak seg.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der en tekst henviser til eller låner fra en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får en ekstra betydning når hen kjenner igjen referansen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En assosiasjon som mange deler og knytter til et ord, utover ordets vanlige betydning. Konnotasjoner gjør at ordvalg skaper stemning i et dikt.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "personifikasjoner",
+        "forklaring": "Ting, dyr eller abstrakte størrelser som får menneskelige egenskaper, handlinger eller følelser, for eksempel at stillheten truer noen.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "besjelinger",
+        "forklaring": "Livløse ting som får liv, handling eller følelser, slik at de framstilles som levende. Teksten skiller dette fra personifikasjon.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et grep forfatteren eller kunstneren bruker for å påvirke leseren eller skape en bestemt følelse hos hen. Bilder, allusjoner og allegorier er eksempler på slike.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som slutter med en moral eller en konklusjon. Fabler kan ofte leses allegorisk.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 38
+      }
+    ]
+  }
+}

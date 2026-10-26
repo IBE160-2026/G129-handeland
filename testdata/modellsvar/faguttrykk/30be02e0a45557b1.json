@@ -1,0 +1,47 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Operativsystem [avsnitt 2] Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og det som tildeler de forskjellige ressursene i datamaskinen til andre p",
+  "lagret": "2026-10-26T13:58:01.331Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "operativsystem",
+        "forklaring": "Et operativsystem er den grunnleggende programvaren på en datamaskin. Det fordeler datamaskinens ressurser mellom programmene, og sørger for at de ikke krangler om dem.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "systemprogramvare",
+        "forklaring": "Systemprogramvare er programvare som kjører maskinen og styrer dens ressurser, slik at andre programmer kan brukes. Operativsystemet er den viktigste typen systemprogramvare.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "applikasjonsprogramvare",
+        "forklaring": "Applikasjonsprogramvare er programmer som brukeren arbeider direkte med, for eksempel tekstbehandlere og regneark. Den står i motsetning til systemprogramvare, som kjører under og styrer maskinen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "driverprogram",
+        "forklaring": "Et driverprogram er et program laget for å styre én bestemt enhet, for eksempel en harddisk. Det oversetter operativsystemets standardkommandoer til instruksjoner som enheten forstår.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "sanntidsoperativsystemer",
+        "forklaring": "Sanntidsoperativsystemer er operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes der forsinkelser kan være farlige, for eksempel i styringen av en bil.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 13
+      },
+      {
+        "uttrykk": "systemressursene",
+        "forklaring": "Systemressursene er de delene av datamaskinen som programmene trenger, for eksempel skrivere, minne og prosessorer. Operativsystemet holder oversikt over dem og deler dem mellom programmene.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 3
+      }
+    ]
+  }
+}

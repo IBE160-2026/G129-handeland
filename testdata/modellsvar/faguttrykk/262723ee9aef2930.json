@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-26T13:57:38.794Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "prisveksten",
+        "forklaring": "Prisveksten er hvor raskt prisene på varer og tjenester i samfunnet stiger over tid. Den måles ofte som endring i prosent fra ett år til det neste.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Inflasjonsmålet er den prisveksten sentralbanken sikter mot på lang sikt, i Norge 2 prosent. Når inflasjonen ligger over målet, vurderer sentralbanken å stramme inn pengepolitikken.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Styringsrenta er renta Norges Bank setter for lån og innskudd mellom bankene. Endringer i den påvirker hvor dyre lån er for husholdninger og bedrifter.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Reallønnsveksten er hvor mye lønningene øker etter at prisveksten er trukket fra. Den viser hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Boliginvesteringene er det samlede beløpet som brukes på bygging av nye boliger og på større oppgraderinger av eksisterende boliger. De er en viktig del av den økonomiske aktiviteten i landet.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "arbeidsstyrken",
+        "forklaring": "Arbeidsstyrken er alle personer i arbeid eller som er arbeidsledige og aktivt leter etter jobb. Ledigheten oppgis som en andel av denne gruppen.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Fastlandsøkonomien er den delen av norsk økonomi som ikke omfatter olje- og gassvirksomheten og sjøfart. Den brukes for å se på utviklingen i resten av næringslivet.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "finanspolitikken",
+        "forklaring": "Finanspolitikken er statens bruk av skatter og offentlige utgifter for å påvirke økonomien. Når staten bruker mer penger, øker den samlede etterspørselen.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "BNP er bruttonasjonalproduktet, den samlede verdien av alt som produseres i et land på ett år. BNP-veksten viser hvor mye denne verdien øker fra et år til et annet.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 26
+      }
+    ]
+  }
+}

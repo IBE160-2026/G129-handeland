@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-26T13:57:36.834Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Renten Norges Bank setter for utlån mellom bankene, og som påvirker renten folk betaler på lån og sparing. Når styringsrenta økes, blir det dyrere å låne.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "boliginvesteringene",
+        "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppussing av eksisterende boliger. Lave boliginvesteringer betyr at det bygges lite.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "Hvor mye den samlede verdiskapingen i et land øker fra ett år til det neste, målt i prosent. Bruttonasjonalprodukt (BNP) er verdien av alt som produseres i landet.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 26
+      },
+      {
+        "uttrykk": "reallønnsvekst",
+        "forklaring": "Hvor mye lønningene øker når man tar hensyn til prisveksten. Har lønna gått opp mer enn prisene, får man mer kjøpekraft.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "konsumprisindeksen",
+        "forklaring": "Et mål for hvordan prisene på en typisk handlekurv for husholdningene utvikler seg over tid. Inflasjonen måles ofte med denne indeksen.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "inflasjonsmålet",
+        "forklaring": "Den prisveksten sentralbanken har som mål å holde seg rundt, som er 2 prosent i Norge. Prisveksten over dette regnes som for høy.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "arbeidsstyrken",
+        "forklaring": "Summen av alle som er sysselsatt eller arbeidsledige, altså de som er i jobb eller aktivt leter etter jobb.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Den delen av norsk økonomi som ikke er petroleumsvirksomhet, altså økonomien på fastlandet. Den brukes ofte for å måle utviklingen i resten av økonomien.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "yrkesdeltakelsen",
+        "forklaring": "Andelen av befolkningen i arbeidsfør alder som er i jobb eller leter etter jobb. Høy yrkesdeltakelse betyr at mange er med i arbeidslivet.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 17
+      }
+    ]
+  }
+}

@@ -136,7 +136,7 @@ describe("AD-11 — elementbrudd forkastes, med årsak", () => {
     expect(forkastet.map((f) => f.aarsak)).toEqual([
       "ikke verbatim i teksten",
       "sirkulær forklaring",
-      "kildeavsnitt utenfor listen",
+      "kildeavsnitt utenfor listen eller en overskrift",
     ]);
   });
 });

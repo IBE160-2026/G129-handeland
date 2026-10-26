@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-26T13:57:23.675Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "språklige bilder",
+        "forklaring": "Et språklig bilde er et uttrykk som brukes i overført betydning for å beskrive noe. Det får leseren til å tenke på én ting gjennom en annen.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En allegori er en tekst som kan leses konkret, men også som et bilde på noe annet og større, ofte en moral eller et samfunnsforhold. Historien i teksten står for noe annet enn det den umiddelbart handler om.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "En allusjon er et språklig virkemiddel der teksten viser til eller låner fra en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får et ekstra lag med mening når hen gjenkjenner referansen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En konnotasjon er den felles assosiasjonen vi knytter til et ord, i tillegg til ordets bokstavelige betydning. For eksempel gir fargen svart ofte assosiasjoner til noe dystert.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Personifikasjon er at noe som ikke er menneskelig, for eksempel døden eller stillheten, får menneskelig skikkelse eller menneskelige handlinger. Det gjør at leseren ser det som en person.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Besjeling er at livløse ting eller naturen får menneskelige egenskaper, for eksempel at sola smiler eller at en maskin sukker. Forskjellen fra personifikasjon er at tingen ikke blir en person, den får bare menneskelige trekk.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et språklig virkemiddel er et grep forfatteren bruker for å påvirke leseren eller skape en bestemt følelse. Språklige bilder og allusjoner er eksempler på slike virkemidler.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 49
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En fabel er en kort fortelling, ofte med dyr som hovedpersoner, som slutter med en moral. Fabelen kan ofte leses allegorisk.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 38
+      }
+    ]
+  }
+}

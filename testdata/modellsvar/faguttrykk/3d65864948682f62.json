@@ -1,0 +1,53 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et f",
+  "lagret": "2026-10-26T13:56:58.817Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og kan bevege seg gjennom tomrom. Lys, radiobølger og røntgenstråling er alle former for elektromagnetiske bølger.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper i en bølge, målt i meter eller nanometer. Kortere bølgelengde gir mer energi, og lengre bølgelengde gir mindre energi.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, en elektromagnetisk stråling med bølgelengder litt lengre enn synlig lys. Vi kjenner den som varme.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag med elektrisk ladde partikler høyt oppe i atmosfæren. Det kan reflektere radiobølger tilbake mot jorda.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 5
+      },
+      {
+        "uttrykk": "ultrafiolett stråling",
+        "forklaring": "Elektromagnetisk stråling med kortere bølgelengde enn synlig lys, altså mer energi. Den kan gjøre huden solbrent.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med svært høy energi og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoffer som er ugjennomsiktige for vanlig lys.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m. De brukes i mikrobølgeovner.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 7
+      }
+    ]
+  }
+}

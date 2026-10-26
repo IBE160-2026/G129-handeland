@@ -112,12 +112,17 @@ function erSammeStamme(ord: string, stamme: string): boolean {
   return ord.startsWith(stamme.slice(0, Math.max(4, kort - 3)));
 }
 
-/** Kildeavsnittet må finnes i den mottatte avsnittslisten. AD-10. */
+/**
+ * Kildeavsnittet må finnes i den mottatte avsnittslisten (AD-10), og det må
+ * være brødtekst. En overskrift forklarer ingenting: eleven som følger
+ * kilden til «personifikasjon», fant bare ordet «Personifikasjon»
+ * (kodefunn 23, 26.10). Minnevers og fagsamtale avviste det alt.
+ */
 export function harGyldigKildeavsnitt(
   kandidat: Begrepskandidat,
   avsnitt: Avsnitt[],
 ): boolean {
-  return avsnitt.some((a) => a.nummer === kandidat.kildeavsnittNummer);
+  return avsnitt.some((a) => a.nummer === kandidat.kildeavsnittNummer && !a.erOverskrift);
 }
 
 /**
@@ -138,7 +143,7 @@ export function filtrerUgyldige(
     if (erVerbatim(k.uttrykk, avsnitt) === false) {
       forkastet.push({ kandidat: k, aarsak: "ikke verbatim i teksten" });
     } else if (harGyldigKildeavsnitt(k, avsnitt) === false) {
-      forkastet.push({ kandidat: k, aarsak: "kildeavsnitt utenfor listen" });
+      forkastet.push({ kandidat: k, aarsak: "kildeavsnitt utenfor listen eller en overskrift" });
     } else if (erSirkulaer(k.uttrykk, k.forklaring)) {
       forkastet.push({ kandidat: k, aarsak: "sirkulær forklaring" });
     } else {

@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Språklige bilder: metafor, allegori og allusjon [avsnitt 2, overskrift] Lyriske virkemidler [avsnitt 3, overskrift] Litt om språklige bilder [avsnitt 4] Et språklig bilde er",
+  "lagret": "2026-10-26T13:57:24.870Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "allegori",
+        "forklaring": "En tekst som kan forstås både konkret og som et bilde på noe annet og større, ofte en moral eller samfunnsforhold. Den konkrete historien står for noe mer generelt.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 35
+      },
+      {
+        "uttrykk": "allusjon",
+        "forklaring": "Et språklig virkemiddel der teksten låner fra eller viser til en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får et ekstra lag med mening når hen gjenkjenner referansen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 52
+      },
+      {
+        "uttrykk": "språklig bilde",
+        "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noe. Det får leseren til å tenke på noe annet som har egenskaper som kan overføres.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Et virkemiddel der noe som ikke er menneske, for eksempel en abstrakt størrelse som stillhet eller døden, får menneskelige egenskaper eller handlinger.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "besjeling",
+        "forklaring": "Et virkemiddel der noe livløst, for eksempel en ting, sol eller natur, får liv og sjel og gjør menneskelige handlinger som smile eller sukke.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "konnotasjon",
+        "forklaring": "En assosiasjon som mange knytter til et ord utover den bokstavelige betydningen. Ordvalget påvirker stemningen i diktet, for eksempel vekker svart gjerne tanker om noe dystert.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "fabel",
+        "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som avslutter med en moral. Fabler kan ofte leses allegorisk.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 38
+      },
+      {
+        "uttrykk": "språklig virkemiddel",
+        "forklaring": "Et grep forfatteren eller kunstneren bruker for å påvirke leseren eller skape en bestemt følelse. Allusjon er et eksempel på et slikt virkemiddel.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 49
+      }
+    ]
+  }
+}

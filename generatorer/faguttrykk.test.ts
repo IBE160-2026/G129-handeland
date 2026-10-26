@@ -191,6 +191,21 @@ describe("hentFaguttrykk — forkasting med begrunnelse", () => {
     expect(r.forkastet[0].aarsak).toContain("kildeavsnitt");
   });
 
+  test("§5: en overskrift er aldri kildeavsnitt (kodefunn 23)", async () => {
+    await gittSvar([
+      {
+        uttrykk: "celledeling",
+        forklaring: "Når en celle deler seg i to nye celler.",
+        viktighetsrangering: 1,
+        kildeavsnitt: 1,
+      },
+    ]);
+
+    const r = await hentFaguttrykk(avsnitt);
+    expect(r.begreper).toEqual([]);
+    expect(r.forkastet[0].aarsak).toContain("overskrift");
+  });
+
   test("sirkulær forklaring forkastes", async () => {
     await gittSvar([
       {
@@ -402,7 +417,7 @@ describe("hentFaguttrykk — tetthet", () => {
         uttrykk: "celledeling",
         forklaring: "Når en celle deler seg i to nye celler.",
         viktighetsrangering: 1,
-        kildeavsnitt: 1,
+        kildeavsnitt: 2,
       },
     ]);
 

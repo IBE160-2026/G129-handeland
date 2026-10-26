@@ -1,0 +1,41 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] metafor [avsnitt 2] En metafor er et ord eller et uttrykk som brukes i overført eller billedlig betydning. Et par eksempler er å si «å holde hjulene i gang» om å sørge for at",
+  "lagret": "2026-10-26T13:57:08.407Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "metafor",
+        "forklaring": "En metafor er et ord eller uttrykk som brukes i overført, billedlig betydning, ikke i sin bokstavelige betydning. Ved hjelp av metaforen skapes en forbindelse mellom to betydningsområder.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 2
+      },
+      {
+        "uttrykk": "kognitiv metafor",
+        "forklaring": "En kognitiv metafor er en tankemessig metafor som former hvordan vi forstår og tenker om noe. Den kommer til uttrykk gjennom språklige metaforer, men ligger dypere enn ordene.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 14
+      },
+      {
+        "uttrykk": "simile",
+        "forklaring": "En simile er en sammenligning der noe settes opp mot noe annet ved hjelp av ord som «som» eller «lik». For eksempel «gjorde det som en løve».",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "domenene",
+        "forklaring": "Domener er de to forestillingsområdene en metafor knytter sammen: området metaforen henter mening fra, og området den overfører mening til.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 17
+      },
+      {
+        "uttrykk": "personifikasjon",
+        "forklaring": "Personifikasjon er en form for metafor der ting, dyr eller abstrakte størrelser gis menneskelige egenskaper, for eksempel at en nasjonalsang kan «senke drømmer» over jorden.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 12
+      }
+    ]
+  }
+}

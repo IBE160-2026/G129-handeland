@@ -1,0 +1,59 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har bidratt ti",
+  "lagret": "2026-10-26T13:57:37.858Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "inflasjonen",
+        "forklaring": "Inflasjon er den generelle økningen i prisene på varer og tjenester over tid, som gjør at pengene kjøper mindre. Her måles den med konsumprisindeksen.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "styringsrenta",
+        "forklaring": "Styringsrenta er renten Norges Bank setter for utlån mellom bankene. Den påvirker hvor dyre lån og sparing blir for husholdninger og bedrifter, og brukes til å styre inflasjonen.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "Boliginvesteringene",
+        "forklaring": "Boliginvesteringene er det samlede beløpet som brukes på å bygge nye boliger og på større oppgraderinger av eksisterende boliger. Når de faller, betyr det at det bygges mindre.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 12
+      },
+      {
+        "uttrykk": "reallønnsveksten",
+        "forklaring": "Reallønnsveksten er hvor mye lønnene øker etter at prisveksten er trukket fra. Den viser hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 6
+      },
+      {
+        "uttrykk": "arbeidsstyrken",
+        "forklaring": "Arbeidsstyrken er summen av alle som er i arbeid og alle som er arbeidsledige og leter etter jobb. Ledighetsprosenten regnes ut i forhold til denne gruppen.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "BNP-veksten",
+        "forklaring": "BNP er bruttonasjonalproduktet, den samlede verdien av alt som produseres i et land i løpet av et år. BNP-veksten viser hvor mye denne verdien øker fra ett år til et annet.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 26
+      },
+      {
+        "uttrykk": "fastlandsøkonomien",
+        "forklaring": "Fastlandsøkonomien er den delen av norsk økonomi som ikke omfatter petroleumsvirksomheten og sjøfarten. Den brukes for å se på utviklingen i resten av næringslivet.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "yrkesdeltakelsen",
+        "forklaring": "Yrkesdeltakelsen er andelen av befolkningen i arbeidsfør alder som er i jobb eller leter etter jobb. Høy yrkesdeltakelse betyr at mange deltar i arbeidslivet.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 17
+      }
+    ]
+  }
+}
