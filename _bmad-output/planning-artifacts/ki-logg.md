@@ -215,6 +215,125 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 ---
 
+<!--
+  SKJELETT, satt opp av Claude 26.10. Feltene «Verktøy», «Hva jeg ba om», «Hva som kom tilbake» og «Spor» er fakta
+  hentet fra promptloggen, promptregisteret, kodefunn og git, og kan kontrolleres der. «Hva jeg gjorde» og
+  «Begrunnelse» er tomme med vilje: de skal skrives med mine egne ord. Typen i tittelen er et forslag.
+  Slett denne kommentaren når oppføringene er ferdige.
+-->
+
+## 2026-10-14 — ENDRET: mitt prioriteringsprinsipp inn i prompten for fagord
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens uttrekk: claude-haiku-5-5.
+
+**Hva jeg ba om:** etter at runde 1 av gullsettet var annotert, limte jeg inn notatet jeg skrev før annoteringen, om tvil («ikke ta med») og prioritering («begreper som går igjen mange ganger og er viktige», «sentrale fagbegreper som ikke blir forklart»). Senere: «Okei, vi må forfremme v3 da, men burde vi gjøre noe annet: revurdere kravene eller finspisse enda mer og lage en v4?»
+
+**Hva som kom tilbake:** påpekningen at prioriteringsprinsippet mitt ikke sto i prompten, altså at modellen og jeg ble målt mot ulike regler. Prompt v3 med prinsippet ble laget og målt over tre kjøringer: presisjon 0,42 → 0,46, gjenkalling 0,36 → 0,38 (ingen sikker forskjell). FR-8 er ikke nådd.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 14.10](promptlogg.md) · REGISTER, Faguttrykk v3 · commit `4e881df`, `0920b8f`
+
+---
+
+## 2026-10-16 — FANGET KI-FEIL: metoden for κ kunne aldri gi et positivt tall
+
+**Verktøy:** Claude Code (Claude Opus 5.5).
+
+**Hva jeg ba om:** verktøyet for å måle egen annoteringsstøy (steg 5 i annoteringsveiledningen), som skulle bygges etter veiledningen fra tidlig i oktober — også den skrevet med KI.
+
+**Hva som kom tilbake:** da formelen ble regnet ut før verktøyet ble skrevet, viste det seg at metoden i veiledningen (κ over unionen av ordene fra to runder) alltid gir κ ≤ 0. Veiledningen hadde i tillegg en «begrensning» som pekte feil vei («overvurderer samsvaret noe»). Rettet til positivt samsvar som hovedtall og κ over alle ordformer, med en test som beviser feilen.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [kodefunn 12](kodefunn.md) · annotering.md §5 · commit `86c8b5d`, `ac04678`
+
+---
+
+## 2026-10-16 — ENDRET: quizen etter at jeg fant en feil fasit
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens quiz: claude-haiku-5-5.
+
+**Hva jeg ba om:** jeg testet quiz v1 og meldte blant annet: «spm: Hva er renter ifølge teksten?, svaralternativet her misforstår teksten, og sier implisitt at rentene er det samme som terminbeløp. Det ligner på det som står i teksten, men det er jo en vesensforskjell.»
+
+**Hva som kom tilbake:** prompt v2 med krav om at det riktige alternativet skal bety det samme som teksten, og at to spørsmål ikke spør om det samme. Demoquizen ble laget på nytt. Umålt; observasjonen etterpå var flere faktaspørsmål, som følges opp i M1.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 16.10 kl. 10:39](promptlogg.md) · REGISTER, Quiz v2 · commit `d027947`, `81162ec`
+
+---
+
+## 2026-10-16 — ENDRET: fagsamtalen etter min egen testing
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens fagsamtale: claude-sonnet-5-5.
+
+**Hva jeg ba om:** jeg testet fagsamtale v1 med seks tilfeller og meldte blant annet at et riktig svar ble vurdert som delvis, og at trøsten «Det går fint å ikke vite, for avsnitt 7 beskriver …» knyttet trøsten til teksten. Avsluttet med: «Nå vil jeg at du skal ta kontroll og evaluere og bruke disse resultatene til å bygge videre.»
+
+**Hva som kom tilbake:** årsaken til det første funnet var at startspørsmålet egentlig var to spørsmål («… og hvorfor»). Prompt v2: ett spørsmål om én ting, ingen avsnittsnumre i vurderingen, «dekkende» krever poenget men ikke tekstens ordlyd, trøsten står for seg selv. Samme tilfeller på nytt: delvis ble dekkende. Dobbeltspørsmål i 1 av 3 startspørsmål, så koden fikk tre forsøk.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 16.10 kl. 15:47](promptlogg.md) · REGISTER, Fagsamtale v2 · commit `9d74c1e`, `61d8ea3`
+
+---
+
+## 2026-10-17 — FANGET AV MENNESKE: «hva tenker du at et minnevers er?»
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens minnevers: claude-haiku-5-5.
+
+**Hva jeg ba om:** under vurderingen av minnevers v1: «Og hva tenker du at et minnevers er?»
+
+**Hva som kom tilbake:** v1 hadde bestått alle maskinelle kontroller (10 av 10), men versene var rimfrie oppsummeringer med linjer på opptil 25 stavelser. Prompt v2 med korte linjer, parrim og rytme, en kodegrense på 14 stavelser, og et nytt punkt på vurderingsarket: «fungerer som huskeregel».
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 17.10 kl. 08:45](promptlogg.md) · REGISTER, Minnevers v2 · commit `e7476ca`
+
+---
+
+## 2026-10-19 til 26 — FORKASTET: minnevers v4–v6, og arbeidet stoppet på v3
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens minnevers: claude-haiku-5-5, og én runde med claude-sonnet-5-5.
+
+**Hva jeg ba om:** vurderte v3 og v4 vers for vers (v3: 0 usanne, huskeregel 6/10; v4: 0 usanne, 5/10). Deretter «prøv v5», «Kan vi prøve en gang med sonnet før vi gir oss?», «er det noen annen inngang til å løse dette?», og til slutt egne eksempelvers.
+
+**Hva som kom tilbake:** v5 med flere regler (7/10 gjennom kontrollen, rim og fyll verre), Sonnet (1/10, tom for tokens), v6 med eksempel og kodekontroll mot rim på samme ord (9/10, vurderingen avbrutt etter vers 1). Da jeg skrev et eget vers, påpekte Claude at det jeg likte (lange linjer, fyllord med humor), var det jeg hadde trukket ned hos modellen. Fire alternativer ble lagt fram; anbefalingen var å beholde v3 og vurdere elevskrevne vers senere.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 19.–26.10](promptlogg.md) · REGISTER, Minnevers v4–v6 og avgjørelsen 26.10 · PRD §11 spørsmål 15 · commit `864818e`, `2edf5fd`, `8dccc9e`, `397a387`
+
+---
+
+## 2026-10-26 — METODE: annoteringsrunde 2 uten at KI påvirket valgene
+
+**Verktøy:** Claude Code (Claude Opus 5.5), bare som skriver.
+
+**Hva jeg ba om:** «Kan vi gå gjennom annoteringen i dette vinduet, og så bare fører du det inn?»
+
+**Hva som kom tilbake:** teksten ble vist ordrett uten markering og uten forslag, og runde 1-filene ble ikke åpnet før begge tekstene var ført inn. Claude fanget én ordform som ikke sto i teksten («prosessor», bare «prosessorer» står der) — og oppdaget underveis at sin egen første sjekk hadde sagt «ok» feilaktig. Resultat: positivt samsvar 0,62, κ 0,61 (Språklige bilder 0,77, Operativsystem 0,47); tre av tolv avvik er bare bøyning.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** [promptlogg 26.10](promptlogg.md) · `maaling/resultater/2026-10-26-annoteringsstoey.md` · commit `548c8cc`
+
+---
+
 ## Status mot FR-38, per 7. oktober
 
 Ti oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
