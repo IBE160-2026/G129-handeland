@@ -1,0 +1,289 @@
+{
+  "krav": "FR-8, forklaringenes riktighet",
+  "promptversjon": "v3",
+  "vurdert": "2026-10-26",
+  "vurdert_av": "utvikleren",
+  "sum": {
+    "riktig": 38,
+    "gal": 0,
+    "misvisende": 1,
+    "utenforTeksten": 14,
+    "totalt": 39
+  },
+  "bestaatt": true,
+  "dommer": [
+    {
+      "nr": 1,
+      "uttrykk": "elektromagnetisk stråling",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 2,
+      "uttrykk": "bølgelengde",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 3,
+      "uttrykk": "ionosfæren",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 4,
+      "uttrykk": "frekvens",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 5,
+      "uttrykk": "IR-stråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 6,
+      "uttrykk": "ultrafiolett stråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Kanskje litt mangelfull. Kildeavsnittet peker feil: 10–400 nm og solbrenthet står i avsnitt 20–21, ikke 19."
+    },
+    {
+      "nr": 7,
+      "uttrykk": "røntgenstråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 8,
+      "uttrykk": "metafor",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 9,
+      "uttrykk": "simile",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 10,
+      "uttrykk": "domenene",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 11,
+      "uttrykk": "kognitive metaforer",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "Litt vanskelig formulert. U (siste setning)."
+    },
+    {
+      "nr": 12,
+      "uttrykk": "personifikasjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Ikke så klart som det kunne vært: «døde ting eller abstrakte begreper» blander personifikasjon og besjeling, som Språklige bilder skiller mellom."
+    },
+    {
+      "nr": 13,
+      "uttrykk": "metafor",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 14,
+      "uttrykk": "allegori",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "«Ofte med en moral» er en litt for sterk forenkling av «noen ganger … for å få fram en moral». På vei mot misvisende, men ikke helt."
+    },
+    {
+      "nr": 15,
+      "uttrykk": "allusjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 16,
+      "uttrykk": "personifikasjon",
+      "vurdering": "misvisende",
+      "utenforTeksten": false,
+      "kommentar": "I konflikt med besjeling («noe livløst» er tekstens besjeling; personifikasjon er abstrakte ting). Kildeavsnittet er en overskrift og peker ikke på noe godt avsnitt."
+    },
+    {
+      "nr": 17,
+      "uttrykk": "besjeling",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U. Kildeavsnittet er en overskrift."
+    },
+    {
+      "nr": 18,
+      "uttrykk": "konnotasjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 19,
+      "uttrykk": "fabel",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 20,
+      "uttrykk": "styringsrenta",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 21,
+      "uttrykk": "boliginvesteringene",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 22,
+      "uttrykk": "inflasjonsmålet",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 23,
+      "uttrykk": "konsumprisindeksen",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 24,
+      "uttrykk": "fastlandsøkonomien",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 25,
+      "uttrykk": "reallønnsvekst",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 26,
+      "uttrykk": "BNP-veksten",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 27,
+      "uttrykk": "topp-domenet",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 28,
+      "uttrykk": "under-domene",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Eksempelet «om» burde stått i anførselstegn."
+    },
+    {
+      "nr": 29,
+      "uttrykk": "Merkenavn-toppdomener",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 30,
+      "uttrykk": "DNS-rotserverne",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 31,
+      "uttrykk": "Nasjonale topp-domener (ccTLD)",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 32,
+      "uttrykk": "Generiske topp-domener (gTLD)",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 33,
+      "uttrykk": "Sponsede topp-domener",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 34,
+      "uttrykk": "operativsystem",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 35,
+      "uttrykk": "systemprogramvare",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 36,
+      "uttrykk": "applikasjonsprogramvare",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 37,
+      "uttrykk": "driverprogram",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 38,
+      "uttrykk": "sanntidsoperativsystemer",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 39,
+      "uttrykk": "plattform",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    }
+  ]
+}

@@ -21,6 +21,8 @@ Målerapportene ligger i `maaling/resultater/`.
 over tre kjøringer hver, med spennene oppgitt. Og den ærlige delen: gjenkallingen
 endret seg ikke, og FR-8 er ikke nådd.
 
+**Forklaringene, vurdert 26.10 (v3):** 0 gale, 1 misvisende, 38 riktige av 39 — kravet om null gale er nådd (`maaling/resultater/fr8-forklaringer-dommer-v3.json`). **14 av 39 bryter promptens regel** «Si ikke noe om uttrykket som teksten ikke dekker», alle sju i avisteksten om prisvekst, og utvikleren vurderte nettopp dem som de mest hjelpsomme: teksten bruker fagordene uten å forklare dem, og prompten ber samtidig om å prioritere slike ord. Regelen er i konflikt med prioriteringen og strengere enn PRD-en («faglig riktig og i samsvar med Kildeavsnittet»). Kandidat til v4: samme formulering som PRD-en. Se også kodefunn 23 (kildeavsnitt som er en overskrift).
+
 ## Quiz (FR-13, FR-14)
 
 | Versjon | Dato | Endring og grunn | Målt | Status |

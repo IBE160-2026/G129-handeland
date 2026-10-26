@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**301 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**313 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
 
 ---
 
@@ -1902,7 +1902,68 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Jeg slettet den med vilje, og ønsker å beholde det slik.
 
-<details><summary>Commits i økta (9)</summary>
+**13:12**
+
+> Sånn, nå er jeg nøgd
+
+**13:13**
+
+> hva var det med quiz-arket?
+
+**13:32**
+
+> Jatakk!
+
+**13:39**
+
+> yes, lag i vei!
+
+**13:41**
+
+> Vi kjører her
+
+**13:44**
+
+> hvis det er korrekt, skulle jeg vurdere om det er basert på noe som finnes i teksten, elle rom det er hentet fra andre kilder?
+
+**13:47**
+
+> Fint, vi gjør det med U-en. Men kan du da også skrive avsnittet det er hentet fra litt tydeligere, slik at jeg lettere ser om det er hentet internt eller eksternt
+
+**13:57**
+
+> 1 Riktig U, 2 Riktig U, 3 Riktig U, 4 R, 5 R, 6 R (men kanskje litt mangelfull), 7 Riktig,
+
+**14:10**
+
+> 4: korrekt at det mangler U.
+> 2: Det er korrekt at man får litt mer av å peke på avsnitt 13, men det mest sentrale er jo hentet utenfra.
+> 6: Enig
+> 7: Hre syns jeg det er like legitimt å peke på 23 som 24 og 25
+>
+> 8 R, 9 R, 10 R, 11 R (men litt vanskelig formulert), 12 R
+
+**14:27**
+
+> 12 jeg vet ikke om det er misvisende, men det er hvertfall ikke så klart som det gjerne kunne vært.
+>
+> 11: Joda, det står i siste setning.
+>
+>
+>
+> 13 R, 14 R (men setningen "ofte med moral" er en litt for forenkling fra "for å få frem en moral". På vei mot M, men ikke helt misvisende), 15 R, 16 M (her er det i konflikt med besjeling, og i tillegg peker det ikke på noen gode avsnitt), 17 R U,  18 R, 19 R
+
+**14:36**
+
+> 20 R U, 21 R U, 22 R U, 23 R U, 24 R U, 25 R U, 26 R U
+>
+> Veldig nyttig! Her hentet den definisjoner utenfor teksten på alt, men det var utrolig hjelpsomt!
+
+**14:45**
+
+> 27 R, 28 R (ved slike sitat kunne gjerne "om" blitt markert med anførselstegn), 29 R, 30 R U, 31 R, 32 R, 33R
+
+<details><summary>Commits i økta (12)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
@@ -1913,5 +1974,8 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `1d5c718` KI-logg: oppføringer 14.–19.10 skrevet, statustabellen oppdatert til 16
 - `ccef2de` Promptlogg: oppdatert
 - `1a015fe` KI-logg: septemberoppføringene med egne ord, fristoppføringen tatt ut
+- `7d2e7b8` KI-logg: skrivefeil rettet
+- `3ee7063` Annotering §6: runde 2, samsvar og lagrede tall krysset av
+- `d362056` Vurderingsark for forklaringene til fagordene (FR-8)
 
 </details>

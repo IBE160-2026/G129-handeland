@@ -544,11 +544,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 23 — Forklaringer kunne vise til en overskrift som kilde
+
+**Hvor:** `generatorer/validering.ts`, `harGyldigKildeavsnitt`. Den sjekker bare at avsnittsnummeret finnes, ikke at det er brødtekst.
+
+**Hva:** i teksten om språklige bilder viser forklaringene til «personifikasjon» og «besjeling» til avsnitt 13 og 9, som er overskriftene «Personifikasjon» og «Besjeling». Eleven som følger kilden, finner bare ett ord. §5 sier «ingen KI-utdata uten kilde», og minneversgeneratoren avviser overskrifter som kilde (fra v3); fagordene, som er det eleven møter først, gjorde det ikke.
+
+**Hvordan det ble funnet:** under utviklerens gjennomgang av forklaringene (FR-8) 26.10. Utvikleren ba om å få se hele kildeavsnittet for hver forklaring, og da ble det synlig at to av dem var overskrifter. Den samme visningen viste at flere forklaringer henter innhold fra et annet avsnitt enn det de viser til (EM-bølger nr. 6, metafor nr. 8), som ingen sjekk fanger.
+
+**Rettelse:** ikke rettet ennå. En rettelse endrer hvilke uttrykk som leveres, og dermed FR-8-tallene for v3; den bør gjøres sammen med neste promptversjon og måles om.
+
+**Mønsteret:** samme regel håndhevet ett sted og ikke et annet. Regelen ble lagt inn i den generatoren der problemet først ble sett, ikke i det felles valideringslaget.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 22 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 23 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egen gjennomgang pågår i `gjennomgang-innlogging.md` |

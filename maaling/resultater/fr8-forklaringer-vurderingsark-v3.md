@@ -25,9 +25,9 @@ Røntgenstråling er elektromagnetisk stråling som er mer energirik enn UV-C og
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 2. bølgelengde
 
@@ -39,9 +39,9 @@ Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 3. ionosfæren
 
@@ -53,9 +53,9 @@ På grunn av den lange bølgelengden er radiobølger svært godt egnet til å se
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 4. frekvens
 
@@ -67,9 +67,9 @@ Ved å øke svingefrekvensen i Hertz forsøk kunne man produsere elektromagnetis
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 5. IR-stråling
 
@@ -81,7 +81,7 @@ IR-stråling er elektromagnetisk stråling som har litt mindre energi enn synlig
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -95,9 +95,9 @@ Inspirert av Herschels oppdagelse av IR gjorde Johann W. Ritter forsøk på den 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Kanskje litt mangelfull. Kildeavsnittet peker feil: 10–400 nm og solbrenthet står i avsnitt 20–21, ikke 19.
 
 ### 7. røntgenstråling
 
@@ -109,7 +109,7 @@ Røntgenstråling er elektromagnetisk stråling som er mer energirik enn UV-C og
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -129,7 +129,7 @@ En metafor er et ord eller et uttrykk som brukes i overført eller billedlig bet
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -143,7 +143,7 @@ Metaforen har mye til felles med similen , men i en metafor skjer sammenligninge
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -157,7 +157,7 @@ Det finnes flere moderne teorier om metaforens funksjon innen både språkvitens
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -171,9 +171,9 @@ Innen kognitiv metaforteori skiller man mellom språklige metaforer, som «hjert
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Litt vanskelig formulert. U (siste setning).
 
 ### 12. personifikasjon
 
@@ -185,9 +185,9 @@ Siden metaforer ofte appellerer til fantasien og skaper sterke bilder, er de sæ
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Ikke så klart som det kunne vært: «døde ting eller abstrakte begreper» blander personifikasjon og besjeling, som Språklige bilder skiller mellom.
 
 ---
 
@@ -205,7 +205,7 @@ Et språklig bilde er et uttrykk som blir brukt i overført betydning, og som sk
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -219,9 +219,9 @@ En allegori er en tekst du kan tolke som et bilde på noe annet. Allegoriske tek
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** «Ofte med en moral» er en litt for sterk forenkling av «noen ganger … for å få fram en moral». På vei mot misvisende, men ikke helt.
 
 ### 15. allusjon
 
@@ -233,7 +233,7 @@ En allusjon er et språklig virkemiddel der vi låner fra eller refererer til en
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -247,9 +247,9 @@ Personifikasjon
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☐ riktig ☐ gal ☒ misvisende
 
-**Kommentar:**
+**Kommentar:** I konflikt med besjeling («noe livløst» er tekstens besjeling; personifikasjon er abstrakte ting). Kildeavsnittet er en overskrift og peker ikke på noe godt avsnitt.
 
 ### 17. besjeling
 
@@ -261,9 +261,9 @@ Besjeling
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U. Kildeavsnittet er en overskrift.
 
 ### 18. konnotasjon
 
@@ -275,7 +275,7 @@ En konnotasjon er en felles assosiasjon som vi knytter til et ord. Ordvalget til
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -289,7 +289,7 @@ Allegori Allegori er når en hel tekst kan forstås som et bilde på noe annet. 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -309,9 +309,9 @@ Norges Bank reduserte styringsrenta med 0,5 prosentpoeng i 2025. Etter uventet h
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 21. boliginvesteringene
 
@@ -323,9 +323,9 @@ Boliginvesteringene holdt seg på et lavt nivå gjennom 2025, etter å ha falt r
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 22. inflasjonsmålet
 
@@ -337,9 +337,9 @@ Boliginvesteringene holdt seg på et lavt nivå gjennom 2025, etter å ha falt r
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 23. konsumprisindeksen
 
@@ -351,9 +351,9 @@ Ifølge prognosene vil inflasjonen, målt ved konsumprisindeksen, avta fra 3,2 p
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 24. fastlandsøkonomien
 
@@ -365,9 +365,9 @@ Ifølge prognosene vil fastlandsøkonomien utvikle seg nær normalt framover, me
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 25. reallønnsvekst
 
@@ -379,9 +379,9 @@ Ifølge prognosene vil inflasjonen, målt ved konsumprisindeksen, avta fra 3,2 p
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 26. BNP-veksten
 
@@ -393,9 +393,9 @@ BNP-veksten hos Norges handelspartnere har i gjennomsnitt ligget på om lag 2 pr
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ---
 
@@ -413,7 +413,7 @@ Neste del er .no, som er det norske topp-domenet. Alle .no-adresser er regulert 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -427,9 +427,9 @@ om er et under-domene under .ndla-domenet. Dette styres av den samme DNS-servere
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Eksempelet «om» burde stått i anførselstegn.
 
 ### 29. Merkenavn-toppdomener
 
@@ -441,7 +441,7 @@ Merkenavn-toppdomener som .google eller .android, som eies og styres av en bedri
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -455,9 +455,9 @@ Hvis vi starter bakerst, har vi et punktum (.). Dette punktumet blir som oftest 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 31. Nasjonale topp-domener (ccTLD)
 
@@ -469,7 +469,7 @@ Nasjonale topp-domener (ccTLD).
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -483,7 +483,7 @@ Generiske topp-domener (gTLD).
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -497,7 +497,7 @@ Sponsede topp-domener som for eksempel .aero for fly-industrien.
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -517,7 +517,7 @@ Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og d
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -531,7 +531,7 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -545,7 +545,7 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -559,7 +559,7 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -573,7 +573,7 @@ Operativsystemer kan grupperes på flere måter.  En av dem er etter bruksområd
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -587,10 +587,10 @@ Forskjellige datamaskiner bruker forskjellige typer maskinvare. En applikasjon s
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☒ riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
 ---
 
-**Sum:** ____ riktig · ____ gal · ____ misvisende av 39  ·  **Krav:** 0 gale
+**Sum:** 38 riktig · 0 gal · 1 misvisende av 39  ·  **Krav:** 0 gale  ·  **Utenfor teksten (U):** 14

@@ -2405,9 +2405,105 @@
       "uuid": "1e70c69b-ae33-4268-a2fa-2c5abc6cfd5b",
       "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
       "tid": "2026-10-26T12:03:15.557Z",
-      "slutt": "2026-10-26T12:04:04.121Z",
+      "slutt": "2026-10-26T12:12:01.152Z",
       "modell": "claude-opus-5-5",
       "tekst": "Jeg slettet den med vilje, og ønsker å beholde det slik."
+    },
+    {
+      "uuid": "d767f14c-37cb-4268-8f9c-676f7a5919d8",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:12:01.167Z",
+      "slutt": "2026-10-26T12:13:07.395Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Sånn, nå er jeg nøgd"
+    },
+    {
+      "uuid": "e3ec263d-78a0-4857-84f0-9ae175767941",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:13:07.408Z",
+      "slutt": "2026-10-26T12:32:40.191Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "hva var det med quiz-arket?"
+    },
+    {
+      "uuid": "abb3cd0e-bb42-4d22-b1c1-5596a36c0335",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:32:40.229Z",
+      "slutt": "2026-10-26T12:39:47.957Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Jatakk!"
+    },
+    {
+      "uuid": "64022ab5-862c-4bae-aadc-7d3ff789d14c",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:39:47.997Z",
+      "slutt": "2026-10-26T12:41:56.953Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "yes, lag i vei!"
+    },
+    {
+      "uuid": "1c7d3a0c-094f-4586-a13a-ee31e1a6e583",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:41:56.976Z",
+      "slutt": "2026-10-26T12:44:12.198Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Vi kjører her"
+    },
+    {
+      "uuid": "29719826-5a36-4bf6-b5cb-0e4aa948ff0e",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:44:12.219Z",
+      "slutt": "2026-10-26T12:47:59.059Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "hvis det er korrekt, skulle jeg vurdere om det er basert på noe som finnes i teksten, elle rom det er hentet fra andre kilder?"
+    },
+    {
+      "uuid": "cbdcc8cd-855d-49dd-9d14-aec1fb69001f",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:47:59.075Z",
+      "slutt": "2026-10-26T12:57:51.015Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Fint, vi gjør det med U-en. Men kan du da også skrive avsnittet det er hentet fra litt tydeligere, slik at jeg lettere ser om det er hentet internt eller eksternt"
+    },
+    {
+      "uuid": "3a2b2ade-37fb-4ce8-8ed4-21f39f28e057",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T12:57:51.039Z",
+      "slutt": "2026-10-26T13:10:18.437Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "1 Riktig U, 2 Riktig U, 3 Riktig U, 4 R, 5 R, 6 R (men kanskje litt mangelfull), 7 Riktig,"
+    },
+    {
+      "uuid": "e5d9873c-c468-4161-a1c0-3a48577e121a",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T13:10:18.504Z",
+      "slutt": "2026-10-26T13:27:42.223Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "4: korrekt at det mangler U. \n2: Det er korrekt at man får litt mer av å peke på avsnitt 13, men det mest sentrale er jo hentet utenfra. \n6: Enig\n7: Hre syns jeg det er like legitimt å peke på 23 som 24 og 25\n\n8 R, 9 R, 10 R, 11 R (men litt vanskelig formulert), 12 R"
+    },
+    {
+      "uuid": "148ee707-cf9b-455b-8508-9001aef2c1d1",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T13:27:42.289Z",
+      "slutt": "2026-10-26T13:36:10.822Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "12 jeg vet ikke om det er misvisende, men det er hvertfall ikke så klart som det gjerne kunne vært. \n\n11: Joda, det står i siste setning. \n\n\n\n13 R, 14 R (men setningen \"ofte med moral\" er en litt for forenkling fra \"for å få frem en moral\". På vei mot M, men ikke helt misvisende), 15 R, 16 M (her er det i konflikt med besjeling, og i tillegg peker det ikke på noen gode avsnitt), 17 R U,  18 R, 19 R"
+    },
+    {
+      "uuid": "2e5d44fe-b068-4c68-ae8b-05e6abd493de",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T13:36:10.865Z",
+      "slutt": "2026-10-26T13:45:08.412Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "20 R U, 21 R U, 22 R U, 23 R U, 24 R U, 25 R U, 26 R U \n\nVeldig nyttig! Her hentet den definisjoner utenfor teksten på alt, men det var utrolig hjelpsomt!"
+    },
+    {
+      "uuid": "140266b5-c65c-41fa-b051-53874ef453ce",
+      "okt": "cd0690c7-b6ab-40b5-9fef-4602810e5c83",
+      "tid": "2026-10-26T13:45:08.522Z",
+      "slutt": "2026-10-26T13:45:36.793Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "27 R, 28 R (ved slike sitat kunne gjerne \"om\" blitt markert med anførselstegn), 29 R, 30 R U, 31 R, 32 R, 33R"
     }
   ]
 }

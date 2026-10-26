@@ -446,8 +446,8 @@ selv — og da er det kravet, ikke modellen, som bør vurderes.
 - [x] Gjenkalling og presisjon målt mot settet **etter kapping**, rapportert per fag, per kilde, per type og samlet
 - [x] To tekster annotert to ganger, minst sju dager mellom — *26.10, tolv dager etter runde 1: Språklige bilder og Operativsystem*
 - [x] Positivt samsvar og κ regnet med `npm run gullsett:samsvar`, med metoden og grunnlaget (to tekster) oppgitt — *0,62 og 0,61, `maaling/resultater/2026-10-26-annoteringsstoey.md`*
-- [ ] Forklaringene gjennomgått for faglige feil — terskelen er **null**, og
-      dette er en gjennomgang av leveransen, ikke en statistisk terskel
+- [x] Forklaringene gjennomgått for faglige feil — terskelen er **null**, og
+      dette er en gjennomgang av leveransen, ikke en statistisk terskel — *26.10: 0 gale, 1 misvisende, 38 riktige av 39 (prompt v3); 14 bruker kunnskap utenfor teksten. `maaling/resultater/fr8-forklaringer-dommer-v3.json`*
 - [x] Tallene lagret som data i repoet, ikke bare i en tabell i rapporten — *FR-8 og samsvaret som JSON i `maaling/resultater/`*
 
 ---
