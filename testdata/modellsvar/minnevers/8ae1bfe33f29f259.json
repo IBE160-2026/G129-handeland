@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T22:15:52.765Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Lang bølgelengde gir stor avstand,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "ionosfæren sender dem tilbake til land.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Radiobølger: lav frekvens, fra en meter,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "til mange km, så signalet når langt og leter.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "bølgelengde",
+      "frekvens",
+      "Radiobølger"
+    ],
+    "stil": ""
+  }
+}

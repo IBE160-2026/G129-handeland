@@ -55,6 +55,30 @@ export function stavelser(linje: string): number {
   return (linje.toLowerCase().match(/[aeiouyæøå]+/g) ?? []).length;
 }
 
+/**
+ * Siste ord i linjen, slik rimet høres: små bokstaver, og etter siste
+ * bindestrek («under-domenet» → «domenet»).
+ */
+function rimord(linje: string): string {
+  const ord = linje.toLowerCase().match(/[\p{L}-]+/gu) ?? [];
+  return (ord.at(-1) ?? "").split("-").filter(Boolean).at(-1) ?? "";
+}
+
+/**
+ * Rimer to linjer bare fordi de slutter på samme ord? «ned / ned»,
+ * «fordeler / deler» og «toppdomenet / under-domenet» er ikke rim
+ * (utviklerens vurdering av v4, 19.10). Det korte ordet må begynne på
+ * konsonant for å telle: «inn / finn» og «is / pris» er ekte rim, der det
+ * korte ordet bare er rimdelen. Eksportert for testene.
+ */
+export function sammeRimord(a: string, b: string): boolean {
+  const [x, y] = [rimord(a), rimord(b)];
+  if (!x || !y) return false;
+  if (x === y) return true;
+  const [kort, lang] = x.length <= y.length ? [x, y] : [y, x];
+  return lang.endsWith(kort) && !/^[aeiouyæøå]/.test(kort);
+}
+
 /** Høyst så mange forsøk før generatoren gir opp (AD-11). */
 const FORSOEK = 2;
 
@@ -123,6 +147,12 @@ export function kontrollerVers(
   for (const l of linjer) {
     const n = stavelser(l);
     if (n > MAKS_STAVELSER) brudd.push(`linjen «${l}» har ${n} stavelser, høyst ${MAKS_STAVELSER}`);
+  }
+  // Parrim: linje 1 med 2, 3 med 4 og så videre.
+  for (let i = 0; i + 1 < linjer.length; i += 2) {
+    if (sammeRimord(linjer[i], linjer[i + 1])) {
+      brudd.push(`linje ${i + 1} og ${i + 2} rimer på samme ord («${rimord(linjer[i])}» / «${rimord(linjer[i + 1])}»)`);
+    }
   }
   for (const f of svar.faguttrykk) {
     if (!sett.has(f.trim().toLowerCase())) brudd.push(`«${f}» står ikke i Begrepssettet`);

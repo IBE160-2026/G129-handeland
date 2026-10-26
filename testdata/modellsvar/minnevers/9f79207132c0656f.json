@@ -1,0 +1,31 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T22:19:28.686Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metafor binder to områder,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og skaper nye forbindelser.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Uten som og lik står tingen plass",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "for den andre, i samme klass.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "metafor"
+    ],
+    "stil": ""
+  }
+}

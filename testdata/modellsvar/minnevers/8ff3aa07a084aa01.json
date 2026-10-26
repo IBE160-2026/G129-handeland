@@ -1,0 +1,32 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T22:19:54.150Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "En metafor settes i stedet",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "for tingen den skal beskrives med.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Uten «som» og «lik» er det kjent:",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Metafor, ikke simile, er ment.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile"
+    ],
+    "stil": ""
+  }
+}

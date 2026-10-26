@@ -4,7 +4,7 @@
 
 import { describe, expect, test } from "vitest";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
-import { brukesIVers, kontrollerVers, stavelser } from "./minnevers";
+import { brukesIVers, kontrollerVers, sammeRimord, stavelser } from "./minnevers";
 
 const AVSNITT = delIAvsnitt("Celler\n\nMitose og meiose er celledeling.\n\nHvert kromosom kopieres.");
 
@@ -36,6 +36,19 @@ describe("stavelser", () => {
   ])("«%s»: %i", (l, n) => expect(stavelser(l)).toBe(n));
 });
 
+describe("sammeRimord — et ord rimer ikke på seg selv", () => {
+  test.each([
+    ["så settes styringsrenta gradvis ned.", "Inflasjonen må først ned,", true],
+    ["Mer energi, kortere bølgelengde,", "mindre energi, lengre bølgelengde.", true],
+    ["Operativsystemet fordeler", "skriver, minne og prosessorer deler.", true],
+    ["Så kommer .no, toppdomenet,", "så .ndla, og om, under-domenet.", true],
+    ["Korte bølger spres lett,", "radiobølger går uforstyrret rett.", false],
+    ["Radiobølger har lav frekvens", "og lang bølgelengde. Konsekvens:", false],
+    ["Programmet ber om å komme inn,", "og driverprogrammet tar seg av det, finn", false],
+    ["Det koster ingen pris,", "det fryser til is", false],
+  ])("«%s» / «%s»: %s", (a, b, svar) => expect(sammeRimord(a, b)).toBe(svar));
+});
+
 describe("FR-30/31 — kontrollen", () => {
   test("§5: en linje som peker på en overskrift eller et avsnitt som ikke finnes, gjør verset ugyldig", () => {
     const v = vers(GODT);
@@ -52,6 +65,13 @@ describe("FR-30/31 — kontrollen", () => {
 
   test("et godt vers har ingen brudd", () => {
     expect(kontrollerVers(vers(GODT), "vers", SETT, AVSNITT)).toEqual([]);
+  });
+
+  test("rim på samme ord avvises", () => {
+    const likt = ["Mitosen deler cella ned,", "meiose deler også ned.", ...GODT.slice(2)];
+    expect(kontrollerVers(vers(likt), "vers", SETT, AVSNITT)).toEqual([
+      "linje 1 og 2 rimer på samme ord («ned» / «ned»)",
+    ]);
   });
 
   test("for få og for mange linjer", () => {

@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Domeneoppbygning\",\"forklaring\":\"\"},{\"uttrykk\":\"toppdomene\",\"forklaring\":\"\"},{\"uttrykk\":\"DNS-rotserverne\",\"forklaring\":\"\"},{\"uttrykk\":\"IP-adressene\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T22:20:28.958Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Punktum bakerst; DNS-rotserverne, sted,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "så toppdomene .no, Norid med.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Om er et under-domene under .ndla i dag,",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "og flere nivå kan gi flere lag.",
+        "kildeavsnitt": 8
+      }
+    ],
+    "faguttrykk": [
+      "DNS-rotserverne",
+      "toppdomene",
+      "under-domene"
+    ],
+    "stil": ""
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T22:22:12.357Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet tildeler minne",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "og prosessorer, som programmer kan finne",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Skriveren får en venteliste",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "så to ikke skriver samtidig, i samme frist",
+        "kildeavsnitt": 2
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "minne",
+      "prosessorer"
+    ],
+    "stil": ""
+  }
+}

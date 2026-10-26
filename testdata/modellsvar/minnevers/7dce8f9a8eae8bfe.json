@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T22:17:59.166Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metafor gir tingen nytt navn,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "ikke simile, uten som og lik, til gavn.",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "Ett ord binder to betydningsområder,",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "og skaper en forbindelse, som gir mening der.",
+        "kildeavsnitt": 3
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

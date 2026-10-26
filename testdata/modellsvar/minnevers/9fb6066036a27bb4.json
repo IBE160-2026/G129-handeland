@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"Prisvekst\",\"forklaring\":\"\"},{\"uttrykk\":\"renteøkning\",\"forklaring\":\"\"},{\"uttrykk\":\"konjunkturtendensene\",\"forklaring\":\"\"},{\"uttrykk\":\"styringsrenta\",\"forklaring\":\"\"},{\"u",
+  "lagret": "2026-10-19T22:16:37.147Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Når prisveksten er høy,",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "ventes å øke styringsrenta på ny.",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "Inflasjonen tar tid å gå,",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "fra 3,2 til 2 prosent, altså.",
+        "kildeavsnitt": 6
+      }
+    ],
+    "faguttrykk": [
+      "Prisvekst",
+      "styringsrenta",
+      "inflasjon"
+    ],
+    "stil": ""
+  }
+}

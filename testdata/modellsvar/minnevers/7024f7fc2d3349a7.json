@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"metafor\",\"forklaring\":\"\"},{\"uttrykk\":\"betydningsområder\",\"forklaring\":\"\"},{\"uttrykk\":\"metaforteori\",\"forklaring\":\"\"},{\"uttrykk\":\"kognitiv\",\"forklaring\":\"\"},{\"uttrykk\":\"",
+  "lagret": "2026-10-19T22:18:36.344Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Metafor, ikke simile: overført mening,",
+        "kildeavsnitt": 6
+      },
+      {
+        "tekst": "to betydningsområder gir forening.",
+        "kildeavsnitt": 3
+      },
+      {
+        "tekst": "Foten av fjellet og fjordarm er ord,",
+        "kildeavsnitt": 9
+      },
+      {
+        "tekst": "kroppsord om døde ting på jord.",
+        "kildeavsnitt": 9
+      }
+    ],
+    "faguttrykk": [
+      "metafor",
+      "simile",
+      "betydningsområder"
+    ],
+    "stil": ""
+  }
+}

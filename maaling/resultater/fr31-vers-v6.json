@@ -1,0 +1,221 @@
+{
+  "krav": "FR-31",
+  "vers": [
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Lang bølgelengde gir lav energi,",
+        "kort bølgelengde gir mer, under ti nm.",
+        "Røntgenstråling er mer energirik enn UV-C,",
+        "UV-A har minst, så det er lett å se."
+      ],
+      "kildeavsnitt": [
+        13,
+        23,
+        23,
+        21
+      ],
+      "faguttrykk": [
+        "bølgelengde",
+        "røntgenstråling",
+        "energi"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "naturfag-em-bolger",
+      "form": "vers",
+      "linjer": [
+        "Lang bølgelengde gir stor avstand,",
+        "ionosfæren sender dem tilbake til land.",
+        "Radiobølger: lav frekvens, fra en meter,",
+        "til mange km, så signalet når langt og leter."
+      ],
+      "kildeavsnitt": [
+        5,
+        5,
+        3,
+        3
+      ],
+      "faguttrykk": [
+        "Radiobølger",
+        "frekvens",
+        "bølgelengde"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Når prisveksten er høy,",
+        "ventes å øke styringsrenta på ny.",
+        "Inflasjonen tar tid å gå,",
+        "fra 3,2 til 2 prosent, altså."
+      ],
+      "kildeavsnitt": [
+        9,
+        9,
+        5,
+        6
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "styringsrenta",
+        "inflasjon"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst",
+      "form": "vers",
+      "linjer": [
+        "Høy lønnsvekst holder prisveksten oppe,",
+        "så venter vi ny renteøkning i år.",
+        "Dyre energi- og råvarepriser",
+        "Det tar tid før inflasjonen kommer ned."
+      ],
+      "kildeavsnitt": [
+        3,
+        9,
+        3,
+        5
+      ],
+      "faguttrykk": [
+        "Prisvekst",
+        "renteøkning",
+        "inflasjon"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "norsk-metafor",
+      "form": "vers",
+      "linjer": [
+        "Metafor, ikke simile: overført mening,",
+        "to betydningsområder gir forening.",
+        "Foten av fjellet og fjordarm er ord,",
+        "kroppsord om døde ting på jord."
+      ],
+      "kildeavsnitt": [
+        6,
+        3,
+        9,
+        9
+      ],
+      "faguttrykk": [
+        "metafor",
+        "betydningsområder",
+        "simile"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Punktum bakerst; DNS-rotserverne, sted,",
+        "så toppdomene .no, Norid med.",
+        "Om er et under-domene under .ndla i dag,",
+        "og flere nivå kan gi flere lag."
+      ],
+      "kildeavsnitt": [
+        5,
+        6,
+        8,
+        8
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning",
+      "form": "vers",
+      "linjer": [
+        "Les adressen bakfra, fra punktet og ned,",
+        "og så under-domenet under .ndla med.",
+        "Det norske toppdomenet .no, Norid rår,",
+        "punktet peker mot DNS-rotserverne, som står."
+      ],
+      "kildeavsnitt": [
+        5,
+        8,
+        6,
+        5
+      ],
+      "faguttrykk": [
+        "toppdomene",
+        "DNS-rotserverne",
+        "under-domene"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet deler tid",
+        "mellom programmene uten strid.",
+        "Applikasjonsprogrammer ber om tilgang hver dag,",
+        "og maskinvaren styres av et lag."
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        10,
+        10
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "applikasjonsprogrammer",
+        "maskinvare"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    },
+    {
+      "tekst": "teknologi-operativsystem",
+      "form": "vers",
+      "linjer": [
+        "Operativsystemet tildeler minne",
+        "og prosessorer, som programmer kan finne",
+        "Skriveren får en venteliste",
+        "så to ikke skriver samtidig, i samme frist"
+      ],
+      "kildeavsnitt": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "faguttrykk": [
+        "operativsystem",
+        "minne",
+        "prosessorer"
+      ],
+      "stil": "",
+      "promptversjon": "v6",
+      "modell": "claude-haiku-5-5"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"operativsystem\",\"forklaring\":\"\"},{\"uttrykk\":\"programvaren\",\"forklaring\":\"\"},{\"uttrykk\":\"minne\",\"forklaring\":\"\"},{\"uttrykk\":\"prosessorer\",\"forklaring\":\"\"},{\"uttrykk\":\"dr",
+  "lagret": "2026-10-19T22:21:30.634Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Operativsystemet deler tid",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "mellom programmene uten strid.",
+        "kildeavsnitt": 2
+      },
+      {
+        "tekst": "Applikasjonsprogrammer ber om tilgang hver dag,",
+        "kildeavsnitt": 10
+      },
+      {
+        "tekst": "og maskinvaren styres av et lag.",
+        "kildeavsnitt": 10
+      }
+    ],
+    "faguttrykk": [
+      "operativsystem",
+      "applikasjonsprogrammer",
+      "maskinvare"
+    ],
+    "stil": ""
+  }
+}

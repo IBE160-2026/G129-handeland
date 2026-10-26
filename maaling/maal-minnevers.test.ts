@@ -46,6 +46,9 @@ const tilfeller = TEKSTER.flatMap((t) => VARIANTER.map((v) => [t, v] as const));
 
 describe("FR-31 — ti vers til vurdering", () => {
   const vers: { tekst: string; variant: number; tittel: string; r: Minneversresultat; avsnitt: Map<number, string> }[] = [];
+  // Avviste vers kjøres ikke på nytt til de består: det ville skjult hvor
+  // ofte kontrollen slår til. De står på arket med årsaken (v6, 20.10).
+  const avviste: { tekst: string; variant: number; tittel: string; aarsak: string }[] = [];
 
   test.each(tilfeller)("%s (variant %s)", { timeout: 600000 }, async (navn, variant) => {
     const raa = await readFile(path.join(MAPPE, `${navn}.txt`), "utf8");
@@ -66,6 +69,7 @@ describe("FR-31 — ti vers til vurdering", () => {
       maksTokens: MODELL ? 21000 : undefined,
     }).catch((e: Error) => {
       console.log(`\n= ${navn} (variant ${variant}): AVVIST — ${e.message}${e.cause instanceof Error ? ` (${e.cause.message})` : ""}`);
+      avviste.push({ tekst: navn, variant, tittel: gull.tittel, aarsak: e.cause instanceof Error ? e.cause.message : e.message });
       throw e;
     });
     vers.push({ tekst: navn, variant, tittel: gull.tittel, r, avsnitt: new Map(delIAvsnitt(raa).map((a) => [a.nummer, a.innhold])) });
@@ -73,7 +77,8 @@ describe("FR-31 — ti vers til vurdering", () => {
   });
 
   test("vurderingsarket", async () => {
-    expect(vers).toHaveLength(10);
+    expect(vers.length + avviste.length).toBe(10);
+    expect(vers.length).toBeGreaterThan(0);
     vers.sort((a, b) => tilfeller.findIndex(([t, v]) => t === a.tekst && v === a.variant) - tilfeller.findIndex(([t, v]) => t === b.tekst && v === b.variant));
     const versjon = vers[0].r.promptversjon;
     const deler = [
@@ -115,7 +120,19 @@ describe("FR-31 — ti vers til vurdering", () => {
         "",
       );
     });
-    deler.push("---", "", "**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av 10", "");
+    if (avviste.length > 0) {
+      deler.push(
+        "---",
+        "",
+        `## Avvist av kontrollen (${avviste.length} av 10)`,
+        "",
+        "Disse versene ville eleven aldri sett; generatoren ga opp etter andre forsøk. De vurderes ikke, men teller som funn om prompten.",
+        "",
+        ...avviste.map((a) => `- **${a.tittel} — vers ${a.variant + 1}:** ${a.aarsak}`),
+        "",
+      );
+    }
+    deler.push("---", "", `**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av ${vers.length}`, "");
     await mkdir(RESULTATER, { recursive: true });
     const navn = MODELL ? `${versjon}-${MODELL.replace(/^claude-/, "")}` : versjon;
     await writeFile(path.join(RESULTATER, `fr31-vurderingsark-${navn}.md`), deler.join("\n"));

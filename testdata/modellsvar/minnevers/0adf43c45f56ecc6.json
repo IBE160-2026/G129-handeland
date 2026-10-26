@@ -1,0 +1,33 @@
+{
+  "oppgave": "minnevers",
+  "promptversjon": "v6",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "type: vers fagord: [{\"uttrykk\":\"EM-bølger\",\"forklaring\":\"\"},{\"uttrykk\":\"Radiobølger\",\"forklaring\":\"\"},{\"uttrykk\":\"frekvens\",\"forklaring\":\"\"},{\"uttrykk\":\"bølgelengde\",\"forklaring\":\"\"},{\"uttrykk\":\"mikro",
+  "lagret": "2026-10-19T22:15:14.985Z",
+  "data": {
+    "linjer": [
+      {
+        "tekst": "Lang bølgelengde gir lav energi,",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "kort bølge gir mer, det kan du si.",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "Røntgen er mer energirik,",
+        "kildeavsnitt": 23
+      },
+      {
+        "tekst": "bølgen under ti nm, ikke lik.",
+        "kildeavsnitt": 23
+      }
+    ],
+    "faguttrykk": [
+      "energi",
+      "bølgelengde",
+      "røntgenstråling"
+    ],
+    "stil": ""
+  }
+}
