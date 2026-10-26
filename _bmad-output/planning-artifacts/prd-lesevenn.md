@@ -1011,6 +1011,7 @@ Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på 
 12. **Hva tillater avtaleverket for skoleverket av digital gjengivelse, og gjelder det når eleven selv laster opp?** Berører både innliming og bildeinnlesing. Ikke undersøkt i dette prosjektet. Må stå i rapporten med en lest kilde, ikke som antakelse. Ikke blokkerende for bygging, men blokkerende for å kunne skrive §6.3 ferdig.
 13. **Hvor godt virker bildeuttrekket i praksis?** Ikke målt i v1 (FR-45). Avviket mellom Råtekst og redigert tekst lagres, og er den billigste indikasjonen. Verdt å se på mot slutten selv om det ikke er en måling.
 14. ~~**Er `claude-haiku-4-5` multimodal?**~~ **Avklart 2. oktober:** ja, Haiku 4.5 tar bilder som inndata. Verifisert av Arve. Bildeuttrekket i FR-44 blir derfor på den billige modellen, og flyttingen til Sonnet er ikke nødvendig.
+15. **Bør eleven skrive minneverset selv (FR-30)?** Ført opp 26. oktober etter seks promptversjoner: modellen får ikke til sant, rimet og fagordrikt på én gang, og v3 står med FR-31 bestått, men svak som huskeregel. Alternativet er at Lesevenn gir fire faktasetninger med kildeavsnitt, fagordene og rimforslag, og at eleven skriver verset. Det flytter den delen modellen er dårlig på til eleven, og utnytter genereringseffekten (det man lager selv, huskes bedre — slå opp en primærkilde før det siteres). Krever endring i FR-30 og en ny skjerm. Vurderes etter M1, ikke før.
 
 ## 12. Antakelsesregister
 
