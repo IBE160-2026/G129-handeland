@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**324 prompter i 31 økter**, 2026-09-17 til 2026-10-29.
+**326 prompter i 31 økter**, 2026-09-17 til 2026-10-29.
 
 ---
 
@@ -2004,7 +2004,7 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Hm, her er jeg i tvil. Med disse reglene, så blir det veldig lett. Man kan aldri klare å utfordre kunnskap på høyt nivå, hvis alt skal stå så tydelig.
 
-<details><summary>Commits i økta (17)</summary>
+<details><summary>Commits i økta (19)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
@@ -2023,6 +2023,8 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `56da8d4` Register: faguttrykk v4 venter på vurdering av forklaringene etter M0
 - `ecf8da5` FR-41-status oppdatert (gjennomgangen er gjort), demotest 26.10: 3 av 3
 - `bbd7923` Samtalegullsett (FR-21): maler for EM-bølger, prisvekst og domener
+- `2eab378` Legg til sesjonslogg-skill
+- `e8c9321` Oppdater sesjonslogg-skill og instruks
 
 </details>
 
@@ -2033,3 +2035,20 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 **10:29**
 
 > Okei, hva nå?
+
+**10:30**
+
+> Er det noe annet du kan gjøre i mellomtiden, så kan vi ta opp det senere?
+
+**10:37**
+
+> Det er foreleser, så gjør det han har sagt. Er dette bare ting for deg, eller er det noe jeg må forholde meg til?
+> Hvis han har foreslått sesjonslogg, så gjør vi det. Opprett denne, og tilpass gjerne  tidligere  prompt og ki-logg, slik at det stemmer overens med formatet, og flytt dem over.
+
+<details><summary>Commits i økta (3)</summary>
+
+- `eadb16d` Klargjort: forklaringsark for faguttrykk v4, leser for quiz-arket (FR-14)
+- `0bd2164` Lagrede oversettelsessvar fra demotesten 26.10
+- `4164a80` Logg: m0-ferdigstilling
+
+</details>
