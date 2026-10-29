@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**318 prompter i 30 økter**, 2026-09-17 til 2026-10-26.
+**324 prompter i 31 økter**, 2026-09-17 til 2026-10-29.
 
 ---
 
@@ -1983,7 +1983,28 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Så hva skjer nå?
 
-<details><summary>Commits i økta (16)</summary>
+**15:14**
+
+> Vi starter med samtalene. Lag det i stand.
+
+**15:19**
+
+> Er det noen rammer for hva et startspørsmål skal inneholde?
+
+**15:43**
+
+> EM 1: Hva vil du si er forskjellen på å varme mat i mirkobølgeovn og i en komfyr?
+> EM 2: Hva er forskjellen på UV-stråling og røntgenstråling?
+
+**15:47**
+
+> Men ditt alternativ, får vi ikke samme problem da? Teksten sier jo ikke noe om hvorfor tallerkenen ikek blir varm (det er jo implisitt fordi den ikke er laget av vann eller fett)
+
+**15:50**
+
+> Hm, her er jeg i tvil. Med disse reglene, så blir det veldig lett. Man kan aldri klare å utfordre kunnskap på høyt nivå, hvis alt skal stå så tydelig.
+
+<details><summary>Commits i økta (17)</summary>
 
 - `8dccc9e` Minnevers v6: eksempel og rimkontroll, forkastet etter vers 1
 - `548c8cc` Annoteringsrunde 2: positivt samsvar 0,62 (κ 0,61)
@@ -2001,5 +2022,14 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `c2442cc` Faguttrykk v4 målt, og overskrift som kildeavsnitt forkastes (kodefunn 23)
 - `56da8d4` Register: faguttrykk v4 venter på vurdering av forklaringene etter M0
 - `ecf8da5` FR-41-status oppdatert (gjennomgangen er gjort), demotest 26.10: 3 av 3
+- `bbd7923` Samtalegullsett (FR-21): maler for EM-bølger, prisvekst og domener
 
 </details>
+
+---
+
+## 2026-10-29 · økt `cd0690c7` · claude-opus-5-5
+
+**10:29**
+
+> Okei, hva nå?

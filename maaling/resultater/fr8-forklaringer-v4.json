@@ -1,0 +1,242 @@
+{
+  "krav": "FR-8, forklaringenes riktighet",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "tekster": [
+    {
+      "tekst": "naturfag-em-bolger.txt",
+      "begreper": [
+        {
+          "uttrykk": "bølgelengde",
+          "forklaring": "Avstanden mellom to nabotopper eller nabodaler i en bølge. Den måles vanligvis i meter eller nanometer.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "elektromagnetiske bølger",
+          "forklaring": "Bølger som består av et samspill mellom elektriske og magnetiske felt, og som kan forplante seg gjennom tomt rom. Lys, radiobølger og røntgenstråling er alle elektromagnetiske bølger, og de skiller seg fra hverandre i frekvens og bølgelengde.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "IR-stråling",
+          "forklaring": "Infrarød stråling, elektromagnetisk stråling med bølgelengder mellom synlig lys og mikrobølger. Den sendes ut av varme gjenstander, og vi kjenner den som varme.",
+          "kildeavsnitt": 10
+        },
+        {
+          "uttrykk": "mikrobølger",
+          "forklaring": "Elektromagnetiske bølger med bølgelengder mellom 1 mm og 1 m, altså høyere frekvens enn radiobølger. Mikrobølgeovnen bruker dem til å varme mat.",
+          "kildeavsnitt": 7
+        },
+        {
+          "uttrykk": "ionosfæren",
+          "forklaring": "Et lag med elektrisk ladde partikler høyt oppe i atmosfæren. Det kan reflektere radiobølger tilbake mot jorda.",
+          "kildeavsnitt": 5
+        },
+        {
+          "uttrykk": "røntgenstråling",
+          "forklaring": "Elektromagnetisk stråling med svært høy energi og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for synlig lys.",
+          "kildeavsnitt": 23
+        },
+        {
+          "uttrykk": "ultrafiolett stråling",
+          "forklaring": "Elektromagnetisk stråling med kortere bølgelengde enn fiolett lys. Den ligger utenfor det synlige spekteret på den andre siden enn infrarød stråling.",
+          "kildeavsnitt": 19
+        },
+        {
+          "uttrykk": "frekvens",
+          "forklaring": "Hvor mange svingninger eller bølger som passerer per sekund, målt i hertz. Lav frekvens gir lang bølgelengde, og høy frekvens gir kort bølgelengde.",
+          "kildeavsnitt": 3
+        }
+      ]
+    },
+    {
+      "tekst": "norsk-metafor.txt",
+      "begreper": [
+        {
+          "uttrykk": "metafor",
+          "forklaring": "Et ord eller uttrykk som brukes i overført eller billedlig betydning, ikke bokstavelig. Metaforen skaper en forbindelse mellom to ulike betydningsområder, for eksempel når noen sies å være «en løve».",
+          "kildeavsnitt": 2
+        },
+        {
+          "uttrykk": "kognitive metaforer",
+          "forklaring": "Tankemessige metaforer som styrer hvordan vi forstår og strukturerer ideer og erfaringer. De kommer til uttrykk i språket gjennom språklige metaforer, og skiller seg dermed fra disse.",
+          "kildeavsnitt": 4
+        },
+        {
+          "uttrykk": "språklige metaforer",
+          "forklaring": "Metaforer i selve språkbruken, for eksempel «hjertet står i brann» om forelskelse. Se også kognitive metaforer, som ligger bak dem i tankesettet.",
+          "kildeavsnitt": 4
+        },
+        {
+          "uttrykk": "personifikasjon",
+          "forklaring": "Personifikasjon er en form for metafor der ting, dyr eller abstrakte størrelser gis menneskelige egenskaper, for eksempel at en nasjonalsang kan «senke drømmer» over jorden.",
+          "kildeavsnitt": 12
+        },
+        {
+          "uttrykk": "forestillingsområdene",
+          "forklaring": "De to områdene av tenkning eller forestillinger som en metafor knytter sammen. Metaforen henter mening fra det ene området og overfører den til det andre, for eksempel fra «reise» til «livet».",
+          "kildeavsnitt": 17
+        },
+        {
+          "uttrykk": "similen",
+          "forklaring": "En sammenligning der noe settes opp mot noe annet med ord som «som» eller «lik», for eksempel «gjorde noe som en løve». I motsetning til metaforen sier den eksplisitt at det er en sammenligning.",
+          "kildeavsnitt": 6
+        }
+      ]
+    },
+    {
+      "tekst": "norsk-sprakligebilder.txt",
+      "begreper": [
+        {
+          "uttrykk": "allegori",
+          "forklaring": "En tekst som kan forstås både konkret og som et bilde på noe annet og større, ofte en moral eller samfunnsforhold. Den konkrete historien står for noe mer generelt.",
+          "kildeavsnitt": 35
+        },
+        {
+          "uttrykk": "allusjon",
+          "forklaring": "Et språklig virkemiddel der teksten låner fra eller viser til en kjent tekst, et kunstverk, en hendelse eller en person. Leseren får et ekstra lag med mening når hen gjenkjenner referansen.",
+          "kildeavsnitt": 52
+        },
+        {
+          "uttrykk": "konnotasjon",
+          "forklaring": "En konnotasjon er den felles assosiasjonen vi knytter til et ord, i tillegg til ordets bokstavelige betydning. For eksempel gir fargen svart ofte assosiasjoner til noe dystert.",
+          "kildeavsnitt": 24
+        },
+        {
+          "uttrykk": "fabel",
+          "forklaring": "En kort fortelling, ofte med dyr som hovedpersoner, som avsluttes med en moral. Fabelen kan ofte leses allegorisk.",
+          "kildeavsnitt": 38
+        },
+        {
+          "uttrykk": "språklig virkemiddel",
+          "forklaring": "Et språklig virkemiddel er et grep forfatteren bruker for å påvirke leseren eller skape en bestemt følelse. Språklige bilder og allusjoner er eksempler på slike virkemidler.",
+          "kildeavsnitt": 49
+        },
+        {
+          "uttrykk": "språklig bilde",
+          "forklaring": "Et uttrykk som brukes i overført betydning for å beskrive noe. Bildet får leseren til å tenke på noe annet som har egenskaper til felles med det som beskrives.",
+          "kildeavsnitt": 4
+        },
+        {
+          "uttrykk": "personifikasjon",
+          "forklaring": "Et virkemiddel der ting, dyr eller abstrakte størrelser gis menneskelige egenskaper og handlinger, slik at de framstår som mennesker.",
+          "kildeavsnitt": 14
+        },
+        {
+          "uttrykk": "besjeling",
+          "forklaring": "Et virkemiddel der ting eller fenomener får levende egenskaper, som om de hadde en sjel eller en livsånd, uten at de blir framstilt som mennesker.",
+          "kildeavsnitt": 10
+        }
+      ]
+    },
+    {
+      "tekst": "samfunnsfag-prisvekst.txt",
+      "begreper": [
+        {
+          "uttrykk": "styringsrenta",
+          "forklaring": "Renten Norges Bank setter for utlån mellom bankene, og som påvirker renten folk betaler på lån og sparing. Når styringsrenta økes, blir det dyrere å låne.",
+          "kildeavsnitt": 8
+        },
+        {
+          "uttrykk": "boliginvesteringene",
+          "forklaring": "Det samlede beløpet som brukes på å bygge nye boliger og på større oppussing av eksisterende boliger. Lave boliginvesteringer betyr at det bygges lite.",
+          "kildeavsnitt": 12
+        },
+        {
+          "uttrykk": "BNP-veksten",
+          "forklaring": "Hvor mye den samlede verdiskapingen i et land øker fra ett år til det neste, målt i prosent. Bruttonasjonalprodukt (BNP) er verdien av alt som produseres i landet.",
+          "kildeavsnitt": 26
+        },
+        {
+          "uttrykk": "fastlandsøkonomien",
+          "forklaring": "Den delen av norsk økonomi som ikke omfatter olje- og gassvirksomheten og skipsfart på sokkelen. Den brukes ofte for å vise utviklingen i resten av næringslivet og i offentlig sektor.",
+          "kildeavsnitt": 21
+        },
+        {
+          "uttrykk": "inflasjonsmålet",
+          "forklaring": "Det målet Norges Bank skal styre etter, nemlig at den årlige prisveksten skal være rundt 2 prosent. Ligger prisveksten over dette, sier man at inflasjonen er for høy.",
+          "kildeavsnitt": 5
+        },
+        {
+          "uttrykk": "konsumprisindeksen",
+          "forklaring": "En indeks som måler hvordan prisene på et representativt utvalg varer og tjenester som husholdningene kjøper, utvikler seg over tid. Den brukes til å måle inflasjonen.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "reallønnsveksten",
+          "forklaring": "Reallønnsveksten er hvor mye lønningene øker etter at prisveksten er trukket fra. Den viser hvor mye mer folk faktisk kan kjøpe for lønnen sin.",
+          "kildeavsnitt": 6
+        }
+      ]
+    },
+    {
+      "tekst": "teknologi-domeneoppbygning.txt",
+      "begreper": [
+        {
+          "uttrykk": "topp-domenet",
+          "forklaring": "Det øverste nivået i et domenenavn, det som står helt til høyre, for eksempel .no. Det sier hvilket land eller hvilken type organisasjon adressen hører til.",
+          "kildeavsnitt": 6
+        },
+        {
+          "uttrykk": "DNS-server",
+          "forklaring": "En server som oversetter domenenavn til IP-adresser, slik at nettleseren vet hvor innholdet ligger. Hvert domene har en slik server som har ansvar for det.",
+          "kildeavsnitt": 7
+        },
+        {
+          "uttrykk": "generiske topp-domener",
+          "forklaring": "Topp-domener som ikke er knyttet til et bestemt land, for eksempel .com og .org. De styres av organisasjoner som har fått ansvaret for dem.",
+          "kildeavsnitt": 16
+        },
+        {
+          "uttrykk": "Nasjonale topp-domener",
+          "forklaring": "Nasjonale topp-domener er topp-domener som er knyttet til ett bestemt land, for eksempel .no for Norge. Hvert land bestemmer selv hvem som kan bruke dem og hvilke krav som gjelder.",
+          "kildeavsnitt": 14
+        },
+        {
+          "uttrykk": "under-domene",
+          "forklaring": "Et domene som ligger under et annet domene, for eksempel om.ndla.no under ndla.no. Det brukes ofte til å skille ulike tjenester eller nettsider innenfor samme domene.",
+          "kildeavsnitt": 8
+        },
+        {
+          "uttrykk": "DNS-rotserverne",
+          "forklaring": "De øverste serverne i DNS-systemet, som peker videre til de riktige topp-domenene. Når punktumet bakerst i adressen står for rotnivået, betyr det at innholdet ligger under disse serverne.",
+          "kildeavsnitt": 5
+        }
+      ]
+    },
+    {
+      "tekst": "teknologi-operativsystem.txt",
+      "begreper": [
+        {
+          "uttrykk": "operativsystem",
+          "forklaring": "Et operativsystem er den grunnleggende programvaren på en datamaskin. Det fordeler datamaskinens ressurser mellom programmene, og sørger for at de ikke krangler om dem.",
+          "kildeavsnitt": 2
+        },
+        {
+          "uttrykk": "applikasjonsprogramvare",
+          "forklaring": "Programmer som brukeren arbeider med direkte, for eksempel tekstbehandlere og regneark. Den står i motsetning til systemprogramvare, som kjører under og støtter applikasjonene.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "driverprogram",
+          "forklaring": "Et program som er laget spesielt for én bestemt enhet, for eksempel en harddisk, og som vet hvordan enheten skal styres. Operativsystemet kommuniserer med enheten gjennom driverprogrammet.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "systemprogramvare",
+          "forklaring": "Systemprogramvare er programvare som kjører maskinen og styrer dens ressurser, slik at andre programmer kan brukes. Operativsystemet er den viktigste typen systemprogramvare.",
+          "kildeavsnitt": 3
+        },
+        {
+          "uttrykk": "sanntidsoperativsystemer",
+          "forklaring": "Sanntidsoperativsystemer er operativsystemer som garanterer at systemet svarer innen en bestemt tid. De brukes der forsinkelser kan være farlige, for eksempel i styringen av en bil.",
+          "kildeavsnitt": 13
+        },
+        {
+          "uttrykk": "plattform",
+          "forklaring": "Et felles grunnlag som programmer kan bygges og kjøres på, slik at utvikleren ikke må tilpasse programmet til hver type maskinvare. Et operativsystem kan utgjøre en slik plattform.",
+          "kildeavsnitt": 11
+        }
+      ]
+    }
+  ]
+}

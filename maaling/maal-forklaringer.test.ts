@@ -2,6 +2,7 @@
  * Forklaringene til Faguttrykkene — FR-8, «Forklaringenes riktighet».
  *
  *   npm run maal:fr8-forklaringer     lager vurderingsarket fra lagrede modellsvar, gratis
+ *   MAAL_PROMPTVERSJON=v4 …            samme for en kandidatversjon (AD-14), før den forfremmes
  *
  * FR-8: «utvikleren vurderer manuelt om forklaringen til hvert Faguttrykk i
  * Gullsettet er faglig riktig og i samsvar med Kildeavsnittet. Antall gale
@@ -24,6 +25,7 @@ import { delIAvsnitt } from "../tekst/avsnittsdeling";
 
 const MAPPE = path.join(process.cwd(), "testdata", "gullsett");
 const RESULTATER = path.join(process.cwd(), "maaling", "resultater");
+const PROMPTVERSJON = process.env.MAAL_PROMPTVERSJON || undefined;
 
 const filer = (await readdir(MAPPE)).filter((f) => f.endsWith(".runde1.gullsett.json")).sort();
 
@@ -33,7 +35,7 @@ describe("FR-8 — forklaringene til vurdering", () => {
   test.each(filer)("%s", { timeout: 60000 }, async (fil) => {
     const gull = JSON.parse(await readFile(path.join(MAPPE, fil), "utf8")) as { tekst: string; tittel: string };
     const avsnitt = delIAvsnitt(await readFile(path.join(MAPPE, gull.tekst), "utf8"));
-    const r = await hentFaguttrykk(avsnitt);
+    const r = await hentFaguttrykk(avsnitt, { overstyrVersjon: PROMPTVERSJON });
     tekster.push({ tekst: gull.tekst, tittel: gull.tittel, r, avsnitt: new Map(avsnitt.map((a) => [a.nummer, a.innhold])) });
     console.log(`\n= ${gull.tittel}: ${r.begreper.length} forklaringer`);
   });

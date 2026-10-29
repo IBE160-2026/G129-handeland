@@ -1,8 +1,11 @@
 /**
- * Gjør et utfylt FR-31-vurderingsark om til en datafil — AD-17: «manuelle
+ * Gjør et utfylt vurderingsark om til en datafil — AD-17: «manuelle
  * dommer lagres som datafiler i repoet, i en fast form».
  *
  *   node maaling/les-vurderingsark.mjs maaling/resultater/fr31-vurderingsark-v3.md
+ *   node maaling/les-vurderingsark.mjs maaling/resultater/fr14-vurderingsark-v2.md
+ *
+ * Arktypen kjennes på overskriften. FR-14 (quiz) leses i les-quizark.mjs.
  *
  * Leser hvert vers: antall usanne påstander, huskeregel ja/nei og
  * kommentaren, og skriver fr31-dommer-<versjon>.json ved siden av arket.
@@ -16,6 +19,12 @@ const fil = process.argv[2];
 if (!fil) throw new Error("Oppgi arket som argument.");
 const tekst = (await readFile(fil, "utf8")).replace(/\r\n/g, "\n");
 const versjon = tekst.match(/prompt (v\d+)/)?.[1] ?? "ukjent";
+
+if (/^# Vurderingsark — quiz \(FR-14\)/m.test(tekst)) {
+  const { lesQuizark } = await import("./les-quizark.mjs");
+  await lesQuizark(fil, tekst, versjon);
+  process.exit(0);
+}
 
 const vers = [];
 for (const blokk of tekst.split(/\n---\n/)) {

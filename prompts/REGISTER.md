@@ -50,6 +50,9 @@ sier teksten om hvorfor renten på en sparekonto er høyere …?» Kravet er lag
 å bevise at systemet leser svaret, og det gjør det; prisen er en overgang en lærer
 ikke ville brukt.
 
+
+**Observasjon 26.10 (forslagene til samtalegullsettet):** tre kall til samtalestart v2 per tekst ga nesten samme spørsmål tre ganger (EM-bølger: identisk alle tre). For domeneteksten var alle tre dobbeltspørsmål («Hvordan er … bygget opp, *og* hva …»), som v2 skulle hindre; i appen fanges det av koden (mykt brudd, nytt forsøk), men prompten holder ikke regelen alene. Stabiliteten er en fordel i appen. Ikke rettet; tas med hvis samtalestart får en v3.
+
 ## Bildeuttrekk (FR-44, FR-45)
 
 | Versjon | Dato | Endring og grunn | Målt | Status |
