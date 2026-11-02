@@ -10,24 +10,27 @@
       "kildeavsnitt": 8,
       "svar": {
         "dekkende": {
-          "tekst": ""
+          "tekst": "I en mikrobølgeovn varmes maten ved at mikrobølgene rister vann- og fettmolekylene i maten slik at de får energi, mens grillelementet utstråler IR-bølger når elementet blir varmt, og disse bølgene varmer opp maten."
         },
         "delvis": {
-          "tekst": ""
+          "tekst": "Mikrobølger varmer opp molekylene, mens grillelementet blir veldig varmt."
         },
         "misoppfatning1": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Det er ingen forskjell, de varmer opp på samme måte.",
+          "motsigendeAvsnitt": [
+            8,
+            11
+          ]
         },
         "misoppfatning2": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Mikrobølgene rister maten slik at den blir varm.",
+          "motsigendeAvsnitt": 8
         },
         "uklart": {
-          "tekst": ""
+          "tekst": "Det handler liksom om noe med bølgene og den elektromagnetiske strålingen."
         },
         "utenfor": {
-          "tekst": ""
+          "tekst": "Oppvarming av mat er viktig og praktisk i hverdagen."
         }
       }
     },

@@ -58,7 +58,8 @@ raskt, kan tro. Det er der testen blir vanskelig, og det er det den skal være.
 | `utenfor` | «Vet ikke», eller utenfor tema | «vet ikke» |
 
 For begge misoppfatningene skriver du i tillegg **`motsigendeAvsnitt`**: avsnittet
-der eleven kan lese hva som faktisk stemmer.
+der eleven kan lese hva som faktisk stemmer. Motsier flere avsnitt like godt, skriv en liste,
+for eksempel `[8, 11]`; da teller oppfølgingen som treff når den peker på ett av dem.
 
 **Det viktigste å få til:**
 

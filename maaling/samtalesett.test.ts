@@ -43,6 +43,17 @@ describe("validering", () => {
     expect(f).toMatch(/B, uklart: svaret er tomt/);
   });
 
+  test("flere motsigende avsnitt er gyldig, men ikke en tom liste eller en overskrift i lista", () => {
+    const s = fyltSett();
+    s.startsporsmal[0].svar.misoppfatning1.motsigendeAvsnitt = [2, 4];
+    expect(validerSamtalesett(s, avsnitt)).toEqual([]);
+    s.startsporsmal[0].svar.misoppfatning1.motsigendeAvsnitt = [];
+    s.startsporsmal[1].svar.misoppfatning2.motsigendeAvsnitt = [2, 3];
+    const f = validerSamtalesett(s, avsnitt).join(" | ");
+    expect(f).toMatch(/A, misoppfatning1: «motsigendeAvsnitt»/);
+    expect(f).toMatch(/B, misoppfatning2: «motsigendeAvsnitt»/);
+  });
+
   test("dobbeltspørsmål og manglende dato fanges", () => {
     const s = fyltSett();
     s.annotert = null;
@@ -98,6 +109,16 @@ describe("målingene", () => {
     const t = settMedPerfekte();
     t.find((x) => x.startId === "A" && x.variant === "misoppfatning1")!.oppfolging!.kildeavsnittNummer = 5;
     expect(regnMaal(t).avsnittstest.ok).toBe(false);
+  });
+
+  test("med flere forhåndsvalgte avsnitt er hvert av dem et treff", () => {
+    const t = settMedPerfekte();
+    for (const x of t.filter((x) => x.variant.startsWith("misoppfatning"))) x.motsigendeAvsnitt = [2, 4];
+    t.find((x) => x.startId === "A" && x.variant === "misoppfatning1")!.oppfolging!.kildeavsnittNummer = 2;
+    t.find((x) => x.startId === "B" && x.variant === "misoppfatning1")!.oppfolging!.kildeavsnittNummer = 5;
+    const m = regnMaal(t);
+    expect(m.treffForhandsvalgt.treff).toBe(3);
+    expect(m.treffForhandsvalgt.avMulige).toBe(4);
   });
 
   test("måltesten krever at målene følger fasiten og er ulike", () => {

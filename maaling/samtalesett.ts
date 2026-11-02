@@ -29,8 +29,11 @@ export const FASIT: Record<Variant, Tilstand> = {
 
 export type Svarvariant = {
   tekst: string;
-  /** Bare for misoppfatningene: avsnittet som motsier dem, skrevet ned på forhånd. */
-  motsigendeAvsnitt?: number | null;
+  /**
+   * Bare for misoppfatningene: avsnittet som motsier dem, skrevet ned på forhånd.
+   * En liste når flere avsnitt motsier like godt; da er hvert av dem et treff.
+   */
+  motsigendeAvsnitt?: number | number[] | null;
 };
 
 export type Startsporsmal = {
@@ -59,6 +62,8 @@ export function validerSamtalesett(s: Samtalesett, avsnitt: Avsnitt[]): string[]
   const feil: string[] = [];
   const brodtekst = new Set(avsnitt.filter((a) => !a.erOverskrift).map((a) => a.nummer));
   const gyldig = (n: number | null | undefined) => typeof n === "number" && brodtekst.has(n);
+  const gyldigeAvsnitt = (n: number | number[] | null | undefined) =>
+    Array.isArray(n) ? n.length > 0 && n.every(gyldig) : gyldig(n);
 
   if (!s.annotert) feil.push("«annotert» mangler dato — skriv datoen du skrev svarene");
   if (s.startsporsmal.length !== 2) feil.push(`${s.startsporsmal.length} startspørsmål, FR-21 krever to`);
@@ -83,7 +88,7 @@ export function validerSamtalesett(s: Samtalesett, avsnitt: Avsnitt[]): string[]
       const norm = sv.tekst.trim().toLowerCase();
       if (tekster.has(norm)) feil.push(`${hvor}, ${v}: samme svar som en annen variant`);
       tekster.add(norm);
-      if (v.startsWith("misoppfatning") && !gyldig(sv.motsigendeAvsnitt)) {
+      if (v.startsWith("misoppfatning") && !gyldigeAvsnitt(sv.motsigendeAvsnitt)) {
         feil.push(`${hvor}, ${v}: «motsigendeAvsnitt» mangler eller er ikke et avsnitt med brødtekst`);
       }
     }
@@ -101,7 +106,7 @@ export type Tilfelle = {
   startId: string;
   variant: Variant;
   fasit: Tilstand;
-  motsigendeAvsnitt: number | null;
+  motsigendeAvsnitt: number | number[] | null;
   elevsvar: string;
   tilstand: Tilstand;
   begrunnelse: string;
@@ -183,7 +188,10 @@ export function regnMaal(t: Tilfelle[]): Maaleresultat {
 
   // Treff mot avsnittet utvikleren valgte på forhånd.
   const medFasit = misopp.filter((x) => x.motsigendeAvsnitt !== null);
-  const avsTreff = medFasit.filter((x) => x.oppfolging?.kildeavsnittNummer === x.motsigendeAvsnitt).length;
+  const avsTreff = medFasit.filter((x) => {
+    const valgt = ([] as (number | null)[]).concat(x.motsigendeAvsnitt);
+    return x.oppfolging !== null && valgt.includes(x.oppfolging.kildeavsnittNummer);
+  }).length;
 
   const forveksling = Object.fromEntries(
     TILSTANDER.map((f) => [f, Object.fromEntries(TILSTANDER.map((p) => [p, 0]))]),
