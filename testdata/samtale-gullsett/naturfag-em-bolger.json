@@ -2,7 +2,7 @@
   "_om": "Gullsettet for Fagsamtalen (FR-21). Fyll inn to startspørsmål og seks svar til hvert. Se samtalegullsett.md. Avsnittsnumrene står i naturfag-em-bolger.avsnitt.md.",
   "tekst": "gullsett/naturfag-em-bolger.txt",
   "tittel": "Egenskaper hos ulike EM-bølger",
-  "annotert": null,
+  "annotert": "2026-11-05",
   "startsporsmal": [
     {
       "id": "A",
@@ -40,24 +40,27 @@
       "kildeavsnitt": 23,
       "svar": {
         "dekkende": {
-          "tekst": ""
+          "tekst": "UV-stråling og røntgenstråling er begge deler EM-stråling, men de har forskjellig bølgelengde. UV-stråling har mellom 10nm og 400nm, mens røntgen har kortere en 10nm. Derfor har røntgen også mer energi enn UV-stråling."
         },
         "delvis": {
-          "tekst": ""
+          "tekst": "Røntgenstråling har mer energi enn UV-stråling."
         },
         "misoppfatning1": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Røntgenstråling har kortere bølgelengde enn UV-stråling, og derfor mindre eneregi enn UV-stråling.",
+          "motsigendeAvsnitt": [
+            13,
+            23
+          ]
         },
         "misoppfatning2": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "UV-C er den strålingen som har mest energi av all EM-stråling.",
+          "motsigendeAvsnitt": 23
         },
         "uklart": {
-          "tekst": ""
+          "tekst": "UV-strålingen er liksom litt lik som røntgen, men også annerledes"
         },
         "utenfor": {
-          "tekst": ""
+          "tekst": "Jeg har ikke peiling."
         }
       }
     }
