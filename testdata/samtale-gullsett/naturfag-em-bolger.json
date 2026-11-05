@@ -16,21 +16,21 @@
           "tekst": "Mikrobølger varmer opp molekylene, mens grillelementet blir veldig varmt."
         },
         "misoppfatning1": {
-          "tekst": "Det er ingen forskjell, de varmer opp på samme måte.",
-          "motsigendeAvsnitt": [
-            8,
-            11
-          ]
+          "tekst": "Mikrobølgeovnen rister alt som er inne i den til det blir varmt.",
+          "motsigendeAvsnitt": 8
         },
         "misoppfatning2": {
-          "tekst": "Mikrobølgene rister maten slik at den blir varm.",
-          "motsigendeAvsnitt": 8
+          "tekst": "Varmeelementene i stekeovenen blir 600 grader, og da begynner vannmolekylene å riste, slik som i mikrobølgeovnen.",
+          "motsigendeAvsnitt": [
+            10,
+            11
+          ]
         },
         "uklart": {
           "tekst": "Det handler liksom om noe med bølgene og den elektromagnetiske strålingen."
         },
         "utenfor": {
-          "tekst": "Oppvarming av mat er viktig og praktisk i hverdagen."
+          "tekst": "Jeg vet ikke"
         }
       }
     },
