@@ -2,7 +2,7 @@
   "_om": "Gullsettet for Fagsamtalen (FR-21). Fyll inn to startspørsmål og seks svar til hvert. Se samtalegullsett.md. Avsnittsnumrene står i teknologi-domeneoppbygning.avsnitt.md.",
   "tekst": "gullsett/teknologi-domeneoppbygning.txt",
   "tittel": "Domeneoppbygning og toppdomene",
-  "annotert": null,
+  "annotert": "2026-11-06",
   "startsporsmal": [
     {
       "id": "A",
@@ -46,21 +46,27 @@
           "tekst": "Da blir man sendt videre til NDLA sin side, ndla.no, fordi www er et valgfritt underdomene, som bare sier at man er på nettet og ikke noe at man er på et spesielt domene."
         },
         "delvis": {
-          "tekst": ""
+          "tekst": "Fordi ndla.no er domenet til www.ndla.no"
         },
         "misoppfatning1": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Man blir sendt videre til ndla.no fordi man skriver inn den nettadressen. Derfor må man ha med www. når man skriver inn andressen.",
+          "motsigendeAvsnitt": [
+            8,
+            9
+          ]
         },
         "misoppfatning2": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "www. er toppdomene, som ndla. ligger under, så når man skriver inn hele adressen blir man sendt til ndla sin side",
+          "motsigendeAvsnitt": [
+            6,
+            9
+          ]
         },
         "uklart": {
-          "tekst": ""
+          "tekst": "Toppdomenet sender til underdomenet."
         },
         "utenfor": {
-          "tekst": ""
+          "tekst": "Kan du bare gå videre til neste spørsmål?"
         }
       }
     }
