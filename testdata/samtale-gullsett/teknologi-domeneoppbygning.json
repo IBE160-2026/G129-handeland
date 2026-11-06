@@ -6,8 +6,8 @@
   "startsporsmal": [
     {
       "id": "A",
-      "sporsmal": "",
-      "kildeavsnitt": null,
+      "sporsmal": "Hvorfor sier toppdomenet mindre om en nettside i dag enn før?",
+      "kildeavsnitt": 25,
       "svar": {
         "dekkende": {
           "tekst": ""
