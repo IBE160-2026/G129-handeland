@@ -10,24 +10,30 @@
       "kildeavsnitt": 25,
       "svar": {
         "dekkende": {
-          "tekst": ""
+          "tekst": "I starten var det liksom litt regler for hvem som kunne ha de ulike toppdomenene: .com var for kommersielle aktører, .org for ikke-kommersielle, .no for norske bedrifter, osv. Slike krav har det blitt færre av idag, slik at terskelen for å kjøpe slike toppdomener har gått ned, og de sier ikke nødvendigvis så mye om domenet."
         },
         "delvis": {
-          "tekst": ""
+          "tekst": "Det er ganske få krav til hvem som kan ha de uliketoppdomenene, derfor sier det ikke så mye."
         },
         "misoppfatning1": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Det har blitt flere regler som styrer hvem som får ha hvilke domener, og disse reglene er så kompliserte at de ikke sier så mye til den vanlige mannen i gata",
+          "motsigendeAvsnitt": [
+            25,
+            26
+          ]
         },
         "misoppfatning2": {
-          "tekst": "",
-          "motsigendeAvsnitt": null
+          "tekst": "Det har blitt færre krav idag, slik at terskelen for å kjøpe slike toppdomener har gått ned, og de sier ikke nødvendigvis så mye om domenet. Likevel står noen krav, som at .com kun er for kommersielle selskap.",
+          "motsigendeAvsnitt": [
+            17,
+            25
+          ]
         },
         "uklart": {
-          "tekst": ""
+          "tekst": "Toppdomener og underdomener er sånne internetting"
         },
         "utenfor": {
-          "tekst": ""
+          "tekst": "Jeg aner ikke, og jeg bryr meg ikke. Jeg haaater dette temaet"
         }
       }
     },
