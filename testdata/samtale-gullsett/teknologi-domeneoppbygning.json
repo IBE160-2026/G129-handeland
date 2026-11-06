@@ -39,8 +39,8 @@
     },
     {
       "id": "B",
-      "sporsmal": "Hvordan henger underdomenet om sammen med domenet ndla?",
-      "kildeavsnitt": 8,
+      "sporsmal": "Hva skjer når du skriver www.ndla.no i nettleseren?",
+      "kildeavsnitt": 9,
       "svar": {
         "dekkende": {
           "tekst": ""
