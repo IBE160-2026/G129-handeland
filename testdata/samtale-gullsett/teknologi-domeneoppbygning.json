@@ -39,11 +39,11 @@
     },
     {
       "id": "B",
-      "sporsmal": "Hva skjer når du skriver www.ndla.no i nettleseren?",
+      "sporsmal": "Hvorfor havner du på ndla.no når du skriver www.ndla.no?",
       "kildeavsnitt": 9,
       "svar": {
         "dekkende": {
-          "tekst": ""
+          "tekst": "Da blir man sendt videre til NDLA sin side, ndla.no, fordi www er et valgfritt underdomene, som bare sier at man er på nettet og ikke noe at man er på et spesielt domene."
         },
         "delvis": {
           "tekst": ""
