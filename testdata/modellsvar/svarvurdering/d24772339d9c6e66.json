@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:38:49.444Z",
+  "data": {
+    "tilstand": "utenfor",
+    "begrunnelse": "Det går fint å ikke vite — delen om prognosene til inflasjon og lønnsvekst forklarer sammenhengen.",
+    "oppfolging": {
+      "sporsmal": "Hvor mye anslår prognosene at prisene vil stige i år, målt ved konsumprisindeksen?",
+      "kildeavsnitt": 6,
+      "maal": "deler_opp"
+    }
+  }
+}

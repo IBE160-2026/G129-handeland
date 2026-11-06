@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir inf",
+  "lagret": "2026-11-06T08:40:38.584Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du forklarer godt at du blir sendt videre til ndla.no, og at www bare er et valgfritt underdomene som viser at adressen er en nettside.",
+    "oppfolging": {
+      "sporsmal": "Du nevnte at www ikke sier noe om et spesielt domene. Hvem har ansvaret for domenene som ender på .no, og hvem har gitt dem det ansvaret?",
+      "kildeavsnitt": 6,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

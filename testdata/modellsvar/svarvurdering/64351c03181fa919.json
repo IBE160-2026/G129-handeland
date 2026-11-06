@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:39:35.878Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "Teksten forklarer ikke at boligbyggingen bremses av at reallønnsveksten er lavere enn lønnsveksten, men peker på andre forhold, og reallønnsveksten beskrives som noe som løfter husholdningenes forbruk.",
+    "oppfolging": {
+      "sporsmal": "Hva sier teksten om hvordan reallønnsveksten virker på husholdningenes forbruk?",
+      "kildeavsnitt": 20,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

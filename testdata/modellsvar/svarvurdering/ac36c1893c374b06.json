@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir inf",
+  "lagret": "2026-11-06T08:40:20.215Z",
+  "data": {
+    "tilstand": "uklart",
+    "begrunnelse": "Svaret ditt sier hva toppdomener og underdomener hører til, men ikke noe om hvorfor et toppdomene sier mindre om en nettside i dag enn før.",
+    "oppfolging": {
+      "sporsmal": "Du skriver at toppdomener og underdomener er «internetting» – hva mener du med det, og hvordan henger det sammen med hvem som kan kjøpe et domene?",
+      "kildeavsnitt": 25,
+      "maal": "ber_om_utdyping"
+    }
+  }
+}

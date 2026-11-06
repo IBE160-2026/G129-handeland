@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:38:36.698Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "Det stemmer at reallønna blir lavere enn lønna, men det teksten sier om prognosene, knytter forskjellen til prisveksten og ikke til renta.",
+    "oppfolging": {
+      "sporsmal": "Teksten nevner både renta og inflasjonen i prognosene, så hva er det som trekker reallønna ned fra 4,4 prosent til rundt 1 prosent?",
+      "kildeavsnitt": 6,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

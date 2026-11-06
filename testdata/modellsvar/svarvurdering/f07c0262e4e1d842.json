@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:38:22.292Z",
+  "data": {
+    "tilstand": "delvis",
+    "begrunnelse": "Du har rett i at inflasjon henger sammen med at reallønnsveksten blir lavere enn lønnsøkningen, men det mangler hvordan de to henger sammen.",
+    "oppfolging": {
+      "sporsmal": "Hvordan virker inflasjonen inn på hva en lønnsøkning på 4,4 prosent faktisk gir, ut fra tallene i prognosene?",
+      "kildeavsnitt": 6,
+      "maal": "peker_mot_manglende"
+    }
+  }
+}

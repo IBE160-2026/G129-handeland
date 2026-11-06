@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:39:13.710Z",
+  "data": {
+    "tilstand": "delvis",
+    "begrunnelse": "Høye kostnader er med i det teksten sier om boligbyggingen, men teksten nevner også noe mer som holder den nede.",
+    "oppfolging": {
+      "sporsmal": "Du trekker fram kostnader. Hvilket annet forhold nevner forskeren som gjør situasjonen krevende for både boligkjøpere og utbyggere?",
+      "kildeavsnitt": 13,
+      "maal": "peker_mot_manglende"
+    }
+  }
+}

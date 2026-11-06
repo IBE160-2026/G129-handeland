@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 18",
+  "lagret": "2026-11-06T08:37:14.791Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "At mikrobølgeovnen rister på alt som er inne i den, stemmer ikke med det teksten sier om hva mikrobølgene virker på.",
+    "oppfolging": {
+      "sporsmal": "Hva sier teksten om hvorfor maten blir varm mens tallerkenen ikke blir det, når mikrobølgeovnen rister på det som er inne i den?",
+      "kildeavsnitt": 8,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

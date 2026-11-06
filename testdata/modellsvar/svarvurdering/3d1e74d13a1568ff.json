@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:39:06.381Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du har fått med at høye renter og høye kostnader er det som holder boligbyggingen nede, slik delen om boliginvesteringene beskriver det.",
+    "oppfolging": {
+      "sporsmal": "Du nevnte høye renter – hva gjorde at Norges Bank i mars varslet at styringsrenta trolig ville bli satt opp?",
+      "kildeavsnitt": 8,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

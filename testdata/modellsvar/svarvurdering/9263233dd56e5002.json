@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 18",
+  "lagret": "2026-11-06T08:37:58.172Z",
+  "data": {
+    "tilstand": "uklart",
+    "begrunnelse": "Svaret sier at UV-stråling og røntgen er litt like og litt ulike, men ikke hva som er likt eller ulikt, så det er vanskelig å se hva du tenker på.",
+    "oppfolging": {
+      "sporsmal": "Du skriver at røntgenstråling er annerledes enn UV-stråling – hva er det teksten sier som skiller dem fra hverandre?",
+      "kildeavsnitt": 23,
+      "maal": "ber_om_utdyping"
+    }
+  }
+}

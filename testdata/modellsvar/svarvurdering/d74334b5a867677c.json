@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir inf",
+  "lagret": "2026-11-06T08:40:06.927Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du forklarer godt at det er de lave kravene til hvem som kan registrere et domene som gjør at toppdomenet sier mindre om en nettside.",
+    "oppfolging": {
+      "sporsmal": "Hvem bestemmer hvilke krav som gjelder for nasjonale toppdomener som .no?",
+      "kildeavsnitt": 14,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

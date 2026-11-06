@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 18",
+  "lagret": "2026-11-06T08:36:52.883Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du forklarer tydelig at mikrobølgene rister vann- og fettmolekylene i maten, mens grillelementet sender ut IR-stråling når det blir varmt.",
+    "oppfolging": {
+      "sporsmal": "Du nevnte at grillelementet utstråler IR-bølger når det blir varmt. Hva skjer med bølgelengden til strålingen når temperaturen øker?",
+      "kildeavsnitt": 13,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

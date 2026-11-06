@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 18",
+  "lagret": "2026-11-06T08:37:22.087Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "At vannmolekylene begynner å riste når elementet når 600 grader stemmer ikke med det teksten sier, for der er det mikrobølgenes frekvens som får vannmolekylene til å svinge, mens 600 grader handler om noe annet.",
+    "oppfolging": {
+      "sporsmal": "Hva sier teksten at et varmeelement begynner å sende ut ved omtrent 600 grader?",
+      "kildeavsnitt": 11,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

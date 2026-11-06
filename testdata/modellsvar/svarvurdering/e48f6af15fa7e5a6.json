@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir inf",
+  "lagret": "2026-11-06T08:40:31.393Z",
+  "data": {
+    "tilstand": "utenfor",
+    "begrunnelse": "Det går fint å ikke vite, og delen om kravene til å registrere domener under .no forklarer det.",
+    "oppfolging": {
+      "sporsmal": "La oss ta en liten bit først: Hvem kunne tidligere registrere et domene under .no?",
+      "kildeavsnitt": 25,
+      "maal": "deler_opp"
+    }
+  }
+}

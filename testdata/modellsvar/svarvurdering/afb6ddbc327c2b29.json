@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 18",
+  "lagret": "2026-11-06T08:37:42.264Z",
+  "data": {
+    "tilstand": "dekkende",
+    "begrunnelse": "Du peker på at røntgenstråling er mer energirik enn UV-stråling, og det er forskjellen teksten legger vekt på.",
+    "oppfolging": {
+      "sporsmal": "Siden du nevner energi: Hva skjer med energien i den infrarøde strålingen fra en gjenstand når temperaturen stiger?",
+      "kildeavsnitt": 13,
+      "maal": "nytt_aspekt"
+    }
+  }
+}

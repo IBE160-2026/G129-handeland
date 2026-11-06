@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:39:21.435Z",
+  "data": {
+    "tilstand": "delvis",
+    "begrunnelse": "Teksten nevner høye byggekostnader som én av faktorene, men sier ikke at de kommer fra energi- og råvarepriser, og forklaringen i delen om boligbygging har mer enn én faktor.",
+    "oppfolging": {
+      "sporsmal": "Du trekker fram kostnadene som holder boligbyggingen nede. Hvilken annen faktor sier forskeren gjør situasjonen krevende for både boligkjøpere og utbyggere?",
+      "kildeavsnitt": 13,
+      "maal": "peker_mot_manglende"
+    }
+  }
+}

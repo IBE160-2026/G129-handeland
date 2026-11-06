@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Høy prisvekst gir ny renteøkning [avsnitt 2] Konjunkturtendensene for Norge og utlandet. Økonomiske prognoser fram til 2029. [avsnitt 3] Konflikten i Midtøsten har",
+  "lagret": "2026-11-06T08:38:42.390Z",
+  "data": {
+    "tilstand": "uklart",
+    "begrunnelse": "Svaret ditt sier at reallønna er en slags lønn, men det forklarer ennå ikke hvorfor veksten blir rundt 1 prosent når lønningene øker med 4,4 prosent.",
+    "oppfolging": {
+      "sporsmal": "Hva slags «form for lønn» er reallønna slik du forstår det, sammenlignet med lønnsveksten på 4,4 prosent?",
+      "kildeavsnitt": 6,
+      "maal": "ber_om_utdyping"
+    }
+  }
+}

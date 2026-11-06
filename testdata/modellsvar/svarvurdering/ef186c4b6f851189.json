@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Domeneoppbygning og toppdomene [avsnitt 2, overskrift] Oppbygning av domenenavn [avsnitt 3] La oss ta for oss om.ndla.no., som er en underside til NDLA som gir inf",
+  "lagret": "2026-11-06T08:41:07.800Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "Delen om www sier at forespørsler til underdomenet www blir videresendt til hoveddomenet, og det er motsatt retning av at toppdomenet sender til underdomenet.",
+    "oppfolging": {
+      "sporsmal": "Hvilken adresse blir en forespørsel til underdomenet www videresendt til, ifølge delen om www?",
+      "kildeavsnitt": 9,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

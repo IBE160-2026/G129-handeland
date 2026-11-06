@@ -36,11 +36,11 @@ endret seg ikke, og FR-8 er ikke nådd.
 | Versjon | Dato | Endring og grunn | Målt | Status |
 |---|---|---|---|---|
 | v1 | 2026-10-16 | Første versjon, claude-sonnet-5-5. Sikkerhetsregelen først, elevsvaret som data. | Prøvekjøring: 5 av 5 tilstander riktig, lot seg ikke lure | Erstattet |
-| v2 | 2026-10-16 | Etter utviklerens testing: (1) et riktig svar ble vurdert *delvis* fordi **startspørsmålet var to spørsmål** bundet med «og hvorfor»; (2) vurderingene viste til «avsnitt 7», som eleven ikke ser; (3) «Det går fint å ikke vite, *for* avsnitt 7 …» knyttet trøsten til teksten. Ett spørsmål om én ting, ingen avsnittsnumre, dekkende krever poenget men ikke tekstens ordlyd, trøsten står for seg selv. | Prøvekjøring på de samme tilfellene: svaret som var *delvis* ble *dekkende*, ingen avsnittsnumre, trøsten står alene. Dobbeltspørsmål i 1 av 3 startspørsmål — koden gir derfor tre forsøk | **Gjeldende** |
+| v2 | 2026-10-16 | Etter utviklerens testing: (1) et riktig svar ble vurdert *delvis* fordi **startspørsmålet var to spørsmål** bundet med «og hvorfor»; (2) vurderingene viste til «avsnitt 7», som eleven ikke ser; (3) «Det går fint å ikke vite, *for* avsnitt 7 …» knyttet trøsten til teksten. Ett spørsmål om én ting, ingen avsnittsnumre, dekkende krever poenget men ikke tekstens ordlyd, trøsten står for seg selv. | Prøvekjøring på de samme tilfellene: svaret som var *delvis* ble *dekkende*, ingen avsnittsnumre, trøsten står alene. Dobbeltspørsmål i 1 av 3 startspørsmål — koden gir derfor tre forsøk. **FR-21 6.11** (36 tilfeller, [rapport](../maaling/resultater/2026-11-06-fr21-svarvurdering-v2/rapport.md)): sikkerhetsport 0 av 12 og gjenkalling 0,93 (28 av 30), begge bestått; måltest 15 av 18 (krav 16) og avsnittstest 5 av 6, ikke bestått; avsnittstreff 12 av 12. Relevans og tone er ikke vurdert ennå | **Gjeldende** |
 
-**AD-6:** ingen av fagsamtaleversjonene har vært gjennom sikkerhetsporten i
-FR-21, fordi Gullsettet på 36 tilfeller er lagt til M1. De er tatt i bruk umålt,
-og grensesnittet sier at vurderingen kan ta feil.
+**AD-6:** svarvurdering v2 besto begge de blokkerende portene i FR-21 6.11.
+De manuelle målingene (relevans og tone) gjenstår før AD-6-avgjørelsen. Grensesnittet
+sier fortsatt at vurderingen kan ta feil.
 
 **En observasjon til refleksjonsrapporten.** FR-20 krever at oppfølgingen bruker
 et ord eleven selv innførte. Det fungerer godt ved misoppfatning og delvis, men ved
