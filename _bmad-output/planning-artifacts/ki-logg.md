@@ -297,9 +297,82 @@ Verdt å merke seg at tre gjennomganger av PRD-en og tre av arkitekturspinen hel
 
 ---
 
-## Status mot FR-38, per 26. oktober
+## 2026-11-06 — FANGET AV MENNESKE: misoppfatningen KI anbefalte, sto på en setning som kan leses to veier
 
-Femten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+**Verktøy:** Claude Code (Claude Opus 5.5)
+
+**Hva jeg ba om:** et startspørsmål til domeneteksten i samtalegullsettet (FR-21). Jeg foreslo «Hvorfor bruker fremdeles mange de eldre toppdomenene?», og fikk svar om at en god felle var å tro at de eldre toppdomenene har strenge krav. Da spurte jeg: «Så rett forståelse er at de har krav som må innfris (jmf. siste setning), men likevel få krav?»
+
+**Hva som kom tilbake:** Claude hadde anbefalt «de eldre har strenge krav» som den sterkeste misoppfatningen, og pekte på avsnitt 25 («.com og .net har veldig få krav»). Etter spørsmålet mitt viste det seg at siste setning i avsnitt 26 («… de eldre topp-domenene og de nasjonale topp-domenene som enda har krav …») kan leses slik at også de eldre har krav. Claude trakk anbefalingen tilbake: en elev kunne pekt på setningen og sagt «det står jo der». Spørsmålet ble byttet til ett som bygger på avsnitt 25, der svaret er entydig.
+
+**Hva jeg gjorde:** 
+ Jeg stilte spørsmål til forslag.
+
+**Begrunnelse:** 
+Jeg så noe som jeg selv oppfattet som en svakhet med selve teksten, men som vi nå prøvde å implementere i spørsmålene, som kunne lede til tvetydighet og uklarhet i svarene. Derfor måtte jeg forhøre meg om det var noe jeg hadde misforstått, for å vite om dette burde endres.
+
+**Spor:** [promptlogg 6.11](promptlogg.md) · commit `364d786` · [sesjonslogg](../../.logs/arve/998-2026-11-06-09-34-06-samtalegullsett.md)
+
+---
+
+## 2026-11-06 — ENDRET: regelen for dekkende krevde mer enn spørsmålet spurte om
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Svarvurderingen: claude-sonnet-5-5, prompt v2.
+
+**Hva jeg ba om:** et nytt startspørsmål om underdomener. Jeg valgte Claudes forslag «Hva skjer når du skriver www.ndla.no i nettleseren?», med regelen Claude foreslo for dekkende: videresending *og* hvorfor (www er valgfritt). Så skrev jeg delvis-svaret «Da blir man sendt videre til NDLA sin side, ndla.no.»
+
+**Hva som kom tilbake:** Claude så at delvis-svaret mitt svarte fullt ut på det spørsmålet spurte om («hva skjer»). Det var regelen, ikke svaret, som var feil, og den hadde Claude selv foreslått. Spørsmålet ble endret til «Hvorfor havner du på ndla.no når du skriver www.ndla.no?». Målingen dagen etter viste samme feil et sted ingen av oss hadde sett: i EM B («Hva er forskjellen på UV-stråling og røntgenstråling?») krevde fasiten både energi og bølgelengde, og modellen leste delvis-svaret «Røntgenstråling har mer energi enn UV-stråling» som dekkende. Claude hadde godkjent den grensen som skarp. Fasiten ble ikke endret etter målingen.
+
+**Hva jeg gjorde:** 
+vi endret spørsmålet slik at det ble tydeligere hva som ble forventet. 
+
+**Begrunnelse:** 
+Vi oppdaget at "hva skjer" ikke tydelig definerer en forventninger til forklaring av en større prosess.
+
+**Spor:** [promptlogg 6.11](promptlogg.md) · commit `156a6e0`, `3accf0f`, `eab33ac` · [rapport](../../maaling/resultater/2026-11-06-fr21-svarvurdering-v2/rapport.md)
+
+---
+
+## 2026-11-05 til 06 — METODE: KI skrev ingen av de 36 elevsvarene i gullsettet
+
+**Verktøy:** Claude Code (Claude Opus 5.5)
+
+**Hva jeg ba om:** at Claude skulle lede meg gjennom samtalegullsettet. Underveis spurte jeg «forslag?» til en misoppfatning jeg ikke fikk til, og ba om forslag til startspørsmål.
+
+**Hva som kom tilbake:** Claude skrev ikke svaret, og viste til regel 0 i veiledningen: skriver KI svarene, måles modellen mot seg selv. I stedet fikk jeg en oppskrift (riktig kjerne og én feil påstand) og en snarvei der alle ordene var mine: ta mitt eget dekkende-svar og endre ett eksempel. Startspørsmål kunne KI foreslå. Tre av seks kom fra Claude (prisvekst A, domener A og B), og det står i commit-meldingene. Claude sjekket hvert av mine 36 svar mot teksten og om fasiten var entydig, og fant blant annet tre svar der en kort, riktig påstand gjorde at uklart eller delvis lå på feil side av grensen.
+
+**Hva jeg gjorde:** 
+Jeg prøvde å få innspill på noen ting, men prosessen var ryddig, med at jeg stod for endelige formuleringer og beslutninger. 
+
+**Begrunnelse:** 
+
+Sikre indre validitet.
+
+**Spor:** [promptlogg 5.–6.11](promptlogg.md) · [samtalegullsett.md](samtalegullsett.md) §0 · commit `618e9ff` til `c5584d9`
+
+---
+
+## 2026-11-06 — ENDRET: egen relevansvurdering ga to forbedringer til svarvurdering v3
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Svarvurderingen: claude-sonnet-5-5, prompt v2.
+
+**Hva jeg ba om:** «Se over» relevansarket etter FR-21-målingen, sammen med mitt inntrykk: delvis-svarene kunne vært utfordret mer på det som mangler, og dekkende-svarene burde fått beskjed om at svaret er godt før samtalen hopper videre.
+
+**Hva som kom tilbake:** Claude fant at nr. 35 var vurdert annerledes enn nr. 8 og 26 med samme logikk, og ba om begrunnelse for nr. 22, som fulgte regelen men som jeg hadde merket «nei». Inntrykkene mine ble koblet til en eldre observasjon i REGISTER om at FR-20 gir kunstige overganger ved dekkende, og ført inn som observasjon til v3. Resultat: relevans 32 av 36 (89 %), tone 0 av 36. Claude påpekte at tonevurderingen ikke var helt blind, fordi relevansarket viser begrunnelsene med tilstand.
+
+**Hva jeg gjorde:** 
+Jeg leste gjennom og prøvde å fange opp egnede oppfølgingsspørsmål. Godkjente det meste, men hadde noen innspill på at ikke alt opplevdes så relevant som det kunne ha vært.
+
+**Begrunnelse:** 
+Sikre validitet
+
+**Spor:** [promptlogg 6.11](promptlogg.md) · REGISTER, observasjon 6.11 · commit `e62a9fa`, `b5fbfb7`
+
+---
+
+## Status mot FR-38, per 6. november
+
+Nitten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -318,6 +391,10 @@ Femten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godta
 | 13 | Fagsamtalen etter egen testing | Endret etter testing; endringer og utrulling bevisst overlatt til KI |
 | 14 | «Hva tenker du at et minnevers er?» | Besto alle kontroller, men løste ikke oppgaven; fanget av menneske |
 | 15 | Minnevers v4–v6, og arbeidet stoppet på v3 | Forsøk forkastet, og en avgjørelse om å stoppe |
+| 16 | Misoppfatningen KI anbefalte, sto på en tvetydig setning | Anbefaling trukket tilbake etter spørsmål; fanget av menneske |
+| 17 | Regelen for dekkende krevde mer enn spørsmålet | Feil i KI-forslag, sett da et svar ble skrevet; en lignende feil viste seg først i målingen |
+| 18 | KI skrev ingen av de 36 elevsvarene | Metode: fasiten holdt uavhengig av modellen |
+| 19 | Egen relevansvurdering ga forbedringer til v3 | Endret etter egen vurdering av utdata |
 
 Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–9). Implementasjonsfasen (10–15) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (12, 14), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (15). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 
