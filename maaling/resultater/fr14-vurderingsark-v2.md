@@ -25,9 +25,9 @@ Tekst: `testdata/gullsett/naturfag-em-bolger.txt`
 
 > **Avsnitt 3:** Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp et forsøk der han lagde elektriske svingninger som produserte radiobølger. Det er bølger med lav frekvens og lang bølgelengde, fra 1 meter til mange km.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:**ingen kommentar
 
 ### 2. Hva fant Heinrich Hertz ut om radiobølgene? _(flervalg)_
 
@@ -38,9 +38,9 @@ Tekst: `testdata/gullsett/naturfag-em-bolger.txt`
 
 > **Avsnitt 4:** Han viste at de hadde bølgeegenskaper som for eksempel brytning, bøyning og overlagring. Ved å lage stående bølger av dem, greide han å måle farten, og den var 300 000 km/s, – akkurat som forutsagt for elektromagnetiske bølger!
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:**Litt tydelig hvilke alternativ som er riktig, fordi det er det eneste som trekker frem to egenskaper.
 
 ### 3. Hvorfor er radiobølger godt egnet til å sende signaler over store avstander? _(kortsvar)_
 
@@ -48,7 +48,7 @@ Eksempelsvar: Radiobølger har lang bølgelengde, så de spres lite og går rett
 
 > **Avsnitt 5:** På grunn av den lange bølgelengden er radiobølger svært godt egnet til å sende signaler over store avstander. Bølger med korte bølgelengder spres lett, mens radiobølger går uforstyrret rett fram. I tillegg kan radiobølger bli reflektert av ionosfæren, 80–400 km over bakken, tilbake mot jordoverflata og dermed nå enda lenger.
 
-**A** ☐ ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
 **Kommentar:**
 
@@ -61,9 +61,9 @@ Eksempelsvar: Radiobølger har lang bølgelengde, så de spres lite og går rett
 
 > **Avsnitt 8:** Grunnen til at mat varmes opp så raskt i en mikrobølgeovn, er at frekvensen til mikrobølgene passer godt sammen med frekvensen som både fett- og vannmolekyler naturlig vil svinge med. Dermed sørger mikrobølgeovnen for å «riste» på alle vannmolekylene i maten. Derfor blir maten varm fordi den inneholder vann, mens tallerkenen (som ikke inneholder vann) ikke blir det.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Litt tydelig hvilke alternativ som er riktig ut fra detaljenivå
 
 ### 5. Hva er infrarød stråling sammenlignet med synlig lys? _(flervalg)_
 
@@ -74,7 +74,7 @@ Eksempelsvar: Radiobølger har lang bølgelengde, så de spres lite og går rett
 
 > **Avsnitt 10:** IR-stråling er elektromagnetisk stråling som har litt mindre energi enn synlig lys. Den har bølgelengder i området 700 nm til 1 mm, og de korteste av disse kan vi føle med huden. Når vi føler strålevarmen fra en vedovn, er det IR-stråler som ligger ganske nærme den røde delen av spekteret.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
 **Kommentar:**
 
@@ -87,9 +87,9 @@ Eksempelsvar: Radiobølger har lang bølgelengde, så de spres lite og går rett
 
 > **Avsnitt 12:** Digitale kameraer kan lages slik at de registrerer og viser infrarøde bølger. Dette kan for eksempel utnyttes til termofotografering for å finne varmelekkasjer i eldre hus, eller til varmesøkende kameraer.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Litt tung setning å lese, men kommer ikke på et godt alternativ
 
 ### 7. Hvorfor blir bølgelengden til infrarød stråling kortere når temperaturen øker? _(kortsvar)_
 
@@ -97,7 +97,7 @@ Eksempelsvar: Når temperaturen stiger, beveger molekylene seg raskere. Da sende
 
 > **Avsnitt 13:** Infrarøde bølger skyldes molekylbevegelser. Siden molekylbevegelsene er raskere ved høyere temperaturer, vil molekylene sende ut mer og mer energirike IR-bølger ved økende temperatur. Av samme grunn vil bølgelengden til strålingen avta når temperaturen øker. (Husk at lav energi tilsvarer lang bølgelengde!)
 
-**A** ☐ ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
 **Kommentar:**
 
@@ -110,9 +110,9 @@ Eksempelsvar: Når temperaturen stiger, beveger molekylene seg raskere. Da sende
 
 > **Avsnitt 16:** På 1670-tallet viste Isac Newton, ved hjelp av et prisme, at hvitt lys består av alle regnbuens farger. Han definerte de 7 spektralfargene som rødt, oransje, gul, grønn, blå, indigo og fiolett.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Ingen kommentar
 
 ---
 
@@ -129,9 +129,9 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 4:** Et språklig bilde er et uttrykk som blir brukt i overført betydning, og som skal beskrive noen eller noe. For eksempel kan en sportsjournalist skrive om et lovende fotballtalent at han er "en uslepen diamant". Bildet får oss til å tenke på noe verdifullt, men uferdig, og det er nettopp disse egenskapene ved den unge spilleren journalisten vil framheve.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** X ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Litt tydelig hvilke som er riktig, fordi den skiller seg ut ved å være lengre.
 
 ### 10. Hvilken konnotasjon vekker fargen hvitt, ifølge teksten? _(flervalg)_
 
@@ -142,7 +142,7 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 24:** En konnotasjon er en felles assosiasjon som vi knytter til et ord. Ordvalget til dikteren er derfor med på å skape ei stemning i diktet. For eksempel vil fargen svart få mange til å tenke på noe dystert. Fargen hvitt, derimot, konnoterer gjerne uskyld.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** X ja ☐ nei · **C** ☐ ja X nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -155,7 +155,7 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 35:** En allegori er en tekst du kan tolke som et bilde på noe annet. Allegoriske tekster forteller en konkret historie der du kan tolke hele tekster som et bilde på noe annet og større. Noen ganger blir allegorien brukt for å få fram en moral.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** X ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -168,7 +168,7 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 38:** En fabel er en kort dyrefortelling. Avslutningen er ofte en konklusjon eller en moral som skal sikre at leseren får med seg poenget.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -181,9 +181,9 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 45:** Mannskapet blir behandlet dårlig. De får dårlig mat og lite lønn.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Dette er et dårlig spørsmål da det spør om detaljer i et eksempel i teksten, men ikke noe som går på essensen i eksempelet.
 
 ### 14. Hva betyr det latinske ordet alludere, som ordet allusjon kommer fra? _(flervalg)_
 
@@ -194,7 +194,7 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 51:** Ordet allusjon kommer fra det latinske ordet alludere, som betyr "lek". Allusjon er en slags språklig lek fordi vi leker med noe som er kjent fra før, samtidig som vi skaper noe helt nytt.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -207,9 +207,10 @@ Tekst: `testdata/gullsett/norsk-sprakligebilder.txt`
 
 > **Avsnitt 57:** Diktet over er skrevet av Ingeborg Brynhildsvoll på vg1. Diktet har tydelig bruk av allusjon i ordene Du som er i himmelen, både i tittelen, første verselinje og siste verselinje. Ordene Du som er i himmelen er en referanse til den kristne bønnen "Fader Vår", hentet fra Bibelen.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
-**Kommentar:**
+**Kommentar:**Dette er et dårlig spørsmål da det spør om detaljer i et eksempel i teksten, men ikke noe som går på essensen i eksempelet.
+
 
 ### 16. Hvorfor fungerer en allusjon bare hvis leseren skjønner den? _(kortsvar)_
 
@@ -217,7 +218,7 @@ Eksempelsvar: Det er først når leseren kjenner igjen referansen at hun forstå
 
 > **Avsnitt 60:** Virkemiddelet fungerer bare som allusjon hvis mottakeren skjønner allusjonen. Det er først da vi forstår det ekstra laget med mening. Det blir enklere å forstå allusjonene når du kjenner de ulike referansene i et land. Det vil si at jo mer norsk litteratur du leser, jo lettere er det å finne og forstå bruken av allusjon i de norske tekstene.
 
-**A** ☐ ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** ikke aktuelt · **C** [] ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -236,7 +237,7 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 5:** Hvis vi starter bakerst, har vi et punktum (.). Dette punktumet blir som oftest fjernet av nettleseren. Det indikerer at innholdet ligger under DNS-rotserverne.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -249,7 +250,7 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 6:** Neste del er .no, som er det norske topp-domenet. Alle .no-adresser er regulert av Norid AS, som er en privat ,ikke-kommersiell bedrift som har fått ansvaret fra norske myndigheter. Norid AS sine DNS-servere har ansvaret for å kjenne til IP-adressene til alle DNS-servere som har .no-domener.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -262,9 +263,9 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 8:** om er et under-domene under .ndla-domenet. Dette styres av den samme DNS-serveren som selve domenet. Det er ikke nødvendig å bruke underdomener, men er spesielt praktisk for domener som skal betjene flere tjenester eller nettsider. Det er mulig å ha flere nivåer med under-domener hvis dette er ønsket.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
-**Kommentar:**
+**Kommentar:**litt tydelig hvilket svar som er riktig, ut fra lengde
 
 ### 20. Hva står www for i en nettsideadresse? _(flervalg)_
 
@@ -275,9 +276,9 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 9:** Ofte brukes www som under-domene. For eksempel www.ndla.no. www står for World Wide Web og brukes for å identifisere at adressen er til en nettside. Det er ikke påkrevd å bruke www i nettsideadresser, og mange videresender forespørsler til www til hoved-domenet. Dette skjer for eksempel hvis du skriver inn www.ndla.no. Da blir du videresendt til ndla.no.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
-**Kommentar:**
+**Kommentar:** Litt lett, og langt fra det mest interessante å stille spørsmål om i dette avsnittet.
 
 ### 21. Hva skjer når du skriver inn www.ndla.no? _(flervalg)_
 
@@ -288,9 +289,10 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 9:** Ofte brukes www som under-domene. For eksempel www.ndla.no. www står for World Wide Web og brukes for å identifisere at adressen er til en nettside. Det er ikke påkrevd å bruke www i nettsideadresser, og mange videresender forespørsler til www til hoved-domenet. Dette skjer for eksempel hvis du skriver inn www.ndla.no. Da blir du videresendt til ndla.no.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja [] nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
+
 
 ### 22. Hvem bestemmer hvem som får bruke nasjonale topp-domener og hva kravene skal være? _(flervalg)_
 
@@ -301,7 +303,7 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 14:** Nasjonale topp-domener styres av hvert enkelt land, og disse bestemmer hvem som får bruke dem og hva kravene skal være for domener under sitt topp-domene.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -314,7 +316,7 @@ Tekst: `testdata/gullsett/teknologi-domeneoppbygning.txt`
 
 > **Avsnitt 16:** I starten var generiske topp-domener avgrenset til noen få spesielle kategorier eller nisjer. For eksempel var .com originalt bare for kommersielle aktører. .org var for ikke-kommersielle organisasjoner.
 
-**A** ☐ ja ☐ nei · **B** ☐ ja ☐ nei · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** x ja ☐ nei · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
@@ -324,12 +326,12 @@ Eksempelsvar: Tidligere hadde hvert topp-domene strenge krav, så domenet sa noe
 
 > **Avsnitt 25:** Tidligere var det strengere krav for å få kjøpe og bruke de fleste domener. Hvert topp-domene hadde sine krav, og dette gjorde det mulig å si noe om en nettside ut fra hvilket topp-domene den lå under. For eksempel så var det lenge bare bedrifter og selvstendige næringsdrivende som kunne ha et domene under .no. Det er nå åpnet for at privatpersoner med norsk personnummer og postadresse kan registrere opp til fem .no-domener. Topp-domener som .com og .net har veldig få krav i dag.
 
-**A** ☐ ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja ☐ nei · **Passerer** ☐ ja ☐ nei
+**A** x ja ☐ nei · **B** ikke aktuelt · **C** ☐ ja x nei · **Passerer** x ja ☐ nei
 
 **Kommentar:**
 
 ---
 
-**Passerer:** ____ av 24  ·  **Krever kunnskap utenfor teksten (C = ja):** ____ (mål 0)
+**Passerer:** 24 av 24  ·  **Krever kunnskap utenfor teksten (C = ja):** 0 (mål 0)
 
 Når arket er fylt ut, regner Claude andelen og konfidensintervallet (FR-14 krever begge).

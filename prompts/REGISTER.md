@@ -29,7 +29,7 @@ endret seg ikke, og FR-8 er ikke nådd.
 | Versjon | Dato | Endring og grunn | Målt | Status |
 |---|---|---|---|---|
 | v1 | 2026-10-16 | Første versjon. Ti kandidater, koden velger åtte. | Umålt (Quiz-gullsettet er M1) | Erstattet |
-| v2 | 2026-10-16 | Utløst av et reelt FR-14-brudd funnet av utvikleren: «Hva er renter?» hadde som fasit hele tilbakebetalingen, mens teksten sier at rentene er *de ekstra pengene*. Krav om at det riktige alternativet betyr det samme som teksten, og at to spørsmål ikke spør om det samme. | Umålt. Én observasjon etter endringen: flere faktaspørsmål i demoquizen — følges opp i M1 | **Gjeldende** |
+| v2 | 2026-10-16 | Utløst av et reelt FR-14-brudd funnet av utvikleren: «Hva er renter?» hadde som fasit hele tilbakebetalingen, mens teksten sier at rentene er *de ekstra pengene*. Krav om at det riktige alternativet betyr det samme som teksten, og at to spørsmål ikke spør om det samme. | FR-14 8.11 (utviklerens vurdering, 24 spørsmål fra seks tekster, [dommer](../maaling/resultater/fr14-dommer-v2.json)): 24 av 24 passerer, 95 % KI [0,86–1,00], og 0 krever kunnskap utenfor teksten. **Bestått**, også nedre grense over 85 %. Kvalitetsfunn utenfor kravet: i fire spørsmål (nr. 2, 4, 9, 19) er det riktige alternativet lett å gjette fordi det er lengre eller mer detaljert, og to (nr. 13, 15) spør om detaljer i et eksempel i stedet for poenget. Kandidater til en v3 | **Gjeldende** |
 
 ## Fagsamtale: startspørsmål og svarvurdering (FR-18 til FR-23)
 

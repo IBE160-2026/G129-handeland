@@ -1,0 +1,288 @@
+{
+  "krav": "FR-14",
+  "promptversjon": "v2",
+  "vurdert": "2026-11-08",
+  "vurdertAv": "utvikleren",
+  "passerer": {
+    "antall": 24,
+    "av": 24,
+    "andel": 1,
+    "intervall95": [
+      0.8620194241710247,
+      1
+    ],
+    "terskel": 0.85,
+    "bestaatt": true
+  },
+  "utenforTeksten": {
+    "antall": 0,
+    "maal": 0,
+    "bestaatt": true
+  },
+  "sporsmal": [
+    {
+      "nummer": 1,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hva er radiobølger?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "ingen kommentar",
+      "passerer": true
+    },
+    {
+      "nummer": 2,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hva fant Heinrich Hertz ut om radiobølgene?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Litt tydelig hvilke alternativ som er riktig, fordi det er det eneste som trekker frem to egenskaper.",
+      "passerer": true
+    },
+    {
+      "nummer": 3,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hvorfor er radiobølger godt egnet til å sende signaler over store avstander?",
+      "type": "kortsvar",
+      "A": true,
+      "B": "ikke aktuelt",
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 4,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, mens tallerkenen ikke blir det?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Litt tydelig hvilke alternativ som er riktig ut fra detaljenivå",
+      "passerer": true
+    },
+    {
+      "nummer": 5,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hva er infrarød stråling sammenlignet med synlig lys?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 6,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hva kan digitale kameraer lages til å registrere og vise?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Litt tung setning å lese, men kommer ikke på et godt alternativ",
+      "passerer": true
+    },
+    {
+      "nummer": 7,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hvorfor blir bølgelengden til infrarød stråling kortere når temperaturen øker?",
+      "type": "kortsvar",
+      "A": true,
+      "B": "ikke aktuelt",
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 8,
+      "tekst": "Egenskaper hos ulike EM-bølger",
+      "sporsmal": "Hva viste Isac Newton med et prisme?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Ingen kommentar",
+      "passerer": true
+    },
+    {
+      "nummer": 9,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hva er et språklig bilde?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Litt tydelig hvilke som er riktig, fordi den skiller seg ut ved å være lengre.",
+      "passerer": true
+    },
+    {
+      "nummer": 10,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hvilken konnotasjon vekker fargen hvitt, ifølge teksten?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 11,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hva er en allegori?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 12,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hva inneholder ofte avslutningen på en fabel?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 13,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hvordan blir mannskapet behandlet i Haiene?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Dette er et dårlig spørsmål da det spør om detaljer i et eksempel i teksten, men ikke noe som går på essensen i eksempelet.",
+      "passerer": true
+    },
+    {
+      "nummer": 14,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hva betyr det latinske ordet alludere, som ordet allusjon kommer fra?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 15,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hvilken tekst er den kristne bønnen «Fader Vår» hentet fra, ifølge teksten?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Dette er et dårlig spørsmål da det spør om detaljer i et eksempel i teksten, men ikke noe som går på essensen i eksempelet.",
+      "passerer": true
+    },
+    {
+      "nummer": 16,
+      "tekst": "Språklige bilder: metafor, allegori og allusjon",
+      "sporsmal": "Hvorfor fungerer en allusjon bare hvis leseren skjønner den?",
+      "type": "kortsvar",
+      "A": true,
+      "B": "ikke aktuelt",
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 17,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hva indikerer punktumet bakerst i adressen om.ndla.no.?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 18,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hvem regulerer alle .no-adresser?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 19,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hvilken DNS-server styrer underdomenet om, slik teksten beskriver det?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "litt tydelig hvilket svar som er riktig, ut fra lengde",
+      "passerer": true
+    },
+    {
+      "nummer": 20,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hva står www for i en nettsideadresse?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "Litt lett, og langt fra det mest interessante å stille spørsmål om i dette avsnittet.",
+      "passerer": true
+    },
+    {
+      "nummer": 21,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hva skjer når du skriver inn www.ndla.no?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 22,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hvem bestemmer hvem som får bruke nasjonale topp-domener og hva kravene skal være?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 23,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hva var .org opprinnelig beregnet for?",
+      "type": "flervalg",
+      "A": true,
+      "B": true,
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    },
+    {
+      "nummer": 24,
+      "tekst": "Domeneoppbygning og toppdomene",
+      "sporsmal": "Hvorfor kan man ikke lenger like lett si noe om en nettside ut fra hvilket topp-domene den ligger under?",
+      "type": "kortsvar",
+      "A": true,
+      "B": "ikke aktuelt",
+      "C": false,
+      "kommentar": "",
+      "passerer": true
+    }
+  ]
+}
