@@ -558,11 +558,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 24 — Valgt morsmål ble ikke vist før siden ble lastet på nytt
+
+**Hvor:** `app/komponenter/Morsmaal.tsx`, `MorsmaalVelger`. Nedtrekkslisten var et ukontrollert felt med `defaultValue={valgt}` i et skjema med serverhandling.
+
+**Hva:** eleven valgte et språk og trykket Lagre. Valget ble lagret, men listen viste det gamle språket helt til siden ble lastet på nytt. React nullstiller et skjema etter en serverhandling, og et ukontrollert felt leser `defaultValue` bare når det tegnes første gang, så den nye verdien fra serveren nådde aldri feltet. Det fantes heller ingen kvittering, så eleven kunne ikke vite at noe var lagret.
+
+**Hvordan det ble funnet:** i utviklerens telefontest 9.11, da utvikleren byttet mellom ukrainsk, arabisk og polsk. Den automatiske tilgjengelighetssjekken går gjennom kontosiden, men bytter aldri språk to ganger og ser ikke etter hva listen viser etterpå.
+
+**Rettelse:** 9.11 (`02377c6`): `key={valgt}` på listen, så den tegnes på nytt med det lagrede språket, og en kvittering «Lagret: …» i en `aria-live`-region. Leseinnstillingene bruker samme mønster (`defaultChecked` i et skjema med serverhandling), men viste endringen med en gang i telefontesten og er ikke endret.
+
+**Mønsteret:** kode som virker første gang og feiler andre gang. En test som gjør én ting én gang, ser den aldri; en bruker som prøver seg fram, ser den med en gang.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 23 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 24 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |
