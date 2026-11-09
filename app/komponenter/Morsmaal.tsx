@@ -55,7 +55,11 @@ export function MorsmaalVelger({
         Morsmål
       </label>
       <div className="flex flex-wrap items-center gap-3">
+        {/* React nullstiller skjemaet etter handlingen, og et ukontrollert felt
+            leser defaultValue bare én gang — uten nøkkelen viste listen det
+            gamle valget til siden ble lastet på nytt (telefontest 9.11). */}
         <select
+          key={valgt ?? ""}
           id="spraak"
           name="spraak"
           defaultValue={valgt ?? ""}
@@ -80,6 +84,11 @@ export function MorsmaalVelger({
           {svar.feil.melding} {svar.feil.handling}
         </p>
       )}
+      <p aria-live="polite" className="text-sm font-medium">
+        {svar !== TOMT && !svar.feil
+          ? `Lagret: ${SPRAAK.find((s) => s.kode === valgt)?.navn ?? "bare norsk"}.`
+          : ""}
+      </p>
     </form>
   );
 }
