@@ -345,9 +345,7 @@ Vi oppdaget at "hva skjer" ikke tydelig definerer en forventninger til forklarin
 Jeg prøvde å få innspill på noen ting, men prosessen var ryddig, med at jeg stod for endelige formuleringer og beslutninger. 
 
 **Begrunnelse:** 
-
-Sikre indre validitet.
-
+Sikre indrevaliditet, og at ikke modellen måles mot seg selv. 
 **Spor:** [promptlogg 5.–6.11](promptlogg.md) · [samtalegullsett.md](samtalegullsett.md) §0 · commit `618e9ff` til `c5584d9`
 
 ---
@@ -364,7 +362,7 @@ Sikre indre validitet.
 Jeg leste gjennom og prøvde å fange opp egnede oppfølgingsspørsmål. Godkjente det meste, men hadde noen innspill på at ikke alt opplevdes så relevant som det kunne ha vært.
 
 **Begrunnelse:** 
-Sikre validitet
+Sikre validitet. En oppfølging kan følge regelen og likevel ikke hjelpe eleven, og er det fint å bedre. 
 
 **Spor:** [promptlogg 6.11](promptlogg.md) · REGISTER, observasjon 6.11 · commit `e62a9fa`, `b5fbfb7`
 
