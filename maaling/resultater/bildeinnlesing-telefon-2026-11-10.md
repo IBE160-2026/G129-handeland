@@ -113,3 +113,32 @@ flymodus av igjen etterpå.
 
 **Bildeinnlesingen virker på telefon:** ☐ ja ☐ nei
 **Alle feiltilstandene jeg fikk testet, sa hva som skjedde og hva jeg kunne gjøre:** ☐ ja ☐ nei
+
+---
+
+## Resultat (utviklerens svar i chat 10.11, ført inn av Claude)
+
+**Del 1:** alle fire steg virket. Påminnelse, kamera, framdrift og FR-45-merknaden
+var der (1), bilde fra galleriet ble godtatt (2), rekkefølgen kunne endres og ble
+riktig (3), og teksten gikk videre i løypen (4).
+
+**Del 2:**
+- **BF-1:** god feilmelding.
+- **BF-2:** virket.
+- **BF-3:** ikke testet. Bildevelgeren tillater bare JPEG, PNG og HEIC, så på
+  telefon kan man ikke velge feil format; nettleseren stopper det før appen.
+  Dekket av `opplasting/bilde.test.ts`. Kan prøves på PC ved å velge «Alle filer»
+  i fildialogen.
+- **BF-4:** ett ord ga en feilmelding. En overskrift og ett kort avsnitt gikk
+  videre, men tok lang tid før det stoppet senere i løypen. Hvor og med hvilken
+  melding er ikke avklart; koden stopper ikke kort tekst fra bilder (FR-44 sier
+  at gjennomsynet skal vises likevel), så stoppet kommer et annet sted.
+- **BF-5:** virket.
+
+**Bildeinnlesingen virker på telefon:** ja.
+
+**Innspill til designfasen fra samme test:** tydeligere ventegrafikk (gjerne
+animasjon), fagsamtalen som dialog med KI-en til venstre og eleven til høyre,
+«Mine tekster» som egen side ved siden av «Hjem» på mobil. Oppsummeringen etter
+fagsamtalen (for mye tekst før «Ingen svar ble vurdert som dekkende») er rettet
+samme dag.

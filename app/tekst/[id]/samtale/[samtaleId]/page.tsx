@@ -172,13 +172,16 @@ function OppsummeringVisning({
 
       {/* FR-22: det som ble godtatt, listes også. Modellen kan ha tatt feil. */}
       <h3 className="mt-4 font-semibold">Det du forklarte godt</h3>
-      <p className="text-sm text-slate-600 dark:text-slate-400">
-        Se over disse også, og sammenlign med teksten. Stemmer noe ikke med det du leste, kan
-        vurderingen ha tatt feil.
-      </p>
+      {/* Telefontest 10.11: oppfordringen sto også når lista var tom, og ga mye
+          tekst før «ingen». Den trengs bare når det finnes noe å se over. */}
       {o.dekkende.length === 0 ? (
-        <p className="mt-1 text-slate-600 dark:text-slate-400">Ingen svar ble vurdert som dekkende.</p>
+        <p className="text-slate-600 dark:text-slate-400">Ingen svar ble vurdert som dekkende.</p>
       ) : (
+        <>
+        <p className="text-sm text-slate-600 dark:text-slate-400">
+          Se over disse også, og sammenlign med teksten. Stemmer noe ikke med det du leste, kan
+          vurderingen ha tatt feil.
+        </p>
         <ul className="mt-2 space-y-3">
           {o.dekkende.map((r) => (
             <li key={r.nummer}>
@@ -195,6 +198,7 @@ function OppsummeringVisning({
             </li>
           ))}
         </ul>
+        </>
       )}
     </section>
   );
