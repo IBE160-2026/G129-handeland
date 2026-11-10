@@ -15,6 +15,7 @@
 - [ ] 2026-11-08 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Quiz v3: like lange alternativer, spørsmål om poenget (funn fra FR-14-vurderingen)
 - [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — AD-6: skal svarvurdering v2 stå som gjeldende og målt?
 - [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Målingstestene overskriver utfylte vurderingsark ved npm test
-- [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Seks minnevers-tester feiler; avgjør om rimkontrollen fra v6 skal gjelde v3 i produksjon
+- [x] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Seks minnevers-tester feiler; avgjør om rimkontrollen fra v6 skal gjelde v3 i produksjon (løst 2026-11-10: rimkontrollen avgrenset og rullet ut; de fem som feiler er Suno på pause)
 - [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bildeinnlesing (FR-44) testet på telefon
 - [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Designfasen: punktene nederst i telefontest-2026-11-09.md, og tre forslag som må vurderes mot PRD-en
+- [ ] 2026-11-10 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Minnevers: avvikle, skjule eller beholde til etter M1 (kursendring i PRD §9.2)
