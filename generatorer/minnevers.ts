@@ -65,18 +65,18 @@ function rimord(linje: string): string {
 }
 
 /**
- * Rimer to linjer bare fordi de slutter på samme ord? «ned / ned»,
- * «fordeler / deler» og «toppdomenet / under-domenet» er ikke rim
- * (utviklerens vurdering av v4, 19.10). Det korte ordet må begynne på
- * konsonant for å telle: «inn / finn» og «is / pris» er ekte rim, der det
- * korte ordet bare er rimdelen. Eksportert for testene.
+ * Rimer to linjer bare fordi de slutter på helt samme ord? «ned / ned» er
+ * ikke rim. Eksportert for testene.
+ *
+ * Til 10.11 avviste den også ord der det ene slutter på det andre
+ * («fordeler / deler»), etter utviklerens vurdering av v4 19.10. Den regelen
+ * kan ikke skille samme ord fra to ulike ord, og avviste 3 av de 10 godkjente
+ * v3-versene («lik / slik», «tråd / råd», «natur / tur») — v3 ble målt uten
+ * den, og skal ikke møte strengere krav i bruk enn i målingen.
  */
 export function sammeRimord(a: string, b: string): boolean {
   const [x, y] = [rimord(a), rimord(b)];
-  if (!x || !y) return false;
-  if (x === y) return true;
-  const [kort, lang] = x.length <= y.length ? [x, y] : [y, x];
-  return lang.endsWith(kort) && !/^[aeiouyæøå]/.test(kort);
+  return x !== "" && x === y;
 }
 
 /** Høyst så mange forsøk før generatoren gir opp (AD-11). */

@@ -40,8 +40,13 @@ describe("sammeRimord — et ord rimer ikke på seg selv", () => {
   test.each([
     ["så settes styringsrenta gradvis ned.", "Inflasjonen må først ned,", true],
     ["Mer energi, kortere bølgelengde,", "mindre energi, lengre bølgelengde.", true],
-    ["Operativsystemet fordeler", "skriver, minne og prosessorer deler.", true],
-    ["Så kommer .no, toppdomenet,", "så .ndla, og om, under-domenet.", true],
+    // Ett ord som slutter på det andre, er ikke lenger brudd (10.11): regelen
+    // kunne ikke skille disse fra ekte rim som «tråd / råd».
+    ["Operativsystemet fordeler", "skriver, minne og prosessorer deler.", false],
+    ["Så kommer .no, toppdomenet,", "så .ndla, og om, under-domenet.", false],
+    ["Simile sier «som» eller «lik»,", "metaforen dropper dem: «han er en løve», slik.", false],
+    ["To betydningsområder, én tråd,", "og minnet får en knagg, et godt råd.", false],
+    ["Operativsystemet, slik er dets natur,", "det deler minne ut, hver til sin tur.", false],
     ["Korte bølger spres lett,", "radiobølger går uforstyrret rett.", false],
     ["Radiobølger har lav frekvens", "og lang bølgelengde. Konsekvens:", false],
     ["Programmet ber om å komme inn,", "og driverprogrammet tar seg av det, finn", false],
