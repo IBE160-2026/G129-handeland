@@ -104,7 +104,7 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
           // Fokus som går til lukkeknappen i boblen, skal ikke lukke den.
           if (!rot.current?.contains(e.relatedTarget as Node)) settKikk(false);
         }}
-        className="rounded-sm bg-amber-100 px-0.5 underline decoration-amber-600 decoration-2 underline-offset-2 hover:bg-amber-200 focus:outline-2 focus:outline-offset-2 focus:outline-amber-700 dark:bg-amber-900/50 dark:decoration-amber-400 dark:hover:bg-amber-900"
+        className="rounded-sm bg-amber-100 px-0.5 underline decoration-amber-600 decoration-2 underline-offset-2 hover:bg-amber-200 aria-expanded:bg-amber-300 dark:aria-expanded:bg-amber-800 focus:outline-2 focus:outline-offset-2 focus:outline-amber-700 dark:bg-amber-900/50 dark:decoration-amber-400 dark:hover:bg-amber-900"
       >
         {tekst}
       </button>
@@ -115,10 +115,12 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
           role="dialog"
           aria-label={`Forklaring: ${uttrykk}`}
           style={{ transform: `translateX(${forskyv}px)` }}
-          className="fixed inset-x-2 bottom-2 z-20 block rounded-md sm:absolute sm:inset-x-auto sm:top-full sm:bottom-auto sm:left-0 sm:mt-2 sm:w-72 border border-slate-300 bg-white p-3 text-left text-base leading-normal font-normal shadow-lg dark:border-slate-700 dark:bg-slate-900"
+          // Telefontest 9.11: boksen var vanskelig å se. Den er nå større, har
+          // farget bakgrunn og tykkere kant, og forklaringen står i full størrelse.
+          className="fixed inset-x-2 bottom-2 z-20 block rounded-lg sm:absolute sm:inset-x-auto sm:top-full sm:bottom-auto sm:left-0 sm:mt-2 sm:w-80 border-2 border-amber-500 bg-amber-50 p-4 text-left text-base leading-normal font-normal shadow-xl dark:border-amber-500 dark:bg-slate-900"
         >
           <span className="flex items-start justify-between gap-2">
-            <span className="font-semibold">{uttrykk}</span>
+            <span className="text-lg font-semibold">{uttrykk}</span>
             <button
               type="button"
               onClick={() => {
@@ -132,12 +134,12 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
               ×
             </button>
           </span>
-          <span className="mt-1 block text-sm text-slate-700 dark:text-slate-300">{forklaring}</span>
+          <span className="mt-1 block text-base text-slate-800 dark:text-slate-200">{forklaring}</span>
           {morsmaal && (
             <span
               lang={morsmaal.kode}
               dir={morsmaal.retning}
-              className="mt-2 block border-t border-slate-200 pt-2 text-sm text-slate-700 dark:border-slate-700 dark:text-slate-300"
+              className="mt-2 block border-t border-amber-300 pt-2 text-base text-slate-800 dark:border-slate-700 dark:text-slate-200"
             >
               {morsmaal.tekst}
             </span>

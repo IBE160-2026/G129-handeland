@@ -215,13 +215,13 @@ export default async function Lesing({
                     */}
                     <dd
                       id={`forklaring-${b.id}`}
-                      className="text-sm text-slate-700 dark:text-slate-300"
+                      className="ml-4 text-sm text-slate-700 dark:text-slate-300"
                     >
                       {b.forklaring}
                     </dd>
                     {spraak && begrepMm.has(`u:${b.id}`) && (
                       /* FR-25: det norske uttrykket i parentes rett etter, satt av appen. */
-                      <dd className="mt-1 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
+                      <dd className="mt-1 ml-4 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
                         <Morsmaalstekst spraak={spraak} tekst={begrepMm.get(`u:${b.id}`)} som="span" className="font-medium" />{" "}
                         <span>({b.uttrykk})</span>
                         <Morsmaalstekst spraak={spraak} tekst={begrepMm.get(`f:${b.id}`)} />
@@ -258,8 +258,8 @@ export default async function Lesing({
                               {u.uttrykk}
                             </a>
                           </dt>
-                          <dd className="text-sm text-slate-700 dark:text-slate-300">{u.forklaring}</dd>
-                          <dd className="mt-1 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
+                          <dd className="ml-4 text-sm text-slate-700 dark:text-slate-300">{u.forklaring}</dd>
+                          <dd className="mt-1 ml-4 border-l-2 border-slate-300 pl-2 text-sm dark:border-slate-700">
                             <Morsmaalstekst spraak={spraak} tekst={utpekingMm.get(`f${u.i}`)} />
                           </dd>
                         </div>

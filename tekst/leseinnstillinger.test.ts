@@ -22,6 +22,6 @@ describe("FR-12 — leseinnstillinger", () => {
 
   test("linjelengden regnes i tegn, så den følger tekststørrelsen", () => {
     expect(lesestil(STANDARD).maxWidth).toBe(`${LINJELENGDE_CH}ch`);
-    expect(lesestil({ tekststorrelse: "ekstra", linjeavstand: "tett" })).toMatchObject({ fontSize: "1.625rem", lineHeight: 1.5 });
+    expect(lesestil({ tekststorrelse: "ekstra", linjeavstand: "tett" })).toMatchObject({ fontSize: "2rem", lineHeight: 1.5, "--avsnittsavstand": "0.8em" });
   });
 });

@@ -13,13 +13,19 @@ export const TEKSTSTORRELSER = {
   liten: { navn: "Liten", rem: 1 },
   normal: { navn: "Normal", rem: 1.125 },
   stor: { navn: "Stor", rem: 1.375 },
-  ekstra: { navn: "Ekstra stor", rem: 1.625 },
+  // 2 og ikke 1,625 etter telefontesten 9.11: «ekstra stor» var for lite
+  // forskjellig fra «stor».
+  ekstra: { navn: "Ekstra stor", rem: 2 },
 } as const;
 
+/**
+ * Avstanden mellom avsnittene følger linjeavstanden (telefontest 9.11: med
+ * «romslig» var avsnittene for tett). I em, så den vokser med skriften.
+ */
 export const LINJEAVSTANDER = {
-  tett: { navn: "Tett", faktor: 1.5 },
-  normal: { navn: "Normal", faktor: 1.8 },
-  romslig: { navn: "Romslig", faktor: 2.2 },
+  tett: { navn: "Tett", faktor: 1.5, avsnitt: 0.8 },
+  normal: { navn: "Normal", faktor: 1.8, avsnitt: 1.1 },
+  romslig: { navn: "Romslig", faktor: 2.2, avsnitt: 1.8 },
 } as const;
 
 export type Tekststorrelse = keyof typeof TEKSTSTORRELSER;
@@ -44,11 +50,15 @@ export function tolkInnstillinger(v: { tekststorrelse?: unknown; linjeavstand?: 
   };
 }
 
+/** CSS-variabelen avsnittene leser avstanden sin fra (`MarkertAvsnitt`). */
+export const AVSNITTSVARIABEL = "--avsnittsavstand";
+
 /** Stilen Lesevisningen bruker på teksten. */
 export function lesestil(i: Leseinnstillinger) {
   return {
     fontSize: `${TEKSTSTORRELSER[i.tekststorrelse].rem}rem`,
     lineHeight: LINJEAVSTANDER[i.linjeavstand].faktor,
     maxWidth: `${LINJELENGDE_CH}ch`,
+    [AVSNITTSVARIABEL]: `${LINJEAVSTANDER[i.linjeavstand].avsnitt}em`,
   };
 }

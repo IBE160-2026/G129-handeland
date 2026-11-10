@@ -10,6 +10,7 @@
 
 import { useActionState, useRef } from "react";
 import {
+  AVSNITTSVARIABEL,
   LINJEAVSTANDER,
   TEKSTSTORRELSER,
   lesestil,
@@ -41,7 +42,12 @@ export function Leseinnstillinger({
       linjeavstand: d.get("linjeavstand") as Linjeavstand,
     });
     const mal = document.getElementById(malId);
-    if (mal) Object.assign(mal.style, { ...stil, lineHeight: String(stil.lineHeight) });
+    if (mal) {
+      const { [AVSNITTSVARIABEL]: avsnitt, ...vanlig } = stil;
+      Object.assign(mal.style, { ...vanlig, lineHeight: String(vanlig.lineHeight) });
+      // En CSS-variabel settes ikke av Object.assign, bare av setProperty.
+      mal.style.setProperty(AVSNITTSVARIABEL, avsnitt);
+    }
     skjema.current?.requestSubmit();
   }
 
