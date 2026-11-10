@@ -38,11 +38,11 @@ import {
 } from "../../../../morsmaal/elementer";
 import { KVALITETSSIKRET } from "../../../../morsmaal/spraak";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
-import { HentOversettelse } from "../../../komponenter/Morsmaal";
+import { HentOversettelse, MorsmaalVelger } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
 import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
-import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing } from "../../../handlinger";
+import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing, velgMorsmaalHandling } from "../../../handlinger";
 
 const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra fagspråket" } as const;
 
@@ -140,12 +140,10 @@ export default async function Lesing({
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}
       </h1>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-        {spraak ? `Morsmål: ${spraak.navn}. ` : ""}
-        <Link href="/konto" className={lenke}>
-          {spraak ? "Endre morsmål" : "Velg morsmål"}
-        </Link>
-      </p>
+      {/* Telefontest 9.11: eleven skal kunne bytte språk her, uten å gå til kontosiden. */}
+      <div className="mt-3">
+        <MorsmaalVelger handling={velgMorsmaalHandling} valgt={spraak?.kode ?? null} kompakt />
+      </div>
 
       <Leseinnstillinger handling={lagreLesing} valgt={innstillinger} malId="lesetekst" />
 

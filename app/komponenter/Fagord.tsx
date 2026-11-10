@@ -115,12 +115,15 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
           role="dialog"
           aria-label={`Forklaring: ${uttrykk}`}
           style={{ transform: `translateX(${forskyv}px)` }}
-          // Telefontest 9.11: boksen var vanskelig å se. Den er nå større, har
-          // farget bakgrunn og tykkere kant, og forklaringen står i full størrelse.
-          className="fixed inset-x-2 bottom-2 z-20 block rounded-lg sm:absolute sm:inset-x-auto sm:top-full sm:bottom-auto sm:left-0 sm:mt-2 sm:w-80 border-2 border-amber-500 bg-amber-50 p-4 text-left text-base leading-normal font-normal shadow-xl dark:border-amber-500 dark:bg-slate-900"
+          // Telefontest 9.11: boksen var vanskelig å se, så den er større, har farget
+          // bakgrunn og tykkere kant. Telefontest 10.11: de runde hjørnene på
+          // skjermen kuttet den nederst, så den står et stykke over kanten (og over
+          // safe-area på iPhone). Skriften følger leseinnstillingene, litt dempet:
+          // 0,85 em av tekstens størrelse, aldri under 1 rem.
+          className="fixed inset-x-3 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-20 block max-h-[60vh] overflow-y-auto rounded-lg sm:absolute sm:inset-x-auto sm:top-full sm:bottom-auto sm:left-0 sm:mt-2 sm:w-80 border-2 border-amber-500 bg-amber-50 p-4 text-left text-[max(1rem,0.85em)] leading-normal font-normal shadow-xl dark:border-amber-500 dark:bg-slate-900"
         >
           <span className="flex items-start justify-between gap-2">
-            <span className="text-lg font-semibold">{uttrykk}</span>
+            <span className="text-[1.15em] font-semibold">{uttrykk}</span>
             <button
               type="button"
               onClick={() => {
@@ -134,12 +137,12 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
               ×
             </button>
           </span>
-          <span className="mt-1 block text-base text-slate-800 dark:text-slate-200">{forklaring}</span>
+          <span className="mt-1 block text-slate-800 dark:text-slate-200">{forklaring}</span>
           {morsmaal && (
             <span
               lang={morsmaal.kode}
               dir={morsmaal.retning}
-              className="mt-2 block border-t border-amber-300 pt-2 text-base text-slate-800 dark:border-slate-700 dark:text-slate-200"
+              className="mt-2 block border-t border-amber-300 pt-2 text-slate-800 dark:border-slate-700 dark:text-slate-200"
             >
               {morsmaal.tekst}
             </span>

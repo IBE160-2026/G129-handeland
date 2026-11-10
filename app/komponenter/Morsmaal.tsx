@@ -36,9 +36,12 @@ function Lagre() {
 export function MorsmaalVelger({
   handling,
   valgt,
+  kompakt = false,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   valgt: string | null;
+  /** På lesesiden (telefontest 9.11): på én linje, med kort forbehold. */
+  kompakt?: boolean;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
   const sikre = SPRAAK.filter((s) => KVALITETSSIKRET.has(s.kode));
@@ -50,11 +53,11 @@ export function MorsmaalVelger({
   );
 
   return (
-    <form action={send} className="space-y-3">
-      <label htmlFor="spraak" className="block font-medium">
+    <form action={send} className={kompakt ? "space-y-1" : "space-y-3"}>
+      <label htmlFor="spraak" className={kompakt ? "text-sm font-medium" : "block font-medium"}>
         Morsmål
       </label>
-      <div className="flex flex-wrap items-center gap-3">
+      <div className={kompakt ? "flex flex-wrap items-center gap-2 text-sm" : "flex flex-wrap items-center gap-3"}>
         {/* React nullstiller skjemaet etter handlingen, og et ukontrollert felt
             leser defaultValue bare én gang — uten nøkkelen viste listen det
             gamle valget til siden ble lastet på nytt (telefontest 9.11). */}
@@ -71,14 +74,20 @@ export function MorsmaalVelger({
         </select>
         <Lagre />
       </div>
-      <p className="text-sm text-slate-600 dark:text-slate-400">
-        Med morsmål valgt får du overskriftene før du leser, forklaringene av fagordene og
-        oppsummeringen på begge språk. Norsk står alltid ved siden av. Oversettelsene er laget av en
-        språkmodell.{" "}
-        {sikre.length > 0
-          ? `${sikre.map((s) => s.navn).join(", ")} er kontrollert av en morsmålsbruker; de andre språkene har ingen kontrollert.`
-          : "Ingen har kontrollert dem."}
-      </p>
+      {kompakt ? (
+        <p className="text-xs text-slate-600 dark:text-slate-400">
+          Oversettelsene er laget av en språkmodell. Norsk står alltid ved siden av.
+        </p>
+      ) : (
+        <p className="text-sm text-slate-600 dark:text-slate-400">
+          Med morsmål valgt får du overskriftene før du leser, forklaringene av fagordene og
+          oppsummeringen på begge språk. Norsk står alltid ved siden av. Oversettelsene er laget av en
+          språkmodell.{" "}
+          {sikre.length > 0
+            ? `${sikre.map((s) => s.navn).join(", ")} er kontrollert av en morsmålsbruker; de andre språkene har ingen kontrollert.`
+            : "Ingen har kontrollert dem."}
+        </p>
+      )}
       {svar.feil && (
         <p role="alert" className="text-sm text-red-800 dark:text-red-300">
           {svar.feil.melding} {svar.feil.handling}
