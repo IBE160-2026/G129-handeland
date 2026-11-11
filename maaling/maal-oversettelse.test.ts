@@ -21,6 +21,7 @@
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { skrivArk } from "./skriv-ark";
 import { config } from "dotenv";
 import { describe, expect, test } from "vitest";
 
@@ -150,7 +151,8 @@ describe(`FR-28 — oversettelse til ${SPRAAKKODE}`, () => {
 
     await mkdir(RESULTATER, { recursive: true });
     await writeFile(path.join(RESULTATER, `fr28-${SPRAAKKODE}-${dato}.json`), JSON.stringify(rapport, null, 2) + "\n");
-    await writeFile(path.join(RESULTATER, `fr28-vurderingsark-${SPRAAKKODE}.md`), vurderingsark(resultater, spraak.navn));
+    // Arket kan være fylt ut: skrives bare om det ikke finnes (skriv-ark.ts).
+    await skrivArk({ sti: path.join(RESULTATER, `fr28-vurderingsark-${SPRAAKKODE}.md`), innhold: vurderingsark(resultater, spraak.navn) });
 
     console.log(
       `\n== FR-28 (${SPRAAKKODE}): begrepsanker ${andel.toFixed(3)} (terskel ${ANKERTERSKEL}), ` +

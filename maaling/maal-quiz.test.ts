@@ -12,8 +12,9 @@
  * vurderingsarket. Utvikleren vurderer.
  */
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { skrivArk } from "./skriv-ark";
 import { config } from "dotenv";
 import { describe, expect, test } from "vitest";
 
@@ -97,11 +98,13 @@ describe("FR-14 — 24 quizspørsmål til vurdering", () => {
       "Når arket er fylt ut, regner Claude andelen og konfidensintervallet (FR-14 krever begge).",
       "",
     );
-    await mkdir(RESULTATER, { recursive: true });
-    await writeFile(path.join(RESULTATER, `fr14-vurderingsark-${versjon}.md`), deler.join("\n"));
-    await writeFile(
-      path.join(RESULTATER, `fr14-quiz-${versjon}.json`),
-      JSON.stringify({ krav: "FR-14", quizer: quizer.map((q) => ({ tekst: q.tekst, ...q.r })) }, null, 2) + "\n",
-    );
+    // Arket kan være fylt ut: skrives bare om det ikke finnes (skriv-ark.ts).
+    // Dataene følger arket — en ny kjøring kan stokke alternativene.
+    await skrivArk({ sti: path.join(RESULTATER, `fr14-vurderingsark-${versjon}.md`), innhold: deler.join("\n") }, [
+      {
+        sti: path.join(RESULTATER, `fr14-quiz-${versjon}.json`),
+        innhold: JSON.stringify({ krav: "FR-14", quizer: quizer.map((q) => ({ tekst: q.tekst, ...q.r })) }, null, 2) + "\n",
+      },
+    ]);
   });
 });

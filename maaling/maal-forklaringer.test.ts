@@ -14,8 +14,9 @@
  * nye kall ville gitt andre forklaringer enn dem FR-8-tallene gjelder for.
  */
 
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { skrivArk } from "./skriv-ark";
 import { describe, expect, test } from "vitest";
 
 process.env.LESEVENN_TESTMODUS = "les";
@@ -83,11 +84,11 @@ describe("FR-8 — forklaringene til vurdering", () => {
     }
     deler.push("---", "", `**Sum:** ____ riktig · ____ gal · ____ misvisende av ${antall}  ·  **Krav:** 0 gale`, "");
 
-    await mkdir(RESULTATER, { recursive: true });
-    await writeFile(path.join(RESULTATER, `fr8-forklaringer-vurderingsark-${versjon}.md`), deler.join("\n"));
-    await writeFile(
-      path.join(RESULTATER, `fr8-forklaringer-${versjon}.json`),
-      JSON.stringify(
+    // Arket kan være fylt ut: skrives bare om det ikke finnes (skriv-ark.ts).
+    await skrivArk({ sti: path.join(RESULTATER, `fr8-forklaringer-vurderingsark-${versjon}.md`), innhold: deler.join("\n") }, [
+      {
+      sti: path.join(RESULTATER, `fr8-forklaringer-${versjon}.json`),
+      innhold: JSON.stringify(
         {
           krav: "FR-8, forklaringenes riktighet",
           promptversjon: versjon,
@@ -100,6 +101,7 @@ describe("FR-8 — forklaringene til vurdering", () => {
         null,
         2,
       ) + "\n",
-    );
+      },
+    ]);
   });
 });

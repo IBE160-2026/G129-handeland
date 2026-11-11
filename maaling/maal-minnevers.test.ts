@@ -13,8 +13,9 @@
  * her: i skrivemodus ville det overskrevet de lagrede FR-8-svarene.
  */
 
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { skrivArk } from "./skriv-ark";
 import { config } from "dotenv";
 import { describe, expect, test } from "vitest";
 
@@ -133,12 +134,13 @@ describe("FR-31 — ti vers til vurdering", () => {
       );
     }
     deler.push("---", "", `**Sum usanne påstander:** ____ av mål 0  ·  **Fungerer som huskeregel:** ____ av ${vers.length}`, "");
-    await mkdir(RESULTATER, { recursive: true });
     const navn = MODELL ? `${versjon}-${MODELL.replace(/^claude-/, "")}` : versjon;
-    await writeFile(path.join(RESULTATER, `fr31-vurderingsark-${navn}.md`), deler.join("\n"));
-    await writeFile(
-      path.join(RESULTATER, `fr31-vers-${navn}.json`),
-      JSON.stringify({ krav: "FR-31", vers: vers.map((v) => ({ tekst: v.tekst, ...v.r })) }, null, 2) + "\n",
-    );
+    // Arket kan være fylt ut: skrives bare om det ikke finnes (skriv-ark.ts).
+    await skrivArk({ sti: path.join(RESULTATER, `fr31-vurderingsark-${navn}.md`), innhold: deler.join("\n") }, [
+      {
+        sti: path.join(RESULTATER, `fr31-vers-${navn}.json`),
+        innhold: JSON.stringify({ krav: "FR-31", vers: vers.map((v) => ({ tekst: v.tekst, ...v.r })) }, null, 2) + "\n",
+      },
+    ]);
   });
 });
