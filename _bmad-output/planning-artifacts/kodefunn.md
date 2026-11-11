@@ -586,11 +586,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 26 — Kort tekst fra bilde stoppet først etter lang venting
+
+**Hvor:** `app/handlinger.ts`, `laasOgGenerer`, og `GjennomsynSkjema` i `app/komponenter/Skjemaer.tsx`.
+
+**Hva:** BF-4 sier at kort tekst fra et bilde ikke skal stoppe innlesingen: eleven skal kunne skrive inn resten i gjennomsynet. Det var gjort riktig. Men ingenting sjekket grensen på 400 tegn (FR-1) etterpå, så en for kort tekst ble låst og sendt til fem uttrekkskall, som ga opp etter flere forsøk. Eleven ventet lenge og fikk beskjeden sent. Tekstfeltet i gjennomsynet var dessuten ukontrollert, så en avvisning ville nullstilt det eleven hadde skrevet (samme felle som funn 24).
+
+**Hvordan det ble funnet:** i utviklerens telefontest av bildeinnlesingen 10.11, med en overskrift og ett kort avsnitt. Ett ord ga riktig feilmelding med en gang (BF-1); litt mer tekst gjorde det ikke.
+
+**Rettelse:** 11.11 (`dd37c9b`): grensen sjekkes før låsing, med samme melding som ved innliming; feltet er kontrollert; en teller viser hvor mye som mangler.
+
+**Mønsteret:** et unntak som ble lagt inn med vilje (BF-4 slipper kort tekst gjennom) uten at noe senere tok over ansvaret for regelen det unntok fra.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 25 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 26 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |
