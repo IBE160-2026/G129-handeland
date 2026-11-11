@@ -17,6 +17,7 @@ import { overskriftsplasser } from "../../../../tekst/overskrifter";
 import { lagEtiketterHandling, lagreOverskrifter } from "../../../handlinger";
 import { HentOversettelse } from "../../../komponenter/Morsmaal";
 import { Overskriftskontroll } from "../../../komponenter/Overskriftskontroll";
+import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/overskrifter">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -39,7 +40,7 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <p className="text-sm text-slate-600 dark:text-slate-400">Steg 1 av 4 — før du leser</p>
+      <p className="text-sm text-slate-600 dark:text-slate-400">{stegtekst(tekst.vei, "aktivering")} — før du leser</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">Stemmer overskriftene?</h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Dette er overskriftene Lesevenn fant i «{tekst.tittel}». Rett det som er feil, slett det som ikke er en

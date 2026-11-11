@@ -25,6 +25,7 @@ import {
   lagreForkunnskapssvar,
   opprettTekst,
   slettTekst,
+  type Tilgang,
 } from "../data/tilgang";
 import { z } from "zod";
 import {
@@ -183,13 +184,18 @@ export async function lagreAktivering(
 
   // FR-3: fase 3a kan ikke hoppes over — heller ikke ved å sende skjemaet
   // uten å gå via siden.
+  let rad;
   try {
-    const rad = await hentTekst(t, tekstId);
-    if (rad.tilstand === "innlest" && rad.overskrifterGodkjent === null) redirect(`/tekst/${tekstId}/overskrifter`);
+    rad = await hentTekst(t, tekstId);
   } catch (e) {
     if (e instanceof IkkeFunnet) return somFeil(e);
     throw e;
   }
+  if (rad.tilstand === "innlest" && rad.overskrifterGodkjent === null) redirect(`/tekst/${tekstId}/overskrifter`);
+  // Et skjema sendt på nytt (tilbakeknappen, to faner) etter at svaret alt er
+  // lagret: send videre i stedet for å feile i lagreForkunnskapssvar.
+  if (rad.tilstand === "laast") redirect(`/tekst/${tekstId}/lesing`);
+  if (rad.tilstand === "aktivert") redirect(`/tekst/${tekstId}/gjennomsyn`);
 
   // FR-6: svaret vurderes ikke og rettes ikke. Et tomt svar får ÉN
   // oppfordring; sender eleven tomt igjen, slipper hun videre. Steget skal
@@ -206,6 +212,19 @@ export async function lagreAktivering(
   }
 
   await lagreForkunnskapssvar(t, tekstId, svar);
+
+  // FR-3 (endret 11.11): innlimt tekst har ingen fase 3b. Eleven har selv
+  // valgt teksten, og det finnes ingen uttrekksfeil å rette, så den låses
+  // slik den ble limt inn. PDF og bilde går via gjennomsynet som før.
+  if (rad.vei === "liming") {
+    const { laast, svar: feil } = await laasOgLagBegrepssett(t, tekstId, rad.redigertTekst);
+    // Feilet låsingen, står teksten fortsatt som aktivert, og feilen vises
+    // her. Feilet bare genereringen, er teksten låst, og lesevisningen tåler
+    // et manglende Begrepssett og tilbyr å prøve igjen (AD-9, §5).
+    if (!laast && feil) return feil;
+    redirect(`/tekst/${tekstId}/lesing`);
+  }
+
   redirect(`/tekst/${tekstId}/gjennomsyn`);
 }
 
@@ -245,16 +264,34 @@ export async function laasOgGenerer(
   }
 
   const t = await tilgang();
+  const { svar } = await laasOgLagBegrepssett(t, tekstId, redigert);
+  if (svar) return svar;
+  redirect(`/tekst/${tekstId}/lesing`);
+}
 
+/**
+ * Låser teksten og lager Begrepssettet — felles for gjennomsynet (fase 3b)
+ * og for aktiveringen av innlimt tekst, som ikke har fase 3b (FR-3, endret
+ * 11.11). `laast` sier om teksten ble låst; `svar` har feilen når noe gikk
+ * galt. Feiler bare genereringen, er teksten likevel låst (AD-9).
+ */
+async function laasOgLagBegrepssett(
+  t: Tilgang,
+  tekstId: string,
+  redigert: string,
+): Promise<{ laast: boolean; svar: Handlingssvar | null }> {
   let laast;
   try {
     laast = await laasTekst(t, tekstId, redigert);
   } catch {
     return {
-      feil: {
-        melding: "Teksten kunne ikke låses.",
-        handling:
-          "Den er kanskje alt låst. Gå til lesevisningen for å se om den er klar.",
+      laast: false,
+      svar: {
+        feil: {
+          melding: "Teksten kunne ikke låses.",
+          handling:
+            "Den er kanskje alt låst. Gå til lesevisningen for å se om den er klar.",
+        },
       },
     };
   }
@@ -269,12 +306,10 @@ export async function laasOgGenerer(
     // Teksten ER låst nå, selv om genereringen feilet. Det er riktig: AD-9
     // går bare framover. Eleven sendes videre til lesevisningen, som tåler
     // et manglende Begrepssett og tilbyr å prøve igjen.
-    const svar = somFeil(e);
     revalidatePath(`/tekst/${tekstId}/lesing`);
-    return svar;
+    return { laast: true, svar: somFeil(e) };
   }
-
-  redirect(`/tekst/${tekstId}/lesing`);
+  return { laast: true, svar: null };
 }
 
 /**

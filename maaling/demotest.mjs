@@ -157,20 +157,25 @@ async function loeype(s, { mobil, eksempel, brod }) {
   // Steg 3: aktivering.
   sjekk(`${p}3`, "aktiveringen viser ikke brødteksten", !(await s.content()).includes(brod));
   await s.fill("#svar", "Noe om bølger og stråling, kanskje mikrobølgeovner.");
+  // Hver side nettleseren lander på etter «Videre», så steg 4 kan vise at
+  // gjennomsynet faktisk ble hoppet over, ikke bare at lesingen ble nådd.
+  const besokt = [];
+  const notér = (f) => f === s.mainFrame() && besokt.push(f.url());
+  s.on("framenavigated", notér);
   await trykk(s.locator("text=Videre"));
-  await s.waitForURL(/\/gjennomsyn$/);
 
-  // Steg 4: fase 3b, rett én linje, lås.
-  const felt = s.locator("textarea#tekst");
-  const tekst = await felt.inputValue();
-  sjekk(`${p}4`, "fase 3b viser hele teksten", tekst.includes(brod));
-  await felt.fill(tekst.replace("Heinrich Hertz", "Heinrich Rudolf Hertz"));
-  await trykk(s.locator("text=Lås og finn fagordene"));
+  // Steg 4 (PRD §9.5, endret 11.11): innlimt tekst hopper over fase 3b og
+  // låses i aktiveringen (FR-3). Fase 3b for PDF og bilde prøves i steg 13.
   await s.waitForURL(/\/lesing$/, { timeout: 240000 });
+  s.off("framenavigated", notér);
   const lesing = s.url();
   const tekstUrl = lesing.replace(/\/lesing$/, "");
+  sjekk(`${p}4`, "fase 3b hoppes over for innlimt tekst", !besokt.some((u) => u.endsWith("/gjennomsyn")), besokt.join(" → "));
+  const lest = await s.locator("main").innerText();
+  sjekk(`${p}4`, "den innlimte brødteksten kommer uendret fram i lesingen", lest.replace(/\s+/g, " ").includes(brod));
+  sjekk(`${p}4`, "stegtellingen har tre steg", lest.includes("Steg 2 av 3"));
   await s.goto(`${tekstUrl}/gjennomsyn`);
-  sjekk(`${p}4`, "teksten er låst for redigering etterpå", !s.url().endsWith("/gjennomsyn") && (await s.locator("textarea#tekst").count()) === 0);
+  sjekk(`${p}4`, "teksten er låst for redigering", !s.url().endsWith("/gjennomsyn") && (await s.locator("textarea#tekst").count()) === 0);
 
   // Steg 5: tre forklaringer, én med tastatur alene.
   await s.goto(lesing);
@@ -359,7 +364,7 @@ async function enKjoering(nettleser) {
   await pc.fill("#svar", "Bølger.");
   await pc.click("text=Videre");
   await pc.waitForURL(/\/gjennomsyn$/);
-  sjekk("13", "uttrekket går gjennom fase 3a og 3b som alt annet", (await pc.locator("textarea#tekst").inputValue()).length > 100);
+  sjekk("13", "uttrekket går gjennom fase 3a og 3b (FR-3: PDF og bilde har gjennomsyn)", (await pc.locator("textarea#tekst").inputValue()).length > 100);
 
   // Steg 14: slett tekst A, logg ut.
   await pc.goto(`${APP}/`);

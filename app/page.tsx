@@ -117,8 +117,10 @@ export default async function Startside({ searchParams }: PageProps<"/">) {
                         </Link>
                       ) : (
                         // Quizen bygger på den låste teksten (AD-15), så
-                        // oppgavene finnes først etter gjennomsynet.
-                        <span className="text-slate-500">Oppgaver — etter gjennomsynet</span>
+                        // oppgavene finnes først når den er låst — etter
+                        // aktiveringen for innlimt tekst, etter gjennomsynet
+                        // for PDF og bilde (FR-3).
+                        <span className="text-slate-500">Oppgaver — når teksten er klar til lesing</span>
                       )}
                     </li>
                   </ul>

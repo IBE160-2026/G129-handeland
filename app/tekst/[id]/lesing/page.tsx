@@ -43,6 +43,7 @@ import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
 import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
 import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing, velgMorsmaalHandling } from "../../../handlinger";
+import { stegtekst } from "../../../../tekst/steg";
 
 const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra fagspråket" } as const;
 
@@ -135,7 +136,7 @@ export default async function Lesing({
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 3 av 4 — les teksten
+        {stegtekst(tekst.vei, "lesing")} — les teksten
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}

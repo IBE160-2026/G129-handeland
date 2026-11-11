@@ -13,6 +13,7 @@ import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { lagQuiz } from "../../../handlinger";
 import { Quiz, type SporsmalForElev } from "../../../komponenter/Quiz";
 import { LagQuizSkjema } from "../../../komponenter/Skjemaer";
+import { stegtekst } from "../../../../tekst/steg";
 
 const DATO = new Intl.DateTimeFormat("nb-NO", {
   day: "numeric",
@@ -49,7 +50,7 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <p className="text-sm text-slate-600 dark:text-slate-400">Steg 4 av 4 — sjekk forståelsen</p>
+      <p className="text-sm text-slate-600 dark:text-slate-400">{stegtekst(tekst.vei, "oppgaver")} — sjekk forståelsen</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">Quiz: {tekst.tittel}</h1>
 
       {quiz === null ? (

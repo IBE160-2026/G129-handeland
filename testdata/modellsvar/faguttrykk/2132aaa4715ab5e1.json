@@ -1,0 +1,65 @@
+{
+  "oppgave": "faguttrykk",
+  "promptversjon": "v4",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp e",
+  "lagret": "2026-11-11T23:24:12.027Z",
+  "data": {
+    "faguttrykk": [
+      {
+        "uttrykk": "radiobølger",
+        "forklaring": "Elektromagnetiske bølger med lav frekvens og lang bølgelengde, fra omtrent 1 meter til mange kilometer. De brukes blant annet til å sende signaler over store avstander.",
+        "viktighetsrangering": 1,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "elektromagnetiske bølger",
+        "forklaring": "Bølger som består av svingende elektriske og magnetiske felt og som kan bre seg gjennom tomrom. Lys, radiobølger og røntgenstråler er alle former for dem, og de skiller seg fra hverandre i frekvens og bølgelengde.",
+        "viktighetsrangering": 2,
+        "kildeavsnitt": 4
+      },
+      {
+        "uttrykk": "bølgelengde",
+        "forklaring": "Avstanden mellom to nabotopper på en bølge. Jo kortere bølgelengde, desto høyere frekvens og energi har bølgen.",
+        "viktighetsrangering": 3,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "frekvens",
+        "forklaring": "Hvor mange svingninger eller bølgetopper som passerer per sekund. Frekvensen bestemmer hvor energirik en bølge er.",
+        "viktighetsrangering": 4,
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "IR-stråling",
+        "forklaring": "Infrarød stråling, elektromagnetisk stråling med litt mindre energi enn synlig lys. Den kan kjennes som varme på huden.",
+        "viktighetsrangering": 5,
+        "kildeavsnitt": 10
+      },
+      {
+        "uttrykk": "mikrobølger",
+        "forklaring": "Elektromagnetiske bølger med høyere frekvens enn radiobølger, med bølgelengder mellom 1 mm og 1 m. De brukes blant annet i mikrobølgeovner.",
+        "viktighetsrangering": 6,
+        "kildeavsnitt": 7
+      },
+      {
+        "uttrykk": "UV-stråling",
+        "forklaring": "Ultrafiolett stråling, elektromagnetisk stråling med bølgelengder mellom 10 nm og 400 nm. Den ligger utenfor det fiolette området i det synlige spekteret og har mer energi enn synlig lys.",
+        "viktighetsrangering": 7,
+        "kildeavsnitt": 20
+      },
+      {
+        "uttrykk": "Røntgenstråling",
+        "forklaring": "Elektromagnetisk stråling med mer energi enn UV-C og bølgelengder kortere enn 10 nm. Den kan gå gjennom stoff som er ugjennomsiktig for vanlig lys.",
+        "viktighetsrangering": 8,
+        "kildeavsnitt": 23
+      },
+      {
+        "uttrykk": "ionosfæren",
+        "forklaring": "Et lag av elektrisk ladde partikler i atmosfæren, omtrent 80–400 km over bakken. Det kan reflektere radiobølger tilbake mot jordoverflaten.",
+        "viktighetsrangering": 9,
+        "kildeavsnitt": 5
+      }
+    ]
+  }
+}

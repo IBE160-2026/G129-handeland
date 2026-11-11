@@ -1,0 +1,121 @@
+{
+  "oppgave": "quiz",
+  "promptversjon": "v2",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp e",
+  "lagret": "2026-11-11T23:24:46.918Z",
+  "data": {
+    "sporsmal": [
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva lagde Heinrich Hertz i forsøket sitt i 1887, ifølge teksten?",
+        "alternativer": [
+          "Elektriske svingninger som produserte radiobølger",
+          "Røntgenstråler ved å bremse fort bevegelige elektroner",
+          "Mikrobølger ved å øke frekvensen til lys",
+          "Infrarød stråling fra varme molekyler"
+        ],
+        "riktigSvar": "Elektriske svingninger som produserte radiobølger",
+        "kildeavsnitt": 3
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvordan målte Hertz farten til radiobølgene, ifølge teksten?",
+        "alternativer": [
+          "Ved å lage stående bølger av dem",
+          "Ved å sende signaler over flere kontinenter",
+          "Ved å sammenligne med lydens fart i luft",
+          "Ved å dele bølgene opp med et prisme"
+        ],
+        "riktigSvar": "Ved å lage stående bølger av dem",
+        "kildeavsnitt": 4
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor er radiobølger særlig godt egnet til å sende signaler over store avstander?",
+        "alternativer": [],
+        "riktigSvar": "Fordi de har lang bølgelengde, spres lite og går rett fram. I tillegg kan de reflekteres av ionosfæren tilbake mot jordoverflaten og nå enda lenger.",
+        "kildeavsnitt": 5
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor blir maten varm i en mikrobølgeovn, ifølge teksten?",
+        "alternativer": [
+          "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til fett- og vannmolekyler",
+          "Fordi tallerkenen tar opp mikrobølgene og varmer maten",
+          "Fordi mikrobølger har høyere energi enn synlig lys",
+          "Fordi mikrobølgene bøyes av metall og varmer opp maten"
+        ],
+        "riktigSvar": "Fordi frekvensen til mikrobølgene passer med svingefrekvensen til fett- og vannmolekyler",
+        "kildeavsnitt": 8
+      },
+      {
+        "type": "kortsvar",
+        "sporsmal": "Hvorfor blir bølgelengden til infrarød stråling kortere når temperaturen øker?",
+        "alternativer": [],
+        "riktigSvar": "Infrarøde bølger skyldes molekylbevegelser. Når temperaturen øker, beveger molekylene seg raskere og sender ut mer energirike bølger, og høy energi gir kort bølgelengde.",
+        "kildeavsnitt": 13
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva viste Isac Newton med et prisme, ifølge teksten?",
+        "alternativer": [
+          "At hvitt lys består av alle regnbuens farger",
+          "At lys bøyer seg rundt hjørner",
+          "At lys beveger seg raskere i vann enn i luft",
+          "At regnbuen er en refleksjon av sollyset"
+        ],
+        "riktigSvar": "At hvitt lys består av alle regnbuens farger",
+        "kildeavsnitt": 16
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvorfor trenger vi ikke bekymre oss for UV-C fra sollyset, ifølge teksten?",
+        "alternativer": [
+          "Den stoppes nesten helt av oksygen og ozonlaget i atmosfæren",
+          "Den har lavest energi av de tre UV-typene",
+          "Den gjør oss solbrente og kan gi hudkreft",
+          "Den finnes ikke i sollyset"
+        ],
+        "riktigSvar": "Den stoppes nesten helt av oksygen og ozonlaget i atmosfæren",
+        "kildeavsnitt": 21
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvem oppdaget røntgenstråling i 1895, ifølge teksten?",
+        "alternativer": [
+          "Wilhelm Røntgen",
+          "Heinrich Hertz",
+          "Johann W. Ritter",
+          "Isac Newton"
+        ],
+        "riktigSvar": "Wilhelm Røntgen",
+        "kildeavsnitt": 24
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hva fant Johann W. Ritter i 1801, ifølge teksten?",
+        "alternativer": [
+          "At sølvklorid mørknet raskere utenfor det fiolette området enn inni",
+          "At infrarød stråling kan kjennes med huden",
+          "At røntgenstråling kan gjennomlyse kroppen",
+          "At regnbuen er brytning i vanndråper"
+        ],
+        "riktigSvar": "At sølvklorid mørknet raskere utenfor det fiolette området enn inni",
+        "kildeavsnitt": 19
+      },
+      {
+        "type": "flervalg",
+        "sporsmal": "Hvor finner du mer om gammastråling, ifølge teksten?",
+        "alternativer": [
+          "På sider om røntgenstråling",
+          "Den har lavere energi enn UV-A",
+          "Den beskrives i avsnittet om synlig lys",
+          "På sider om stråling fra radioaktive kilder"
+        ],
+        "riktigSvar": "På sider om stråling fra radioaktive kilder",
+        "kildeavsnitt": 27
+      }
+    ]
+  }
+}

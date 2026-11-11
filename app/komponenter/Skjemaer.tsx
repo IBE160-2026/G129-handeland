@@ -48,8 +48,11 @@ function Send({ venter, klar }: { venter: string; klar: string }) {
 
 export function AktiveringSkjema({
   handling,
+  venter = "Lagrer…",
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+  /** Innlimt tekst låses og får fagordene i samme trykk (FR-3), og det tar tid (§5). */
+  venter?: string;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
 
@@ -81,7 +84,7 @@ export function AktiveringSkjema({
         />
       </div>
 
-      <Send venter="Lagrer…" klar="Videre" />
+      <Send venter={venter} klar="Videre" />
     </form>
   );
 }

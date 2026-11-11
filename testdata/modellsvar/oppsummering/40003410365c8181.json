@@ -1,0 +1,31 @@
+{
+  "oppgave": "oppsummering",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "[avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i 1887 opp e",
+  "lagret": "2026-11-11T23:42:24.378Z",
+  "data": {
+    "setninger": [
+      {
+        "tekst": "Elektromagnetiske bølger finnes i ulike typer, og de skiller seg fra hverandre i frekvens, bølgelengde og energi.",
+        "kildeavsnitt": 1
+      },
+      {
+        "tekst": "Radiobølger har lav frekvens og lang bølgelengde, og de er godt egnet til å sende signaler over store avstander.",
+        "kildeavsnitt": 5
+      },
+      {
+        "tekst": "Mikrobølger har bølgelengder mellom 1 mm og 1 m, og frekvensen deres passer godt sammen med svingefrekvensen til fett- og vannmolekyler, noe som gjør at maten varmes opp i mikrobølgeovnen.",
+        "kildeavsnitt": 8
+      },
+      {
+        "tekst": "IR-stråling er elektromagnetisk stråling med litt mindre energi enn synlig lys, og når temperaturen stiger, sender molekylene ut mer energirike IR-bølger med kortere bølgelengde.",
+        "kildeavsnitt": 13
+      },
+      {
+        "tekst": "Ultrafiolett stråling har bølgelengder fra 10 nm til 400 nm, og UV-A og UV-B kan gjøre oss solbrente og i verste fall gi hudkreft.",
+        "kildeavsnitt": 21
+      }
+    ]
+  }
+}

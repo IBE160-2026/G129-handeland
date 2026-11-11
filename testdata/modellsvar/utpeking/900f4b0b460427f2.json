@@ -1,0 +1,83 @@
+{
+  "oppgave": "utpeking",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "maksPerKategori: 6 fagord: [\"elektromagnetiske bølger\",\"radiobølger\",\"IR-stråling\",\"bølgelengde\",\"mikrobølger\",\"røntgenstråling\",\"ionosfæren\",\"ultrafiolett stråling\",\"frekvens\"] [avsnitt 1, overskrif",
+  "lagret": "2026-11-11T23:28:01.130Z",
+  "data": {
+    "uttrykk": [
+      {
+        "uttrykk": "«riste» på alle vannmolekylene",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Mikrobølgene får vannmolekylene til å bevege seg kraftig, slik at maten varmes opp. Ordet «riste» er bildelig, ikke en beskrivelse av å riste noe for hånd.",
+        "kildeavsnitt": 8
+      },
+      {
+        "uttrykk": "i verste tilfelle",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr «i den verste situasjonen som kan oppstå». Det brukes om en mulig, men ikke sikker, konsekvens.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "langt tilbake i tid",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr «for svært lenge siden», altså i en fjern fortid. Det sier ikke noe om avstand.",
+        "kildeavsnitt": 15
+      },
+      {
+        "uttrykk": "av hånda til kona hans",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr «laget av kona hans». Det er en fast vending for at noe er utført av en bestemt person.",
+        "kildeavsnitt": 24
+      },
+      {
+        "uttrykk": "på den andre siden av det synlige spekteret",
+        "kategori": "spraklig_bilde",
+        "forklaring": "Betyr her «i det området av spekteret som ligger like utenfor det synlige». Det er ikke en fysisk side, men en plass i rekkefølgen av bølgelengder.",
+        "kildeavsnitt": 19
+      },
+      {
+        "uttrykk": "Inspirert av",
+        "kategori": "akademisk",
+        "forklaring": "Betyr at noe er påvirket av eller tar utgangspunkt i noe annet, for eksempel en teori. Eksempel: «Inspirert av Maxwell gjorde han et nytt forsøk.»",
+        "kildeavsnitt": 3
+      },
+      {
+        "uttrykk": "i utgangspunktet",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «fra begynnelsen av» eller «egentlig, før noe annet er tatt med». Brukes for å si hva som gjelder først.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "tilnærmet",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «nesten, så godt som». Eksempel: tilnærmet all UV-C betyr at nesten all UV-C stoppes.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "forårsake",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «føre til» eller «være årsak til». Eksempel: solen kan forårsake hudkreft.",
+        "kildeavsnitt": 21
+      },
+      {
+        "uttrykk": "avdekke",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «finne fram til» eller «gjøre synlig noe som var skjult». Eksempel: å avdekke strukturer i krystaller.",
+        "kildeavsnitt": 25
+      },
+      {
+        "uttrykk": "ved hjelp av",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «ved bruk av» et verktøy eller en metode. Eksempel: ved hjelp av et prisme.",
+        "kildeavsnitt": 16
+      },
+      {
+        "uttrykk": "Av samme grunn",
+        "kategori": "akademisk",
+        "forklaring": "Betyr «på grunn av det samme», altså at det som nettopp er sagt også forklarer det neste. Brukes for å vise årsakssammenheng.",
+        "kildeavsnitt": 13
+      }
+    ]
+  }
+}

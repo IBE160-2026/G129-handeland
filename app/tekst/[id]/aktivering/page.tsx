@@ -7,8 +7,9 @@
  * det er bare lesing med et spørsmål foran.
  *
  * Overskriftene regnes ut fra `delIAvsnitt` (AD-12) og lagres IKKE. Avsnitts-
- * listen fryses først ved låsing (AD-9), fordi eleven fortsatt kan endre
- * brødteksten i gjennomsynet etter dette steget.
+ * listen fryses først ved låsing (AD-9): for PDF og bilde i gjennomsynet etter
+ * dette steget, der eleven kan rette brødteksten; for innlimt tekst i dette
+ * steget, som låser teksten når svaret sendes (FR-3, endret 11.11).
  */
 
 import Link from "next/link";
@@ -23,6 +24,7 @@ import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
 import { lagOversettelse, lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema } from "../../../komponenter/Skjemaer";
+import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Aktivering({
   params,
@@ -46,6 +48,13 @@ export default async function Aktivering({
   if (tekst.tilstand === "innlest" && tekst.overskrifterGodkjent === null) {
     redirect(`/tekst/${id}/overskrifter`);
   }
+  // AD-9 går bare framover. En aktivert tekst (PDF og bilde, eller innlimt
+  // tekst der låsingen feilet) fullføres i gjennomsynet. En låst tekst kan
+  // fortsatt åpne siden og se overskriftene — også på morsmålet (FR-26) —
+  // men får ikke skjemaet: svaret er lagret, og et nytt trykk ville feilet.
+  // Innlimt tekst kommer nå rett hit fra lesingen med tilbakeknappen (FR-3).
+  if (tekst.tilstand === "aktivert") redirect(`/tekst/${id}/gjennomsyn`);
+  const laast = tekst.tilstand === "laast";
 
   const avsnitt = delIAvsnitt(tekst.redigertTekst);
   const titler = overskrifter(avsnitt);
@@ -63,7 +72,7 @@ export default async function Aktivering({
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 1 av 4 — før du leser
+        {stegtekst(tekst.vei, "aktivering")} — før du leser
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}
@@ -108,7 +117,22 @@ export default async function Aktivering({
       )}
 
       <section className="mt-8">
-        <AktiveringSkjema handling={lagreAktivering.bind(null, id)} />
+        {laast ? (
+          <p>
+            Du har alt svart på dette steget.{" "}
+            <Link
+              href={`/tekst/${id}/lesing`}
+              className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
+            >
+              Gå til teksten
+            </Link>
+          </p>
+        ) : (
+          <AktiveringSkjema
+            handling={lagreAktivering.bind(null, id)}
+            venter={tekst.vei === "liming" ? "Finner fagordene…" : "Lagrer…"}
+          />
+        )}
       </section>
 
       <p className="mt-10 text-sm">

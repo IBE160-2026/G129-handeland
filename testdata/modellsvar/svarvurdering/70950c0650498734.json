@@ -1,0 +1,16 @@
+{
+  "oppgave": "svarvurdering",
+  "promptversjon": "v2",
+  "modell": "claude-sonnet-5-5",
+  "utdrag": "# Teksten [avsnitt 1, overskrift] Egenskaper hos ulike EM-bølger [avsnitt 2, overskrift] Om radiobølger [avsnitt 3] Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz i",
+  "lagret": "2026-11-11T23:27:14.118Z",
+  "data": {
+    "tilstand": "misoppfatning",
+    "begrunnelse": "Det stemmer ikke med det teksten sier om at maten blir varm fordi mikrobølgene rister vannmolekylene i selve maten, ikke fordi luften varmes opp.",
+    "oppfolging": {
+      "sporsmal": "Hvis det var luften som varmet maten, ville tallerkenen blitt like varm – hva sier teksten om hva som er i maten, men ikke i tallerkenen?",
+      "kildeavsnitt": 8,
+      "maal": "motsigende_avsnitt"
+    }
+  }
+}

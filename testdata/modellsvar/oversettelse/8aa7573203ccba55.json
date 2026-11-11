@@ -1,0 +1,27 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Arabisk\", \"kode\": \"ar\" }, \"fagord\": [ \"elektromagnetiske bølger\", \"radiobølger\", \"IR-stråling\", \"bølgelengde\", \"mikrobølger\", \"røntgens",
+  "lagret": "2026-11-11T23:42:34.718Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "s0",
+        "oversatt": "موجات الراديو (radiobølger) لها تردد (frekvens) منخفض وطول موجي (bølgelengde) كبير، ولذلك فهي مناسبة جيدا لإرسال إشارات عبر مسافات كبيرة."
+      },
+      {
+        "id": "s1",
+        "oversatt": "الموجات الدقيقة (mikrobølger) لها أطوال موجية (bølgelengde) تتراوح بين 1 مم و1 م، ويتناسب ترددها (frekvens) جيدا مع تردد اهتزاز جزيئات الدهون والماء، مما يجعل الطعام يسخن في فرن الموجات الدقيقة (mikrobølger)."
+      },
+      {
+        "id": "s2",
+        "oversatt": "الأشعة تحت الحمراء (IR-stråling) هي إشعاع كهرومغناطيسي له طاقة أقل قليلا من الضوء المرئي، وعندما ترتفع درجة الحرارة، تطلق الجزيئات أمواج تحت حمراء أغنى بالطاقة بطول موجي (bølgelengde) أقصر."
+      },
+      {
+        "id": "s3",
+        "oversatt": "للأشعة فوق البنفسجية (ultrafiolett stråling) أطوال موجية (bølgelengde) من 10 نانومتر إلى 400 نانومتر، والأشعة UV-A وUV-B يمكن أن تجعلنا محروقين بالشمس، وفي أسوأ الحالات تسبب سرطان الجلد."
+      }
+    ]
+  }
+}

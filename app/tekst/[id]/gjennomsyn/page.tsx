@@ -5,10 +5,13 @@
  * generert innhold på avsnittsnumrene slik de står nå (AD-2), så en endring
  * etterpå ville gjort kildeavsnittene gale uten at noe sa fra.
  *
- * Steget finnes selv når teksten kom inn ved liming og ikke kan ha
- * uthentingsfeil. Grunnen er at det er sikkerhetsnettet for PDF og bilde
- * (FR-4, FR-45), og at én løype gjennom samme steg er enklere å stole på enn
- * to løyper der den ene hopper over kontrollen.
+ * Steget er sikkerhetsnettet for PDF og bilde (FR-4, FR-45), der uttrekket
+ * ofte gir feil. Innlimt tekst kommer ikke hit (FR-3, endret 11.11): den har
+ * ingen uttrekksfeil, og låses alt i aktiveringen. En innlimt tekst kommer
+ * hit bare om den står som aktivert: laget før endringen, eller fordi
+ * låsingen i aktiveringen feilet. Da fullføres den her. Inntil 11.11 gikk all tekst
+ * gjennom steget, med begrunnelsen at én løype var enklere å stole på enn to;
+ * telefontesten viste at prisen for innlimt tekst var høyere enn nytten.
  */
 
 import Link from "next/link";
@@ -19,6 +22,7 @@ import { delIAvsnitt } from "../../../../tekst/avsnittsdeling";
 import { laasOgGenerer } from "../../../handlinger";
 import { GjennomsynSkjema } from "../../../komponenter/Skjemaer";
 import { Innlesingsrapport } from "../../../komponenter/Innlesingsrapport";
+import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Gjennomsyn({
   params,
@@ -48,7 +52,7 @@ export default async function Gjennomsyn({
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
-        Steg 2 av 4 — se gjennom
+        {stegtekst(tekst.vei, "gjennomsyn")} — se gjennom
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
         {tekst.tittel}
