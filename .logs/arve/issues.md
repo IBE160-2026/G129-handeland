@@ -21,5 +21,6 @@
 - [x] 2026-11-10 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Minnevers: avvikle, skjule eller beholde til etter M1 (kursendring i PRD §9.2) (avgjort 2026-11-11: beholdes foreløpig)
 - [x] 2026-11-10 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Byggtest for AD-6 (portresultat med hash for svarvurdering), før v3 (løst 2026-11-11)
 - [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — BF-4: hvor stoppet kort tekst fra bilde senere i løypen, og med hvilken melding (løst 2026-11-11, kodefunn 26)
-- [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — KI-logg for 9.–11.11
+- [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — KI-logg for 9.–11.11 (løst 2026-11-11)
 - [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Før levering: sjekk Covered Models på nytt (PRD spørsmål 11)
+- [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg flytendringene (FR-3 innlimt uten 3b, FR-13/15 quiz, FR-16 kilde som knapp) og oppdater demotest.mjs
