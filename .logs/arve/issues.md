@@ -23,4 +23,6 @@
 - [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — BF-4: hvor stoppet kort tekst fra bilde senere i løypen, og med hvilken melding (løst 2026-11-11, kodefunn 26)
 - [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — KI-logg for 9.–11.11 (løst 2026-11-11)
 - [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Før levering: sjekk Covered Models på nytt (PRD spørsmål 11)
-- [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg flytendringene (FR-3 innlimt uten 3b, FR-13/15 quiz, FR-16 kilde som knapp) og oppdater demotest.mjs
+- [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg flytendringene (FR-3 innlimt uten 3b, FR-13/15 quiz, FR-16 kilde som knapp) og oppdater demotest.mjs (FR-3 bygget 2026-11-12; quiz og øvekort gjenstår, se under)
+- [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg quiz (FR-13, FR-15) og øvekort (FR-16) med bmad-build, fra deferred-work.md
+- [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — PRD linje 112 og 899 må samsvare med FR-3 (utsatt fra gjennomgangen)
