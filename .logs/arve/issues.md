@@ -2,7 +2,7 @@
 
 - [x] 2026-10-26 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Samtalegullsettet: skriv EM 1 på nytt (komfyren står ikke i teksten); EM 2 er godkjent med kildeavsnitt 23 (løst 2026-10-29)
 - [x] 2026-10-29 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Samtalegullsettet: seks svar til EM 1 og EM 2, deretter startspørsmål og svar for prisvekst og domener (løst 2026-11-06)
-- [ ] 2026-10-26 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Faguttrykk v4: vurder forklaringene (`fr8-forklaringer-vurderingsark-v4.md`) etter M0, og forfrem v4 hvis null gale
+- [x] 2026-10-26 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Faguttrykk v4: vurder forklaringene (`fr8-forklaringer-vurderingsark-v4.md`) etter M0, og forfrem v4 hvis null gale (løst 2026-11-11: 0 gale, forfremmet)
 - [x] 2026-10-26 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Kodefunn 23 er i koden: neste utrulling fjerner *personifikasjon* og *besjeling* fra Språklige bilder til v4 er forfremmet (rullet ut 2026-11-09)
 - [x] 2026-10-29 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — Quiz-arket (FR-14, M1): vurder 24 spørsmål, og kjør `node maaling/les-vurderingsark.mjs` på arket (løst 2026-11-08: 24 av 24)
 - [x] 2026-10-29 [m0-ferdigstilling](999-2026-10-29-10-38-20-m0-ferdigstilling.md) — De 36 samtaletilfellene (FR-21, M1), med AD-6-avgjørelsen (tilfellene skrevet og målt 2026-11-06)
