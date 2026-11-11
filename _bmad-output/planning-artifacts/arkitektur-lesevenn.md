@@ -107,7 +107,7 @@ Begrunnelsen er strukturell, og den kan ikke patches bort: **en server action er
 
 - **Binds:** AD-2, FR-1, FR-2, FR-3, FR-5, FR-6, FR-44
 - **Prevents:** at kildeavsnitt-henvisninger peker på tekst som har flyttet seg — og at Aktiveringen kan gjøres om etter at eleven har sett brødteksten
-- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. Overgangen til `Aktivert` krever at eleven har godkjent overskriftene i fase 3a (`tekst.overskrifter_godkjent`, satt 17.10; eldre tekster fikk verdien ved migrasjon 0005). Mangler teksten overskrifter, settes genererte etiketter inn i `Innlest` (FR-5), og hvilke de er, lagres i `tekst.genererte_overskrifter` så de kan merkes. `Aktivert` settes når elevens forkunnskapssvar er lagret, og først da blir brødteksten tilgjengelig for gjennomsyn. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. Vil eleven endre brødteksten, lager hun en ny Tekst.
+- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. Overgangen til `Aktivert` krever at eleven har godkjent overskriftene i fase 3a (`tekst.overskrifter_godkjent`, satt 17.10; eldre tekster fikk verdien ved migrasjon 0005). Mangler teksten overskrifter, settes genererte etiketter inn i `Innlest` (FR-5), og hvilke de er, lagres i `tekst.genererte_overskrifter` så de kan merkes. `Aktivert` settes når elevens forkunnskapssvar er lagret, og først da blir brødteksten tilgjengelig for gjennomsyn. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. For **innlimt** tekst er det ingen fase 3b (FR-3, endret 11.11.2026): `Låst` settes rett etter `Aktivert`, i samme handling som lagrer forkunnskapssvaret, med teksten slik den ble limt inn. Overgangene går fortsatt bare framover. Vil eleven endre brødteksten, lager hun en ny Tekst.
 
 ```mermaid
 stateDiagram-v2
@@ -115,7 +115,8 @@ stateDiagram-v2
     Innlest --> Innlest : etiketter (FR-5) og retting av overskrifter (fase 3a)
     Innlest --> Aktivert : fase 3a godkjent, forkunnskapssvar lagret (FR-6)
     Aktivert --> Aktivert : retting av broedtekst (fase 3b)
-    Aktivert --> Laast : eleven godkjenner fase 3b
+    Aktivert --> Laast : eleven godkjenner fase 3b (PDF, bilde)
+    Aktivert --> Laast : rett etter aktivering (innlimt tekst)
     Laast --> [*] : sletting
 ```
 

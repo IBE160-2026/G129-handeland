@@ -83,7 +83,7 @@ Termene under brukes ordrett i resten av dokumentet. Synonymer er en disiplinbri
 
 - **Tekst** — én sammenhengende fagtekst eleven har lagt inn, enten limt inn eller hentet ut fra en PDF. Bærer tittel, brødtekst, overskrifter, Begrepssett og alle genererte elementer. Eies av én konto.
 - **Råtekst** — tegnstrengen slik den forelå etter innliming eller PDF-uttrekk, før eleven eventuelt rettet den. Bevares ved siden av den redigerte teksten, fordi avviket mellom de to er dokumentasjon på hvor godt uttrekket virket.
-- **Kjerneløype** — den faste sekvensen Aktivering → Lesevisning → Quiz. Tekstgjennomsynets fase 3b (FR-3) ligger mellom Aktivering og Lesevisning, men er et innlesingssteg og ikke et ledd i løypen. Fagsamtale, Øvekort, Minnevers og morsmålsstøtte henger på løypen, men er ikke ledd i den.
+- **Kjerneløype** — den faste sekvensen Aktivering → Lesevisning → Quiz. Tekstgjennomsynets fase 3b (FR-3, for PDF og bilde) ligger mellom Aktivering og Lesevisning, men er et innlesingssteg og ikke et ledd i løypen. Fagsamtale, Øvekort, Minnevers og morsmålsstøtte henger på løypen, men er ikke ledd i den.
 - **Aktivering** — første steg: overskriftene vises, og eleven skriver kort hva teksten sannsynligvis handler om, før brødteksten er tilgjengelig.
 - **Lesevisning** — Teksten vist for lesing, med Faguttrykk markert inline og forklaring tilgjengelig uten at eleven forlater siden.
 - **Faguttrykk** — et ord eller uttrykk hvis betydning er spesifikk for Tekstens fagområde, og som en elev på videregående rimeligvis ikke kjenner. Gjelder like fullt akademisk fagspråk («mitose», «tektonisk plate», «allegori») og praksisnær yrkesfagterminologi («bæreevne», «sveisefuge», «hygieneforskrift») — begge programområder er målgruppe, og et uttrykk er ikke mindre et Faguttrykk fordi det hører i et verksted framfor et laboratorium. Ikke allment akademisk språk («faktor», «prosess», «utvikling»), ikke egennavn med mindre de bærer argumentet, ikke tall eller datoer.
@@ -151,7 +151,7 @@ Gjennomsynet er delt i to, og de to fasene ligger på hver sin side av Aktiverin
 **Hvorfor delt.** Et tidligere utkast la hele gjennomsynet før Aktiveringen. Det ødela Aktiveringen: FR-5 holder brødteksten skjult med vilje, fordi gjetningen skal skje før lesingen — men et gjennomsyn av hele teksten rett i forveien hadde alt vist eleven nettopp det FR-5 skjuler. Vernet var illusorisk. Ved å dele steget får Aktiveringen sin forutsetning tilbake, og parsefeil rettes fortsatt før noe genereres.
 
 **Konsekvenser (testbare):**
-- Ingen av fasene kan hoppes over, heller ikke for innlimt tekst. `[ANTAKELSE: friksjonen er verdt det — to korte bekreftelser veier mindre enn en hel løype bygget på feil leserekkefølge. Prøves på testbrukeren i SM-10.]`
+- Fase 3a kan ikke hoppes over. **Fase 3b hoppes over for innlimt tekst**: teksten låses slik eleven limte den inn, når Aktiveringen er ferdig. For PDF og bilde kan fase 3b ikke hoppes over, fordi uttrekket der ofte gir feil (FR-4, FR-45). *Endret 11.11.2026:* kravet sa at ingen av fasene kunne hoppes over, med antakelsen «friksjonen er verdt det … Prøves på testbrukeren». Utviklerens telefontest 9.11 prøvde den: for innlimt tekst finnes ingen uttrekksfeil å rette, eleven har selv valgt teksten, og steget ble opplevd som et kjedelig hinder de færreste ville lest gjennom. Antakelsen holdt for PDF og bilde, der gjennomsynet er sikkerhetsnettet, og ikke for innlimt tekst. Ønsket om å rette *etter* låsingen kan ikke innfris: Kildeavsnittene peker på avsnittene slik de ble låst.
 - I fase 3a vises **bare** overskriftene. Brødteksten er ikke tilgjengelig, verken synlig eller i sidens kildekode — samme krav som i FR-5.
 - Eleven kan i fase 3a rette, legge til, slette og omordne overskrifter. Fant uttrekket ingen overskrifter, opprettes de genererte etikettene fra FR-5 her, og eleven kan endre dem.
 - I fase 3b kan eleven redigere brødteksten fritt: slette, omorganisere, skrive inn manglende tekst.
@@ -397,6 +397,7 @@ Lesevenn genererer en Quiz fra Teksten.
 - Quizen har **åtte spørsmål**, hvorav minst fem er flervalg med fire alternativer, og minst ett krever et kort skriftlig svar.
 - Spørsmålene dekker Tekstens hoveddeler: ingen av Tekstens overskriftsdeler er uten minst ett spørsmål, når Teksten har fire eller færre deler.
 - Quizen lagres på Teksten og gjenbrukes ved senere visning, ikke regenerert.
+- Quizen lages når eleven åpner den, uten en egen bekreftelse. Ventetiden vises etter §5. *(Lagt til 11.11.2026 etter telefontesten.)*
 
 #### FR-14: Forankring i Teksten
 
@@ -414,7 +415,8 @@ Hvert Quiz-spørsmål er forankret i et Kildeavsnitt og kan besvares fra Teksten
 Eleven får svarene rettet med henvisning tilbake i Teksten.
 
 **Konsekvenser (testbare):**
-- Feil svar viser Kildeavsnittet der det riktige svaret står, ikke bare hva som var riktig.
+- Ved feil svar tilbys Kildeavsnittet der det riktige svaret står, med én knapp — ikke bare hva som var riktig. *(Endret 11.11.2026: var «viser». Telefontesten fant at avsnittene som sto åpne ved hvert feil svar, gjorde resultatet uoversiktlig; kilden er fortsatt ett trykk unna.)*
+- Kortsvar vurderes av eleven selv: eksempelsvaret vises sammen med fasiten for resten av quizen, og eleven kan krysse av for at svaret var riktig. Da regnes det med i antall riktige. *(Lagt til 11.11.2026.)*
 - Resultatet vises som antall riktige av totalt, ikke som karakter, prosentkarakter eller mestringsnivå.
 - Eleven kan ta quizen om igjen. Tidligere forsøk beholdes, og eleven kan se utviklingen.
 
@@ -431,7 +433,7 @@ Lesevenn lager ett Øvekort per Faguttrykk i Begrepssettet.
 **Konsekvenser (testbare):**
 - Øvekortsettet er identisk med Begrepssettet — ingen uttrykk lagt til, ingen fjernet. En avviksstest sjekker likhet mellom de to settene.
 - Er Begrepssettet tomt (FR-7), tilbys ikke Øvekort, og grunnen oppgis. Det lages ikke kort av ingenting.
-- Forsiden viser Faguttrykket, baksiden forklaringen og Kildeavsnittet.
+- Forsiden viser Faguttrykket, baksiden forklaringen, og Kildeavsnittet tilbys med én knapp. *(Endret 11.11.2026, som i FR-15.)*
 
 #### FR-17: Gjennomgang av Øvekort
 
@@ -941,7 +943,7 @@ Et nivå er ferdig når demoløypen kjører gjennom på en tom database, tre gan
 1. Opprett konto, logg inn.
 2. Lim inn testtekst A. Kontroller at bare overskriftene vises i fase 3a, rett én overskrift, godkjenn.
 3. Aktivering: kontroller at brødteksten ikke er tilgjengelig, skriv forkunnskaper, gå videre.
-4. Tekstgjennomsyn fase 3b: rett én linje i brødteksten, godkjenn. Kontroller at teksten deretter er låst for redigering.
+4. Kontroller at fase 3b hoppes over for den innlimte teksten, og at teksten er låst for redigering når Lesevisningen vises (FR-3, endret 11.11). Fase 3b for PDF og bilde prøves i steg 13.
 5. Lesevisning: åpne tre forklaringer, én med tastatur alene.
 6. Quiz: svar, se resultat, følg én tilbakevisning til Kildeavsnittet.
 7. Øvekort: gå gjennom, merk to kort.
