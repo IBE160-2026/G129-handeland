@@ -444,7 +444,7 @@ I gjennomgangen oppdaget jeg noe som ikke stemte helt overens, og ønsket å dr�
 
 **Hva som kom tilbake:** AD-6 sier at en prompt som ikke har bestått sikkerhetsporten, ikke settes som gjeldende. Jeg bekreftet at svarvurdering v2 står. Claude hadde funnet at arkitekturen lovet en byggtest som håndhevet regelen, og at den ikke fantes. Den ble laget i en smal form (bare svarvurdering har en port): `npm test` feiler nå hvis en uprøvd versjon settes som gjeldende, eller hvis den målte prompten endres. Claude kontrollerte at den feiler i begge tilfellene.
 
-**Hva jeg gjorde:** Jeg stilte spørsmål ved en vurdering som ble gjort, og godtok endringen. 
+**Hva jeg gjorde:** Jeg spurte om vi burde lage testen arkitekturen lovet, selv om den ikke var et krav, og sa ja. 
 
 **Begrunnelse:** Viss dette var en endring som styrker appen vil jeg gjøre en slik endring, selv om det bare er en bonus, og ikke en del av kravet. 
 
