@@ -1,0 +1,303 @@
+{
+  "krav": "FR-8, forklaringenes riktighet",
+  "promptversjon": "v4",
+  "vurdert": "2026-11-11",
+  "vurdert_av": "utvikleren",
+  "sum": {
+    "riktig": 40,
+    "gal": 0,
+    "misvisende": 1,
+    "utenforTeksten": 14,
+    "totalt": 41
+  },
+  "bestaatt": true,
+  "dommer": [
+    {
+      "nr": 1,
+      "uttrykk": "bølgelengde",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "Ville heller foretrukket \"bølgetopp\", i stedet for nabotopp, men da kan det jo tolkes som at de ikke trenger å ligge ved siden av hverandre. U"
+    },
+    {
+      "nr": 2,
+      "uttrykk": "elektromagnetiske bølger",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "Litt vankselig når det trekkes inn snakk om \"felt\". U"
+    },
+    {
+      "nr": 3,
+      "uttrykk": "IR-stråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 4,
+      "uttrykk": "mikrobølger",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 5,
+      "uttrykk": "ionosfæren",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "Veldig fint og nyttig! U"
+    },
+    {
+      "nr": 6,
+      "uttrykk": "røntgenstråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Feil avsnitt. Hvertfall det med ugjennomsiktig."
+    },
+    {
+      "nr": 7,
+      "uttrykk": "ultrafiolett stråling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 8,
+      "uttrykk": "frekvens",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 9,
+      "uttrykk": "metafor",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Det er kanskje mye å forlange, men en del av meg kunne ønsket at når man tar med et eksempel i forklaringen, så forklarer man eksempelet, ikke bare gjengir det slik det står. Her kunne jeg trengt å forstå hvorfor \"å være en løve\" er en forbindelse mellom to ulike betydningsområder."
+    },
+    {
+      "nr": 10,
+      "uttrykk": "kognitive metaforer",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Likte jeg godt."
+    },
+    {
+      "nr": 11,
+      "uttrykk": "språklige metaforer",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Likte godt."
+    },
+    {
+      "nr": 12,
+      "uttrykk": "personifikasjon",
+      "vurdering": "misvisende",
+      "utenforTeksten": false,
+      "kommentar": "Her mener jeg teksten er misforstått. Den sier at man finner frasen \"senke drømmer\" i nasjonalsangen, ikke at nasjonalsangen i seg selv \"senker drømmer\""
+    },
+    {
+      "nr": 13,
+      "uttrykk": "forestillingsområdene",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 14,
+      "uttrykk": "similen",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 15,
+      "uttrykk": "allegori",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Litt vanskelig med den siste setningen. Ble mer usikker av den."
+    },
+    {
+      "nr": 16,
+      "uttrykk": "allusjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 17,
+      "uttrykk": "konnotasjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 18,
+      "uttrykk": "fabel",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Litt usikker her på avkryssingen. Avsnittet sier at det ER en kort dyrefortelling, mens forklaringen sier at det ofte er med dyr som hovedpersoner. Jeg ser det som at kilden er den som er mest upresis, så det er vanskelig å si hva som er best av forklaringen: rette opp feil, eller bygge videre. — Avgjort 11.11 etter samtale med Claude: riktig. Teksten definerer fabel to ganger («med en moral» og «dyrefortelling»); forklaringen slår dem sammen og motsier ingen av dem. Svak kilde: moral og allegori står i et annet avsnitt."
+    },
+    {
+      "nr": 19,
+      "uttrykk": "språklig virkemiddel",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "veldig fin"
+    },
+    {
+      "nr": 20,
+      "uttrykk": "språklig bilde",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 21,
+      "uttrykk": "personifikasjon",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Peker på feil avsnitt: kun eksempel, ikke forklaring"
+    },
+    {
+      "nr": 22,
+      "uttrykk": "besjeling",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Peker på feil avsnitt: kun eksempel, ikke forklaring"
+    },
+    {
+      "nr": 23,
+      "uttrykk": "styringsrenta",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 24,
+      "uttrykk": "boliginvesteringene",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 25,
+      "uttrykk": "BNP-veksten",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 26,
+      "uttrykk": "fastlandsøkonomien",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 27,
+      "uttrykk": "inflasjonsmålet",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 28,
+      "uttrykk": "konsumprisindeksen",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 29,
+      "uttrykk": "reallønnsveksten",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, og mye mer nyttig enn noe som kunne blitt henta fra teksten."
+    },
+    {
+      "nr": 30,
+      "uttrykk": "topp-domenet",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 31,
+      "uttrykk": "DNS-server",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 32,
+      "uttrykk": "generiske topp-domener",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 33,
+      "uttrykk": "Nasjonale topp-domener",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 34,
+      "uttrykk": "under-domene",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "fint"
+    },
+    {
+      "nr": 35,
+      "uttrykk": "DNS-rotserverne",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U"
+    },
+    {
+      "nr": 36,
+      "uttrykk": "operativsystem",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 37,
+      "uttrykk": "applikasjonsprogramvare",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 38,
+      "uttrykk": "driverprogram",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    },
+    {
+      "nr": 39,
+      "uttrykk": "systemprogramvare",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": "Litt usikker her. Kan du sjekke om det gjelder for all systemprogramvare at den styrer maskinens ressurser?"
+    },
+    {
+      "nr": 40,
+      "uttrykk": "sanntidsoperativsystemer",
+      "vurdering": "riktig",
+      "utenforTeksten": true,
+      "kommentar": "U, det står ingenting i teksten om de gjelder der forsinkelser kan medføre fare."
+    },
+    {
+      "nr": 41,
+      "uttrykk": "plattform",
+      "vurdering": "riktig",
+      "utenforTeksten": false,
+      "kommentar": ""
+    }
+  ]
+}

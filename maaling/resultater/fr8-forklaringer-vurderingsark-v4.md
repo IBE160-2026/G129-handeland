@@ -25,9 +25,9 @@ Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Ville heller foretrukket "bølgetopp", i stedet for nabotopp, men da kan det jo tolkes som at de ikke trenger å ligge ved siden av hverandre. U
 
 ### 2. elektromagnetiske bølger
 
@@ -39,9 +39,9 @@ Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Litt vankselig når det trekkes inn snakk om "felt". U 
 
 ### 3. IR-stråling
 
@@ -53,7 +53,7 @@ IR-stråling er elektromagnetisk stråling som har litt mindre energi enn synlig
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -67,7 +67,7 @@ Ved å øke svingefrekvensen i Hertz forsøk kunne man produsere elektromagnetis
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -81,9 +81,9 @@ På grunn av den lange bølgelengden er radiobølger svært godt egnet til å se
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Veldig fint og nyttig! U 
 
 ### 6. røntgenstråling
 
@@ -95,9 +95,9 @@ Røntgenstråling er elektromagnetisk stråling som er mer energirik enn UV-C og
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Feil avsnitt. Hvertfall det med ugjennomsiktig. 
 
 ### 7. ultrafiolett stråling
 
@@ -109,7 +109,7 @@ Inspirert av Herschels oppdagelse av IR gjorde Johann W. Ritter forsøk på den 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -123,9 +123,9 @@ Inspirert av Maxwells teorier for elektromagnetiske bølger satte Heinrich Hertz
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ---
 
@@ -143,9 +143,9 @@ En metafor er et ord eller et uttrykk som brukes i overført eller billedlig bet
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Det er kanskje mye å forlange, men en del av meg kunne ønsket at når man tar med et eksempel i forklaringen, så forklarer man eksempelet, ikke bare gjengir det slik det står. Her kunne jeg trengt å forstå hvorfor "å være en løve" er en forbindelse mellom to ulike betydningsområder. 
 
 ### 10. kognitive metaforer
 
@@ -157,9 +157,9 @@ Innen kognitiv metaforteori skiller man mellom språklige metaforer, som «hjert
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Likte jeg godt.
 
 ### 11. språklige metaforer
 
@@ -171,9 +171,9 @@ Innen kognitiv metaforteori skiller man mellom språklige metaforer, som «hjert
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Likte godt.
 
 ### 12. personifikasjon
 
@@ -185,9 +185,9 @@ Siden metaforer ofte appellerer til fantasien og skaper sterke bilder, er de sæ
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** ☐ riktig ☐ gal X misvisende
 
-**Kommentar:**
+**Kommentar:** Her mener jeg teksten er misforstått. Den sier at man finner frasen "senke drømmer" i nasjonalsangen, ikke at nasjonalsangen i seg selv "senker drømmer"
 
 ### 13. forestillingsområdene
 
@@ -199,7 +199,7 @@ Det finnes flere moderne teorier om metaforens funksjon innen både språkvitens
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -213,7 +213,7 @@ Metaforen har mye til felles med similen , men i en metafor skjer sammenligninge
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -233,9 +233,9 @@ En allegori er en tekst du kan tolke som et bilde på noe annet. Allegoriske tek
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Litt vanskelig med den siste setningen. Ble mer usikker av den. 
 
 ### 16. allusjon
 
@@ -247,7 +247,7 @@ En allusjon er et språklig virkemiddel der vi låner fra eller refererer til en
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -261,7 +261,7 @@ En konnotasjon er en felles assosiasjon som vi knytter til et ord. Ordvalget til
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -275,9 +275,9 @@ En fabel er en kort dyrefortelling. Avslutningen er ofte en konklusjon eller en 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Litt usikker her på avkryssingen. Avsnittet sier at det ER en kort dyrefortelling, mens forklaringen sier at det ofte er med dyr som hovedpersoner. Jeg ser det som at kilden er den som er mest upresis, så det er vanskelig å si hva som er best av forklaringen: rette opp feil, eller bygge videre. — Avgjort 11.11 etter samtale med Claude: riktig. Teksten definerer fabel to ganger («med en moral» og «dyrefortelling»); forklaringen slår dem sammen og motsier ingen av dem. Svak kilde: moral og allegori står i et annet avsnitt.
 
 ### 19. språklig virkemiddel
 
@@ -289,9 +289,9 @@ Allusjoner et språklig virkemiddel der du låner eller refererer til deler av e
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** veldig fin
 
 ### 20. språklig bilde
 
@@ -303,7 +303,7 @@ Et språklig bilde er et uttrykk som blir brukt i overført betydning, og som sk
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -317,9 +317,9 @@ Stillheten truet meg.
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Peker på feil avsnitt: kun eksempel, ikke forklaring
 
 ### 22. besjeling
 
@@ -331,9 +331,9 @@ Sola smilte den dagen.
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Peker på feil avsnitt: kun eksempel, ikke forklaring
 
 ---
 
@@ -351,9 +351,9 @@ Norges Bank reduserte styringsrenta med 0,5 prosentpoeng i 2025. Etter uventet h
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
 
 ### 24. boliginvesteringene
 
@@ -365,9 +365,9 @@ Boliginvesteringene holdt seg på et lavt nivå gjennom 2025, etter å ha falt r
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
 
 ### 25. BNP-veksten
 
@@ -379,9 +379,10 @@ BNP-veksten hos Norges handelspartnere har i gjennomsnitt ligget på om lag 2 pr
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
+
 
 ### 26. fastlandsøkonomien
 
@@ -393,9 +394,10 @@ Ifølge prognosene vil fastlandsøkonomien utvikle seg nær normalt framover, me
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
+
 
 ### 27. inflasjonsmålet
 
@@ -407,9 +409,10 @@ Ifølge prognosene vil fastlandsøkonomien utvikle seg nær normalt framover, me
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
+
 
 ### 28. konsumprisindeksen
 
@@ -421,9 +424,9 @@ Ifølge prognosene vil inflasjonen, målt ved konsumprisindeksen, avta fra 3,2 p
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
 
 ### 29. reallønnsveksten
 
@@ -435,10 +438,9 @@ Ifølge prognosene vil inflasjonen, målt ved konsumprisindeksen, avta fra 3,2 p
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
-
+**Kommentar:** U, og mye mer nyttig enn noe som kunne blitt henta fra teksten.
 ---
 
 ## Domeneoppbygning og toppdomene
@@ -455,7 +457,7 @@ Neste del er .no, som er det norske topp-domenet. Alle .no-adresser er regulert 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -469,9 +471,9 @@ Neste del er .no, som er det norske topp-domenet. Alle .no-adresser er regulert 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** U
 
 ### 32. generiske topp-domener
 
@@ -483,7 +485,7 @@ I starten var generiske topp-domener avgrenset til noen få spesielle kategorier
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -497,7 +499,7 @@ Nasjonale topp-domener styres av hvert enkelt land, og disse bestemmer hvem som 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -511,9 +513,9 @@ om er et under-domene under .ndla-domenet. Dette styres av den samme DNS-servere
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** fint
 
 ### 35. DNS-rotserverne
 
@@ -525,9 +527,9 @@ Hvis vi starter bakerst, har vi et punktum (.). Dette punktumet blir som oftest 
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** X riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:**U
 
 ---
 
@@ -545,7 +547,7 @@ Et operativsystem (OS) er den grunnleggende programvaren på en datamaskin, og d
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -559,7 +561,7 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -573,7 +575,7 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
@@ -587,9 +589,9 @@ Man kan betrakte programvare som å være én av to typer: applikasjonsprogramva
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:** Litt usikker her. Kan du sjekke om det gjelder for all systemprogramvare at den styrer maskinens ressurser?
 
 ### 40. sanntidsoperativsystemer
 
@@ -601,9 +603,9 @@ Operativsystemer kan grupperes på flere måter.  En av dem er etter bruksområd
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
-**Kommentar:**
+**Kommentar:**U, det står ingenting i teksten om de gjelder der forsinkelser kan medføre fare. 
 
 ### 41. plattform
 
@@ -615,10 +617,10 @@ Forskjellige datamaskiner bruker forskjellige typer maskinvare. En applikasjon s
 
 </details>
 
-**Vurdering:** ☐ riktig ☐ gal ☐ misvisende
+**Vurdering:** x riktig ☐ gal ☐ misvisende
 
 **Kommentar:**
 
 ---
 
-**Sum:** ____ riktig · ____ gal · ____ misvisende av 41  ·  **Krav:** 0 gale
+**Sum:** 40 riktig · 0 gal · 1 misvisende av 41 · 14 med kunnskap utenfor teksten (U)  ·  **Krav:** 0 gale
