@@ -166,7 +166,7 @@ Merk at dette ikke rører AD-2: Kildeavsnitt er fortsatt et nummer. Tegnposisjon
 
 - **Binds:** AD-3, AD-4, AD-6, FR-39
 - **Prevents:** at det å sjekke inn en promptfil *er* forfremmelsen av den — og at webappen og harnessen samtidig har ulik oppfatning av hva som er gjeldende
-- **Rule:** `prompts/gjeldende.json` navngir én versjon per oppgave. Generatoren laster **bare** versjoner manifestet navngir, og avviser andre. Harnessen kan kjøre en vilkårlig versjon, men rapporterer alltid hvilken (AD-4). En byggtest krever at hver oppføring i manifestet har et bestått portresultat (AD-6) med matchende fil-hash.
+- **Rule:** `prompts/gjeldende.json` navngir én versjon per oppgave. Generatoren laster **bare** versjoner manifestet navngir, og avviser andre. Harnessen kan kjøre en vilkårlig versjon, men rapporterer alltid hvilken (AD-4). En byggtest krever at hver oppføring i manifestet **for en oppgave med port** har et bestått portresultat (AD-6) med matchende fil-hash: `prompts/port.test.ts` mot `prompts/portresultater.json`. I dag har bare svarvurdering en port (FR-21). *(Rettet 11.11: teksten sa «hver oppføring», og testen fantes ikke før 11.11; se kodefunn 25.)*
 
 AD-3 gjorde «gjeldende» til en egenskap ved disken, og da forutsatte AD-6 en handling som ikke fantes: å legge v3 i mappa *var* forfremmelsen. Mens v3 lå der kunne webappen kjøre v3 og harnessen v2 uten at promptene var duplisert, og AD-4 gjorde avviket usynlig fordi begge stemplet ærlig.
 

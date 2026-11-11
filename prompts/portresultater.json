@@ -1,0 +1,14 @@
+{
+  "_om": "AD-6: en promptversjon som ikke har bestått sikkerhetsporten, settes ikke som gjeldende. Her står hver versjon som har vært gjennom porten, med hash av promptfila slik den var da den ble målt (sha256 av innholdet med LF-linjeskift). prompts/port.test.ts sjekker at versjonen gjeldende.json navngir for en oppgave med port, står her som bestått, og at fila ikke er endret siden. Føres for hånd når utvikleren har tatt AD-6-avgjørelsen; målingen alene forfremmer ingenting. I dag har bare svarvurdering en port (FR-21).",
+  "svarvurdering": {
+    "v2": {
+      "sha256": "3ad99b43444354803fb801a1910ca5f0d485536c04a2da09bbb5c4d9b1fd5284",
+      "maalt": "2026-11-06",
+      "sikkerhetsport": { "misoppfatningLestSomDekkende": 0, "av": 12 },
+      "gjenkalling": { "verdi": 0.93, "treff": 28, "av": 30 },
+      "bestatt": true,
+      "avgjort": "2026-11-10",
+      "rapport": "maaling/resultater/2026-11-06-fr21-svarvurdering-v2/rapport.md"
+    }
+  }
+}

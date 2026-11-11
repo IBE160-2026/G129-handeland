@@ -572,11 +572,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 25 — Arkitekturen lovet en byggtest som ikke fantes, og målingene kunne skrive over utfylte ark
+
+**Hvor:** `arkitektur-lesevenn.md` (AD-14 viser til AD-6: «En byggtest krever at hver oppføring i manifestet har et bestått portresultat … med matchende fil-hash»), og `maaling/maal-quiz.test.ts`, `maal-minnevers.test.ts`, `maal-forklaringer.test.ts` og `maal-oversettelse.test.ts`, som skrev vurderingsarket ukritisk.
+
+**Hva:** (1) Testen arkitekturen beskrev, var aldri skrevet. AD-6 hvilte på at noen husket den: ingenting hindret at en uprøvd svarvurdering ble satt som gjeldende, eller at den målte prompten ble endret etterpå. Setningen var dessuten for vid — bare svarvurdering har en port. (2) En ny kjøring av `npm run maal:*` skrev over et utfylt vurderingsark, og quiz-dataene kom ut med alternativene i ny rekkefølge, så avkrysningene ikke lenger passet.
+
+**Hvordan det ble funnet:** (1) da AD-6-avgjørelsen for svarvurdering v2 skulle tas 10.11, og arkitekturdokumentet ble lest for å forklare hva den innebar. (2) 9.11, da Claude kjørte hele testsamlingen med `npx vitest run` i stedet for `npm test` (som holder målingene utenfor): tre utfylte ark ble overskrevet på disken. De ble hentet tilbake fra git.
+
+**Rettelse:** 11.11. (1) `prompts/port.test.ts` mot `prompts/portresultater.json`, med hash av promptfila; kontrollert at den feiler når den målte fila endres og når en uprøvd versjon settes som gjeldende. Arkitekturteksten er snevret inn til oppgaver med port. (2) `maaling/skriv-ark.ts`: arket og dataene det bygger på skrives bare når arket ikke finnes, slik samtalesettet alt gjorde; kontrollert ved å kjøre de tre målingene på nytt.
+
+**Mønsteret:** en regel som står i et dokument, er ikke håndhevet før en test feiler når den brytes. Og en beskyttelse som bare finnes i én kjørevei (`npm test`), beskytter ikke mot den andre.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 24 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 25 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |

@@ -118,6 +118,10 @@ havner i `maaling/resultater/<dato>-fr21-svarvurdering-<versjon>/`.
   du er ferdig. La i tillegg **én utenforstående** lese tolv av dem og svare på om
   noen ville truffet en sekstenåring dårlig.
 
+## 7b. Består porten
+
+Når du har tatt AD-6-avgjørelsen, føres resultatet i `prompts/portresultater.json`: versjonen, hash av promptfila (sha256 med LF-linjeskift), datoen og tallene. Først da kan versjonen stå i `gjeldende.json` — `prompts/port.test.ts` feiler ellers, og den feiler også hvis den målte fila endres etterpå.
+
 ## 8. Faller en port
 
 Det er et funn, ikke noe å skjule. Skriv en ny promptversjon, mål på nytt, og la
