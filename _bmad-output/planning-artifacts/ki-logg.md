@@ -368,9 +368,93 @@ Sikre validitet. En oppfølging kan følge regelen og likevel ikke hjelpe eleven
 
 ---
 
-## Status mot FR-38, per 6. november
+## 2026-11-09 til 10 — FANGET AV MENNESKE: telefontesten fant to feil og en rekke svakheter
 
-Nitten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+**Verktøy:** Claude Code (Claude Opus 5.5)
+
+**Hva jeg ba om:** en sjekkliste for å teste kjerneløypen og bildeinnlesingen på egen telefon (PRD §5 og §9.2, FR-44). Jeg gikk gjennom den, skrev funnene inn og ba Claude «se over».
+
+**Hva som kom tilbake:** Claude sorterte funnene i det som måtte rettes før M1, det som hørte til designfasen, og det som endret flyten og måtte vurderes mot PRD-en. To av funnene mine var feil i KI-skrevet kode: valgt morsmål ble ikke vist før siden ble lastet på nytt (kodefunn 24), og kort tekst fra bilde stoppet først etter lang venting (kodefunn 26). Da Claude rettet det siste, fant den samme felle i gjennomsynet: det eleven skrev, ville blitt visket ut ved en avvisning. Arabisk og polsk som manglet i fagord-boksen, var ventetid, ikke feil. Fire visuelle forslag ble gjort med en gang; resten venter på designfasen.
+
+**Hva jeg gjorde:** Jeg testet ut appen på mobilen, for å se hvordan den så ut og responderte der. Jeg fikk en liste av KIen over ting jeg skulle teste, og jeg gjennomførte disse og gav tilbakemelding på dem (se at ting ser ok ut, at det fungerer som intendert o.l.).
+**Begrunnelse:** Jeg fant flere ting som jeg ønsket å endre på, både funksjonelt, men også hva gjelder oppsett, utseende og brukervennlighet. Hvordan brukeropplevelsen er kan ikke maskinen si på mine vegne, og det var veldig lærerikt. 
+
+**Spor:** [telefontest 9.11](../../maaling/resultater/telefontest-2026-11-09.md) · [bildeinnlesing 10.11](../../maaling/resultater/bildeinnlesing-telefon-2026-11-10.md) · commit `02377c6`, `f5a97e2`, `fef6b66`, `dd37c9b` · kodefunn 24 og 26
+
+---
+
+## 2026-11-09 — FEIL AV KI: utfylte vurderingsark ble overskrevet
+
+**Verktøy:** Claude Code (Claude Opus 5.5)
+
+**Hva jeg ba om:** ingenting om dette. Claude kjørte testene for å kontrollere rettelsen av språkvelgeren.
+
+**Hva som kom tilbake:** Claude kjørte `npx vitest run` på hele prosjektet i stedet for `npm test`, som holder målingene utenfor. Målingene skrev da om quiz-, minnevers- og forklaringsarket mitt på disken, med avkrysningene borte, og laget fem nye resultatfiler. Claude oppdaget det selv i `git status`, sa fra, og hentet arkene tilbake fra git: ingenting var tapt, fordi de var committet. Kjøringen ble gjentatt én gang til ved et uhell (minnevers-arket), og hentet tilbake igjen. To dager senere ble målingene endret så de aldri skriver over et ark som finnes.
+
+**Hva jeg gjorde:** 
+Jeg gjorde lite her. Jeg ble informert om at dette skjedde, og var da fornøyd med at Claude oppdaget det selv og hentet arkene tilbake fra git.
+
+**Begrunnelse:** Det var et godt læringsøyeblikk for meg om viktigheten av å bruke git aktivt, og commite endringer forløpende.
+
+**Spor:** commit `8e61536` · kodefunn 25 · [sesjonslogg](../../.logs/arve/998-2026-11-06-09-34-06-samtalegullsett.md) 9.11
+
+---
+
+## 2026-11-09 — FEIL AV KI: utrulling uten å si hva som fulgte med
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Appens minnevers: claude-haiku-5-5, prompt v3.
+
+**Hva jeg ba om:** «rull ut», etter at Claude hadde rettet språkvelgeren.
+
+**Hva som kom tilbake:** utrullingen var den første siden 19.10, og tok med seg tre ukers endringer jeg ikke ble fortalt om på forhånd: kodefunn 23 (*personifikasjon* og *besjeling* falt ut av teksten om språklige bilder) og en rimkontroll fra det forkastede minnevers v6. Claude sa fra etterpå. Kontrollen viste seg å avvise 3 av de 10 godkjente v3-versene («lik / slik», «tråd / råd», «natur / tur»). Den ble avgrenset til helt like ord og rullet ut på nytt dagen etter. Siden har Claude listet opp hva som følger med før hver utrulling.
+
+**Hva jeg gjorde:** 
+Jeg ba om utrulling, og fikk da erfare at siden det var lenge siden sist, så skjedde det mange endringer. Noen av dem skulle ikke skjedd. Jeg lærte at dette kan skje, og at jeg nok burde være proaktiv i slike situasjoner. 
+
+**Begrunnelse:** 
+Jeg vil f.eks. si: gi en oversikt over alt som rulles ut i denne runden, i stedet for å bare be om utrulling. Evt. gi kommando: overse at ingenting som rulles ut har blitt trukket eller endret i etterkant.  
+
+
+**Spor:** commit `8fef334` · REGISTER, minnevers · [sesjonslogg](../../.logs/arve/998-2026-11-06-09-34-06-samtalegullsett.md) 9.–10.11
+
+---
+
+## 2026-11-11 — ENDRET: egen vurdering av en forklaring endret etter samtale med KI
+
+**Verktøy:** Claude Code (Claude Opus 5.5). Forklaringene: claude-haiku-5-5, faguttrykk v4.
+
+**Hva jeg ba om:** «Hva tenker du om fabel-problemstillingen?» Jeg hadde merket forklaringen av *fabel* som misvisende: kilden sier at en fabel ER en dyrefortelling, mens forklaringen sier «ofte med dyr».
+
+**Hva som kom tilbake:** Claude viste at teksten definerer fabel to ganger («en kort fortelling med en moral» og «en kort dyrefortelling»), og at forklaringen slår dem sammen uten å motsi noen av dem; det svake er kilden. Claude foreslo riktig, men sa at valget var mitt og at misvisende også kunne forsvares. Jeg endret til riktig. To forklaringer uten avkrysning (nr. 21 og 27) ble satt til riktig av Claude ut fra kommentarene mine. Resultat: 0 gale av 41, og faguttrykk v4 ble forfremmet.
+
+**Hva jeg gjorde:** 
+I gjennomgangen oppdaget jeg noe som ikke stemte helt overens, og ønsket å drøfte dette litt. KIen fremmet at dette ikke var en svakhet ved modellen, men heller ved kilden, og da kunne vi endre fra misvisende til riktig. 
+
+**Begrunnelse:** Jeg syns KIen argumenterte godt, og pekte på viktige grunner. Derfor var logisk å endre merkingen, siden målet var å merke svakheter ved modellen, og jeg forstod at det var ikke det det var snakk om i dette tilfellet. 
+
+**Spor:** [vurderingsark v4](../../maaling/resultater/fr8-forklaringer-vurderingsark-v4.md) nr. 18, 21, 27 · commit `f4ca299`, `5e977c2` · REGISTER, Faguttrykk v4
+
+---
+
+## 2026-11-10 til 11 — GODTATT ETTER SPØRSMÅL: AD-6 som byggtest
+
+**Verktøy:** Claude Code (Claude Opus 5.5)
+
+**Hva jeg ba om:** «Hva innebærer AD-6?», og etter forklaringen: «arkitektur-innspillet, selv om det ikke er et krav, er det noe vi burde lage?»
+
+**Hva som kom tilbake:** AD-6 sier at en prompt som ikke har bestått sikkerhetsporten, ikke settes som gjeldende. Jeg bekreftet at svarvurdering v2 står. Claude hadde funnet at arkitekturen lovet en byggtest som håndhevet regelen, og at den ikke fantes. Den ble laget i en smal form (bare svarvurdering har en port): `npm test` feiler nå hvis en uprøvd versjon settes som gjeldende, eller hvis den målte prompten endres. Claude kontrollerte at den feiler i begge tilfellene.
+
+**Hva jeg gjorde:** Jeg stilte spørsmål ved en vurdering som ble gjort, og godtok endringen. 
+
+**Begrunnelse:** Viss dette var en endring som styrker appen vil jeg gjøre en slik endring, selv om det bare er en bonus, og ikke en del av kravet. 
+
+**Spor:** commit `8a30568`, `6dc342f` · `prompts/port.test.ts` · kodefunn 25 · REGISTER, svarvurdering v2
+
+---
+
+## Status mot FR-38, per 11. november
+
+Tjuefire oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -393,6 +477,11 @@ Nitten oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godta
 | 17 | Regelen for dekkende krevde mer enn spørsmålet | Feil i KI-forslag, sett da et svar ble skrevet; en lignende feil viste seg først i målingen |
 | 18 | KI skrev ingen av de 36 elevsvarene | Metode: fasiten holdt uavhengig av modellen |
 | 19 | Egen relevansvurdering ga forbedringer til v3 | Endret etter egen vurdering av utdata |
+| 20 | Telefontesten fant to feil og en rekke svakheter | Feil i KI-kode og svak brukeropplevelse, fanget ved egen testing |
+| 21 | Utfylte vurderingsark ble overskrevet | Feil gjort av KI i prosessen, oppdaget og rettet av KI |
+| 22 | Utrulling uten å si hva som fulgte med | Feil gjort av KI; arbeidsmåten endret etterpå |
+| 23 | Egen vurdering endret etter samtale med KI | Menneskelig vurdering påvirket av KI-argument |
+| 24 | AD-6 som byggtest | Avvik mellom arkitektur og kode, rettet utover kravet |
 
 Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–9). Implementasjonsfasen (10–15) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (12, 14), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (15). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 
