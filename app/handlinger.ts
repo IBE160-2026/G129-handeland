@@ -229,6 +229,21 @@ export async function laasOgGenerer(
     };
   }
 
+  // FR-1 og BF-4: kort tekst fra et bilde slipper gjennom innlesingen, så
+  // eleven kan skrive inn resten her. Før låsingen gjelder samme grense som
+  // ved innliming — uten den ventet eleven på fem uttrekkskall som ga opp,
+  // og fikk beskjeden sent (telefontest 10.11). Teksten låses ikke, så
+  // eleven kan skrive mer og godkjenne på nytt.
+  const lengde = redigert.trim().length;
+  if (lengde < GRENSER.minTegnTotalt) {
+    return {
+      feil: {
+        melding: `Teksten er for kort: ${lengde} tegn. Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
+        handling: "Skriv inn resten av teksten i feltet, eller ta bilde av flere sider.",
+      },
+    };
+  }
+
   const t = await tilgang();
 
   let laast;

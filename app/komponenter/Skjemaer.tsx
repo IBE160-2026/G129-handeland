@@ -13,10 +13,11 @@
  * eleven ikke sender to ganger og betaler for to kall.
  */
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
+import { GRENSER } from "../../opplasting/pdf-tekst";
 
 const TOMT: Handlingssvar = {};
 
@@ -95,6 +96,11 @@ export function GjennomsynSkjema({
   tekst: string;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
+  // Kontrollert felt: React nullstiller skjemaet etter handlingen, og et
+  // ukontrollert felt ville mistet det eleven skrev inn når låsingen ble
+  // avvist (for kort tekst, BF-4). Samme felle som kodefunn 24.
+  const [innhold, settInnhold] = useState(tekst);
+  const lengde = innhold.trim().length;
 
   return (
     <form action={send} className="space-y-4">
@@ -115,10 +121,17 @@ export function GjennomsynSkjema({
           name="tekst"
           rows={20}
           required
-          defaultValue={tekst}
-          aria-describedby="gj-hjelp"
+          value={innhold}
+          onChange={(e) => settInnhold(e.target.value)}
+          aria-describedby="gj-hjelp gj-lengde"
           className="mt-2 w-full rounded-md border border-slate-300 p-3 font-mono text-sm leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
         />
+        {/* FR-1: bare synlig når teksten er under grensen, så eleven ser hva som mangler før hen trykker. */}
+        <p id="gj-lengde" className="mt-1 text-right text-sm font-medium text-amber-700 dark:text-amber-400">
+          {lengde < GRENSER.minTegnTotalt
+            ? `${lengde} tegn — Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`
+            : ""}
+        </p>
       </div>
 
       <Send venter="Finner fagordene…" klar="Lås og finn fagordene" />
