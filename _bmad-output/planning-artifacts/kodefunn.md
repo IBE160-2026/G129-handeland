@@ -600,11 +600,25 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 27 — En endring i flyten brøt to sjekkskript som ingen kjørte
+
+**Hvor:** `maaling/sjekk-readme.mjs` (FR-46) og `maaling/sjekk-tilgjengelighet.mjs` (§5), etter FR-3-endringen 12.11 (`0176006`).
+
+**Hva:** innlimt tekst hopper nå over gjennomsynet. Begge skriptene ventet fortsatt på gjennomsynet og trykket «Lås og finn fagordene» for innlimt tekst, og README-testen brukte den gamle quizflyten. De ville feilet ved neste kjøring. `npm test` kjører dem ikke, og demotesten besto, så ingenting sa fra.
+
+**Hvordan det ble funnet:** av en av de tre gjennomgangsagentene i bmad-build for quizendringen (FR-13, FR-15), som fulgte en påstand om gamle velgere i README-testen. At også tilgjengelighetssjekken og selve gjennomsynssteget var brutt, kom fram da påstanden ble sjekket.
+
+**Rettelse:** 12.11 (`f9b577c`): begge følger den nye flyten. Axe-sjekken av gjennomsynet er ute av tilgjengelighetssjekken, siden innlimt tekst ikke lenger når siden; den må nås via PDF (utsatt arbeid).
+
+**Mønsteret:** en endring testes mot testene som kjøres, ikke mot alle skriptene som beskriver flyten. Samme gjennomgang fant også at to raske avkrysninger på kortsvar kunne overskrive hverandre i databasen (les–endre–skriv uten lås); rettet ved å låse alle avkrysninger mens én lagres.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 26 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 27 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
 | Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |

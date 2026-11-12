@@ -452,6 +452,22 @@ I gjennomgangen oppdaget jeg noe som ikke stemte helt overens, og ønsket å dr�
 
 ---
 
+## 2026-11-12 — METODE: flytendringene bygget med bmad-build, etter at BMAD ble installert i repoet
+
+**Verktøy:** Claude Code (Claude Opus 5.5), BMAD v6.12.4 (bmad-build), underagenter med samme modell til implementering og gjennomgang.
+
+**Hva jeg ba om:** «Start endringer!» for de tre flytendringene fra telefontesten. Da bmad-build stoppet fordi prosjektdelen av BMAD manglet i repoet, valgte jeg å installere den «for å være på den sikre siden». Deretter: «Kjør på med B og C, og rull deretter ut.»
+
+**Hva som kom tilbake:** BMAD ble installert uten spørsmål, med bare nye filer. bmad-build delte bestillingen i tre spesifikasjoner (innlimt tekst uten gjennomsyn, quiz, øvekort), som jeg godkjente. Hver ble implementert, gjennomgått av en til tre agenter som ikke hadde skrevet koden, og kjørt gjennom demotesten tre ganger. Gjennomgangene fant blant annet en blindvei ved tilbakeknappen, at to raske avkrysninger på kortsvar kunne overskrive hverandre, og at README-testen og tilgjengelighetssjekken var brutt av den første endringen (kodefunn 27). Demotesten fanget to feil til underveis: en rettelse etter gjennomgangen som stoppet morsmålsvisningen, og en testvelger som traff feil knapp.
+
+**Hva jeg gjorde:** 
+
+**Begrunnelse:** 
+
+**Spor:** commit `2e6f1c9` (BMAD), `0176006` (FR-3), `f9b577c` (FR-13, FR-15), `85187d8` (FR-16) · `_bmad-output/implementation-artifacts/` · kodefunn 27
+
+---
+
 ## Status mot FR-38, per 11. november
 
 Tjuefire oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
