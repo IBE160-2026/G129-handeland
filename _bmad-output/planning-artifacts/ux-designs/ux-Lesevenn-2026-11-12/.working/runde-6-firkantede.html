@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeseBuddy – runde 6</title>
+<!-- Unntak fra «ingen nettverk»: skrift må ses i ekte skrift for å kunne velges. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Gloock&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Felles lys (rosahvit): bg #FFF5F7, flate #FFFFFF, kant #F5DDE5, tekst #141A3A, dempet #5A5670, markering #FFE0EE */
+[data-modus="lys"]{--bg:#FFF5F7;--flate:#FFFFFF;--kant:#F5DDE5;--tekst:#141A3A;--dempet:#5A5670;--paaPrimaer:#FFFFFF;--markering:#FFE0EE;--aksent:#FF4D9D}
+/* Felles mørk: bg #0F1226, flate #1A1E3A, kant #2C3158, tekst #EEF0FF, dempet #A9AFD3, markering #4A1F3A */
+[data-modus="moerk"]{--bg:#0F1226;--flate:#1A1E3A;--kant:#2C3158;--tekst:#EEF0FF;--dempet:#A9AFD3;--paaPrimaer:#0F1226;--markering:#4A1F3A;--aksent:#FF7AB6}
+/* Primærfarger. Lys: hvit tekst på primær / primær mot bg. Mørk: bg mot primær. */
+[data-modus="lys"][data-farge="blekk"]{--primaer:#1E2257}      /* 14,8 / 13,8 */
+[data-modus="lys"][data-farge="fiolett"]{--primaer:#6427D6}    /* 7,5 / 7,0 */
+[data-modus="lys"][data-farge="bringebaer"]{--primaer:#B8165F;--aksent:#FFB020;--markering:#FFF0C7}  /* 6,3 / 5,9 */
+[data-modus="lys"][data-farge="petrol"]{--primaer:#0B6466}     /* 6,9 / 6,5 */
+[data-modus="lys"][data-farge="kobolt"]{--primaer:#2A45E8}     /* 6,7 / 6,3 */
+[data-modus="moerk"][data-farge="blekk"]{--primaer:#C7CBFF}    /* 11,8 */
+[data-modus="moerk"][data-farge="fiolett"]{--primaer:#B79BFF}  /* 8,1 */
+[data-modus="moerk"][data-farge="bringebaer"]{--primaer:#FF8DC2;--aksent:#FFC24D;--markering:#4A3A12} /* 8,7 */
+[data-modus="moerk"][data-farge="petrol"]{--primaer:#62D3C7}   /* 10,3 */
+[data-modus="moerk"][data-farge="kobolt"]{--primaer:#8FA0FF}   /* 7,6 */
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tekst);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.55;transition:background .3s,color .3s}
+.bryter{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:10px 16px;background:var(--flate);border-bottom:1px solid var(--kant);font-size:14px}
+.gruppe{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gruppe>span{color:var(--dempet);margin-right:2px}
+.bryter button{font:inherit;padding:6px 11px;border-radius:999px;border:1px solid var(--kant);background:var(--bg);color:var(--tekst);cursor:pointer}
+.bryter button[aria-pressed=true]{outline:2px solid var(--tekst);outline-offset:1px;font-weight:700}
+.prikk{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:20px}
+.kort{background:var(--flate);border:1px solid var(--kant);border-radius:20px;padding:22px}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--dempet);margin:0 0 6px;font-weight:700}
+.dempet{color:var(--dempet)}
+.knapp{font:inherit;font-weight:700;padding:10px 16px;border-radius:14px;border:0;background:var(--primaer);color:var(--paaPrimaer);cursor:pointer}
+.typer{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:14px}
+.type{border:1px solid var(--kant);border-radius:18px;padding:18px;background:var(--bg)}
+.type h3{margin:0 0 4px;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:28px;line-height:1.1}
+.type p{margin:0 0 12px;color:var(--dempet);font-size:15px}
+.rad{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.scene{width:150px;height:150px;border-radius:22px;background:var(--flate);border:1px solid var(--kant);display:grid;place-items:center}
+.scene svg{width:132px;height:132px}
+.flis{width:60px;height:60px;border-radius:15px;background:var(--primaer);display:grid;place-items:center}
+.flis svg{width:52px;height:52px}
+.s32{width:32px;height:32px}.s16{width:16px;height:16px}
+.lockup{display:flex;align-items:center;gap:6px;margin-top:12px;font-family:"Gloock",Georgia,serif;font-size:30px;line-height:1}
+.lockup svg{width:1.3em;height:1.3em}
+.hero{font-family:"Gloock",Georgia,serif;font-size:40px;line-height:1.05;margin:4px 0 10px}
+.hero .hl{position:relative;isolation:isolate;font-style:italic}
+.hero .hl::after{content:"";position:absolute;left:-.06em;right:-.06em;bottom:.06em;height:.36em;background:var(--aksent);border-radius:.2em;z-index:-1;transform:rotate(-1.5deg)}
+.sideov{font-family:"Instrument Serif",Georgia,serif;font-size:30px;margin:0}
+
+/* ——— Animasjon (6,6 s) ———
+   lesing 0–1,9 s · blunk 2,4–2,6 s · pupillene blir til 3,2 s og tones ut til 3,6 s
+   · 700 ms pause · rotasjon 4,3–5,5 s, stengene trekkes inn samtidig · ryggen tegnes 5,2–6,1 s */
+.ramme{stroke:var(--primaer);stroke-linecap:round;stroke-linejoin:round;fill:none}
+.glass{fill:var(--markering)}
+.oye{fill:var(--tekst);transform-origin:center;transform-box:fill-box}
+.snu{transform-origin:60px 40px;transform-box:view-box}
+.stenger path{transform-box:view-box}
+.flytt{transform:translate(var(--x0),var(--y0))}
+.stang{stroke-dasharray:96;stroke-dashoffset:96}
+.spill .flytt{animation:flytt 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.spill .snu{animation:snu 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.spill .oyne{animation:les 6.6s ease-in-out forwards}
+.spill .oye{animation:blunk 6.6s linear forwards}
+.spill .stenger path{animation:stenger 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.spill .stang{animation:stang 6.6s ease forwards}
+@keyframes les{0%,3%{transform:translateX(-7px)}15%{transform:translateX(7px)}17%{transform:translateX(-7px)}29%{transform:translateX(7px)}33%,100%{transform:translateX(0)}}
+@keyframes blunk{0%,36%{transform:scaleY(1);opacity:1}38%{transform:scaleY(.1)}39.5%,48.5%{transform:scaleY(1);opacity:1}54.5%,100%{opacity:0;transform:scale(.2)}}
+@keyframes snu{0%,65%{transform:rotate(0)}83%,100%{transform:rotate(-90deg)}}
+@keyframes flytt{0%,65%{transform:translate(var(--x0),var(--y0))}83%,100%{transform:translate(var(--x1),var(--y1))}}
+@keyframes stenger{0%,65%{transform:scale(1);opacity:1}80%{transform:scale(.2);opacity:.3}83%,100%{transform:scale(0);opacity:0}}
+@keyframes stang{0%,79%{stroke-dashoffset:96}92%,100%{stroke-dashoffset:0}}
+.ferdig .flytt{transform:translate(var(--x1),var(--y1))}
+.ferdig .snu{transform:rotate(-90deg)}
+.ferdig .oye,.ferdig .stenger{opacity:0}
+.ferdig .stang{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){
+  .spill .flytt{animation:none;transform:translate(var(--x1),var(--y1))}
+  .spill .snu{animation:none;transform:rotate(-90deg)}
+  .spill .oye,.spill .stenger path{animation:none;opacity:0}
+  .spill .stang{animation:none;stroke-dashoffset:0}
+  .spill .oyne{animation:none}
+}
+</style>
+</head>
+<body data-modus="lys" data-farge="blekk">
+<div class="bryter" role="toolbar" aria-label="Innstillinger for utkastet">
+  <div class="gruppe" data-felt="farge"><span>Primærfarge</span>
+    <button type="button" data-v="blekk"><span class="prikk" style="background:#1E2257"></span>Blekk</button>
+    <button type="button" data-v="fiolett"><span class="prikk" style="background:#6427D6"></span>Fiolett</button>
+    <button type="button" data-v="bringebaer"><span class="prikk" style="background:#B8165F"></span>Bringebær + mango</button>
+    <button type="button" data-v="petrol"><span class="prikk" style="background:#0B6466"></span>Petrol</button>
+    <button type="button" data-v="kobolt"><span class="prikk" style="background:#2A45E8"></span>Kobolt (før)</button></div>
+  <div class="gruppe" data-felt="modus"><span>Modus</span>
+    <button type="button" data-v="lys">Lys</button><button type="button" data-v="moerk">Mørk</button></div>
+  <button type="button" id="spill" class="knapp">Spill av alle</button>
+</div>
+<main>
+<section class="kort">
+  <h2>Kraftige firkantede – neserom og rammetykkelse</h2>
+  <p class="dempet" style="margin:0;max-width:75ch">Ytterkantene står fast, så glassene blir litt smalere når neserommet øker. Nesebroen blir midjen i B-en.</p>
+  <div class="typer" id="typer"></div>
+</section>
+<section class="kort">
+  <h2>Med valgt farge</h2>
+  <p class="hero">Les tekstene selv. <span class="hl">Buddy</span> hjelper deg med å forstå dem.</p>
+  <p class="sideov">Celledeling</p>
+  <p class="dempet" style="margin:4px 0 14px">Gloock på landingssiden, vanlig Instrument Serif som sideoverskrift.</p>
+  <button class="knapp" type="button">Prøv LeseBuddy</button>
+</section>
+</main>
+
+<script>
+// Alle glass har overkant på y=40. Rotasjon −90° om (60,40) gjør overkanten til ryggen (x=60).
+// h = glasshøyde. Start: translate(0, 20−h/2). Slutt: translate(−h/2, 20).
+const TYPER = [
+ {
+  "navn": "Som før",
+  "tekst": "Neserom 8, ramme 10. Til sammenligning.",
+  "h": 32,
+  "strek": 10,
+  "oyeY": 57,
+  "oyeX": [
+   36,
+   84
+  ],
+  "glass": [
+   "M25 40 H47 Q56 40 56 49 V63 Q56 72 47 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z",
+   "M73 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H73 Q64 72 64 63 V49 Q64 40 73 40 Z"
+  ],
+  "bro": "M56 45 Q60 36.666666666666664 64 45",
+  "stenger": [
+   "M16 44 L5 37",
+   "M104 44 L115 37"
+  ]
+ },
+ {
+  "navn": "Litt mer neserom",
+  "tekst": "Neserom 13, ramme 8,5. Nesebroen blir en liten bue, og B-en får en antydning til midje.",
+  "h": 32,
+  "strek": 8.5,
+  "oyeY": 57,
+  "oyeX": [
+   34.75,
+   85.25
+  ],
+  "glass": [
+   "M25 40 H44.5 Q53.5 40 53.5 49 V63 Q53.5 72 44.5 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z",
+   "M75.5 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H75.5 Q66.5 72 66.5 63 V49 Q66.5 40 75.5 40 Z"
+  ],
+  "bro": "M53.5 45 Q60 35.833333333333336 66.5 45",
+  "stenger": [
+   "M16 44 L5 37",
+   "M104 44 L115 37"
+  ]
+ },
+ {
+  "navn": "Mer neserom",
+  "tekst": "Neserom 17, ramme 8,5. Tydeligere bro, og glassene blir litt mer stående.",
+  "h": 32,
+  "strek": 8.5,
+  "oyeY": 57,
+  "oyeX": [
+   33.75,
+   86.25
+  ],
+  "glass": [
+   "M25 40 H42.5 Q51.5 40 51.5 49 V63 Q51.5 72 42.5 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z",
+   "M77.5 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H77.5 Q68.5 72 68.5 63 V49 Q68.5 40 77.5 40 Z"
+  ],
+  "bro": "M51.5 45 Q60 35.166666666666664 68.5 45",
+  "stenger": [
+   "M16 44 L5 37",
+   "M104 44 L115 37"
+  ]
+ },
+ {
+  "navn": "Mest neserom",
+  "tekst": "Neserom 21, ramme 8. Brillene blir mer «hipster», og B-en får en tydelig midje der broen sitter.",
+  "h": 32,
+  "strek": 8,
+  "oyeY": 57,
+  "oyeX": [
+   32.75,
+   87.25
+  ],
+  "glass": [
+   "M25 40 H40.5 Q49.5 40 49.5 49 V63 Q49.5 72 40.5 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z",
+   "M79.5 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79.5 Q70.5 72 70.5 63 V49 Q70.5 40 79.5 40 Z"
+  ],
+  "bro": "M49.5 45 Q60 34.5 70.5 45",
+  "stenger": [
+   "M16 44 L5 37",
+   "M104 44 L115 37"
+  ]
+ }
+];
+
+function figur(t) {
+  const glass = t.glass.map(d => `<path class="glass" d="${d}"/>`).join("");
+  const rammer = t.glass.map(d => `<path class="ramme" stroke-width="${t.strek}" d="${d}"/>`).join("");
+  const bro = t.brow
+    ? `<path class="ramme" stroke-width="13" d="M12 40 H108"/>`
+    : `<path class="ramme" stroke-width="${t.strek}" d="${t.bro}"/>`;
+  const stenger = t.stenger.map((d, i) => {
+    const [x, y] = d.slice(1).split(" L")[0].split(" ").map(Number);
+    return `<path class="ramme" stroke-width="${t.brow ? 8 : t.strek}" d="${d}" style="transform-origin:${x}px ${y}px"/>`;
+  }).join("");
+  const oyne = `<g class="oyne"><circle class="oye" cx="${t.oyeX[0]}" cy="${t.oyeY}" r="5.5"/><circle class="oye" cx="${t.oyeX[1]}" cy="${t.oyeY}" r="5.5"/></g>`;
+  const stang = t.brow ? "" : `<path class="ramme stang" stroke-width="${t.strek + 2}" d="M60 -4 V84"/>`;
+  const stil = `--x0:0px;--y0:${20 - t.h / 2}px;--x1:${-t.h / 2}px;--y1:20px`;
+  return { inn: `<g class="flytt" style="${stil}"><g class="snu">${glass}${oyne}${rammer}${bro}<g class="stenger">${stenger}</g></g>${stang}</g>` };
+}
+const svg = (t, klasse, stil = "") => `<svg viewBox="-4 -4 128 128" class="${klasse}" style="${stil}" aria-hidden="true">${figur(t).inn}</svg>`;
+
+function tegn() {
+  document.getElementById("typer").innerHTML = TYPER.map(t => `
+    <article class="type">
+      <h3>${t.navn}</h3><p>${t.tekst}</p>
+      <div class="rad">
+        <div class="scene">${svg(t, "spill")}</div>
+        <div class="flis">${svg(t, "ferdig", "--primaer:#fff;--markering:rgba(255,255,255,.3)")}</div>
+        ${svg(t, "ferdig s32")}${svg(t, "ferdig s16")}
+      </div>
+      <div class="lockup">${svg(t, "ferdig")}<span>LeseBuddy</span></div>
+    </article>`).join("");
+}
+tegn();
+document.getElementById("spill").onclick = tegn;
+
+const b = document.body;
+function oppdater() {
+  document.querySelectorAll(".gruppe").forEach(g => g.querySelectorAll("button").forEach(k => k.setAttribute("aria-pressed", k.dataset.v === b.dataset[g.dataset.felt])));
+}
+document.querySelectorAll(".gruppe").forEach(g => g.addEventListener("click", e => {
+  const k = e.target.closest("button"); if (!k) return;
+  b.dataset[g.dataset.felt] = k.dataset.v; oppdater();
+}));
+oppdater();
+</script>
+</body>
+</html>

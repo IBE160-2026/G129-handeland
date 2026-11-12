@@ -1,0 +1,24 @@
+/* Tenkeindikatoren: øynene leser fram og tilbake så lenge Buddy tenker («tenker»),
+   og når svaret er klart avslutter den («slutt», 4,3 s):
+   blunk 0–0,2 s · pupillene blir til 0,8 s og tones ut til 1,2 s · 700 ms ro ·
+   rotasjon 1,9–3,1 s, stengene trekkes inn samtidig · ryggen tegnes 3,0–3,9 s */
+.merke.tenker .oyne{animation:t-les 1.6s ease-in-out infinite}
+@keyframes t-les{0%,100%{transform:translateX(-7px)}45%{transform:translateX(7px)}50%{transform:translateX(7px)}95%{transform:translateX(-7px)}}
+.merke.slutt .flytt{animation:s-flytt 4.3s cubic-bezier(.65,0,.3,1) forwards}
+.merke.slutt .snu{animation:s-snu 4.3s cubic-bezier(.65,0,.3,1) forwards}
+.merke.slutt .oye{animation:s-blunk 4.3s linear forwards}
+.merke.slutt .stenger path{animation:s-stenger 4.3s cubic-bezier(.65,0,.3,1) forwards}
+.merke.slutt .stang{animation:s-stang 4.3s ease forwards}
+@keyframes s-blunk{0%{transform:scaleY(1);opacity:1}2.5%{transform:scaleY(.1)}5%,19%{transform:scaleY(1);opacity:1}28%,100%{opacity:0;transform:scale(.2)}}
+@keyframes s-snu{0%,44%{transform:rotate(0)}72%,100%{transform:rotate(-90deg)}}
+@keyframes s-flytt{0%,44%{transform:translate(0,4px)}72%,100%{transform:translate(-16px,20px)}}
+@keyframes s-stenger{0%,44%{transform:scale(1);opacity:1}68%{transform:scale(.2);opacity:.3}72%,100%{transform:scale(0);opacity:0}}
+@keyframes s-stang{0%,70%{stroke-dashoffset:96}91%,100%{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){
+  /* Uten bevegelse: øynene står stille mens det tenkes (statusteksten bærer beskjeden), og slutten vises som B. */
+  .merke.tenker .oyne{animation:none}
+  .merke.slutt .flytt{animation:none;transform:translate(-16px,20px)}
+  .merke.slutt .snu{animation:none;transform:rotate(-90deg)}
+  .merke.slutt .oye,.merke.slutt .stenger path{animation:none;opacity:0}
+  .merke.slutt .stang{animation:none;stroke-dashoffset:0}
+}

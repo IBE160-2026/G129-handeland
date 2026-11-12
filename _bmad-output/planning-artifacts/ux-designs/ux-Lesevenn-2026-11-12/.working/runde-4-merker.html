@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeseBuddy – runde 4</title>
+<!-- Unntak fra «ingen nettverk»: skrift må ses i ekte skrift for å kunne velges. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Gloock&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Pop – lys, rosahvit: bg #FFF5F7, flate #FFFFFF, kant #F5DDE5, tekst #141A3A, dempet #5A5670, primaer #2A45E8, aksent #FF4D9D, markering #FFE0EE */
+[data-modus="lys"]{--bg:#FFF5F7;--flate:#FFFFFF;--kant:#F5DDE5;--tekst:#141A3A;--dempet:#5A5670;--primaer:#2A45E8;--paaPrimaer:#FFFFFF;--aksent:#FF4D9D;--paaAksent:#141A3A;--markering:#FFE0EE}
+/* Pop – mørk: bg #0F1226, flate #1A1E3A, kant #2C3158, tekst #EEF0FF, dempet #A9AFD3, primaer #8FA0FF, aksent #FF7AB6, markering #4A1F3A */
+[data-modus="moerk"]{--bg:#0F1226;--flate:#1A1E3A;--kant:#2C3158;--tekst:#EEF0FF;--dempet:#A9AFD3;--primaer:#8FA0FF;--paaPrimaer:#0F1226;--aksent:#FF7AB6;--paaAksent:#141A3A;--markering:#4A1F3A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tekst);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.55}
+.bryter{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;padding:10px 16px;background:var(--flate);border-bottom:1px solid var(--kant);font-size:14px}
+.bryter button{font:inherit;padding:6px 11px;border-radius:999px;border:1px solid var(--kant);background:var(--bg);color:var(--tekst);cursor:pointer}
+.bryter button[aria-pressed=true]{outline:2px solid var(--primaer);outline-offset:1px;font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:20px}
+.kort{background:var(--flate);border:1px solid var(--kant);border-radius:20px;padding:22px}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--dempet);margin:0 0 14px;font-weight:700}
+.gloock{font-family:"Gloock",Georgia,serif;font-weight:400}
+.instr{font-family:"Instrument Serif",Georgia,serif;-webkit-text-stroke:.022em currentColor}
+.knapp{font:inherit;font-weight:700;padding:10px 16px;border-radius:14px;border:0;background:var(--primaer);color:var(--paaPrimaer);cursor:pointer}
+.anim{display:flex;flex-wrap:wrap;gap:28px;align-items:center}
+.scene{width:220px;height:220px;border-radius:28px;background:var(--bg);border:1px solid var(--kant);display:grid;place-items:center}
+.scene svg{width:190px;height:190px}
+.dempet{color:var(--dempet)}
+.konsepter{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.konsept{border:1px solid var(--kant);border-radius:18px;padding:18px;background:var(--bg)}
+.konsept h3{margin:0 0 4px;font-family:"Instrument Serif",Georgia,serif;-webkit-text-stroke:.022em currentColor;font-weight:400;font-size:26px}
+.konsept p{margin:0 0 14px;color:var(--dempet);font-size:15px}
+.rad{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.stor{width:110px;height:110px}
+.flis{width:64px;height:64px;border-radius:16px;background:var(--primaer);display:grid;place-items:center;overflow:hidden}
+.flis svg{width:52px;height:52px}
+.fav{width:16px;height:16px}
+.fav32{width:32px;height:32px}
+.lockup{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:32px;line-height:1}
+.lockup svg{width:1.25em;height:1.25em}
+.lockup.liten{font-size:20px;margin-top:8px}
+.lockup .ord-a{font-weight:700;letter-spacing:-.02em}
+.lockup .ord-b{font-family:"Gloock",Georgia,serif}
+.merk{font-size:13px;color:var(--dempet);margin:8px 0 0}
+
+/* ——— Animasjonen, utkast 3 (5,8 s) ——— */
+.ramme{stroke:var(--primaer);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.glass{fill:var(--markering)}
+.oye{fill:var(--tekst)}
+.snu{transform-origin:60px 48px;transform-box:view-box}
+.oye{transform-origin:center;transform-box:fill-box}
+.stenger path{transform-box:view-box}
+.stenger .v{transform-origin:17px 48px}.stenger .h{transform-origin:103px 48px}
+.flytt{transform:translate(0,12px)}
+.stang{stroke-dasharray:88;stroke-dashoffset:88}
+.spill .flytt{animation:flytt 5.8s cubic-bezier(.65,0,.3,1) forwards}
+.spill .snu{animation:snu 5.8s cubic-bezier(.65,0,.3,1) forwards}
+.spill .oyne{animation:les 5.8s ease-in-out forwards}
+.spill .oye{animation:blunk 5.8s linear forwards}
+.spill .stenger path{animation:stenger 5.8s cubic-bezier(.65,0,.3,1) forwards}
+.spill .stang{animation:stang 5.8s ease forwards}
+/* lesing 0–1,9 s · blunk 2,3 s · øynene borte 2,7 s · pause · rotasjon 3,7–4,9 s · stenger trekkes inn under rotasjonen · ryggen 4,7–5,5 s */
+@keyframes les{0%,4%{transform:translateX(-8px)}16%{transform:translateX(8px)}18%{transform:translateX(-8px)}30%{transform:translateX(8px)}36%,100%{transform:translateX(0)}}
+@keyframes blunk{0%,38%{transform:scaleY(1);opacity:1}40%{transform:scaleY(.1)}43%{transform:scaleY(1);opacity:1}47%,100%{opacity:0;transform:scale(.2)}}
+@keyframes snu{0%,63%{transform:rotate(0)}85%,100%{transform:rotate(-90deg)}}
+@keyframes flytt{0%,63%{transform:translate(0,12px)}85%,100%{transform:translate(-12px,12px)}}
+@keyframes stenger{0%,63%{transform:scale(1);opacity:1}80%{transform:scale(.25);opacity:.35}85%,100%{transform:scale(0);opacity:0}}
+@keyframes stang{0%,81%{stroke-dashoffset:88}95%,100%{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){
+  .spill .snu{animation:none;transform:rotate(-90deg)}
+  .spill .flytt{animation:none;transform:translate(-12px,12px)}
+  .spill .oye,.spill .stenger path{animation:none;opacity:0}
+  .spill .stang{animation:none;stroke-dashoffset:0}
+  .spill .oyne{animation:none}
+}
+</style>
+</head>
+<body data-modus="lys">
+<div class="bryter" role="toolbar" aria-label="Modus">
+  <button type="button" data-v="lys" aria-pressed="true">Lys</button><button type="button" data-v="moerk" aria-pressed="false">Mørk</button>
+</div>
+<main>
+
+<section class="kort">
+  <h2>Animasjonen – utkast 3</h2>
+  <div class="anim">
+    <div class="scene" id="scene"></div>
+    <div>
+      <p class="dempet" style="max-width:52ch;margin-top:0">Lengre pause etter blunket (om lag ett sekund med tomme briller). Stengene trekkes inn mot glassene og tones ut <em>mens</em> brillene vipper, så fjerningen glir inn i rotasjonen.</p>
+      <button class="knapp" type="button" id="spill">Spill av igjen</button>
+    </div>
+  </div>
+</section>
+
+<section class="kort">
+  <h2>Overskrifter i to lag</h2>
+  <p class="gloock" style="font-size:44px;line-height:1.05;margin:0 0 8px">Les tekstene selv. Buddy hjelper deg med å forstå dem.</p>
+  <p class="dempet" style="margin:0 0 18px">Gloock: landingssiden og andre store blikkfang.</p>
+  <p class="instr" style="font-size:30px;line-height:1.1;margin:0 0 8px">Celledeling</p>
+  <p class="dempet" style="margin:0">Instrument Serif (tykkere): sideoverskrifter inne i appen, som tittelen på en tekst eller «Quiz».</p>
+</section>
+
+<section class="kort">
+  <h2>Merket – seks retninger</h2>
+  <div class="konsepter" id="konsepter"></div>
+  <p class="merk">Hver retning vises stor, som app-ikon, som favicon i 32 og 16 piksler og sammen med navnet. Ordmerket står i Gloock og i fet Atkinson.</p>
+</section>
+</main>
+
+<script>
+// ——— Animasjonen ———
+const FIGUR = `
+  <g class="flytt">
+    <g class="snu">
+      <path class="glass" d="M17 48 H57 A20 24 0 0 1 17 48 Z"/>
+      <path class="glass" d="M63 48 H103 A20 24 0 0 1 63 48 Z"/>
+      <g class="oyne"><circle class="oye" cx="37" cy="59" r="5.5"/><circle class="oye" cx="83" cy="59" r="5.5"/></g>
+      <path class="ramme" d="M17 48 H57 A20 24 0 0 1 17 48 Z"/>
+      <path class="ramme" d="M63 48 H103 A20 24 0 0 1 63 48 Z"/>
+      <path class="ramme" d="M57 48 Q60 43 63 48"/>
+      <g class="stenger"><path class="ramme v" d="M17 48 L6 40"/><path class="ramme h" d="M103 48 L114 40"/></g>
+    </g>
+    <path class="ramme stang" d="M60 4 V92"/>
+  </g>`;
+const scene = document.getElementById("scene");
+function spill(){ scene.innerHTML = `<svg viewBox="0 0 120 120" class="spill" aria-hidden="true">${FIGUR}</svg>`; }
+document.getElementById("spill").onclick = spill;
+spill();
+
+// ——— Merkene. Alle i viewBox 0 0 120 120; farger fra variablene, så de følger modus. ———
+// Felles B-geometri fra animasjonens sluttbilde: rygg x=48 (y 16–104), øvre bue y 17–57, nedre y 63–103, dybde 24.
+const P = "var(--primaer)", A = "var(--aksent)", M = "var(--markering)", T = "var(--tekst)", F = "var(--flate)";
+const strekB = (s, fyll) => `
+  <path d="M48 17 A24 20 0 0 1 48 57 Z" fill="${fyll}"/><path d="M48 63 A24 20 0 0 1 48 103 Z" fill="${fyll}"/>
+  <g fill="none" stroke="${s}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 16 V104"/><path d="M48 17 A24 20 0 0 1 48 57"/><path d="M48 63 A24 20 0 0 1 48 103"/><path d="M48 57 Q53 60 48 63"/></g>`;
+
+const konsepter = [
+  { navn: "1 · Massiv B", tekst: "Animasjonens B med tykk strek og fylte buer i aksentfarge. Enklest og mest gjenkjennelig i små størrelser, men brillene er borte i stillbildet.",
+    tegn: (s = P, f = A) => strekB(s, f) },
+  { navn: "2 · B med blikk", tekst: "Øynene blir med inn i B-en: de ligger i buene og ser fremover i teksten. Brillene og figuren lever videre i stillbildet, omtrent som øynene til Duo.",
+    tegn: (s = P, f = M) => strekB(s, f) + `<circle cx="60" cy="40" r="6" fill="${T}"/><circle cx="60" cy="86" r="6" fill="${T}"/>` },
+  { flisFyll: A, navn: "3 · Utskåret B", tekst: "En massiv bokstav der de to hullene er halvmåneglassene. Brillene sitter i det negative rommet: tydelig B på avstand, briller når du ser etter. Mest «logo».",
+    tegn: (s = P, f = F) => `
+      <path fill="${s}" d="M30 14 Q30 10 34 10 H62 A26 24 0 0 1 62 58 A28 26 0 0 1 64 110 H34 Q30 110 30 106 Z"/>
+      <path fill="${f}" d="M50 22 A15 13 0 0 1 50 48 Z"/><path fill="${f}" d="M50 70 A17 14 0 0 1 50 98 Z"/>` },
+  { flisFyll: A, navn: "4 · Utskåret B med øyne", tekst: "Som 3, men med pupiller i glassene. Bokstaven blir et ansikt. Mer personlighet, og fungerer som Buddys «avatar» i samtalen.",
+    tegn: (s = P, f = F) => `
+      <path fill="${s}" d="M30 14 Q30 10 34 10 H62 A26 24 0 0 1 62 58 A28 26 0 0 1 64 110 H34 Q30 110 30 106 Z"/>
+      <path fill="${f}" d="M50 22 A15 13 0 0 1 50 48 Z"/><path fill="${f}" d="M50 70 A17 14 0 0 1 50 98 Z"/>
+      <circle cx="56" cy="38" r="5" fill="${T}"/><circle cx="57" cy="87" r="5" fill="${T}"/>` },
+  { navn: "5 · Buddy-ansiktet", tekst: "Merket er brillene med øynene, altså startbildet i animasjonen. B-en lever bare i navnet. Mest figur, minst bokstav, og gir mest frihet til å la Buddy uttrykke ting (blunke, se opp, tenke).",
+    tegn: (s = P, f = M) => `
+      <g transform="translate(0,14)"><path fill="${f}" d="M17 48 H57 A20 24 0 0 1 17 48 Z"/><path fill="${f}" d="M63 48 H103 A20 24 0 0 1 63 48 Z"/>
+      <circle cx="41" cy="58" r="6" fill="${T}"/><circle cx="87" cy="58" r="6" fill="${T}"/>
+      <g fill="none" stroke="${s}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 48 H57 A20 24 0 0 1 17 48 Z"/><path d="M63 48 H103 A20 24 0 0 1 63 48 Z"/><path d="M57 48 Q60 42 63 48"/><path d="M17 48 L7 41"/><path d="M103 48 L113 41"/></g></g>` },
+  { navn: "6 · B i snakkeboble", tekst: "B-en med blikk inne i en rund boble med hale. Sier «Buddy snakker»: passer i fagsamtalen, i varsler og når Buddy tenker. Kan bli vel travel som favicon.",
+    tegn: (s = P, f = M) => `
+      <path fill="${A}" d="M60 6 A54 54 0 1 1 30 105 L10 114 L18 94 A54 54 0 0 1 60 6 Z"/>
+      <g transform="translate(14,10) scale(.82)">${strekB(s, F)}<circle cx="60" cy="40" r="6" fill="${T}"/><circle cx="60" cy="86" r="6" fill="${T}"/></g>` },
+];
+
+const svg = (inn, klasse = "", stil = "") => `<svg viewBox="0 0 120 120" class="${klasse}" style="${stil}" aria-hidden="true">${inn}</svg>`;
+document.getElementById("konsepter").innerHTML = konsepter.map(k => `
+  <article class="konsept">
+    <h3>${k.navn}</h3><p>${k.tekst}</p>
+    <div class="rad">
+      ${svg(k.tegn(), "stor")}
+      <div class="flis">${svg(k.tegn("#fff", k.flisFyll ?? "rgba(255,255,255,.3)"), "", "--tekst:#141A3A;--flate:var(--primaer);--markering:rgba(255,255,255,.3)")}</div>
+      ${svg(k.tegn(), "fav32")}${svg(k.tegn(), "fav")}
+    </div>
+    <div class="lockup">${svg(k.tegn())}<span class="ord-b">LeseBuddy</span></div>
+    <div class="lockup liten">${svg(k.tegn())}<span class="ord-a">LeseBuddy</span></div>
+  </article>`).join("");
+
+document.querySelector(".bryter").addEventListener("click", e => {
+  const k = e.target.closest("button"); if (!k) return;
+  document.body.dataset.modus = k.dataset.v;
+  document.querySelectorAll(".bryter button").forEach(x => x.setAttribute("aria-pressed", x === k));
+});
+</script>
+</body>
+</html>

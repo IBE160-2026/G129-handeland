@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeseBuddy – ordmerke og tenkeindikator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Gloock&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="merke.css">
+<link rel="stylesheet" href="merke-tenker.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tekst);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.5;transition:background .3s,color .3s}
+.bryter{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;padding:10px 16px;background:var(--flate);border-bottom:1px solid var(--kant);font-size:14px}
+.bryter button{font:inherit;padding:6px 11px;border-radius:999px;border:1px solid var(--kant);background:var(--bg);color:var(--tekst);cursor:pointer}
+.bryter button[aria-pressed=true]{outline:2px solid var(--primaer);outline-offset:1px;font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:20px}
+.kort{background:var(--flate);border:1px solid var(--kant);border-radius:20px;padding:22px}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--dempet);margin:0 0 14px;font-weight:700}
+.dempet{color:var(--dempet)}
+.knapp{font:inherit;font-weight:700;padding:10px 16px;border-radius:14px;border:2px solid var(--primaer);background:var(--primaer);color:var(--paaPrimaer);cursor:pointer}
+.knapp.sek{background:transparent;color:var(--primaer)}
+
+/* Tenkeindikator */
+.tenk{display:flex;flex-wrap:wrap;gap:24px;align-items:center}
+.boks{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:18px;background:var(--bg);border:1px solid var(--kant);min-width:300px}
+.boks svg{width:64px;height:64px}
+.boks .status{font-weight:700}
+.boks .status small{display:block;font-weight:400;color:var(--dempet)}
+
+/* Ordmerkene */
+.merker{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.forslag{border:1px solid var(--kant);border-radius:18px;padding:20px;background:var(--bg);display:flex;flex-direction:column;gap:14px}
+.forslag h3{margin:0;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:26px;line-height:1.1}
+.forslag p{margin:0;color:var(--dempet);font-size:15px}
+.stort{font-size:46px}
+.topplinje{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:14px;background:var(--flate);border:1px solid var(--kant);font-size:24px}
+.topplinje .meny{font-size:14px;color:var(--dempet);font-family:"Atkinson Hyperlegible",sans-serif}
+
+.om{display:inline-flex;align-items:center;line-height:1;white-space:nowrap}
+.om svg{width:1.3em;height:1.3em;margin-right:.12em}
+.g{font-family:"Gloock",Georgia,serif}
+.fio{color:var(--primaer)}
+.tusj{position:relative;isolation:isolate}
+.tusj::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.05em;height:.3em;background:var(--aksent);border-radius:.2em;z-index:-1;transform:rotate(-1.5deg)}
+.bInn svg{height:.74em;width:auto;margin:0 .01em;transform:translateY(.005em)}
+.dd{position:relative;display:inline-block}
+.dd .briller{position:absolute;pointer-events:none}
+.stablet{display:inline-flex;flex-direction:column;line-height:.9}
+.stablet .over{font-family:"Atkinson Hyperlegible",sans-serif;font-weight:700;font-size:.3em;letter-spacing:.34em;text-transform:uppercase;color:var(--dempet);margin-left:.15em}
+</style>
+</head>
+<body data-modus="lys">
+<div class="bryter" role="toolbar" aria-label="Modus">
+  <button type="button" data-v="lys" aria-pressed="true">Lys</button><button type="button" data-v="moerk" aria-pressed="false">Mørk</button>
+</div>
+<main>
+
+<section class="kort">
+  <h2>Animasjonen som tenkeindikator</h2>
+  <p class="dempet" style="margin-top:0;max-width:70ch">Så lenge Buddy tenker, leser øynene fram og tilbake. Når svaret er klart, blunker Buddy, pupillene forsvinner, det blir 700 ms ro, og brillene vipper til en B. Teksten ved siden av forteller hva som skjer, slik PRD-en krever ved ventetid over to sekunder.</p>
+  <div class="tenk">
+    <div class="boks" id="boks"><span id="tenkemerke"></span><span class="status" id="status" aria-live="polite">Buddy lager quizen din …<small>Det tar som regel 10–20 sekunder.</small></span></div>
+    <div>
+      <button class="knapp" type="button" id="ferdig">Svaret er klart</button>
+      <button class="knapp sek" type="button" id="igjen">Start på nytt</button>
+    </div>
+  </div>
+</section>
+
+<section class="kort">
+  <h2>Ordmerket – seks forslag med de valgte brillene</h2>
+  <div class="merker" id="merker"></div>
+</section>
+</main>
+
+<script src="merke.js"></script>
+<script>
+// Tenkeindikator
+const boks = document.getElementById("tenkemerke"), status = document.getElementById("status");
+function start() {
+  document.getElementById("boks").querySelector("svg")?.remove();
+  boks.outerHTML = `<span id="tenkemerke">${MERKE.svg("tenker")}</span>`;
+  document.getElementById("tenkemerke").outerHTML = MERKE.svg("tenker");
+  status.innerHTML = 'Buddy lager quizen din …<small>Det tar som regel 10–20 sekunder.</small>';
+}
+document.getElementById("boks").insertAdjacentHTML("afterbegin", MERKE.svg("tenker"));
+document.getElementById("tenkemerke").remove();
+document.getElementById("ferdig").onclick = () => {
+  const s = document.querySelector("#boks svg"); s.classList.remove("tenker"); s.classList.add("slutt");
+  status.innerHTML = 'Quizen er klar!<small>8 spørsmål om Celledeling.</small>';
+};
+document.getElementById("igjen").onclick = () => {
+  document.querySelector("#boks svg").remove();
+  document.getElementById("boks").insertAdjacentHTML("afterbegin", MERKE.svg("tenker"));
+  status.innerHTML = 'Buddy lager quizen din …<small>Det tar som regel 10–20 sekunder.</small>';
+};
+
+// Ordmerkene
+const B = () => MERKE.svg("ferdig");
+const BRILLER = () => MERKE.svg("", "", true);
+const BOKSTAV_B = () => MERKE.svg("ferdig").replace('viewBox="-4 -4 128 128"', 'viewBox="36 10 42 104"');
+const BRILLER_DD = () => MERKE.svg("", "", false).replace('viewBox="-4 -4 128 128"', 'viewBox="0 30 120 50"').replace('class="merke ', 'class="merke briller ');
+
+const FORSLAG = [
+  { navn: "1 · B-merket + navnet", tekst: "Det vi har brukt i utkastene: B-en som symbol og «LeseBuddy» i Gloock. Rolig og ryddig; symbolet og navnet gjør hver sin jobb.",
+    ord: () => `<span class="om g">${B()}LeseBuddy</span>` },
+  { navn: "2 · Buddy-ansiktet + navnet", tekst: "Brillene med øyne foran navnet. Figuren er hovedperson, og den samme tegningen som tenker i appen. B-en dukker opp når Buddy er ferdig.",
+    ord: () => `<span class="om g">${BRILLER()}LeseBuddy</span>` },
+  { navn: "3 · Brillene på «dd»", tekst: "Buddy har brillene på seg i selve ordet: brillene sitter over de to d-ene, og buene i d-ene blir øynene. Ingen egen figur foran.",
+    ord: () => `<span class="om g">Lese<span>Bu</span><span class="dd">dd<span class="plass"></span></span><span>y</span></span>` },
+  { navn: "4 · B-en inne i ordet", tekst: "B-merket står i stedet for B-en i «Buddy». Kort og eget, men B-en må være tydelig nok til at ordet leses riktig.",
+    ord: () => `<span class="om g">Lese<span class="bInn">${BOKSTAV_B()}</span>uddy</span>` },
+  { navn: "5 · Fiolett «Buddy» med tusj", tekst: "Bare skrift: «Lese» i tekstfarge, «Buddy» i fiolett med rosa tusj under, som et markert fagord. B-merket brukes for seg selv som ikon.",
+    ord: () => `<span class="om g">Lese<span class="fio tusj">Buddy</span></span>` },
+  { navn: "6 · Stablet", tekst: "«Lese» som et lite fornavn over «Buddy», med brillene foran. Gir et kompakt merke til app-ikon og forside, men er for høyt til topplinjen.",
+    ord: () => `<span class="om">${BRILLER()}<span class="stablet"><span class="over">lese</span><span class="g">Buddy</span></span></span>` },
+];
+
+document.getElementById("merker").innerHTML = FORSLAG.map((f, i) => `
+  <article class="forslag">
+    <h3>${f.navn}</h3><p>${f.tekst}</p>
+    <div class="stort" data-i="${i}">${f.ord()}</div>
+    <div class="topplinje"><span data-i="${i}">${f.ord()}</span><span class="meny">Arbeidsbord · Samlingen</span></div>
+  </article>`).join("");
+
+// Forslag 3: legg brillene over «dd», målt mot skriften når den er lastet.
+function plasserBriller() {
+  document.querySelectorAll(".dd").forEach(dd => {
+    dd.querySelector(".briller")?.remove();
+    const fs = parseFloat(getComputedStyle(dd).fontSize);
+    const bredde = dd.getBoundingClientRect().width;
+    dd.insertAdjacentHTML("beforeend", BRILLER_DD());
+    const s = dd.querySelector(".briller");
+    const w = bredde * 1.02;
+    s.style.width = w + "px";
+    s.style.height = (w * 50 / 120) + "px";
+    s.style.left = (-fs * 0.07) + "px";
+    s.style.top = (fs * 0.33) + "px";
+    s.style.setProperty("--markering", "transparent");
+  });
+}
+document.fonts.ready.then(plasserBriller);
+
+document.querySelector(".bryter").addEventListener("click", e => {
+  const k = e.target.closest("button"); if (!k) return;
+  document.body.dataset.modus = k.dataset.v;
+  document.querySelectorAll(".bryter button").forEach(x => x.setAttribute("aria-pressed", x === k));
+});
+</script>
+</body>
+</html>
