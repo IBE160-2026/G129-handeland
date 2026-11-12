@@ -3,19 +3,21 @@
 /**
  * Gjennomgang av Øvekort — FR-16, FR-17.
  *
- * Forsiden viser Faguttrykket, baksiden forklaringen og Kildeavsnittet.
+ * Forsiden viser Faguttrykket, baksiden forklaringen. Kildeavsnittet ligger
+ * i en utfellbar del under kortet (FR-16, endret 11.11).
  * Eleven kan snu, gå fram og tilbake, og merke «kan» eller «må øve mer».
  * Merkingen lagres med en gang, så en ny økt starter der forrige sluttet:
  * på første kort i runden som ikke er merket.
  *
- * Alt er knapper, så runden kan tas med tastatur alene (§5).
+ * Kort, merking og den utfellbare kilden er knapper eller summary-elementer,
+ * så runden kan tas med tastatur alene (§5).
  */
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Merking, Oevekort as Kort } from "../../data/oevekort";
 import { merkKort } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
+import { Kildeavsnitt } from "./Kildeavsnitt";
 
 type Modus = "alle" | "maa_oeve";
 
@@ -144,21 +146,22 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
                 {gjeldende.uttrykk}
               </p>
               <p className="mt-2 text-lg">{gjeldende.forklaring}</p>
-              <p className="mt-4 text-sm font-medium">Fra teksten:</p>
-              <blockquote className="mt-1 border-l-4 border-slate-300 pl-4 text-slate-700 dark:border-slate-600 dark:text-slate-300">
-                {gjeldende.kildeavsnitt.innhold}
-              </blockquote>
             </div>
           )}
         </div>
       </button>
+      {/*
+        FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
+        kortet, ikke på baksiden (telefontest 9.11: kortet ble tungt å lese).
+        Den står under kortet fordi kortet selv er en knapp, og en knapp kan
+        ikke inneholde en annen interaktiv del. Den forsvinner når kortet snus
+        tilbake eller eleven går til et annet kort, så den er alltid lukket
+        på et nytt kort.
+      */}
       {snudd && (
-        <Link
-          href={`/tekst/${tekstId}/lesing#avsnitt-${gjeldende.kildeavsnitt.nummer}`}
-          className="mt-2 inline-block text-sm underline underline-offset-4"
-        >
-          Se avsnittet i teksten
-        </Link>
+        <div className="mt-3">
+          <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
+        </div>
       )}
 
       {feil && <Feilmelding {...feil} />}

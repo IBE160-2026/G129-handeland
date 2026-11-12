@@ -20,11 +20,11 @@
  * kommer fra serveren først når quizen er levert.
  */
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { leverQuiz, vurderKortsvar, type Leveringssvar } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
+import { Kildeavsnitt } from "./Kildeavsnitt";
 
 /** Det nettleseren får vite om et spørsmål før levering. Ingen fasit. */
 export type SporsmalForElev = {
@@ -313,38 +313,5 @@ export function Quiz({
         )}
       </div>
     </div>
-  );
-}
-
-/**
- * Kildeavsnittet, lukket til eleven trykker (telefontest 9.11: åpne avsnitt
- * under hvert feil svar gjorde resultatet uoversiktlig).
- */
-function Kildeavsnitt({
-  tekstId,
-  nummer,
-  innhold,
-}: {
-  tekstId: string;
-  nummer: number;
-  innhold: string;
-}) {
-  return (
-    <details>
-      <summary className="cursor-pointer text-sm font-medium underline underline-offset-4 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900">
-        Se hvor det står i teksten
-      </summary>
-      <div className="mt-2 rounded-md bg-slate-50 p-4 dark:bg-slate-900">
-        <blockquote className="border-l-4 border-slate-300 pl-4 text-slate-700 dark:border-slate-600 dark:text-slate-300">
-          {innhold}
-        </blockquote>
-        <Link
-          href={`/tekst/${tekstId}/lesing#avsnitt-${nummer}`}
-          className="mt-2 inline-block text-sm underline underline-offset-4"
-        >
-          Les avsnittet i teksten
-        </Link>
-      </div>
-    </details>
   );
 }

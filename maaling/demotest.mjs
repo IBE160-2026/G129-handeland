@@ -249,9 +249,20 @@ async function loeype(s, { mobil, eksempel, brod }) {
 
   // Steg 7: øvekort, merk to.
   await s.goto(`${tekstUrl}/oevekort`);
-  await trykk(s.locator('button:has-text("Kan")'));
-  await trykk(s.locator('button:has-text("Neste →")'));
-  await trykk(s.locator('button:has-text("Må øve mer")'));
+  // FR-16 (endret 11.11): baksiden viser forklaringen; kildeavsnittet ligger
+  // lukket bak «Se hvor det står i teksten» til eleven trykker.
+  await trykk(s.locator('button:has-text("Trykk for å snu")'));
+  sjekk(`${p}7`, "baksiden viser forklaringen uten kildeavsnittet", (await s.locator("button[aria-pressed=true] blockquote").count()) === 0);
+  const kilde = s.locator("details:has(summary:has-text('Se hvor det står i teksten'))");
+  await kilde.waitFor({ timeout: 5000 });
+  sjekk(`${p}7`, "kildeavsnittet på øvekortet er lukket til eleven trykker", !(await kilde.evaluate((d) => d.open)));
+  await trykk(kilde.locator("summary"));
+  sjekk(`${p}7`, "kildeavsnittet folder seg ut", await kilde.evaluate((d) => d.open) && (await kilde.locator("blockquote").isVisible()));
+  // Eksakt navn: når kortet er snudd, står forklaringen på kortknappen, og den
+  // kan inneholde ordet «kan».
+  await trykk(s.getByRole("button", { name: "Kan", exact: true }));
+  await trykk(s.getByRole("button", { name: "Neste →", exact: true }));
+  await trykk(s.getByRole("button", { name: "Må øve mer", exact: true }));
   await s.waitForTimeout(1500);
   await s.goto(`${tekstUrl}/oppgaver`);
   // Synlig tekst, ikke kildekoden: React setter kommentarer mellom tekst og tall i HTML-en.
