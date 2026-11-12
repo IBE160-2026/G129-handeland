@@ -227,12 +227,18 @@ try {
 
   /* --- FR-12 ------------------------------------------------------- */
   const storrelse = () => pc.locator("#lesetekst").evaluate((el) => getComputedStyle(el).fontSize);
+  // Forventningen leses fra trinnene i koden, ikke hardkodet: «Ekstra stor» ble
+  // endret fra 1,625 til 2 rem 10.11, og et fast «26px» ble da stående feil.
+  const ekstraRem = Number(
+    (await readFile("tekst/leseinnstillinger.ts", "utf8")).match(/ekstra:\s*\{[^}]*rem:\s*([\d.]+)/)[1],
+  );
+  const ekstraPx = `${ekstraRem * 16}px`;
   await pc.click("summary:has-text('Leseinnstillinger')");
   await pc.click("label:has-text('Ekstra stor')");
-  sjekk("FR-12: tekststørrelsen endres med en gang", (await storrelse()) === "26px", await storrelse());
+  sjekk("FR-12: tekststørrelsen endres med en gang", (await storrelse()) === ekstraPx, await storrelse());
   await pc.waitForTimeout(1500);
   await pc.reload();
-  sjekk("FR-12: tekststørrelsen huskes", (await storrelse()) === "26px", await storrelse());
+  sjekk("FR-12: tekststørrelsen huskes", (await storrelse()) === ekstraPx, await storrelse());
   const tegnPerLinje = await pc.locator("#lesetekst").evaluate((el) => {
     const p = el.querySelector("p");
     const ch = document.createElement("span");

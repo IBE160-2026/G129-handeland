@@ -9,9 +9,10 @@
  * overskriftskontroll, aktivering (innlimt tekst låses der, FR-3),
  * lesevisning og quiz med selvvurdering i resultatet (FR-15).
  *
- * Ett avvik fra README, som rapporteres: PGlite startes på en annen port enn
- * 5433, fordi utviklerens egen lokale database bruker den. Alt annet er
- * README-stegene som de står.
+ * To avvik fra README, som rapporteres: PGlite startes på en annen port enn
+ * 5433, fordi utviklerens egen lokale database bruker den; og appen kjøres på
+ * en annen port enn 3000 (PORT og BETTER_AUTH_URL), fordi VS Code lytter på
+ * 3000 på utviklerens maskin. Alt annet er README-stegene som de står.
  *
  * Rapporten skrives til maaling/resultater/readme-<dato>.md.
  */
@@ -24,7 +25,10 @@ import { chromium } from "playwright-core";
 
 const REPO = process.cwd();
 const DBPORT = 5439;
-const APP = "http://localhost:3000";
+// Ikke 3000: på utviklerens maskin lytter VS Code der, og da valgte
+// npm run dev en annen port mens testen ventet på 3000 (11.11 og 12.11).
+const APPPORT = 3210;
+const APP = `http://localhost:${APPPORT}`;
 const EPOST = "readme@test.no";
 const PASSORD = "et-langt-passord";
 
@@ -85,6 +89,8 @@ try {
   // README, «Uten Docker»: sett DATABASE_URL til PGlite. Porten er det ene avviket.
   let lokal = await readFile(path.join(mappe, ".env.local"), "utf8");
   lokal = lokal.replace(/^DATABASE_URL=.*$/m, `DATABASE_URL=postgres://postgres:postgres@127.0.0.1:${DBPORT}/postgres`);
+  // Innloggingen må vite hvilken adresse appen faktisk har.
+  lokal = lokal.replace(/^BETTER_AUTH_URL=.*$/m, `BETTER_AUTH_URL=${APP}`);
   await writeFile(path.join(mappe, ".env.local"), lokal);
 
   start("npx", ["pglite-server", `--port=${DBPORT}`, "--max-connections=20"], mappe);
@@ -95,7 +101,7 @@ try {
   }, "migrasjonene", 60000);
   sjekk("npm run db:migrer", true);
 
-  start("npm", ["run", "dev"], mappe);
+  start("npm", ["run", "dev", "--", "--port", String(APPPORT)], mappe);
   await vent(async () => (await fetch(`${APP}/api/helse`)).ok, "npm run dev");
   sjekk("npm run dev svarer", true);
 
@@ -165,7 +171,7 @@ const linjer = [
   "",
   `Commit \`${commit}\`, klonet til en tom mappe uten \`.env.local\` og uten prosjektets nøkler (alle ANTHROPIC-, DATABASE-, NEON-, VERCEL- og BETTER_AUTH-variabler fjernet fra miljøet). Fulgt: «Komme i gang», veien «Uten Docker». Kjerneløypen gått gjennom i Chrome.`,
   "",
-  `**Avvik fra README:** PGlite på port ${DBPORT} i stedet for 5433, fordi utviklerens lokale database bruker 5433. Ingen andre.`,
+  `**Avvik fra README:** PGlite på port ${DBPORT} i stedet for 5433, fordi utviklerens lokale database bruker 5433; appen på port ${APPPORT} i stedet for 3000 (med BETTER_AUTH_URL tilsvarende), fordi VS Code lytter på 3000. Ingen andre.`,
   "",
   `**${ok} av ${funn.length} steg bestått.**`,
   "",
