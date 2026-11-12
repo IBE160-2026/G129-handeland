@@ -13,7 +13,8 @@
  * eleven ikke sender to ganger og betaler for to kall.
  */
 
-import { useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
@@ -144,21 +145,65 @@ export function GjennomsynSkjema({
 
 /* ------------------------------------------------------------------ */
 
-/** FR-13: lager Quizen første gang. Modellkallet tar noen sekunder (§5). */
-export function LagQuizSkjema({
+/**
+ * FR-13 (endret 11.11): Quizen lages av seg selv første gang siden åpnes —
+ * eleven skal ikke måtte trykke for at den skal finnes (telefontest 9.11).
+ * Samme mønster som `HentOversettelse`: handlingen kjøres én gang etter at
+ * siden er tegnet, ventetiden vises (§5), og en feil gir «Prøv igjen».
+ */
+export function LagQuizAutomatisk({
   handling,
 }: {
-  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+  handling: () => Promise<Handlingssvar>;
 }) {
-  const [svar, send] = useActionState(handling, TOMT);
+  const router = useRouter();
+  const [venter, startOvergang] = useTransition();
+  const [feil, settFeil] = useState<Handlingssvar["feil"]>(undefined);
+  const startet = useRef(false);
 
+  const kjoer = () =>
+    startOvergang(async () => {
+      settFeil(undefined);
+      let svar: Handlingssvar;
+      try {
+        svar = await handling();
+      } catch {
+        svar = { feil: { melding: "Quizen kunne ikke lages akkurat nå.", handling: "Prøv igjen." } };
+      }
+      if (svar.feil) settFeil(svar.feil);
+      else router.refresh();
+    });
+
+  useEffect(() => {
+    // Én gang per visning. Uten vakten ville React i utviklingsmodus kjørt
+    // effekten to ganger og betalt for to modellkall.
+    if (startet.current) return;
+    startet.current = true;
+    kjoer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (feil && !venter) {
+    return (
+      <div>
+        <Feilmelding melding={feil.melding} handling={feil.handling} />
+        <button
+          type="button"
+          onClick={kjoer}
+          className="rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+        >
+          Prøv igjen
+        </button>
+      </div>
+    );
+  }
+
+  // Vises også i øyeblikket før overgangen starter og mens siden oppdateres,
+  // så eleven aldri ser en tom side.
   return (
-    <form action={send}>
-      {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
-      )}
-      <Send venter="Lager quizen…" klar="Lag quizen" />
-    </form>
+    <p aria-live="polite" className="text-slate-600 dark:text-slate-400">
+      Lager quizen … Dette kan ta et halvt minutt.
+    </p>
   );
 }
 

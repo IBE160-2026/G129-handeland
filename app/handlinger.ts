@@ -32,8 +32,10 @@ import {
   hentQuiz,
   lagreForsoek,
   lagreQuiz,
+  oppdaterSelvvurdering,
   rettQuiz,
-  type Elevsvar,
+  tilElevsvar,
+  UgyldigVurdering,
 } from "../data/quiz";
 import {
   avsluttFagsamtale,
@@ -378,46 +380,25 @@ export async function lagQuiz(
   return INGEN_FEIL;
 }
 
-export type Eksempelsvar = {
-  sporsmalId: string;
-  eksempelsvar: string;
-  kildeavsnitt: { nummer: number; innhold: string };
-};
-
 /**
- * Eksempelsvarene til kortsvarsspørsmålene, for selvvurderingen.
- *
- * Gir BARE kortsvarene. Fasiten til flervalgsspørsmålene sendes aldri til
- * nettleseren før quizen er levert — ellers kunne den leses i nettleserens
- * utviklerverktøy, og forsøkene i FR-15 ville ikke sagt noe.
+ * Det nettleseren sender. Valideres, fordi alt fra nettleseren kan være laget
+ * for hånd. Ingen selvvurdering her: den gjøres i resultatet, etter levering
+ * (`vurderKortsvar`), og et kortsvar teller ikke før eleven har krysset av.
  */
-export async function hentEksempelsvar(tekstId: string): Promise<Eksempelsvar[]> {
-  const t = await tilgang();
-  const q = await hentQuiz(t, tekstId);
-  if (!q) return [];
-  return q.sporsmal
-    .filter((s) => !s.erFlervalg)
-    .map((s) => ({
-      sporsmalId: s.id,
-      eksempelsvar: s.riktigSvar,
-      kildeavsnitt: s.kildeavsnitt,
-    }));
-}
-
-/** Det nettleseren sender. Valideres, fordi alt fra nettleseren kan være laget for hånd. */
 const ElevsvarSkjema = z
   .array(
     z.object({
       sporsmalId: z.string().uuid(),
       valgt: z.string().max(2000).optional(),
       skrevet: z.string().max(5000).optional(),
-      selvvurdertRiktig: z.boolean().optional(),
     }),
   )
   .max(20);
 
 export type Leveringssvar = Handlingssvar & {
   resultat?: {
+    /** Forsøket som ble lagret — selvvurderingen av kortsvarene skrives dit. */
+    forsoekId: string;
     antallRiktige: number;
     antallTotalt: number;
     per: {
@@ -432,6 +413,10 @@ export type Leveringssvar = Handlingssvar & {
 /**
  * Retter og lagrer et forsøk (FR-15). Rettingen skjer HER, på serveren, mot
  * fasiten i databasen — nettleseren sender bare hva eleven svarte.
+ *
+ * Svaret har fasiten og eksempelsvarene (`riktigSvar`). Det er første gang de
+ * når nettleseren: før levering ville de kunnet leses i utviklerverktøyet,
+ * og forsøkene i FR-15 ville ikke sagt noe.
  */
 export async function leverQuiz(
   tekstId: string,
@@ -458,13 +443,14 @@ export async function leverQuiz(
         },
       };
     }
-    const elevsvar: Elevsvar[] = tolket.data;
+    const elevsvar = tilElevsvar(tolket.data);
     const retting = rettQuiz(q.sporsmal, elevsvar);
-    await lagreForsoek(t, tekstId, elevsvar, retting);
+    const forsoekId = await lagreForsoek(t, tekstId, elevsvar, retting);
 
     revalidatePath(`/tekst/${tekstId}/quiz`);
     return {
       resultat: {
+        forsoekId,
         antallRiktige: retting.antallRiktige,
         antallTotalt: retting.antallTotalt,
         per: q.sporsmal.map((s) => ({
@@ -477,6 +463,48 @@ export async function leverQuiz(
     };
   } catch (e) {
     return somFeil(e);
+  }
+}
+
+export type Vurderingssvar = Handlingssvar & {
+  /** Det nye antallet, rettet på serveren med samme regel som ved levering. */
+  antallRiktige?: number;
+};
+
+const VurderingSkjema = z.object({
+  forsoekId: z.string().uuid(),
+  sporsmalId: z.string().uuid(),
+  riktig: z.boolean(),
+});
+
+/**
+ * FR-15 (endret 11.11): eleven krysser av i resultatet for om kortsvaret var
+ * riktig. Nettleseren sender bare «spørsmål X: riktig ja/nei» for et forsøk,
+ * aldri et antall — antallet regnes ut på nytt i `oppdaterSelvvurdering`.
+ */
+export async function vurderKortsvar(
+  tekstId: string,
+  forsoekId: string,
+  sporsmalId: string,
+  riktig: boolean,
+): Promise<Vurderingssvar> {
+  const t = await tilgang();
+  const tolket = VurderingSkjema.safeParse({ forsoekId, sporsmalId, riktig });
+  if (!tolket.success) {
+    return { feil: { melding: "Avkrysningen kom ikke fram i riktig form.", handling: "Last siden på nytt og prøv igjen." } };
+  }
+  try {
+    const retting = await oppdaterSelvvurdering(t, tekstId, forsoekId, sporsmalId, riktig);
+    revalidatePath(`/tekst/${tekstId}/quiz`);
+    return { antallRiktige: retting.antallRiktige };
+  } catch (e) {
+    if (e instanceof UgyldigVurdering) {
+      return { feil: { melding: e.message, handling: "Last siden på nytt." } };
+    }
+    if (e instanceof IkkeFunnet) {
+      return { feil: { melding: "Fant ikke forsøket.", handling: "Last siden på nytt og ta quizen igjen." } };
+    }
+    return { feil: { melding: "Avkrysningen ble ikke lagret.", handling: "Prøv igjen." } };
   }
 }
 

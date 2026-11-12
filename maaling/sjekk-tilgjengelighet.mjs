@@ -5,7 +5,8 @@
  *
  * Starter en Postgres i minnet og appen i testmodus `les`, og går gjennom
  * Kjerneløypen i Chrome slik en elev ville gjort: registrering, innliming av
- * eksempelteksten, aktivering, gjennomsyn, lesing. Deretter:
+ * eksempelteksten, aktivering, lesing (innlimt tekst har ikke gjennomsyn,
+ * FR-3). Deretter:
  *
  *   - axe-core på hver side, på PC og på telefon (WCAG 2.1 A og AA)
  *   - FR-10: forklaringen åpnes med fokus, pekerhvil og trykk; lukkes med
@@ -184,10 +185,8 @@ try {
   sjekk("FR-5: brødteksten finnes ikke i kildekoden i aktiveringen", !(await lekker()));
   await pc.fill("#svar", "Noe om bølger og stråling.");
   await pc.click("text=Videre");
-  await pc.waitForURL(/\/gjennomsyn$/);
-  await axe(pc, "gjennomsyn");
-  await pc.click("text=Lås og finn fagordene");
-  await pc.waitForURL(/\/lesing$/);
+  // Gjennomsynet nås nå bare via PDF og bilde; innlimt tekst låses i aktiveringen (FR-3, 11.11).
+  await pc.waitForURL(/\/lesing$/, { timeout: 240000 });
   const lesing = pc.url();
   const tekstUrl = lesing.replace(/\/lesing$/, "");
   await pc.waitForSelector("article button");

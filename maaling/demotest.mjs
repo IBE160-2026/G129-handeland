@@ -196,10 +196,9 @@ async function loeype(s, { mobil, eksempel, brod }) {
     await trykk(s.locator("h1"));
   }
 
-  // Steg 6: quiz, resultat, følg én tilbakevisning.
+  // Steg 6: quiz, resultat, følg én tilbakevisning. FR-13 (endret 11.11):
+  // quizen lages av seg selv når siden åpnes — ingen knapp å trykke.
   await s.goto(`${tekstUrl}/quiz`);
-  const lag = s.locator('button:has-text("Lag quizen")');
-  if (await lag.count()) await trykk(lag);
   await s.waitForSelector("ol fieldset", { timeout: 240000 });
   for (const f of await s.locator("ol > li fieldset").all()) {
     const radio = f.locator("input[type=radio]");
@@ -208,14 +207,38 @@ async function loeype(s, { mobil, eksempel, brod }) {
     if (await t.count()) await t.fill("Det har med frekvens å gjøre.");
   }
   await trykk(s.locator('button:has-text("Lever")'));
+  // FR-15 (endret 11.11): kortsvarene vurderes i resultatet, ikke i et mellomsteg.
+  await s.waitForSelector("text=/Du fikk \\d+ av \\d+ riktige/", { timeout: 30000 });
   const nei = s.locator("label:has-text('Nei, ikke helt')");
-  await nei.first().waitFor({ timeout: 30000 }).catch(() => {});
-  for (const n of await nei.all()) await trykk(n);
-  if (await s.locator('button:has-text("Se resultatet")').count()) await trykk(s.locator('button:has-text("Se resultatet")'));
-  await s.waitForSelector("text=/Du fikk \\d+ av \\d+ riktige/");
+  // Avkrysningen låses mens den lagres; vent til hver er lagret.
+  const lagret = () => vent(async () => (await s.locator("ol fieldset[disabled]").count()) === 0, "lagret avkrysning", 15000);
+  const antall = async () => Number((await s.locator("text=/Du fikk \\d+ av/").first().textContent()).match(/Du fikk (\d+)/)[1]);
+  // Første kortsvar krysses «Ja»: antallet skal øke med én, og merket bli «Riktig».
+  const ja = s.locator("label:has-text('Ja, i hovedsak')").first();
+  const foerJa = await antall();
+  await trykk(ja);
+  await s.waitForTimeout(300);
+  await lagret();
+  await vent(async () => (await antall()) === foerJa + 1, "nytt antall etter «Ja»", 10000).catch(() => {});
+  const jaLegend = s.locator("ol > li", { has: ja }).locator("legend").first();
+  const merke = (await jaLegend.locator("span.ml-2").textContent())?.trim();
+  sjekk(`${p}6`, "«Ja» på et kortsvar øker antallet riktige med én", (await antall()) === foerJa + 1 && merke === "Riktig", `${foerJa} → ${await antall()}, merke «${merke}»`);
+  // Resten krysses «Nei», ett om gangen.
+  for (const n of (await nei.all()).slice(1)) {
+    await lagret();
+    await trykk(n);
+  }
+  await s.waitForTimeout(300);
+  await lagret();
+  sjekk(`${p}6`, "ingen feil ved selvvurderingen", (await s.locator("main [role=alert]").count()) === 0);
   sjekk(`${p}6`, "quiz levert og resultat vist", true, (await s.locator("text=/Du fikk/").first().textContent())?.trim());
+  const kilder = s.locator("ol details");
+  const aapne = await kilder.evaluateAll((d) => d.filter((x) => x.open).length);
+  sjekk(`${p}6`, "kildeavsnittene er lukket til eleven trykker", (await kilder.count()) > 0 && aapne === 0, `${await kilder.count()} lukket`);
   const tilbake = s.locator("text=Les avsnittet i teksten").first();
-  if (await tilbake.count()) {
+  if (await kilder.count()) {
+    await trykk(kilder.first().locator("summary"));
+    await tilbake.waitFor({ state: "visible", timeout: 5000 });
     await trykk(tilbake);
     await s.waitForURL(/\/lesing#avsnitt-\d+$/);
     await vent(async () => (await s.locator("[data-uthevet=true]").count()) === 1, "uthevet avsnitt", 10000).catch(() => {});

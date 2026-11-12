@@ -6,7 +6,8 @@
  * Kloner det som er committet til en tom mappe — uten .env.local og uten
  * prosjektets nøkler — følger stegene i README («Uten Docker»), og går
  * gjennom Kjerneløypen i Chrome: registrering, innliming av eksempelteksten,
- * overskriftskontroll, aktivering, gjennomsyn, lesevisning og quiz.
+ * overskriftskontroll, aktivering (innlimt tekst låses der, FR-3),
+ * lesevisning og quiz med selvvurdering i resultatet (FR-15).
  *
  * Ett avvik fra README, som rapporteres: PGlite startes på en annen port enn
  * 5433, fordi utviklerens egen lokale database bruker den. Alt annet er
@@ -121,16 +122,14 @@ try {
   sjekk("innliming og overskriftskontroll", true);
   await s.fill("#svar", "Noe om bølger.");
   await s.click("text=Videre");
-  await s.waitForURL(/\/gjennomsyn$/);
-  await s.click("text=Lås og finn fagordene");
+  // FR-3 (11.11): innlimt tekst låses i aktiveringen og går rett til lesingen.
   await s.waitForURL(/\/lesing$/);
   const markeringer = await s.locator("article button[aria-expanded]").count();
   sjekk("lesevisning med fagord markert, uten API-nøkkel", markeringer > 0, `${markeringer} markeringer`);
 
   const tekstUrl = s.url().replace(/\/lesing$/, "");
+  // FR-13 (11.11): quizen lages av seg selv når siden åpnes.
   await s.goto(`${tekstUrl}/quiz`);
-  const lag = s.locator('button:has-text("Lag quizen")');
-  if (await lag.count()) await lag.click();
   await s.waitForSelector("ol fieldset");
   for (const f of await s.locator("ol > li fieldset").all()) {
     const radio = f.locator("input[type=radio]");
@@ -139,12 +138,16 @@ try {
     if (await felt.count()) await felt.fill("Vet ikke helt.");
   }
   await s.click('button:has-text("Lever")');
-  const vurder = s.locator("text=Nei, ikke helt");
-  await vurder.first().waitFor({ timeout: 20000 }).catch(() => {});
-  for (const v of await vurder.all()) await v.click();
-  const seResultat = s.locator('button:has-text("Se resultatet")');
-  if (await seResultat.count()) await seResultat.click();
+  // FR-15 (11.11): kortsvarene vurderes i resultatet, ett om gangen.
   await s.waitForSelector("text=/Du fikk \\d+ av \\d+ riktige/");
+  const ledig = () =>
+    s.waitForFunction(() => document.querySelectorAll("ol fieldset[disabled]").length === 0, null, { timeout: 15000 });
+  for (const v of await s.locator("label:has-text('Nei, ikke helt')").all()) {
+    await ledig();
+    await v.click();
+  }
+  await s.waitForTimeout(300);
+  await ledig();
   sjekk("quiz levert og rettet, uten API-nøkkel", true, (await s.locator("text=/Du fikk/").first().textContent())?.trim());
 
   await nettleser.close();

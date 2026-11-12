@@ -1,0 +1,83 @@
+{
+  "oppgave": "oversettelse",
+  "promptversjon": "v1",
+  "modell": "claude-haiku-5-5",
+  "utdrag": "{ \"maalspraak\": { \"navn\": \"Arabisk\", \"kode\": \"ar\" }, \"fagord\": [ \"elektromagnetiske bølger\", \"radiobølger\", \"IR-stråling\", \"bølgelengde\", \"mikrobølger\", \"røntgens",
+  "lagret": "2026-11-12T00:02:38.931Z",
+  "data": {
+    "oversettelser": [
+      {
+        "id": "u:cfa1562f-7aba-440c-a2f1-9801a7e83b4e",
+        "oversatt": "موجات كهرومغناطيسية (elektromagnetiske bølger)"
+      },
+      {
+        "id": "f:cfa1562f-7aba-440c-a2f1-9801a7e83b4e",
+        "oversatt": "موجات تتكون من تفاعل بين المجالات الكهربائية والمغناطيسية، ويمكنها أن تنتقل عبر الفراغ. الضوء وموجات الراديو (radiobølger) والأشعة السينية (røntgenstråling) كلها موجات كهرومغناطيسية (elektromagnetiske bølger)، وهي تختلف عن بعضها في الطول الموجي (bølgelengde) والتردد (frekvens)."
+      },
+      {
+        "id": "u:78967f60-d17f-4ecc-87fe-d62de2418a5f",
+        "oversatt": "موجات الراديو (radiobølger)"
+      },
+      {
+        "id": "f:78967f60-d17f-4ecc-87fe-d62de2418a5f",
+        "oversatt": "موجات كهرومغناطيسية (elektromagnetiske bølger) ذات تردد (frekvens) منخفض وطول موجي (bølgelengde) كبير، من نحو متر واحد إلى عدة كيلومترات. تُستخدم من بين أمور أخرى لإرسال الإشارات عبر مسافات طويلة."
+      },
+      {
+        "id": "u:d131843a-2a68-4dfb-ba15-3754850b12df",
+        "oversatt": "الأشعة تحت الحمراء (IR-stråling)"
+      },
+      {
+        "id": "f:d131843a-2a68-4dfb-ba15-3754850b12df",
+        "oversatt": "أشعة تحت حمراء، وهي إشعاع كهرومغناطيسي بطاقة أقل قليلاً من الضوء المرئي. نشعر بها على أنها حرارة."
+      },
+      {
+        "id": "u:76f272d1-7326-4670-9cce-149aebd1825b",
+        "oversatt": "الطول الموجي (bølgelengde)"
+      },
+      {
+        "id": "f:76f272d1-7326-4670-9cce-149aebd1825b",
+        "oversatt": "المسافة بين قمتين متجاورتين أو قاعين متجاورين في الموجة. يحدد الطول الموجي (bølgelengde) نوع الإشعاع الكهرومغناطيسي المقصود."
+      },
+      {
+        "id": "u:744c7c41-c683-49b4-9a33-90bcf7ce8f6a",
+        "oversatt": "الموجات الدقيقة (mikrobølger)"
+      },
+      {
+        "id": "f:744c7c41-c683-49b4-9a33-90bcf7ce8f6a",
+        "oversatt": "موجات كهرومغناطيسية (elektromagnetiske bølger) ذات أطوال موجية (bølgelengde) بين 1 mm و1 m، أي بتردد (frekvens) أعلى من موجات الراديو (radiobølger). يتوافق التردد مع اهتزازات جزيئات الماء والدهون، ولهذا تُستخدم في أفران الميكروويف."
+      },
+      {
+        "id": "u:c6598269-472a-4107-90ab-a239ff4144b3",
+        "oversatt": "الأشعة السينية (røntgenstråling)"
+      },
+      {
+        "id": "f:c6598269-472a-4107-90ab-a239ff4144b3",
+        "oversatt": "إشعاع كهرومغناطيسي بطاقة عالية جداً، وطول موجي (bølgelengde) أقصر من 10 nm. يمكنه النفاذ عبر مواد لا يمر منها الضوء العادي."
+      },
+      {
+        "id": "u:dbfa8816-8f4f-4f54-858a-13cc6d3b3a01",
+        "oversatt": "الغلاف الأيوني (ionosfæren)"
+      },
+      {
+        "id": "f:dbfa8816-8f4f-4f54-858a-13cc6d3b3a01",
+        "oversatt": "طبقة من جسيمات مشحونة كهربائياً على ارتفاع عالٍ في الغلاف الجوي، نحو 80–400 km فوق سطح الأرض. يمكنها أن تعكس موجات الراديو (radiobølger) نحو الأرض."
+      },
+      {
+        "id": "u:84d0e906-909c-4232-a64f-89c012856580",
+        "oversatt": "الأشعة فوق البنفسجية (ultrafiolett stråling)"
+      },
+      {
+        "id": "f:84d0e906-909c-4232-a64f-89c012856580",
+        "oversatt": "إشعاع كهرومغناطيسي (elektromagnetisk stråling) ذو طول موجي (bølgelengde) أقصر وطاقة أعلى من الضوء المرئي، خارج النطاق البنفسجي. يمكن أن يسبب الاحتراق الشمسي."
+      },
+      {
+        "id": "u:f6fd9b6b-3085-4d0e-964a-a2110eea6b5e",
+        "oversatt": "التردد (frekvens)"
+      },
+      {
+        "id": "f:f6fd9b6b-3085-4d0e-964a-a2110eea6b5e",
+        "oversatt": "عدد الاهتزازات أو قمم الموجة التي تمر في الثانية. يحدد التردد (frekvens) مقدار الطاقة في الموجة."
+      }
+    ]
+  }
+}

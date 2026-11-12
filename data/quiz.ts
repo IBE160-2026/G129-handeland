@@ -44,7 +44,10 @@ export type Elevsvar = {
   valgt?: string;
   /** Kortsvar: det eleven skrev. */
   skrevet?: string;
-  /** Kortsvar: elevens egen vurdering etter å ha sett eksempelsvaret. */
+  /**
+   * Kortsvar: elevens egen vurdering etter å ha sett eksempelsvaret. Settes
+   * bare i resultatet, etter levering (`oppdaterSelvvurdering`).
+   */
   selvvurdertRiktig?: boolean;
 };
 
@@ -53,6 +56,15 @@ export type Retting = {
   antallRiktige: number;
   antallTotalt: number;
 };
+
+/**
+ * Svarene slik de lagres ved levering. Selvvurderingen tas bort: et kortsvar
+ * teller ikke før eleven har krysset av i resultatet (`oppdaterSelvvurdering`),
+ * uansett hva nettleseren sender med.
+ */
+export function tilElevsvar(svar: Elevsvar[]): Elevsvar[] {
+  return svar.map((s) => ({ sporsmalId: s.sporsmalId, valgt: s.valgt, skrevet: s.skrevet }));
+}
 
 /* ------------------------------------------------------------------ *
  * Retting — ren funksjon
@@ -209,23 +221,85 @@ export type Forsoek = {
   gjennomfoert: Date;
 };
 
-/** Lagrer et rettet forsøk. Rettingen gjøres av kalleren med `rettQuiz`. */
+/** Lagrer et rettet forsøk og gir id-en. Rettingen gjøres av kalleren med `rettQuiz`. */
 export async function lagreForsoek(
   t: Tilgang,
   tekstId: string,
   svar: Elevsvar[],
   retting: Retting,
-): Promise<void> {
+): Promise<string> {
   await sjekkEierskap(t, tekstId);
   const q = await db.select({ id: quiz.id }).from(quiz).where(eq(quiz.tekstId, tekstId)).limit(1);
   if (q.length === 0) throw new IkkeFunnet("Quizen");
 
-  await db.insert(quizforsoek).values({
-    quizId: q[0].id,
-    svar: JSON.stringify(svar),
-    antallRiktige: retting.antallRiktige,
-    antallTotalt: retting.antallTotalt,
-  });
+  const [rad] = await db
+    .insert(quizforsoek)
+    .values({
+      quizId: q[0].id,
+      svar: JSON.stringify(svar),
+      antallRiktige: retting.antallRiktige,
+      antallTotalt: retting.antallTotalt,
+    })
+    .returning({ id: quizforsoek.id });
+  return rad.id;
+}
+
+/**
+ * Selvvurderingen kan ikke gjøres: spørsmålet er flervalg (det kan ikke
+ * endres etter levering), eller kortsvaret er tomt og kan ikke bli riktig.
+ */
+export class UgyldigVurdering extends Error {
+  constructor(grunn: string) {
+    super(grunn);
+    this.name = "UgyldigVurdering";
+  }
+}
+
+/**
+ * FR-15 (endret 11.11): eleven krysser av for et kortsvar i resultatet, etter
+ * levering. Forsøket leses, svaret endres, og hele forsøket rettes på nytt
+ * med `rettQuiz` — samme regel som ved levering, så det ikke finnes to regler
+ * for hva som er riktig. Nettleseren sender bare ja/nei, aldri et antall.
+ *
+ * Eierskapet sjekkes gjennom Teksten (AD-8): et forsøk på en annen kontos
+ * quiz, eller på en annen tekst, gir IkkeFunnet.
+ */
+export async function oppdaterSelvvurdering(
+  t: Tilgang,
+  tekstId: string,
+  forsoekId: string,
+  sporsmalId: string,
+  riktig: boolean,
+): Promise<Retting> {
+  const q = await hentQuiz(t, tekstId);
+  if (!q) throw new IkkeFunnet("Quizen");
+
+  const [f] = await db
+    .select({ id: quizforsoek.id, svar: quizforsoek.svar })
+    .from(quizforsoek)
+    .where(and(eq(quizforsoek.id, forsoekId), eq(quizforsoek.quizId, q.id)))
+    .limit(1);
+  if (!f) throw new IkkeFunnet("Forsøket");
+
+  const sporsmal = q.sporsmal.find((s) => s.id === sporsmalId);
+  if (!sporsmal) throw new IkkeFunnet("Spørsmålet");
+  if (sporsmal.erFlervalg) throw new UgyldigVurdering("Flervalgssvar kan ikke endres etter levering.");
+
+  const svar: Elevsvar[] = JSON.parse(f.svar);
+  const gammelt = svar.find((s) => s.sporsmalId === sporsmalId);
+  if (riktig && !gammelt?.skrevet?.trim()) {
+    throw new UgyldigVurdering("Et tomt svar kan ikke vurderes som riktig.");
+  }
+  const nye = gammelt
+    ? svar.map((s) => (s.sporsmalId === sporsmalId ? { ...s, selvvurdertRiktig: riktig } : s))
+    : [...svar, { sporsmalId, selvvurdertRiktig: riktig }];
+
+  const retting = rettQuiz(q.sporsmal, nye);
+  await db
+    .update(quizforsoek)
+    .set({ svar: JSON.stringify(nye), antallRiktige: retting.antallRiktige })
+    .where(eq(quizforsoek.id, f.id));
+  return retting;
 }
 
 /** Tidligere forsøk, nyeste først, slik at eleven ser utviklingen (FR-15). */

@@ -10,3 +10,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-fr-3-innlimt-tekst-uten-gjennomsyn.md`
   summary: PRD-en linje 112 («ender på samme sted — et redigerbart gjennomsyn») og 899 («Liming av tekst, med gjennomsyn og retting») må samsvare med FR-3 slik den ble endret 11.11.
   evidence: Gjennomgangen 12.11; motsier FR-3 linje 154.
+- source_spec: `_bmad-output/implementation-artifacts/spec-fr-13-15-quizflyt.md`
+  summary: Tilgjengelighetssjekken (axe) må nå gjennomsynet via PDF eller bilde, siden innlimt tekst ikke lenger går dit (FR-3).
+  evidence: Gjennomgangen 12.11; axe-sjekken av gjennomsynet ble fjernet fra sjekk-tilgjengelighet.mjs da innlimt tekst sluttet å gå via siden.

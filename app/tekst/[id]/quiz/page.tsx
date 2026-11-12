@@ -12,7 +12,7 @@ import { hentQuiz, listForsoek } from "../../../../data/quiz";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { lagQuiz } from "../../../handlinger";
 import { Quiz, type SporsmalForElev } from "../../../komponenter/Quiz";
-import { LagQuizSkjema } from "../../../komponenter/Skjemaer";
+import { LagQuizAutomatisk } from "../../../komponenter/Skjemaer";
 import { stegtekst } from "../../../../tekst/steg";
 
 const DATO = new Intl.DateTimeFormat("nb-NO", {
@@ -60,7 +60,7 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
             alene, og for hvert spørsmål du ikke får til, ser du hvor svaret står.
           </p>
           <div className="mt-6">
-            <LagQuizSkjema handling={lagQuiz.bind(null, id)} />
+            <LagQuizAutomatisk handling={lagQuiz.bind(null, id, {})} />
           </div>
         </section>
       ) : (
