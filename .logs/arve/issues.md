@@ -25,6 +25,8 @@
 - [ ] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Før levering: sjekk Covered Models på nytt (PRD spørsmål 11)
 - [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg flytendringene (FR-3 innlimt uten 3b, FR-13/15 quiz, FR-16 kilde som knapp) og oppdater demotest.mjs (FR-3 bygget 2026-11-12; quiz og øvekort gjenstår, se under)
 - [x] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bygg quiz (FR-13, FR-15) og øvekort (FR-16) med bmad-build, fra deferred-work.md (løst og rullet ut 2026-11-12)
-- [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — PRD linje 112 og 899 må samsvare med FR-3 (utsatt fra gjennomgangen)
+- [x] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — PRD linje 112 og 899 må samsvare med FR-3 (utsatt fra gjennomgangen) (løst 2026-11-13 i PRD runde 1)
 - [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — KI-logg nr. 25 (bmad-build): utviklerens vurdering
 - [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Utsatt fra gjennomgangene: enhetstest av lagreAktivering, axe-sjekk av gjennomsynet via PDF (se deferred-work.md)
+- [ ] 2026-11-13 [designfase](../../_bmad-output/planning-artifacts/ux-designs/ux-Lesevenn-2026-11-12/EXPERIENCE.md) — Lærerkoder: hvordan får en lærer invitasjonskoder til klassen? Landingssiden sier «Har du fått en kode fra læreren?», men PRD-en har ingen lærerpålogging (§2.2)
+- [ ] 2026-11-13 [designfase](../../_bmad-output/planning-artifacts/tilbakemelding-prd.md) — Bårds PRD-tilbakemelding: runde 1 gjort 2026-11-13 (motsigelser, KI-feil, bruksgrenser, FR-47–49). Gjenstår runde 2 før levering: historikk ut av kravene, DK-seksjon for FR-38–43, statustabell per FR, opprydding i §11 pkt. 11 og 14

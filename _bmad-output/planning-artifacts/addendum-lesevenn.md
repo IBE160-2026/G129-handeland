@@ -60,14 +60,16 @@ Ikke krav, men de valgene PRD-ens krav er dimensjonert for. Hører nedstrøms i 
 
 | Oppgave | Modell | Vanskelighet | Begrunnelse |
 |---|---|---|---|
-| Uttrekk av Faguttrykk | `claude-haiku-4-5` | Middels | Kjøres per Tekst og lagres, så her ligger volumet og dermed pengene. **Måles mot FR-8-gullsettet før valget låses** — treffer Haiku presisjon 0,70 og gjenkalling 0,75, er det billigste modell på dyreste oppgave, dokumentert |
-| Quizgenerering | `claude-haiku-4-5` | Middels | Forankringskravet i FR-14 er det som skiller modellene, ikke språkforståelsen |
-| **Svarvurdering og oppfølgingsspørsmål** | **`claude-sonnet-5`** | **Høy** | Den vanskeligste oppgaven i appen: klassifisering i fem tilstander pluss et oppfølgingsspørsmål som skal reagere på innholdet. FR-21 har en blokkerende sikkerhetsport som tolererer null misoppfatninger lest som dekkende. Sonnet framfor Opus fordi den er halv pris og fortsatt langt sterkere enn Haiku; Opus 5 er oppgraderingsveien hvis målingen krever det |
-| Oversettelse | `claude-haiku-4-5` | Middels til høy | Vanskeligheten varierer sterkt med språket, og det er nettopp poenget i FR-42 om skjevhet. Måles mot FR-28 |
-| Minnevers | `claude-haiku-4-5` | Lav | Men faktasjekken i FR-31 er ikke lav |
-| Bildeuttrekk | `claude-haiku-4-5` | Middels | Krever multimodal modell. Bekreftet av Arve 2. oktober at Haiku 4.5 tar bilder som inndata, så bildeuttrekket blir på den billige modellen |
+| Uttrekk av Faguttrykk | `claude-haiku-5-5` | Middels | Kjøres per Tekst og lagres, så her ligger volumet og dermed pengene. **Måles mot FR-8-gullsettet før valget låses** — treffer Haiku presisjon 0,70 og gjenkalling 0,75, er det billigste modell på dyreste oppgave, dokumentert |
+| Quizgenerering | `claude-haiku-5-5` | Middels | Forankringskravet i FR-14 er det som skiller modellene, ikke språkforståelsen |
+| **Svarvurdering og oppfølgingsspørsmål** | **`claude-sonnet-5-5`** | **Høy** | Den vanskeligste oppgaven i appen: klassifisering i fem tilstander pluss et oppfølgingsspørsmål som skal reagere på innholdet. FR-21 har en blokkerende sikkerhetsport som tolererer null misoppfatninger lest som dekkende. Sonnet framfor Opus fordi den er halv pris og fortsatt langt sterkere enn Haiku; Opus 5 er oppgraderingsveien hvis målingen krever det |
+| Oversettelse | `claude-haiku-5-5` | Middels til høy | Vanskeligheten varierer sterkt med språket, og det er nettopp poenget i FR-42 om skjevhet. Måles mot FR-28 |
+| Minnevers | `claude-haiku-5-5` | Lav | Men faktasjekken i FR-31 er ikke lav |
+| Bildeuttrekk | `claude-haiku-5-5` | Middels | Krever multimodal modell. Bekreftet 2. oktober at Haiku tar bilder som inndata, så bildeuttrekket blir på den billige modellen |
 
-**Kostnadsgrunnlaget for fordelingen.** Én Tekst gjennom hele løypen er grovt 25 000 tokens inn og 7 000 ut. Med alt på Opus 5 ($5/$25 per million) blir semesteret rundt $90, altså over budsjettrammen i §6.4. Med alt på Haiku 4.5 ($1/$5) rundt $18. Den blandede fordelingen legger de dyre tokenene der kvaliteten faktisk avgjør noe, og de billige der volumet er. Anslagene er estimater fra datamodellen, og prisene bør kontrolleres mot gjeldende prisliste.
+*Oppdatert 13.11.2026: modellene i tabellen er de som gjelder i `prompts/gjeldende.json`. Haiku 4.5 ble byttet med Haiku 5.5 8. oktober (PRD §11 pkt. 11), og Sonnet 5 med Sonnet 5.5. Samtalestart bruker også Sonnet 5.5.*
+
+**Kostnadsgrunnlaget for fordelingen.** *(Opprinnelig anslag fra 2. oktober, med de daværende modellene. Det gjeldende estimatet og bruksgrensene står i PRD §6.4.)* Én Tekst gjennom hele løypen er grovt 25 000 tokens inn og 7 000 ut. Med alt på Opus 5 ($5/$25 per million) blir semesteret rundt $90, altså over budsjettrammen i §6.4. Med alt på Haiku 4.5 ($1/$5) rundt $18. Den blandede fordelingen legger de dyre tokenene der kvaliteten faktisk avgjør noe, og de billige der volumet er. Anslagene er estimater fra datamodellen, og prisene bør kontrolleres mot gjeldende prisliste.
 
 **Og fordelingen er et utgangspunkt, ikke en konklusjon.** AD-4 stempler modellidentitet på alt generert innhold nettopp for at to måletall fra ulike modeller skal være sammenlignbare. Viser målingen at Haiku ikke holder på uttrekket, er oppgraderingen én linje — og da har du tallene som viser hvorfor.
 

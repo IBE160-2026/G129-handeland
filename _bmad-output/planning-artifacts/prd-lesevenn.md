@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-10-08
+updated: 2026-11-13
 ---
 
 # PRD: Lesevenn
@@ -13,7 +13,7 @@ En nettapp som fører eleven gjennom en lesestrategi-sekvens for fagtekst, med K
 
 Dokumentet er skrevet for én leser: utvikleren som skal bygge Lesevenn alene i løpet av høstsemesteret 2026, i emnet IBE160 Programmering med KI ved Høgskolen i Molde. Det bygger på `product-brief-lesevenn.md` i samme mappe og gjentar ikke begrunnelsen som ligger der — briefen svarer på *hvorfor*, dette dokumentet svarer på *hva som skal virke, og hvordan man vet at det virker*.
 
-Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-46, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
+Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-49, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
 
 Emnets mappevurdering høsten 2026 har to deler: prosjektkode og funksjonalitet teller 70 prosent, og «dokumentasjon må vise hvordan KI ble brukt, og hvordan studentene har kvalitetssikret koden». Refleksjonsrapporten teller 30 prosent. Det er nesten en tredjedel av karakteren som ikke er kode, og formuleringen sier *koden* — ikke bare det KI-genererte innholdet appen produserer. Dokumentasjonsleveransen er derfor modellert som en funksjonsseksjon med egne krav (§4.11), på linje med resten, og milepælsplanen i §9 verner tid til den. Tekniske valg som er løsning og ikke krav, ligger i `addendum-lesevenn.md`.
 
@@ -55,7 +55,7 @@ For elever med norsk som andrespråk gjør Lesevenn én ting til, og gjør den b
 ### 2.3 Sentrale brukerreiser
 
 > **UJ-1. Jonas kommer seg gjennom naturfagteksten han har utsatt i tre dager.**
-> Jonas går Vg1 bygg- og anleggsteknikk og er 16 år. Han valgte yrkesfag fordi han lærer best med hendene, men naturfag er fellesfag og må bestås. Han leser tregt, og lærebokas kapittel om celledeling er fire sider med ord han ikke kjenner. Han er innlogget fra forrige gang. Han limer inn teksten fra den digitale læreboka, og får først bare overskriftene tilbake til kontroll — «Celledeling», «Mitose», «Når delingen går galt». De ser riktige ut, han trykker videre. Aktiveringssiden viser de samme overskriftene og ber han skrive kort hva han tror teksten handler om; brødteksten har han ennå ikke sett. Han skriver tre setninger, og de er halvveis feil, men det er poenget. Så får han hele den uttrukne teksten til gjennomsyn, retter en linje som havnet på feil sted, og godkjenner. Nå leser han teksten med fjorten fagbegreper markert; han holder pekeren over «mitose» og får forklaringen uten å forlate siden. Til slutt tar han quizen: seks av åtte riktig, og for de to feil får han se hvilket avsnitt svaret sto i.
+> Jonas går Vg1 bygg- og anleggsteknikk og er 16 år. Han valgte yrkesfag fordi han lærer best med hendene, men naturfag er fellesfag og må bestås. Han leser tregt, og lærebokas kapittel om celledeling er fire sider med ord han ikke kjenner. Han er innlogget fra forrige gang. Han limer inn teksten fra den digitale læreboka, og får først bare overskriftene tilbake til kontroll — «Celledeling», «Mitose», «Når delingen går galt». De ser riktige ut, han trykker videre. Aktiveringssiden viser de samme overskriftene og ber han skrive kort hva han tror teksten handler om; brødteksten har han ennå ikke sett. Han skriver tre setninger, og de er halvveis feil, men det er poenget. Han limte inn teksten selv, så det er ingen uttrekksfeil å rette, og han går rett videre (FR-3). Nå leser han teksten med fjorten fagbegreper markert; han holder pekeren over «mitose» og får forklaringen uten å forlate siden. Til slutt tar han quizen: seks av åtte riktig, og for de to feil får han se hvilket avsnitt svaret sto i.
 > **Klimaks:** han lukker fanen og vet hva mitose er — ikke fordi appen fortalte ham det, men fordi han leste det og ble sjekket på det.
 > **Etterpå:** teksten ligger lagret på kontoen med resultatet. Øvekortene med de fjorten begrepene er klare til repetisjon kvelden før prøven.
 > **Kanttilfelle:** Jonas prøvde først å laste opp et PDF-utsnitt læreren hadde delt. Det var en skanning uten tekstlag, og Lesevenn sa det rett ut — at filen ser ut til å være et bilde av en tekst, at Lesevenn ikke kan lese bilder, og at han kan lime inn teksten i stedet. Han limte inn.
@@ -109,7 +109,7 @@ Termene under brukes ordrett i resten av dokumentet. Synonymer er en disiplinbri
 
 ### 4.1 Innlesing av tekst
 
-**Beskrivelse:** Eleven får teksten inn på tre veier: liming i et tekstfelt, opplasting av PDF med tekstlag, eller bilder av boksider (FR-44). Alle tre ender på samme sted — et redigerbart gjennomsyn av Råteksten, delt i to faser rundt Aktiveringen (FR-3) — og det er det viktigste designvalget i hele funksjonen. PDF-uttrekk feiler på mange måter, og noen av dem er umulige å oppdage automatisk: en tekst med to spalter kan trekkes ut i feil leserekkefølge og fortsatt se ut som gyldig norsk. Ved å vise uttrekket og la eleven rette det, gjøres hver parsefeil synlig og rettbar i stedet for at den forplanter seg stille inn i markeringer, quiz og fagsamtale. Realiserer UJ-1, UJ-2, UJ-4.
+**Beskrivelse:** Eleven får teksten inn på tre veier: liming i et tekstfelt, opplasting av PDF med tekstlag, eller bilder av boksider (FR-44). Alle tre ender i et gjennomsyn rundt Aktiveringen (FR-3): overskriftene kontrolleres alltid, og for PDF og bilde vises hele Råteksten redigerbar etterpå. Det er det viktigste designvalget i hele funksjonen. PDF-uttrekk feiler på mange måter, og noen av dem er umulige å oppdage automatisk: en tekst med to spalter kan trekkes ut i feil leserekkefølge og fortsatt se ut som gyldig norsk. Ved å vise uttrekket og la eleven rette det, gjøres hver parsefeil synlig og rettbar i stedet for at den forplanter seg stille inn i markeringer, quiz og fagsamtale. Realiserer UJ-1, UJ-2, UJ-4.
 
 Den andre gjennomgående regelen: **ingen feiltilstand er en blindvei.** Hver feil sier på vanlig norsk hva som gikk galt, hvorfor, og minst én konkret ting eleven kan gjøre videre.
 
@@ -276,6 +276,7 @@ Lesevenn utvinner et Begrepssett fra Teksten: Faguttrykk med forklaring og Kilde
 - **Kappingen bruker det billigste virkemidlet først, og fjerner Faguttrykk bare for antallstaket.** Presisert 7. oktober etter første ekte kjøring. Rekkefølgen er: (1) kutt til det antallstaket tillater — `floor(12 × ord/1000)`, med gulvet som nedre skranke for korte Tekster; (2) marker hvert Faguttrykk høyst én gang per Avsnitt; (3) marker hvert Faguttrykk bare første gang. **Et Faguttrykk fjernes aldri for å rette prosentgrensen eller vindustaket**, bare for antallstaket, fordi et fjernet Faguttrykk er et fagord eleven ikke får forklart, mens en fjernet markering er samme ord uthevet én gang mindre.
 - **Vindustaket kan være uoppnåelig, og rapporteres da som brutt.** Dette er målt, ikke antatt: på en NDLA-tekst om elektromagnetisk stråling ligger førsteforekomstene til de viktigste Faguttrykkene i Avsnitt 1, 2, 3 og 3 — fire innenfor de første hundre ordene, fordi åpningsavsnittet er der fagspråket introduseres. Så lenge hvert beholdt Faguttrykk skal ha minst én markering, kan taket ikke oppfylles. En tidligere utgave kuttet videre for å jage det, endte på fem Faguttrykk av 26, og brøt taket likevel — altså ofret 21 fagord for ingenting. Samme regel gjelder derfor som for gulvet: tetthetstallene rapporteres med faktisk verdi, også når de er over taket.
 - **Viktighetsrangeringen må ha nok oppløsning til å kappe etter.** Første kjøring gav 26 Faguttrykk fordelt på fire rangeringer, der ti delte rangering 2. Innenfor en så stor gruppe avgjøres kappingen av modellens utdatarekkefølge, som følger Teksten — og resultatet var at alle beholdte Faguttrykk kom fra første tredjedel, mens Avsnittene etter midten sto umarkerte. Prompten skal derfor kreve at rangeringen skiller Faguttrykkene fra hverandre, og at de viktigste ikke alle hentes fra samme del av Teksten. `[ÅPENT: om et krav i prompten er nok, eller om kappingen også må sikre spredning over Avsnittene. Avklares mot Gullsettet.]`
+- **Når kallet feiler.** Gir uttrekket ugyldig eller manglende svar etter ett nytt forsøk, sier Lesevenn at fagordene ikke kunne lages nå, og tilbyr «Prøv igjen». Teksten og Aktiveringen er lagret, og eleven mister ingenting. *(Lagt til 13.11.2026 etter tilbakemelding på PRD.)*
 - Viktighetsrangeringen er en intern sorteringsnøkkel, ikke en kvalitetspåstand. Den rapporteres ikke til eleven og brukes ikke som dokumentasjon på at uttrekket er godt — det ville vært SM-C4-brudd. Bare målingen i FR-8 sier noe om kvalitet.
 
 #### FR-8: Måling av treffsikkerhet mot Gullsett
@@ -398,6 +399,7 @@ Lesevenn genererer en Quiz fra Teksten.
 - Spørsmålene dekker Tekstens hoveddeler: ingen av Tekstens overskriftsdeler er uten minst ett spørsmål, når Teksten har fire eller færre deler.
 - Quizen lagres på Teksten og gjenbrukes ved senere visning, ikke regenerert.
 - Quizen lages når eleven åpner den, uten en egen bekreftelse. Ventetiden vises etter §5. *(Lagt til 11.11.2026 etter telefontesten.)*
+- **Når kallet feiler.** Gir genereringen ugyldig eller manglende svar etter ett nytt forsøk, sier Lesevenn at quizen ikke kunne lages nå, og tilbyr «Prøv igjen». Ingen Quiz lagres fra et mislykket kall. *(Lagt til 13.11.2026.)*
 
 #### FR-14: Forankring i Teksten
 
@@ -479,6 +481,7 @@ Hvert elevsvar klassifiseres i én av fem tilstander, og tilstanden vises til el
 
 - Tilstanden er synlig for eleven, ikke bare intern. Begrunnelsen er én setning på vanlig norsk.
 - Ingen tilstand vises som poeng, prosent, karakter eller mestringsnivå.
+- **Når kallet feiler.** Gir vurderingen ugyldig eller manglende svar etter ett nytt forsøk, vises «Vurderingen feilet. Svaret ditt er lagret.» med knappen «Prøv igjen». Runden telles ikke mot grensen i FR-22. *(Lagt til 13.11.2026.)*
 
 #### FR-20: Regler for oppfølgingsspørsmål
 
@@ -490,6 +493,7 @@ Oppfølgingsspørsmålet følger tilstandens regel i FR-19 og oppfyller fire mas
 - **Forankring:** oppfølgingen kan besvares fra Teksten alene og har et gyldig `kildeavsnitt_id`. Ingen oppfølging krever kunnskap utenfor Teksten.
 - **Ingen gjentakelse:** oppfølgingen er ikke nær-identisk med noe tidligere Samtalespørsmål i samme samtale. Måles som Jaccard-overlapp under 0,6 over **innholdsord**, etter at funksjonsord er fjernet med en fast norsk stoppordliste som ligger i repoet, og etter enkel normalisering (små bokstaver, fjernet tegnsetting). Uten den presiseringen er tallet ikke reproduserbart: to helt ulike norske spørsmål på åtte ord kan komme over 0,8 på funksjonsord alene.
 - **Ett spørsmål:** oppfølgingen inneholder ett spørsmål, ikke tre i samme melding.
+- **Når kallet feiler.** Feiler genereringen av oppfølgingen etter ett nytt forsøk, beholdes vurderingen av svaret, og eleven får «Prøv igjen» for neste spørsmål. Samtalen avsluttes ikke av feilen. *(Lagt til 13.11.2026.)*
 
 #### FR-21: Måling av relevans mot Gullsett
 
@@ -653,7 +657,7 @@ Byttet er verdt å begrunne, fordi det reverserer en tidligere beslutning i dett
 Ordlistens definisjon av **Mappe** er beholdt, siden begrepet er referert i FR-1 som en foreslått vei videre for tekst over lengdegrensen. Den veien er i v1 «del teksten i flere Tekster» uten en mappe å samle dem i.
 ### 4.10 Brukerkonto og lagring
 
-**Beskrivelse:** Kontoen finnes fordi Mappen trenger noe å samle og fordi eleven skal kunne komme tilbake til Øvekortene før prøven. Den er ikke en plattform: ingen deling, ingen sosiale funksjoner, ingen profil. Minst mulig data, fordi en stor del av brukergruppen er mindreårige og innholdet ofte er opphavsrettslig beskyttet lærebokstoff.
+**Beskrivelse:** Kontoen finnes fordi tekstene skal samles på Arbeidsbordet og i Samlingen (FR-48, FR-49), og fordi eleven skal kunne komme tilbake til Øvekortene før prøven. Den er ikke en plattform: ingen deling, ingen sosiale funksjoner, ingen profil. Minst mulig data, fordi en stor del av brukergruppen er mindreårige og innholdet ofte er opphavsrettslig beskyttet lærebokstoff.
 
 **Funksjonskrav:**
 
@@ -672,7 +676,7 @@ Eleven finner igjen tidligere arbeid.
 
 **Konsekvenser (testbare):**
 - Tekster, Begrepssett, Quizer med resultater, Øvekortmerking og Fagsamtaler lagres på kontoen.
-- Tekstlisten kan sorteres på dato og søkes i på tittel.
+- Samlingen (FR-49) kan sorteres på dato og søkes i på tittel.
 - Genererte elementer regenereres ikke ved gjenbesøk. De hentes fra lagring — for stabilitet (FR-11) og kostnad (§6).
 
 #### FR-37: Sletting
@@ -777,12 +781,48 @@ Lagt inn 7. oktober etter tilbakemelding fra emneansvarlig. Kravet manglet, og d
 - **README er testet av å bli fulgt.** Stegene i README kjøres på en maskin uten `.env.local` og uten prosjektets nøkler, og det dokumenteres at kjerneløypen gikk gjennom. Et README som bare er skrevet, er ikke et README som virker.
 - **Testmodus er ikke standard i drift.** En uleselig eller glemt verdi i miljøvariabelen faller til «av», altså til et ekte kall. Det motsatte valget — å falle til lagrede svar — ville gitt en app i drift som stille viser andres svar til eleven.
 
+### 4.12 Inngang, arbeidsbord og samling
+
+**Beskrivelse:** Lagt til 13.11.2026 i designfasen. Utseende og oppførsel står i `ux-designs/ux-Lesevenn-2026-11-12/DESIGN.md` og `EXPERIENCE.md`. Kravene her sier hva som skal finnes og kunne testes. Utad heter appen LeseBuddy. I kode og planleggingsdokumenter heter den fortsatt Lesevenn.
+
+**Funksjonskrav:**
+
+#### FR-47: Landingsside
+
+Den som ikke er innlogget, møter en side som forklarer hva appen er.
+
+**Konsekvenser (testbare):**
+- `/` uten innlogging viser landingssiden, ikke innloggingssiden. En innlogget elev på `/` får Arbeidsbordet (FR-48).
+- Siden sier at appen er lesestøtte og hjelp til leseforståelse for videregående, viser hvordan den hjelper før, mens og etter lesingen, og har en egen del for lærere.
+- Siden har «Logg inn» og «Registrer deg», og sier at registrering krever en kode fra læreren (FR-35).
+- Alt innhold er tilgjengelig uten rulleeffektene. Med `prefers-reduced-motion` vises alt statisk.
+
+#### FR-48: Arbeidsbord
+
+En innlogget elev kommer til et arbeidsbord, ikke rett til innlesing.
+
+**Konsekvenser (testbare):**
+- Arbeidsbordet viser de fem Tekstene med nyest aktivitet som bunker. Den nyeste er størst og viser neste steg, utledet av Tekstens tilstand og hva eleven har gjort.
+- En bunke kan åpnes og viser nøyaktig fem aktiviteter i fast rekkefølge: Teksten, Quiz, Øvekort, Fagsamtale og Minnevers, hver med status fra lagrede data. Aktiviteter som krever en låst Tekst, vises låst med en forklaring.
+- En bunke kan åpnes og lukkes med tastatur. Esc lukker, og fokus går tilbake til bunken.
+- Har eleven ingen Tekster, viser bordet én handling: legg inn en ny tekst. Har eleven flere enn fem, vises en lenke til Samlingen med antallet.
+- Innlesing av en ny Tekst (FR-1, FR-2, FR-44) nås med én handling.
+
+#### FR-49: Samlingen
+
+Alle Tekstene er samlet på ett sted.
+
+**Konsekvenser (testbare):**
+- Samlingen viser alle elevens Tekster, kan sorteres på dato og søkes i på tittel (FR-36), og nås fra menyen og fra Arbeidsbordet.
+- Hver Tekst kan åpnes og slettes herfra (FR-37).
+
 ## 5. Tverrgående krav
 
 - **Ingen KI-utdata uten kilde.** Alt generert innhold som påstår noe om Teksten — forklaringer, quizspørsmål, samtalespørsmål, oppsummeringer, vers — har et Kildeavsnitt. Kravet er arkitektonisk, ikke kosmetisk: klarer ikke en generator å oppgi Kildeavsnitt, er utdataen ikke gyldig.
 - **Ingen blindveier.** Hver feiltilstand i hele appen sier hva som skjedde, på vanlig norsk, og tilbyr minst én konkret neste handling. Ingen tekniske feilspor, ingen «noe gikk galt», ingen stille feil.
 - **Ingen stille forkorting.** Appen kutter aldri tekst, spørsmål eller innhold uten at eleven ser det og godtar det.
-- **Ventetid er synlig og brutt opp.** Kall til språkmodell som tar over to sekunder viser en status som sier hva som gjøres. Kjerneløypens steg genereres når de trengs, ikke alle i ett langt oppstartskall — eleven skal komme til aktiveringssiden raskt.
+- **Ventetid er synlig og brutt opp.** Kall til språkmodell som tar over to sekunder viser en status som sier hva som gjøres. Kjerneløypens steg genereres når de trengs, ikke alle i ett langt oppstartskall — eleven skal komme til aktiveringssiden raskt. Ventingen vises med Buddys tenkeindikator og en statustekst (EXPERIENCE.md).
+- **KI-feil er ikke blindveier.** Feiler et kall til språkmodellen etter ett nytt forsøk (tidsavbrudd, ugyldig eller manglende svar), sier appen hva som ikke ble laget, at det eleven har skrevet er lagret, og tilbyr «Prøv igjen». Konsekvensene per funksjon står i FR-7, FR-13, FR-19 og FR-20.
 - **Lesbarhet foran pynt.** Lesevisningen er den viktigste flaten. Justerbar tekststørrelse og linjeavstand, linjelengde om lag 70 tegn, tilstrekkelig kontrast, og ingen informasjon formidlet ved farge alene.
 - **Tastatur og skjermleser.** Kjerneløypen kan fullføres med tastatur alene. Markerte Faguttrykk er fokuserbare, og forklaringen er tilgjengelig for skjermleser.
 - **Mobil er en reell flate.** Kjerneløypen virker på telefon i portrettmodus. `[ANTAKELSE: elever leser og øver like ofte på telefon som på PC. Ikke verifisert — men en lesestøtteapp som krever PC treffer dårligere.]`
@@ -837,9 +877,10 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 - **Rettstilstanden er ikke avklart i dette dokumentet.** Hva avtaleverket for skoleverket tillater av digital gjengivelse, og om det i det hele tatt er relevant når det er eleven selv og ikke skolen som laster opp, er ikke undersøkt her. Åpent spørsmål 12 i §11. Skal det inn i rapporten, må det stå med en kilde som er lest, ikke en antakelse.
 ### 6.4 Kostnad
 
-- `[ANTAKELSE: API-budsjett for hele semesteret er i størrelsesorden 300–600 kroner, av egen lomme.]` Rammen styrer flere valg som ellers ville sett vilkårlige ut: lagring framfor regenerering, tak på tekstlengde (FR-1), tak på mappestørrelse (FR-32), og tak på samtalelengde (FR-22).
-- Ulike oppgaver bruker ulike modeller, og fordelingen er nå konkret: `claude-haiku-4-5` som standard, `claude-sonnet-5` for Svarvurderingen og oppfølgingsspørsmålene. Fordelingen per oppgave med begrunnelse står i `addendum-lesevenn.md` §3.
-- **Fordelingen er en budsjettbeslutning, ikke en kvalitetspreferanse.** Én Tekst gjennom hele løypen er grovt 25 000 tokens inn og 7 000 ut. Alt på den dyreste tieren ville kostet rundt 950 kroner over semesteret — altså over rammen over. Blandingen legger de dyre tokenene der kvaliteten avgjør noe, og de billige der volumet er.
+- `[ANTAKELSE: API-budsjett for hele semesteret er i størrelsesorden 300–600 kroner, av egen lomme.]` Rammen styrer flere valg som ellers ville sett vilkårlige ut: lagring framfor regenerering, tak på tekstlengde (FR-1), tak på samtalelengde (FR-22) og bruksgrensene under.
+- Ulike oppgaver bruker ulike modeller: `claude-haiku-5-5` som standard, og `claude-sonnet-5-5` for Samtalestart, Svarvurderingen og oppfølgingsspørsmålene. Kilden er `prompts/gjeldende.json` (AD-14). Fordelingen per oppgave med begrunnelse står i `addendum-lesevenn.md` §3.
+- **Fordelingen er en budsjettbeslutning, ikke en kvalitetspreferanse.** Blandingen legger de dyre tokenene der kvaliteten avgjør noe, og de billige der volumet er. `[ESTIMAT 13.11.2026, ikke målt: én Tekst gjennom hele løypen med en Fagsamtale på fire runder koster om lag 1,60 kroner (Haiku om lag 34 000 tokens inn og 17 000 ut, inkludert fem uttrekk og tenking. Sonnet om lag 33 000 inn og 7 000 ut). Fagsamtalen står for om lag 92 prosent. Uten Fagsamtale er det om lag 0,15 kroner, og med seks runder, bilde og morsmål om lag 2,40. Rammen over holder da til om lag 200–400 Tekster. Kurs 10,5 kroner per dollar.]`
+- **Bruksgrenser.** Én konto kan legge inn høyst **5 nye Tekster** og starte høyst **5 Fagsamtaler** per døgn. I tillegg stopper appen nye genereringer når samlet forbruk for døgnet passerer **30 kroner**. Over en grense sier appen hvilken grense som er nådd og når den åpner igjen (neste døgn, norsk tid). Lagret innhold kan fortsatt åpnes. Grensen på Fagsamtaler finnes fordi det er der kostnaden ligger. Taket for hele appen finnes fordi en grense per konto ikke beskytter budsjettet når mange bruker appen samtidig. `[ANTAKELSE: forbruket beregnes fra tokenbruken modellen oppgir i hvert svar, og prisene i addendum §3.]` *(Lagt til 13.11.2026 etter tilbakemelding på PRD.)*
 - **Svarvurderingen får den dyrere modellen fordi FR-21 har en blokkerende port.** Null misoppfatninger lest som dekkende er ikke et mål man forhandler om, og det er den oppgaven som krever mest av modellen. Sonnet framfor Opus fordi den er halv pris og fortsatt langt sterkere enn Haiku; Opus 5 er oppgraderingsveien om målingen krever det.
 - **Uttrekket måles mot FR-8 før modellvalget låses.** Treffer Haiku tersklene, er valget dokumentert framfor antatt — og det er en sterkere setning i rapporten enn en begrunnelse basert på hva som er vanlig.
 - Målekjøringene mot Gullsettene koster også penger, og de kjøres per promptversjon. Det er en budsjettpost, ikke en gratis bieffekt — og et argument for å holde gullsettene så små som de er.
@@ -859,7 +900,7 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 
 ### 8.1 Med i v1
 
-- Innlesing av tekst på tre veier: liming, PDF med tekstlag, og bilder av boksider (umålt, tydelig merket). Obligatorisk gjennomsyn i to faser, sju navngitte PDF-feiltilstander og fem for bilder.
+- Innlesing av tekst på tre veier: liming, PDF med tekstlag, og bilder av boksider (umålt, tydelig merket). Gjennomsyn i to faser: overskriftene alltid, hele teksten for PDF og bilde (FR-3). Sju navngitte PDF-feiltilstander og fem for bilder.
 - Kjerneløypen: Aktivering med overskrifter og forkunnskapssvar → Lesevisning med markerte Faguttrykk og forklaring inline → Quiz med forankring og tilbakevisning i teksten.
 - Øvekort fra samme Begrepssett som Lesevisningen.
 - Skriftlig fagsamtale med Svarvurdering i fem tilstander og oppfølgingsspørsmål som oppfyller FR-20, målt etter FR-21.
@@ -896,7 +937,7 @@ Det som likevel er en reell post, er at målearbeidet i §4 er et arbeid i seg s
 
 Uten dette finnes det ikke et produkt å vurdere. M0 inneholder Fagsamtalen i full form, og det er et bevisst valg med en kostnad.
 
-- Liming av tekst, med gjennomsyn og retting (FR-1, FR-3).
+- Liming av tekst, med kontroll av overskriftene (FR-1, FR-3 fase 3a).
 - Kjerneløypen ende til ende: Aktivering → Lesevisning med markeringer → Quiz (FR-5, FR-6, FR-7, FR-9, FR-10, FR-13, FR-14, FR-15).
 - **Fagsamtale i full form** (FR-18 til FR-23): fem tilstander, strukturert utdata med `kildeavsnitt_id` og `mål`, flere runder, oppsummering.
 - Konto og lagring, nok til at en Tekst kan hentes fram igjen (FR-35, FR-36).
@@ -925,7 +966,7 @@ Dette er prosjektet i briefens forstand, og det nivået som svarer til påstande
 
 Det finnes **ikke** noe M2-nivå lenger. Mapper var det eneste betingede målet, og det er ute av v1 (§4.9). Uken mellom M1 og kodefrys er derfor ikke en funksjonsuke — den er slakk, og det er et bevisst valg framfor et tomrom.
 
-**Designfase (bestemt 16. oktober).** En samlet designrunde — felles farger, avstander, typografi og knapper, og mobil — legges hit, senest i denne uka. Den tar av bufferen, og krymper først om M1 skrider. Brukervennlighetsfeil rettes fortløpende og venter ikke hit; §5 er funksjonskrav, ikke pynt.
+**Designfase (bestemt 16. oktober).** En samlet designrunde — felles farger, avstander, typografi og knapper, og mobil — legges hit, senest i denne uka. Den tar av bufferen, og krymper først om M1 skrider. **Designfasen ble gjort 12.–13. november** og la til tre nye funksjoner: landingsside, arbeidsbord og samling (FR-47 til FR-49). Det er nye funksjoner i slakken, altså nettopp det SM-C2 advarer mot, og det skal stå åpent. Begrunnelsen er at inngangen avgjør om en lærer eller elev forstår appen i det hele tatt. Kuttrekkefølge om tiden ikke strekker til: først rulleeffektene på landingssiden, så viften på arbeidsbordet (bunkene blir lenker), og til slutt arbeidsbordet selv (Samlingen blir startsiden). Brukervennlighetsfeil rettes fortløpende og venter ikke hit; §5 er funksjonskrav, ikke pynt.
 
 Uken brukes ellers til det som alltid gjenstår og alltid undervurderes: feilretting funnet under målekjøringene, å få demoløypen til å gå tre ganger på rad uten inngrep, mobiltesting, og de siste tilgjengelighetskravene i §5. Skrider M1 ut, er dette bufferen som absorberer det — og da er det bedre at bufferen finnes i planen enn at den oppstår ved at noe annet ryker.
 
@@ -972,7 +1013,7 @@ Demoløypen er skrevet ned som en sjekkliste i repoet, og kjøres ved hver milep
 
 **Sekundære**
 
-- **SM-7: Quizen er forankret.** Minst 90 prosent av genererte spørsmål passerer forankringskravet, null uforankrede spørsmål vises eleven. Validerer FR-14.
+- **SM-7: Quizen er forankret.** Minst 85 prosent av genererte spørsmål passerer forankringskravet (samme terskel som FR-14), null uforankrede spørsmål vises eleven. Validerer FR-14.
 - **SM-8: Begrepssettet er stabilt.** Overlapp ≥ 0,80 (Jaccard) mellom to kjøringer av samme Tekst, i det ferdig kappede Begrepssettet, målt over alle Gullsettets seks Tekster. Validerer FR-11. **Terskelen beholdes på 0,80 over hele Gullsettet, og et brudd rapporteres som et brudd** — se avgjørelsen under.
 
 **Om SM-8, og hvorfor tallet er verdiløst uten merkingen**
@@ -985,7 +1026,7 @@ Tre veier var mulige: beholde 0,80 over alle seks og rapportere et eventuelt bru
 
 Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på seks fokuserte Tekster, kan snittet bestå — og da ville en bestått SM-8 skyldes tekstutvalget framfor kvaliteten. Begge feilretninger lukkes av samme krav. **Derfor er fordelingen tre og tre, bestemt før annoteringen starter og ikke etter at tallene er kjent.**
 - **SM-9: Kjerneløypen virker på telefon.** Demoløypens steg 1–7 fullføres på telefon i portrettmodus. Validerer §5.
-- **SM-10: Én testbruker utenfor utvikleren kommer gjennom løypen uten hjelp.** Én elev eller annen frivillig fullfører Kjerneløypen uten instruksjon, og friksjonspunktene skrives ned — særlig om det obligatoriske gjennomsynssteget (FR-3) er der de stopper, siden det er friksjon Lesevenn legger til med vilje. `[ANTAKELSE: én testbruker er oppnåelig innen fristen. Én er nok til å finne det som er åpenbart galt, og langt bedre enn ingen.]`
+- **SM-10: Én testbruker utenfor utvikleren kommer gjennom løypen uten hjelp.** Én elev eller annen frivillig fullfører Kjerneløypen uten instruksjon, og friksjonspunktene skrives ned — særlig om gjennomsynet av hele teksten for PDF og bilde (FR-3 fase 3b) er der de stopper, siden det er friksjon Lesevenn legger til med vilje. `[ANTAKELSE: én testbruker er oppnåelig innen fristen. Én er nok til å finne det som er åpenbart galt, og langt bedre enn ingen.]`
 - **SM-11: En elev med papirbok kommer gjennom løypen.** Bildeinnlesing av inntil fire sider gir en Råtekst som eleven kan rette i gjennomsynet og fullføre Kjerneløypen fra. Demonstreres i demoløypens steg 13. Validerer FR-44, FR-45. **Merk at dette ikke er en kvalitetspåstand:** metrikken sier at veien finnes og virker ende til ende, ikke at uttrekket er treffsikkert. Det siste er umålt i v1, og det står i FR-45.
 - **SM-12: Noen andre kan kjøre appen.** Kjerneløypen fullføres fra et rent utsjekk av repoet, etter stegene i README, uten prosjektets API-nøkkel og uten tilgang til driftsdatabasen. Validerer FR-46. **Dette er ikke en kvalitetspåstand om modellsvarene** — de er lagret på forhånd, og sier derfor ingenting om hvordan appen svarer på en ny tekst. Metrikken sier at kodeveien finnes, er validert og kan vises fram av noen som ikke er utvikleren.
 - **Merknad om briefens mappekriterium.** Briefen listet «flere tekster samlet i en mappe med én felles quiz» som et funksjonelt suksesskriterium. Det er ikke innfridd i v1, fordi Mapper er tatt ut (§4.9). Det skal stå i rapporten som et bevisst bytte med begrunnelse, ikke forsvinne fordi metrikken ble fjernet sammen med funksjonen.
@@ -1004,11 +1045,11 @@ Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på 
 3. ~~**Arbeidskravet — godkjent proposal.**~~ **Avklart 25. september: proposalen er levert og godkjent.** Dokumentet ligger som `proposal-lesevenn.md`. Emnet hadde ingen påkrevd struktur, så den følger malen gjenfunnet fra fjorårets gjennomføring (addendum §1). Retten til å levere mappekravet er dermed sikret.
 4. ~~**Hvem kan gjøre den eksterne vurderingen i FR-28?**~~ **Avklart 25. september:** en ukrainsk morsmålsbruker er funnet, og ukrainsk er derfor v1s Kvalitetssikrede språk (FR-24). Gjenstår bare å avtale tidspunkt i M1-vinduet rundt 20. november — ikke tidligere, siden funksjonen ikke finnes før da.
 5. ~~**Stemmer emnets ukeplan med milepælsplanen i §9?**~~ **Avklart 25. september:** uke 44–45 i ukeplanen er anbefalt framdrift, ikke egne innleveringer. M1-vinduet er intakt, og Mapper har dermed en reell sjanse framfor å være nærmest utelukket.
-6. **Tåler det obligatoriske gjennomsynssteget (FR-3) en reell elev?** Det er begrunnet i kvalitet, men det er også ekstra friksjon rett foran den eleven som strever mest. Prøv på testbrukeren i SM-10.
-7. **Hva skjer når eleven limer inn noe som ikke er en fagtekst?** En oppskrift, en chatlogg, et dikt. Trolig et mykt varsel med mulighet for å fortsette — men oppførselen er ikke spesifisert, og bør avklares eller bevisst utsettes.
+6. **Tåler det obligatoriske gjennomsynssteget (FR-3) en reell elev?** Det er begrunnet i kvalitet, men det er også ekstra friksjon rett foran den eleven som strever mest. Prøv på testbrukeren i SM-10. **Delvis avklart 11.11:** utviklerens telefontest viste at steget ikke var verdt friksjonen for innlimt tekst, og fase 3b hoppes nå over der (FR-3). For PDF og bilde står spørsmålet åpent til SM-10.
+7. ~~**Hva skjer når eleven limer inn noe som ikke er en fagtekst?**~~ **Avklart:** mykt, ikke-blokkerende varsel, spesifisert i FR-7. En oppskrift, en chatlogg, et dikt. Trolig et mykt varsel med mulighet for å fortsette — men oppførselen er ikke spesifisert, og bør avklares eller bevisst utsettes.
 8. ~~**Skal samlet Fagsamtale (FR-34) måles?**~~ **Bortfalt 27. september:** Mapper er ute av v1, så spørsmålet er ikke lenger aktuelt. Det samme resonnementet — en funksjon kan leveres umålt så lenge det oppgis — er nå brukt på bildeinnlesing i stedet (FR-45).
 9. **Er tetthetstaket i FR-7 riktig kalibrert for videregående?** Tallene — 4 prosent av løpende ord, 12 unike Faguttrykk per 1 000 ord — ble satt da målgruppen var ungdomstrinnet. Videregåendetekster er tettere på fagspråk, så taket kan nå binde for hardt og kutte uttrykk eleven faktisk trengte. Annoteringen av Gullsettet i FR-8 gir svaret: er det jevnlig flere enn 12 uttrykk per 1 000 ord i den manuelle annoteringen, skal taket heves — men da med tallet fra annoteringen, ikke med et anslag. Avklares i M0, siden annoteringen skjer der.
-10. **Er de-orddeling av PDF mulig uten en norsk ordliste?** FR-2 krever at «informa-\nsjon» slås sammen mens «KI-assistert» beholdes. Uten en ordliste er den grensen vanskelig å treffe pålitelig. Avklar om en enkel ordliste skal inn, eller om kravet skal senkes til å gjelde de vanlige tilfellene og resten fanges av gjennomsynet i FR-3.
+10. ~~**Er de-orddeling av PDF mulig uten en norsk ordliste?**~~ **Avklart:** FR-2 dekker de vanlige tilfellene uten ordliste, og restfeilene fanges i gjennomsynet (FR-3 fase 3b). FR-2 krever at «informa-\nsjon» slås sammen mens «KI-assistert» beholdes. Uten en ordliste er den grensen vanskelig å treffe pålitelig. Avklar om en enkel ordliste skal inn, eller om kravet skal senkes til å gjelde de vanlige tilfellene og resten fanges av gjennomsynet i FR-3.
 11. ~~**Hvilken modell, og er den en «Covered Model»?**~~ **Avklart på nytt 8. oktober:** modellen er byttet til `claude-haiku-5-5` etter at stabilitetsmålingen viste at den er dobbelt så stabil, en femtedel så dyr i utdatatokens og åtte ganger raskere enn `claude-haiku-4-5`. Sjekken er gjort om mot to primærkilder, med ordrette sitater, URL og lesedato i addendum §6: Covered Models er Claude Fable 5.1, Mythos 5.1, Fable 5 og Mythos 5, og **Claude Haiku står ikke på listen i noen versjon**. 30-dagerslagringen gjelder altså ikke, og konklusjonen i §6 står. **Ett forbehold er ført i §6 og er ikke lukket:** støtteartikkelen med listen er sist oppdatert 1. september, mens modellen ble utgitt 7. oktober, så listen er eldre enn modellen. Må kontrolleres på nytt nærmere innlevering. *(Forrige avklaring, 2. oktober:)* `claude-haiku-4-5` som standard og `claude-sonnet-5` for svarvurdering. **Begge er utenfor Covered Models**, så 30-dagerslagringen gjelder ikke og konklusjonen i addendum §6 står. Fordelingen per oppgave i addendum §3. Gjenstår: måle uttrekket mot FR-8 før valget låses. Opprinnelig formulering: Leverandør er avklart (Anthropic for M0), og vilkårene er dokumentert i addendum §6 — Commercial Terms sier «Anthropic may not train models on Customer Content from Services». Men spinen pinner ingen modell, og lagringsdokumentasjonen gjør unntak for «Covered Models» med 30 dagers oppbevaring. Hvilke modeller som er dekket er ikke belagt med kilde. **Må avklares før generatorkoden skrives**, siden konklusjonen om elevenes data henger på det. Opprinnelig formulering: *(Delvis avklart 30. september: Anthropic er valgt for M0, med sammenligning mot minst én annen leverandør før M1, målt på gullsettet i FR-8. Gjenstår kravene under.)* Inndata skal ikke brukes til trening, behandlingsstedet skal være kjent. Les vilkårene for det du faktisk bruker — forbruker- og API-versjoner av samme tjeneste har ofte ulike vilkår her — og skriv ned hvilke vilkår og hvilken dato. Avklares før M0, siden det er leverandøren appen bygges mot.
 12. **Hva tillater avtaleverket for skoleverket av digital gjengivelse, og gjelder det når eleven selv laster opp?** Berører både innliming og bildeinnlesing. Ikke undersøkt i dette prosjektet. Må stå i rapporten med en lest kilde, ikke som antakelse. Ikke blokkerende for bygging, men blokkerende for å kunne skrive §6.3 ferdig.
 13. **Hvor godt virker bildeuttrekket i praksis?** Ikke målt i v1 (FR-45). Avviket mellom Råtekst og redigert tekst lagres, og er den billigste indikasjonen. Verdt å se på mot slutten selv om det ikke er en måling.
@@ -1023,7 +1064,7 @@ Hver oppføring er merket `[ANTAKELSE]` der den står, og skal bekreftes eller a
 2. **§2.2** — Det er videregåendetekster (Vg1–Vg3) som brukes i testing, demo og Gullsett. Flyttes målgruppen, må Gullsettene annoteres på nytt — nivået sitter i annoteringen, ikke i koden.
 3. **§2.3, §4.1** — En stor del av målgruppen har papirbok eller nettbok uten brukbar kopiering. Dette er grunnlaget for at bildeinnlesing (FR-44) er i v1 og Mapper ikke er. Opplyst av utvikleren 27. september; ikke tallfestet.
 4. **§4.1, FR-45** — Et multimodalt modellkall gir godt nok tekstuttrekk fra et mobilbilde av en boksides tekst til at gjennomsynet i FR-3 fase 3b holder som sikkerhetsnett. Ikke målt, og bevisst ikke målt.
-5. **§4.1, FR-3** — Det obligatoriske gjennomsynssteget er verdt friksjonen. Bør prøves på testbruker.
+5. **§4.1, FR-3** — Gjennomsynet av hele teksten (fase 3b) er verdt friksjonen for PDF og bilde. *Endret 11.11:* for innlimt tekst holdt antakelsen ikke, og steget er fjernet der. For PDF og bilde bør den fortsatt prøves på testbruker.
 6. **§4.7** — Kontrollkilden for ukrainsk er tilgjengelig i M1-vinduet. *(Avklart 25. september: ukrainsk morsmålsbruker funnet.)*
 7. **§4.7, FR-27** — En morsmålsbruker på videregående trenger sjelden akademisk allmennspråk forklart, så kategorien markeres bare for elever med valgt Morsmål.
 8. **§4.11, FR-42** — At yrkesfaglige fagtekster treffes dårligere av uttrekket enn studiespesialiserende, er en hypotese og ikke et funn. Krysningen i FR-8 avgjør, og ingen forskjell er også et resultat.
