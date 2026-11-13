@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**471 prompter i 41 økter**, 2026-09-17 til 2026-11-13.
+**473 prompter i 41 økter**, 2026-09-17 til 2026-11-13.
 
 ---
 
@@ -2965,9 +2965,21 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 > Ja, til runde 1 nå.
 > Kan du beregne kostnad i kroner for k = 1, 10, 100 elever som mater inn N tekster daglig, med N = 2, 5, 10, 20
 
-<details><summary>Commits i økta (2)</summary>
+**00:59**
+
+> Grensene ser fine ut.
+> 85% er greit.
+
+**01:07**
+
+> Ja, valider alt, og kjør 2 og 3
+
+<details><summary>Commits i økta (5)</summary>
 
 - `484bf19` Designfase: visuell identitet, merke og mockups for LeseBuddy
 - `9fb7662` Promptlogg: oppdatert
+- `445ef5c` PRD runde 1 etter tilbakemelding: motsigelser, KI-feil, bruksgrenser, FR-47-49
+- `dae62d2` Designfase: DESIGN.md og EXPERIENCE.md (utkast), mockups promotert
+- `a8cb38f` Promptlogg: oppdatert
 
 </details>
