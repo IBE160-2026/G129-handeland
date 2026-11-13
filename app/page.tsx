@@ -6,11 +6,14 @@
  * tekst og til Samlingen. Tekstlisten med søk og sletting ligger i
  * `/samling` (FR-49), og innlesingen i `/ny`.
  *
- * Bordet tegnes på serveren, så det finnes ingen egen lastetilstand. Uten
- * innlogging sender `tilgang()` eleven til innloggingssiden (landingssiden
- * kommer i bolk 3).
+ * Bordet tegnes på serveren, så det finnes ingen egen lastetilstand.
+ *
+ * Uten innlogging viser `/` landingssiden (FR-47), ikke en omdirigering.
+ * Derfor `valgfriTilgang()` her, som gir `null` i stedet for å kaste. Feiler
+ * øktoppslaget, vises også landingssiden (data/konto.ts).
  */
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   type Bunke,
@@ -22,9 +25,11 @@ import {
   type Steg,
   velgBordet,
 } from "../data/arbeidsbord";
-import { tilgang } from "../data/konto";
+import { valgfriTilgang } from "../data/konto";
+import type { Tilgang } from "../data/tilgang";
 import { Arbeidsbord, type Hovedbunke, type Visningsbunke } from "./komponenter/Arbeidsbord";
 import { Hentefeil } from "./komponenter/Hentefeil";
+import { Landingsside } from "./komponenter/Landingsside";
 import { KNAPP_PRIMAER } from "./komponenter/knapper";
 import { BuddyMerke } from "./komponenter/Merke";
 
@@ -53,9 +58,24 @@ function visning(b: Bunke): Visningsbunke {
   return { id: b.id, tittel: b.tittel, dato: kortDato(b.opprettet), framdrift: kort.map((k) => k.paabegynt), kort };
 }
 
-export default async function ArbeidsbordSide() {
-  // FR-35: hentes før try-blokken, se data/konto.ts.
-  const t = await tilgang();
+/** Landingstittelen bare for den som ser landingssiden; innlogget er fanen «Arbeidsbord». */
+export async function generateMetadata(): Promise<Metadata> {
+  if (await valgfriTilgang()) return { title: "Arbeidsbord – LeseBuddy" };
+  return {
+    title: "LeseBuddy – lesestøtte for videregående",
+    description:
+      "LeseBuddy hjelper elever på videregående å forstå det de leser. Eleven leser teksten selv, og Buddy forklarer fagordene, lager quiz og øvekort og følger opp i en fagsamtale. For elever og lærere.",
+  };
+}
+
+export default async function Forside() {
+  // FR-47: uten innlogging, eller når øktoppslaget feiler, vises landingssiden.
+  const t = await valgfriTilgang();
+  if (!t) return <Landingsside />;
+  return <ArbeidsbordSide t={t} />;
+}
+
+async function ArbeidsbordSide({ t }: { t: Tilgang }) {
   let bunker: Bunke[] | null = null;
   try {
     bunker = await hentArbeidsbord(t);

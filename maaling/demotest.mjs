@@ -321,10 +321,12 @@ async function enKjoering(nettleser) {
     .join(" ");
   const epost = `demo${kjoering}@test.no`;
 
-  // Steg 1: opprett konto, logg inn.
+  // Steg 1: opprett konto, logg inn. Uten innlogging er `/` landingssiden (FR-47).
   const pc = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
   pc.setDefaultTimeout(60000);
-  await pc.goto(`${APP}/registrer`);
+  await pc.goto(`${APP}/`);
+  await pc.click("main a[href='/registrer'] >> nth=0");
+  await pc.waitForURL(`${APP}/registrer`);
   await pc.fill("#kode", KODE);
   await pc.fill("#epost", epost);
   await pc.fill("#passord", PASSORD);
@@ -371,7 +373,9 @@ async function enKjoering(nettleser) {
   const kontekst = await nettleser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: "nb-NO" });
   const tlf = await kontekst.newPage();
   tlf.setDefaultTimeout(60000);
-  await tlf.goto(`${APP}/logg-inn`);
+  await tlf.goto(`${APP}/`);
+  await tlf.tap("main a[href='/logg-inn'] >> nth=0");
+  await tlf.waitForURL(`${APP}/logg-inn`);
   await tlf.fill("#epost", epost);
   await tlf.fill("#passord", PASSORD);
   await tlf.tap("form button[type=submit]");

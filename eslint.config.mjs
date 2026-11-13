@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Kopiert fra pdfjs-dist av predev/prebuild, ikke i git og ikke vår kode.
+    "public/pdf.worker.min.mjs",
   ]),
 ]);
 

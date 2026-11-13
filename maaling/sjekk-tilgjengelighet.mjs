@@ -23,6 +23,12 @@
  *   - FR-49: Samlingen, tittelen til neste steg, og søk uten treff
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlingen og på Ny tekst
+ *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
+ *     axe i lys og mørk modus, med og uten redusert bevegelse, uten
+ *     JavaScript og på telefon; den statiske versjonen (alle steg, fire
+ *     markerte fagord og forklaringslisten), ingen live-regioner, Følge-Buddy
+ *     skjult for skjermlesere og bare fra 760 px ved vanlig tekst, og 320 px
+ *     med 200 % tekst. Med SKJERMBILDE=<mappe> lagres skjermbilder av siden.
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -105,6 +111,14 @@ async function axe(side, navn) {
     axeFunn.push({ side: navn, id: v.id, alvor: v.impact, hjelp: v.help, antall: v.nodes.length, eksempel: v.nodes[0]?.target.join(" ") });
   }
   sjekk(`axe: ${navn}`, r.violations.length === 0, r.violations.map((v) => `${v.id} (${v.nodes.length})`).join(", "));
+}
+
+/** Landingsmenyen («Logg inn», «For lærere») skal bare stå i topplinjen på landingssiden. */
+async function ingenLandingsmeny(side) {
+  return (
+    (await side.locator("header a:visible", { hasText: "Logg inn" }).count()) === 0 &&
+    (await side.locator("header a:visible", { hasText: "For lærere" }).count()) === 0
+  );
 }
 
 async function ingenSiderulling(side, navn) {
@@ -413,6 +427,7 @@ try {
     (await pc.locator("text=Ingen titler inneholder «mitose».").count()) === 1 && (await pc.locator("main a:has-text('Vis alle')").count()) === 1,
   );
   sjekk("menyen markerer Samlingen som aktiv", (await pc.locator("nav a[aria-current=page]").textContent()) === "Samlingen");
+  sjekk("innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen", await ingenLandingsmeny(pc));
 
   /* --- Mørk modus: axe på de samme sidene ----------------------------- */
   const moerkUt = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" })).newPage();
@@ -467,6 +482,7 @@ try {
   await tlf.fill("#passord", PASSORD);
   await tlf.click("form button[type=submit]");
   await tlf.waitForURL(`${APP}/`);
+  sjekk("innlogget (/ på telefon): ingen «Logg inn» eller «For lærere» i topplinjen", await ingenLandingsmeny(tlf));
 
   for (const [navn, url] of [
     ["arbeidsbord", `${APP}/`],
@@ -573,6 +589,244 @@ try {
   sjekk("1280 px, 200 % tekst: viften er et rutenett", storOppsett === "rutenett", `data-oppsett=${storOppsett}`);
   await ingenSiderulling(storPc, "åpen vifte 1280 px, 200 % tekst");
   await ingenKlipping(storPc, "åpen vifte 1280 px, 200 % tekst");
+
+  /* --- FR-47: landingssiden, uten innlogging ------------------------- */
+  // Nye kontekster har ingen informasjonskapsler, så ingen er innlogget.
+  const svar = await fetch(`${APP}/`, { redirect: "manual" });
+  const html = await svar.text();
+  sjekk(
+    "FR-47: / uten innlogging gir 200 med landingssiden, ikke en omdirigering",
+    svar.status === 200 && html.includes("Forstå mer av det du"),
+    `status ${svar.status}`,
+  );
+
+  const SKJERM = process.env.SKJERMBILDE;
+  async function skjermbilde(side, navn) {
+    if (SKJERM) await side.screenshot({ path: path.join(SKJERM, `landingsside-${navn}.png`), fullPage: true });
+  }
+  async function landing({ bredde = 1280, hoeyde = 900, farge = "light", redusert = false, js = true, mobil = false } = {}) {
+    const ctx = await nettleser.newContext({
+      viewport: { width: bredde, height: hoeyde },
+      locale: "nb-NO",
+      colorScheme: farge,
+      reducedMotion: redusert ? "reduce" : "no-preference",
+      javaScriptEnabled: js,
+      isMobile: mobil,
+      hasTouch: mobil,
+    });
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${APP}/`);
+    if (js) await side.waitForLoadState("networkidle");
+    return side;
+  }
+  /** Ruller hele siden ned og opp igjen, så effektene har kjørt, og venter til overgangene er ferdige. */
+  async function rullGjennom(side) {
+    await side.evaluate(async () => {
+      for (let y = 0; y <= document.documentElement.scrollHeight; y += 300) {
+        window.scrollTo(0, y);
+        await new Promise((ok) => requestAnimationFrame(() => setTimeout(ok, 30)));
+      }
+    });
+    await side.waitForTimeout(800);
+  }
+  /** Den statiske versjonen: alle steg synlige, alle fire fagord markert og forklaringslisten synlig. */
+  async function statisk(side) {
+    return side.evaluate(() => {
+      const synlig = (e) => e.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !e.classList.contains("sr-only");
+      const steg = [...document.querySelectorAll("#landingsside .ls-ett")];
+      const ord = [...document.querySelectorAll("#landingsside .ls-fagord")];
+      const dt = [...document.querySelectorAll("#landingsside .ls-forklaringer dl dt")];
+      return {
+        steg: steg.filter((e) => synlig(e) && getComputedStyle(e).opacity === "1").length,
+        markert: ord.filter((e) => getComputedStyle(e).backgroundColor !== "rgba(0, 0, 0, 0)").length,
+        forklaringer: dt.filter((e) => synlig(e.parentElement)).length,
+        folger: [...document.querySelectorAll(".ls-folger")].some((e) => e.checkVisibility()),
+      };
+    });
+  }
+  const statiskOk = (s) => s.steg === 3 && s.markert === 4 && s.forklaringer === 4 && !s.folger;
+  const statiskTekst = (s) => `${s.steg} steg, ${s.markert} fagord markert, ${s.forklaringer} forklaringer, Følge-Buddy ${s.folger ? "synlig" : "skjult"}`;
+
+  // PC, lys modus, bevegelse tillatt: effektene kjører.
+  const land = await landing();
+  sjekk(
+    "FR-47: landingssiden har «Logg inn» og «Registrer deg»",
+    (await land.locator("main a[href='/logg-inn']", { hasText: "Logg inn" }).count()) > 0 &&
+      (await land.locator("main a[href='/registrer']", { hasText: "Registrer deg" }).count()) > 0,
+  );
+  sjekk("FR-47: siden sier at registrering krever en kode fra læreren", (await land.locator("text=Har du fått en kode fra læreren? Da kan du registrere deg.").count()) > 0);
+  sjekk("landingssiden har én h1", (await land.locator("h1").count()) === 1);
+  sjekk("demoen har overskriften «Se hvordan Buddy markerer fagord»", (await land.locator("h2", { hasText: "Se hvordan Buddy markerer fagord" }).count()) === 1);
+  sjekk(
+    "topplinjen på landingssiden: «For lærere» og «Logg inn», ikke appmenyen",
+    (await land.locator("header a:visible", { hasText: "For lærere" }).count()) === 1 &&
+      (await land.locator("header a:visible", { hasText: "Logg inn" }).count()) === 1 &&
+      (await land.locator("header a:visible", { hasText: "Samlingen" }).count()) === 0,
+  );
+  sjekk(
+    "skjermleser: ingen live-regioner på landingssiden, Følge-Buddy er aria-hidden",
+    await land.evaluate(
+      () =>
+        document.querySelectorAll("#landingsside [aria-live], #landingsside [role=status], #landingsside [role=alert]").length === 0 &&
+        [...document.querySelectorAll(".ls-folger, .ls-boble")].every((e) => e.closest("[aria-hidden=true]")),
+    ),
+  );
+  sjekk("rulleeffektene A og C er slått på med JavaScript og bevegelse", await land.evaluate(() => {
+    const r = document.getElementById("landingsside");
+    return r.classList.contains("effekt-a") && r.classList.contains("effekt-c");
+  }));
+  await land.evaluate(() => window.scrollTo(0, document.querySelector(".ls-demo-spor").offsetTop + window.innerHeight * 0.9));
+  await land.waitForTimeout(600);
+  const demoNaa = await land.evaluate(() => ({
+    paa: document.querySelectorAll("#landingsside .ls-fagord.paa").length,
+    vist: [...document.querySelectorAll("#landingsside .ls-forklaring")].filter((e) => !e.classList.contains("sr-only")).length,
+    iDom: document.querySelectorAll("#landingsside .ls-forklaringer dl dt").length,
+  }));
+  sjekk(
+    "effekt A: fagordene markeres ett for ett, og alle forklaringene står i DOM-en",
+    demoNaa.paa >= 1 && demoNaa.paa < 4 && demoNaa.vist === 1 && demoNaa.iDom === 4,
+    `${demoNaa.paa} markert, ${demoNaa.vist} vist, ${demoNaa.iDom} i listen`,
+  );
+  // 1280 px: margen ved siden av tekstkolonnen har ikke plass til Buddy og boblen (WCAG 2.4.11).
+  sjekk(
+    "1280 px: ingen Følge-Buddy, fordi den ville dekket tekstkolonnen",
+    !(await land.locator(".ls-folger").evaluate((e) => e.checkVisibility({ opacityProperty: true }))),
+  );
+  await rullGjennom(land);
+  sjekk("effekt C: alle stegene har dukket fram etter rullingen", (await statisk(land)).steg === 3);
+  await skjermbilde(land, "1280-lys");
+  await land.evaluate(() => window.scrollTo(0, 0));
+  await land.waitForTimeout(800);
+  await axe(land, "landingsside");
+  // Bevegelsen slås av mens effektene går: siden går over til den statiske versjonen.
+  await land.emulateMedia({ reducedMotion: "reduce" });
+  await land.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
+  await land.waitForTimeout(100);
+  const stByttet = await statisk(land);
+  sjekk(
+    "redusert bevegelse slått på underveis: statisk versjon og ingen effekt-klasser",
+    statiskOk(stByttet) && !(await land.evaluate(() => document.getElementById("landingsside").className.includes("effekt"))),
+    statiskTekst(stByttet),
+  );
+  await land.context().close();
+
+  // Bred skjerm: Følge-Buddy og boblen står i margen, utenfor tekstkolonnen.
+  const bred = await landing({ bredde: 1920, hoeyde: 1000 });
+  // Overskriften «Slik hjelper Buddy deg» like over synsfeltet: heroen er forbi, og stegene står midt i.
+  await bred.evaluate(() => window.scrollTo(0, document.querySelector("#ls-slik").getBoundingClientRect().top + window.scrollY + 100));
+  await bred.waitForTimeout(700);
+  const plass = await bred.evaluate(() => {
+    const f = document.querySelector(".ls-folger");
+    const b = f.querySelector(".ls-boble");
+    const i = document.querySelector("#landingsside .ls-innhold");
+    const kant = i.getBoundingClientRect().right - parseFloat(getComputedStyle(i).paddingRight);
+    return {
+      synlig: f.dataset.synlig === "ja" && f.checkVisibility({ opacityProperty: true }),
+      snakker: f.dataset.snakker === "ja",
+      venstre: Math.min(f.getBoundingClientRect().left, b.getBoundingClientRect().left),
+      kant,
+    };
+  });
+  sjekk(
+    "1920 px: Følge-Buddy vises når heroen er rullet forbi, med boblen, utenfor tekstkolonnen",
+    plass.synlig && plass.snakker && plass.venstre >= plass.kant,
+    `Buddy/boble fra ${Math.round(plass.venstre)} px, tekstkolonnen slutter ved ${Math.round(plass.kant)} px`,
+  );
+  await bred.context().close();
+
+  const landMoerk = await landing({ farge: "dark" });
+  await rullGjennom(landMoerk);
+  await skjermbilde(landMoerk, "1280-moerk");
+  await landMoerk.evaluate(() => window.scrollTo(0, 0));
+  await landMoerk.waitForTimeout(800);
+  await axe(landMoerk, "landingsside (mørk)");
+  await landMoerk.context().close();
+
+  // Innloggingssiden uten økt: topplinjen er appens, ikke landingssidens.
+  const innlogging = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
+  await innlogging.goto(`${APP}/logg-inn`);
+  sjekk("/logg-inn: ingen «Logg inn» eller «For lærere» i topplinjen", await ingenLandingsmeny(innlogging));
+  await innlogging.context().close();
+
+  // Redusert bevegelse gir den statiske versjonen.
+  for (const farge of ["light", "dark"]) {
+    const s = await landing({ farge, redusert: true });
+    await rullGjennom(s);
+    const st = await statisk(s);
+    const navn = farge === "dark" ? "mørk" : "lys";
+    sjekk(`redusert bevegelse (${navn}): den statiske versjonen`, statiskOk(st) && !(await s.evaluate(() => document.getElementById("landingsside").className.includes("effekt"))), statiskTekst(st));
+    await skjermbilde(s, `1280-${farge === "dark" ? "moerk" : "lys"}-redusert`);
+    await axe(s, `landingsside med redusert bevegelse (${navn})`);
+    await s.context().close();
+  }
+
+  // Uten JavaScript: alt innhold er der.
+  const utenJs = await landing({ js: false });
+  const stJs = await statisk(utenJs);
+  sjekk("uten JavaScript: alle steg, alle fire fagord markert og forklaringslisten synlige", statiskOk(stJs), statiskTekst(stJs));
+  // axe kjører ikke uten JavaScript. Siden er da den samme statiske HTML-en som axe sjekket med redusert bevegelse.
+  await skjermbilde(utenJs, "1280-uten-js");
+  await utenJs.context().close();
+
+  // Telefon: én kolonne, ingen Følge-Buddy, ingen sidelengs rulling.
+  for (const farge of ["light", "dark"]) {
+    const navn = farge === "dark" ? "mørk" : "lys";
+    const s = await landing({ bredde: 375, hoeyde: 740, farge, mobil: true });
+    await rullGjennom(s);
+    await ingenSiderulling(s, `landingsside (${navn})`);
+    sjekk(`telefon (${navn}): ingen Følge-Buddy`, !(await s.locator(".ls-folger").evaluate((e) => e.checkVisibility())));
+    sjekk(
+      `telefon (${navn}): «For lærere» er skjult i topplinjen, men lærerdelen står`,
+      (await s.locator("header a:visible", { hasText: "For lærere" }).count()) === 0 && (await s.locator("#laerere h2").isVisible()),
+    );
+    await skjermbilde(s, `375-${farge === "dark" ? "moerk" : "lys"}`);
+    await s.evaluate(() => window.scrollTo(0, 0));
+    await s.waitForTimeout(800);
+    await axe(s, `landingsside (telefon, ${navn})`);
+    await s.context().close();
+  }
+  if (SKJERM) {
+    for (const [navn, valg] of [
+      ["375-lys-redusert", { redusert: true }],
+      ["375-uten-js", { js: false }],
+    ]) {
+      const s = await landing({ bredde: 375, hoeyde: 740, mobil: true, ...valg });
+      await skjermbilde(s, navn);
+      await s.context().close();
+    }
+  }
+
+  // 320 px og 200 % tekst, med og uten effektene.
+  for (const [navn, redusert] of [
+    ["landingsside 320 px, 200 % tekst", false],
+    ["landingsside 320 px, 200 % tekst, redusert bevegelse", true],
+  ]) {
+    const s = await landing({ bredde: 320, hoeyde: 700, redusert });
+    await s.addStyleTag({ content: "html { font-size: 200% !important; }" });
+    await s.evaluate(() => window.dispatchEvent(new Event("resize")));
+    await rullGjennom(s);
+    await ingenSiderulling(s, navn);
+    await ingenKlipping(s, navn);
+    if (!redusert) {
+      // Demoflaten er høyere enn synsfeltet, så effekt A står av og demoen er statisk.
+      const st = await statisk(s);
+      sjekk(
+        "320 px, 200 % tekst: effekt A er av, og alle fire forklaringene er synlige",
+        !(await s.evaluate(() => document.getElementById("landingsside").classList.contains("effekt-a"))) && st.forklaringer === 4,
+        statiskTekst(st),
+      );
+    }
+    await s.context().close();
+  }
+  // Bred skjerm med 200 % tekst: Følge-Buddy vises bare ved vanlig tekststørrelse.
+  const landStor = await landing({ bredde: 1920, hoeyde: 1000 });
+  await landStor.addStyleTag({ content: "html { font-size: 200% !important; }" });
+  await landStor.evaluate(() => window.dispatchEvent(new Event("resize")));
+  await rullGjennom(landStor);
+  sjekk("1920 px, 200 % tekst: ingen Følge-Buddy", !(await landStor.locator(".ls-folger").evaluate((e) => e.checkVisibility())));
+  await ingenSiderulling(landStor, "landingsside 1920 px, 200 % tekst");
+  await landStor.context().close();
 
   await nettleser.close();
 } catch (e) {

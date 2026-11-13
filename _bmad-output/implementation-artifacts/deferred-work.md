@@ -23,3 +23,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-2-arbeidsbord-og-samling.md`
   summary: Hentefeil-tilstanden på / og /samling (og at tilgang() står utenfor try) har ingen test.
   evidence: Medium, ikke verifisert; krever enten servertest i vitest eller simulert databasefeil i e2e-skriptene.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-3-landingsside.md`
+  summary: /logg-inn og /registrer kaller innloggetEpost() uten vakt, så de gir 500 når øktoppslaget feiler, mens / nå viser landingssiden.
+  evidence: Edge-case-gjennomgangen av bolk 3; innloggetEpost i data/konto.ts har ingen try/unstable_rethrow.

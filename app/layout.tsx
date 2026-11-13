@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Atkinson_Hyperlegible, Gloock, Instrument_Serif, Quicksand } from "next/font/google";
+import { Atkinson_Hyperlegible, Instrument_Serif, Quicksand } from "next/font/google";
 import "./globals.css";
 import { Topplinje } from "./komponenter/Topplinje";
 
 // DESIGN.md, typography: Atkinson til all brødtekst, Instrument Serif til
 // overskrifter og «lese» i ordmerket, Quicksand bare til «uddy» i ordmerket.
-// Gloock lastes nå, men brukes først på landingssiden (ikke inne i appen).
+// Gloock brukes bare på landingssiden, og lastes der (Landingsside.tsx), med
+// forhåndslasting fordi heroen er det største elementet på siden.
 const atkinson = Atkinson_Hyperlegible({
   variable: "--font-atkinson",
   weight: ["400", "700"],
@@ -17,13 +18,6 @@ const instrument = Instrument_Serif({
   weight: "400",
   style: ["normal", "italic"],
   subsets: ["latin", "latin-ext"],
-});
-
-const gloock = Gloock({
-  variable: "--font-gloock",
-  weight: "400",
-  subsets: ["latin", "latin-ext"],
-  preload: false,
 });
 
 const quicksand = Quicksand({
@@ -45,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // er bygget for.
     <html
       lang="nb"
-      className={`${atkinson.variable} ${instrument.variable} ${gloock.variable} ${quicksand.variable} h-full antialiased`}
+      className={`${atkinson.variable} ${instrument.variable} ${quicksand.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bakgrunn font-sans text-tekst">
         {/*

@@ -12,13 +12,18 @@
  */
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { cache } from "react";
+import { redirect, unstable_rethrow } from "next/navigation";
 import { hentAuth } from "./auth";
 import type { Tilgang } from "./tilgang";
 
-/** Økten bak forespørselen, eller `null`. Verifiseres mot databasen. */
-async function hentOekt() {
-  return hentAuth().api.getSession({ headers: await headers() });
+/**
+ * Økten bak forespørselen, eller `null`. Verifiseres mot databasen. Det eneste
+ * stedet økten slås opp. Kalleren henter `headers()`, så valgfriTilgang kan
+ * gjøre det utenfor sin try-blokk.
+ */
+async function hentOekt(h: Headers) {
+  return hentAuth().api.getSession({ headers: h });
 }
 
 /**
@@ -29,13 +34,38 @@ async function hentOekt() {
  * inni — ellers fanger catch omdirigeringen.
  */
 export async function tilgang(): Promise<Tilgang> {
-  const oekt = await hentOekt();
+  const oekt = await hentOekt(await headers());
   if (!oekt) redirect("/logg-inn");
   return { kontoId: oekt.user.id };
 }
 
+/**
+ * Tilgangen, eller `null` uten innlogging — for forsiden, som viser
+ * landingssiden til den som ikke er innlogget (FR-47) i stedet for å sende
+ * henne videre. Kaster aldri: feiler øktoppslaget (databasen svarer ikke),
+ * logges feilen og siden behandles som utlogget, så landingssiden vises i
+ * stedet for en 500.
+ *
+ * `headers()` hentes utenfor try-blokken, og `unstable_rethrow` slipper
+ * gjennom Nexts egne kast, så Next fortsatt ser at siden er dynamisk.
+ *
+ * `cache`: forsiden spør både i generateMetadata og i siden, og det skal
+ * bare bli ett øktoppslag per forespørsel.
+ */
+export const valgfriTilgang = cache(async (): Promise<Tilgang | null> => {
+  const h = await headers();
+  try {
+    const oekt = await hentOekt(h);
+    return oekt ? { kontoId: oekt.user.id } : null;
+  } catch (e) {
+    unstable_rethrow(e);
+    console.error("Kunne ikke slå opp økten, viser landingssiden:", e);
+    return null;
+  }
+});
+
 /** For kontosiden: e-postadressen er det eneste kontoen har å vise. */
 export async function innloggetEpost(): Promise<string | null> {
-  const oekt = await hentOekt();
+  const oekt = await hentOekt(await headers());
   return oekt?.user.email ?? null;
 }

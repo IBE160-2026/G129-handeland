@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**105 av 105 sjekker bestått.**
+**143 av 143 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -34,7 +34,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/d86ca27e-9aaf-4d63-bc7b-a957fccac23c/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/aadb6f22-8b9f-467c-8e35-11395cc5de38/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -51,14 +51,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/d86ca27e-9aaf-4d63-bc7b-a957fccac23c/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/aadb6f22-8b9f-467c-8e35-11395cc5de38/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
+| ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
 | ✓ | axe: registrering (mørk) |  |
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/d86ca27e-9aaf-4d63-bc7b-a957fccac23c/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/aadb6f22-8b9f-467c-8e35-11395cc5de38/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -67,6 +68,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: konto (mørk) |  |
 | ✓ | axe: arbeidsbord med åpen vifte (mørk) |  |
 | ✓ | axe: lesevisning med åpen forklaring (mørk) |  |
+| ✓ | innlogget (/ på telefon): ingen «Logg inn» eller «For lærere» i topplinjen |  |
 | ✓ | mobil uten sidelengs rulling: arbeidsbord | 375 px innhold i 375 px vindu |
 | ✓ | axe: arbeidsbord (telefon) |  |
 | ✓ | mobil uten sidelengs rulling: samling | 375 px innhold i 375 px vindu |
@@ -111,5 +113,41 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | 1280 px, 200 % tekst: viften er et rutenett | data-oppsett=rutenett |
 | ✓ | mobil uten sidelengs rulling: åpen vifte 1280 px, 200 % tekst | 1280 px innhold i 1280 px vindu |
 | ✓ | ingen tekst klippes: åpen vifte 1280 px, 200 % tekst |  |
+| ✓ | FR-47: / uten innlogging gir 200 med landingssiden, ikke en omdirigering | status 200 |
+| ✓ | FR-47: landingssiden har «Logg inn» og «Registrer deg» |  |
+| ✓ | FR-47: siden sier at registrering krever en kode fra læreren |  |
+| ✓ | landingssiden har én h1 |  |
+| ✓ | demoen har overskriften «Se hvordan Buddy markerer fagord» |  |
+| ✓ | topplinjen på landingssiden: «For lærere» og «Logg inn», ikke appmenyen |  |
+| ✓ | skjermleser: ingen live-regioner på landingssiden, Følge-Buddy er aria-hidden |  |
+| ✓ | rulleeffektene A og C er slått på med JavaScript og bevegelse |  |
+| ✓ | effekt A: fagordene markeres ett for ett, og alle forklaringene står i DOM-en | 3 markert, 1 vist, 4 i listen |
+| ✓ | 1280 px: ingen Følge-Buddy, fordi den ville dekket tekstkolonnen |  |
+| ✓ | effekt C: alle stegene har dukket fram etter rullingen |  |
+| ✓ | axe: landingsside |  |
+| ✓ | redusert bevegelse slått på underveis: statisk versjon og ingen effekt-klasser | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | 1920 px: Følge-Buddy vises når heroen er rullet forbi, med boblen, utenfor tekstkolonnen | Buddy/boble fra 1705 px, tekstkolonnen slutter ved 1480 px |
+| ✓ | axe: landingsside (mørk) |  |
+| ✓ | /logg-inn: ingen «Logg inn» eller «For lærere» i topplinjen |  |
+| ✓ | redusert bevegelse (lys): den statiske versjonen | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | axe: landingsside med redusert bevegelse (lys) |  |
+| ✓ | redusert bevegelse (mørk): den statiske versjonen | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | axe: landingsside med redusert bevegelse (mørk) |  |
+| ✓ | uten JavaScript: alle steg, alle fire fagord markert og forklaringslisten synlige | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | mobil uten sidelengs rulling: landingsside (lys) | 375 px innhold i 375 px vindu |
+| ✓ | telefon (lys): ingen Følge-Buddy |  |
+| ✓ | telefon (lys): «For lærere» er skjult i topplinjen, men lærerdelen står |  |
+| ✓ | axe: landingsside (telefon, lys) |  |
+| ✓ | mobil uten sidelengs rulling: landingsside (mørk) | 375 px innhold i 375 px vindu |
+| ✓ | telefon (mørk): ingen Følge-Buddy |  |
+| ✓ | telefon (mørk): «For lærere» er skjult i topplinjen, men lærerdelen står |  |
+| ✓ | axe: landingsside (telefon, mørk) |  |
+| ✓ | mobil uten sidelengs rulling: landingsside 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: landingsside 320 px, 200 % tekst |  |
+| ✓ | 320 px, 200 % tekst: effekt A er av, og alle fire forklaringene er synlige | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | mobil uten sidelengs rulling: landingsside 320 px, 200 % tekst, redusert bevegelse | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: landingsside 320 px, 200 % tekst, redusert bevegelse |  |
+| ✓ | 1920 px, 200 % tekst: ingen Følge-Buddy |  |
+| ✓ | mobil uten sidelengs rulling: landingsside 1920 px, 200 % tekst | 1920 px innhold i 1920 px vindu |
 
 Det axe-core ikke kan se — om rekkefølgen gir mening, om teksten er forståelig — krever en person. Se også testen på ekte telefon i fremdriftsplanen.
