@@ -3000,7 +3000,7 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Oppta arbeidet
 
-<details><summary>Commits i økta (9)</summary>
+<details><summary>Commits i økta (10)</summary>
 
 - `484bf19` Designfase: visuell identitet, merke og mockups for LeseBuddy
 - `9fb7662` Promptlogg: oppdatert
@@ -3011,5 +3011,6 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `4502d2c` Logg: designfase
 - `5fcfd4b` Promptlogg: oppdatert
 - `f680294` Promptlogg: oppdatert
+- `9915f24` feat(design): bolk 1 – LeseBuddy-identitet og tenkeindikator
 
 </details>

@@ -20,7 +20,7 @@ export default async function Konto() {
   return (
     <main className="mx-auto w-full max-w-xl px-4 py-10">
       <p>
-        <Link href="/" className="underline underline-offset-4">← Til tekstene</Link>
+        <Link href="/" className="underline underline-offset-4">← Til arbeidsbordet</Link>
       </p>
       <h1 className="mt-6 text-3xl font-semibold tracking-tight">Konto</h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">Logget inn som {epost}.</p>

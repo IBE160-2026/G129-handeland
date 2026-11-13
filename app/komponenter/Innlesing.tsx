@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Innlesing på forsiden — FR-1 (liming) og FR-2 (PDF).
+ * Innlesing på Ny tekst-siden (/ny) — FR-1 (liming) og FR-2 (PDF).
  *
  * To faner som ender i samme løype. PDF-en leses HER, i nettleseren (AD-16):
  * filen forlater aldri elevens maskin, bare teksten og rapporten om hva
@@ -136,7 +136,7 @@ export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling
   const [fane, setFane] = useState<Fane>("lim");
   return (
     <div>
-      <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="flex gap-2 border-b border-slate-200 dark:border-slate-800">
+      <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="flex flex-wrap gap-x-2 border-b border-slate-200 dark:border-slate-800">
         {(
           [
             ["lim", "Lim inn tekst"],

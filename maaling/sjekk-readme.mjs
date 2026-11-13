@@ -117,6 +117,8 @@ try {
   await s.click("form button[type=submit]");
   await s.waitForURL(`${APP}/`);
   sjekk("registrering med invitasjonskoden fra .env.example", true);
+  // Innlesingen ligger på /ny; arbeidsbordet på / har bare bunkene.
+  await s.goto(`${APP}/ny`);
 
   const eksempel = await readFile(path.join(mappe, "testdata", "eksempeltekst", "em-egenskaper.txt"), "utf8");
   await s.fill("#tittel", "EM-bølger");

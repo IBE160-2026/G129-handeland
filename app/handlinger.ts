@@ -782,6 +782,7 @@ export async function slett(tekstId: string): Promise<{ slettet: boolean }> {
     return { slettet: false };
   }
   revalidatePath("/");
+  revalidatePath("/samling");
   return { slettet: true };
 }
 

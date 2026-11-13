@@ -140,8 +140,8 @@ async function loeype(s, { mobil, eksempel, brod }) {
   const trykk = (l) => (mobil ? l.tap() : l.click());
   const p = mobil ? "12/" : "";
 
-  // Steg 2: lim inn, fase 3a.
-  await s.goto(`${APP}/`);
+  // Steg 2: lim inn, fase 3a. Innlesingen ligger på /ny.
+  await s.goto(`${APP}/ny`);
   await s.fill("#tittel", "EM-bølger");
   await s.fill("#tekst", eksempel);
   await trykk(s.locator('button[type=submit]:visible:has-text("Begynn")'));
@@ -361,7 +361,7 @@ async function enKjoering(nettleser) {
   await pc.waitForTimeout(1000);
 
   // Steg 11: PF-1.
-  await pc.goto(`${APP}/`);
+  await pc.goto(`${APP}/ny`);
   await pc.click('[role=tab]:has-text("Last opp PDF")');
   await pc.setInputFiles("#pdf", "testdata/pdf/pf1-skannet.pdf");
   await pc.locator("text=Filen ser ut til å være et bilde av en tekst.").waitFor({ timeout: 30000 });
@@ -381,7 +381,7 @@ async function enKjoering(nettleser) {
 
   // Steg 13: to bilder.
   const bilder = await testbilder(nettleser, eksempel);
-  await pc.goto(`${APP}/`);
+  await pc.goto(`${APP}/ny`);
   await pc.click('[role=tab]:has-text("Ta bilder")');
   await pc.setInputFiles("#bilder", bilder);
   await pc.click('button[aria-label="Flytt side 2 opp"]');
@@ -400,15 +400,20 @@ async function enKjoering(nettleser) {
   await pc.waitForURL(/\/gjennomsyn$/);
   sjekk("13", "uttrekket går gjennom fase 3a og 3b (FR-3: PDF og bilde har gjennomsyn)", (await pc.locator("textarea#tekst").inputValue()).length > 100);
 
-  // Steg 14: slett tekst A, logg ut.
-  await pc.goto(`${APP}/`);
+  // Steg 14: slett tekst A (i Samlingen), logg ut.
+  await pc.goto(`${APP}/samling`);
   const forFoer = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
-  const kort = pc.locator("aside li").filter({ hasText: "EM-bølger" }).first();
+  const kort = pc.locator("main li").filter({ hasText: "EM-bølger" }).first();
+  // Tittelen lenker til neste steg under /tekst/<id>/, så id-en finnes i lenken.
+  const slettetId = (await kort.locator("h2 a").getAttribute("href")).split("/")[2];
   await kort.locator('button:has-text("Slett")').click();
   await pc.click('[role=alertdialog] button:has-text("Slett for godt")');
-  await pc.waitForTimeout(1500);
+  await pc.waitForURL(/\/samling$/);
+  const raden = pc.locator(`main h2 a[href*="/tekst/${slettetId}/"]`);
+  for (let i = 0; i < 20 && (await raden.count()) > 0; i++) await pc.waitForTimeout(500);
   const etter = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
   sjekk("14", "testtekst A slettet", etter === forFoer - 1, `${forFoer} → ${etter} tekster`);
+  sjekk("14", "raden er borte fra Samlingen", (await raden.count()) === 0);
   await pc.goto(`${APP}/konto`);
   await pc.click('button:has-text("Logg ut")');
   await pc.waitForURL(/\/logg-inn/);

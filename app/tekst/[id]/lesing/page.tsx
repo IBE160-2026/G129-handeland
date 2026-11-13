@@ -356,7 +356,7 @@ export default async function Lesing({
 
       <p className="mt-12 text-sm">
         <Link href="/" className={lenke}>
-          Tilbake til tekstene dine
+          Tilbake til arbeidsbordet
         </Link>
       </p>
     </main>

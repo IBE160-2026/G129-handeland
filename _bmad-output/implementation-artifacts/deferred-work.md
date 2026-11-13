@@ -20,3 +20,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-1-identitet-og-tenkeindikator.md`
   summary: Knappesystemet mangler fare- og lenkevariant; --lb-fare/--lb-fareflate er ubrukt, og små knapper (Slett for godt, Kopier, Lagre i Morsmaal, LITEN i Overskriftskontroll) er under 44 px.
   evidence: Blind-gjennomgangen av bolk 1; DESIGN.md krever 44 px trykkflate og danger-message-komponenten.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-2-arbeidsbord-og-samling.md`
+  summary: Hentefeil-tilstanden på / og /samling (og at tilgang() står utenfor try) har ingen test.
+  evidence: Medium, ikke verifisert; krever enten servertest i vitest eller simulert databasefeil i e2e-skriptene.

@@ -25,23 +25,23 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
       <button
         type="button"
         onClick={() => setBekrefter(true)}
-        className="text-sm text-slate-600 underline underline-offset-4 hover:text-red-700 dark:text-slate-400 dark:hover:text-red-400"
+        className="inline-flex min-h-11 items-center px-1 text-dempet underline underline-offset-4 hover:text-fare"
       >
-        Slett
+        Slett<span className="sr-only"> «{tittel}»</span>
       </button>
     );
   }
 
   return (
-    <div role="alertdialog" aria-label={`Slette «${tittel}»?`} className="mt-2 rounded-md border border-red-300 bg-red-50 p-3 text-sm dark:border-red-800 dark:bg-red-950/40">
+    <div role="alertdialog" aria-label={`Slette «${tittel}»?`} className="mt-2 rounded-md border-s-4 border-fare bg-fareflate p-3 text-sm">
       <p className="font-medium">Slette «{tittel}»?</p>
       <p className="mt-1">
-        Teksten, fagordene, quizen og alle forsøkene dine forsvinner for godt,
-        og kan ikke hentes tilbake.
+        Teksten, fagordene, quizen, øvekortene, fagsamtalene og minneversene
+        forsvinner for godt, og kan ikke hentes tilbake.
       </p>
       {feilet && (
-        <p role="alert" className="mt-2 font-medium text-red-800 dark:text-red-300">
-          Teksten kunne ikke slettes. Den er kanskje alt slettet — last siden på nytt.
+        <p role="alert" className="mt-2 font-bold text-fare">
+          Teksten ble ikke slettet. Prøv igjen, eller last siden på nytt hvis den alt er borte.
         </p>
       )}
       <div className="mt-3 flex gap-3">
@@ -53,14 +53,14 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
             setFeilet(false);
             const { slettet } = await slett(tekstId).catch(() => ({ slettet: false }));
             if (slettet) {
-              router.push("/");
+              router.push("/samling");
               router.refresh();
             } else {
               setVenter(false);
               setFeilet(true);
             }
           }}
-          className="fylt rounded-md bg-red-700 px-3 py-1.5 font-bold text-white hover:bg-red-800 disabled:opacity-60"
+          className="fylt min-h-11 rounded-md bg-fare px-3 py-1.5 font-bold text-bakgrunn hover:brightness-94 disabled:opacity-60"
         >
           {venter ? "Sletter…" : "Slett for godt"}
         </button>

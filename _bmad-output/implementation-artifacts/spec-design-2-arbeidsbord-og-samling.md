@@ -2,7 +2,8 @@
 title: 'Designfase bolk 2: arbeidsbordet (FR-48), Samlingen (FR-49) og Ny tekst'
 type: 'feature'
 created: '2026-11-13'
-status: 'draft'
+status: 'done'
+baseline_commit: '9915f24c94515a48261be5de17697df31fc415da'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -82,14 +83,14 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `data/arbeidsbord.ts` (ny) -- `hentArbeidsbord(t)`: alle Tekstene med `sistAktiv` og status per aktivitet. Pluss de rene funksjonene `nesteSteg(bunke)`, `kortstatus(bunke)` og `velgBordet(bunker)` (fem nyeste, med hovedbunken først).
-- [ ] `data/arbeidsbord.test.ts` (ny) -- tester for hver regel i Neste steg og hver rad i statustabellen, sist aktiv-sorteringen og matrisens 0, 4 og 8 tekster.
-- [ ] `app/page.tsx` -- arbeidsbordet (serverkomponent). Hilsen «Hei!» og «Du holdt på med {tittel} {relativ dag}.», bunkene i `<ul>`, «+ Ny tekst», og «Se alle N tekstene i samlingen» ved mer enn 5.
-- [ ] `app/komponenter/Arbeidsbord.tsx` (ny, klient) -- bunkene og viften med dialog, fokusfelle og `inert`. Kortene ligger rundt bunken på brede skjermer når det er plass, og ellers i et rutenett under. `{motion.fan}` når bevegelse er tillatt.
-- [ ] `app/samling/page.tsx` (ny) -- tekstlisten med Tekstrad-reglene: tittelen lenker til neste steg, tilstand i klartekst, dato, søk og sortering i adressen, og sletting.
-- [ ] `app/ny/page.tsx` (ny) -- `Innlesing` med overskriften «Ny tekst».
-- [ ] `app/komponenter/Topplinje.tsx` -- menyen og `aria-current`. På telefon er «Samlingen» og «Konto» synlige.
-- [ ] Lenkene i Code Map -- oppdateres.
+- [x] `data/arbeidsbord.ts` (ny) -- `hentArbeidsbord(t)`: alle Tekstene med `sistAktiv` og status per aktivitet. Pluss de rene funksjonene `nesteSteg(bunke)`, `kortstatus(bunke)` og `velgBordet(bunker)` (fem nyeste, med hovedbunken først).
+- [x] `data/arbeidsbord.test.ts` (ny) -- tester for hver regel i Neste steg og hver rad i statustabellen, sist aktiv-sorteringen og matrisens 0, 4 og 8 tekster.
+- [x] `app/page.tsx` -- arbeidsbordet (serverkomponent). Hilsen «Hei!» og «Du holdt på med {tittel} {relativ dag}.», bunkene i `<ul>`, «+ Ny tekst», og «Se alle N tekstene i samlingen» ved mer enn 5.
+- [x] `app/komponenter/Arbeidsbord.tsx` (ny, klient) -- bunkene og viften med dialog, fokusfelle og `inert`. Kortene ligger rundt bunken på brede skjermer når det er plass, og ellers i et rutenett under. `{motion.fan}` når bevegelse er tillatt.
+- [x] `app/samling/page.tsx` (ny) -- tekstlisten med Tekstrad-reglene: tittelen lenker til neste steg, tilstand i klartekst, dato, søk og sortering i adressen, og sletting.
+- [x] `app/ny/page.tsx` (ny) -- `Innlesing` med overskriften «Ny tekst».
+- [x] `app/komponenter/Topplinje.tsx` -- menyen og `aria-current`. På telefon er «Samlingen» og «Konto» synlige.
+- [x] Lenkene i Code Map -- oppdateres.
 
 **Acceptance Criteria:**
 - Given en innlogget elev med tekster, when hun åpner `/`, then hovedbunken er den som sist var aktiv, og lenken for neste steg går rett til steget.
@@ -108,3 +109,33 @@ context:
 
 **Manual checks:**
 - Skjermbilder (playwright-core uten vindu) av `/`, en åpen vifte, `/samling` og `/ny`, i lys og mørk modus, på 1280 og 375 px.
+
+## Review Triage Log
+
+| # | Kilde | Funn | Vurdering | Rute |
+|---|---|---|---|---|
+| 1 | edge | `apen` peker på en tekst som er borte, og siden blir stående inert | medium | patch |
+| 2 | edge, blind | Viften måles ikke på nytt ved font-swap eller ny tekststørrelse; resize er ikke strupet | medium | patch |
+| 3 | edge, blind | Neste steg ser ikke på overskrifterGodkjent (PDF i fase 3a) | low: lenken når steget via omdirigering, og EXPERIENCE-regelen er fulgt ordrett | avvist |
+| 4 | edge | Tidspunktet for avsluttet samtale brukes ikke i sist aktiv | low: siste runde gir samme tid | avvist |
+| 5 | edge, vgap | Ingen sjekk av rundt eller rutenett på PC ved 100 og 200 % tekst | patch | patch |
+| 6 | edge, blind | Slettefeilen blir en blindvei når teksten alt er borte | medium | patch |
+| 7 | edge | «Neste: Fagsamtale» går til /oppgaver | low: bevisst, fordi en samtale startes med et skjema der | avvist |
+| 8 | edge | Bunketitler avkortes ved 200 % | false: EXPERIENCE «Lang tittel» krever avkorting, og navnet står i sin helhet | avvist |
+| 9 | vgap, blind | Valget mellom flere samtaler er ikke testet | patch | patch |
+| 10 | vgap, blind | Quiz, runde og vers som kilde til sist aktiv er ikke testet | patch | patch |
+| 11 | vgap | Sletting: landing på /samling og at raden forsvinner, er ikke sjekket | patch | patch |
+| 12 | vgap | Hentefeil har ingen test | medium, ikke verifisert: krever ny testinfrastruktur | defer |
+| 13 | blind | Bruddpunktene spriker (52rem container mot 760 px i JS og meny) | medium | patch |
+| 14 | blind | Bekreftelsesboksen bruker faste red-*-farger | low, direkte retting | patch |
+| 15 | blind | Bekreftelsen nevner ikke oversettelser og oppsummering | low: teksten følger EXPERIENCE.md | avvist |
+| 16 | blind | catch svelger feilen uten logging | low, direkte retting | patch |
+| 17 | blind | «Legg sammen» sist i DOM, men øverst på skjermen (2.4.3) | medium | patch |
+| 18 | blind | hentArbeidsbord henter alle forsøk og samtaler | low: få rader per elev | avvist |
+| 19 | blind | vifteplass-testene sjekker ikke luft og grenser | patch | patch |
+| 20 | blind | plasserRundt lar aksene vokse sammen | low | avvist |
+| 21 | blind | Hover retter opp kortet; vifte-senter arver bunke-hover | low: oppretting er spesifisert i DESIGN.md | avvist |
+| 22 | blind | Trykk mellom kortene lukker ikke viften | low | avvist |
+| 23 | blind | Esc ignorerer isComposing og defaultPrevented | low: ingen tekstfelt i viften | avvist |
+| 24 | blind | aria-controls er ugyldig når viften er lukket | low, direkte retting | patch |
+| 25 | vgap | Tilbake-lenker i aktivering og overskrifter går til / | low: / er nå arbeidsbordet, og det er riktig mål | avvist |

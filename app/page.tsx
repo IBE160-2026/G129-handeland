@@ -1,149 +1,114 @@
 /**
- * Startsiden — FR-1 (innlesing ved liming) og FR-36 (historikk).
+ * Arbeidsbordet — FR-48 (EXPERIENCE.md, Inngang og arbeidsbord).
  *
- * Bildeinnlesing (FR-44) og PDF (FR-2) kommer som egne veier inn i samme
- * løype. Liming er den første fordi den er den eneste som ikke kan feile på
- * uthenting, og fordi den gjør resten av løypen målbar før de andre finnes.
+ * Det eleven ser etter innlogging: hilsenen, teksten hun sist holdt på med
+ * som hovedbunke med neste steg, inntil fire bunker til, og veien til en ny
+ * tekst og til Samlingen. Tekstlisten med søk og sletting ligger i
+ * `/samling` (FR-49), og innlesingen i `/ny`.
+ *
+ * Bordet tegnes på serveren, så det finnes ingen egen lastetilstand. Uten
+ * innlogging sender `tilgang()` eleven til innloggingssiden (landingssiden
+ * kommer i bolk 3).
  */
 
 import Link from "next/link";
+import {
+  type Bunke,
+  hentArbeidsbord,
+  kortDato,
+  kortstatus,
+  nesteSteg,
+  relativDag,
+  type Steg,
+  velgBordet,
+} from "../data/arbeidsbord";
 import { tilgang } from "../data/konto";
-import { listTekster } from "../data/tilgang";
-import { filtrerTekster, tolkSortering } from "../data/tekstliste";
-import { limInnBilde, limInnPdf, limInnTekst } from "./handlinger";
-import { Innlesing } from "./komponenter/Innlesing";
-import { SlettTekstKnapp } from "./komponenter/SlettTekstKnapp";
+import { Arbeidsbord, type Hovedbunke, type Visningsbunke } from "./komponenter/Arbeidsbord";
+import { Hentefeil } from "./komponenter/Hentefeil";
+import { KNAPP_PRIMAER } from "./komponenter/knapper";
+import { BuddyMerke } from "./komponenter/Merke";
 
-/** Hvor eleven skal fortsette, ut fra hvor langt Teksten har kommet (AD-9). */
-function nesteSteg(tilstand: "innlest" | "aktivert" | "laast", id: string) {
-  if (tilstand === "innlest") return `/tekst/${id}/aktivering`;
-  if (tilstand === "aktivert") return `/tekst/${id}/gjennomsyn`;
-  return `/tekst/${id}/lesing`;
+/** Buddys boble gjentar neste steg (pynt, `aria-hidden`). */
+function boble(steg: Steg, tittel: string): string {
+  switch (steg.slag) {
+    case "aktivering":
+      return `Klar til å begynne på ${tittel}?`;
+    case "gjennomsyn":
+      return `Skal vi se over ${tittel}?`;
+    case "samtale":
+      return `Skal vi fortsette samtalen om ${tittel}?`;
+    case "quiz":
+      return `Klar for quizen om ${tittel}?`;
+    case "fagsamtale":
+      return `Klar for en fagsamtale om ${tittel}?`;
+    case "oevekort":
+      return `Skal vi øve på fagordene i ${tittel}?`;
+    case "lesing":
+      return `Vil du lese ${tittel} igjen?`;
+  }
 }
 
-const UNDERLENKE =
-  "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+function visning(b: Bunke): Visningsbunke {
+  const kort = kortstatus(b);
+  return { id: b.id, tittel: b.tittel, dato: kortDato(b.opprettet), framdrift: kort.map((k) => k.paabegynt), kort };
+}
 
-const TILSTANDSORD: Record<string, string> = {
-  innlest: "Ikke begynt",
-  aktivert: "Venter på gjennomsyn",
-  laast: "Klar til lesing",
-};
+export default async function ArbeidsbordSide() {
+  // FR-35: hentes før try-blokken, se data/konto.ts.
+  const t = await tilgang();
+  let bunker: Bunke[] | null = null;
+  try {
+    bunker = await hentArbeidsbord(t);
+  } catch (e) {
+    console.error("Kunne ikke hente tekstene til arbeidsbordet:", e);
+    bunker = null;
+  }
 
-const DATO = new Intl.DateTimeFormat("nb-NO", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/Oslo" });
+  if (bunker === null) {
+    return (
+      <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+        <h1>Hei!</h1>
+        <Hentefeil igjen="/" />
+      </main>
+    );
+  }
 
-export default async function Startside({ searchParams }: PageProps<"/">) {
-  // FR-35: uten innlogging sendes eleven til innloggingssiden.
-  const alle = await listTekster(await tilgang());
-  // FR-36: søk på tittel og sortering på dato, i adressen så de overlever en
-  // oppdatering — og et vanlig skjema, så det virker uten JavaScript.
-  const sp = await searchParams;
-  const sok = typeof sp.sok === "string" ? sp.sok.trim() : "";
-  const sortering = tolkSortering(sp.sorter);
-  const tekster = filtrerTekster(alle, sok, sortering);
+  const { hoved, smaa, antall } = velgBordet(bunker);
+
+  if (!hoved) {
+    return (
+      <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+        <h1>Hei!</h1>
+        <div className="bord mt-6">
+          <div className="flex flex-col items-center gap-5 px-4 py-14 text-center">
+            <BuddyMerke variant="ansikt" storrelse={96} />
+            <p className="max-w-[28rem] text-lg">Her blir tekstene dine liggende. Legg den første på bordet.</p>
+            <Link href="/ny" className={KNAPP_PRIMAER}>
+              + Ny tekst
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  const steg = nesteSteg(hoved);
+  const hovedbunke: Hovedbunke = { ...visning(hoved), neste: { tekst: steg.tekst, href: steg.href }, boble: boble(steg, hoved.tittel) };
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-10">
-      <div className="flex flex-col gap-12 lg:flex-row">
-        {/*
-          Sidekolonnen kommer først i koden, slik at den står til venstre på
-          store skjermer, men `order` legger den under skjemaet på mobil —
-          der er det å lime inn en ny tekst det første eleven skal se.
-        */}
-        <aside aria-labelledby="tekstene-dine" className="order-2 shrink-0 lg:order-1 lg:w-72">
-          <h2 id="tekstene-dine" className="text-lg font-semibold tracking-tight">
-            Tekstene dine
-          </h2>
-          {alle.length > 1 && (
-            <form role="search" className="mt-3 space-y-2 text-sm">
-              <label htmlFor="sok" className="sr-only">
-                Søk i titlene
-              </label>
-              <input
-                id="sok"
-                name="sok"
-                type="search"
-                defaultValue={sok}
-                placeholder="Søk i titlene"
-                className="w-full rounded-md border border-slate-500 px-3 py-1.5 dark:border-slate-400 dark:bg-slate-900"
-              />
-              <div className="flex items-center gap-2">
-                <label htmlFor="sorter">Sorter</label>
-                <select
-                  id="sorter"
-                  name="sorter"
-                  defaultValue={sortering}
-                  className="rounded-md border border-slate-500 px-2 py-1 dark:border-slate-400 dark:bg-slate-900"
-                >
-                  <option value="nyest">Nyeste først</option>
-                  <option value="eldst">Eldste først</option>
-                </select>
-                <button type="submit" className="rounded-md border border-slate-500 px-3 py-1 font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800">
-                  Vis
-                </button>
-              </div>
-            </form>
-          )}
-          {alle.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-              Tekstene du limer inn, havner her. Herfra kan du gå rett til
-              teksten eller oppgavene.
-            </p>
-          ) : tekster.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-              Ingen titler inneholder «{sok}».{" "}
-              <Link href="/" className={UNDERLENKE}>
-                Vis alle
-              </Link>
-            </p>
-          ) : (
-            <ul className="mt-3 space-y-4">
-              {tekster.map((t) => (
-                <li key={t.id} className="rounded-md border border-slate-200 p-3 dark:border-slate-800">
-                  <p className="font-medium">{t.tittel}</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">
-                    {DATO.format(t.opprettet)} · {TILSTANDSORD[t.tilstand] ?? t.tilstand}
-                  </p>
-                  <ul className="mt-2 space-y-1 border-l-2 border-slate-200 pl-3 text-sm dark:border-slate-700">
-                    <li>
-                      <Link href={nesteSteg(t.tilstand, t.id)} className={UNDERLENKE}>
-                        Teksten
-                      </Link>
-                    </li>
-                    <li>
-                      {t.tilstand === "laast" ? (
-                        <Link href={`/tekst/${t.id}/oppgaver`} className={UNDERLENKE}>
-                          Oppgaver
-                        </Link>
-                      ) : (
-                        // Quizen bygger på den låste teksten (AD-15), så
-                        // oppgavene finnes først når den er låst — etter
-                        // aktiveringen for innlimt tekst, etter gjennomsynet
-                        // for PDF og bilde (FR-3).
-                        <span className="text-slate-500 dark:text-slate-400">Oppgaver — når teksten er klar til lesing</span>
-                      )}
-                    </li>
-                  </ul>
-                  <div className="mt-2">
-                    <SlettTekstKnapp tekstId={t.id} tittel={t.tittel} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </aside>
-
-        <section className="order-1 min-w-0 flex-1 lg:order-2">
-          <h1 className="text-3xl font-semibold tracking-tight">Ny tekst</h1>
-          <p className="mt-2 text-slate-600 dark:text-slate-400">
-            Lim inn en fagtekst. Du får se hva den handler om, lese den med
-            fagordene forklart, og sjekke om du forsto den.
+    <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+      <div className="mb-6 flex flex-wrap items-end gap-4">
+        <div className="min-w-0">
+          <h1>Hei!</h1>
+          <p className="mt-1 text-dempet">
+            Du holdt på med <strong className="text-tekst">{hoved.tittel}</strong> {relativDag(hoved.sistAktiv, new Date())}.
           </p>
-          <div className="mt-8">
-            <Innlesing limInn={limInnTekst} limInnPdf={limInnPdf} limInnBilde={limInnBilde} />
-          </div>
-        </section>
+        </div>
+        <Link href="/ny" className={`ml-auto ${KNAPP_PRIMAER}`}>
+          + Ny tekst
+        </Link>
       </div>
+      <Arbeidsbord hoved={hovedbunke} smaa={smaa.map(visning)} antall={antall} />
     </main>
   );
 }
