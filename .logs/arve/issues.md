@@ -34,8 +34,10 @@
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Ordmerket: 4d er foreløpig valgt; 4e og 4g er alternativer
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Arkitektur: landingssiden må sjekke økten uten å kaste, og Teksten trenger et tidsfelt for «sist aktiv» (løst 2026-11-13: valgfriTilgang(); sist aktiv regnes ut fra eksisterende tidsstempler, et eget felt kan komme senere)
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Kode for de nye kravene om KI-feil (FR-7, 13, 19, 20) og bruksgrenser (§6.4, inkludert forbruk i kroner)
-- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over grenen designfase (9915f24, 3330e9a, c73a103), slå den sammen med main og rull ut (krever ja)
-- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over landingstekstene agenten skrev selv (stegforklaringer, lærerpunkter, ingresser, bobler, bunntekst og setningen om invitasjon)
+- [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over grenen designfase (9915f24, 3330e9a, c73a103), slå den sammen med main og rull ut (krever ja) (rullet ut 2026-11-13, main = acf869d)
+- [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over landingstekstene agenten skrev selv (stegforklaringer, lærerpunkter, ingresser, bobler, bunntekst og setningen om invitasjon) (godkjent av Arve 2026-11-13)
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Følge-Buddy vises bare fra om lag 1540 px, så den ikke dekker tekst. Avgjør om det er greit
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Bygg telefontestpunktene (EXPERIENCE.md §Telefontesten): brilleknapp, større forklaringspanel, ekstra stor tekst, flagg i morsmålsvalget, innrykk, færre bokser i Fagsamtale
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Utsatt fra gjennomgangene av bolk 1–3: favicon-reserve, fare- og lenkeknapper og små knapper, test av Hentefeil, 500 på /logg-inn ved feil i øktoppslaget (se deferred-work.md)
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobil: velg mini-Buddy (M1/M2/M3) og mobilflater (A–E) fra runde 10, og bygg dem
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobilfeil i prod: tomt felt under fagorddemoen på landingssiden (375 px), og titler som brytes midt i ordet i de små bunkene
