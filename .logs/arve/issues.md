@@ -17,7 +17,7 @@
 - [x] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Målingstestene overskriver utfylte vurderingsark ved npm test (løst 2026-11-11)
 - [x] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Seks minnevers-tester feiler; avgjør om rimkontrollen fra v6 skal gjelde v3 i produksjon (løst 2026-11-10: rimkontrollen avgrenset og rullet ut; de fem som feiler er Suno på pause)
 - [x] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Bildeinnlesing (FR-44) testet på telefon (løst 2026-11-10)
-- [ ] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Designfasen: punktene nederst i telefontest-2026-11-09.md, og tre forslag som må vurderes mot PRD-en
+- [x] 2026-11-09 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Designfasen: punktene nederst i telefontest-2026-11-09.md, og tre forslag som må vurderes mot PRD-en (løst 2026-11-13: designfasen gjort, punktene fordelt i EXPERIENCE.md §Telefontesten)
 - [x] 2026-11-10 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Minnevers: avvikle, skjule eller beholde til etter M1 (kursendring i PRD §9.2) (avgjort 2026-11-11: beholdes foreløpig)
 - [x] 2026-11-10 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Byggtest for AD-6 (portresultat med hash for svarvurdering), før v3 (løst 2026-11-11)
 - [x] 2026-11-11 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — BF-4: hvor stoppet kort tekst fra bilde senere i løypen, og med hvilken melding (løst 2026-11-11, kodefunn 26)
@@ -28,5 +28,9 @@
 - [x] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — PRD linje 112 og 899 må samsvare med FR-3 (utsatt fra gjennomgangen) (løst 2026-11-13 i PRD runde 1)
 - [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — KI-logg nr. 25 (bmad-build): utviklerens vurdering
 - [ ] 2026-11-12 [samtalegullsett](998-2026-11-06-09-34-06-samtalegullsett.md) — Utsatt fra gjennomgangene: enhetstest av lagreAktivering, axe-sjekk av gjennomsynet via PDF (se deferred-work.md)
-- [ ] 2026-11-13 [designfase](../../_bmad-output/planning-artifacts/ux-designs/ux-Lesevenn-2026-11-12/EXPERIENCE.md) — Lærerkoder: hvordan får en lærer invitasjonskoder til klassen? Landingssiden sier «Har du fått en kode fra læreren?», men PRD-en har ingen lærerpålogging (§2.2)
-- [ ] 2026-11-13 [designfase](../../_bmad-output/planning-artifacts/tilbakemelding-prd.md) — Bårds PRD-tilbakemelding: runde 1 gjort 2026-11-13 (motsigelser, KI-feil, bruksgrenser, FR-47–49). Gjenstår runde 2 før levering: historikk ut av kravene, DK-seksjon for FR-38–43, statustabell per FR, opprydding i §11 pkt. 11 og 14
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Lærerkoder: hvordan får en lærer invitasjonskoder til klassen? Landingssiden sier «Har du fått en kode fra læreren?», men PRD-en har ingen lærerpålogging (§2.2)
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Bårds PRD-tilbakemelding: runde 1 gjort 2026-11-13 (motsigelser, KI-feil, bruksgrenser, FR-47–49). Gjenstår runde 2 før levering: historikk ut av kravene, DK-seksjon for FR-38–43, statustabell per FR, opprydding i §11 pkt. 11 og 14
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Bygg designfasen med bmad-build: FR-47–49, tenkeindikatoren, identiteten og telefontestpunktene (EXPERIENCE.md §Telefontesten)
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Ordmerket: 4d er foreløpig valgt; 4e og 4g er alternativer
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Arkitektur: landingssiden må sjekke økten uten å kaste, og Teksten trenger et tidsfelt for «sist aktiv»
+- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Kode for de nye kravene om KI-feil (FR-7, 13, 19, 20) og bruksgrenser (§6.4, inkludert forbruk i kroner)
