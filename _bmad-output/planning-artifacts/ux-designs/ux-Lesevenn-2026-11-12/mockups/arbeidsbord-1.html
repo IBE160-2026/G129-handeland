@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeseBuddy – arbeidsbord, utkast 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Gloock&family=Quicksand:wght@700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="merke.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tekst);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.5;font-size:17px;transition:background .3s,color .3s}
+button{font:inherit;color:inherit}
+.innhold{max-width:1120px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--kant);background:var(--bg)}
+header .innhold{display:flex;align-items:center;gap:18px;height:64px}
+.lockup{display:flex;align-items:center;gap:6px;font-family:"Gloock",Georgia,serif;font-size:24px;text-decoration:none;color:inherit}
+.lockup svg{width:36px;height:36px}
+nav{display:flex;gap:4px;margin-left:12px}
+nav a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--dempet);font-weight:700}
+nav a[aria-current]{color:var(--tekst);background:var(--markering)}
+.hoyre{margin-left:auto;display:flex;gap:10px;align-items:center}
+.knapp{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-weight:700;padding:10px 16px;border-radius:14px;border:2px solid var(--primaer);background:var(--primaer);color:var(--paaPrimaer);text-decoration:none;cursor:pointer}
+.knapp.sek{background:transparent;color:var(--primaer)}
+.modus{font-size:14px;padding:6px 10px;border-radius:999px;border:1px solid var(--kant);background:var(--flate);cursor:pointer}
+.konto{width:38px;height:38px;border-radius:50%;background:var(--markering);display:grid;place-items:center;font-weight:700;color:var(--primaer)}
+
+.topp{display:flex;align-items:end;gap:16px;flex-wrap:wrap;padding:34px 0 18px}
+.topp h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:44px;line-height:1.05;margin:0}
+.topp p{margin:4px 0 0;color:var(--dempet)}
+.topp .knapp{margin-left:auto}
+
+/* Arbeidsbordet */
+.bord{position:relative;height:620px;border-radius:32px;background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--dempet) 22%,transparent) 1px,transparent 0) 0 0/22px 22px,
+  var(--flate);border:1px solid var(--kant);overflow:hidden}
+.bunke{position:absolute;border:0;background:none;padding:0;cursor:pointer;text-align:left;transition:transform .45s cubic-bezier(.3,1.3,.5,1),opacity .35s,filter .35s}
+.bunke .ark{position:absolute;inset:0;border-radius:18px;background:var(--flate);border:1px solid var(--kant);box-shadow:0 10px 26px -14px rgba(0,0,0,.35)}
+.bunke .ark:nth-child(1){transform:rotate(-6deg) translate(-6px,6px)}
+.bunke .ark:nth-child(2){transform:rotate(4deg) translate(6px,4px)}
+.bunke .forside{position:relative;height:100%;border-radius:18px;background:var(--flate);border:1px solid var(--kant);padding:16px 18px;display:flex;flex-direction:column;box-shadow:0 14px 30px -16px rgba(0,0,0,.35)}
+.bunke h2,.bunke h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;margin:0;line-height:1.05}
+.bunke .meta{color:var(--dempet);font-size:14px;margin-top:4px}
+.bunke .framdrift{margin-top:auto;display:flex;gap:4px}
+.bunke .framdrift i{flex:1;height:6px;border-radius:6px;background:var(--kant)}
+.bunke .framdrift i.ja{background:var(--primaer)}
+.bunke:hover{transform:translateY(-4px) rotate(var(--rot,0deg))}
+.bunke:focus-visible{outline:3px solid var(--primaer);outline-offset:6px;border-radius:20px}
+
+.hoved{width:300px;height:210px;left:calc(50% - 150px);top:calc(50% - 105px);z-index:5}
+.hoved h2{font-size:38px}
+.hoved .forside{border:2px solid var(--primaer)}
+.fortsett{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-weight:700;color:var(--primaer)}
+.merkelapp{position:absolute;top:-14px;right:16px;background:var(--aksent);color:var(--paaAksent);font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;z-index:2}
+.liten{width:180px;height:126px;transform:rotate(var(--rot,0deg))}
+.liten h3{font-size:24px}
+.b1{left:5%;top:7%;--rot:-4deg}.b2{right:6%;top:9%;--rot:3deg}.b3{left:7%;bottom:9%;--rot:2deg}.b4{right:5%;bottom:8%;--rot:-3deg}
+.ny{position:absolute;left:calc(50% - 90px);bottom:5%;width:180px;height:70px;border-radius:18px;border:2px dashed var(--primaer);background:color-mix(in srgb,var(--markering) 60%,transparent);display:grid;place-items:center;text-align:center;font-weight:700;color:var(--primaer);text-decoration:none;transform:rotate(-1deg)}
+.samling{position:absolute;left:calc(50% - 110px);top:5%;color:var(--dempet);font-size:15px;text-decoration:underline;text-underline-offset:4px}
+
+/* Utviftet */
+.bord.apen .bunke:not(.valgt),.bord.apen .ny,.bord.apen .samling{opacity:.18;filter:blur(1.5px);pointer-events:none}
+.bord.apen .valgt{z-index:6;transform:translate(var(--dx,0px),var(--dy,0px)) scale(.8) rotate(0deg)}
+.bord.apen .buddy{opacity:.18;filter:blur(1.5px)}
+.slor{position:absolute;inset:0;z-index:4;display:none;border:0;background:transparent;cursor:default}
+.bord.apen .slor{display:block}
+.kort{position:absolute;z-index:8;width:168px;min-height:118px;margin:-59px 0 0 -84px;left:50%;top:50%;border-radius:18px;background:var(--flate);border:1px solid var(--kant);padding:14px 16px;text-decoration:none;color:inherit;box-shadow:0 22px 40px -18px rgba(0,0,0,.45);opacity:0;transform:translate(0,0) scale(.4) rotate(0);pointer-events:none;transition:transform .5s cubic-bezier(.3,1.35,.5,1),opacity .3s;display:flex;flex-direction:column;gap:4px}
+.bord.apen .kort{opacity:1;pointer-events:auto;transform:translate(var(--x),var(--y)) scale(1) rotate(var(--r))}
+.kort:hover,.kort:focus-visible{transform:translate(var(--x),var(--y)) scale(1.06) rotate(0deg)!important;outline:none;border-color:var(--primaer)}
+.kort .ikon{width:34px;height:34px;border-radius:10px;background:var(--markering);display:grid;place-items:center;color:var(--primaer);font-weight:700}
+.kort b{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:26px;line-height:1.05}
+.status{font-size:14px;color:var(--dempet)}
+.status.ferdig{color:var(--tekst)}
+.status .pille{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--aksent);color:var(--paaAksent);font-weight:700;font-size:13px}
+.lukk{position:absolute;z-index:9;right:18px;top:18px;padding:8px 12px;border-radius:12px;border:1px solid var(--kant);background:var(--flate);cursor:pointer;display:none}
+.bord.apen .lukk{display:block}
+.hint{color:var(--dempet);font-size:14px;text-align:center;margin:12px 0 40px}
+
+/* Buddy i hjørnet av bordet */
+.buddy{position:absolute;left:22px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px;z-index:3}
+.buddy svg{width:64px;height:64px}
+.buddy .boble{background:var(--tekst);color:var(--bg);padding:8px 12px;border-radius:14px;font-size:14px;max-width:150px}
+
+@media (max-width:760px){
+  nav{display:none}
+  .topp h1{font-size:34px}
+  .bord{height:auto;padding:22px 16px 26px;display:flex;flex-direction:column;gap:18px}
+  .bunke,.ny,.samling,.buddy{position:relative;left:auto;right:auto;top:auto;bottom:auto}
+  .hoved{width:100%;height:200px;align-self:center;max-width:320px;margin-top:10px}
+  .smaa{display:flex;gap:14px;overflow-x:auto;padding:8px 4px 14px;margin:0 -16px;padding-left:16px}
+  .liten{flex:0 0 150px;height:110px}
+  .ny{width:100%;transform:none}
+  .samling{text-align:center}
+  .buddy{transform:none;display:none}
+  .bord.apen{min-height:760px}
+  .bord.apen .valgt{transform:translate(var(--dx,0px),var(--dy,0px)) scale(.7) rotate(0deg)}
+  .kort{width:140px;margin:-55px 0 0 -70px;min-height:110px}
+  .kort b{font-size:22px}
+}
+@media (min-width:761px){ .smaa{display:contents} }
+@media (prefers-reduced-motion:reduce){ .bunke,.kort{transition:opacity .2s} }
+/* Ordmerke 4d (foreløpig): «lese» Instrument kursiv + B-merket + «uddy» Quicksand i fiolett */
+.lockup{display:flex;align-items:baseline;gap:0;font-size:28px;line-height:1;text-decoration:none;color:var(--tekst)}
+.lockup .lese{font-family:"Instrument Serif",Georgia,serif;font-style:italic}
+.lockup svg{height:.9em!important;width:auto!important;align-self:baseline;margin:0 .01em 0 .16em;overflow:visible}
+.lockup .uddy{font-family:"Quicksand",sans-serif;font-weight:700;color:var(--primaer)}
+</style>
+</head>
+<body data-modus="lys">
+<header>
+  <div class="innhold">
+    <a class="lockup" href="#"><span class="lese">lese</span><span id="logomerke"></span><span class="uddy">uddy</span></a>
+    <nav aria-label="Hovedmeny">
+      <a href="#" aria-current="page">Arbeidsbord</a>
+      <a href="#">Samlingen</a>
+    </nav>
+    <div class="hoyre">
+      <button class="modus" type="button" id="modus">Mørk</button>
+      <span class="konto" title="Konto">J</span>
+    </div>
+  </div>
+</header>
+
+<main class="innhold">
+  <div class="topp">
+    <div>
+      <h1>Hei, Jonas</h1>
+      <p>Du holdt på med <strong>Celledeling</strong> i går.</p>
+    </div>
+    <a class="knapp" href="#">+ Ny tekst</a>
+  </div>
+
+  <div class="bord" id="bord">
+    <button class="slor" type="button" aria-label="Lukk" tabindex="-1" id="slor"></button>
+    <a class="samling" href="#">Se alle 12 tekstene i samlingen</a>
+
+    <div class="buddy" aria-hidden="true"><span id="buddymerke"></span><span class="boble">Klar for en fagsamtale om Celledeling?</span></div>
+
+    <button class="bunke hoved" type="button" aria-expanded="false" aria-controls="vifte" data-tekst="Celledeling">
+      <span class="ark"></span><span class="ark"></span>
+      <span class="forside">
+        <span class="merkelapp">Sist brukt</span>
+        <h2>Celledeling</h2>
+        <span class="meta">Naturfag · lagt inn 11. nov.</span>
+        <span class="fortsett">Neste: Fagsamtale →</span>
+        <span class="framdrift" aria-label="3 av 5 aktiviteter påbegynt"><i class="ja"></i><i class="ja"></i><i class="ja"></i><i></i><i></i></span>
+      </span>
+    </button>
+
+    <div class="smaa">
+      <button class="bunke liten b1" type="button" aria-expanded="false" data-tekst="Novelleanalyse"><span class="ark"></span><span class="ark"></span><span class="forside"><h3>Novelleanalyse</h3><span class="meta">9. nov.</span><span class="framdrift"><i class="ja"></i><i class="ja"></i><i class="ja"></i><i class="ja"></i><i></i></span></span></button>
+      <button class="bunke liten b2" type="button" aria-expanded="false" data-tekst="Bæreevne i bjelker"><span class="ark"></span><span class="ark"></span><span class="forside"><h3>Bæreevne i bjelker</h3><span class="meta">7. nov.</span><span class="framdrift"><i class="ja"></i><i></i><i></i><i></i><i></i></span></span></button>
+      <button class="bunke liten b3" type="button" aria-expanded="false" data-tekst="Den industrielle revolusjonen"><span class="ark"></span><span class="ark"></span><span class="forside"><h3>Industriell revolusjon</h3><span class="meta">4. nov.</span><span class="framdrift"><i class="ja"></i><i class="ja"></i><i></i><i></i><i></i></span></span></button>
+      <button class="bunke liten b4" type="button" aria-expanded="false" data-tekst="Fotosyntese"><span class="ark"></span><span class="ark"></span><span class="forside"><h3>Fotosyntese</h3><span class="meta">1. nov.</span><span class="framdrift"><i class="ja"></i><i class="ja"></i><i class="ja"></i><i class="ja"></i><i class="ja"></i></span></span></button>
+    </div>
+
+    <a class="ny" href="#">+ Legg en ny tekst på bordet</a>
+
+    <div id="vifte" role="group" aria-label="Aktiviteter for teksten">
+      <a class="kort" href="#" style="--i:0"><span class="ikon">T</span><b>Teksten</b><span class="status ferdig">Klar til lesing · 14 fagord</span></a>
+      <a class="kort" href="#" style="--i:1"><span class="ikon">?</span><b>Quiz</b><span class="status">Sist: <span class="pille">6 av 8</span> riktig</span></a>
+      <a class="kort" href="#" style="--i:2"><span class="ikon">◫</span><b>Øvekort</b><span class="status">9 av 14 kan du</span></a>
+      <a class="kort" href="#" style="--i:3"><span class="ikon">“</span><b>Fagsamtale</b><span class="status">Ikke startet</span></a>
+      <a class="kort" href="#" style="--i:4"><span class="ikon">♪</span><b>Minnevers</b><span class="status">Ikke laget</span></a>
+    </div>
+    <button class="lukk" type="button" id="lukk">Legg sammen ✕</button>
+  </div>
+  <p class="hint">Trykk på en bunke for å vifte den ut. Esc eller «Legg sammen» lukker.</p>
+</main>
+
+<script src="merke.js"></script>
+<script>
+document.getElementById("logomerke").outerHTML = MERKE.svg("ferdig").replace('viewBox="-4 -4 128 128"', 'viewBox="38 10 40 100"');
+document.getElementById("buddymerke").outerHTML = MERKE.svg("");
+const modus = document.getElementById("modus");
+modus.onclick = () => { const m = document.body.dataset.modus === "lys" ? "moerk" : "lys"; document.body.dataset.modus = m; modus.textContent = m === "lys" ? "Mørk" : "Lys"; };
+
+const bord = document.getElementById("bord");
+const kort = [...document.querySelectorAll(".kort")];
+let apen = null;
+
+// Kortene legges i en bue rundt bunken (sirkel), litt skjeve som på et ekte bord.
+function plasser(bunke) {
+  // Bunken flyttes til et fast midtpunkt (midt på bordet på PC, hovedbunkens plass
+  // på mobil), og kortene legges rundt det punktet så de aldri dekker bunken.
+  bunke.style.removeProperty("--dx"); bunke.style.removeProperty("--dy");
+  const b = bord.getBoundingClientRect(), r = bunke.getBoundingClientRect();
+  const mobil = innerWidth <= 760;
+  const hoved = document.querySelector(".hoved").getBoundingClientRect();
+  const maalX = mobil ? hoved.left + hoved.width / 2 - b.left - b.width / 2 : 0;
+  const maalY = mobil ? hoved.top - b.top - b.height / 2 + 70 : 0;
+  const naaX = r.left + r.width / 2 - b.left - b.width / 2;
+  const naaY = r.top + r.height / 2 - b.top - b.height / 2;
+  bunke.style.setProperty("--dx", (maalX - naaX) + "px");
+  bunke.style.setProperty("--dy", (maalY - naaY) + "px");
+  // PC: ellipse rundt bunken. Mobil: kortene sprer seg nedover i forskjøvne par.
+  const MOBIL = [[-82, 150], [82, 175], [-82, 295], [82, 320], [0, 440]];
+  kort.forEach((k, i) => {
+    const vinkel = (-90 + i * 72) * Math.PI / 180;
+    const x = mobil ? maalX + MOBIL[i][0] : Math.cos(vinkel) * 295;
+    const y = mobil ? maalY + MOBIL[i][1] : Math.sin(vinkel) * 228;
+    k.style.setProperty("--x", x + "px");
+    k.style.setProperty("--y", y + "px");
+    k.style.setProperty("--r", ((i % 2 ? 1 : -1) * (2 + i)) + "deg");
+    k.style.transitionDelay = (i * 45) + "ms";
+  });
+}
+function apne(bunke) {
+  lukk(false);
+  apen = bunke;
+  if (innerWidth <= 760) bord.scrollIntoView({ block: "start" });
+  bunke.classList.add("valgt");
+  bunke.setAttribute("aria-expanded", "true");
+  bord.setAttribute("aria-label", "Aktiviteter for " + bunke.dataset.tekst);
+  bord.classList.add("apen");
+  plasser(bunke);
+  setTimeout(() => kort[0].focus({ preventScroll: true }), 250);
+}
+function lukk(fokus = true) {
+  if (!apen) return;
+  bord.classList.remove("apen");
+  apen.classList.remove("valgt");
+  apen.setAttribute("aria-expanded", "false");
+  if (fokus) apen.focus();
+  apen = null;
+}
+document.querySelectorAll(".bunke").forEach(b => b.addEventListener("click", () => apen === b ? lukk() : apne(b)));
+document.getElementById("lukk").onclick = () => lukk();
+document.getElementById("slor").onclick = () => lukk();
+addEventListener("keydown", e => { if (e.key === "Escape") lukk(); });
+addEventListener("resize", () => apen && plasser(apen));
+</script>
+</body>
+</html>

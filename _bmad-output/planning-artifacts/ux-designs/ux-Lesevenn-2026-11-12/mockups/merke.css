@@ -1,0 +1,44 @@
+/* LeseBuddy – felles tokens for mockene (Pop med fiolett primær) */
+:root, [data-modus="lys"] {
+  --bg:#FFF5F7; --flate:#FFFFFF; --kant:#F5DDE5; --tekst:#141A3A; --dempet:#5A5670;
+  --primaer:#6427D6; --paaPrimaer:#FFFFFF; --aksent:#FF4D9D; --paaAksent:#141A3A; --markering:#FFE0EE;
+}
+[data-modus="moerk"] {
+  --bg:#0F1226; --flate:#1A1E3A; --kant:#2C3158; --tekst:#EEF0FF; --dempet:#A9AFD3;
+  --primaer:#B79BFF; --paaPrimaer:#0F1226; --aksent:#FF7AB6; --paaAksent:#141A3A; --markering:#4A1F3A;
+}
+.gloock{font-family:"Gloock",Georgia,serif;font-weight:400}
+.instr{font-family:"Instrument Serif",Georgia,serif;font-weight:400}
+
+/* Merket. Animasjon 6,6 s: lesing · blunk · pupillene blir · ut · 700 ms ro · rotasjon · ryggen */
+.merke .ramme{stroke:var(--primaer);stroke-width:8.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.merke .stang{stroke-width:10.5}
+.merke .glass{fill:var(--markering)}
+.merke .oye{fill:var(--tekst);transform-origin:center;transform-box:fill-box}
+.merke .snu{transform-origin:60px 40px;transform-box:view-box}
+.merke .stenger path{transform-box:view-box}
+.merke .flytt{transform:translate(0,4px)}
+.merke .stang{stroke-dasharray:96;stroke-dashoffset:96}
+.merke.spill .flytt{animation:m-flytt 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.merke.spill .snu{animation:m-snu 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.merke.spill .oyne{animation:m-les 6.6s ease-in-out forwards}
+.merke.spill .oye{animation:m-blunk 6.6s linear forwards}
+.merke.spill .stenger path{animation:m-stenger 6.6s cubic-bezier(.65,0,.3,1) forwards}
+.merke.spill .stang{animation:m-stang 6.6s ease forwards}
+@keyframes m-les{0%,3%{transform:translateX(-7px)}15%{transform:translateX(7px)}17%{transform:translateX(-7px)}29%{transform:translateX(7px)}33%,100%{transform:translateX(0)}}
+@keyframes m-blunk{0%,36%{transform:scaleY(1);opacity:1}38%{transform:scaleY(.1)}39.5%,48.5%{transform:scaleY(1);opacity:1}54.5%,100%{opacity:0;transform:scale(.2)}}
+@keyframes m-snu{0%,65%{transform:rotate(0)}83%,100%{transform:rotate(-90deg)}}
+@keyframes m-flytt{0%,65%{transform:translate(0,4px)}83%,100%{transform:translate(-16px,20px)}}
+@keyframes m-stenger{0%,65%{transform:scale(1);opacity:1}80%{transform:scale(.2);opacity:.3}83%,100%{transform:scale(0);opacity:0}}
+@keyframes m-stang{0%,79%{stroke-dashoffset:96}92%,100%{stroke-dashoffset:0}}
+.merke.ferdig .flytt{transform:translate(-16px,20px)}
+.merke.ferdig .snu{transform:rotate(-90deg)}
+.merke.ferdig .oye,.merke.ferdig .stenger{opacity:0}
+.merke.ferdig .stang{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){
+  .merke.spill .flytt{animation:none;transform:translate(-16px,20px)}
+  .merke.spill .snu{animation:none;transform:rotate(-90deg)}
+  .merke.spill .oye,.merke.spill .stenger path{animation:none;opacity:0}
+  .merke.spill .stang{animation:none;stroke-dashoffset:0}
+  .merke.spill .oyne{animation:none}
+}

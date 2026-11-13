@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeseBuddy – ordmerke 4, videreført</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Gloock&family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500..700&family=Quicksand:wght@600..700&family=Outfit:wght@500..700&family=Nunito:wght@700..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="merke.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tekst);font-family:"Atkinson Hyperlegible",system-ui,sans-serif;line-height:1.5;transition:background .3s,color .3s}
+.bryter{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:10px 16px;background:var(--flate);border-bottom:1px solid var(--kant);font-size:14px}
+.gruppe{display:flex;gap:6px;align-items:center}
+.gruppe>span{color:var(--dempet)}
+.bryter button{font:inherit;padding:6px 11px;border-radius:999px;border:1px solid var(--kant);background:var(--bg);color:var(--tekst);cursor:pointer}
+.bryter button[aria-pressed=true]{outline:2px solid var(--primaer);outline-offset:1px;font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:16px}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--dempet);margin:8px 0 14px;font-weight:700}
+.merker{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.forslag{border:1px solid var(--kant);border-radius:18px;padding:20px;background:var(--flate);display:flex;flex-direction:column;gap:16px}
+.forslag h3{margin:0;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:26px;line-height:1.1}
+.forslag p{margin:0;color:var(--dempet);font-size:15px}
+.stort{font-size:60px}
+.topplinje{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:14px;background:var(--bg);border:1px solid var(--kant);font-size:26px}
+.topplinje .meny{font-size:14px;color:var(--dempet)}
+.liten{font-size:18px;display:flex;align-items:center;gap:14px;color:var(--dempet)}
+.liten .om{color:var(--tekst)}
+
+.om{display:inline-flex;align-items:baseline;white-space:nowrap;line-height:1}
+.om svg{height:var(--bh,.9em);width:auto;align-self:baseline;margin:0 var(--bm,.01em) 0 var(--bv,.03em);overflow:visible}
+[data-uddy="fio"] .uddy{color:var(--primaer)}
+.f-gloock{font-family:"Gloock",Georgia,serif}
+.f-instr{font-family:"Instrument Serif",Georgia,serif;font-style:italic}
+.f-fredoka{font-family:"Fredoka",sans-serif;font-weight:600}
+.f-quick{font-family:"Quicksand",sans-serif;font-weight:700}
+.f-outfit{font-family:"Outfit",sans-serif;font-weight:600}
+.f-nunito{font-family:"Nunito",sans-serif;font-weight:800}
+</style>
+</head>
+<body data-modus="lys" data-uddy="fio" data-b="stor">
+<div class="bryter" role="toolbar" aria-label="Innstillinger">
+  <div class="gruppe" data-felt="modus"><span>Modus</span><button type="button" data-v="lys">Lys</button><button type="button" data-v="moerk">Mørk</button></div>
+  <div class="gruppe" data-felt="uddy"><span>«uddy»</span><button type="button" data-v="fio">Fiolett, som B-en</button><button type="button" data-v="tekst">Tekstfarge</button></div>
+  <div class="gruppe" data-felt="b"><span>B-en</span><button type="button" data-v="stor">Litt større</button><button type="button" data-v="mye">Større</button><button type="button" data-v="lik">Som bokstavene</button></div>
+</div>
+<main>
+  <h2>Forslag 4, videreført: «Lese» i én skrift, B-merket, «uddy» i en skrift som ligner B-en</h2>
+  <div class="merker" id="merker"></div>
+</main>
+<script src="merke.js"></script>
+<script>
+// B-en beskåret til selve bokstaven, med plass til streken.
+const BOKSTAV = () => MERKE.svg("ferdig").replace('viewBox="-4 -4 128 128"', 'viewBox="38 10 40 100"');
+const FORSLAG = [
+  { navn: "4g · Instrument kursiv + Gloock", tekst: "«lese» i lett kursiv serif og «uddy» i tung Gloock. To serifer, én lett og én tung: elegant og redaksjonelt, og B-en står som det eneste avrundede elementet.", lese: "f-instr", uddy: "f-gloock", ord: "lese" },
+  { navn: "4a · Gloock + Fredoka", tekst: "Fredoka er avrundet og myk, med samme runde endestykker og jevne strektykkelse som brillene. Lekent, men ikke barnslig.", lese: "f-gloock", uddy: "f-fredoka", ord: "Lese" },
+  { navn: "4b · Gloock + Outfit", tekst: "Outfit er geometrisk og ren, med rette linjer og runde buer som de firkantede glassene. Mest moderne og «trendy».", lese: "f-gloock", uddy: "f-outfit", ord: "Lese" },
+  { navn: "4c · Gloock + Nunito", tekst: "Nunito er en avrundet sans med kraft. Tykkere strek gjør at «uddy» står like tungt som B-en.", lese: "f-gloock", uddy: "f-nunito", ord: "Lese" },
+  { navn: "4d · Instrument kursiv + Quicksand", tekst: "Lettere og mer elegant: «lese» i kursiv serif, som et lite forord, og «uddy» i den runde Quicksand.", lese: "f-instr", uddy: "f-quick", ord: "lese" },
+  { navn: "4e · Instrument kursiv + Fredoka", tekst: "Kursiv «lese» og myk Fredoka. Størst kontrast mellom de to delene: «lese» hvisker, «Buddy» snakker.", lese: "f-instr", uddy: "f-fredoka", ord: "lese" },
+  { navn: "4f · Gloock + Gloock (som før)", tekst: "Til sammenligning: samme skrift begge steder, bare med større B.", lese: "f-gloock", uddy: "f-gloock", ord: "Lese" },
+];
+const ord = f => `<span class="om"><span class="${f.lese}">${f.ord}</span>${BOKSTAV()}<span class="uddy ${f.uddy}">uddy</span></span>`;
+document.getElementById("merker").innerHTML = FORSLAG.map(f => `
+  <article class="forslag">
+    <h3>${f.navn}</h3><p>${f.tekst}</p>
+    <div class="stort">${ord(f)}</div>
+    <div class="topplinje">${ord(f)}<span class="meny">Arbeidsbord · Samlingen</span></div>
+    <div class="liten">${ord(f)}<span>i løpende tekst og bunntekst</span></div>
+  </article>`).join("");
+
+const STR = { stor: [".9em", ".01em", ".03em"], mye: ["1.02em", ".02em", ".04em"], lik: [".74em", ".01em", ".02em"] };
+const b = document.body;
+function oppdater() {
+  const [h, m, v] = STR[b.dataset.b];
+  b.style.setProperty("--bh", h); b.style.setProperty("--bm", m); b.style.setProperty("--bv", v);
+  document.querySelectorAll(".gruppe").forEach(g => g.querySelectorAll("button").forEach(k => k.setAttribute("aria-pressed", k.dataset.v === b.dataset[g.dataset.felt])));
+}
+document.querySelectorAll(".gruppe").forEach(g => g.addEventListener("click", e => {
+  const k = e.target.closest("button"); if (!k) return;
+  b.dataset[g.dataset.felt] = k.dataset.v; oppdater();
+}));
+oppdater();
+</script>
+</body>
+</html>
