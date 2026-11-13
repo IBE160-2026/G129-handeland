@@ -66,9 +66,9 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
       ) : (
         <section className="mt-8">
           <Quiz tekstId={id} sporsmal={forElev} />
-          <p className="mt-8 text-xs text-slate-500">
+          <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">
             Spørsmålene er laget av {quiz.modell}, prompt {quiz.promptversjon}.
-            Lesevenn kan ta feil — teksten er kilden.
+            LeseBuddy kan ta feil — teksten er kilden.
           </p>
         </section>
       )}
@@ -92,7 +92,7 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
       <p className="mt-12 text-sm">
         <Link
           href={`/tekst/${id}/oppgaver`}
-          className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
+          className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
         >
           Tilbake til oppgavene
         </Link>

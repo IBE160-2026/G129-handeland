@@ -23,7 +23,7 @@ import { Kopier } from "../../../komponenter/Kopier";
 import { HandlingSkjema } from "../../../komponenter/Skjemaer";
 
 const LENKE =
-  "underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+  "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
 
 export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minnevers">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -62,8 +62,8 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
         </p>
       ) : valgt === null ? (
         <section className="mt-6">
-          <p>Lesevenn lager et vers på fire til seks linjer med minst tre av fagordene.</p>
-          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager verset…" klar="Lag et minnevers" />
+          <p>LeseBuddy lager et vers på fire til seks linjer med minst tre av fagordene.</p>
+          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager verset…" klar="Lag et minnevers" status="Buddy lager verset …" />
         </section>
       ) : (
         <section className="mt-6">
@@ -86,7 +86,7 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
                     {" "}
                     <Link
                       href={`/tekst/${id}/lesing#avsnitt-${valgt.kildeavsnitt[i]}`}
-                      className="align-middle text-sm text-slate-500 underline decoration-slate-300 underline-offset-4 hover:text-slate-900 dark:hover:text-slate-100"
+                      className="align-middle text-sm text-slate-500 dark:text-slate-400 underline decoration-slate-400 underline-offset-4 hover:text-slate-900 dark:hover:text-slate-100"
                     >
                       avsnitt {valgt.kildeavsnitt[i]}
                     </Link>
@@ -103,8 +103,8 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
             <span className="font-medium">Fagord i verset:</span> {valgt.faguttrykk.join(", ")}
           </p>
 
-          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager et nytt vers…" klar="Lag et nytt vers" />
-          <p className="mt-8 text-xs text-slate-500">
+          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager et nytt vers…" klar="Lag et nytt vers" status="Buddy lager et nytt vers …" />
+          <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">
             Laget av {valgt.modell}, prompt {valgt.promptversjon}. Fagordene og avsnittene er kontrollert mot
             teksten; påstandene er det ikke.
           </p>

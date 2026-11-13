@@ -24,7 +24,7 @@ export function Kopier({ tekst, hva }: { tekst: string; hva: string }) {
       <button
         type="button"
         onClick={kopier}
-        className="rounded-md border border-slate-400 px-3 py-1.5 text-sm font-medium hover:bg-slate-100 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:border-slate-600 dark:hover:bg-slate-800"
+        className="rounded-md border border-slate-500 px-3 py-1.5 text-sm font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
       >
         Kopier {hva.toLowerCase()}
       </button>

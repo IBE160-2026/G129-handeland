@@ -26,7 +26,7 @@ const DATO = new Intl.DateTimeFormat("nb-NO", {
 });
 
 const LENKE =
-  "font-medium underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+  "font-medium underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
 
 export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgaver">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -107,7 +107,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
         <section className="rounded-md border border-slate-300 p-5 dark:border-slate-700">
           <h2 className="text-lg font-semibold tracking-tight">Fagsamtale</h2>
           <p className="mt-1 text-slate-600 dark:text-slate-400">
-            Forklar teksten med egne ord. Lesevenn leser svaret ditt og stiller
+            Forklar teksten med egne ord. LeseBuddy leser svaret ditt og stiller
             neste spørsmål ut fra det du skrev.
           </p>
           <div className="mt-4">
@@ -157,7 +157,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
       )}
 
       <p className="mt-12 text-sm">
-        <Link href={`/tekst/${id}/lesing`} className="underline decoration-slate-400 underline-offset-4">
+        <Link href={`/tekst/${id}/lesing`} className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4">
           Tilbake til teksten
         </Link>
       </p>

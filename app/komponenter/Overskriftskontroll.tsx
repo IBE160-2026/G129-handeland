@@ -15,22 +15,19 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { overskriftsfeil, type Overskriftsplass } from "../../tekst/overskrifter";
 import { Feilmelding } from "./Feilmelding";
+import { KNAPP_PRIMAER } from "./knapper";
 import type { Handlingssvar } from "../handlinger";
 
 const TOMT: Handlingssvar = {};
 const LITEN =
-  "rounded border border-slate-300 px-2 py-1 text-sm hover:bg-slate-100 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800";
+  "rounded border border-slate-300 px-2 py-1 text-sm hover:bg-slate-100 disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800";
 const FELT =
-  "w-full rounded-md border border-slate-300 px-3 py-2 text-lg focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900";
+  "w-full rounded-md border border-slate-500 px-3 py-2 text-lg dark:border-slate-400 dark:bg-slate-900";
 
 function Godkjenn() {
   const { pending } = useFormStatus();
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-    >
+    <button type="submit" disabled={pending} className={KNAPP_PRIMAER}>
       {pending ? "Lagrer…" : "Overskriftene stemmer — videre"}
     </button>
   );
@@ -89,7 +86,7 @@ export function Overskriftskontroll({
 
       {plasser.length === 0 ? (
         <p className="rounded-md border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
-          Lesevenn fant ingen overskrifter i teksten. Du kan legge til en øverst, for eksempel tittelen, eller gå
+          LeseBuddy fant ingen overskrifter i teksten. Du kan legge til en øverst, for eksempel tittelen, eller gå
           videre uten.
         </p>
       ) : (
@@ -102,13 +99,13 @@ export function Overskriftskontroll({
                   Overskrift {i + 1} av {plasser.length}
                   {genererte.includes(tekster[i].trim()) && (
                     <span className="ml-2 rounded bg-slate-200 px-1.5 py-0.5 text-xs dark:bg-slate-700">
-                      laget av Lesevenn, ikke hentet fra teksten
+                      laget av LeseBuddy, ikke hentet fra teksten
                     </span>
                   )}
                 </label>
                 {slettet[i] ? (
                   <div className="mt-1 flex items-center gap-3">
-                    <p className="text-slate-500 line-through">{tekster[i]}</p>
+                    <p className="text-slate-500 dark:text-slate-400 line-through">{tekster[i]}</p>
                     <input type="hidden" name={`o-${p.nummer}`} value="" />
                     <button type="button" onClick={() => settSlettetPaa(i, false)} className={LITEN}>
                       Angre

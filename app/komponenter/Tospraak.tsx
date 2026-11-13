@@ -39,7 +39,7 @@ export function Morsmaalstekst({
 export function Spraakmerknad({ spraak, kvalitetssikret }: { spraak: Spraak; kvalitetssikret: boolean }) {
   if (kvalitetssikret) return null;
   return (
-    <p className="text-xs text-slate-500">
+    <p className="text-xs text-slate-500 dark:text-slate-400">
       {spraak.navn}: oversatt av en språkmodell. Ingen har kontrollert oversettelsen.
     </p>
   );

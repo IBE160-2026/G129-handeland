@@ -243,7 +243,7 @@ export async function lagMinnevers({
   }
   throw new GeneratorFeil(
     "ugyldig_utdata",
-    "Lesevenn fikk ikke laget et vers som holdt seg til fagordene i teksten.",
+    "LeseBuddy fikk ikke laget et vers som holdt seg til fagordene i teksten.",
     "Prøv igjen. Får du det ikke til, er øvekortene en god måte å pugge fagordene på.",
     new Error(sisteBrudd.join("; ")),
   );

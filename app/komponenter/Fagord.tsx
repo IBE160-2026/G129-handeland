@@ -104,7 +104,7 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
           // Fokus som går til lukkeknappen i boblen, skal ikke lukke den.
           if (!rot.current?.contains(e.relatedTarget as Node)) settKikk(false);
         }}
-        className="rounded-sm bg-amber-100 px-0.5 underline decoration-amber-600 decoration-2 underline-offset-2 hover:bg-amber-200 aria-expanded:bg-amber-300 dark:aria-expanded:bg-amber-800 focus:outline-2 focus:outline-offset-2 focus:outline-amber-700 dark:bg-amber-900/50 dark:decoration-amber-400 dark:hover:bg-amber-900"
+        className="rounded-sm bg-amber-100 px-0.5 underline decoration-amber-600 decoration-2 underline-offset-2 hover:bg-amber-200 aria-expanded:bg-amber-300 dark:aria-expanded:bg-amber-800 dark:bg-amber-900/50 dark:decoration-amber-400 dark:hover:bg-amber-900"
       >
         {tekst}
       </button>
@@ -132,7 +132,7 @@ export function Fagord({ tekst, uttrykk, forklaring, beskrivelseId, morsmaal }: 
                 knapp.current?.focus({ preventScroll: true });
               }}
               aria-label="Lukk forklaringen"
-              className="-mt-1 -mr-1 rounded px-2 text-lg leading-none hover:bg-slate-100 focus:outline-2 focus:outline-slate-900 dark:hover:bg-slate-800"
+              className="-mt-1 -mr-1 rounded px-2 text-lg leading-none hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               ×
             </button>

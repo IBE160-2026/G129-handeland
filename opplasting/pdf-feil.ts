@@ -42,7 +42,7 @@ export function pdfFeilmelding(
       return {
         melding: "Filen ser ut til å være et bilde av en tekst.",
         handling:
-          "Lesevenn leser ikke bilder inne i en PDF. Ta bilder av sidene i stedet, eller lim inn teksten.",
+          "LeseBuddy leser ikke bilder inne i en PDF. Ta bilder av sidene i stedet, eller lim inn teksten.",
         valg: ["bilde", "lim_inn"],
       };
     case "PF-2":
@@ -61,8 +61,8 @@ export function pdfFeilmelding(
       return {
         melding:
           d.sider !== undefined
-            ? `Filen har ${d.sider} sider. Lesevenn tar høyst 40.`
-            : `Filen er på ${mb(d.storrelse ?? 0)}. Lesevenn tar høyst 10 MB.`,
+            ? `Filen har ${d.sider} sider. LeseBuddy tar høyst 40.`
+            : `Filen er på ${mb(d.storrelse ?? 0)}. LeseBuddy tar høyst 10 MB.`,
         handling: "Del filen i mindre deler og last opp den du trenger, eller lim inn begynnelsen av teksten.",
         valg: ["velg_annen", "lim_inn"],
       };

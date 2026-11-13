@@ -51,7 +51,7 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
       </div>
 
       <p className="mt-12 text-sm">
-        <Link href={`/tekst/${id}/oppgaver`} className="underline decoration-slate-400 underline-offset-4">
+        <Link href={`/tekst/${id}/oppgaver`} className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4">
           Tilbake til oppgavene
         </Link>
       </p>

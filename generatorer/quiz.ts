@@ -172,7 +172,7 @@ export function velgAatte(
   ) {
     throw new GeneratorFeil(
       "ugyldig_utdata",
-      "Lesevenn klarte ikke å lage en hel quiz av denne teksten.",
+      "LeseBuddy klarte ikke å lage en hel quiz av denne teksten.",
       "Prøv igjen — quizen lages på nytt hver gang. Skjer det flere ganger, kan teksten være for kort til åtte spørsmål.",
     );
   }

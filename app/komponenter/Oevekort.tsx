@@ -18,12 +18,15 @@ import type { Merking, Oevekort as Kort } from "../../data/oevekort";
 import { merkKort } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
 import { Kildeavsnitt } from "./Kildeavsnitt";
+import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "./knapper";
 
 type Modus = "alle" | "maa_oeve";
 
-const KNAPP =
-  "rounded-md border border-slate-300 px-4 py-2 font-medium hover:bg-slate-100 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-50 dark:border-slate-600 dark:hover:bg-slate-800";
-const VALGT = "border-slate-900 bg-slate-900 text-white hover:bg-slate-700 dark:border-slate-100 dark:bg-slate-100 dark:text-slate-900";
+// Knappene i øvingen har fiolett kant (button-secondary). Den valgte
+// merkingen (aria-pressed) er fylt (button-primary), så valget synes med
+// både form og farge.
+const KNAPP = KNAPP_SEKUNDAER;
+const knapp = (valgt: boolean) => (valgt ? KNAPP_PRIMAER : KNAPP_SEKUNDAER);
 
 function startIndeks(runde: Kort[], merking: Record<string, Merking | null>): number {
   const i = runde.findIndex((k) => !merking[k.id]);
@@ -95,7 +98,7 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           {telling.maaOeve > 0 && (
-            <button type="button" onClick={() => nyRunde("maa_oeve")} className={`${KNAPP} ${VALGT}`}>
+            <button type="button" onClick={() => nyRunde("maa_oeve")} className={KNAPP_PRIMAER}>
               Øv på de {telling.maaOeve} du ikke kan ennå
             </button>
           )}
@@ -132,7 +135,7 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
         type="button"
         onClick={() => setSnudd((s) => !s)}
         aria-pressed={snudd}
-        className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 focus:outline-2 focus:outline-offset-4 focus:outline-slate-900 dark:border-slate-600 dark:bg-slate-900"
+        className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
       >
         <div aria-live="polite">
           {!snudd ? (
@@ -171,10 +174,10 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
           ← Forrige
         </button>
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={`${KNAPP} ${m === "maa_oeve" ? VALGT : ""}`}>
+          <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={knapp(m === "maa_oeve")}>
             Må øve mer
           </button>
-          <button type="button" onClick={() => merk("kan")} aria-pressed={m === "kan"} className={`${KNAPP} ${m === "kan" ? VALGT : ""}`}>
+          <button type="button" onClick={() => merk("kan")} aria-pressed={m === "kan"} className={knapp(m === "kan")}>
             Kan
           </button>
         </div>

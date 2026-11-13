@@ -12,7 +12,7 @@ export default async function LoggInn() {
 
   return (
     <main className="mx-auto w-full max-w-md px-4 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">Lesevenn</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">LeseBuddy</h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">Logg inn for å fortsette.</p>
       <section className="mt-8">
         <InnloggingSkjema />

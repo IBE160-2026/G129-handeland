@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 10 100 100">
+  <!-- LeseBuddy: B-merket, statisk (transformene fra .ferdig i globals.css). -->
+  <style>
+    .ramme { fill: none; stroke: #6427d6; stroke-width: 8.5; stroke-linecap: round; stroke-linejoin: round; }
+    .stang { stroke-width: 10.5; }
+    .glass { fill: #ffe0ee; }
+    @media (prefers-color-scheme: dark) {
+      .ramme { stroke: #b79bff; }
+      .glass { fill: #4a1f3a; }
+    }
+  </style>
+  <g transform="translate(-16 20)">
+    <g transform="rotate(-90 60 40)">
+      <path class="glass" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+      <path class="glass" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+      <path class="ramme" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+      <path class="ramme" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+      <path class="ramme" d="M55 44 Q60 37 65 44"/>
+    </g>
+    <path class="ramme stang" d="M60 -4 V84"/>
+  </g>
+</svg>

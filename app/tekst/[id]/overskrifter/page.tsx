@@ -43,7 +43,7 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
       <p className="text-sm text-slate-600 dark:text-slate-400">{stegtekst(tekst.vei, "aktivering")} — før du leser</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">Stemmer overskriftene?</h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
-        Dette er overskriftene Lesevenn fant i «{tekst.tittel}». Rett det som er feil, slett det som ikke er en
+        Dette er overskriftene LeseBuddy fant i «{tekst.tittel}». Rett det som er feil, slett det som ikke er en
         overskrift, og flytt dem om rekkefølgen er gal. Selve teksten ser du etterpå — først skal du gjette hva den
         handler om.
       </p>
@@ -51,8 +51,8 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
         <HentOversettelse
           handling={lagEtiketterHandling.bind(null, id)}
           hva="etikettene"
-          venterTekst="Teksten har ingen overskrifter. Lesevenn lager noen korte etiketter du kan bruke …"
-          feilTekst="Lesevenn fikk ikke laget etiketter. Du kan legge til en overskrift selv, eller gå videre uten."
+          venterTekst="Teksten har ingen overskrifter. Buddy lager noen korte etiketter du kan bruke …"
+          feilTekst="LeseBuddy fikk ikke laget etiketter. Du kan legge til en overskrift selv, eller gå videre uten."
         />
       )}
       <div className="mt-8">
@@ -66,7 +66,7 @@ export default async function Overskrifter({ params }: PageProps<"/tekst/[id]/ov
         />
       </div>
       <p className="mt-10 text-sm">
-        <Link href="/" className="underline decoration-slate-400 underline-offset-4">
+        <Link href="/" className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4">
           Tilbake
         </Link>
       </p>

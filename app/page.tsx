@@ -22,7 +22,7 @@ function nesteSteg(tilstand: "innlest" | "aktivert" | "laast", id: string) {
 }
 
 const UNDERLENKE =
-  "underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 focus:outline-2 focus:outline-offset-2 dark:hover:decoration-slate-100";
+  "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
 
 const TILSTANDSORD: Record<string, string> = {
   innlest: "Ikke begynt",
@@ -65,7 +65,7 @@ export default async function Startside({ searchParams }: PageProps<"/">) {
                 type="search"
                 defaultValue={sok}
                 placeholder="Søk i titlene"
-                className="w-full rounded-md border border-slate-300 px-3 py-1.5 dark:border-slate-700 dark:bg-slate-900"
+                className="w-full rounded-md border border-slate-500 px-3 py-1.5 dark:border-slate-400 dark:bg-slate-900"
               />
               <div className="flex items-center gap-2">
                 <label htmlFor="sorter">Sorter</label>
@@ -73,12 +73,12 @@ export default async function Startside({ searchParams }: PageProps<"/">) {
                   id="sorter"
                   name="sorter"
                   defaultValue={sortering}
-                  className="rounded-md border border-slate-300 px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+                  className="rounded-md border border-slate-500 px-2 py-1 dark:border-slate-400 dark:bg-slate-900"
                 >
                   <option value="nyest">Nyeste først</option>
                   <option value="eldst">Eldste først</option>
                 </select>
-                <button type="submit" className="rounded-md border border-slate-400 px-3 py-1 font-medium hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800">
+                <button type="submit" className="rounded-md border border-slate-500 px-3 py-1 font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800">
                   Vis
                 </button>
               </div>
@@ -120,7 +120,7 @@ export default async function Startside({ searchParams }: PageProps<"/">) {
                         // oppgavene finnes først når den er låst — etter
                         // aktiveringen for innlimt tekst, etter gjennomsynet
                         // for PDF og bilde (FR-3).
-                        <span className="text-slate-500">Oppgaver — når teksten er klar til lesing</span>
+                        <span className="text-slate-500 dark:text-slate-400">Oppgaver — når teksten er klar til lesing</span>
                       )}
                     </li>
                   </ul>

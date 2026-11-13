@@ -13,3 +13,10 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-fr-13-15-quizflyt.md`
   summary: Tilgjengelighetssjekken (axe) må nå gjennomsynet via PDF eller bilde, siden innlimt tekst ikke lenger går dit (FR-3).
   evidence: Gjennomgangen 12.11; axe-sjekken av gjennomsynet ble fjernet fra sjekk-tilgjengelighet.mjs da innlimt tekst sluttet å gå via siden.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-1-identitet-og-tenkeindikator.md`
+  summary: Favicon har ingen PNG/ICO-reserve og ingen apple-icon (bare app/icon.svg).
+  evidence: favicon.ico ble slettet i bolk 1; eldre Safari og iOS-hjemskjerm viser da ikke ikon.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-1-identitet-og-tenkeindikator.md`
+  summary: Knappesystemet mangler fare- og lenkevariant; --lb-fare/--lb-fareflate er ubrukt, og små knapper (Slett for godt, Kopier, Lagre i Morsmaal, LITEN i Overskriftskontroll) er under 44 px.
+  evidence: Blind-gjennomgangen av bolk 1; DESIGN.md krever 44 px trykkflate og danger-message-komponenten.

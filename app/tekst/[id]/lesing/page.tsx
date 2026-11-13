@@ -42,6 +42,7 @@ import { HentOversettelse, MorsmaalVelger } from "../../../komponenter/Morsmaal"
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
 import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
+import { KNAPP_PRIMAER } from "../../../komponenter/knapper";
 import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing, velgMorsmaalHandling } from "../../../handlinger";
 import { stegtekst } from "../../../../tekst/steg";
 
@@ -131,7 +132,7 @@ export default async function Lesing({
   }
 
   const lenke =
-    "underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+    "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
@@ -151,8 +152,8 @@ export default async function Lesing({
       {fagtekstvarsel.length > 0 && (
         /* FR-7: en opplysning, ikke en sperre. Eleven leser videre som vanlig. */
         <p className="mt-4 max-w-[70ch] rounded-md border border-slate-300 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-900">
-          Denne teksten ser ikke ut som en fagtekst ({fagtekstvarsel.join(", ")}), og Lesevenn fant få eller ingen
-          fagord. Du kan godt lese videre — men Lesevenn er laget for fagtekster, og quiz og fagsamtale blir best med
+          Denne teksten ser ikke ut som en fagtekst ({fagtekstvarsel.join(", ")}), og LeseBuddy fant få eller ingen
+          fagord. Du kan godt lese videre — men LeseBuddy er laget for fagtekster, og quiz og fagsamtale blir best med
           dem.
         </p>
       )}
@@ -240,7 +241,7 @@ export default async function Lesing({
               )}
               {utpeking && utpeking.length === 0 && (
                 <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  Lesevenn fant ingen språklige bilder eller fagspråkord å forklare i denne teksten.
+                  LeseBuddy fant ingen språklige bilder eller fagspråkord å forklare i denne teksten.
                 </p>
               )}
               {(["spraklig_bilde", "akademisk"] as const).map((k) => {
@@ -283,9 +284,9 @@ export default async function Lesing({
              * FR-40 krever, og det gjør at en rar markering kan knyttes til
              * hvilken promptversjon som lagde den.
              */
-            <p className="mt-4 text-xs text-slate-500">
+            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
               Fagordene er funnet av {sett.modell}, prompt {sett.promptversjon}.
-              Lesevenn kan ta feil — teksten er kilden.
+              LeseBuddy kan ta feil — teksten er kilden.
             </p>
           )}
         </aside>
@@ -295,7 +296,7 @@ export default async function Lesing({
         FR-26: oppsummeringen står nederst, etter teksten, og lages når eleven
         ber om den — men først når hun har sjekket forståelsen (PRD §6). Det er
         med vilje strengt: en oppsummering før lesingen er sjekket, gjør
-        Lesevenn til et sammendragsverktøy, og det er det appen ikke er.
+        LeseBuddy til et sammendragsverktøy, og det er det appen ikke er.
       */}
       <section id="oppsummering" className="mt-12 max-w-[34rem] scroll-mt-6">
         <h2 className="font-semibold tracking-tight">Oppsummering</h2>
@@ -332,7 +333,7 @@ export default async function Lesing({
                 </li>
               ))}
             </ol>
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
               Laget av en språkmodell ut fra teksten. Teksten er kilden — sjekk avsnittet om noe virker rart.
             </p>
           </>
@@ -347,7 +348,7 @@ export default async function Lesing({
         </p>
         <Link
           href={`/tekst/${id}/oppgaver`}
-          className="mt-4 inline-block rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+          className={`mt-4 ${KNAPP_PRIMAER}`}
         >
           Til oppgavene
         </Link>

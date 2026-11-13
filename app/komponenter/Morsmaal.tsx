@@ -13,6 +13,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import { useFormStatus } from "react-dom";
 import { KVALITETSSIKRET, SPRAAK } from "../../morsmaal/spraak";
 import type { Handlingssvar } from "../handlinger";
+import { Tenker } from "./Tenker";
 
 const TOMT: Handlingssvar = {};
 
@@ -22,7 +23,7 @@ function Lagre() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-md border border-slate-400 px-4 py-2 font-medium hover:bg-slate-100 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:border-slate-600 dark:hover:bg-slate-800"
+      className="rounded-md border border-slate-500 px-4 py-2 font-bold hover:bg-slate-100 disabled:opacity-60 dark:border-slate-600 dark:hover:bg-slate-800"
     >
       {pending ? "Lagrer …" : "Lagre"}
     </button>
@@ -66,7 +67,7 @@ export function MorsmaalVelger({
           id="spraak"
           name="spraak"
           defaultValue={valgt ?? ""}
-          className="rounded-md border border-slate-400 bg-white px-3 py-2 dark:border-slate-600 dark:bg-slate-900"
+          className="rounded-md border border-slate-500 bg-white px-3 py-2 dark:border-slate-400 dark:bg-slate-900"
         >
           <option value="">Ingen — bare norsk</option>
           {sikre.length > 0 && <optgroup label="Kvalitetssikret">{sikre.map(valg)}</optgroup>}
@@ -150,7 +151,7 @@ export function HentOversettelse({
         <button
           type="button"
           onClick={kjoer}
-          className="mt-2 underline underline-offset-4 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900"
+          className="mt-2 underline underline-offset-4"
         >
           Prøv igjen
         </button>
@@ -158,9 +159,5 @@ export function HentOversettelse({
     );
   }
 
-  return (
-    <p aria-live="polite" className="my-3 text-sm text-slate-600 dark:text-slate-400">
-      {venter ? (venterTekst ?? `Oversetter ${hva} …`) : ""}
-    </p>
-  );
+  return <Tenker aktiv={venter} status={venterTekst ?? `Buddy oversetter ${hva} …`} className="my-3" />;
 }

@@ -170,7 +170,7 @@ export async function oppsummer({
   if (setninger.length === 0) {
     throw new GeneratorFeil(
       "ugyldig_utdata",
-      "Lesevenn fikk ikke laget en oppsummering av denne teksten.",
+      "LeseBuddy fikk ikke laget en oppsummering av denne teksten.",
       "Prøv igjen. Teksten står som før.",
     );
   }

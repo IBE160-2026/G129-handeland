@@ -55,7 +55,7 @@ export function Leseinnstillinger({
 
   return (
     <details className="mt-4 rounded-md border border-slate-300 p-3 dark:border-slate-700">
-      <summary className="cursor-pointer font-medium">Leseinnstillinger</summary>
+      <summary className="cursor-pointer font-bold">Leseinnstillinger</summary>
       <form ref={skjema} action={send} onChange={endret} className="mt-3 space-y-3">
         <fieldset>
           <legend className="text-sm font-medium">Tekststørrelse</legend>

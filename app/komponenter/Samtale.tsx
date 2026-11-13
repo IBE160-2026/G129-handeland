@@ -14,25 +14,30 @@ import { useFormStatus } from "react-dom";
 import type { Handlingssvar } from "../handlinger";
 import { avsluttSamtale, revurderRunde } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
+import { KNAPP_PRIMAER } from "./knapper";
+import { Tenker } from "./Tenker";
 
 const TOMT: Handlingssvar = {};
-const KNAPP =
-  "rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300";
+const KNAPP = KNAPP_PRIMAER;
 const LENKEKNAPP =
-  "text-sm underline underline-offset-4 hover:text-slate-900 focus:outline-2 focus:outline-offset-2 disabled:opacity-60 dark:hover:text-slate-100";
+  "inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:text-slate-900 disabled:opacity-60 dark:hover:text-slate-100";
 
-function Send({ venter, klar }: { venter: string; klar: string }) {
+function Send({
+  venter,
+  klar,
+  status,
+}: {
+  venter: string;
+  klar: string;
+  status: string;
+}) {
   const { pending } = useFormStatus();
   return (
     <>
       <button type="submit" disabled={pending} className={KNAPP}>
         {pending ? venter : klar}
       </button>
-      {pending && (
-        <p aria-live="polite" className="mt-3 text-slate-600 dark:text-slate-400">
-          {venter} Det kan ta noen sekunder.
-        </p>
-      )}
+      <Tenker aktiv={pending} status={status} hjelp="Det kan ta noen sekunder." className="mt-3" />
     </>
   );
 }
@@ -47,7 +52,7 @@ export function StartSamtaleSkjema({
   return (
     <form action={send}>
       {svar.feil && <Feilmelding {...svar.feil} />}
-      <Send venter="Lager første spørsmål…" klar="Start en fagsamtale" />
+      <Send venter="Lager første spørsmål…" klar="Start en fagsamtale" status="Buddy lager det første spørsmålet …" />
     </form>
   );
 }
@@ -74,9 +79,13 @@ export function SvarSkjema({
         required
         maxLength={3000}
         placeholder="Forklar med egne ord. Vet du ikke, kan du skrive det."
-        className="w-full rounded-md border border-slate-300 p-3 leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
+        className="w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
       />
-      <Send venter="Leser svaret ditt…" klar="Svar" />
+      <Send
+        venter="Leser svaret ditt…"
+        klar="Svar"
+        status="Buddy leser svaret ditt …"
+      />
     </form>
   );
 }
@@ -106,6 +115,7 @@ export function RevurderKnapp({ samtaleId, nummer }: { samtaleId: string; nummer
       >
         {venter ? "Leser svaret ditt på nytt…" : "Jeg tror du misforsto svaret mitt"}
       </button>
+      <Tenker aktiv={venter} status="Buddy leser svaret ditt på nytt …" className="mt-3" />
       {feil && <Feilmelding {...feil} />}
     </div>
   );

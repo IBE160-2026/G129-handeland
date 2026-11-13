@@ -13,6 +13,9 @@
  *     Escape, trykk utenfor og lukkeknappen; rulleposisjonen står stille
  *   - FR-12: tekststørrelsen endres og huskes etter ny innlasting
  *   - §5: hopp-lenken er det første tastaturet treffer
+ *   - fokusringen: en fylt primærknapp får 3 px heltrukken ring i
+ *     primærfargen når den nås med Tab (DESIGN.md, focus-ring)
+ *   - mørk modus: axe på de samme sidene med colorScheme «dark»
  *   - §5 mobil: ingen side ruller sidelengs på en 375 px bred telefon
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
@@ -159,6 +162,20 @@ try {
   const foerste = await pc.evaluate(() => document.activeElement?.textContent?.trim());
   sjekk("hopp-lenken er første fokus", foerste === "Hopp til innholdet", `fikk «${foerste}»`);
 
+  // DESIGN.md, focus-ring: Tab fra tekstfeltet til primærknappen «Begynn».
+  await pc.focus("#tekst");
+  await pc.keyboard.press("Tab");
+  const ring = await pc.evaluate(() => {
+    const e = document.activeElement;
+    const s = getComputedStyle(e);
+    return { tekst: e.textContent.trim(), stil: s.outlineStyle, bredde: s.outlineWidth, farge: s.outlineColor, synlig: e.matches(":focus-visible") };
+  });
+  sjekk(
+    "fokusringen på primærknappen er 3 px heltrukken i primærfargen",
+    ring.tekst === "Begynn" && ring.synlig && ring.stil === "solid" && ring.bredde === "3px" && ring.farge === "rgb(100, 39, 214)",
+    `«${ring.tekst}»: ${ring.stil} ${ring.bredde} ${ring.farge}`,
+  );
+
   const eksempel = await readFile("testdata/eksempeltekst/em-egenskaper.txt", "utf8");
   await pc.fill("#tittel", "EM-bølger");
   await pc.fill("#tekst", eksempel);
@@ -263,6 +280,38 @@ try {
     await axe(pc, navn);
   }
 
+  /* --- Mørk modus: axe på de samme sidene ----------------------------- */
+  const moerkUt = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" })).newPage();
+  moerkUt.setDefaultTimeout(120000);
+  await moerkUt.goto(`${APP}/registrer`);
+  await axe(moerkUt, "registrering (mørk)");
+  const moerkKontekst = await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" });
+  await moerkKontekst.addCookies(await pc.context().cookies());
+  const moerk = await moerkKontekst.newPage();
+  moerk.setDefaultTimeout(120000);
+  for (const [navn, url] of [
+    ["forsiden", `${APP}/`],
+    ["overskriftskontroll (3a)", `${tekstUrl}/overskrifter`],
+    ["aktivering", `${tekstUrl}/aktivering`],
+    ["lesevisning", lesing],
+    ["oppgaver", `${tekstUrl}/oppgaver`],
+    ["øvekort", `${tekstUrl}/oevekort`],
+    ["minnevers", `${tekstUrl}/minnevers`],
+    ["konto", `${APP}/konto`],
+  ]) {
+    await moerk.goto(url);
+    // Etter låsingen sender overskriftssiden videre; da er det en annen side som sjekkes.
+    if (moerk.url() !== url) {
+      sjekk(`mørk: ${navn} omdirigert, sjekkes ikke her`, true, moerk.url().replace(APP, ""));
+      continue;
+    }
+    await axe(moerk, `${navn} (mørk)`);
+  }
+  await moerk.goto(lesing);
+  await moerk.locator("article button[aria-expanded]").first().focus();
+  await moerk.locator("article [role=dialog]").waitFor();
+  await axe(moerk, "lesevisning med åpen forklaring (mørk)");
+
   /* --- Telefon ------------------------------------------------------ */
   const kontekst = await nettleser.newContext({
     viewport: { width: 375, height: 740 },
@@ -337,7 +386,7 @@ const ok = funn.filter((f) => f.ok).length;
 const linjer = [
   `# Tilgjengelighetssjekk — ${dato}`,
   "",
-  "Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.",
+  "Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.",
   "",
   `**${ok} av ${funn.length} sjekker bestått.**`,
   "",

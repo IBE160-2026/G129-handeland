@@ -13,6 +13,7 @@ import { useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
+import { KNAPP_PRIMAER } from "./knapper";
 
 type Feil = { melding: string; handling: string };
 
@@ -35,7 +36,7 @@ function somFeil(
       return {
         melding: "E-post eller passord er feil.",
         handling:
-          "Sjekk at du har skrevet riktig. Har du glemt passordet, må du lage en ny konto — Lesevenn sender ikke e-post, og kan derfor ikke tilbakestille det.",
+          "Sjekk at du har skrevet riktig. Har du glemt passordet, må du lage en ny konto — LeseBuddy sender ikke e-post, og kan derfor ikke tilbakestille det.",
       };
     case "USER_ALREADY_EXISTS":
     case "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL":
@@ -68,7 +69,7 @@ function somFeil(
     return {
       melding: "Invitasjonskoden er feil.",
       handling:
-        "Sjekk koden du fikk av den som inviterte deg. Lesevenn er bare åpen for inviterte testbrukere.",
+        "Sjekk koden du fikk av den som inviterte deg. LeseBuddy er bare åpen for inviterte testbrukere.",
     };
   }
   return {
@@ -78,9 +79,8 @@ function somFeil(
 }
 
 const FELT =
-  "mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900";
-const KNAPP =
-  "rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300";
+  "mt-1 w-full rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400 dark:bg-slate-900";
+const KNAPP = KNAPP_PRIMAER;
 
 /* ------------------------------------------------------------------ */
 
@@ -177,7 +177,7 @@ export function RegistreringSkjema() {
       <div>
         <label htmlFor="passord" className="block font-medium">Passord</label>
         <p id="passord-hjelp" className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Minst 8 tegn. Skriv det ned et trygt sted: Lesevenn kan ikke sende deg
+          Minst 8 tegn. Skriv det ned et trygt sted: LeseBuddy kan ikke sende deg
           et nytt hvis du glemmer det.
         </p>
         <input id="passord" name="passord" type="password" autoComplete="new-password" minLength={8} required aria-describedby="passord-hjelp" className={FELT} />
@@ -251,7 +251,7 @@ export function SlettKontoSkjema() {
       <button
         type="submit"
         disabled={venter}
-        className="rounded-md bg-red-700 px-5 py-2.5 font-medium text-white hover:bg-red-800 focus:outline-2 focus:outline-offset-2 focus:outline-red-700 disabled:opacity-60"
+        className="fylt inline-flex min-h-11 items-center rounded-md bg-red-700 px-5 py-3 font-bold text-white hover:bg-red-800 disabled:opacity-60"
       >
         {venter ? "Sletter…" : "Slett kontoen og alt innholdet"}
       </button>

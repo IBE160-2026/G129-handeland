@@ -22,8 +22,8 @@ const TILSTAND: Record<Tilstand, { navn: string; stil: string }> = {
   dekkende: { navn: "Dekkende", stil: "border-green-600 bg-green-50 dark:border-green-500 dark:bg-green-950/40" },
   delvis: { navn: "Delvis", stil: "border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-950/40" },
   misoppfatning: { navn: "Misoppfatning", stil: "border-rose-500 bg-rose-50 dark:border-rose-500 dark:bg-rose-950/40" },
-  uklart: { navn: "Uklart", stil: "border-slate-400 bg-slate-50 dark:border-slate-500 dark:bg-slate-900" },
-  utenfor: { navn: "Utenfor tema", stil: "border-slate-400 bg-slate-50 dark:border-slate-500 dark:bg-slate-900" },
+  uklart: { navn: "Uklart", stil: "border-slate-500 bg-slate-50 dark:border-slate-500 dark:bg-slate-900" },
+  utenfor: { navn: "Utenfor tema", stil: "border-slate-500 bg-slate-50 dark:border-slate-500 dark:bg-slate-900" },
 };
 
 export default async function Samtaleside({ params }: PageProps<"/tekst/[id]/samtale/[samtaleId]">) {
@@ -84,11 +84,11 @@ export default async function Samtaleside({ params }: PageProps<"/tekst/[id]/sam
 
       {samtale.avsluttet && <OppsummeringVisning runder={samtale.runder} avsnitt={avsnitt} lenke={lenke} />}
 
-      <p className="mt-8 text-xs text-slate-500">
-        Laget av {samtale.modell} ({samtale.promptversjon}). Lesevenn kan ta feil — teksten er kilden.
+      <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">
+        Laget av {samtale.modell} ({samtale.promptversjon}). LeseBuddy kan ta feil — teksten er kilden.
       </p>
       <p className="mt-6 text-sm">
-        <Link href={`/tekst/${id}/oppgaver`} className="underline decoration-slate-400 underline-offset-4">
+        <Link href={`/tekst/${id}/oppgaver`} className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4">
           Tilbake til oppgavene
         </Link>
       </p>

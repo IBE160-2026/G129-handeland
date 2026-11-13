@@ -125,7 +125,7 @@ async function lesManifest(): Promise<Manifest> {
   } catch (e) {
     throw new GeneratorFeil(
       "prompt_mangler",
-      "Lesevenn mangler oppsettet sitt og kan ikke behandle teksten nå.",
+      "LeseBuddy mangler oppsettet sitt og kan ikke behandle teksten nå.",
       "Prøv igjen senere. Står det ved, er det en feil hos oss.",
       e,
     );
@@ -158,7 +158,7 @@ export async function hentPrompt(
   if (!oppføring) {
     throw new GeneratorFeil(
       "ukjent_oppgave",
-      "Lesevenn kjenner ikke denne operasjonen.",
+      "LeseBuddy kjenner ikke denne operasjonen.",
       "Dette er en feil hos oss. Prøv en annen funksjon i mellomtiden.",
     );
   }
@@ -180,7 +180,7 @@ export async function hentPrompt(
   } catch (e) {
     throw new GeneratorFeil(
       "prompt_mangler",
-      "Lesevenn mangler oppsettet sitt for denne operasjonen.",
+      "LeseBuddy mangler oppsettet sitt for denne operasjonen.",
       "Prøv igjen senere. Står det ved, er det en feil hos oss.",
       e,
     );
@@ -198,7 +198,7 @@ function klient(): Anthropic {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new GeneratorFeil(
       "tilgang_avslaatt",
-      "Lesevenn mangler tilgangen den trenger for å behandle teksten.",
+      "LeseBuddy mangler tilgangen den trenger for å behandle teksten.",
       "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er lagret, " +
         "og du kan lese den videre uten markeringer mens vi retter det.",
     );
@@ -330,7 +330,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     if (!lagret) {
       throw new GeneratorFeil(
         "lagret_svar_mangler",
-        "Lesevenn kjører i testmodus, og det finnes ikke noe lagret svar for denne teksten.",
+        "LeseBuddy kjører i testmodus, og det finnes ikke noe lagret svar for denne teksten.",
         "Testmodus dekker bare eksempelteksten som ligger i repoet. Bruk den, " +
           "eller sett LESEVENN_TESTMODUS=av og legg inn en egen API-nøkkel for å " +
           "kjøre mot modellen.",
@@ -341,7 +341,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     if (!validert.success) {
       throw new GeneratorFeil(
         "ugyldig_utdata",
-        "Det lagrede svaret passer ikke formen Lesevenn forventer.",
+        "Det lagrede svaret passer ikke formen LeseBuddy forventer.",
         "Fila er sannsynligvis lagret under en eldre utgave av skjemaet. " +
           "Lag den på nytt med LESEVENN_TESTMODUS=skriv.",
       );
@@ -377,7 +377,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     if (svar.parsed_output === null || svar.parsed_output === undefined) {
       throw new GeneratorFeil(
         "ugyldig_utdata",
-        "Lesevenn fikk et svar den ikke kunne bruke.",
+        "LeseBuddy fikk et svar den ikke kunne bruke.",
         "Prøv igjen. Skjer det på nytt med samme tekst, kan teksten være vanskelig å behandle — prøv et kortere utdrag.",
         // Til loggen og harnessen: «max_tokens» betyr at tenkingen spiste taket.
         new Error(`stop_reason=${svar.stop_reason}, output_tokens=${svar.usage.output_tokens}`),
@@ -438,7 +438,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     ) {
       throw new GeneratorFeil(
         "tilgang_avslaatt",
-        "Lesevenn mangler tilgangen den trenger for å behandle teksten.",
+        "LeseBuddy mangler tilgangen den trenger for å behandle teksten.",
         "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er " +
           "lagret, og du kan lese den videre uten markeringer mens vi retter det.",
         e,
@@ -449,7 +449,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
     if (e instanceof Anthropic.RateLimitError) {
       throw new GeneratorFeil(
         "for_mange_kall",
-        "Lesevenn har for mye å gjøre akkurat nå.",
+        "LeseBuddy har for mye å gjøre akkurat nå.",
         "Vent et minutt og prøv igjen. Teksten din er lagret.",
         e,
       );
@@ -457,7 +457,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
 
     throw new GeneratorFeil(
       "modellfeil",
-      "Lesevenn fikk ikke behandlet teksten.",
+      "LeseBuddy fikk ikke behandlet teksten.",
       "Prøv igjen om litt. Står det ved, er det en feil hos oss.",
       e,
     );

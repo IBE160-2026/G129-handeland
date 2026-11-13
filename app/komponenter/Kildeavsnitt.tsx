@@ -17,7 +17,7 @@ export function Kildeavsnitt({
 }) {
   return (
     <details>
-      <summary className="cursor-pointer text-sm font-medium underline underline-offset-4 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900">
+      <summary className="cursor-pointer text-sm font-bold underline underline-offset-4">
         Se hvor det står i teksten
       </summary>
       <div className="mt-2 rounded-md bg-slate-50 p-4 dark:bg-slate-900">

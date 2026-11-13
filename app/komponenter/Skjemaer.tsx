@@ -19,24 +19,28 @@ import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
 import { GRENSER } from "../../opplasting/pdf-tekst";
+import { KNAPP_PRIMAER } from "./knapper";
+import { Tenker } from "./Tenker";
 
 const TOMT: Handlingssvar = {};
 
-function Send({ venter, klar }: { venter: string; klar: string }) {
+/**
+ * Knappen beholder den korte teksten («Finner fagordene…») og låses. Venter
+ * skjemaet på språkmodellen (`status`), vises tenkeindikatoren under; ellers
+ * får skjermleseren ventteksten i en statusregion som finnes fra før.
+ */
+function Send({ venter, klar, status }: { venter: string; klar: string; status?: string }) {
   const { pending } = useFormStatus();
   return (
     <>
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-      >
+      <button type="submit" disabled={pending} className={KNAPP_PRIMAER}>
         {pending ? venter : klar}
       </button>
-      {pending && (
-        // aria-live, slik at skjermleseren sier det uten at eleven leter.
-        <p aria-live="polite" className="mt-3 text-slate-600 dark:text-slate-400">
-          {venter} Dette kan ta et halvt minutt.
+      {status ? (
+        <Tenker aktiv={pending} status={status} hjelp="Dette kan ta et halvt minutt." className="mt-3" />
+      ) : (
+        <p role="status" className="sr-only">
+          {pending ? venter : ""}
         </p>
       )}
     </>
@@ -50,10 +54,13 @@ function Send({ venter, klar }: { venter: string; klar: string }) {
 export function AktiveringSkjema({
   handling,
   venter = "Lagrer…",
+  status,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   /** Innlimt tekst låses og får fagordene i samme trykk (FR-3), og det tar tid (§5). */
   venter?: string;
+  /** Statusteksten i tenkeindikatoren, når trykket venter på språkmodellen. */
+  status?: string;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
 
@@ -81,11 +88,11 @@ export function AktiveringSkjema({
           name="svar"
           rows={6}
           aria-describedby="svar-hjelp"
-          className="mt-2 w-full rounded-md border border-slate-300 p-3 leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
+          className="mt-2 w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
         />
       </div>
 
-      <Send venter={venter} klar="Videre" />
+      <Send venter={venter} klar="Videre" status={status} />
     </form>
   );
 }
@@ -118,7 +125,7 @@ export function GjennomsynSkjema({
         </label>
         <p id="gj-hjelp" className="mt-1 text-slate-600 dark:text-slate-400">
           Rett det som er blitt feil. Dette er siste sjanse — etter dette låses
-          teksten, fordi alt Lesevenn lager peker på avsnittene slik de står nå.
+          teksten, fordi alt LeseBuddy lager peker på avsnittene slik de står nå.
         </p>
         <textarea
           id="tekst"
@@ -128,17 +135,17 @@ export function GjennomsynSkjema({
           value={innhold}
           onChange={(e) => settInnhold(e.target.value)}
           aria-describedby="gj-hjelp gj-lengde"
-          className="mt-2 w-full rounded-md border border-slate-300 p-3 font-mono text-sm leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
+          className="mt-2 w-full rounded-md border border-slate-500 p-3 font-mono text-sm leading-relaxed dark:border-slate-400 dark:bg-slate-900"
         />
         {/* FR-1: bare synlig når teksten er under grensen, så eleven ser hva som mangler før hen trykker. */}
         <p id="gj-lengde" className="mt-1 text-right text-sm font-medium text-amber-700 dark:text-amber-400">
           {lengde < GRENSER.minTegnTotalt
-            ? `${lengde} tegn — Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`
+            ? `${lengde} tegn — LeseBuddy trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`
             : ""}
         </p>
       </div>
 
-      <Send venter="Finner fagordene…" klar="Lås og finn fagordene" />
+      <Send venter="Finner fagordene…" klar="Lås og finn fagordene" status="Buddy finner fagordene …" />
     </form>
   );
 }
@@ -187,11 +194,7 @@ export function LagQuizAutomatisk({
     return (
       <div>
         <Feilmelding melding={feil.melding} handling={feil.handling} />
-        <button
-          type="button"
-          onClick={kjoer}
-          className="rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-        >
+        <button type="button" onClick={kjoer} className={KNAPP_PRIMAER}>
           Prøv igjen
         </button>
       </div>
@@ -200,11 +203,7 @@ export function LagQuizAutomatisk({
 
   // Vises også i øyeblikket før overgangen starter og mens siden oppdateres,
   // så eleven aldri ser en tom side.
-  return (
-    <p aria-live="polite" className="text-slate-600 dark:text-slate-400">
-      Lager quizen … Dette kan ta et halvt minutt.
-    </p>
-  );
+  return <Tenker aktiv status="Buddy lager quizen din …" hjelp="Det tar som regel 10–20 sekunder." />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -226,7 +225,7 @@ export function FinnFagordPaaNyttSkjema({
       {svar.feil && (
         <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
       )}
-      <Send venter="Finner fagordene…" klar="Prøv å finne fagordene igjen" />
+      <Send venter="Finner fagordene…" klar="Prøv å finne fagordene igjen" status="Buddy finner fagordene …" />
     </form>
   );
 }
@@ -244,7 +243,7 @@ export function LagOppsummeringSkjema({
       {svar.feil && (
         <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
       )}
-      <Send venter="Lager oppsummeringen…" klar="Vis en kort oppsummering" />
+      <Send venter="Lager oppsummeringen…" klar="Vis en kort oppsummering" status="Buddy lager oppsummeringen …" />
     </form>
   );
 }
@@ -254,10 +253,13 @@ export function HandlingSkjema({
   handling,
   venter,
   klar,
+  status,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   venter: string;
   klar: string;
+  /** Statusteksten i tenkeindikatoren, for eksempel «Buddy lager verset …». */
+  status?: string;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
 
@@ -266,7 +268,7 @@ export function HandlingSkjema({
       {svar.feil && (
         <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
       )}
-      <Send venter={venter} klar={klar} />
+      <Send venter={venter} klar={klar} status={status} />
     </form>
   );
 }

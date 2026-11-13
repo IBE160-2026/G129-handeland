@@ -3813,9 +3813,25 @@
       "uuid": "0ece3016-2b2e-47b1-a632-92129724b50f",
       "okt": "13b11739-9e62-4a10-914f-dfac64b9a163",
       "tid": "2026-11-13T00:50:01.280Z",
-      "slutt": "2026-11-13T00:50:12.990Z",
+      "slutt": "2026-11-13T00:51:21.001Z",
       "modell": "claude-opus-5-5",
       "tekst": "Er det slik at hvis jeg sier godkjenn og fortsett, at det da kommer til å stoppe opp pga. tokens, og at det egentlig er negativt?"
+    },
+    {
+      "uuid": "8f65fbca-fde1-4127-b3a3-f9709f2d69de",
+      "okt": "13b11739-9e62-4a10-914f-dfac64b9a163",
+      "tid": "2026-11-13T00:51:21.023Z",
+      "slutt": "2026-11-13T01:19:29.689Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Jeg skal legge meg nå .Jeg ønsker at du nå skal gjøre mest mulig uten meg så langt det går. Hvordan kan vi ordne deT?"
+    },
+    {
+      "uuid": "363fae6e-974a-4d1d-966b-8f43d434c9e1",
+      "okt": "13b11739-9e62-4a10-914f-dfac64b9a163",
+      "tid": "2026-11-13T07:34:58.523Z",
+      "slutt": "2026-11-13T07:35:10.107Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Oppta arbeidet"
     }
   ]
 }

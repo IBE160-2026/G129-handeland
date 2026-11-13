@@ -136,7 +136,7 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
   if (lengde < GRENSER.minTegnTotalt) {
     return {
       feil: {
-        melding: `Teksten er for kort: ${lengde} tegn. Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
+        melding: `Teksten er for kort: ${lengde} tegn. LeseBuddy trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
         handling: "Lim inn mer av teksten — gjerne hele delkapittelet. Overskrifter, fagord og quiz trenger nok tekst å bygge på.",
       },
     };
@@ -259,7 +259,7 @@ export async function laasOgGenerer(
   if (lengde < GRENSER.minTegnTotalt) {
     return {
       feil: {
-        melding: `Teksten er for kort: ${lengde} tegn. Lesevenn trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
+        melding: `Teksten er for kort: ${lengde} tegn. LeseBuddy trenger minst ${GRENSER.minTegnTotalt}, så det mangler ${GRENSER.minTegnTotalt - lengde}.`,
         handling: "Skriv inn resten av teksten i feltet, eller ta bilde av flere sider.",
       },
     };
@@ -513,7 +513,7 @@ function sjekkTak(tekst: string): Handlingssvar | null {
   if (tekst.length <= GRENSER.maksTegn) return null;
   return {
     feil: {
-      melding: `Teksten er på ${tekst.length.toLocaleString("nb-NO")} tegn. Lesevenn tar høyst ${GRENSER.maksTegn.toLocaleString("nb-NO")}.`,
+      melding: `Teksten er på ${tekst.length.toLocaleString("nb-NO")} tegn. LeseBuddy tar høyst ${GRENSER.maksTegn.toLocaleString("nb-NO")}.`,
       handling: "Bruk de første 8 000 tegnene, eller del teksten i flere og legg dem inn hver for seg.",
     },
   };

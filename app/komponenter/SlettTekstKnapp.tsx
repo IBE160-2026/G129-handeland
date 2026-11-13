@@ -25,7 +25,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
       <button
         type="button"
         onClick={() => setBekrefter(true)}
-        className="text-sm text-slate-600 underline underline-offset-4 hover:text-red-700 focus:outline-2 focus:outline-offset-2 dark:text-slate-400 dark:hover:text-red-400"
+        className="text-sm text-slate-600 underline underline-offset-4 hover:text-red-700 dark:text-slate-400 dark:hover:text-red-400"
       >
         Slett
       </button>
@@ -60,7 +60,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
               setFeilet(true);
             }
           }}
-          className="rounded-md bg-red-700 px-3 py-1.5 font-medium text-white hover:bg-red-800 focus:outline-2 focus:outline-offset-2 focus:outline-red-700 disabled:opacity-60"
+          className="fylt rounded-md bg-red-700 px-3 py-1.5 font-bold text-white hover:bg-red-800 disabled:opacity-60"
         >
           {venter ? "Sletter…" : "Slett for godt"}
         </button>
@@ -68,7 +68,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
           type="button"
           disabled={venter}
           onClick={() => setBekrefter(false)}
-          className="rounded-md px-3 py-1.5 font-medium underline underline-offset-4"
+          className="rounded-md px-3 py-1.5 font-bold underline underline-offset-4"
         >
           Avbryt
         </button>

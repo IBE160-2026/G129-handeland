@@ -307,7 +307,7 @@ export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
   }
   throw new GeneratorFeil(
     "ugyldig_utdata",
-    "Lesevenn fikk ikke til et godt første spørsmål.",
+    "LeseBuddy fikk ikke til et godt første spørsmål.",
     "Prøv å starte samtalen igjen.",
     // Detaljene er for utvikleren, ikke for eleven (§5: ingen tekniske feilspor).
     new Error(`Brudd på startspørsmålet: ${siste.join("; ")}`),
@@ -368,7 +368,7 @@ export async function vurderSvar(inn: {
   if (!beste) {
     throw new GeneratorFeil(
       "ugyldig_utdata",
-      "Lesevenn fikk ikke vurdert svaret ditt denne gangen.",
+      "LeseBuddy fikk ikke vurdert svaret ditt denne gangen.",
       "Svaret ditt er ikke borte — trykk «Svar» igjen for å prøve på nytt.",
       new Error(`Brudd på vurderingen: ${sisteHarde.join("; ")}`),
     );

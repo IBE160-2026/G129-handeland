@@ -65,7 +65,7 @@ export default async function Gjennomsyn({
         fagordene peker på avsnitt 1.
       */}
       <p className="mt-3 text-slate-600 dark:text-slate-400">
-        Lesevenn leser dette som <strong>{avsnitt.length} avsnitt</strong>, der{" "}
+        LeseBuddy leser dette som <strong>{avsnitt.length} avsnitt</strong>, der{" "}
         <strong>{antallOverskrifter}</strong> er overskrifter.
       </p>
 
@@ -90,7 +90,7 @@ export default async function Gjennomsyn({
       <p className="mt-10 text-sm">
         <Link
           href={`/tekst/${id}/aktivering`}
-          className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
+          className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
         >
           Tilbake
         </Link>

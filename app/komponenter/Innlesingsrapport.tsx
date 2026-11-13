@@ -15,7 +15,7 @@ import type { Innlesingsrapport as Rapport } from "../../opplasting/pdf-les";
 export function Innlesingsrapport({ rapport }: { rapport: Rapport }) {
   const fjernet = rapport.fjernedeLinjer;
   return (
-    <section aria-label="Hva Lesevenn gjorde med PDF-en" className="mt-6 rounded-md border border-slate-300 p-4 text-sm dark:border-slate-700">
+    <section aria-label="Hva LeseBuddy gjorde med PDF-en" className="mt-6 rounded-md border border-slate-300 p-4 text-sm dark:border-slate-700">
       <p className="font-medium">Fra PDF-en</p>
       <ul className="mt-2 list-disc pl-5">
         <li>

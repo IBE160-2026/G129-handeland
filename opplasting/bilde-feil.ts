@@ -45,7 +45,7 @@ export function bildeFeilmelding(kode: BildeFeilkode, d: BildeFeildetaljer = {})
       return {
         melding:
           d.antall !== undefined
-            ? `Du har valgt ${d.antall} bilder. Lesevenn tar høyst 4 per tekst.`
+            ? `Du har valgt ${d.antall} bilder. LeseBuddy tar høyst 4 per tekst.`
             : `${d.bilde ? `Bilde ${d.bilde}` : "Bildet"} er på ${mb(d.storrelse ?? 0)} selv etter krymping. Grensen er 4 MB.`,
         handling:
           d.antall !== undefined
@@ -59,7 +59,7 @@ export function bildeFeilmelding(kode: BildeFeilkode, d: BildeFeildetaljer = {})
         handling:
           d.format === "HEIC"
             ? "Nettleseren din kan ikke lese HEIC-bilder. Velg «Mest kompatibel» under Kamera i innstillingene på telefonen, eller ta skjermbilde av bildet og bruk det."
-            : "Lesevenn leser JPEG-, PNG- og HEIC-bilder. Velg et bilde i et av disse formatene.",
+            : "LeseBuddy leser JPEG-, PNG- og HEIC-bilder. Velg et bilde i et av disse formatene.",
         valg: ["fjern_bilder", "lim_inn"],
       };
     case "BF-5":

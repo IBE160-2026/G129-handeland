@@ -90,7 +90,7 @@ export default async function Aktivering({
                 {o.innhold}
                 {/* FR-5: synlig merket når Lesevenn laget den, ikke teksten. */}
                 {tekst.genererteOverskrifter?.includes(o.innhold) && (
-                  <span className="ml-2 align-middle text-xs text-slate-500">(laget av Lesevenn)</span>
+                  <span className="ml-2 align-middle text-xs text-slate-500 dark:text-slate-400">(laget av LeseBuddy)</span>
                 )}
                 {spraak && <Morsmaalstekst spraak={spraak} tekst={mm.get(`o${o.nummer}`)} className="text-base" />}
               </li>
@@ -109,7 +109,7 @@ export default async function Aktivering({
          */
         <section className="mt-8 rounded-md border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
           <p>
-            Lesevenn fant ingen overskrifter i denne teksten. Da er det
+            LeseBuddy fant ingen overskrifter i denne teksten. Da er det
             vanskelig å gjette hva den handler om på forhånd — så skriv heller
             kort om hva du vet om emnet fra før.
           </p>
@@ -122,7 +122,7 @@ export default async function Aktivering({
             Du har alt svart på dette steget.{" "}
             <Link
               href={`/tekst/${id}/lesing`}
-              className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
+              className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
             >
               Gå til teksten
             </Link>
@@ -131,6 +131,7 @@ export default async function Aktivering({
           <AktiveringSkjema
             handling={lagreAktivering.bind(null, id)}
             venter={tekst.vei === "liming" ? "Finner fagordene…" : "Lagrer…"}
+            status={tekst.vei === "liming" ? "Buddy finner fagordene …" : undefined}
           />
         )}
       </section>
@@ -138,7 +139,7 @@ export default async function Aktivering({
       <p className="mt-10 text-sm">
         <Link
           href="/"
-          className="underline decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
+          className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
         >
           Tilbake
         </Link>

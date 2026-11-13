@@ -77,7 +77,7 @@ export async function lagEtiketter(avsnitt: Avsnitt[]): Promise<{
   if (k.etiketter.length < krav) {
     throw new GeneratorFeil(
       "ugyldig_utdata",
-      "Lesevenn fikk ikke laget etiketter til teksten.",
+      "LeseBuddy fikk ikke laget etiketter til teksten.",
       "Gå videre uten — du kan legge til en overskrift selv øverst.",
     );
   }

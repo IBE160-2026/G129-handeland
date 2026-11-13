@@ -1,36 +1,336 @@
 @import "tailwindcss";
 
+/*
+ * LeseBuddy, paletten «Pop» (DESIGN.md, colors). Kontrastene er målt for
+ * akkurat disse verdiene, så de brukes uendret. Mørk modus bytter bare
+ * variablene; klassene er de samme.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --lb-bakgrunn: #fff5f7;
+  --lb-flate: #ffffff;
+  --lb-kant: #f5dde5; /* bare skillelinjer, aldri informasjon (1,3:1) */
+  --lb-tekst: #141a3a;
+  --lb-dempet: #5a5670;
+  --lb-primaer: #6427d6;
+  --lb-paa-primaer: #ffffff;
+  --lb-aksent: #ff4d9d; /* bare som flate med paa-aksent oppå, aldri som tekst */
+  --lb-paa-aksent: #141a3a;
+  --lb-tusj: #ff4d9d;
+  --lb-markering: #ffe0ee;
+  --lb-fare: #b3261e;
+  --lb-fareflate: #fde7e9;
+  color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --lb-bakgrunn: #0f1226;
+    --lb-flate: #1a1e3a;
+    --lb-kant: #2c3158;
+    --lb-tekst: #eef0ff;
+    --lb-dempet: #a9afd3;
+    --lb-primaer: #b79bff;
+    --lb-paa-primaer: #0f1226;
+    --lb-aksent: #ff7ab6;
+    --lb-paa-aksent: #141a3a;
+    --lb-tusj: #8a2457;
+    --lb-markering: #4a1f3a;
+    --lb-fare: #ff8a80;
+    --lb-fareflate: #3d1a22;
   }
 }
 
+/* Tokenene som Tailwind-klasser: bg-flate, text-tekst, bg-primaer, text-paa-primaer … */
+@theme inline {
+  --color-bakgrunn: var(--lb-bakgrunn);
+  --color-flate: var(--lb-flate);
+  --color-kant: var(--lb-kant);
+  --color-tekst: var(--lb-tekst);
+  --color-dempet: var(--lb-dempet);
+  --color-primaer: var(--lb-primaer);
+  --color-paa-primaer: var(--lb-paa-primaer);
+  --color-aksent: var(--lb-aksent);
+  --color-paa-aksent: var(--lb-paa-aksent);
+  --color-tusj: var(--lb-tusj);
+  --color-markering: var(--lb-markering);
+  --color-fare: var(--lb-fare);
+  --color-fareflate: var(--lb-fareflate);
+
+  /* Skriftene lastes i app/layout.tsx. Gloock brukes først på landingssiden. */
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), Georgia, serif;
+  --font-display: var(--font-gloock), Georgia, serif;
+  --font-ordmerke: var(--font-quicksand), ui-rounded, system-ui, sans-serif;
+}
+
+@theme {
+  /* DESIGN.md, rounded */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+
+  /*
+   * Bevisst grep: slate-skalaen er tonet mot Pop, slik at de om lag 480
+   * slate-klassene i appen får ny tone uten å endres én etter én. Ankrene er
+   * fra DESIGN.md (900 = tekst, 950 = mørk bakgrunn, 100 = mørk tekst,
+   * 600 = dempet, 400 = dempet mørk). Mellomtrinnene er valgt slik at kanter
+   * og dempet tekst har minst samme kontrast som før mot sin flate.
+   * Nye flater bruker de semantiske tokenene over, ikke slate.
+   */
+  --color-slate-50: #f8f8ff;
+  --color-slate-100: #eef0ff;
+  --color-slate-200: #e6dcec;
+  --color-slate-300: #e4c3d1;
+  --color-slate-400: #a9afd3;
+  --color-slate-500: #67637f;
+  --color-slate-600: #5a5670;
+  --color-slate-700: #434268;
+  --color-slate-800: #2c3158;
+  --color-slate-900: #141a3a;
+  --color-slate-950: #0f1226;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--lb-bakgrunn);
+  color: var(--lb-tekst);
 }
 
 /*
- * §5: synlig fokus overalt. Komponentene har egne fokusstiler; dette er
- * gulvet for lenker og felt som mangler det, så ingen tastaturbruker mister
- * oversikten over hvor hun er.
+ * DESIGN.md, typography: sideoverskriftene inne i appen står i Instrument
+ * Serif, vanlig vekt og aldri fortykket. Regelen står utenfor lagene med
+ * vilje, så den slår font-semibold og tracking-tight på overskriftene.
+ * Instrument er smal og har lav x-høyde, så overskriftene er større enn før:
+ * h1 ett trinn, og h2 i em, så de også følger tekststørrelsen i lesevisningen.
+ */
+h1,
+h2 {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+h1 {
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+h2 {
+  font-size: 1.4em;
+  line-height: 1.15;
+}
+
+/*
+ * {components.focus-ring}: én regel for hele appen. 3 px i primærfargen med
+ * 2 px avstand. Den gamle regelen brukte currentColor og ble usynlig på
+ * fylte knapper.
  */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid currentColor;
+  outline: 3px solid var(--lb-primaer);
   outline-offset: 2px;
+}
+
+/* På fylte knapper: en ytre ring i bakgrunnsfargen mellom knappen og fokusringen. */
+.fylt:focus-visible {
+  box-shadow: 0 0 0 2px var(--lb-bakgrunn);
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: Highlight;
+  }
+  .fylt:focus-visible {
+    box-shadow: none;
+  }
+}
+
+/*
+ * Buddy-merket (DESIGN.md, logo-mark). Portert uendret fra
+ * mockups/merke.css og mockups/merke-tenker.css. Klassene:
+ *   .tenker  øynene leser fra side til side i en løkke (1,6 s)
+ *   .slutt   avslutningen, én gang (4,3 s): blunk, pupillene tones ut,
+ *            700 ms ro, brillene vipper til en B og ryggen tegnes
+ *   .ferdig  B-en, statisk
+ */
+.merke .ramme {
+  stroke: var(--lb-primaer);
+  stroke-width: 8.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.merke .stang {
+  stroke-width: 10.5;
+}
+.merke .glass {
+  fill: var(--lb-markering);
+}
+.merke .oye {
+  fill: var(--lb-tekst);
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.merke .snu {
+  transform-origin: 60px 40px;
+  transform-box: view-box;
+}
+.merke .stenger path {
+  transform-box: view-box;
+}
+.merke .flytt {
+  transform: translate(0, 4px);
+}
+.merke .stang {
+  stroke-dasharray: 96;
+  stroke-dashoffset: 96;
+}
+
+.merke.tenker .oyne {
+  animation: t-les 1.6s ease-in-out infinite;
+}
+@keyframes t-les {
+  0%,
+  100% {
+    transform: translateX(-7px);
+  }
+  45% {
+    transform: translateX(7px);
+  }
+  50% {
+    transform: translateX(7px);
+  }
+  95% {
+    transform: translateX(-7px);
+  }
+}
+
+.merke.slutt .flytt {
+  animation: s-flytt 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+}
+.merke.slutt .snu {
+  animation: s-snu 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+}
+.merke.slutt .oye {
+  animation: s-blunk 4.3s linear forwards;
+}
+.merke.slutt .stenger path {
+  animation: s-stenger 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+}
+.merke.slutt .stang {
+  animation: s-stang 4.3s ease forwards;
+}
+@keyframes s-blunk {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  2.5% {
+    transform: scaleY(0.1);
+  }
+  5%,
+  19% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  28%,
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+@keyframes s-snu {
+  0%,
+  44% {
+    transform: rotate(0);
+  }
+  72%,
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+@keyframes s-flytt {
+  0%,
+  44% {
+    transform: translate(0, 4px);
+  }
+  72%,
+  100% {
+    transform: translate(-16px, 20px);
+  }
+}
+@keyframes s-stenger {
+  0%,
+  44% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  68% {
+    transform: scale(0.2);
+    opacity: 0.3;
+  }
+  72%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+@keyframes s-stang {
+  0%,
+  70% {
+    stroke-dashoffset: 96;
+  }
+  91%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.merke.ferdig .flytt {
+  transform: translate(-16px, 20px);
+}
+.merke.ferdig .snu {
+  transform: rotate(-90deg);
+}
+.merke.ferdig .oye,
+.merke.ferdig .stenger {
+  opacity: 0;
+}
+.merke.ferdig .stang {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Øynene står stille mens Buddy tenker (statusteksten bærer beskjeden), og avslutningen viser B-en direkte. */
+  .merke.tenker .oyne {
+    animation: none;
+  }
+  .merke.slutt .flytt {
+    animation: none;
+    transform: translate(-16px, 20px);
+  }
+  .merke.slutt .snu {
+    animation: none;
+    transform: rotate(-90deg);
+  }
+  .merke.slutt .oye,
+  .merke.slutt .stenger path {
+    animation: none;
+    opacity: 0;
+  }
+  .merke.slutt .stang {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* I kontrastmodus tegnes merket i systemfargene, så det ikke forsvinner. */
+@media (forced-colors: active) {
+  .merke .ramme {
+    stroke: CanvasText;
+  }
+  .merke .glass {
+    fill: Canvas;
+  }
+  .merke .oye {
+    fill: CanvasText;
+  }
 }

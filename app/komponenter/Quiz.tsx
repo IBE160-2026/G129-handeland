@@ -25,6 +25,8 @@ import { useState } from "react";
 import { leverQuiz, vurderKortsvar, type Leveringssvar } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
 import { Kildeavsnitt } from "./Kildeavsnitt";
+import { KNAPP_PRIMAER } from "./knapper";
+import { Tenker } from "./Tenker";
 
 /** Det nettleseren får vite om et spørsmål før levering. Ingen fasit. */
 export type SporsmalForElev = {
@@ -38,8 +40,7 @@ export type SporsmalForElev = {
 type Fase = "svarer" | "ferdig";
 type Svar = { valgt?: string; skrevet?: string };
 
-const KNAPP =
-  "rounded-md bg-slate-900 px-5 py-2.5 font-medium text-white hover:bg-slate-700 focus:outline-2 focus:outline-offset-2 focus:outline-slate-900 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300";
+const KNAPP = KNAPP_PRIMAER;
 
 export function Quiz({
   tekstId,
@@ -149,6 +150,18 @@ export function Quiz({
         </div>
       )}
 
+      {/*
+        Avslutningen spilles øverst, ved resultatet, fordi `lever()` ruller
+        dit. Den er alltid rendret, så statusregionen finnes før svaret kommer.
+      */}
+      <Tenker
+        aktiv={venter}
+        status="Buddy retter quizen …"
+        ferdigStatus={feil ? undefined : "Quizen er rettet."}
+        bareAvslutning
+        className="mb-6"
+      />
+
       {feil && <Feilmelding {...feil} />}
 
       <ol className="space-y-8">
@@ -163,7 +176,7 @@ export function Quiz({
             <li key={s.id} className="rounded-md border border-slate-200 p-5 dark:border-slate-800">
               <fieldset>
                 <legend className="font-medium">
-                  <span className="text-slate-500">{s.nummer}.</span> {s.sporsmal}
+                  <span className="text-slate-500 dark:text-slate-400">{s.nummer}.</span> {s.sporsmal}
                   {visMerke && (
                     <span className={`ml-2 text-sm font-semibold ${riktig ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"}`}>
                       {riktig ? "Riktig" : "Ikke riktig"}
@@ -210,7 +223,7 @@ export function Quiz({
                     <div className="mt-3 rounded-md border border-slate-900 bg-slate-100 p-3 dark:border-slate-100 dark:bg-slate-800">
                       <p className="text-sm font-semibold">Ditt svar</p>
                       <p className="mt-1 whitespace-pre-wrap leading-relaxed">
-                        {skrevet || <span className="text-slate-500">(ikke besvart)</span>}
+                        {skrevet || <span className="text-slate-500 dark:text-slate-400">(ikke besvart)</span>}
                       </p>
                     </div>
                   )
@@ -237,7 +250,7 @@ export function Quiz({
                     value={svar[s.id]?.skrevet ?? ""}
                     onChange={(e) => sett(s.id, { skrevet: e.target.value })}
                     placeholder="Svar med én eller to setninger."
-                    className="mt-3 w-full rounded-md border border-slate-300 p-3 leading-relaxed focus:outline-2 focus:outline-offset-1 focus:outline-slate-900 dark:border-slate-700 dark:bg-slate-900"
+                    className="mt-3 w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
                   />
                 )}
               </fieldset>
@@ -292,6 +305,9 @@ export function Quiz({
           );
         })}
       </ol>
+
+      {/* Ventingen vises ved knappen, der eleven trykket. Ved feil forsvinner den, og feilmeldingen øverst tar over. */}
+      <Tenker aktiv={venter} status="Buddy retter quizen …" className="mt-8" />
 
       <div className="mt-8 flex flex-wrap items-center gap-4">
         {fase === "svarer" && (
