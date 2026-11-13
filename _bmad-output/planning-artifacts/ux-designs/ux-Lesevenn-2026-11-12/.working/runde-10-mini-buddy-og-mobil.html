@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini-Buddy og mobil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Gloock&family=Instrument+Serif:ital@0;1&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../mockups/merke.css">
+<link rel="stylesheet" href="../mockups/merke-tenker.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tekst);font:18px/1.6 "Atkinson Hyperlegible",system-ui,sans-serif}
+  main{max-width:1240px;margin:0 auto;padding:32px 20px 80px}
+  h1{font:400 2.75rem/1.05 "Instrument Serif",serif;margin:0 0 8px}
+  h2{font:400 2rem/1.1 "Instrument Serif",serif;margin:56px 0 8px}
+  h3{font:700 1rem/1.3 "Atkinson Hyperlegible";margin:0 0 6px;letter-spacing:.04em;text-transform:uppercase}
+  .ingress{color:var(--dempet);max-width:62ch;margin:0}
+  /* Mini-Buddy-tabellen */
+  .rad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px}
+  .modus{color:var(--tekst);border-radius:20px;padding:20px;background:var(--bg);border:1px solid var(--kant)}
+  .variant{display:grid;grid-template-columns:minmax(0,1fr) repeat(5,auto);align-items:end;gap:12px;padding:14px 0;border-top:1px solid var(--kant)}
+  .variant:first-of-type{border-top:0}
+  .variant .navn{font-weight:700;align-self:center;line-height:1.3}
+  .variant .navn small{display:block;font-weight:400;color:var(--dempet);font-size:.85rem}
+  .str{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.75rem;color:var(--dempet)}
+  .mini .ramme{stroke:var(--primaer);fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .mini .glass{fill:var(--markering)}
+  .mini .oye{fill:var(--tekst)}
+  .mini.tenker .oyne{animation:t-les 1.6s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){.mini.tenker .oyne{animation:none}}
+  /* Telefonrammer */
+  .telefoner{display:flex;flex-wrap:wrap;gap:28px;margin-top:20px}
+  .tlf{width:360px;flex:none}
+  .skjerm{width:360px;height:720px;border-radius:36px;border:10px solid #141A3A;background:var(--bg);overflow:hidden;position:relative;box-shadow:0 22px 40px -18px rgba(0,0,0,.45)}
+  .skjerm .innhold{padding:0 16px;height:100%;overflow:hidden}
+  .tlf figcaption{margin-top:12px;font-size:.95rem;line-height:1.45}
+  .tlf figcaption b{display:block;font-size:1.05rem}
+  .topp{display:flex;align-items:center;justify-content:space-between;height:56px;border-bottom:1px solid var(--kant);margin:0 -16px 16px;padding:0 16px;background:var(--bg)}
+  .ordmerke{display:flex;align-items:baseline;font-size:1.6rem;line-height:1}
+  .ordmerke .lese{font:italic 400 1em "Instrument Serif",serif;margin-right:.16em}
+  .ordmerke .uddy{font:700 1em Quicksand,sans-serif;color:var(--primaer)}
+  .ordmerke svg{height:.9em;width:auto;transform:translateY(.08em)}
+  .meny{display:flex;gap:16px;font-weight:700;font-size:.95rem}
+  .knapp{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border-radius:14px;background:var(--primaer);color:var(--paaPrimaer);font-weight:700;border:0;font-size:1rem}
+  .knapp.sek{background:transparent;color:var(--primaer);border:2px solid var(--primaer)}
+  .instr{font-family:"Instrument Serif",serif}
+  .dempet{color:var(--dempet)}
+  .liten{font-size:.9rem;line-height:1.45}
+  .kort{background:var(--flate);border-radius:20px;padding:16px;box-shadow:0 10px 26px -14px rgba(0,0,0,.35)}
+  .strek{display:flex;gap:4px;margin:10px 0 4px}
+  .strek i{flex:1;height:6px;border-radius:9px;border:2px solid var(--dempet)}
+  .strek i.f{background:var(--primaer);border-color:var(--primaer)}
+  .pille{display:inline-block;background:var(--aksent);color:var(--paaAksent);border-radius:999px;padding:2px 10px;font-weight:700;font-size:.8rem}
+  .boble{position:relative;background:var(--flate);border-radius:16px;padding:8px 12px;font-size:.9rem;line-height:1.35;box-shadow:0 10px 26px -14px rgba(0,0,0,.35)}
+  .merk{position:absolute;inset:auto 12px 12px 12px;background:#141A3A;color:#fff;border-radius:12px;padding:8px 12px;font-size:.78rem;line-height:1.35}
+  .fagord{background:var(--markering);text-decoration:underline 2px var(--primaer);text-underline-offset:3px;font-weight:700;border-radius:4px;padding:0 2px}
+  .valg{display:flex;gap:10px;align-items:flex-start;margin-top:10px}
+  .valg .bokstav{flex:none;width:26px;height:26px;border-radius:50%;background:var(--primaer);color:var(--paaPrimaer);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Mini-Buddy og mobil</h1>
+  <p class="ingress">Runde 10: utkast. Først tre måter å tegne Buddy på i små størrelser, deretter fem mobilflater der en liten Buddy kan bo. Sett de små brillene i bevegelse ved å se på kolonnen «tenker».</p>
+
+  <h2>1. Mini-Buddy: tre tegninger</h2>
+  <p class="ingress">Ved 16–24 px blir rammen på 8,5 under to piksler og pupillene under én, så Buddy forsvinner. En egen tegning for små størrelser er vanlig (som et favicon har sin egen tegning).</p>
+  <div class="rad">
+    <section class="modus" data-modus="lys" id="lys"><h3>Lys</h3></section>
+    <section class="modus" data-modus="moerk" id="moerk"><h3>Mørk</h3></section>
+  </div>
+
+  <h2>2. Buddy på telefonen: fem flater</h2>
+  <p class="ingress">Hver flate viser ett forslag. Rammene er 360 px brede, som en vanlig telefon. Mini-Buddy er variant M2 (kraftig) i alle.</p>
+  <div class="telefoner" id="telefoner"></div>
+</main>
+
+<script>
+/* Tegningene. Alle i flaten 120 × 120, beskåret til brillene. */
+const G = {
+  vGlass: "M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z",
+  hGlass: "M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z",
+};
+const VARIANTER = [
+  { id: "M1", navn: "M1 Nedskalert", tekst: "Dagens tegning, bare mindre. Ramme 8,5, pupiller 5,5, stenger med.",
+    tegn: o => `<g><path class="glass" d="${G.vGlass}"/><path class="glass" d="${G.hGlass}"/>${o}<path class="ramme" stroke-width="8.5" d="${G.vGlass}"/><path class="ramme" stroke-width="8.5" d="${G.hGlass}"/><path class="ramme" stroke-width="8.5" d="M55 44 Q60 37 65 44"/><path class="ramme" stroke-width="8.5" d="M16 44 L5 37"/><path class="ramme" stroke-width="8.5" d="M104 44 L115 37"/></g>`,
+    oye: 5.5, vb: "0 30 120 50" },
+  { id: "M2", navn: "M2 Kraftig", tekst: "Samme glass, ramme 12, pupiller 8, uten stenger. Leses ned til 20 px.",
+    tegn: o => `<g><path class="glass" d="${G.vGlass}"/><path class="glass" d="${G.hGlass}"/>${o}<path class="ramme" stroke-width="12" d="${G.vGlass}"/><path class="ramme" stroke-width="12" d="${G.hGlass}"/><path class="ramme" stroke-width="12" d="M55 45 Q60 39 65 45"/></g>`,
+    oye: 8, vb: "8 32 104 48" },
+  { id: "M3", navn: "M3 Ikon", tekst: "Forenklet: to avrundede firkanter, rett bro, ramme 14, pupiller 9.5. Virker også på 16 px.",
+    tegn: o => `<g><rect class="glass" x="14" y="38" width="40" height="34" rx="11"/><rect class="glass" x="66" y="38" width="40" height="34" rx="11"/>${o}<rect class="ramme" stroke-width="14" x="14" y="38" width="40" height="34" rx="11"/><rect class="ramme" stroke-width="14" x="66" y="38" width="40" height="34" rx="11"/><path class="ramme" stroke-width="14" d="M54 48 H66"/></g>`,
+    oye: 9.5, vb: "5 29 110 52" },
+];
+const oyne = (r) => `<g class="oyne"><circle class="oye" cx="34" cy="56" r="${r}"/><circle class="oye" cx="86" cy="56" r="${r}"/></g>`;
+const mini = (v, px, tenker = false) => {
+  const [, , w, h] = v.vb.split(" ").map(Number);
+  return `<svg class="mini ${tenker ? "tenker" : ""}" viewBox="${v.vb}" width="${Math.round(px * w / h)}" height="${px}" aria-hidden="true">${v.tegn(oyne(v.oye))}</svg>`;
+};
+for (const id of ["lys", "moerk"]) {
+  const s = document.getElementById(id);
+  for (const v of VARIANTER) {
+    s.insertAdjacentHTML("beforeend", `<div class="variant"><div class="navn">${v.navn}<small>${v.tekst}</small></div>
+      ${[48, 32, 24, 16].map(px => `<div class="str">${mini(v, px)}<span>${px} px</span></div>`).join("")}
+      <div class="str">${mini(v, 32, true)}<span>tenker</span></div></div>`);
+  }
+}
+const M2 = VARIANTER[1];
+const ordmerke = () => `<span class="ordmerke"><span class="lese">lese</span><span class="merke ferdig" style="display:inline-flex"></span><span class="uddy">uddy</span></span>`;
+const topp = (hoyre = `<span class="meny"><span>Samlingen</span><span>Konto</span></span>`) => `<div class="topp">${ordmerke()}${hoyre}</div>`;
+
+const TELEFONER = [
+  { tittel: "A. Tenkeindikatoren som pille nederst",
+    tekst: "På telefonen ruller eleven ofte bort fra knappen. Pillen ligger fast nederst med mini-Buddy (28 px) som leser, så ventingen alltid synes. Avslutningen (B-en) spilles i pillen, og så glir den bort. På PC beholdes 64 px-varianten i flaten.",
+    html: `${topp()}<p class="dempet liten" style="margin:0">Steg 3 av 3</p><h2 class="instr" style="margin:0 0 8px;font-size:2rem">Quiz: Celledeling</h2>
+      <p class="liten">Quizen har åtte spørsmål om teksten. Alle kan besvares fra teksten alene.</p>
+      <div class="kort liten" style="opacity:.5">1. Hva skjer med arvestoffet før cellen deler seg?</div>
+      <div style="position:absolute;left:16px;right:16px;bottom:20px;display:flex;align-items:center;gap:12px;background:var(--flate);border-radius:999px;padding:10px 18px 10px 14px;box-shadow:0 22px 40px -18px rgba(0,0,0,.45);border:2px solid var(--primaer)">
+        ${mini(M2, 28, true)}<span style="line-height:1.3"><b>Buddy lager quizen din …</b><br><span class="dempet liten">Som regel 10–20 sekunder</span></span></div>` },
+  { tittel: "B. Mini-Buddy i knappen",
+    tekst: "Et alternativ til pillen for korte ventinger (svar i fagsamtalen, oversettelser): Buddy sitter inne i knappen mens den venter. Statusregionen er den samme som i dag.",
+    html: `${topp()}<h2 class="instr" style="margin:0 0 8px;font-size:2rem">Fagsamtale</h2>
+      <div class="kort liten"><b>Runde 2 av 6</b><p style="margin:6px 0 0">Hvorfor må arvestoffet kopieres før cellen deler seg?</p></div>
+      <div style="margin-top:14px;border:2px solid var(--dempet);border-radius:14px;height:120px;padding:10px" class="liten dempet">Fordi begge de nye cellene trenger …</div>
+      <p style="margin-top:14px"><span class="knapp" style="opacity:.92">${mini(M2, 22, true).replace('class="mini','style="--primaer:#fff;--markering:#8d63e0;--tekst:#141A3A" class="mini')} Buddy leser svaret ditt …</span></p>` },
+  { tittel: "C. Arbeidsbordet med Buddy og striper",
+    tekst: "Buddy (36 px) hilser ved siden av «Hei!» og sier neste steg. De små bunkene blir striper i full bredde: tittelen får hele linjen og brytes aldri midt i ordet (i dag: «Novelleanalys-e»).",
+    html: `${topp()}<div style="display:flex;align-items:center;gap:12px">${mini(M2, 36)}<div class="boble">Hei! Klar for en fagsamtale om <b>Celledeling</b>?</div></div>
+      <div class="kort" style="margin-top:16px;border:2px solid var(--primaer);position:relative"><span class="pille" style="position:absolute;right:12px;top:-10px">Sist brukt</span>
+        <div class="instr" style="font-size:2rem;line-height:1.05">Celledeling</div><div class="dempet liten">lagt inn 11. nov.</div>
+        <p style="margin:8px 0 0;font-weight:700;color:var(--primaer)">Neste: Fagsamtale →</p><div class="strek"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></div><div class="liten dempet">3 av 5 påbegynt</div></div>
+      ${["Novelleanalyse|3", "Bæreevne i bjelker|0", "Den industrielle revolusjonen|1", "Fotosyntese|5"].map(x => { const [t, n] = x.split("|"); return `<div class="kort" style="margin-top:10px;padding:12px 14px;display:flex;align-items:center;gap:12px"><div style="flex:1;min-width:0"><div class="instr" style="font-size:1.35rem;line-height:1.15">${t}</div><div class="strek" style="margin:6px 0 0;max-width:120px">${[1,2,3,4,5].map(i => `<i class="${i <= n ? "f" : ""}" style="height:4px"></i>`).join("")}</div></div><span class="dempet liten">${n} av 5</span></div>`; }).join("")}` },
+  { tittel: "D. Viften som ark nedenfra",
+    tekst: "På telefonen glir viften opp som et ark fra bunnen, med de fem aktivitetene som rader i én kolonne. Store trykkflater nær tommelen, «Legg sammen» øverst i arket. Samme dialog-regler som i dag.",
+    html: `${topp()}<div style="opacity:.25;filter:blur(1.5px)"><div class="kort" style="height:150px"></div><div class="kort" style="margin-top:10px;height:60px"></div></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:var(--flate);border-radius:28px 28px 0 0;padding:10px 16px 22px;box-shadow:0 -14px 40px -18px rgba(0,0,0,.45)">
+        <div style="width:44px;height:5px;border-radius:9px;background:var(--kant);margin:0 auto 10px"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="instr" style="font-size:1.75rem">Celledeling</span><span class="knapp sek" style="min-height:40px;padding:0 12px">Legg sammen</span></div>
+        ${[["Teksten", "Klar til lesing · 14 fagord"], ["Quiz", "Sist: 6 av 8 riktig"], ["Øvekort", "9 av 14 kan du"], ["Fagsamtale", "Runde 3 av 6"], ["Minnevers", "Ikke laget"]].map(([n, s]) => `<div style="display:flex;align-items:center;gap:12px;min-height:56px;border-top:1px solid var(--kant)"><span style="width:36px;height:36px;border-radius:10px;background:var(--markering);flex:none"></span><span style="flex:1;line-height:1.25"><span class="instr" style="font-size:1.3rem">${n}</span><br><span class="dempet liten">${s}</span></span><span style="color:var(--primaer);font-weight:700">›</span></div>`).join("")}
+      </div>` },
+  { tittel: "E. Landingssiden: trykk i stedet for rull",
+    tekst: "Rulleeffekt A krever høyde telefonen ikke har, og etterlater i dag et stort tomt felt. På telefonen: eleven trykker på et fagord, og forklaringen vises under, som i appen. Mini-Buddy står ved forklaringen i stedet for Følge-Buddy.",
+    html: `${topp(`<span class="knapp" style="min-height:38px;padding:0 14px">Logg inn</span>`)}<h2 class="instr" style="margin:0 0 6px;font-size:1.9rem;line-height:1.1">Se hvordan Buddy markerer fagord</h2>
+      <p class="liten dempet" style="margin:0 0 12px">Trykk på et fagord i teksten.</p>
+      <div class="kort liten"><div class="instr" style="font-size:1.4rem;margin-bottom:4px">Celledeling</div>Før cellen deler seg, kopieres <span class="fagord">arvestoffet</span>. Under <span class="fagord" style="outline:3px solid var(--primaer);outline-offset:2px">mitose</span> fordeles <span class="fagord">kromosomene</span> likt mellom to nye celler.</div>
+      <div style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">${mini(M2, 30)}<div class="kort liten" style="flex:1;background:var(--markering);border-inline-start:5px solid var(--primaer);box-shadow:none"><b style="font-size:1.15rem">mitose</b><br>Den vanlige celledelingen, der én celle blir til to like celler. <span class="dempet">Avsnitt 1</span></div></div>` },
+];
+document.getElementById("telefoner").innerHTML = TELEFONER.map(t => `<figure class="tlf" style="margin:0"><div class="skjerm"><div class="innhold">${t.html}</div></div><figcaption><b>${t.tittel}</b>${t.tekst}</figcaption></figure>`).join("");
+</script>
+<script src="../mockups/merke.js"></script>
+<script>
+// merke.js lastes etter; tegn ordmerkene på nytt når det er klart.
+document.querySelectorAll(".ordmerke .merke").forEach(m => { m.innerHTML = `<svg viewBox="38 10 43 100" aria-hidden="true" style="height:.9em;width:auto">${window.MERKE.figur(false)}</svg>`; m.classList.add("ferdig"); });
+</script>
+</body>
+</html>
