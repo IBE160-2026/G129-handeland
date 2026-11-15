@@ -29,6 +29,13 @@
  *     markerte fagord og forklaringslisten), ingen live-regioner, Følge-Buddy
  *     skjult for skjermlesere og bare fra 760 px ved vanlig tekst, og 320 px
  *     med 200 % tekst. Med SKJERMBILDE=<mappe> lagres skjermbilder av siden.
+ *   - bolk 4, temavalget: «Utseende» på kontosiden setter informasjonskapselen
+ *     (SameSite=Lax, ett år), med og uten JavaScript, og «Følg enheten» sletter
+ *     den; axe med `tema=moerk` og systemet i lys modus, og omvendt, og at både
+ *     tokenene og `dark:`-klassene følger valget fra første tegning
+ *   - bolk 4, mobilfeilene: ingen tomrom over 160 px mellom fagorddemoen og
+ *     neste seksjon på 375 px, og ingen tittel i en liten bunke brytes midt i
+ *     et ord («Novelleanalyse» i to kolonner)
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -468,6 +475,139 @@ try {
   await moerk.locator("article [role=dialog]").waitFor();
   await axe(moerk, "lesevisning med åpen forklaring (mørk)");
 
+  /* --- Bolk 4: temavalget («Utseende» på kontosiden) ------------------ */
+  /** Modus slik siden er tegnet: data-tema, color-scheme, bakgrunnen og en `dark:`-klasse. */
+  const modus = (side) =>
+    side.evaluate(() => {
+      const d = document.querySelector("[class~='dark:text-slate-400']");
+      return {
+        tema: document.documentElement.dataset.tema ?? null,
+        skjema: getComputedStyle(document.documentElement).colorScheme,
+        bakgrunn: getComputedStyle(document.body).backgroundColor,
+        darkKlasse: d ? getComputedStyle(d).color : null,
+      };
+    });
+  const MOERK_BG = "rgb(15, 18, 38)";
+  const LYS_BG = "rgb(255, 245, 247)";
+  const SLATE_400 = "rgb(169, 175, 211)";
+  const SLATE_600 = "rgb(90, 86, 112)";
+  const temaKake = (value) => ({ name: "tema", value, url: APP });
+
+  // Valget overstyrer systemet, også for `dark:`-klassene (konto har en slik på «Logget inn som»).
+  for (const [system, valg, ventetBg, ventetDark, navn] of [
+    ["light", "moerk", MOERK_BG, SLATE_400, "tema=moerk, systemet lyst"],
+    ["dark", "lys", LYS_BG, SLATE_600, "tema=lys, systemet mørkt"],
+  ]) {
+    const ctx = await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: system });
+    await ctx.addCookies([...(await pc.context().cookies()), temaKake(valg)]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    // Første tegning: HTML-en fra serveren har allerede valget, før noe skript kjører.
+    const forside = await (await side.request.get(`${APP}/konto`)).text();
+    const htmlTagg = forside.match(/<html[^>]*>/)?.[0] ?? "";
+    sjekk(
+      `temavalg (${navn}): HTML-en fra serveren har data-tema`,
+      htmlTagg.includes(`data-tema="${valg}"`),
+      htmlTagg.replace(/ class="[^"]*"/, ""),
+    );
+    await side.goto(`${APP}/konto`);
+    const m = await modus(side);
+    sjekk(
+      `temavalg (${navn}): fargene, color-scheme og dark:-klassene følger valget`,
+      m.tema === valg && m.skjema === (valg === "moerk" ? "dark" : "light") && m.bakgrunn === ventetBg && m.darkKlasse === ventetDark,
+      JSON.stringify(m),
+    );
+    for (const [sidenavn, url] of [
+      ["konto", `${APP}/konto`],
+      ["arbeidsbord", `${APP}/`],
+      ["lesevisning", lesing],
+    ]) {
+      await side.goto(url);
+      await axe(side, `${sidenavn} (${navn})`);
+    }
+    // Landingssiden uten innlogging, med det samme valget.
+    const ut = await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: system, reducedMotion: "reduce" });
+    await ut.addCookies([temaKake(valg)]);
+    const land = await ut.newPage();
+    land.setDefaultTimeout(120000);
+    await land.goto(`${APP}/`);
+    sjekk(`temavalg (${navn}): landingssiden følger valget`, (await modus(land)).bakgrunn === ventetBg);
+    await axe(land, `landingsside (${navn})`);
+    await ut.close();
+    await ctx.close();
+  }
+  // Ugyldig verdi behandles som ingen: siden følger systemet.
+  {
+    const ctx = await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" });
+    await ctx.addCookies([temaKake("rosa")]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${APP}/registrer`);
+    const m = await modus(side);
+    sjekk("temavalg: tema=rosa ignoreres, og siden følger systemet", m.tema === null && m.bakgrunn === MOERK_BG, JSON.stringify(m));
+    await ctx.close();
+  }
+  // Skjemaet: radioknapper i en fieldset med legend, «Lagre» og informasjonskapselen.
+  for (const js of [true, false]) {
+    const hvordan = js ? "med JavaScript" : "uten JavaScript";
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 740 }, locale: "nb-NO", colorScheme: "light", javaScriptEnabled: js });
+    await ctx.addCookies(await pc.context().cookies());
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${APP}/konto`);
+    const skjema = side.locator("form:has(legend:has-text('Utseende'))");
+    sjekk(
+      `temavalg (${hvordan}): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt`,
+      (await skjema.locator("fieldset > legend", { hasText: "Utseende" }).count()) === 1 &&
+        (await skjema.locator("input[type=radio][name=tema]").count()) === 3 &&
+        (await skjema.locator("input[type=radio]:checked").getAttribute("value")) === "",
+    );
+    /** Bekreftelsen etter lagring: statusregionen med JavaScript, <noscript> uten. */
+    const melding = (tekst) => side.locator("p:visible", { hasText: new RegExp(`^${tekst}$`) });
+    const valgt = () => skjema.locator("input[type=radio]:checked").getAttribute("value");
+    await skjema.locator("label", { hasText: "Mørk" }).click();
+    await skjema.locator("button[type=submit]", { hasText: "Lagre" }).click();
+    await melding("Lagret: Mørk\\.").waitFor();
+    await side.waitForLoadState("load");
+    const valgtEtterLagring = await valgt();
+    const adresse = side.url().replace(APP, "");
+    sjekk(
+      `temavalg (${hvordan}): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.»`,
+      valgtEtterLagring === "moerk" && (!js || !adresse.includes("lagret")),
+      `valgt ${valgtEtterLagring}, adresse ${adresse}`,
+    );
+    await side.goto(`${APP}/konto`);
+    const valgtEtterNy = await valgt();
+    const gammel = await side.locator("p:visible", { hasText: /^Lagret:/ }).count();
+    sjekk(
+      `temavalg (${hvordan}): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding`,
+      valgtEtterNy === "moerk" && gammel === 0,
+      `valgt ${valgtEtterNy}, ${gammel} meldinger`,
+    );
+    const kake = (await ctx.cookies()).find((c) => c.name === "tema");
+    const dager = kake ? Math.round((kake.expires - Date.now() / 1000) / 86400) : 0;
+    const m = await modus(side);
+    sjekk(
+      `temavalg (${hvordan}): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side`,
+      kake?.value === "moerk" && kake.sameSite === "Lax" && dager >= 364 && dager <= 366 && m.tema === "moerk" && m.bakgrunn === MOERK_BG,
+      kake ? `${kake.value}, ${kake.sameSite}, ${dager} dager, ${m.bakgrunn}` : "ingen informasjonskapsel",
+    );
+    await side.goto(`${APP}/samling`);
+    sjekk(`temavalg (${hvordan}): andre sider er også mørke`, (await modus(side)).bakgrunn === MOERK_BG);
+    await side.goto(`${APP}/konto`);
+    await skjema.locator("label", { hasText: "Følg enheten" }).click();
+    await skjema.locator("button[type=submit]", { hasText: "Lagre" }).click();
+    await melding("Lagret: Følg enheten\\.").waitFor();
+    await side.waitForLoadState("load");
+    const etter = await modus(side);
+    sjekk(
+      `temavalg (${hvordan}): «Følg enheten» sletter informasjonskapselen og følger systemet igjen`,
+      !(await ctx.cookies()).some((c) => c.name === "tema") && etter.tema === null && etter.bakgrunn === LYS_BG,
+      JSON.stringify(etter),
+    );
+    await ctx.close();
+  }
+
   /* --- Telefon ------------------------------------------------------ */
   const kontekst = await nettleser.newContext({
     viewport: { width: 375, height: 740 },
@@ -589,6 +729,59 @@ try {
   sjekk("1280 px, 200 % tekst: viften er et rutenett", storOppsett === "rutenett", `data-oppsett=${storOppsett}`);
   await ingenSiderulling(storPc, "åpen vifte 1280 px, 200 % tekst");
   await ingenKlipping(storPc, "åpen vifte 1280 px, 200 % tekst");
+
+  /* --- Bolk 4: titlene i de små bunkene brytes ikke midt i et ord ---- */
+  // To tekster til: «Diktanalyse» blir hovedbunken (sist lagt inn), og
+  // «Novelleanalyse» havner i en liten bunke. Lagt inn her, etter alle
+  // sjekkene som venter at EM-bølger er hovedbunken.
+  for (const tittel of ["Novelleanalyse", "Diktanalyse"]) {
+    await pc.goto(`${APP}/ny`);
+    await pc.fill("#tittel", tittel);
+    await pc.fill("#tekst", eksempel);
+    await pc.click('button[type=submit]:visible:has-text("Begynn")');
+    await pc.waitForURL(/\/overskrifter$/);
+  }
+  /**
+   * Titlene i de små bunkene: et ord som brytes over to linjer, gir to
+   * rektangler, med eller uten bindestrek. Delene mellom ekte bindestreker
+   * måles hver for seg, så «EM-bølger» kan brytes etter «EM-».
+   */
+  async function ingenDelteOrd(side, navn) {
+    await side.locator(".bunker > li:not(.bunke-hoved) .bunke-tittel", { hasText: "Novelleanalyse" }).waitFor();
+    const delteOrd = await side.evaluate(() =>
+      [...document.querySelectorAll(".bunker > li:not(.bunke-hoved) .bunke-tittel")].flatMap((h) => {
+        const node = h.firstChild;
+        if (!node || node.nodeType !== Node.TEXT_NODE) return [`${h.textContent}: ikke ren tekst`];
+        const delt = [];
+        for (const m of node.textContent.matchAll(/[^\s-]+/g)) {
+          const r = document.createRange();
+          r.setStart(node, m.index);
+          r.setEnd(node, m.index + m[0].length);
+          if ([...r.getClientRects()].filter((b) => b.width > 0).length !== 1) delt.push(m[0]);
+        }
+        return delt;
+      }),
+    );
+    const smaaTitler = await side.locator(".bunker > li:not(.bunke-hoved) .bunke-tittel").allTextContents();
+    sjekk(
+      `${navn}: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje)`,
+      smaaTitler.includes("Novelleanalyse") && delteOrd.length === 0,
+      delteOrd.length ? `delt: ${delteOrd.join(", ")}` : smaaTitler.join(", "),
+    );
+  }
+  const bunkeTlf = await (
+    await nettleser.newContext({ viewport: { width: 375, height: 800 }, isMobile: true, hasTouch: true, locale: "nb-NO" })
+  ).newPage();
+  bunkeTlf.setDefaultTimeout(120000);
+  await bunkeTlf.context().addCookies(await pc.context().cookies());
+  await bunkeTlf.goto(`${APP}/`);
+  await ingenDelteOrd(bunkeTlf, "375 px");
+  if (process.env.SKJERMBILDE) await bunkeTlf.screenshot({ path: path.join(process.env.SKJERMBILDE, "arbeidsbord-375.png"), fullPage: true });
+  await bunkeTlf.context().close();
+  // 320 px med 200 % tekst: her er «Novelleanalyse» om lag 1,5 px bredere enn
+  // kolonnen, og spesifikasjonen (bolk 4) tillater at et ord deles når det ikke
+  // får plass alene. Sjekken kommer tilbake i bolk 6, når de små bunkene blir
+  // striper i full bredde på telefon.
 
   /* --- FR-47: landingssiden, uten innlogging ------------------------- */
   // Nye kontekster har ingen informasjonskapsler, så ingen er innlogget.
@@ -784,6 +977,46 @@ try {
     await s.evaluate(() => window.scrollTo(0, 0));
     await s.waitForTimeout(800);
     await axe(s, `landingsside (telefon, ${navn})`);
+    await s.context().close();
+  }
+  // Bolk 4: sporet til effekt A ga 1584 px tomrom fra demoflaten til
+  // overskriften i neste seksjon (målt på 375 × 800, utlogget). Målt i
+  // dokumentet, som i et langt skjermbilde. Vanlig seksjonsluft er 2 × 72 px.
+  for (const redusert of [false, true]) {
+    const navn = redusert ? "redusert bevegelse" : "bevegelse tillatt";
+    const s = await landing({ bredde: 375, hoeyde: 800, mobil: true, redusert });
+    const r = await s.evaluate(() => {
+      const flate = document.querySelector("#landingsside .ls-demo-klistre");
+      const neste = document.querySelector("#landingsside .ls-demo").nextElementSibling.querySelector("h2");
+      return {
+        effektA: document.getElementById("landingsside").classList.contains("effekt-a"),
+        tomrom: Math.round(neste.getBoundingClientRect().top - flate.getBoundingClientRect().bottom),
+      };
+    });
+    sjekk(
+      `landingsside 375 px (${navn}): ingen tomrom over 160 px mellom demoen og neste seksjon`,
+      r.tomrom <= 160 && r.effektA === !redusert,
+      `${r.tomrom} px, effekt A ${r.effektA ? "på" : "av"}`,
+    );
+    if (!redusert) {
+      // Effekt A virker fortsatt på telefon: ordene lyser opp ett for ett mens flaten passerer.
+      const { sett, antall } = await s.evaluate(async () => {
+        const flate = document.querySelector("#landingsside .ls-demo-klistre");
+        const funnet = new Set();
+        const start = flate.getBoundingClientRect().top + window.scrollY - window.innerHeight;
+        for (let y = start; y < start + window.innerHeight + flate.offsetHeight; y += 40) {
+          window.scrollTo(0, y);
+          await new Promise((ok) => requestAnimationFrame(() => setTimeout(ok, 30)));
+          funnet.add(document.querySelectorAll("#landingsside .ls-fagord.paa").length);
+        }
+        return { sett: [...funnet].sort((x, y) => x - y), antall: document.querySelectorAll("#landingsside .ls-fagord").length };
+      });
+      sjekk(
+        "landingsside 375 px: effekt A markerer fagordene ett for ett",
+        antall > 0 && Array.from({ length: antall + 1 }, (_, n) => n).every((n) => sett.includes(n)),
+        `antall markert underveis: ${sett.join(", ")} av ${antall}`,
+      );
+    }
     await s.context().close();
   }
   if (SKJERM) {

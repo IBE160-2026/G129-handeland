@@ -11,9 +11,13 @@
  *   A  fagordene i eksempelteksten markeres ett for ett mens forklaringen ved
  *      siden av skifter. Uten `aria-live`: skjermleseren har hele `<dl>`-en
  *      hele tiden, fordi forklaringene som ikke vises, bare skjules visuelt.
- *      Flaten måles med den høyeste forklaringen vist, og den klistrede
- *      visningen slås av når flaten er høyere enn synsfeltet minus 32 px.
- *      Da står demoen statisk.
+ *      Flaten måles med den høyeste forklaringen vist, og effekten slås av
+ *      når flaten er høyere enn synsfeltet minus 32 px. Da står demoen
+ *      statisk. Fra 760 px blir flaten stående (klistret) mens eleven ruller
+ *      gjennom et spor. Smalere enn det er det ikke noe spor: flaten ruller
+ *      som vanlig, og ordene lyser opp mens den passerer synsfeltet. Sporet
+ *      ga ellers 1584 px tomrom fra demoflaten til overskriften i neste
+ *      seksjon (målt på 375 × 800, utlogget, bolk 4).
  *   B  Følge-Buddy nede i hjørnet når heroen er rullet forbi. Øynene leser i
  *      takt med rullingen, og boblene er ekko av seksjonsoverskriftene. Bare
  *      pynt (`aria-hidden`), bare fra 760 px, ved vanlig tekststørrelse, og
@@ -69,6 +73,8 @@ export function LandingEffekter() {
     const remPx = () => proeve.getBoundingClientRect().width || 16;
 
     let a = false;
+    /** Flaten står stille i sporet (fra 760 px). Ellers ruller den fritt. */
+    let klistret = false;
     let b = false;
     let c = false;
     let aktivt = -2;
@@ -97,7 +103,7 @@ export function LandingEffekter() {
       tegnDemo(i);
     }
     function slaaAvA() {
-      rot!.classList.remove("effekt-a", "ls-demo-i-gang");
+      rot!.classList.remove("effekt-a", "ls-demo-klistret", "ls-demo-i-gang");
       ord.forEach((o) => o.classList.remove("paa"));
       forklaringer.forEach((f) => f.classList.remove("paa", "sr-only"));
       if (klistre) klistre.style.top = "";
@@ -105,11 +111,15 @@ export function LandingEffekter() {
       if (teller) teller.textContent = "";
       aktivt = -2;
       a = false;
+      klistret = false;
     }
     /** Måler flaten i effektoppsettet, med hver forklaring vist etter tur, og bufrer den høyeste. */
     function maalA() {
       if (!klistre || !panel) return;
       rot!.classList.add("effekt-a");
+      // Sporet står mens det måles på brede skjermer. Ellers kollapser siden
+      // fra 240vh, og rulleposisjonen klemmes om eleven er forbi demoen.
+      rot!.classList.toggle("ls-demo-klistret", bred.matches);
       panel.style.minHeight = "";
       let flate = 0;
       let pan = 0;
@@ -129,9 +139,11 @@ export function LandingEffekter() {
         return;
       }
       rot!.classList.add("effekt-a");
+      klistret = bred.matches;
+      rot!.classList.toggle("ls-demo-klistret", klistret);
       // Panelet holdes like høyt for alle fagordene, så flaten ikke endrer høyde underveis.
       panel.style.minHeight = `${panelHoeyde}px`;
-      klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
+      klistre.style.top = klistret ? `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px` : "";
       aktivt = -2;
       visFagord(-1);
       a = true;
@@ -204,12 +216,20 @@ export function LandingEffekter() {
         const andel = Math.min(1, Math.max(0, (vh * 0.7 - r.top) / r.height));
         fyll.style.height = `${andel * 100}%`;
       }
-      if (a && spor && klistre) {
+      if (a && klistret && spor && klistre) {
         const d = spor.getBoundingClientRect();
         const topp = parseFloat(klistre.style.top) || 0;
         // Den bufrede høyden, ikke den levende: ordet skal ikke blafre ved stegskillene.
         const lengde = d.height - flateHoeyde;
         const andel = lengde > 0 ? (topp - d.top) / lengde : 0;
+        visFagord(andel < 0 ? -1 : Math.min(forklaringer.length - 1, Math.floor(andel * forklaringer.length)));
+      } else if (a && klistre) {
+        // Uten spor: fra flaten står helt inne i synsfeltet (toppen ved vh − høyden)
+        // til den øverste fjerdedelen er rullet ut. Lengden er positiv, fordi
+        // flaten er minst LUFT lavere enn synsfeltet når effekten står på.
+        const start = vh - flateHoeyde;
+        const lengde = start + flateHoeyde * 0.25;
+        const andel = (start - klistre.getBoundingClientRect().top) / lengde;
         visFagord(andel < 0 ? -1 : Math.min(forklaringer.length - 1, Math.floor(andel * forklaringer.length)));
       }
       if (b && hero) {
@@ -272,7 +292,7 @@ export function LandingEffekter() {
       if (!redusert.matches && flateHoeyde > 0) {
         const fikk = flateHoeyde <= window.innerHeight - LUFT;
         if (fikk !== a) brukA();
-        else if (a && klistre) klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
+        else if (a && klistret && klistre) klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
         sist.flate = klistre?.offsetHeight ?? 0;
       }
       planlegg();

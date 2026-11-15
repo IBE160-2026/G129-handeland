@@ -9,7 +9,7 @@
  */
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
@@ -256,5 +256,41 @@ export function SlettKontoSkjema() {
         {venter ? "Sletter…" : "Slett kontoen og alt innholdet"}
       </button>
     </form>
+  );
+}
+
+/**
+ * Bekreftelsen etter «Lagre» under «Utseende» (bolk 4).
+ *
+ * Statusregionen finnes tom fra montering og fylles etterpå, ellers leser
+ * skjermleseren den ikke opp. Når meldingen er vist, fjernes `lagret` fra
+ * adressen, så den ikke kommer tilbake ved oppdatering eller Tilbake. Siden
+ * gir komponenten en ny nøkkel for hver lagring, så også to lagringer etter
+ * hverandre kunngjøres. Uten JavaScript står meldingen i <noscript>.
+ */
+export function LagretMelding({ tekst }: { tekst: string | null }) {
+  const [vist, setVist] = useState("");
+  useEffect(() => {
+    if (!tekst) return;
+    const t = setTimeout(() => {
+      setVist(tekst);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("lagret");
+      url.searchParams.delete("n");
+      window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    }, 100);
+    return () => clearTimeout(t);
+  }, [tekst]);
+  return (
+    <>
+      <p role="status" className="mt-1 text-sm font-medium">
+        {vist}
+      </p>
+      {tekst && (
+        <noscript>
+          <p className="mt-1 text-sm font-medium">{tekst}</p>
+        </noscript>
+      )}
+    </>
   );
 }

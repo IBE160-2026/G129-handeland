@@ -1,6 +1,28 @@
 @import "tailwindcss";
 
 /*
+ * Mørk modus (EXPERIENCE.md, Gjelder overalt): eleven velger under «Utseende»
+ * på kontosiden. Valget står som `data-tema` på <html>, satt på serveren fra
+ * informasjonskapselen (app/layout.tsx), så første tegning har riktig modus.
+ *   data-tema="moerk"  alltid mørk
+ *   data-tema="lys"    alltid lys, også når systemet er mørkt
+ *   uten data-tema     følger systemet (prefers-color-scheme), som før
+ * Varianten gjelder både Tailwinds `dark:`-klasser og tokenene under (via
+ * `@variant dark`), så de to aldri kan bli uenige. :where() holder
+ * spesifisiteten lik den vanlige mediavarianten.
+ */
+@custom-variant dark {
+  &:where([data-tema="moerk"], [data-tema="moerk"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-tema="lys"]), :root:not([data-tema="lys"]) *) {
+      @slot;
+    }
+  }
+}
+
+/*
  * LeseBuddy, paletten «Pop» (DESIGN.md, colors). Kontrastene er målt for
  * akkurat disse verdiene, så de brukes uendret. Mørk modus bytter bare
  * variablene; klassene er de samme.
@@ -21,9 +43,16 @@
   --lb-fareflate: #fde7e9;
   color-scheme: light dark;
 }
+/* color-scheme følger valget, så skjemafelt og rullefelt også bytter. */
+:root[data-tema="lys"] {
+  color-scheme: light;
+}
+:root[data-tema="moerk"] {
+  color-scheme: dark;
+}
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root {
+  @variant dark {
     --lb-bakgrunn: #0f1226;
     --lb-flate: #1a1e3a;
     --lb-kant: #2c3158;
@@ -555,9 +584,13 @@ h2 {
   /* Smalt på telefon: ett trinn mindre, så vanlige ord får plass i to kolonner. */
   font-size: 1.3rem;
   line-height: 1.15;
-  /* Bryter bare et ord som ikke får plass på en linje alene. */
+  /*
+   * Brytes mellom ordene. Et ord deles bare når det ikke får plass på en linje
+   * alene, og aldri med orddeling fra nettleseren: `hyphens: auto` med
+   * lang="nb" ga «Novelleanalys-e» i to kolonner på telefon (bolk 4).
+   */
   overflow-wrap: break-word;
-  hyphens: auto;
+  hyphens: manual;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -1138,12 +1171,20 @@ body:has(#landingsside) .meny-landing {
   }
 }
 
-/* Med effekten: teksten blir stående mens fagordene lyser opp ett for ett. */
-.effekt-a .ls-demo-spor {
+/*
+ * Med effekten: fagordene lyser opp ett for ett mens eleven ruller. Fra 760 px
+ * blir teksten stående (sporet gir rulleveien). På telefon er det ikke noe
+ * spor: flaten ruller som vanlig og ordene lyser opp mens den passerer.
+ * Sporet står som tomrom i dokumentet under flaten: 1584 px fra demoflaten
+ * til overskriften i neste seksjon (målt på 375 × 800, utlogget, bolk 4).
+ */
+.effekt-a.ls-demo-klistret .ls-demo-spor {
   height: 240vh;
 }
-.effekt-a .ls-demo-klistre {
+.effekt-a.ls-demo-klistret .ls-demo-klistre {
   position: sticky;
+}
+.effekt-a .ls-demo-klistre {
   align-items: start;
 }
 .effekt-a .ls-forklaringer {

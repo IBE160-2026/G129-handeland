@@ -26,3 +26,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-3-landingsside.md`
   summary: /logg-inn og /registrer kaller innloggetEpost() uten vakt, så de gir 500 når øktoppslaget feiler, mens / nå viser landingssiden.
   evidence: Edge-case-gjennomgangen av bolk 3; innloggetEpost i data/konto.ts har ingen try/unstable_rethrow.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-4-mobilfeil-og-temavalg.md`
+  summary: Tema-kapselen (lys/mørk) slettes ikke ved utlogging, så neste elev på en delt PC arver valget på landingssiden.
+  evidence: Blind-gjennomgangen av bolk 4; utloggingen går via authKlient.signOut i klienten, og kapselen er httpOnly.

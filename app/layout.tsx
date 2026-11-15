@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Atkinson_Hyperlegible, Instrument_Serif, Quicksand } from "next/font/google";
+import { cookies } from "next/headers";
+import { TEMA_KAPSEL, tolkTema } from "../data/tema";
 import "./globals.css";
 import { Topplinje } from "./komponenter/Topplinje";
 
@@ -32,13 +34,19 @@ export const metadata: Metadata = {
     "LeseBuddy er lesestøtte for videregående. Du leser teksten selv, og Buddy hjelper deg med fagordene, spørsmålene og samtalen om det du har lest.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Lys eller mørk modus fra kontoinnstillingene (EXPERIENCE.md, Gjelder
+  // overalt). Leses her på serveren, så første tegning har riktig modus og
+  // ingenting blinker. Uten gyldig valg står ingen data-tema, og siden følger
+  // systemet som før. color-scheme følger data-tema i globals.css.
+  const tema = tolkTema((await cookies()).get(TEMA_KAPSEL)?.value);
   return (
     // `lang="nb"` er ikke kosmetikk: skjermlesere velger uttale ut fra den,
     // og engelsk uttale av norsk fagtekst er ubrukelig for den eleven appen
     // er bygget for.
     <html
       lang="nb"
+      data-tema={tema ?? undefined}
       className={`${atkinson.variable} ${instrument.variable} ${quicksand.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bakgrunn font-sans text-tekst">

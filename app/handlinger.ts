@@ -13,6 +13,7 @@
  */
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hentBegrepssett, lagreBegrepssett } from "../data/begrepssett";
 import { tilgang } from "../data/konto";
@@ -85,6 +86,7 @@ import { lagreMinnevers } from "../data/minnevers";
 import { harSjekketForstaaelsen } from "../data/sjekket";
 import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
 import { tolkInnstillinger } from "../tekst/leseinnstillinger";
+import { TEMA_KAPSEL, TEMA_LEVETID, tolkTema } from "../data/tema";
 import { lagMinnevers, type Versform } from "../generatorer/minnevers";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
@@ -996,3 +998,36 @@ export async function lagEtiketterHandling(tekstId: string): Promise<Handlingssv
   return INGEN_FEIL;
 }
 
+
+/* ------------------------------------------------------------------ *
+ * Utseende — lys eller mørk modus (EXPERIENCE.md, Gjelder overalt)
+ * ------------------------------------------------------------------ */
+
+/**
+ * Lagrer valget i en informasjonskapsel på denne enheten: `lys`, `moerk`,
+ * eller ingen kapsel for «Følg enheten». Ingen tabell og ingen migrering
+ * (avveining godkjent 15.11), så valget følger ikke kontoen til en annen
+ * enhet. Et vanlig skjema, så det virker uten JavaScript.
+ *
+ * `tilgang()` som alle handlingene her: valget gjøres på kontosiden, som
+ * krever innlogging. Rotlayouten leser kapselen og setter `data-tema`.
+ */
+export async function velgTemaHandling(data: FormData): Promise<void> {
+  await tilgang();
+  const tema = tolkTema(data.get("tema"));
+  const kapsler = await cookies();
+  if (tema === null) {
+    kapsler.delete(TEMA_KAPSEL);
+  } else {
+    kapsler.set(TEMA_KAPSEL, tema, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: TEMA_LEVETID,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+  revalidatePath("/", "layout");
+  // `n` gir bekreftelsen en ny nøkkel, så to lagringer etter hverandre begge kunngjøres.
+  redirect(`/konto?lagret=utseende&n=${Date.now()}`);
+}

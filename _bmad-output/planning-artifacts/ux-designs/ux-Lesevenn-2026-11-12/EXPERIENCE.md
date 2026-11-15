@@ -1,7 +1,7 @@
 ---
 name: LeseBuddy
 status: final
-updated: 2026-11-13
+updated: 2026-11-15
 sources:
   - ../../prd-lesevenn.md
   - ../../product-brief-lesevenn.md
@@ -38,7 +38,7 @@ Navnet byttes bare utad, til «LeseBuddy». Det gjelder all tekst eleven kan se,
 | **Samlingen** (FR-49) | Menyen, «Se alle N tekstene i samlingen» | Alle tekstene, med søk, sortering og sletting. Gjenbruker dagens tekstliste fra startsiden (FR-36, FR-37) |
 | **Ny tekst** | «+ Ny tekst», «Legg en ny tekst på bordet» | Innlesing (FR-1, FR-2, FR-44). Det som er startsiden i dag, flyttet til egen side |
 | Tekstens løype | En bunke, et aktivitetskort, neste steg | Aktivering → (gjennomsyn for PDF og bilde) → Lesevisning → Quiz, Øvekort, Fagsamtale, Minnevers. Sidene finnes i dag under `/tekst/[id]/…` |
-| Konto | Kontolenken i topplinjen | Uendret (sletting FR-37, innstillinger) |
+| Konto | Kontolenken i topplinjen | Uendret (sletting FR-37, innstillinger), og «Utseende»: lys eller mørk modus (se State Patterns, Gjelder overalt) |
 
 **Adressene** `/samling` og `/ny` er forslag (`[ANTAKELSE]`). Arkitekturen avgjør de endelige.
 
@@ -183,7 +183,7 @@ Grensene står i PRD §6.4. Handlingene vises ikke som deaktiverte. Når eleven 
 | Tilstand | Behandling |
 |---|---|
 | Redusert bevegelse | Øynene står stille mens Buddy tenker, og statusteksten bærer beskjeden. Avslutningen viser B-en direkte. Landingssiden vises i den statiske versjonen. Viften åpner seg uten å fly. Myk rulling og overganger er slått av. |
-| Mørk modus | Følger systeminnstillingen. Det finnes ingen egen bryter i v1. Bryterne i mockene er bare til gjennomsyn. |
+| Mørk modus | Eleven velger under «Utseende» på kontosiden: «Følg enheten» (standard), «Lys» eller «Mørk». «Følg enheten» følger systeminnstillingen (`prefers-color-scheme`). «Lys» og «Mørk» overstyrer systemet, både fargene og `color-scheme`, så skjemafelt og rullefelt også bytter. Valget settes på serveren, så siden har riktig modus fra første tegning. Det er et vanlig skjema med radioknapper og «Lagre», og virker uten JavaScript. Valget lagres i en informasjonskapsel på enheten (ikke på kontoen), så det gjelder bare der det ble gjort. Det finnes ingen bryter i topplinjen eller på landingssiden. Bryterne i mockene er bare til gjennomsyn. |
 
 ## Interaction Primitives
 
