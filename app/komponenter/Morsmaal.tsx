@@ -159,5 +159,5 @@ export function HentOversettelse({
     );
   }
 
-  return <Tenker aktiv={venter} status={venterTekst ?? `Buddy oversetter ${hva} …`} className="my-3" />;
+  return <Tenker form="linje" aktiv={venter} status={venterTekst ?? `Buddy oversetter ${hva} …`} className="my-3" />;
 }

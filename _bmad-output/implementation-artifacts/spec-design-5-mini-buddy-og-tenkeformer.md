@@ -2,7 +2,8 @@
 title: 'Designfase bolk 5: mini-Buddy (M1), tenkepille (A) og Buddy i knappen (B)'
 type: 'feature'
 created: '2026-11-15'
-status: 'draft'
+status: 'done'
+baseline_commit: 'b7a446068b145d163d28340d4646f3fd93d70ec1'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -69,12 +70,12 @@ Statusregionen og reglene fra EXPERIENCE.md gjelder for alle tre formene.
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/komponenter/Merke.tsx` og `globals.css` -- avslutningen skal få plass i alle størrelser, slik at viewBox eller overflow dekker hele banen.
-- [ ] `app/komponenter/Tenker.tsx` -- formene `flate` (med pille under 760 px), `knapp` og `linje`.
-- [ ] Bruksstedene i Code Map -- velg form som angitt.
-- [ ] `app/komponenter/Tenker.test.ts` -- tester for statusregionen og `aria-hidden` i hver form.
-- [ ] `DESIGN.md` (Components: thinking-indicator og logo-mark) og `EXPERIENCE.md` (Component Patterns: Tenkeindikator) -- beskriv mini-Buddy M1 (størrelsene 22, 24 og 28 px) og de tre formene.
-- [ ] `maaling/sjekk-tilgjengelighet.mjs` -- på 375 px: pillen vises ved quizlaging, dekker ikke fokusert innhold, og axe er grønn mens den vises.
+- [x] `app/komponenter/Merke.tsx` og `globals.css` -- avslutningen skal få plass i alle størrelser, slik at viewBox eller overflow dekker hele banen.
+- [x] `app/komponenter/Tenker.tsx` -- formene `flate` (med pille under 760 px), `knapp` og `linje`.
+- [x] Bruksstedene i Code Map -- velg form som angitt.
+- [x] `app/komponenter/Tenker.test.ts` -- tester for statusregionen og `aria-hidden` i hver form.
+- [x] `DESIGN.md` (Components: thinking-indicator og logo-mark) og `EXPERIENCE.md` (Component Patterns: Tenkeindikator) -- beskriv mini-Buddy M1 (størrelsene 22, 24 og 28 px) og de tre formene.
+- [x] `maaling/sjekk-tilgjengelighet.mjs` -- på 375 px: pillen vises ved quizlaging, dekker ikke fokusert innhold, og axe er grønn mens den vises.
 
 **Acceptance Criteria:**
 - Given 375 px og en quiz som lages, when eleven ruller til bunns, then er pillen fortsatt synlig, og ingen knapp eller lenke ligger skjult under den.
@@ -88,3 +89,27 @@ Statusregionen og reglene fra EXPERIENCE.md gjelder for alle tre formene.
 
 **Manual checks:**
 - Filmstripe (playwright, ett bilde hvert 300 ms over 4,5 s) av avslutningen på 375 px i pillen, i knappen og på 64 px. Ingen del av merket skal være klippet i noen frame. Legg bildene i scratchpad og se på dem.
+
+## Spec Change Log
+
+- **Funn:** Ved gjennomsyn av filmstripene var brillene i pillen og knappen bare rundt 15–20 px brede, mye mindre enn i runde 10. **Årsak:** «22, 24 og 28 px» ble lest som høyden på hele det kvadratiske merket. **Endret:** størrelsene gjelder høyden på brillene (pillen 28, knappen 20, linjen 22). Mini-formene får en viewBox beskåret til brillene, og under avslutningen skaleres merket ned så B-en får plass i samme høyde. **Unngår:** en Buddy som ikke kan leses på telefon. **KEEP:** formene, statusregionen og bruksstedene som de er bygget.
+
+## Review Triage Log
+
+| # | Kilde | Funn | Vurdering | Rute |
+|---|---|---|---|---|
+| 0 | egen kontroll | Mini-Buddy for liten (hele merket i stedet for brillene) | high, spesifikasjonen var uklar | patch (se Spec Change Log) |
+| 1 | blind | Knapp-formen mister fokus ved disabled | medium | patch |
+| 2 | blind, edge, vgap | Send-typen tillater tom knapp | low, direkte retting | patch |
+| 3 | blind, edge | Én global --tenker-pille, piller oppå hverandre, ingen reserve for :has(), 0 px ved redusert bevegelse | medium | patch |
+| 4 | blind | Utgangen er et tidsløp; safe area mangler i inngangen | low, direkte retting | patch |
+| 5 | blind | Pillen har ingen øvre høyde ved stor tekst | medium | patch |
+| 6 | blind, edge | Sjekkskriptet svelger feil eller krasjer, unroute-timing og vindusstørrelse | patch | patch |
+| 7 | blind, edge, vgap | Kommentaren i Quiz stemmer ikke på telefon | low: pillen er fast og synlig, bare kommentaren er feil | patch |
+| 8 | edge | ResizeObserver mangler i gamle nettlesere | low | avvist |
+| 9 | edge | RevurderKnapp låses ved kast | medium | patch |
+| 10 | vgap | Avslutningen og forsvinningen i quizflyten er ikke sjekket | patch (demotest) | patch |
+| 11 | vgap | --tenker-pille skjules av reserveverdien på 6rem | patch | patch |
+| 12 | blind | MERKE_PX dupliseres i CSS | low, direkte retting | patch |
+| 13 | blind | Ventemeldingen havner rart i quizen etter 30 s | low | avvist |
+| 14 | blind | Knapp-formen, linje-formen og redusert bevegelse er ikke sjekket | patch (knapp-sjekk) | patch |

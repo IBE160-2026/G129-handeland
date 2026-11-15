@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**174 av 174 sjekker bestått.**
+**190 av 190 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -34,7 +34,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/d1654934-6376-4b36-ac1b-07aa537d94d7/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -51,7 +51,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/d1654934-6376-4b36-ac1b-07aa537d94d7/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -59,7 +59,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/d1654934-6376-4b36-ac1b-07aa537d94d7/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -90,7 +90,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794776872950 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794779063455 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -123,6 +123,22 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | mobil uten sidelengs rulling: arbeidsbord med åpen vifte | 380 px innhold i 380 px vindu |
 | ✓ | axe: arbeidsbord med åpen vifte (telefon) |  |
 | ✓ | menyen på telefon viser Samlingen og Konto |  |
+| ✓ | bolk 5, 375 px: tenkepillen vises mens quizen lages |  |
+| ✓ | bolk 5, 375 px: pillen ligger fast nederst med mini-Buddy (brillene 28 px) og «Buddy lager quizen din …» | {"posisjon":"fixed","nederst":16,"mini":true,"merke":28} |
+| ✓ | bolk 5: pillen har én statusregion (ikke en ekstra), med teksten, og merkene er skjult for skjermlesere |  |
+| ✓ | bolk 5: --tenker-pille på <html> er lik høyden på pillen, og html har klassen har-tenkepille | 86px / 86px |
+| ✓ | bolk 5, 375 px: rullet til bunns er pillen fortsatt synlig, og ingen knapp eller lenke ligger under den |  |
+| ✓ | bolk 5, 375 px: pillen dekker ikke fokusert innhold |  |
+| ✓ | axe: quiz som lages, med tenkepillen (telefon) |  |
+| ✓ | bolk 5, 375 px, 200 % tekst: rullet til bunns er pillen fortsatt synlig, og ingen knapp eller lenke ligger under den |  |
+| ✓ | bolk 5, 375 px, 200 % tekst: pillen dekker ikke fokusert innhold |  |
+| ✓ | bolk 5, 1280 px: ingen pille, flaten med Buddy på 64 px | {"posisjon":"static","mini":false,"merke":64,"luft":"0px","klasse":false} |
+| ✓ | bolk 5: handlingen som ble holdt igjen (quizen), fikk svar |  |
+| ✓ | bolk 5: pillen forsvinner når quizen er laget |  |
+| ✓ | bolk 5: quizsiden har «Lever»-knappen (Tenker i knapp-form) |  |
+| ✓ | bolk 5, knapp: låst med aria-disabled, opasitet ≥ 0,9, brillene om lag 20 px, statusen som knappetekst og fokus på knappen | {"laast":true,"opasitet":1,"brille":20,"tekst":"Buddy retter quizen …","fokus":true} |
+| ✓ | bolk 5, knapp: et nytt trykk mens Buddy tenker, sender ikke en gang til | 1 kall |
+| ✓ | bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar |  |
 | ✓ | mobil uten sidelengs rulling: arbeidsbord 320 px | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: arbeidsbord 320 px |  |
 | ✓ | mobil uten sidelengs rulling: samling 320 px | 320 px innhold i 320 px vindu |

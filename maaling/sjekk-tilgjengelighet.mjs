@@ -36,6 +36,13 @@
  *   - bolk 4, mobilfeilene: ingen tomrom over 160 px mellom fagorddemoen og
  *     neste seksjon på 375 px, og ingen tittel i en liten bunke brytes midt i
  *     et ord («Novelleanalyse» i to kolonner)
+ *   - bolk 5, tenkepillen: på 375 px ligger tenkeindikatoren fast nederst mens
+ *     quizen lages (mini-Buddy med brillene 28 px høye, én statusregion,
+ *     `--tenker-pille` lik høyden), ingen knapp eller lenke ligger under den
+ *     rullet til bunns og fokus havner aldri bak den (også med 200 % tekst),
+ *     og axe er grønn mens den vises; på 1280 px er den flaten på 64 px som
+ *     før. «Lever» med Buddy i knappen er låst med aria-disabled (fokus blir
+ *     stående, opasitet ≥ 0,9, brillene om lag 20 px) og sender ikke to ganger
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -677,6 +684,213 @@ try {
     "menyen på telefon viser Samlingen og Konto",
     (await tlf.locator("nav a:visible", { hasText: "Samlingen" }).count()) === 1 && (await tlf.locator("nav a:visible", { hasText: "Konto" }).count()) === 1,
   );
+
+  /* --- Bolk 5: tenkepillen og Buddy i knappen, på telefon ----------- */
+  // Handlingskall (POST med Next-Action) holdes igjen til sjekkene er gjort, så
+  // ventingen står stille. `slipp()` slipper dem, venter på svaret og fjerner ruten.
+  async function holdHandlinger(side) {
+    let aapne;
+    const holdt = new Promise((ok) => (aapne = ok));
+    const erHandling = (r) => r.method() === "POST" && !!r.headers()["next-action"];
+    const hold = { antall: 0 };
+    const svar = side.waitForResponse((r) => erHandling(r.request()), { timeout: 180000 }).then(
+      () => true,
+      () => false,
+    );
+    await side.route("**/*", async (rute) => {
+      if (erHandling(rute.request())) {
+        hold.antall++;
+        await holdt;
+      }
+      await rute.continue();
+    });
+    hold.slipp = async () => {
+      aapne();
+      const ok = await svar;
+      await side.unrouteAll({ behavior: "ignoreErrors" });
+      return ok;
+    };
+    return hold;
+  }
+  const PILLE = ".tenker-flate";
+  // Knapper og lenker utenfor pillen som ligger (helt eller delvis) under den.
+  const underPillen = (side) =>
+    side.evaluate((sel) => {
+      const pb = document.querySelector(sel).getBoundingClientRect();
+      const treff = (b) => b.width > 0 && b.height > 0 && b.left < pb.right && b.right > pb.left && b.top < pb.bottom && b.bottom > pb.top;
+      return [...document.querySelectorAll("a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])")]
+        .filter((e) => !e.closest(sel) && !e.closest(".sr-only") && getComputedStyle(e).visibility !== "hidden")
+        .filter((e) => treff(e.getBoundingClientRect()))
+        .map((e) => e.textContent.trim().slice(0, 30) || e.tagName.toLowerCase());
+    }, PILLE);
+  // Tab gjennom siden: fokus skal aldri havne bak pillen (scroll-padding-bottom).
+  async function fokusBakPillen(side) {
+    await side.evaluate(() => window.scrollTo(0, 0));
+    const dekket = [];
+    for (let i = 0; i < 25; i++) {
+      await side.keyboard.press("Tab");
+      const d = await side.evaluate((sel) => {
+        const e = document.activeElement;
+        if (!e || e === document.body || e.closest(sel)) return null;
+        const pb = document.querySelector(sel).getBoundingClientRect();
+        const b = e.getBoundingClientRect();
+        const over = b.left < pb.right && b.right > pb.left && b.top < pb.bottom && b.bottom > pb.top;
+        return over ? e.textContent.trim().slice(0, 30) || e.tagName.toLowerCase() : null;
+      }, PILLE);
+      if (d) dekket.push(d);
+    }
+    return dekket;
+  }
+  async function bunnOgFokus(side, navn) {
+    await side.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await side.waitForTimeout(200);
+    const bunn = await underPillen(side);
+    sjekk(
+      `bolk 5, ${navn}: rullet til bunns er pillen fortsatt synlig, og ingen knapp eller lenke ligger under den`,
+      (await side.locator(PILLE).isVisible()) && bunn.length === 0,
+      bunn.join(", "),
+    );
+    const dekket = await fokusBakPillen(side);
+    sjekk(`bolk 5, ${navn}: pillen dekker ikke fokusert innhold`, dekket.length === 0, dekket.join(", "));
+  }
+
+  // Quizen lages av seg selv første gang siden åpnes.
+  const quizHold = await holdHandlinger(tlf);
+  try {
+    await tlf.goto(`${tekstUrl}/quiz`);
+    const pille = tlf.locator(PILLE);
+    const kom = await pille.waitFor({ timeout: 60000 }).then(
+      () => true,
+      () => false,
+    );
+    sjekk("bolk 5, 375 px: tenkepillen vises mens quizen lages", kom);
+    if (kom) {
+      await tlf.waitForTimeout(500); // inngangen (0,3 s) er ferdig
+      const p = await pille.evaluate((el) => {
+        const s = getComputedStyle(el);
+        const b = el.getBoundingClientRect();
+        const svg = [...el.querySelectorAll("svg.merke")].find((m) => getComputedStyle(m).display !== "none");
+        const rot = document.documentElement;
+        return {
+          posisjon: s.position,
+          nederst: Math.round(window.innerHeight - b.bottom),
+          innenfor: b.left >= 0 && b.right <= window.innerWidth && b.bottom <= window.innerHeight,
+          mini: !!svg?.classList.contains("mini"),
+          merke: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+          tekst: el.textContent,
+          regioner: el.querySelectorAll("[role=status]").length,
+          regionTekst: el.querySelector("[role=status]")?.textContent ?? "",
+          svgSkjult: [...el.querySelectorAll("svg")].every((m) => m.getAttribute("aria-hidden") === "true"),
+          variabel: getComputedStyle(rot).getPropertyValue("--tenker-pille").trim(),
+          hoeyde: el.offsetHeight,
+          klasse: rot.classList.contains("har-tenkepille"),
+        };
+      });
+      sjekk(
+        "bolk 5, 375 px: pillen ligger fast nederst med mini-Buddy (brillene 28 px) og «Buddy lager quizen din …»",
+        p.posisjon === "fixed" && p.innenfor && p.nederst >= 16 && p.mini && p.merke === 28 && p.tekst.includes("Buddy lager quizen din"),
+        JSON.stringify({ posisjon: p.posisjon, nederst: p.nederst, mini: p.mini, merke: p.merke }),
+      );
+      sjekk(
+        "bolk 5: pillen har én statusregion (ikke en ekstra), med teksten, og merkene er skjult for skjermlesere",
+        p.regioner === 1 && p.regionTekst.includes("Buddy lager quizen din") && p.svgSkjult,
+      );
+      sjekk(
+        "bolk 5: --tenker-pille på <html> er lik høyden på pillen, og html har klassen har-tenkepille",
+        p.klasse && p.variabel === `${p.hoeyde}px`,
+        `${p.variabel} / ${p.hoeyde}px`,
+      );
+
+      await bunnOgFokus(tlf, "375 px");
+      await axe(tlf, "quiz som lages, med tenkepillen (telefon)");
+
+      // Én gang til med 200 % tekst.
+      await tlf.evaluate(() => {
+        const s = document.createElement("style");
+        s.id = "sjekk-stor-tekst";
+        s.textContent = "html { font-size: 200% !important; }";
+        document.head.append(s);
+      });
+      await tlf.waitForTimeout(400);
+      await bunnOgFokus(tlf, "375 px, 200 % tekst");
+      await tlf.evaluate(() => document.getElementById("sjekk-stor-tekst")?.remove());
+
+      // 760 px og bredere: ingen pille, flaten som i dag (64 px).
+      await tlf.setViewportSize({ width: 1280, height: 900 });
+      await tlf.waitForTimeout(400);
+      const bred = await pille.evaluate((el) => {
+        const svg = [...el.querySelectorAll("svg.merke")].find((m) => getComputedStyle(m).display !== "none");
+        return {
+          posisjon: getComputedStyle(el).position,
+          mini: !!svg?.classList.contains("mini"),
+          merke: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+          luft: getComputedStyle(document.body).paddingBottom,
+          klasse: document.documentElement.classList.contains("har-tenkepille"),
+        };
+      });
+      sjekk(
+        "bolk 5, 1280 px: ingen pille, flaten med Buddy på 64 px",
+        bred.posisjon !== "fixed" && !bred.mini && bred.merke === 64 && bred.luft === "0px" && !bred.klasse,
+        JSON.stringify(bred),
+      );
+    }
+  } finally {
+    await tlf.setViewportSize({ width: 375, height: 740 });
+    sjekk("bolk 5: handlingen som ble holdt igjen (quizen), fikk svar", await quizHold.slipp());
+  }
+  // Quizen (eller feilmeldingen i testmodus) tar over, og pillen forsvinner.
+  sjekk(
+    "bolk 5: pillen forsvinner når quizen er laget",
+    await tlf
+      .locator(PILLE)
+      .waitFor({ state: "detached", timeout: 120000 })
+      .then(
+        () => true,
+        () => false,
+      ),
+  );
+
+  // Buddy i knappen: «Lever» er låst (aria-disabled, ikke nedtonet) mens quizen rettes.
+  const lever = tlf.locator("button.tenker-knapp", { hasText: "Lever" });
+  const fantLever = await lever.waitFor({ timeout: 60000 }).then(
+    () => true,
+    () => false,
+  );
+  sjekk("bolk 5: quizsiden har «Lever»-knappen (Tenker i knapp-form)", fantLever);
+  if (fantLever) {
+    const leverHold = await holdHandlinger(tlf);
+    try {
+      await lever.click();
+      const laast = tlf.locator("button.tenker-knapp[aria-disabled=true]");
+      const ble = await laast.waitFor({ timeout: 10000 }).then(
+        () => true,
+        () => false,
+      );
+      // Et nytt trykk mens Buddy tenker, sender ikke svarene en gang til.
+      // force: Playwright regner aria-disabled som låst og ville ellers ventet på at knappen ble ledig.
+      if (ble) await laast.click({ force: true, timeout: 5000 });
+      await tlf.waitForTimeout(300);
+      const k = await tlf.evaluate(() => {
+        const b = document.querySelector("button.tenker-knapp");
+        const svg = b?.querySelector("svg.merke.mini");
+        return {
+          laast: b?.getAttribute("aria-disabled") === "true" && !b.disabled,
+          opasitet: b ? Number(getComputedStyle(b).opacity) : 0,
+          brille: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+          tekst: b?.textContent ?? "",
+          fokus: document.activeElement === b,
+        };
+      });
+      sjekk(
+        "bolk 5, knapp: låst med aria-disabled, opasitet ≥ 0,9, brillene om lag 20 px, statusen som knappetekst og fokus på knappen",
+        ble && k.laast && k.opasitet >= 0.9 && Math.abs(k.brille - 20) <= 1 && k.tekst.includes("Buddy retter quizen") && k.fokus,
+        JSON.stringify(k),
+      );
+      sjekk("bolk 5, knapp: et nytt trykk mens Buddy tenker, sender ikke en gang til", leverHold.antall === 1, `${leverHold.antall} kall`);
+    } finally {
+      sjekk("bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar", await leverHold.slipp());
+    }
+  }
 
   /* --- 320 px og 200 % tekst: ingen sidelengs rulling, ingen tekst klippes */
   async function ingenKlipping(side, navn) {

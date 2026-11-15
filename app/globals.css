@@ -365,6 +365,150 @@ h2 {
 }
 
 /*
+ * Tenkeindikatorens tre former (bolk 5, DESIGN.md thinking-indicator,
+ * EXPERIENCE.md Tenkeindikator). Størrelsene her er fasit (--tenker-merke):
+ *
+ *   .tenker-flate  64 px i flaten; smalere enn 760 px en pille fast nederst
+ *                  med mini-Buddy, brillene 28 px høye
+ *   .tenker-knapp  mini-Buddy i knappen, brillene 20 px høye, i knappens
+ *                  forgrunnsfarge
+ *   .tenker-linje  mini-Buddy foran én linje, brillene 22 px høye
+ *
+ * Det store merket (viewBox -4 -4 128 128) dekker hele banen til avslutningen.
+ * Mini-merket er beskåret til brillene (Merke.tsx) og krymper til 0,48 rundt
+ * midten av brillene (60, 60) i samme tidsvindu som rotasjonen, så den
+ * ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen
+ * eller knappen. Krympingen er ferdig ved 56 %, før glassene har vippet
+ * nevneverdig; ellers ville de skrå brillene stukket ut over og under.
+ */
+.merke.mini .krymp {
+  transform-origin: 60px 60px;
+  transform-box: view-box;
+}
+.merke.mini.slutt .krymp {
+  animation: s-krymp 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+}
+.merke.mini.ferdig .krymp {
+  transform: scale(0.48);
+}
+@keyframes s-krymp {
+  0%,
+  44% {
+    transform: scale(1);
+  }
+  56%,
+  100% {
+    transform: scale(0.48);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .merke.mini.slutt .krymp {
+    animation: none;
+    transform: scale(0.48);
+  }
+}
+
+.tenker-flate {
+  --tenker-merke: 64px;
+}
+.tenker-knapp {
+  --tenker-merke: 20px;
+}
+.tenker-linje {
+  --tenker-merke: 22px;
+}
+@media (min-width: 760px) {
+  .tenker-flate .merke.mini {
+    display: none;
+  }
+  /* På PC forsvinner flaten etter avslutningen som før, uten å gli. */
+  .tenker-flate.gaar {
+    display: none;
+  }
+}
+@media (max-width: 759.98px) {
+  .tenker-flate {
+    --tenker-merke: 28px;
+    position: fixed;
+    inset-inline: 1rem;
+    /* --tenker-over: høyden på pillene under, når flere vises samtidig (Tenker.tsx). */
+    bottom: calc(1rem + env(safe-area-inset-bottom) + var(--tenker-over, 0px));
+    z-index: 40;
+    margin: 0;
+    max-height: 40vh;
+    overflow: auto;
+    gap: 0.75rem;
+    border: 2px solid var(--lb-primaer);
+    /* Pilleform ved én eller to linjer; med stor tekst blir den et kort, så hjørnene ikke kutter teksten. */
+    border-radius: 2rem;
+    background: var(--lb-flate);
+    padding-block: 0.625rem;
+    padding-inline: 0.875rem 1.25rem;
+    box-shadow: 0 22px 40px -18px rgba(0, 0, 0, 0.45);
+    line-height: 1.3;
+    animation: tenker-pille-inn 0.3s ease;
+  }
+  .tenker-flate .merke:not(.mini) {
+    display: none;
+  }
+  .tenker-flate .tenker-hjelp,
+  .tenker-flate .tenker-lang {
+    font-size: 1rem;
+  }
+  .tenker-flate.gaar {
+    animation: tenker-pille-ut 0.3s ease forwards;
+  }
+}
+/* Lite plass (lav skjerm eller stor standardtekst, målt i em): bare statusen i pillen. */
+@media (max-width: 759.98px) and (max-height: 30em) {
+  .tenker-flate .tenker-hjelp {
+    display: none;
+  }
+}
+/* Pillen dekker aldri innhold: siden får luft nederst, og fokus rulles fram over pillen. Satt av Tenker.tsx. */
+html.har-tenkepille {
+  scroll-padding-bottom: calc(var(--tenker-pille, 6rem) + 2rem + env(safe-area-inset-bottom));
+}
+html.har-tenkepille body {
+  padding-bottom: calc(var(--tenker-pille, 6rem) + 2rem + env(safe-area-inset-bottom));
+}
+@keyframes tenker-pille-inn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(100% + 1rem + env(safe-area-inset-bottom)));
+  }
+}
+@keyframes tenker-pille-ut {
+  to {
+    opacity: 0;
+    transform: translateY(calc(100% + 1rem + env(safe-area-inset-bottom)));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tenker-flate {
+    animation: none;
+  }
+  .tenker-flate.gaar {
+    display: none;
+  }
+}
+
+/* Knappen er låst (aria-disabled) mens Buddy tenker, men leselig: ingen nedtoning. */
+.tenker-knapp[aria-disabled="true"] {
+  cursor: progress;
+}
+/* I knappen er Buddy tegnet i knappens forgrunnsfarge, med åpne glass, så glass og ramme ikke flyter sammen. */
+.tenker-knapp .merke .ramme {
+  stroke: currentColor;
+}
+.tenker-knapp .merke .glass {
+  fill: none;
+}
+.tenker-knapp .merke .oye {
+  fill: currentColor;
+}
+
+/*
  * Arbeidsbordet og viften — DESIGN.md (board, stack-main, stack-small,
  * progress, activity-card, status-pill) og EXPERIENCE.md (Bunke,
  * Hovedbunke, Viften, Aktivitetskort).

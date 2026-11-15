@@ -10,6 +10,12 @@
  *   b        B-en (brillene vippet −90°), app-ikon og del av ordmerket
  *   briller  brillene uten øyne, brilleknappen
  *
+ * `mini` (mini-Buddy M1, bolk 5): den samme tegningen, men flaten er beskåret
+ * til brillene, så `storrelse` er høyden på brillene og bredden følger
+ * (om lag 2,35 × høyden). Under avslutningen krymper merket rundt midten av
+ * brillene i samme tidsvindu som rotasjonen (globals.css, s-krymp), så den
+ * ferdige B-en får plass i høyden til brillene.
+ *
  * Merket er alltid pynt for skjermlesere (`aria-hidden`). Det som merket
  * sier, står i teksten ved siden av.
  */
@@ -24,48 +30,61 @@ export function BuddyMerke({
   variant = "ansikt",
   tilstand,
   storrelse = 64,
+  mini = false,
   className = "",
 }: {
   variant?: MerkeVariant;
   /** Uten tilstand står brillene stille. B-en er alltid «ferdig». */
   tilstand?: MerkeTilstand;
-  /** Høyden, i px (tall) eller en CSS-lengde («0.9em»). */
+  /** Høyden, i px (tall) eller en CSS-lengde («0.9em»). Med `mini` er det høyden på brillene. */
   storrelse?: number | string;
+  /** Flaten beskåret til brillene (mini-Buddy). Bare for ansiktet og brillene. */
+  mini?: boolean;
   className?: string;
 }) {
   const erB = variant === "b";
+  const erMini = mini && !erB;
   const klasse = erB ? "ferdig" : (tilstand ?? "");
   const oyne = variant === "ansikt";
+  const figur = (
+    <g className="flytt">
+      <g className="snu">
+        <path className="glass" d={GLASS_V} />
+        <path className="glass" d={GLASS_H} />
+        {oyne && (
+          <g className="oyne">
+            <circle className="oye" cx="33.5" cy="56" r="5.5" />
+            <circle className="oye" cx="86.5" cy="56" r="5.5" />
+          </g>
+        )}
+        <path className="ramme" d={GLASS_V} />
+        <path className="ramme" d={GLASS_H} />
+        <path className="ramme" d="M55 44 Q60 37 65 44" />
+        <g className="stenger">
+          <path className="ramme" d="M16 44 L5 37" style={{ transformOrigin: "16px 44px" }} />
+          <path className="ramme" d="M104 44 L115 37" style={{ transformOrigin: "104px 44px" }} />
+        </g>
+      </g>
+      <path className="ramme stang" d="M60 -4 V84" />
+    </g>
+  );
   return (
     <svg
       // B-en er beskåret til selve bokstaven, med plass til streken: ryggen
       // går til x 38,75 og glassene til x 80,25 (ramme 8,5, rygg 10,5).
-      viewBox={erB ? "38 10 43 100" : "-4 -4 128 128"}
-      className={`merke ${klasse} shrink-0 overflow-visible ${className}`}
-      style={{ height: storrelse, width: erB ? "auto" : storrelse }}
+      // Ansiktet og brillene har hele flaten med 4 i marg: hele banen til
+      // avslutningen (rotasjonen −90° rundt (60, 40) og flyttingen (−16, 20),
+      // med stengene og ryggen) holder seg innenfor −1…120.
+      // Mini er beskåret til brillene (y 36,75…80,25 med stenger og ramme).
+      // Med krympingen til 0,48 rundt (60, 60) holder hele avslutningen seg
+      // innenfor y 35,3…85,6, altså inne i flaten 35…86.
+      viewBox={erB ? "38 10 43 100" : erMini ? "0 35 120 51" : "-4 -4 128 128"}
+      className={`merke ${erMini ? "mini " : ""}${klasse} shrink-0 overflow-visible ${className}`}
+      style={{ height: storrelse, width: erB || erMini ? "auto" : storrelse }}
       aria-hidden="true"
       focusable="false"
     >
-      <g className="flytt">
-        <g className="snu">
-          <path className="glass" d={GLASS_V} />
-          <path className="glass" d={GLASS_H} />
-          {oyne && (
-            <g className="oyne">
-              <circle className="oye" cx="33.5" cy="56" r="5.5" />
-              <circle className="oye" cx="86.5" cy="56" r="5.5" />
-            </g>
-          )}
-          <path className="ramme" d={GLASS_V} />
-          <path className="ramme" d={GLASS_H} />
-          <path className="ramme" d="M55 44 Q60 37 65 44" />
-          <g className="stenger">
-            <path className="ramme" d="M16 44 L5 37" style={{ transformOrigin: "16px 44px" }} />
-            <path className="ramme" d="M104 44 L115 37" style={{ transformOrigin: "104px 44px" }} />
-          </g>
-        </g>
-        <path className="ramme stang" d="M60 -4 V84" />
-      </g>
+      {erMini ? <g className="krymp">{figur}</g> : figur}
     </svg>
   );
 }

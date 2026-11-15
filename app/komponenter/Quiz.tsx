@@ -151,8 +151,10 @@ export function Quiz({
       )}
 
       {/*
-        Avslutningen spilles øverst, ved resultatet, fordi `lever()` ruller
-        dit. Den er alltid rendret, så statusregionen finnes før svaret kommer.
+        Avslutningen: fra 760 px spilles den her øverst, ved resultatet, fordi
+        `lever()` ruller dit. Smalere enn 760 px er den pillen nederst på
+        skjermen, som er synlig uansett hvor eleven har rullet. Den er alltid
+        rendret, så statusregionen finnes før svaret kommer.
       */}
       <Tenker
         aktiv={venter}
@@ -306,15 +308,13 @@ export function Quiz({
         })}
       </ol>
 
-      {/* Ventingen vises ved knappen, der eleven trykket. Ved feil forsvinner den, og feilmeldingen øverst tar over. */}
-      <Tenker aktiv={venter} status="Buddy retter quizen …" className="mt-8" />
-
       <div className="mt-8 flex flex-wrap items-center gap-4">
         {fase === "svarer" && (
           <>
-            <button type="button" disabled={venter} onClick={lever} className={KNAPP}>
-              {venter ? "Retter…" : "Lever"}
-            </button>
+            {/* Ventingen vises i knappen, der eleven trykket. Ved feil går knappen tilbake, og feilmeldingen øverst tar over. */}
+            <Tenker form="knapp" aktiv={venter} status="Buddy retter quizen …" onClick={lever} className={KNAPP}>
+              Lever
+            </Tenker>
             {ubesvarte.length > 0 && (
               <p className="text-sm text-slate-600 dark:text-slate-400">
                 {ubesvarte.length === 1 ? "Ett spørsmål" : `${ubesvarte.length} spørsmål`} uten svar teller som ikke riktig.

@@ -2,7 +2,7 @@
 name: LeseBuddy
 description: Visuell identitet for LeseBuddy (kodenavn Lesevenn), lesestøtte for videregående. Next.js med Tailwind CSS v4 og egne komponenter, uten komponentbibliotek. Lys og mørk modus.
 status: final
-updated: 2026-11-13
+updated: 2026-11-15
 sources:
   - ../../prd-lesevenn.md
   - ../../product-brief-lesevenn.md
@@ -214,6 +214,9 @@ components:
     strokeWidth: 8.5 av 120
     lensFill: '{colors.highlight}'
     pupil: '{colors.text}'
+    viewBox: -4 -4 128 128      # dekker hele avslutningen, så B-en aldri klippes
+    miniViewBox: 0 35 120 51    # mini: beskåret til brillene, krymper til 0,48 under avslutningen
+    miniSizes: 20px, 22px, 28px # mini-Buddy M1: høyden på brillene (knapp, linje, pille)
   wordmark:
     lese: '{typography.wordmark-lese}'
     uddy: '{typography.wordmark-uddy}'
@@ -226,9 +229,24 @@ components:
     radius: '{rounded.full}'
     shadow: '{elevation.floating}'
   thinking-indicator:
-    markSize: 64px
+    markSize: 64px              # formen «flate», 760 px og bredere
     status: '{typography.body}'
     statusWeight: '700'
+    pill:                       # formen «flate» smalere enn 760 px
+      markSize: 28px             # høyden på brillene
+      background: '{colors.surface}'
+      border: 2px solid {colors.primary}
+      radius: 32px
+      shadow: '{elevation.floating}'
+      inset: 16px fra sidene, 16px + safe-area-inset-bottom fra bunnen
+      maxHeight: 40vh (ruller innvendig; hjelpelinjen skjules når plassen er liten)
+      stack: flere piller samtidig stables nedenfra med 8px mellomrom
+    button:                     # formen «knapp»
+      markSize: 20px             # høyden på brillene
+      markStroke: knappens forgrunnsfarge (ramme og pupiller), glass uten fyll
+      disabledOpacity: '1'
+    line:                       # formen «linje»
+      markSize: 22px             # høyden på brillene
   danger-message:
     background: '{colors.danger-surface}'
     foreground: '{colors.text}'
@@ -328,15 +346,20 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
   - *Brilleansiktet* (med øyne) er figuren.
   - *B-en* er app-ikon, favicon og del av ordmerket.
   - *Brillene uten øyne* er brilleknappen.
+- **Mini-Buddy (M1, valgt 15.11):** brilleansiktet i små størrelser er den samme tegningen, bare mindre, men beskåret til brillene (flaten 0 35 120 51), så størrelsen er høyden på brillene og bredden om lag 2,35 × høyden: 20 px i en knapp, 22 px foran en linje og 28 px i tenkepillen. Ramme, pupiller og stenger er med. Det finnes ingen egen tegning for små størrelser. Under avslutningen krymper mini-merket til 0,48 rundt midten av brillene i samme tidsvindu som rotasjonen, slik at den ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen eller knappen. Utkastet med M1–M3 ligger i [.working/runde-10-mini-buddy-og-mobil.html](.working/runde-10-mini-buddy-og-mobil.html).
+- **Plass til avslutningen:** brilleansiktet tegnes i flaten −4 −4 128 128. Hele banen til avslutningen (rotasjonen −90° rundt (60, 40), flyttingen (−16, 20), stengene og ryggen) holder seg innenfor den, så ingen del av B-en eller stengene klippes. Mini-merket holder seg innenfor sin beskårne flate fordi det krymper (se over). SVG-en har i tillegg `overflow: visible`, og ingen flate rundt merket har `overflow: hidden`.
 - **Kildekode:** [mockups/merke.js](mockups/merke.js) og [mockups/merke.css](mockups/merke.css).
 
 **Ordmerke (`{components.wordmark}`).** Se Brand & Style. Hele merket er én lenke til `/`. For skjermlesere har den navnet «LeseBuddy, forsiden». Delene («lese», B-en og «uddy») er skjult for skjermlesere.
 
 **Tenkeindikatoren (`{components.thinking-indicator}`)**
-- Merket er 64 px, med statusteksten i fet `{typography.body}` ved siden av, i flaten der innholdet kommer.
+- **Tre former** (bolk 5). Merket er alltid brilleansiktet, og bare størrelsen skifter:
+  - *Flate:* merket er 64 px, med statusteksten i fet `{typography.body}` ved siden av, i flaten der innholdet kommer. Smalere enn 760 px er flaten i stedet en **tenkepille** som ligger fast nederst på skjermen: mini-Buddy med brillene 28 px høye, statusen i fet skrift og hjelpelinjen i `{typography.body-sm}` og dempet tekst, på `{colors.surface}` med 2 px kant i `{colors.primary}`, radius 32 px og `{elevation.floating}`. Den står 16 px fra sidene og 16 px pluss `env(safe-area-inset-bottom)` fra bunnen. Med stor tekst blir den høyere og ser ut som et kort, så hjørnene ikke kutter teksten. Den er høyst 40 % av skjermhøyden og ruller innvendig, og hjelpelinjen skjules når plassen er liten. Vises flere piller samtidig, stables de nedenfra. Pillen glir inn (300 ms), og glir bort etter avslutningen.
+  - *Knapp:* mini-Buddy med brillene 20 px høye inne i knappen som ble trykket, med statusteksten som knappetekst. Ramme og pupiller tegnes i knappens forgrunnsfarge (`currentColor`), og glassene har ikke fyll, så glass og ramme ikke flyter sammen i mørk modus. Knappen er låst mens Buddy tenker (`aria-disabled`, så fokus blir stående), men tones ikke ned (opasitet 1). Brukes ved korte ventinger, som et svar i fagsamtalen.
+  - *Linje:* mini-Buddy med brillene 22 px høye foran én linje med status. Brukes for oversettelser som lages i bakgrunnen.
 - *Tenker:* øynene leser fra side til side i en løkke (`{motion.thinking-loop}`).
 - *Ferdig:* en avslutning (`{motion.thinking-finish}`). Buddy blunker, pupillene blir værende 0,8 sekunder og tones ut, det blir 700 ms ro, brillene vipper til en B mens stengene trekkes inn, og til slutt tegnes ryggen.
-- Avslutningen spilles i indikatorens plass mens innholdet allerede vises under.
+- Avslutningen spilles i indikatorens plass mens innholdet allerede vises under: i flaten, i pillen eller i knappen. Den får plass i alle størrelser.
 - Kildekode: [mockups/merke-tenker.css](mockups/merke-tenker.css). Et eksempel å trykke på ligger øverst i [mockups/runde-8-ordmerke.html](mockups/runde-8-ordmerke.html). Ordmerkene lenger ned på den siden er valgt bort.
 
 **Knapper og topplinje**

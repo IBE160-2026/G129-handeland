@@ -22,20 +22,33 @@ const KNAPP = KNAPP_PRIMAER;
 const LENKEKNAPP =
   "inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:text-slate-900 disabled:opacity-60 dark:hover:text-slate-100";
 
-function Send({
-  venter,
-  klar,
-  status,
-}: {
-  venter: string;
-  klar: string;
-  status: string;
-}) {
+/**
+ * Første spørsmål tar tid og vises i flaten (på telefon som pillen nederst).
+ * Svar på en runde er en kort venting, så Buddy sitter i knappen (bolk 5).
+ */
+function Send(
+  props: { klar: string; status: string } & (
+    | {
+        form: "flate";
+        /** Den korte knappeteksten mens det ventes (i knappen står statusen i stedet). */
+        venter: string;
+      }
+    | { form: "knapp" }
+  ),
+) {
+  const { klar, status } = props;
   const { pending } = useFormStatus();
+  if (props.form === "knapp") {
+    return (
+      <Tenker form="knapp" type="submit" aktiv={pending} status={status} className={KNAPP}>
+        {klar}
+      </Tenker>
+    );
+  }
   return (
     <>
       <button type="submit" disabled={pending} className={KNAPP}>
-        {pending ? venter : klar}
+        {pending ? props.venter : klar}
       </button>
       <Tenker aktiv={pending} status={status} hjelp="Det kan ta noen sekunder." className="mt-3" />
     </>
@@ -52,7 +65,7 @@ export function StartSamtaleSkjema({
   return (
     <form action={send}>
       {svar.feil && <Feilmelding {...svar.feil} />}
-      <Send venter="Lager første spørsmål…" klar="Start en fagsamtale" status="Buddy lager det første spørsmålet …" />
+      <Send form="flate" venter="Lager første spørsmål…" klar="Start en fagsamtale" status="Buddy lager det første spørsmålet …" />
     </form>
   );
 }
@@ -81,11 +94,7 @@ export function SvarSkjema({
         placeholder="Forklar med egne ord. Vet du ikke, kan du skrive det."
         className="w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
       />
-      <Send
-        venter="Leser svaret ditt…"
-        klar="Svar"
-        status="Buddy leser svaret ditt …"
-      />
+      <Send form="knapp" klar="Svar" status="Buddy leser svaret ditt …" />
     </form>
   );
 }
@@ -100,22 +109,28 @@ export function RevurderKnapp({ samtaleId, nummer }: { samtaleId: string; nummer
   const [feil, setFeil] = useState<Handlingssvar["feil"]>();
   return (
     <div className="mt-2">
-      <button
-        type="button"
-        disabled={venter}
+      <Tenker
+        form="knapp"
+        aktiv={venter}
+        status="Buddy leser svaret ditt på nytt …"
         onClick={async () => {
           setVenter(true);
           setFeil(undefined);
-          const r = await revurderRunde(samtaleId, nummer);
-          setVenter(false);
-          if (r.feil) setFeil(r.feil);
-          else router.refresh();
+          // Kaster kallet (nettet borte), skal knappen likevel låses opp igjen.
+          try {
+            const r = await revurderRunde(samtaleId, nummer);
+            if (r.feil) setFeil(r.feil);
+            else router.refresh();
+          } catch {
+            setFeil({ melding: "Svaret kom ikke fram.", handling: "Sjekk nettet og prøv igjen." });
+          } finally {
+            setVenter(false);
+          }
         }}
         className={LENKEKNAPP}
       >
-        {venter ? "Leser svaret ditt på nytt…" : "Jeg tror du misforsto svaret mitt"}
-      </button>
-      <Tenker aktiv={venter} status="Buddy leser svaret ditt på nytt …" className="mt-3" />
+        Jeg tror du misforsto svaret mitt
+      </Tenker>
       {feil && <Feilmelding {...feil} />}
     </div>
   );

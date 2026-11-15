@@ -206,7 +206,32 @@ async function loeype(s, { mobil, eksempel, brod }) {
     const t = f.locator("textarea");
     if (await t.count()) await t.fill("Det har med frekvens å gjøre.");
   }
+  const luftFoer = await s.evaluate(() => getComputedStyle(document.body).paddingBottom);
   await trykk(s.locator('button:has-text("Lever")'));
+  if (mobil) {
+    // Bolk 5: avslutningen spilles i tenkepillen nederst, og så glir den bort.
+    const rettet = await vent(
+      async () =>
+        (await s.locator("[role=status]").evaluateAll((r) => r.some((e) => e.textContent.includes("Quizen er rettet.")))) &&
+        (await s.locator(".tenker-flate").count()) === 1,
+      "«Quizen er rettet.» i pillen",
+      30000,
+    ).then(
+      () => true,
+      () => false,
+    );
+    sjekk(`${p}6`, "statusregionen i pillen sier «Quizen er rettet.»", rettet);
+    const borte = await s
+      .locator(".tenker-flate")
+      .waitFor({ state: "detached", timeout: 7000 })
+      .then(
+        () => true,
+        () => false,
+      );
+    sjekk(`${p}6`, "tenkepillen forsvinner innen 7 s etter avslutningen", borte);
+    const luftEtter = await s.evaluate(() => getComputedStyle(document.body).paddingBottom);
+    sjekk(`${p}6`, "luften nederst på siden er tilbake til normalen når pillen er borte", luftEtter === luftFoer, `${luftFoer} → ${luftEtter}`);
+  }
   // FR-15 (endret 11.11): kortsvarene vurderes i resultatet, ikke i et mellomsteg.
   await s.waitForSelector("text=/Du fikk \\d+ av \\d+ riktige/", { timeout: 30000 });
   const nei = s.locator("label:has-text('Nei, ikke helt')");
