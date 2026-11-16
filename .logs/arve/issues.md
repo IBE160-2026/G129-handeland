@@ -33,7 +33,7 @@
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Bygg designfasen med bmad-build: FR-47–49, tenkeindikatoren, identiteten og telefontestpunktene (EXPERIENCE.md §Telefontesten) (FR-47–49, identiteten og tenkeindikatoren bygget 2026-11-13 på grenen designfase; telefontestpunktene gjenstår, se under)
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Ordmerket: 4d er foreløpig valgt; 4e og 4g er alternativer
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Arkitektur: landingssiden må sjekke økten uten å kaste, og Teksten trenger et tidsfelt for «sist aktiv» (løst 2026-11-13: valgfriTilgang(); sist aktiv regnes ut fra eksisterende tidsstempler, et eget felt kan komme senere)
-- [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Kode for de nye kravene om KI-feil (FR-7, 13, 19, 20) og bruksgrenser (§6.4, inkludert forbruk i kroner)
+- [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Kode for de nye kravene om KI-feil (FR-7, 13, 19, 20) og bruksgrenser (§6.4, inkludert forbruk i kroner) (bygget 2026-11-16 på grenen grenser, 4366630 og 59239a8)
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over grenen designfase (9915f24, 3330e9a, c73a103), slå den sammen med main og rull ut (krever ja) (rullet ut 2026-11-13, main = acf869d)
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Se over landingstekstene agenten skrev selv (stegforklaringer, lærerpunkter, ingresser, bobler, bunntekst og setningen om invitasjon) (godkjent av Arve 2026-11-13)
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Følge-Buddy vises bare fra om lag 1540 px, så den ikke dekker tekst. Avgjør om det er greit
@@ -44,3 +44,4 @@
 - [x] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Rull ut grenen mobil (bolk 4–6, b7a4460..f4cbc45), krever ja (rullet ut 2026-11-16, main = 3db9022)
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Temavalget følger enheten (informasjonskapsel); skal det følge kontoen, trengs migrering
+- [ ] 2026-11-16 [996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser](996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser.md) — Rull ut grenen grenser: Neon-migrering 0007, merge og vercel --prod (krever ja)
