@@ -45,3 +45,29 @@ Rulle ut KI-feil og bruksgrenser («Rull ut!»).
 ### Åpne punkter
 - Punkt 4: de utsatte småtingene (se `deferred-work.md`).
 - Test på ekte telefon.
+
+## 2026-11-16 kl. 22:38 — Arve
+
+### Oppgave
+Punkt 4: rette de utsatte småtingene fra gjennomgangene («jupp, kjør dem nå»).
+
+### Plan
+- Grenen `smaating` med én spesifikasjon, `spec-smaating-fra-gjennomgangene.md`. Ti punkter fra `deferred-work.md`, tre gjennomganger og retting.
+
+### Resultat
+- **Commits:** cee7f82, ee4d7cb og b0fa5b2.
+- **Tester:**
+  - `lagreAktivering`, Hentefeil og grensene for PDF og bilde.
+  - Rotasjon over 760 px og axe på gjennomsynet via PDF eller bilde.
+  - Reglene på samtalesiden er trukket ut i `data/samtalevisning.ts`.
+- **Rettinger:**
+  - Ikon som reserve: PNG og apple-icon.
+  - Knappene fare og lenke, alle minst 44 px, og røde farger byttet til tokenene.
+  - `/logg-inn` og `/registrer` gir ikke lenger 500 når øktoppslaget feiler, og kontosiden kaster i stedet for å vise en tom adresse.
+  - Temaet slettes ved utlogging og ved sletting av kontoen.
+  - Innlimt tekst som ikke ble låst, prøver å låse på nytt i aktiveringen i stedet for å gå til gjennomsynet.
+- **Verifisert:** `npm test` 628 av 628, tilgjengelighetssjekken 245 av 245, demotesten 3 av 3 og README-testen grønn. Lint og bygget er grønne.
+
+### Åpne punkter
+- Rull ut grenen `smaating` (krever ja).
+- Utsatt: en vurdering som pågår, vises som «feilet» ved ny innlasting. Det krever et tidsstempel og dermed en migrering.
