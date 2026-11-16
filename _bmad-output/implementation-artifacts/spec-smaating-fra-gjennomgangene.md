@@ -2,7 +2,7 @@
 title: 'Småting fra gjennomgangene (deferred-work.md)'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'cf9248e3259944f55eb2c70fc049bf073fbb8c26'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -66,3 +66,22 @@ Hvert punkt peker på oppføringen i `deferred-work.md`, som har mer bakgrunn.
 **Commands:**
 - `npx tsc --noEmit`, `npm test`, `npm run lint` og `npm run build` -- forventet: grønt
 - `npm run sjekk:tilgjengelighet` -- forventet: bestått, med de nye sjekkene
+
+## Review Triage Log
+
+| # | Kilde | Funn | Vurdering | Rute |
+|---|---|---|---|---|
+| 1 | blind, edge, vgap | /konto viser tom e-post når oppslaget gir null | medium | patch |
+| 2 | blind | Innlimt tekst i aktivert sendes til gjennomsynet etter låsefeil | medium, må verifiseres | patch |
+| 3 | blind | Kapsler-Map deles mellom testene og har feil form | low, direkte retting | patch |
+| 4 | blind, edge | Rekkefølgen ved utlogging og sletting: signOut-error, finally, setVenter, timeout | medium | patch |
+| 5 | edge | slettTemaHandling tømmer hurtigbufferen også uten kapsel | low, direkte retting | patch |
+| 6 | vgap | Sletting av temaet er ikke verifisert i flyten | patch | patch |
+| 7 | vgap | Testen av slettTemaHandling kan ikke fange en tilgang-vakt | patch | patch |
+| 8 | blind | ikonmerke kopierer icon.svg for hånd og bruker Buffer | low | patch |
+| 9 | blind | PNG-ikonet har ingen mørk variant; ikonkoden er duplisert | low | avvist |
+| 10 | blind | samtalevisning kobles på posisjon; begge flaggene sanne er ikke testet | low | patch |
+| 11 | blind | Grønne farger i Quiz og slate i Overskriftskontroll | low: utenfor punkt 4 (rødt), og det finnes ingen token for riktig | avvist |
+| 12 | blind | hentefeil-testen for Samlingen sjekker ikke logging | low, direkte retting | patch |
+| 13 | blind | Grensetesten viser ikke at det ikke ble kalt eller registrert noe | low | patch |
+| 14 | blind, edge | Sjekkskriptet: faste ventetider, ingen finally, null-vakt mangler, opprydding svelges | medium | patch |
