@@ -41,6 +41,6 @@
 - [ ] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Utsatt fra gjennomgangene av bolk 1–3: favicon-reserve, fare- og lenkeknapper og små knapper, test av Hentefeil, 500 på /logg-inn ved feil i øktoppslaget (se deferred-work.md)
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobil: velg mini-Buddy (M1/M2/M3) og mobilflater (A–E) fra runde 10, og bygg dem (M1 + A–E bygget 2026-11-16 på grenen mobil)
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobilfeil i prod: tomt felt under fagorddemoen på landingssiden (375 px), og titler som brytes midt i ordet i de små bunkene (rettet i bolk 4, b7a4460)
-- [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Rull ut grenen mobil (bolk 4–6, b7a4460..f4cbc45), krever ja
+- [x] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Rull ut grenen mobil (bolk 4–6, b7a4460..f4cbc45), krever ja (rullet ut 2026-11-16, main = 3db9022)
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Temavalget følger enheten (informasjonskapsel); skal det følge kontoen, trengs migrering
