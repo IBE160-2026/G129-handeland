@@ -398,7 +398,11 @@ function Aktivitetskort({ kort }: { kort: Kort }) {
             <path d="M8 11V8a4 4 0 0 1 8 0v3" />
           </svg>
         </span>
-        <span className="kort-navn">{kort.navn}</span>
+        <span className="kort-navn">
+          {kort.navn}
+          {/* Mellomrommet holder «Minnevers» og «Uferdig» som to ord for skjermlesere. */}
+          {kort.merke && <> <span className="kort-merke">{kort.merke}</span></>}
+        </span>
         <span className="kort-status">{status}</span>
       </div>
     );
@@ -408,7 +412,11 @@ function Aktivitetskort({ kort }: { kort: Kort }) {
       <span className="kort-ikon" aria-hidden="true">
         {IKON[kort.navn]}
       </span>
-      <span className="kort-navn">{kort.navn}</span>
+      <span className="kort-navn">
+          {kort.navn}
+          {/* Mellomrommet holder «Minnevers» og «Uferdig» som to ord for skjermlesere. */}
+          {kort.merke && <> <span className="kort-merke">{kort.merke}</span></>}
+        </span>
       <span className="kort-status">{status}</span>
       {/* Pilen vises bare i radene på arket (telefon). */}
       <span className="kort-pil" aria-hidden="true">

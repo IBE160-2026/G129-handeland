@@ -388,7 +388,16 @@ try {
     return funn;
   });
   sjekk("1280 px: kortene dekker ikke hverandre, bunken eller «Legg sammen»", overlapp.length === 0, overlapp.join(", "));
-  const kortnavn = await vifte.locator(".vifte-kort > li .kort-navn").allTextContents();
+  // Navnet uten merket («Minnevers Uferdig» er Minnevers), se kortstatus i data/arbeidsbord.ts.
+  const kortnavn = await vifte.locator(".vifte-kort > li .kort-navn").evaluateAll((navn) =>
+    navn.map((n) => {
+      const kopi = n.cloneNode(true);
+      kopi.querySelector(".kort-merke")?.remove();
+      return kopi.textContent.trim();
+    }),
+  );
+  const merker = await vifte.locator(".vifte-kort > li .kort-merke").allTextContents();
+  sjekk("bare Minnevers er merket «Uferdig» i viften", merker.join(",") === "Uferdig", merker.join(", "));
   sjekk(
     "viften har fem kort i fast rekkefølge",
     kortnavn.join(",") === "Teksten,Quiz,Øvekort,Fagsamtale,Minnevers",

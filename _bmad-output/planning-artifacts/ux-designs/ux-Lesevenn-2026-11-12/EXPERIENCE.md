@@ -144,7 +144,7 @@ Fagsamtalen kan tas før quizen (FR-18, UJ-3). Da hopper regelen over «Neste: F
 | Quiz | Minst ett forsøk | «Ikke tatt», eller «Sist: 6 av 8 riktig» (bare fullførte forsøk lagres) |
 | Øvekort | Minst ett kort merket | «Ikke øvd», eller «9 av 14 kan du». Tomt Begrepssett (FR-16): «Fant ingen fagord i teksten, så det er ingen kort å øve på.» |
 | Fagsamtale | En samtale finnes | «Ikke startet», «Runde 3 av 6» eller «Fullført». Når grensen er nådd: «Dagens 5 samtaler er brukt. Du kan starte en ny i morgen.» |
-| Minnevers | Et vers finnes | «Ikke laget» eller «Laget» |
+| Minnevers | Et vers finnes | «Ikke laget» eller «Laget». Kortet har alltid merket «Uferdig» ved navnet, også når det er låst (lagt til 16.11: versene holder ikke mål, se PRD FR-31). Oppgavesiden og minnevers-siden har samme merke, og minnevers-siden sier fra før eleven lager et vers. |
 
 **Låst:** Før teksten er låst (`laast`), er Quiz, Øvekort, Fagsamtale og Minnevers låst, med teksten «Låst. Åpnes når du har lest teksten.». Sidene i koden krever det samme i dag.
 

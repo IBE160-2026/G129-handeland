@@ -133,9 +133,12 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
         </section>
 
         <section className="rounded-md border border-slate-300 p-5 dark:border-slate-700">
-          <h2 className="text-lg font-semibold tracking-tight">Huskeregel</h2>
+          <h2 className="text-lg font-semibold tracking-tight">
+            Huskeregel <span className="uferdig-merke">Uferdig</span>
+          </h2>
           <p className="mt-1 text-slate-600 dark:text-slate-400">
-            Et kort rim om én ting fra teksten, med fagordene i — så det sitter.
+            Et kort rim om én ting fra teksten, med fagordene i. Denne delen er ikke ferdig: rimene blir ofte
+            klønete og kan bøye sannheten. Øvekortene og quizen er bedre for å lære fagordene.
           </p>
           <p className="mt-4">
             <Link href={`/tekst/${id}/minnevers`} className={LENKE}>

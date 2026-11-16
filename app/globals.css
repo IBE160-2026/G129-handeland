@@ -999,6 +999,27 @@ a.kort:focus-visible {
 .kort-laast .kort-status {
   color: var(--lb-tekst);
 }
+/*
+ * «Uferdig» (minneverset): stiplet rød kant som en avsperring. Teksten står i
+ * tekstfargen, så kontrasten er den samme som brødteksten; fargen bærer ikke
+ * informasjonen alene, ordet gjør det.
+ */
+.kort-merke,
+.uferdig-merke {
+  display: inline-block;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border: 2px dashed var(--lb-fare);
+  border-radius: 6px;
+  padding: 0 0.375rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--lb-tekst);
+}
 .pille {
   display: inline-block;
   border-radius: 9999px;

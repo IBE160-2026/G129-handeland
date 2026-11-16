@@ -154,7 +154,15 @@ export type Kort = {
   pille?: string;
   /** Teller i framdriften («3 av 5 påbegynt»). */
   paabegynt: boolean;
+  /** Et merke ved navnet, for eksempel «Uferdig» på en del som ikke holder mål ennå. */
+  merke?: string;
 };
+
+/**
+ * Minneversene er for svake til å stole på (v3 beholdt 26.10, maskinvers
+ * stoppet). Delen står, men merkes som uferdig overalt den vises.
+ */
+export const UFERDIG = "Uferdig";
 
 export const LAAST = "Låst. Åpnes når du har lest teksten.";
 export const INGEN_FAGORD = "Fant ingen fagord i teksten, så det er ingen kort å øve på.";
@@ -190,7 +198,7 @@ export function kortstatus(b: Bunke, konto: Kontostatus = {}): Kort[] {
   };
   if (!laast) {
     const laaste = (["Quiz", "Øvekort", "Fagsamtale", "Minnevers"] as const).map(
-      (navn): Kort => ({ navn, href: null, status: LAAST, paabegynt: false }),
+      (navn): Kort => ({ navn, href: null, status: LAAST, paabegynt: false, ...(navn === "Minnevers" && { merke: UFERDIG }) }),
     );
     return [teksten, ...laaste];
   }
@@ -225,6 +233,7 @@ export function kortstatus(b: Bunke, konto: Kontostatus = {}): Kort[] {
     href: `${rot}/minnevers`,
     status: b.harMinnevers ? "Laget" : "Ikke laget",
     paabegynt: b.harMinnevers,
+    merke: UFERDIG,
   };
 
   return [teksten, quizkort, oevekort, samtalekort, verskort];

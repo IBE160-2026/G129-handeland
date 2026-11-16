@@ -50,9 +50,21 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
           ← Til oppgavene
         </Link>
       </p>
-      <h1 className="mt-6 text-2xl font-semibold tracking-tight">Huskeregel: {tekst.tittel}</h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-400">
-        Et kort rim om én ting fra teksten, med fagordene i — så det sitter.
+      <h1 className="mt-6 text-2xl font-semibold tracking-tight">
+        Huskeregel: {tekst.tittel} <span className="uferdig-merke">Uferdig</span>
+      </h1>
+      {/* Versene holder ikke mål (v3 beholdt 26.10, maskinvers stoppet). Det skal eleven vite før hun trykker. */}
+      <p className="mt-4 rounded-md border-2 border-dashed border-fare p-4">
+        <strong>Denne delen er ikke ferdig.</strong> LeseBuddy er ennå dårlig til å lage minnevers: rimene blir ofte
+        klønete, og et rim kan bøye sannheten for å rime. Prøv gjerne, men lær fagordene med{" "}
+        <Link href={`/tekst/${id}/oevekort`} className={LENKE}>
+          øvekortene
+        </Link>{" "}
+        eller{" "}
+        <Link href={`/tekst/${id}/quiz`} className={LENKE}>
+          quizen
+        </Link>
+        .
       </p>
 
       {forFaa ? (

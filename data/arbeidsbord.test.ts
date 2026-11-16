@@ -159,6 +159,12 @@ describe("Status på kortene i viften", () => {
     expect(kort(bunke({ harMinnevers: true }), "Minnevers")).toMatchObject({ status: "Laget", paabegynt: true });
   });
 
+  test("Minnevers er merket uferdig, også når det er låst; de andre kortene er ikke merket", () => {
+    expect(kort(bunke(), "Minnevers").merke).toBe("Uferdig");
+    expect(kort(bunke({ tilstand: "innlest" }), "Minnevers").merke).toBe("Uferdig");
+    for (const k of a.kortstatus(bunke())) if (k.navn !== "Minnevers") expect(k.merke).toBeUndefined();
+  });
+
   test("pillen står alltid inni statusen", () => {
     const b = bunke({ sisteQuiz: { antallRiktige: 6, antallTotalt: 8 }, antallKan: 9, antallMerket: 9, samtale: { id: "s", avsluttet: false, besvarteRunder: 1 } });
     for (const k of a.kortstatus(b)) if (k.pille) expect(k.status).toContain(k.pille);
