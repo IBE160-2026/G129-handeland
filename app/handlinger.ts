@@ -211,13 +211,16 @@ export async function lagreAktivering(
   // Et skjema sendt på nytt (tilbakeknappen, to faner) etter at svaret alt er
   // lagret: send videre i stedet for å feile i lagreForkunnskapssvar.
   if (rad.tilstand === "laast") redirect(`/tekst/${tekstId}/lesing`);
-  if (rad.tilstand === "aktivert") redirect(`/tekst/${tekstId}/gjennomsyn`);
+  // Innlimt tekst i `aktivert`: svaret er lagret, men låsingen feilet. Den
+  // går ikke til gjennomsynet (FR-3), men låses på nytt her.
+  const nyttLaaseforsoek = rad.tilstand === "aktivert" && rad.vei === "liming";
+  if (rad.tilstand === "aktivert" && !nyttLaaseforsoek) redirect(`/tekst/${tekstId}/gjennomsyn`);
 
   // FR-6: svaret vurderes ikke og rettes ikke. Et tomt svar får ÉN
   // oppfordring; sender eleven tomt igjen, slipper hun videre. Steget skal
   // ikke bli en sperre for den som synes dette er vanskelig. (Før 17.10 ble
   // tomt svar stoppet for godt — et avvik fra FR-6.)
-  if (svar.length === 0 && data.get("tomtEtterOppfordring") !== "1") {
+  if (!nyttLaaseforsoek && svar.length === 0 && data.get("tomtEtterOppfordring") !== "1") {
     return {
       feil: {
         melding: "Du har ikke skrevet noe ennå.",
@@ -227,7 +230,7 @@ export async function lagreAktivering(
     };
   }
 
-  await lagreForkunnskapssvar(t, tekstId, svar);
+  if (!nyttLaaseforsoek) await lagreForkunnskapssvar(t, tekstId, svar);
 
   // FR-3 (endret 11.11): innlimt tekst har ingen fase 3b. Eleven har selv
   // valgt teksten, og det finnes ingen uttrekksfeil å rette, så den låses
@@ -1229,6 +1232,9 @@ export async function velgTemaHandling(data: FormData): Promise<void> {
  * kan bare gjøre enheten til «Følg enheten» (AD-8 gjelder datatilgang).
  */
 export async function slettTemaHandling(): Promise<void> {
-  (await cookies()).delete(TEMA_KAPSEL);
+  const kapsler = await cookies();
+  // Uten kapsel er det ingenting å gjøre, og hurtigbufferen får stå.
+  if (!kapsler.has(TEMA_KAPSEL)) return;
+  kapsler.delete(TEMA_KAPSEL);
   revalidatePath("/", "layout");
 }

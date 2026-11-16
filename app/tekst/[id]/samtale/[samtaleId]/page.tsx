@@ -64,7 +64,7 @@ export default async function Samtaleside({ params, searchParams }: PageProps<"/
 
   const lenke = (n: number) => `/tekst/${id}/lesing#avsnitt-${n}`;
   // Hva som vises under hver runde (FR-19, FR-20, FR-22): data/samtalevisning.ts.
-  const visning = samtalevisning(samtale.runder, samtale.avsluttet !== null);
+  const visning = new Map(samtalevisning(samtale.runder, samtale.avsluttet !== null).map((v) => [v.nummer, v]));
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -79,21 +79,20 @@ export default async function Samtaleside({ params, searchParams }: PageProps<"/
       </p>
 
       <ol className="mt-8 space-y-8">
-        {samtale.runder.map((r, i) => (
-          <li key={r.nummer}>
-            <RundeVisning r={r} lenke={lenke(r.kildeavsnitt.nummer)} />
-            {visning[i].vurderingFeilet && (
-              <VurderingFeilet samtaleId={samtale.id} nummer={r.nummer} standard={vurderingstekst} fokus={nettoppFeilet} />
-            )}
-            {visning[i].kanRevurderes && (
-              <RevurderKnapp samtaleId={samtale.id} nummer={r.nummer} />
-            )}
-            {visning[i].oppfolgingFeilet && <NesteSporsmalFeilet samtaleId={samtale.id} nummer={r.nummer} fokus={nettoppFeilet} />}
-            {visning[i].svarSkjema && (
-              <SvarSkjema handling={svarISamtale.bind(null, samtale.id, r.nummer)} nummer={r.nummer} />
-            )}
-          </li>
-        ))}
+        {samtale.runder.map((r) => {
+          const v = visning.get(r.nummer)!;
+          return (
+            <li key={r.nummer}>
+              <RundeVisning r={r} lenke={lenke(r.kildeavsnitt.nummer)} />
+              {v.vurderingFeilet && (
+                <VurderingFeilet samtaleId={samtale.id} nummer={r.nummer} standard={vurderingstekst} fokus={nettoppFeilet} />
+              )}
+              {v.kanRevurderes && <RevurderKnapp samtaleId={samtale.id} nummer={r.nummer} />}
+              {v.oppfolgingFeilet && <NesteSporsmalFeilet samtaleId={samtale.id} nummer={r.nummer} fokus={nettoppFeilet} />}
+              {v.svarSkjema && <SvarSkjema handling={svarISamtale.bind(null, samtale.id, r.nummer)} nummer={r.nummer} />}
+            </li>
+          );
+        })}
       </ol>
 
       {!samtale.avsluttet && (

@@ -13,23 +13,37 @@ import { eq } from "drizzle-orm";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 import * as skjema from "../data/skjema";
 
-const { innlogget, kapsler, Omdirigert } = vi.hoisted(() => ({
-  innlogget: { kontoId: "" },
-  kapsler: new Map<string, string>(),
-  Omdirigert: class Omdirigert extends Error {
-    constructor(readonly adresse: string) {
-      super(`omdirigert til ${adresse}`);
-    }
-  },
-}));
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
+const { innlogget, kapsler, tilgang, revalidatePath, Omdirigert } = vi.hoisted(() => {
+  const innlogget = { kontoId: "" };
+  const verdier = new Map<string, string>();
+  return {
+    innlogget,
+    /** Informasjonskapslene, med formen til Nexts `cookies()`: `get` gir `{ name, value }`. */
+    kapsler: {
+      verdier,
+      get: (name: string) => (verdier.has(name) ? { name, value: verdier.get(name)! } : undefined),
+      has: (name: string) => verdier.has(name),
+      set: (name: string, value: string) => void verdier.set(name, value),
+      delete: (name: string) => void verdier.delete(name),
+    },
+    /** Styrbar per test; standard er den innloggede kontoen. */
+    tilgang: vi.fn(async () => innlogget),
+    revalidatePath: vi.fn(),
+    Omdirigert: class Omdirigert extends Error {
+      constructor(readonly adresse: string) {
+        super(`omdirigert til ${adresse}`);
+      }
+    },
+  };
+});
+vi.mock("next/cache", () => ({ revalidatePath }));
 vi.mock("next/headers", () => ({ cookies: async () => kapsler, headers: async () => new Headers() }));
 vi.mock("next/navigation", () => ({
   redirect: (adresse: string) => {
     throw new Omdirigert(adresse);
   },
 }));
-vi.mock("../data/konto", () => ({ tilgang: async () => innlogget }));
+vi.mock("../data/konto", () => ({ tilgang: () => tilgang() }));
 
 const db = drizzle(new PGlite(), { schema: skjema, casing: "snake_case" });
 (globalThis as unknown as { lesevennDb?: unknown }).lesevennDb = db;
@@ -100,6 +114,9 @@ beforeEach(async () => {
   foerModus = process.env.LESEVENN_TESTMODUS;
   process.env.LESEVENN_TESTMODUS = "av";
   vi.spyOn(console, "warn").mockImplementation(() => {});
+  kapsler.verdier.clear();
+  revalidatePath.mockClear();
+  tilgang.mockImplementation(async () => innlogget);
 });
 afterEach(() => {
   settKlientForTest(null);
@@ -306,6 +323,8 @@ describe("bruksgrensene (PRD §6.4)", () => {
       await opprettTekst(innlogget, { tittel: "T", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
     }
     const pdf = new FormData();
+    const parse = vi.fn();
+    settKlientForTest({ messages: { parse } });
     pdf.set("tittel", "Den sjette");
     pdf.set("raatekst", TEKST);
     pdf.set(
@@ -319,8 +338,11 @@ describe("bruksgrensene (PRD §6.4)", () => {
     bilde.set("raatekst", TEKST);
     expect(await h.limInnBilde({}, bilde)).toEqual({ feil: GRENSE_FEIL.tekster });
 
-    // Ingen av dem ble lagret.
+    // Ingen av dem ble lagret, modellen ble ikke kalt, og ingenting ble registrert som forbruk.
     expect(await db.select().from(skjema.tekst).where(eq(skjema.tekst.kontoId, innlogget.kontoId))).toHaveLength(5);
+    expect(parse).not.toHaveBeenCalled();
+    expect(await apiKall()).toHaveLength(0);
+    expect(await db.select().from(skjema.forbruk).where(eq(skjema.forbruk.kontoId, innlogget.kontoId))).toHaveLength(5);
   });
 
   test("sjette fagsamtale i dag: avvist før første spørsmål lages", async () => {
@@ -538,6 +560,36 @@ describe("lagreAktivering for innlimt tekst (FR-3, FR-6)", () => {
     expect(parse).not.toHaveBeenCalled();
   });
 
+  test("nytt forsøk etter låsefeil: teksten blir i aktiveringen (ikke gjennomsynet), og et nytt trykk låser den", async () => {
+    const tekstId = await innlimtTekst("   \n\n   ");
+    settKlientForTest({ messages: { parse: vi.fn() } });
+    expect((await aktiver(tekstId)).svar).toMatchObject({ feil: { melding: "Teksten kunne ikke låses." } });
+    expect(await tilstand(tekstId)).toBe("aktivert");
+
+    // Det som stoppet låsingen, er borte (her: teksten er rettet i databasen).
+    await db.update(skjema.tekst).set({ redigertTekst: TEKST }).where(eq(skjema.tekst.id, tekstId));
+    settKlientForTest({
+      messages: {
+        parse: vi.fn().mockResolvedValue(
+          svar({ faguttrykk: [{ uttrykk: "vannmolekyler", forklaring: "Vann.", viktighetsrangering: 1, kildeavsnitt: 2 }] }),
+        ),
+      },
+    });
+    // Skjemaet for nytt forsøk sender ikke svaret på nytt; det første er lagret.
+    const data = new FormData();
+    let adresse: string | undefined;
+    try {
+      await h.lagreAktivering(tekstId, {}, data);
+    } catch (e) {
+      if (!(e instanceof Omdirigert)) throw e;
+      adresse = e.adresse;
+    }
+    expect(adresse).toBe(`/tekst/${tekstId}/lesing`);
+    expect(await tilstand(tekstId)).toBe("laast");
+    const [rad] = await db.select().from(skjema.tekst).where(eq(skjema.tekst.id, tekstId));
+    expect(rad.forkunnskapssvar).toBe("Noe om ovner og varme.");
+  });
+
   test("genereringen feiler: teksten er låst uten fagord, og lesevisningen får feilkoden", async () => {
     const tekstId = await innlimtTekst();
     settKlientForTest({ messages: { parse: vi.fn().mockResolvedValue(ugyldig) } });
@@ -553,10 +605,28 @@ describe("lagreAktivering for innlimt tekst (FR-3, FR-6)", () => {
  * ------------------------------------------------------------------ */
 
 describe("slettTemaHandling", () => {
-  test("sletter temakapselen, også uten innlogging", async () => {
+  test("sletter temakapselen, også uten innlogging (etter signOut)", async () => {
+    tilgang.mockImplementation(async () => {
+      throw new Omdirigert("/logg-inn");
+    });
     kapsler.set("tema", "moerk");
-    innlogget.kontoId = "";
     await h.slettTemaHandling();
-    expect(kapsler.has("tema")).toBe(false);
+    expect(kapsler.get("tema")).toBeUndefined();
+    expect(revalidatePath).toHaveBeenCalledOnce();
+    expect(tilgang).not.toHaveBeenCalled();
+  });
+
+  test("uten kapsel gjør den ingenting, og hurtigbufferen står", async () => {
+    await h.slettTemaHandling();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("velgTemaHandling", () => {
+  test("«Mørk» setter kapselen, og get gir den som { name, value }", async () => {
+    const data = new FormData();
+    data.set("tema", "moerk");
+    await expect(h.velgTemaHandling(data)).rejects.toBeInstanceOf(Omdirigert);
+    expect(kapsler.get("tema")).toEqual({ name: "tema", value: "moerk" });
   });
 });

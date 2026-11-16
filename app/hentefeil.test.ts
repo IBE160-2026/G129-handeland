@@ -93,14 +93,15 @@ describe("arbeidsbordet (/)", () => {
 });
 
 describe("Samlingen (/samling)", () => {
-  test("hentArbeidsbord kaster: Hentefeil med «Prøv igjen» til /samling", async () => {
+  test("hentArbeidsbord kaster: Hentefeil med «Prøv igjen» til /samling, og feilen logges", async () => {
     innlogget.tilgang = { kontoId: "konto-1" };
     hentArbeidsbord.mockRejectedValue(new Error("databasen svarer ikke"));
-    vi.spyOn(console, "error").mockImplementation(() => {});
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
 
     const html = renderToStaticMarkup(await samling());
     expect(html).toContain(FEILTEKST);
     expect(html).toMatch(/<a href="\/samling"[^>]*>Prøv igjen<\/a>/);
+    expect(logg).toHaveBeenCalledOnce();
   });
 
   test("utlogget: tilgang() står utenfor try, så omdirigeringen slipper ut i stedet for Hentefeil", async () => {

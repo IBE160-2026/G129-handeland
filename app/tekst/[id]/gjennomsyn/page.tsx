@@ -7,9 +7,9 @@
  *
  * Steget er sikkerhetsnettet for PDF og bilde (FR-4, FR-45), der uttrekket
  * ofte gir feil. Innlimt tekst kommer ikke hit (FR-3, endret 11.11): den har
- * ingen uttrekksfeil, og låses alt i aktiveringen. En innlimt tekst kommer
- * hit bare om den står som aktivert: laget før endringen, eller fordi
- * låsingen i aktiveringen feilet. Da fullføres den her. Inntil 11.11 gikk all tekst
+ * ingen uttrekksfeil, og låses alt i aktiveringen. Står en innlimt tekst som
+ * aktivert (låsingen feilet), sendes den tilbake til aktiveringen og låses
+ * på nytt der. Inntil 11.11 gikk all tekst
  * gjennom steget, med begrunnelsen at én løype var enklere å stole på enn to;
  * telefontesten viste at prisen for innlimt tekst var høyere enn nytten.
  */
@@ -45,6 +45,9 @@ export default async function Gjennomsyn({
   // — og å vise et redigeringsfelt som ikke kan lagres ville vært en blindvei.
   if (tekst.tilstand === "laast") redirect(`/tekst/${id}/lesing`);
   if (tekst.tilstand === "innlest") redirect(`/tekst/${id}/aktivering`);
+  // Innlimt tekst har ikke gjennomsynet (FR-3). Står den som aktivert, feilet
+  // låsingen, og den låses på nytt i aktiveringen.
+  if (tekst.vei === "liming") redirect(`/tekst/${id}/aktivering`);
 
   const avsnitt = delIAvsnitt(tekst.redigertTekst);
   const antallOverskrifter = avsnitt.filter((a) => a.erOverskrift).length;

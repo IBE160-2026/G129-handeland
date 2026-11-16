@@ -74,9 +74,19 @@ export async function tilgangForForesporsel(h: Headers): Promise<Tilgang | null>
 }
 
 /**
- * E-postadressen til den innloggede, eller `null`. For kontosiden (det eneste
- * kontoen har å vise) og for /logg-inn og /registrer, som sender en innlogget
- * elev videre til forsiden.
+ * For kontosiden: e-postadressen er det eneste kontoen har å vise. Siden har
+ * alt kalt `tilgang()`. Feiler oppslaget, kaster denne (feilsiden), så
+ * kontosiden aldri viser «Logget inn som .» eller en sletteboks uten adresse.
+ */
+export async function kontoEpost(): Promise<string> {
+  const oekt = await hentOekt(await headers());
+  if (!oekt) redirect("/logg-inn");
+  return oekt.user.email;
+}
+
+/**
+ * E-postadressen til den innloggede, eller `null`. For /logg-inn og
+ * /registrer, som sender en innlogget elev videre til forsiden.
  *
  * Samme vakt som `valgfriTilgang`: feiler øktoppslaget, logges feilen og
  * svaret er `null`, så /logg-inn og /registrer vises som for en utlogget i

@@ -47,6 +47,19 @@ describe("samtalevisning", () => {
     expect(v.every((r) => !r.svarSkjema)).toBe(true);
   });
 
+  test("oppfølgingen feilet på en runde som ellers kunne revurderes: bare «Prøv igjen», ikke «Revurder»", () => {
+    const v = samtalevisning([besvart(1), besvart(2)], false);
+    // Runde 2 er vurdert og ikke revurdert, men neste spørsmål feilet: én tydelig handling.
+    expect(v[1]).toMatchObject({ nummer: 2, oppfolgingFeilet: true, kanRevurderes: false });
+    // Tidligere runder kan fortsatt revurderes.
+    expect(v[0]).toMatchObject({ nummer: 1, oppfolgingFeilet: false, kanRevurderes: true });
+  });
+
+  test("avsluttet samtale: siste runde kan revurderes, siden oppfølgingen ikke gjelder", () => {
+    const v = samtalevisning([besvart(1), besvart(2)], true);
+    expect(v[1]).toMatchObject({ oppfolgingFeilet: false, kanRevurderes: true });
+  });
+
   test("FR-22: en runde som alt er vurdert på nytt, kan ikke revurderes igjen", () => {
     const [v] = samtalevisning([besvart(1, { revurdert: true }), runde(2)], false);
     expect(v.kanRevurderes).toBe(false);

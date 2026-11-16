@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**243 av 243 sjekker bestått.**
+**245 av 245 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -34,7 +34,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/11a3f8b3-acbb-4e8b-b69c-68290c18fe50/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/9b03dd65-16e0-40f7-b27f-ff8ecf8e42be/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -51,7 +51,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/11a3f8b3-acbb-4e8b-b69c-68290c18fe50/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/9b03dd65-16e0-40f7-b27f-ff8ecf8e42be/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -59,7 +59,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/11a3f8b3-acbb-4e8b-b69c-68290c18fe50/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/9b03dd65-16e0-40f7-b27f-ff8ecf8e42be/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -90,7 +90,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794863342251 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794864675073 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -225,6 +225,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | 1920 px, 200 % tekst: ingen Følge-Buddy |  |
 | ✓ | mobil uten sidelengs rulling: landingsside 1920 px, 200 % tekst | 1920 px innhold i 1920 px vindu |
 | ✓ | rotasjon, landingsside 375 px: trykkdemoen med fire knapper, effekt A av | {"effektA":false,"knapper":4,"spenn":0,"paa":0,"klistret":false,"panel":"Trykk på et fagord i teksten, så forklarer Buddy det."} |
+| ✓ | rotasjon, landingsside 1280 px: demosporet finnes |  |
 | ✓ | rotasjon, landingsside 375 → 1280 px: effekt A markerer span.ls-fagord, og ingen knapper er igjen | {"effektA":true,"knapper":0,"spenn":4,"paa":3,"klistret":true,"panel":""} |
 | ✓ | rotasjon, landingsside 1280 → 375 px: trykkdemoen er tilbake, uten rester av effekt A | {"effektA":false,"knapper":4,"spenn":0,"paa":0,"klistret":false,"panel":"Trykk på et fagord i teksten, så forklarer Buddy det."} |
 | ✓ | rotasjon, landingsside 375 px igjen: et trykk på «mitose» viser forklaringen | mitoseCelledeling der én celle blir til  |
@@ -235,16 +236,17 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":11,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/0912afc7-e0bd-4aeb-8ac1-c10b3ba6a920/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/4ab03a1e-a339-4847-b04a-14a3ad0fbff0/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/0912afc7-e0bd-4aeb-8ac1-c10b3ba6a920/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/4ab03a1e-a339-4847-b04a-14a3ad0fbff0/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/f092491b-f2c8-4d0e-aff6-c8cb70c64390/gjennomsyn |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/4d635523-4178-4f9a-a49d-888e7a335ef7/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/f092491b-f2c8-4d0e-aff6-c8cb70c64390/gjennomsyn |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/4d635523-4178-4f9a-a49d-888e7a335ef7/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |
+| ✓ | gjennomsyn: prøvetekstene er ryddet bort | 2 av 2 |
 | ✓ | PRD §6.4: 5 tekster i dag — /ny viser meldingen før innlesingen, med lenke til arbeidsbordet | Du har lagt inn 5 tekster i dag.Du kan legge inn flere i morgen.Til arbeidsbordet |
 | ✓ | axe: ny tekst, grensen er nådd |  |
 | ✓ | PRD §6.4: taket er nådd — ny quiz gir takmeldingen i stedet for tenkeindikatoren, og ingen quiz lages | 0 quiz(er) |

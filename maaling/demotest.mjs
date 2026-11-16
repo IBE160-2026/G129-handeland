@@ -443,10 +443,14 @@ async function enKjoering(nettleser) {
   const etter = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
   sjekk("14", "testtekst A slettet", etter === forFoer - 1, `${forFoer} → ${etter} tekster`);
   sjekk("14", "raden er borte fra Samlingen", (await raden.count()) === 0);
+  // Et temavalg på en delt PC skal ikke arves av neste elev (bolk 4).
+  await pc.context().addCookies([{ name: "tema", value: "moerk", url: APP }]);
   await pc.goto(`${APP}/konto`);
   await pc.click('button:has-text("Logg ut")');
   await pc.waitForURL(/\/logg-inn/);
   sjekk("14", "logget ut", true);
+  const temaEtter = (await pc.context().cookies()).find((c) => c.name === "tema");
+  sjekk("14", "temakapselen er slettet ved utlogging", !temaEtter, temaEtter ? `tema=${temaEtter.value}` : "");
   await pc.context().close();
 }
 

@@ -23,7 +23,7 @@ import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
 import { lagOversettelse, lagreAktivering } from "../../../handlinger";
-import { AktiveringSkjema } from "../../../komponenter/Skjemaer";
+import { AktiveringSkjema, LaasPaaNyttSkjema } from "../../../komponenter/Skjemaer";
 import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Aktivering({
@@ -48,12 +48,15 @@ export default async function Aktivering({
   if (tekst.tilstand === "innlest" && tekst.overskrifterGodkjent === null) {
     redirect(`/tekst/${id}/overskrifter`);
   }
-  // AD-9 går bare framover. En aktivert tekst (PDF og bilde, eller innlimt
-  // tekst der låsingen feilet) fullføres i gjennomsynet. En låst tekst kan
+  // AD-9 går bare framover. En aktivert PDF- eller bildetekst fullføres i
+  // gjennomsynet. En låst tekst kan
   // fortsatt åpne siden og se overskriftene — også på morsmålet (FR-26) —
   // men får ikke skjemaet: svaret er lagret, og et nytt trykk ville feilet.
   // Innlimt tekst kommer nå rett hit fra lesingen med tilbakeknappen (FR-3).
-  if (tekst.tilstand === "aktivert") redirect(`/tekst/${id}/gjennomsyn`);
+  // Innlimt tekst går ikke til gjennomsynet (FR-3): feilet låsingen, blir
+  // den her og låses på nytt.
+  const laasPaaNytt = tekst.tilstand === "aktivert" && tekst.vei === "liming";
+  if (tekst.tilstand === "aktivert" && !laasPaaNytt) redirect(`/tekst/${id}/gjennomsyn`);
   const laast = tekst.tilstand === "laast";
 
   const avsnitt = delIAvsnitt(tekst.redigertTekst);
@@ -127,6 +130,8 @@ export default async function Aktivering({
               Gå til teksten
             </Link>
           </p>
+        ) : laasPaaNytt ? (
+          <LaasPaaNyttSkjema handling={lagreAktivering.bind(null, id)} />
         ) : (
           <AktiveringSkjema
             handling={lagreAktivering.bind(null, id)}

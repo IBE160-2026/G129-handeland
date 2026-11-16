@@ -1563,109 +1563,146 @@ try {
   // Alle sjekkene over åpner en fersk kontekst med fast bredde. Her endres
   // bredden mens siden er åpen, som når en nettbrett snus: fagorddemoen bytter
   // mellom knapper og spenn (FagordDemo), effekt A måler på nytt, og viften
-  // går fra ark til vifte og tilbake mens den er åpen.
+  // går fra ark til vifte og tilbake mens den er åpen. Det ventes på
+  // tilstanden (effekt-a, data-oppsett, har-ark), ikke på faste tider.
   {
     const ctx = await nettleser.newContext({ viewport: { width: 375, height: 740 }, locale: "nb-NO" });
-    const s = await ctx.newPage();
-    s.setDefaultTimeout(120000);
-    const feil = [];
-    s.on("pageerror", (e) => feil.push(e.message.split("\n")[0]));
-    await s.goto(`${APP}/`);
-    await s.waitForLoadState("networkidle");
-    const demoTilstand = () =>
-      s.evaluate(() => ({
-        effektA: document.getElementById("landingsside").classList.contains("effekt-a"),
-        knapper: document.querySelectorAll("#landingsside button.ls-fagord").length,
-        spenn: document.querySelectorAll("#landingsside span.ls-fagord").length,
-        paa: document.querySelectorAll("#landingsside .ls-fagord.paa").length,
-        klistret: document.getElementById("landingsside").classList.contains("ls-demo-klistret"),
-        panel: document.querySelector("#landingsside .ls-trykkpanel")?.textContent ?? "",
-      }));
-    const foer = await demoTilstand();
-    sjekk("rotasjon, landingsside 375 px: trykkdemoen med fire knapper, effekt A av", foer.knapper === 4 && !foer.effektA, JSON.stringify(foer));
-    await s.setViewportSize({ width: 1280, height: 900 });
-    await s.waitForTimeout(1000);
-    await s.evaluate(() => window.scrollTo(0, document.querySelector(".ls-demo-spor").offsetTop + window.innerHeight * 0.9));
-    await s.waitForTimeout(800);
-    const bredt = await demoTilstand();
-    sjekk(
-      "rotasjon, landingsside 375 → 1280 px: effekt A markerer span.ls-fagord, og ingen knapper er igjen",
-      bredt.effektA && bredt.knapper === 0 && bredt.spenn === 4 && bredt.paa >= 1 && bredt.panel === "",
-      JSON.stringify(bredt),
-    );
-    await s.setViewportSize({ width: 375, height: 740 });
-    await s.waitForTimeout(1000);
-    const tilbake = await demoTilstand();
-    sjekk(
-      "rotasjon, landingsside 1280 → 375 px: trykkdemoen er tilbake, uten rester av effekt A",
-      !tilbake.effektA && tilbake.knapper === 4 && tilbake.paa === 0 && !tilbake.klistret && tilbake.panel.startsWith("Trykk på et fagord"),
-      JSON.stringify(tilbake),
-    );
-    await s.locator("#landingsside button.ls-fagord", { hasText: "mitose" }).click();
-    const trykket = await demoTilstand();
-    sjekk("rotasjon, landingsside 375 px igjen: et trykk på «mitose» viser forklaringen", trykket.panel.startsWith("mitose"), trykket.panel.slice(0, 40));
-    await ingenSiderulling(s, "landingsside etter rotasjon");
-
-    // Arbeidsbordet med arket åpent.
-    await ctx.addCookies(await pc.context().cookies());
-    await s.goto(`${APP}/`);
-    const bunke = s.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
-    await bunke.click(HJOERNE);
-    const dialog = s.locator("[role=dialog][aria-modal=true]");
-    await dialog.waitFor();
-    await s.waitForTimeout(800);
-    const bord = () =>
-      s.evaluate(() => {
-        const d = document.querySelector("[role=dialog]");
-        return {
-          dialog: !!d,
-          oppsett: d?.dataset.oppsett ?? null,
-          harArk: document.documentElement.classList.contains("har-ark"),
-          overflow: getComputedStyle(document.documentElement).overflowY,
-          inert: document.querySelectorAll("[inert]").length,
-          fokusIDialog: !!document.activeElement?.closest("[role=dialog]"),
-        };
+    try {
+      const s = await ctx.newPage();
+      s.setDefaultTimeout(120000);
+      const feil = [];
+      s.on("pageerror", (e) => feil.push(e.message.split("\n")[0]));
+      await s.goto(`${APP}/`);
+      await s.waitForLoadState("networkidle");
+      const demoTilstand = () =>
+        s.evaluate(() => ({
+          effektA: document.getElementById("landingsside").classList.contains("effekt-a"),
+          knapper: document.querySelectorAll("#landingsside button.ls-fagord").length,
+          spenn: document.querySelectorAll("#landingsside span.ls-fagord").length,
+          paa: document.querySelectorAll("#landingsside .ls-fagord.paa").length,
+          klistret: document.getElementById("landingsside").classList.contains("ls-demo-klistret"),
+          panel: document.querySelector("#landingsside .ls-trykkpanel")?.textContent ?? "",
+        }));
+      /** Venter til effekt A er på uten knapper (bred), eller av med trykkdemoen tilbake (smal). */
+      const ventPaaDemo = (bred) =>
+        s.waitForFunction(
+          (bred) => {
+            const rot = document.getElementById("landingsside");
+            const knapper = document.querySelectorAll("#landingsside button.ls-fagord").length;
+            return bred ? rot.classList.contains("effekt-a") && knapper === 0 : !rot.classList.contains("effekt-a") && knapper === 4;
+          },
+          bred,
+          { timeout: 15000 },
+        );
+      const foer = await demoTilstand();
+      sjekk("rotasjon, landingsside 375 px: trykkdemoen med fire knapper, effekt A av", foer.knapper === 4 && !foer.effektA, JSON.stringify(foer));
+      await s.setViewportSize({ width: 1280, height: 900 });
+      await ventPaaDemo(true);
+      const sporFinnes = await s.evaluate(() => {
+        const spor = document.querySelector(".ls-demo-spor");
+        if (!spor) return false;
+        window.scrollTo(0, spor.offsetTop + window.innerHeight * 0.9);
+        return true;
       });
-    const ark = await bord();
-    sjekk("rotasjon, arbeidsbord 375 px: arket er åpent", ark.oppsett === "ark" && ark.harArk, JSON.stringify(ark));
-    await s.setViewportSize({ width: 1280, height: 900 });
-    await s.waitForTimeout(1500);
-    const vifteBredt = await bord();
-    sjekk(
-      "rotasjon, arbeidsbord 375 → 1280 px med arket åpent: viften står åpen som vifte, uten har-ark, og resten av siden er fortsatt inert",
-      vifteBredt.dialog &&
-        (vifteBredt.oppsett === "rundt" || vifteBredt.oppsett === "rutenett") &&
-        !vifteBredt.harArk &&
-        vifteBredt.overflow !== "hidden" &&
-        vifteBredt.inert > 0,
-      JSON.stringify(vifteBredt),
-    );
-    await ingenSiderulling(s, "arbeidsbord med åpen vifte etter rotasjon");
-    await s.setViewportSize({ width: 375, height: 740 });
-    await s.waitForTimeout(1500);
-    const arkIgjen = await bord();
-    sjekk(
-      "rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen",
-      arkIgjen.dialog && arkIgjen.oppsett === "ark" && arkIgjen.harArk,
-      JSON.stringify(arkIgjen),
-    );
-    await s.keyboard.press("Escape");
-    await s.waitForTimeout(300);
-    const lukket = await bord();
-    sjekk(
-      "rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen",
-      !lukket.dialog && !lukket.harArk && lukket.inert === 0 && lukket.overflow !== "hidden",
-      JSON.stringify(lukket),
-    );
-    sjekk("rotasjon: ingen skriptfeil i nettleseren", feil.length === 0, feil.join(" | "));
-    await ctx.close();
+      sjekk("rotasjon, landingsside 1280 px: demosporet finnes", sporFinnes);
+      if (sporFinnes) {
+        await s.waitForFunction(() => document.querySelectorAll("#landingsside span.ls-fagord.paa").length >= 1, null, { timeout: 15000 });
+      }
+      const bredt = await demoTilstand();
+      sjekk(
+        "rotasjon, landingsside 375 → 1280 px: effekt A markerer span.ls-fagord, og ingen knapper er igjen",
+        bredt.effektA && bredt.knapper === 0 && bredt.spenn === 4 && bredt.paa >= 1 && bredt.panel === "",
+        JSON.stringify(bredt),
+      );
+      await s.setViewportSize({ width: 375, height: 740 });
+      await ventPaaDemo(false);
+      const tilbake = await demoTilstand();
+      sjekk(
+        "rotasjon, landingsside 1280 → 375 px: trykkdemoen er tilbake, uten rester av effekt A",
+        !tilbake.effektA && tilbake.knapper === 4 && tilbake.paa === 0 && !tilbake.klistret && tilbake.panel.startsWith("Trykk på et fagord"),
+        JSON.stringify(tilbake),
+      );
+      await s.locator("#landingsside button.ls-fagord", { hasText: "mitose" }).click();
+      const trykket = await demoTilstand();
+      sjekk("rotasjon, landingsside 375 px igjen: et trykk på «mitose» viser forklaringen", trykket.panel.startsWith("mitose"), trykket.panel.slice(0, 40));
+      await ingenSiderulling(s, "landingsside etter rotasjon");
+
+      // Arbeidsbordet med arket åpent.
+      await ctx.addCookies(await pc.context().cookies());
+      await s.goto(`${APP}/`);
+      const bunke = s.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
+      await bunke.click(HJOERNE);
+      const bord = () =>
+        s.evaluate(() => {
+          const d = document.querySelector("[role=dialog]");
+          return {
+            dialog: !!d,
+            oppsett: d?.dataset.oppsett ?? null,
+            harArk: document.documentElement.classList.contains("har-ark"),
+            overflow: getComputedStyle(document.documentElement).overflowY,
+            inert: document.querySelectorAll("[inert]").length,
+            fokusIDialog: !!document.activeElement?.closest("[role=dialog]"),
+          };
+        });
+      /** Venter til viften er åpen med et av oppsettene, og har-ark stemmer med det. */
+      const ventPaaOppsett = (oppsett) =>
+        s.waitForFunction(
+          (oppsett) => {
+            const d = document.querySelector("[role=dialog][aria-modal=true]");
+            const harArk = document.documentElement.classList.contains("har-ark");
+            return !!d && oppsett.includes(d.dataset.oppsett) && harArk === oppsett.includes("ark");
+          },
+          oppsett,
+          { timeout: 15000 },
+        );
+      await ventPaaOppsett(["ark"]);
+      const ark = await bord();
+      sjekk("rotasjon, arbeidsbord 375 px: arket er åpent", ark.oppsett === "ark" && ark.harArk, JSON.stringify(ark));
+      await s.setViewportSize({ width: 1280, height: 900 });
+      await ventPaaOppsett(["rundt", "rutenett"]);
+      const vifteBredt = await bord();
+      sjekk(
+        "rotasjon, arbeidsbord 375 → 1280 px med arket åpent: viften står åpen som vifte, uten har-ark, og resten av siden er fortsatt inert",
+        vifteBredt.dialog &&
+          (vifteBredt.oppsett === "rundt" || vifteBredt.oppsett === "rutenett") &&
+          !vifteBredt.harArk &&
+          vifteBredt.overflow !== "hidden" &&
+          vifteBredt.inert > 0,
+        JSON.stringify(vifteBredt),
+      );
+      await ingenSiderulling(s, "arbeidsbord med åpen vifte etter rotasjon");
+      await s.setViewportSize({ width: 375, height: 740 });
+      await ventPaaOppsett(["ark"]);
+      const arkIgjen = await bord();
+      sjekk(
+        "rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen",
+        arkIgjen.dialog && arkIgjen.oppsett === "ark" && arkIgjen.harArk,
+        JSON.stringify(arkIgjen),
+      );
+      await s.keyboard.press("Escape");
+      await s.waitForFunction(
+        () => !document.querySelector("[role=dialog]") && !document.documentElement.classList.contains("har-ark"),
+        null,
+        { timeout: 15000 },
+      );
+      const lukket = await bord();
+      sjekk(
+        "rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen",
+        !lukket.dialog && !lukket.harArk && lukket.inert === 0 && lukket.overflow !== "hidden",
+        JSON.stringify(lukket),
+      );
+      sjekk("rotasjon: ingen skriptfeil i nettleseren", feil.length === 0, feil.join(" | "));
+    } finally {
+      await ctx.close();
+    }
   }
 
   /* --- FR-3 fase 3b: gjennomsynet via PDF og bilde -------------------- */
   // Innlimt tekst går ikke lenger via gjennomsynet (FR-3, 11.11), så sjekken
   // når det med en tekst som er lagt rett inn i databasen: lest inn fra PDF
   // eller bilde, med godkjente overskrifter og aktiveringen gjort. Det er
-  // tilstanden en elev står i etter innlesingen. Tekstene ryddes bort.
+  // tilstanden en elev står i etter innlesingen. Tekstene ryddes bort, og en
+  // opprydding som feiler, er et funn.
   {
     const pool = new pg.Pool({ connectionString: DB, max: 1 });
     const lagt = [];
@@ -1700,7 +1737,14 @@ try {
         }
       }
     } finally {
-      if (lagt.length > 0) await pool.query(`delete from tekst where id = any($1::uuid[])`, [lagt]).catch(() => {});
+      if (lagt.length > 0) {
+        try {
+          const { rowCount } = await pool.query(`delete from tekst where id = any($1::uuid[])`, [lagt]);
+          sjekk("gjennomsyn: prøvetekstene er ryddet bort", rowCount === lagt.length, `${rowCount} av ${lagt.length}`);
+        } catch (e) {
+          sjekk("gjennomsyn: prøvetekstene er ryddet bort", false, e.message.split("\n")[0]);
+        }
+      }
       await pool.end();
     }
   }

@@ -98,6 +98,25 @@ export function AktiveringSkjema({
   );
 }
 
+/**
+ * Innlimt tekst der låsingen i aktiveringen feilet (FR-3): svaret er lagret,
+ * så skjemaet spør ikke om det igjen, men låser teksten på nytt.
+ */
+export function LaasPaaNyttSkjema({
+  handling,
+}: {
+  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+}) {
+  const [svar, send] = useActionState(handling, TOMT);
+  return (
+    <form action={send} className="space-y-4">
+      {svar.feil && <Feilmelding {...svar.feil} />}
+      <p>Svaret ditt er lagret, men teksten ble ikke klar til lesing. Prøv igjen.</p>
+      <Send venter="Finner fagordene…" klar="Prøv igjen" status="Buddy finner fagordene …" />
+    </form>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 
 export function GjennomsynSkjema({

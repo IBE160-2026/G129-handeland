@@ -22,7 +22,11 @@ export type Rundevisning = {
    * fått neste spørsmål. Det skjer bare når oppfølgingen feilet.
    */
   oppfolgingFeilet: boolean;
-  /** FR-22: en vurdert runde kan leses på nytt én gang. */
+  /**
+   * FR-22: en vurdert runde kan leses på nytt én gang. Ikke når neste
+   * spørsmål feilet (oppfolgingFeilet): da er «Prøv igjen» den ene tydelige
+   * handlingen.
+   */
   kanRevurderes: boolean;
   /** Runden eleven skal svare på nå: det første ubesvarte spørsmålet i en åpen samtale. */
   svarSkjema: boolean;
@@ -31,11 +35,14 @@ export type Rundevisning = {
 export function samtalevisning(runder: readonly Runde[], avsluttet: boolean): Rundevisning[] {
   const siste = runder.at(-1);
   const aktiv = avsluttet ? undefined : runder.find((r) => r.elevsvar === null);
-  return runder.map((r) => ({
-    nummer: r.nummer,
-    vurderingFeilet: !avsluttet && r.elevsvar !== null && r.svarvurdering === null,
-    oppfolgingFeilet: !avsluttet && r === siste && r.svarvurdering !== null,
-    kanRevurderes: r.svarvurdering !== null && !r.revurdert,
-    svarSkjema: aktiv === r,
-  }));
+  return runder.map((r) => {
+    const oppfolgingFeilet = !avsluttet && r === siste && r.svarvurdering !== null;
+    return {
+      nummer: r.nummer,
+      vurderingFeilet: !avsluttet && r.elevsvar !== null && r.svarvurdering === null,
+      oppfolgingFeilet,
+      kanRevurderes: r.svarvurdering !== null && !r.revurdert && !oppfolgingFeilet,
+      svarSkjema: aktiv === r,
+    };
+  });
 }

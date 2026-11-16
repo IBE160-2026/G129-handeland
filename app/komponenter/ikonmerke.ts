@@ -12,8 +12,8 @@
 const PRIMAER = "#6427d6";
 const MARKERING = "#ffe0ee";
 
-const GLASS_V = "M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z";
-const GLASS_H = "M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z";
+export const GLASS_V = "M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z";
+export const GLASS_H = "M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z";
 const RAMME = `fill="none" stroke="${PRIMAER}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"`;
 
 /** Samme som app/icon.svg: brillene rotert −90°, så de blir en B, og ryggen. */
@@ -31,4 +31,5 @@ export const B_MERKE_SVG =
   `</g>` +
   `</svg>`;
 
-export const B_MERKE_DATA_URI = `data:image/svg+xml;base64,${Buffer.from(B_MERKE_SVG).toString("base64")}`;
+/** Uten `Buffer`, så modulen virker både i Node og på edge. */
+export const B_MERKE_DATA_URI = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(B_MERKE_SVG)}`;

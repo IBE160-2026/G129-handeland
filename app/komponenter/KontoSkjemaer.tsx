@@ -87,12 +87,21 @@ const KNAPP = KNAPP_PRIMAER;
  * Temakapselen slettes ved utlogging og sletting av kontoen, så neste elev
  * på en delt PC får «Følg enheten» på landingssiden. Feiler det, går
  * utloggingen likevel videre: et arvet tema er ikke verdt å stoppe den for.
+ * Etter 3 sekunder gis det opp, så utloggingen aldri henger.
  */
 async function glemTema() {
+  let tidsgrense: ReturnType<typeof setTimeout> | undefined;
   try {
-    await slettTemaHandling();
+    await Promise.race([
+      slettTemaHandling(),
+      new Promise((_, nei) => {
+        tidsgrense = setTimeout(() => nei(new Error("tidsgrensen på 3 s")), 3000);
+      }),
+    ]);
   } catch (e) {
     console.error("Kunne ikke slette temavalget:", e);
+  } finally {
+    clearTimeout(tidsgrense);
   }
 }
 
@@ -212,19 +221,33 @@ export function RegistreringSkjema() {
 export function LoggUtKnapp() {
   const router = useRouter();
   const [venter, setVenter] = useState(false);
+  const [feil, setFeil] = useState<Feil | null>(null);
 
   async function loggUt() {
     setVenter(true);
-    await authKlient.signOut();
-    await glemTema();
-    router.push("/logg-inn");
-    router.refresh();
+    setFeil(null);
+    try {
+      // signOut kan svare med en feil uten å kaste. Da er eleven fortsatt
+      // innlogget, og verken temaet slettes eller siden byttes.
+      const { error } = await authKlient.signOut();
+      if (error) return setFeil(somFeil(error));
+      await glemTema();
+      router.push("/logg-inn");
+      router.refresh();
+    } catch {
+      setFeil(somFeil(null));
+    } finally {
+      setVenter(false);
+    }
   }
 
   return (
-    <button type="button" onClick={loggUt} disabled={venter} className={KNAPP}>
-      {venter ? "Logger ut…" : "Logg ut"}
-    </button>
+    <>
+      {feil && <Feilmelding {...feil} />}
+      <button type="button" onClick={loggUt} disabled={venter} className={KNAPP}>
+        {venter ? "Logger ut…" : "Logg ut"}
+      </button>
+    </>
   );
 }
 
@@ -248,8 +271,11 @@ export function SlettKontoSkjema() {
     const { error } = await authKlient.deleteUser({
       password: String(data.get("passord") ?? ""),
     });
-    setVenter(false);
-    if (error) return setFeil(somFeil(error));
+    if (error) {
+      setVenter(false);
+      return setFeil(somFeil(error));
+    }
+    // Knappen står låst til siden byttes, også mens temaet slettes.
     await glemTema();
     router.push("/logg-inn");
     router.refresh();

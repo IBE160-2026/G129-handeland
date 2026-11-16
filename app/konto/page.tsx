@@ -11,7 +11,7 @@
 
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { innloggetEpost, tilgang } from "../../data/konto";
+import { kontoEpost, tilgang } from "../../data/konto";
 import { hentMorsmaal } from "../../data/morsmaal";
 import { listTekster } from "../../data/tilgang";
 import { TEMA_KAPSEL, tolkTema, type Tema } from "../../data/tema";
@@ -28,7 +28,7 @@ const TEMAVALG: { verdi: Tema | ""; navn: string }[] = [
 export default async function Konto({ searchParams }: PageProps<"/konto">) {
   const t = await tilgang();
   const [epost, tekster, spraak, kapsler, sp] = await Promise.all([
-    innloggetEpost(),
+    kontoEpost(),
     listTekster(t),
     hentMorsmaal(t),
     cookies(),
