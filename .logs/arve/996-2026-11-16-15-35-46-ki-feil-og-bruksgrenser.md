@@ -71,3 +71,20 @@ Punkt 4: rette de utsatte småtingene fra gjennomgangene («jupp, kjør dem nå�
 ### Åpne punkter
 - Rull ut grenen `smaating` (krever ja).
 - Utsatt: en vurdering som pågår, vises som «feilet» ved ny innlasting. Det krever et tidsstempel og dermed en migrering.
+
+## 2026-11-16 kl. 22:51 — Arve
+
+### Oppgave
+Rulle ut småtingene («ja»).
+
+### Plan
+- Spole `main` fram til `smaating` og kjøre `vercel --prod`. Ingen migrering.
+
+### Resultat
+- `main` er 54bd5d0, rullet ut på https://lesevenn.vercel.app. `/` og `/logg-inn` gir 200, og `/api/helse` svarer ok.
+- Ikonene: `/icon1?…` og `/apple-icon?…` gir 200 med `image/png`, i lenkene siden peker på. Uten suffiks gir `/apple-icon` 404, og det er ventet.
+
+### Åpne punkter
+- Test på ekte telefon.
+- Vurdering som pågår, vises som «feilet» ved ny innlasting. Det krever migrering.
+- Telefontestpunktene (punkt 3 fra 16.11) er ikke bygget.
