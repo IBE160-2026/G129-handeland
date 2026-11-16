@@ -38,6 +38,11 @@ const { opprettTekst, lagreForkunnskapssvar } = await import("../data/tilgang");
 const { laasTekst } = await import("../tekst/las");
 const { settKlientForTest } = await import("../generatorer/kontrakt");
 const { KI_FEIL } = await import("./kifeil");
+const { GRENSE_FEIL } = await import("../data/grenser");
+const { hentQuiz } = await import("../data/quiz");
+const { hentLaast } = await import("../tekst/las");
+const { lagreBegrepssett } = await import("../data/begrepssett");
+const { velgMorsmaal } = await import("../data/morsmaal");
 
 const TEKST =
   "Mikrobølger\n\nMikrobølger får vannmolekyler til å riste.\n\nDerfor blir maten varm.\n\n" +
@@ -87,7 +92,9 @@ let foerModus: string | undefined;
 beforeAll(async () => {
   await migrate(db, { migrationsFolder: "data/migrasjoner" });
 });
-beforeEach(() => {
+beforeEach(async () => {
+  // PRD §6.4: kallene registreres, og summen skal ikke vokse mot taket over testene.
+  await db.delete(skjema.forbruk);
   foerModus = process.env.LESEVENN_TESTMODUS;
   process.env.LESEVENN_TESTMODUS = "av";
   vi.spyOn(console, "warn").mockImplementation(() => {});
@@ -184,5 +191,264 @@ describe("revurderRunde (FR-22)", () => {
     const s = await f.hentFagsamtale(innlogget, id);
     expect(s.runder[0]).toMatchObject({ svarvurdering: "dekkende", revurdert: false });
     expect(s.runder).toHaveLength(2);
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * PRD §6.4 — bruksgrensene
+ * ------------------------------------------------------------------ */
+
+/** Åtte gyldige spørsmål til TEKST: sju flervalg og ett kortsvar, på brødtekstavsnittene 2, 3 og 5. */
+const QUIZ = {
+  sporsmal: [
+    ...[2, 3, 5, 2, 3, 5, 2].map((kildeavsnitt, i) => ({
+      type: "flervalg",
+      sporsmal: `Spørsmål ${i + 1} om mikrobølger?`,
+      alternativer: [`Riktig ${i}`, `Feil a${i}`, `Feil b${i}`, `Feil c${i}`],
+      riktigSvar: `Riktig ${i}`,
+      kildeavsnitt,
+    })),
+    { type: "kortsvar", sporsmal: "Hvorfor blir maten varm?", alternativer: [], riktigSvar: "Vannet rister.", kildeavsnitt: 3 },
+  ],
+};
+
+/** Radene for API-kall (ikke hendelsene for ny Tekst og ny Fagsamtale). */
+async function apiKall() {
+  return (await db.select().from(skjema.forbruk)).filter((r) => r.hendelse === null);
+}
+
+/** Dagens forbruk over taket på 30 kr. */
+async function overTaket() {
+  vi.spyOn(console, "warn").mockImplementation(() => {});
+  await db.insert(skjema.forbruk).values({ oppgave: "test", modell: "x", tokensInn: 0, tokensUt: 0, mikrodollar: 3_000_000 });
+}
+
+async function nyKonto() {
+  const [u] = await db.insert(skjema.user).values({ name: "", email: `g${++n}@test.no` }).returning({ id: skjema.user.id });
+  innlogget.kontoId = u.id;
+}
+
+async function nyLaastTekst() {
+  await nyKonto();
+  const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
+  await lagreForkunnskapssvar(innlogget, ny.id, "Noe om ovner.");
+  await laasTekst(innlogget, ny.id, TEKST);
+  return ny.id;
+}
+
+describe("bruksgrensene (PRD §6.4)", () => {
+  test("en fullført quizlaging gir én rad i forbruk per API-kall, med tokens og kostnad", async () => {
+    const tekstId = await nyLaastTekst();
+    const bruk = { input_tokens: 2000, output_tokens: 1500 };
+    // Første svar ugyldig, så ett nytt forsøk: to kall, to rader.
+    settKlientForTest({
+      messages: {
+        parse: vi
+          .fn()
+          .mockResolvedValueOnce({ ...ugyldig, usage: bruk })
+          .mockResolvedValueOnce({ parsed_output: QUIZ, stop_reason: "end_turn", usage: bruk }),
+      },
+    });
+    expect(await h.lagQuiz(tekstId, {})).toEqual({});
+    expect(await hentQuiz(innlogget, tekstId)).not.toBeNull();
+    const rader = await apiKall();
+    expect(rader).toHaveLength(2);
+    for (const r of rader) {
+      expect(r).toMatchObject({
+        kontoId: innlogget.kontoId,
+        oppgave: "quiz",
+        modell: "claude-haiku-5-5",
+        tokensInn: 2000,
+        tokensUt: 1500,
+      });
+      // Haiku: 2000 × 0,10 + 1500 × 0,50 = 950 mikrodollar.
+      expect(r.mikrodollar).toBe(950);
+    }
+  });
+
+  test("taket er nådd: modellen kalles ikke, og eleven får takmeldingen uten «Prøv igjen»", async () => {
+    const tekstId = await nyLaastTekst();
+    await db.insert(skjema.forbruk).values({ oppgave: "quiz", modell: "x", tokensInn: 0, tokensUt: 0, mikrodollar: 2_857_143 });
+    const parse = vi.fn();
+    settKlientForTest({ messages: { parse } });
+    expect(await h.lagQuiz(tekstId, {})).toEqual({ feil: GRENSE_FEIL.taket });
+    expect(parse).not.toHaveBeenCalled();
+    expect(await hentQuiz(innlogget, tekstId)).toBeNull();
+  });
+
+  test("taket midt i en samtale: svaret lagres, ingen modellkall, og siden får takkoden", async () => {
+    const { id, tekstId } = await nySamtale();
+    await db.insert(skjema.forbruk).values({ oppgave: "quiz", modell: "x", tokensInn: 0, tokensUt: 0, mikrodollar: 5_000_000 });
+    const parse = vi.fn();
+    settKlientForTest({ messages: { parse } });
+    expect(await send(id, 1, SVAR)).toBe(`/tekst/${tekstId}/samtale/${id}?feil=vurdering&kode=dagstak`);
+    expect(parse).not.toHaveBeenCalled();
+    expect((await f.hentFagsamtale(innlogget, id)).runder[0].elevsvar).toBe(SVAR);
+  });
+
+  test("sjette tekst i dag: handlingen avviser, også ved en direkte POST", async () => {
+    const [u] = await db.insert(skjema.user).values({ name: "", email: `g${++n}@test.no` }).returning({ id: skjema.user.id });
+    innlogget.kontoId = u.id;
+    for (let i = 0; i < 5; i++) {
+      await opprettTekst(innlogget, { tittel: "T", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
+    }
+    const data = new FormData();
+    data.set("tittel", "Den sjette");
+    data.set("tekst", `${TEKST}\n\n${"Mer tekst om mikrobølger og varme. ".repeat(20)}`);
+    expect(await h.limInnTekst({}, data)).toEqual({ feil: GRENSE_FEIL.tekster });
+  });
+
+  test("sjette fagsamtale i dag: avvist før første spørsmål lages", async () => {
+    const tekstId = await nyLaastTekst();
+    const laast = await hentLaast(innlogget, tekstId);
+    for (let i = 0; i < 5; i++) {
+      await f.opprettFagsamtale(laast, { sporsmal: "Hvorfor?", kildeavsnittNummer: 3, promptversjon: "v", modell: "m" });
+    }
+    const parse = vi.fn();
+    settKlientForTest({ messages: { parse } });
+    expect(await h.startFagsamtale(tekstId, {})).toEqual({ feil: GRENSE_FEIL.samtaler });
+    expect(parse).not.toHaveBeenCalled();
+  });
+});
+
+/** En samtale med første runde besvart og vurdert, uten neste spørsmål. */
+async function vurdertSamtale() {
+  const s = await nySamtale();
+  await f.lagreElevsvar(innlogget, s.id, 1, SVAR);
+  await f.lagreVurdering(innlogget, s.id, 1, { tilstand: "dekkende", begrunnelse: "Godt forklart." }, "mangler");
+  return s;
+}
+
+const UTEN_OVERSKRIFTER =
+  "Mikrobølger får vannmolekylene i maten til å riste, og da blir maten varm.\n\n" +
+  "En tallerken uten vann blir ikke varm, fordi den ikke har noe som kan riste.\n\n" +
+  "Derfor kan du ta tallerkenen ut med bare hender etter at maten er varmet.";
+
+/**
+ * Handlingene som kaller modellen, utenom quizen og samtalesvaret over.
+ * `forbered` lager det handlingen trenger og gir tilbake kallet.
+ */
+const HANDLINGER: { navn: string; oppgave: string; forbered: () => Promise<() => Promise<{ feil?: unknown }>> }[] = [
+  {
+    navn: "genererPaaNytt",
+    oppgave: "faguttrykk",
+    forbered: async () => {
+      const id = await nyLaastTekst();
+      return () => h.genererPaaNytt(id);
+    },
+  },
+  {
+    navn: "lagOppsummering",
+    oppgave: "oppsummering",
+    forbered: async () => {
+      const { tekstId } = await vurdertSamtale();
+      return () => h.lagOppsummering(tekstId, {});
+    },
+  },
+  {
+    navn: "lagOversettelse",
+    oppgave: "oversettelse",
+    forbered: async () => {
+      const id = await nyLaastTekst();
+      await velgMorsmaal(innlogget, "uk");
+      return () => h.lagOversettelse(id, "overskrifter");
+    },
+  },
+  {
+    navn: "lagVers",
+    oppgave: "minnevers",
+    forbered: async () => {
+      const id = await nyLaastTekst();
+      const begreper = ["mikrobølger", "vannmolekyler", "tallerken"].map((uttrykk, i) => ({
+        uttrykk,
+        forklaring: `Forklaring av ${uttrykk}.`,
+        viktighetsrangering: i + 1,
+        kildeavsnittNummer: i === 2 ? 5 : 2,
+        forekomster: [],
+      }));
+      await lagreBegrepssett(await hentLaast(innlogget, id), {
+        begreper,
+        promptversjon: "v",
+        modell: "m",
+      } as unknown as Parameters<typeof lagreBegrepssett>[1]);
+      return () => h.lagVers(id, "vers", {});
+    },
+  },
+  {
+    navn: "lagEtiketterHandling",
+    oppgave: "etiketter",
+    forbered: async () => {
+      await nyKonto();
+      const ny = await opprettTekst(innlogget, {
+        tittel: "Mikrobølger",
+        raatekst: UTEN_OVERSKRIFTER,
+        redigertTekst: UTEN_OVERSKRIFTER,
+        vei: "liming",
+      });
+      return () => h.lagEtiketterHandling(ny.id);
+    },
+  },
+  {
+    navn: "revurderRunde",
+    oppgave: "svarvurdering",
+    forbered: async () => {
+      const { id } = await vurdertSamtale();
+      return () => h.revurderRunde(id, 1);
+    },
+  },
+  {
+    navn: "lagNesteSporsmal",
+    oppgave: "svarvurdering",
+    forbered: async () => {
+      const { id } = await vurdertSamtale();
+      return () => h.lagNesteSporsmal(id, 1);
+    },
+  },
+];
+
+describe("bruksgrensene, for hver handling som kaller modellen (PRD §6.4)", () => {
+  for (const { navn, oppgave, forbered } of HANDLINGER) {
+    test(`${navn}: kallene registreres med oppgave «${oppgave}» og kontoen`, async () => {
+      const kall = await forbered();
+      const parse = vi.fn().mockResolvedValue({ ...ugyldig, usage: { input_tokens: 500, output_tokens: 100 } });
+      settKlientForTest({ messages: { parse } });
+      await kall();
+      expect(parse).toHaveBeenCalled();
+      const rader = await apiKall();
+      expect(rader).toHaveLength(parse.mock.calls.length);
+      for (const r of rader) expect(r).toMatchObject({ oppgave, kontoId: innlogget.kontoId, tokensInn: 500, tokensUt: 100 });
+    });
+
+    test(`${navn}: over taket kalles ikke modellen, og svaret er takmeldingen`, async () => {
+      const kall = await forbered();
+      await overTaket();
+      const parse = vi.fn();
+      settKlientForTest({ messages: { parse } });
+      expect(await kall()).toEqual({ feil: GRENSE_FEIL.taket });
+      expect(parse).not.toHaveBeenCalled();
+    });
+  }
+
+  test("vakten: taket nås midt i en handling, og neste kall gjøres ikke", async () => {
+    const { id } = await vurdertSamtale();
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    // Første kall koster over taket (Sonnet, 300 000 tokens ut = 31,5 kr) og er ugyldig.
+    const parse = vi.fn().mockResolvedValue({ ...ugyldig, usage: { input_tokens: 0, output_tokens: 300_000 } });
+    settKlientForTest({ messages: { parse } });
+    expect(await h.revurderRunde(id, 1)).toEqual({ feil: GRENSE_FEIL.taket });
+    expect(parse).toHaveBeenCalledOnce();
+    expect(await apiKall()).toHaveLength(1);
+  });
+
+  test("sletting nullstiller ikke tekstgrensen", async () => {
+    await nyKonto();
+    const ider: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      ider.push((await opprettTekst(innlogget, { tittel: "T", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" })).id);
+    }
+    expect(await h.slett(ider[0])).toEqual({ slettet: true });
+    const data = new FormData();
+    data.set("tekst", `${TEKST}\n\n${"Mer tekst om mikrobølger og varme. ".repeat(20)}`);
+    expect(await h.limInnTekst({}, data)).toEqual({ feil: GRENSE_FEIL.tekster });
   });
 });

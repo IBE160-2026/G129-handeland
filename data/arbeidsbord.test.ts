@@ -394,3 +394,24 @@ describe("hentArbeidsbord", () => {
     expect((await a.hentArbeidsbord(t))[0].antallFagord).toBe(0);
   });
 });
+
+describe("dagens samtalegrense (PRD §6.4)", () => {
+  const laastMedQuiz = bunke({ tilstand: "laast", sisteQuiz: { antallRiktige: 6, antallTotalt: 8 }, antallFagord: 4, samtale: null });
+
+  test("«Neste: Fagsamtale» hoppes over når grensen er nådd", () => {
+    expect(a.nesteSteg(laastMedQuiz).slag).toBe("fagsamtale");
+    expect(a.nesteSteg(laastMedQuiz, { samtalegrenseNaadd: true }).slag).toBe("oevekort");
+  });
+
+  test("en påbegynt samtale er fortsatt neste steg over grensen", () => {
+    const b = bunke({ tilstand: "laast", samtale: { id: "s", avsluttet: false, besvarteRunder: 2 } });
+    expect(a.nesteSteg(b, { samtalegrenseNaadd: true }).slag).toBe("samtale");
+  });
+
+  test("Fagsamtale-kortet sier fra, og er fortsatt en lenke (ingen deaktivert handling)", () => {
+    const kort = a.kortstatus(laastMedQuiz, { samtalegrenseNaadd: true }).find((k) => k.navn === "Fagsamtale")!;
+    expect(kort.status).toBe("Dagens 5 samtaler er brukt. Du kan starte en ny i morgen.");
+    expect(kort.href).not.toBeNull();
+    expect(a.kortstatus(laastMedQuiz).find((k) => k.navn === "Fagsamtale")!.status).toBe("Ikke startet");
+  });
+});

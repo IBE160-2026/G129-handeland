@@ -21,6 +21,17 @@ import { MAKS_RUNDER } from "../generatorer/fagsamtale";
 import { db } from "./db";
 import { begrep, begrepssett, fagsamtale, minnevers, quiz, quizforsoek, samtalerunde, tekst } from "./skjema";
 import type { Tilgang } from "./tilgang";
+import { GRENSE_FEIL } from "./grenser";
+
+/**
+ * Det reglene trenger å vite om kontoen, ikke om teksten: om grensen på
+ * nye Fagsamtaler i dag er nådd (PRD §6.4, `samtalegrenseNaadd` i
+ * data/forbruk.ts). Utelatt betyr ikke nådd.
+ */
+export type Kontostatus = { samtalegrenseNaadd?: boolean };
+
+/** EXPERIENCE.md, status for Fagsamtale-kortet når grensen er nådd. */
+export const SAMTALEGRENSE = `${GRENSE_FEIL.samtaler.melding} ${GRENSE_FEIL.samtaler.handling}`;
 
 export type Tilstand = "innlest" | "aktivert" | "laast";
 
@@ -107,9 +118,10 @@ function gjeldendeRunde(besvarte: number): number {
  *
  * Fagsamtalen kan tas før quizen (FR-18, UJ-3); da finnes det en samtale, og
  * regelen «Neste: Fagsamtale» hoppes over. Minnevers er aldri neste steg.
- * Bruksgrensene finnes ikke ennå, så dagens samtalegrense regnes som ikke nådd.
+ * «Neste: Fagsamtale» gjelder bare når dagens samtalegrense ikke er nådd
+ * (PRD §6.4). Påbegynte samtaler er neste steg som før, også over grensen.
  */
-export function nesteSteg(b: Bunke): Steg {
+export function nesteSteg(b: Bunke, konto: Kontostatus = {}): Steg {
   const rot = `/tekst/${b.id}`;
   if (b.tilstand === "innlest") return { tekst: "Fortsett: Før du leser", href: `${rot}/aktivering`, slag: "aktivering" };
   if (b.tilstand === "aktivert") return { tekst: "Fortsett: Se over teksten", href: `${rot}/gjennomsyn`, slag: "gjennomsyn" };
@@ -126,7 +138,7 @@ export function nesteSteg(b: Bunke): Steg {
   }
   if (!b.sisteQuiz) return { tekst: "Neste: Ta quizen", href: `${rot}/quiz`, slag: "quiz" };
   // Samtalen startes med et skjema på oppgavesiden (den lager første spørsmål).
-  if (!b.samtale) return { tekst: "Neste: Fagsamtale", href: `${rot}/oppgaver`, slag: "fagsamtale" };
+  if (!b.samtale && !konto.samtalegrenseNaadd) return { tekst: "Neste: Fagsamtale", href: `${rot}/oppgaver`, slag: "fagsamtale" };
   if (b.antallFagord !== null && b.antallFagord > 0) return { tekst: "Øv videre med kortene", href: `${rot}/oevekort`, slag: "oevekort" };
   return { tekst: "Les teksten igjen", href: `${rot}/lesing`, slag: "lesing" };
 }
@@ -161,8 +173,12 @@ export function tilstandsord(t: Tilstand): string {
  * De fem kortene i viften, alltid i denne rekkefølgen: Teksten, Quiz,
  * Øvekort, Fagsamtale, Minnevers. Før teksten er låst, er de fire siste
  * låst, slik sidene krever i dag.
+ *
+ * Fagsamtale-kortet uten samtale sier fra når dagens grense er nådd (PRD
+ * §6.4). Kortet er fortsatt en lenke: ingen deaktiverte handlinger, og
+ * oppgavesiden forklarer grensen hvis eleven prøver å starte.
  */
-export function kortstatus(b: Bunke): Kort[] {
+export function kortstatus(b: Bunke, konto: Kontostatus = {}): Kort[] {
   const rot = `/tekst/${b.id}`;
   const laast = b.tilstand === "laast";
 
@@ -193,7 +209,7 @@ export function kortstatus(b: Bunke): Kort[] {
 
   const s = b.samtale;
   const samtalekort: Kort = !s
-    ? { navn: "Fagsamtale", href: `${rot}/oppgaver`, status: "Ikke startet", paabegynt: false }
+    ? { navn: "Fagsamtale", href: `${rot}/oppgaver`, status: konto.samtalegrenseNaadd ? SAMTALEGRENSE : "Ikke startet", paabegynt: false }
     : s.avsluttet
       ? { navn: "Fagsamtale", href: `${rot}/samtale/${s.id}`, status: "Fullført", paabegynt: true }
       : {

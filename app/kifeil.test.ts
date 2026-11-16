@@ -62,3 +62,22 @@ describe("feiltekstForKode — når bare koden kom fram i adressen", () => {
 test("nettfeilen sier ikke noe om hva som er lagret, fordi det vet ikke nettleseren", () => {
   expect(`${NETTFEIL.melding} ${NETTFEIL.handling}`).toBe("Svaret kom ikke fram. Sjekk nettet og prøv igjen.");
 });
+
+describe("bruksgrensene (PRD §6.4)", () => {
+  test("GrenseNaadd gir meldingen fra EXPERIENCE.md, med grensen merket", async () => {
+    const { GrenseNaadd } = await import("../data/grenser");
+    const { TAK_KODE } = await import("./kifeil");
+    const { GRENSE_FEIL } = await import("../data/grenser");
+    expect(somFeil(new GrenseNaadd("tekster")).feil).toEqual(GRENSE_FEIL.tekster);
+    expect(`${GRENSE_FEIL.tekster.melding} ${GRENSE_FEIL.tekster.handling}`).toBe(
+      "Du har lagt inn 5 tekster i dag. Du kan legge inn flere i morgen.",
+    );
+    expect(`${GRENSE_FEIL.taket.melding} ${GRENSE_FEIL.taket.handling}`).toBe(
+      "LeseBuddy har nådd dagens grense for nye oppgaver. Alt du har laget, kan du fortsatt åpne. Prøv igjen i morgen.",
+    );
+    // kiFeil bytter ikke ut grensen med funksjonens KI-melding.
+    expect(kiFeil(new GrenseNaadd("taket"), KI_FEIL.quiz).feil).toEqual(GRENSE_FEIL.taket);
+    expect(feilkodeFor(new GrenseNaadd("taket"))).toBe(TAK_KODE);
+    expect(feiltekstForKode(KI_FEIL.fagord, TAK_KODE)).toEqual(GRENSE_FEIL.taket);
+  });
+});

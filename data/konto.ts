@@ -64,6 +64,15 @@ export const valgfriTilgang = cache(async (): Promise<Tilgang | null> => {
   }
 });
 
+/**
+ * Tilgangen bak en forespørsel til en rute (`app/api/…`), eller `null` uten
+ * innlogging. Ruter kan ikke omdirigere, så de svarer 401 selv.
+ */
+export async function tilgangForForesporsel(h: Headers): Promise<Tilgang | null> {
+  const oekt = await hentOekt(h);
+  return oekt ? { kontoId: oekt.user.id } : null;
+}
+
 /** For kontosiden: e-postadressen er det eneste kontoen har å vise. */
 export async function innloggetEpost(): Promise<string | null> {
   const oekt = await hentOekt(await headers());

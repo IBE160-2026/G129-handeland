@@ -13,6 +13,7 @@ import type { Maal, Tilstand } from "../generatorer/fagsamtale";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
 import type { LaastTekst } from "../tekst/las";
 import { db } from "./db";
+import { regnInnHendelse } from "./forbruk";
 import { avsnitt as avsnittTabell, fagsamtale, samtalerunde, tekst } from "./skjema";
 import { IkkeFunnet, type Tilgang } from "./tilgang";
 
@@ -72,13 +73,21 @@ async function avsnittId(tekstId: string, nummer: number): Promise<string> {
 
 /* ------------------------------------------------------------------ */
 
-/** FR-18: oppretter samtalen med første spørsmål. */
+/**
+ * FR-18: oppretter samtalen med første spørsmål.
+ *
+ * PRD §6.4: grensen på 5 nye Fagsamtaler per døgn sjekkes på nytt her, i
+ * transaksjonen, og hendelsen skrives der (`regnInnHendelse`). Handlingen
+ * sjekker også før første spørsmål lages, så grensen ikke koster et kall;
+ * sjekken her er den som holder når to starter samtidig.
+ */
 export async function opprettFagsamtale(
   laast: LaastTekst,
   start: { sporsmal: string; kildeavsnittNummer: number; promptversjon: string; modell: string },
 ): Promise<string> {
   const kilde = await avsnittId(laast.id, start.kildeavsnittNummer);
   return db.transaction(async (tx) => {
+    await regnInnHendelse(tx, laast.kontoId, "ny_fagsamtale");
     const [s] = await tx
       .insert(fagsamtale)
       .values({ tekstId: laast.id, promptversjon: start.promptversjon, modell: start.modell })

@@ -10,7 +10,7 @@
  */
 
 import { z } from "zod";
-import { kjoerGenerator } from "./kontrakt";
+import { kjoerGenerator, type Forbruksvakt } from "./kontrakt";
 
 export const BildeSkjema = z.object({
   lesbar: z.boolean().describe("false om bildet ikke viser lesbar tekst."),
@@ -32,15 +32,21 @@ export class IngenTekstIBilde extends Error {
 /** Under så mange tegn regnes et bilde som uten lesbar tekst (BF-1). */
 export const MIN_TEGN_PER_BILDE = 20;
 
-export async function lesTekstFraBilde(bilde: {
-  mediaType: "image/jpeg" | "image/png";
-  data: string;
-}): Promise<Bildetekst> {
+export async function lesTekstFraBilde(
+  bilde: {
+    mediaType: "image/jpeg" | "image/png";
+    data: string;
+  },
+  /** `paaForbruk` og `foerKall`: tokenbruken og vakten mot dagstaket, se `kjoerGenerator` (PRD §6.4). */
+  valg: Forbruksvakt = {},
+): Promise<Bildetekst> {
   const r = await kjoerGenerator({
     oppgave: "bildeuttrekk",
     skjema: BildeSkjema,
     brukermelding: "Skriv av teksten på denne siden.",
     bilde,
+    paaForbruk: valg.paaForbruk,
+    foerKall: valg.foerKall,
   });
   const tekst = r.data.tekst.trim();
   if (!r.data.lesbar || tekst.length < MIN_TEGN_PER_BILDE) {

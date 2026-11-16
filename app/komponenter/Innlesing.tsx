@@ -134,6 +134,8 @@ type Fane = "lim" | "pdf" | "bilde";
 
 export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling; limInnPdf: Handling; limInnBilde: Handling }) {
   const [fane, setFane] = useState<Fane>("lim");
+  /** Teksten liming starter med: den som ble lest fra bildene før dagstaket stoppet (BF-6). */
+  const [startTekst, setStartTekst] = useState("");
   return (
     <div>
       <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="flex flex-wrap gap-x-2 border-b border-slate-200 dark:border-slate-800">
@@ -160,20 +162,26 @@ export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling
       </div>
       <div className="mt-6">
         {fane === "lim" ? (
-          <LimInn handling={limInn} />
+          <LimInn handling={limInn} startTekst={startTekst} />
         ) : fane === "pdf" ? (
           <Pdf handling={limInnPdf} tilLiming={() => setFane("lim")} tilBilder={() => setFane("bilde")} />
         ) : (
-          <Bilder handling={limInnBilde} tilLiming={() => setFane("lim")} />
+          <Bilder
+            handling={limInnBilde}
+            tilLiming={(tekst) => {
+              setStartTekst(tekst);
+              setFane("lim");
+            }}
+          />
         )}
       </div>
     </div>
   );
 }
 
-function LimInn({ handling }: { handling: Handling }) {
+function LimInn({ handling, startTekst = "" }: { handling: Handling; startTekst?: string }) {
   const [svar, send] = useActionState(handling, TOMT);
-  const [tekst, setTekst] = useState("");
+  const [tekst, setTekst] = useState(startTekst);
   const [kuttet, setKuttet] = useState<{ slutt: string; rest: string } | null>(null);
   const forLang = tekst.length > GRENSER.maksTegn;
 
@@ -330,7 +338,7 @@ function Pdf({ handling, tilLiming, tilBilder }: { handling: Handling; tilLiming
 
 type Valgt = { fil: File; url: string };
 
-function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: () => void }) {
+function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst: string) => void }) {
   const [svar, send] = useActionState(handling, TOMT);
   const filfelt = useRef<HTMLInputElement>(null);
   const [bilder, setBilder] = useState<Valgt[]>([]);
@@ -339,6 +347,8 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: () => 
   const [tekst, setTekst] = useState("");
   const [kuttet, setKuttet] = useState<{ slutt: string; rest: string } | null>(null);
   const [feil, setFeil] = useState<{ kode: BildeFeilkode; detaljer: BildeFeildetaljer } | null>(null);
+  /** Teksten fra bildene som ble lest før en feil. */
+  const [delvis, setDelvis] = useState("");
 
   // Forhåndsvisningene er lånt minne; gi det tilbake når komponenten går.
   const bilderRef = useRef(bilder);
@@ -390,13 +400,16 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: () => 
       setTekst(deler.join("\n\n"));
       setStatus("ferdig");
     } catch (e) {
+      // PRD §6.4: stopper dagstaket serien midt i (BF-6), er teksten fra
+      // bildene før beholdt, og «Lim inn teksten» tar den med.
+      setDelvis(deler.join("\n\n"));
       setFeil(e instanceof BildeFeilKlasse ? { kode: e.kode, detaljer: e.detaljer } : { kode: "BF-5", detaljer: {} });
       setStatus("feil");
     }
   }
 
   function valg(v: BildeValg) {
-    if (v === "lim_inn") tilLiming();
+    if (v === "lim_inn") tilLiming(feil?.kode === "BF-6" ? delvis : "");
     else if (v === "prov_igjen") les();
     else if (v === "ta_nytt") {
       if (feil?.detaljer.bilde) fjern(feil.detaljer.bilde - 1);

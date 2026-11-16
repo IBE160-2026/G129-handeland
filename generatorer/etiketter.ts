@@ -14,7 +14,7 @@
 
 import { z } from "zod";
 import { erOverskrift, type Avsnitt } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, kjoerGenerator, type Forbruksvakt } from "./kontrakt";
 
 export const EtikettSkjema = z.object({
   etiketter: z.array(
@@ -61,7 +61,11 @@ export function kontrollerEtiketter(
   return { etiketter, forkastet };
 }
 
-export async function lagEtiketter(avsnitt: Avsnitt[]): Promise<{
+export async function lagEtiketter(
+  avsnitt: Avsnitt[],
+  /** `paaForbruk` og `foerKall`: tokenbruken og vakten mot dagstaket, se `kjoerGenerator` (PRD §6.4). */
+  valg: Forbruksvakt = {},
+): Promise<{
   etiketter: Etikett[];
   forkastet: { etikett: string; grunn: string }[];
   promptversjon: string;
@@ -71,6 +75,8 @@ export async function lagEtiketter(avsnitt: Avsnitt[]): Promise<{
     oppgave: "etiketter",
     skjema: EtikettSkjema,
     brukermelding: formaterAvsnitt(avsnitt),
+    paaForbruk: valg.paaForbruk,
+    foerKall: valg.foerKall,
   });
   const k = kontrollerEtiketter(r.data.etiketter, avsnitt);
   const krav = Math.min(MIN_ETIKETTER, avsnitt.filter((a) => !a.erOverskrift).length);

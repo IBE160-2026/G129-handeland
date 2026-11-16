@@ -24,6 +24,7 @@ import {
   GeneratorFeil,
   formaterAvsnitt,
   kjoerGenerator,
+  type Forbruksvakt,
 } from "./kontrakt";
 
 export const QuizSkjema = z.object({
@@ -235,11 +236,17 @@ function stokk<T>(liste: T[]): T[] {
  * Lager en Quiz fra Teksten. `avsnitt` skal komme fra `delIAvsnitt` (AD-12),
  * av samme grunn som for faguttrykkene.
  */
-export async function genererQuiz(avsnitt: Avsnitt[]): Promise<Quizresultat> {
+export async function genererQuiz(
+  avsnitt: Avsnitt[],
+  /** `paaForbruk` og `foerKall`: tokenbruken og vakten mot dagstaket, se `kjoerGenerator` (PRD §6.4). */
+  valg: Forbruksvakt = {},
+): Promise<Quizresultat> {
   const svar = await kjoerGenerator({
     oppgave: "quiz",
     skjema: QuizSkjema,
     brukermelding: formaterAvsnitt(avsnitt),
+    paaForbruk: valg.paaForbruk,
+    foerKall: valg.foerKall,
   });
 
   const alleNumre = new Set(avsnitt.map((a) => a.nummer));

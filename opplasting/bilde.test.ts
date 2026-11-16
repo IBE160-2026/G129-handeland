@@ -75,6 +75,15 @@ describe("feiltilstandene vises med melding og handling", () => {
     visesMed("BF-5", ["prov_igjen", "lim_inn"]);
     expect(bildeFeilmelding("BF-5").handling).toMatch(/beholdt/);
   });
+  test("BF-6: dagstaket (PRD §6.4) — lim inn, med takmeldingen", () => {
+    visesMed("BF-6", ["lim_inn"]);
+    expect(bildeFeilmelding("BF-6").melding).toBe("LeseBuddy har nådd dagens grense for nye oppgaver.");
+  });
+  test("BF-7: 5 tekster i dag (PRD §6.4) — meldingen, uten knapper som ikke kan virke", () => {
+    visesMed("BF-7", []);
+    expect(bildeFeilmelding("BF-7").valg).toEqual([]);
+    expect(bildeFeilmelding("BF-7").melding).toBe("Du har lagt inn 5 tekster i dag.");
+  });
 });
 
 /* ------------------------------------------------------------------ */
@@ -96,6 +105,17 @@ describe("sendingen — ett automatisk nytt forsøk (BF-5)", () => {
     expect(e.detaljer.bilde).toBe(3);
     expect(kall).toBe(1);
   });
+
+  for (const kode of ["BF-6", "BF-7"]) {
+    test(`${kode} (429, PRD §6.4) prøves ikke på nytt`, async () => {
+      let kall = 0;
+      const hent = (async () => (kall++, new Response(JSON.stringify({ kode }), { status: 429 }))) as unknown as typeof fetch;
+      const e = await lesBilde("abc", 2, hent).catch((x) => x);
+      expect(e).toBeInstanceOf(BildeFeil);
+      expect(e.kode).toBe(kode);
+      expect(kall).toBe(1);
+    });
+  }
 
   test("tjenerfeil to ganger gir BF-5 etter to forsøk", async () => {
     let kall = 0;

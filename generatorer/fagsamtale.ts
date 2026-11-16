@@ -30,7 +30,7 @@
 import { z } from "zod";
 import { brukerNoenAv, innfortAvEleven, innholdsord, jaccard } from "../tekst/innholdsord";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, kanProevesPaaNytt, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, kanProevesPaaNytt, kjoerGenerator, type Forbruksvakt } from "./kontrakt";
 import { testmodus } from "./lagretsvar";
 
 export const TILSTANDER = ["dekkende", "delvis", "misoppfatning", "uklart", "utenfor"] as const;
@@ -298,7 +298,11 @@ export type Startresultat = {
 };
 
 /** FR-18: det første spørsmålet. */
-export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
+export async function startSamtale(
+  avsnitt: Avsnitt[],
+  /** `paaForbruk` og `foerKall`: tokenbruken og vakten mot dagstaket, også i løkken under (PRD §6.4). */
+  valg: Forbruksvakt = {},
+): Promise<Startresultat> {
   const brukermelding = formaterAvsnitt(avsnitt);
   let siste: string[] = [];
   let beste: { r: { data: z.infer<typeof StartSkjema>; promptversjon: string; modell: string }; myke: number } | null = null;
@@ -308,7 +312,15 @@ export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
   for (let forsok = 0; forsok < 3; forsok++) {
     const r: Generert<z.infer<typeof StartSkjema>> | null | typeof HOPP_OVER = await nyttForsok(forsok, beste !== null, () =>
       // Egen løkke med nye forsøk, så ikke kontraktens i tillegg.
-      kjoerGenerator({ oppgave: "samtalestart", skjema: StartSkjema, brukermelding, kjoering: forsok, nyttForsoek: false }),
+      kjoerGenerator({
+        oppgave: "samtalestart",
+        skjema: StartSkjema,
+        brukermelding,
+        kjoering: forsok,
+        nyttForsoek: false,
+        paaForbruk: valg.paaForbruk,
+        foerKall: valg.foerKall,
+      }),
     );
     if (!r) break;
     if (r === HOPP_OVER) continue;
@@ -370,6 +382,9 @@ export async function vurderSvar(inn: {
    * av en tom begrunnelse ikke stopper hvert nytt forsøk.
    */
   beholdVurdering?: { tilstand: Tilstand; begrunnelse: string | null };
+  /** Tokenbruken per kall og vakten mot dagstaket, også i løkken under (PRD §6.4). */
+  paaForbruk?: Forbruksvakt["paaForbruk"];
+  foerKall?: Forbruksvakt["foerKall"];
 }): Promise<Vurdering> {
   const brukermelding = formaterVurdering(inn.avsnitt, inn.tidligere, inn.gjeldende, inn.elevsvar, {
     sisteRunde: inn.sisteRunde,
@@ -392,7 +407,15 @@ export async function vurderSvar(inn: {
   for (let forsok = 0; forsok < 2; forsok++) {
     const r: Generert<Vurderingsutkast> | null | typeof HOPP_OVER = await nyttForsok(forsok, beste !== null || utenOppfolging !== null, () =>
       // Egen løkke med nye forsøk, så ikke kontraktens i tillegg.
-      kjoerGenerator({ oppgave: "svarvurdering", skjema: VurderingSkjema, brukermelding, kjoering: forsok, nyttForsoek: false }),
+      kjoerGenerator({
+        oppgave: "svarvurdering",
+        skjema: VurderingSkjema,
+        brukermelding,
+        kjoering: forsok,
+        nyttForsoek: false,
+        paaForbruk: inn.paaForbruk,
+        foerKall: inn.foerKall,
+      }),
     );
     if (!r) break;
     if (r === HOPP_OVER) continue;

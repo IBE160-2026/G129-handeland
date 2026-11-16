@@ -11,6 +11,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { hentFagsamtale, oppsummer, type Runde } from "../../../../../data/fagsamtale";
+import { kodeSomGjelder } from "../../../../../data/forbruk";
 import { tilgang } from "../../../../../data/konto";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../../data/tilgang";
 import { MAKS_RUNDER, type Tilstand } from "../../../../../generatorer/fagsamtale";
@@ -41,7 +42,11 @@ export default async function Samtaleside({ params, searchParams }: PageProps<"/
   // da får «Prøv igjen» fokus, og koden gir rådet som passer feilen.
   const sp = await searchParams;
   const nettoppFeilet = typeof sp.feil === "string";
-  const vurderingstekst = feiltekstForKode(KI_FEIL.vurdering, typeof sp.kode === "string" ? sp.kode : undefined);
+  // PRD §6.4: takkoden gjelder bare mens taket er nådd (`kodeSomGjelder`).
+  const vurderingstekst = feiltekstForKode(
+    KI_FEIL.vurdering,
+    await kodeSomGjelder(typeof sp.kode === "string" ? sp.kode : undefined),
+  );
 
   let tekst, samtale, avsnitt;
   try {

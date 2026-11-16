@@ -351,6 +351,80 @@ describe("§5 — ett nytt forsøk når kallet feiler", () => {
     expect(parse).toHaveBeenCalledTimes(1);
   });
 
+  test("PRD §6.4: tokenbruken står på resultatet og meldes til paaForbruk, én gang per kall", async () => {
+    const medBruk = { ...gyldig, usage: { input_tokens: 1200, cache_read_input_tokens: 300, output_tokens: 400 } };
+    falskKlient(medBruk);
+    const meldt: unknown[] = [];
+    const r = await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", paaForbruk: (p) => meldt.push(p) });
+    const modell = (await hentPrompt("quiz")).modell;
+    // Bufrede tokens telles med inn.
+    expect(r.forbruk).toEqual([{ oppgave: "quiz", modell, inn: 1500, ut: 400, bufferSkriving: 0 }]);
+    expect(meldt).toEqual(r.forbruk);
+  });
+
+  test("PRD §6.4: skriving til hurtigbufferen skilles ut, så den kan prises høyere", async () => {
+    falskKlient({ ...gyldig, usage: { input_tokens: 100, cache_creation_input_tokens: 900, output_tokens: 10 } });
+    const r = await kjoer();
+    expect(r.forbruk[0]).toMatchObject({ inn: 1000, bufferSkriving: 900 });
+  });
+
+  test("PRD §6.4: foerKall kjøres før hvert kall, også det nye forsøket", async () => {
+    falskKlient(ugyldig, gyldig);
+    const foerKall = vi.fn(async () => {});
+    await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", foerKall });
+    expect(foerKall).toHaveBeenCalledTimes(2);
+  });
+
+  test("PRD §6.4: kaster foerKall, kalles ikke modellen, og feilen går uendret videre", async () => {
+    const parse = falskKlient(ugyldig, gyldig);
+    const stopp = new Error("taket");
+    let n = 0;
+    const foerKall = async () => {
+      if (++n === 2) throw stopp;
+    };
+    const e = await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", foerKall }).catch((x) => x);
+    expect(e).toBe(stopp);
+    expect(parse).toHaveBeenCalledTimes(1);
+  });
+
+  test("PRD §6.4: testmodus les kjører ikke foerKall", async () => {
+    process.env.LESEVENN_TESTMODUS = "les";
+    const foerKall = vi.fn(async () => {});
+    await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", foerKall }).catch(() => {});
+    expect(foerKall).not.toHaveBeenCalled();
+  });
+
+  test("PRD §6.4: to ugyldige svar — begge kallene meldes, og feilen bærer dem", async () => {
+    falskKlient(ugyldig, ugyldig);
+    const meldt: { ut: number }[] = [];
+    const e = await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", paaForbruk: (p) => meldt.push(p) }).catch((x) => x);
+    expect(e).toBeInstanceOf(GeneratorFeil);
+    expect(meldt.map((p) => p.ut)).toEqual([16000, 16000]);
+    expect(e.forbruk).toHaveLength(2);
+  });
+
+  test("PRD §6.4: et tidsavbrudd anslås høyt (hele tokentaket ut), et 401 meldes med null", async () => {
+    falskKlient(tidsavbrudd, gyldig);
+    const meldt: { inn: number; ut: number }[] = [];
+    await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", paaForbruk: (p) => meldt.push(p) });
+    expect(meldt).toHaveLength(2);
+    expect(meldt[0].ut).toBe(16000);
+    expect(meldt[0].inn).toBeGreaterThan(0);
+
+    falskKlient(avslaatt);
+    const meldt2: { inn: number; ut: number }[] = [];
+    await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", paaForbruk: (p) => meldt2.push(p) }).catch(() => {});
+    expect(meldt2).toEqual([expect.objectContaining({ inn: 0, ut: 0 })]);
+  });
+
+  test("PRD §6.4: testmodus les melder ingenting", async () => {
+    process.env.LESEVENN_TESTMODUS = "les";
+    falskKlient(gyldig);
+    const meldt: unknown[] = [];
+    await kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "x", paaForbruk: (p) => meldt.push(p) }).catch(() => {});
+    expect(meldt).toEqual([]);
+  });
+
   test("kanProevesPaaNytt følger matrisen, for hver kode som finnes", () => {
     const proeves: Feilkode[] = ["ugyldig_utdata", "tidsavbrudd", "modellfeil"];
     for (const k of FEILKODER) expect(kanProevesPaaNytt(k), k).toBe(proeves.includes(k));

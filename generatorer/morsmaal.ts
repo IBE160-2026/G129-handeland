@@ -20,7 +20,7 @@ import { z } from "zod";
 import type { Spraak } from "../morsmaal/spraak";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
 import { antallOrd } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, kjoerGenerator, type FoerKall, type PaaForbruk } from "./kontrakt";
 import { erVerbatim } from "./validering";
 
 /* ------------------------------------------------------------------ *
@@ -61,11 +61,17 @@ export async function oversett({
   elementer,
   fagord,
   overstyrVersjon,
+  paaForbruk,
+  foerKall,
 }: {
   spraak: Spraak;
   elementer: Element[];
   fagord: string[];
   overstyrVersjon?: string;
+  /** Tokenbruken per kall (PRD §6.4). */
+  paaForbruk?: PaaForbruk;
+  /** Vakten mot dagstaket før hvert kall (PRD §6.4). */
+  foerKall?: FoerKall;
 }): Promise<Oversettelsesresultat> {
   if (elementer.length === 0) return { oversatt: [], promptversjon: "", modell: "" };
 
@@ -80,6 +86,8 @@ export async function oversett({
     brukermelding: melding,
     overstyrVersjon,
     maksTokens: 16000,
+    paaForbruk,
+    foerKall,
   });
 
   const etterId = new Map(r.data.oversettelser.map((o) => [o.id, o.oversatt.trim()]));
@@ -156,15 +164,23 @@ export function kontrollerOppsummering(
 export async function oppsummer({
   avsnitt,
   overstyrVersjon,
+  paaForbruk,
+  foerKall,
 }: {
   avsnitt: Avsnitt[];
   overstyrVersjon?: string;
+  /** Tokenbruken per kall (PRD §6.4). */
+  paaForbruk?: PaaForbruk;
+  /** Vakten mot dagstaket før hvert kall (PRD §6.4). */
+  foerKall?: FoerKall;
 }): Promise<Oppsummeringsresultat> {
   const r = await kjoerGenerator({
     oppgave: "oppsummering",
     skjema: OppsummeringSkjema,
     brukermelding: formaterAvsnitt(avsnitt),
     overstyrVersjon,
+    paaForbruk,
+    foerKall,
   });
   const { setninger, forkastet } = kontrollerOppsummering(r.data.setninger, avsnitt);
   if (setninger.length === 0) {
@@ -254,10 +270,16 @@ export async function pekUt({
   avsnitt,
   fagord,
   overstyrVersjon,
+  paaForbruk,
+  foerKall,
 }: {
   avsnitt: Avsnitt[];
   fagord: string[];
   overstyrVersjon?: string;
+  /** Tokenbruken per kall (PRD §6.4). */
+  paaForbruk?: PaaForbruk;
+  /** Vakten mot dagstaket før hvert kall (PRD §6.4). */
+  foerKall?: FoerKall;
 }): Promise<Utpekingsresultat> {
   const melding = [
     `maksPerKategori: ${utpekingstak(avsnitt)}`,
@@ -270,6 +292,8 @@ export async function pekUt({
     skjema: UtpekingSkjema,
     brukermelding: melding,
     overstyrVersjon,
+    paaForbruk,
+    foerKall,
   });
   // Et tomt sett er et gyldig svar: en tekst kan mangle begge kategoriene.
   return { ...kontrollerUtpeking(r.data.uttrykk, avsnitt, fagord), promptversjon: r.promptversjon, modell: r.modell };

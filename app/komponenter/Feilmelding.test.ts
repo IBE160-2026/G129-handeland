@@ -40,3 +40,18 @@ describe("Feilmelding", () => {
     expect(inni).toContain(tekst.handling);
   });
 });
+
+describe("Feilmelding ved en bruksgrense (PRD §6.4)", () => {
+  test("med grense: meldingen står, men ingen «Prøv igjen», heller ikke en egen knapp", () => {
+    const html = renderToStaticMarkup(
+      createElement(
+        Feilmelding,
+        { ...tekst, grense: "taket", proevIgjen: () => {} },
+        createElement("button", { type: "button" }, "Prøv igjen"),
+      ),
+    );
+    expect(html).toContain('role="alert"');
+    expect(html).toContain(tekst.melding);
+    expect(html).not.toContain("<button");
+  });
+});

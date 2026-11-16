@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**487 prompter i 43 økter**, 2026-09-17 til 2026-11-16.
+**489 prompter i 43 økter**, 2026-09-17 til 2026-11-16.
 
 ---
 
@@ -3072,11 +3072,20 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > Ja til migrering
 
-<details><summary>Commits i økta (4)</summary>
+**13:59**
+
+> Gjenoppta
+
+**14:56**
+
+> gjenopta
+
+<details><summary>Commits i økta (5)</summary>
 
 - `f4cbc45` feat(design): bolk 6 – mobilflatene (striper, ark, trykkdemo) og animasjonsbanene
 - `21f42c2` Logg: mobilbolkene 4–6
 - `3db9022` design: Buddy i mørk modus får hvite glass og mørkelilla pupiller
 - `01f9de6` Logg: øynene i mørk modus og utrulling av mobilbolkene
+- `4366630` feat(§5, FR-7/13/19/20): ett nytt forsøk ved KI-feil og meldinger per funksjon
 
 </details>

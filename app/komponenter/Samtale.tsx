@@ -170,7 +170,7 @@ function ProevIgjen({
   const [antallFeil, setAntallFeil] = useState(0);
   return (
     <div className="ml-6">
-      <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} fokus={fokus || antallFeil > 0}>
+      <Feilmelding key={antallFeil} {...feil} fokus={fokus || antallFeil > 0}>
         <Tenker
           form="knapp"
           aktiv={venter || oppdaterer}

@@ -22,7 +22,7 @@ import {
   finnForekomster,
   type Forekomst,
 } from "../tekst/forekomster";
-import { formaterAvsnitt, hentPrompt, kjoerGenerator } from "./kontrakt";
+import { formaterAvsnitt, hentPrompt, kjoerGenerator, type Forbruksvakt } from "./kontrakt";
 import {
   filtrerUgyldige,
   kappEtterRangering,
@@ -214,7 +214,8 @@ function slaaSammenKjoeringer(
  */
 export async function hentFaguttrykk(
   avsnitt: Avsnitt[],
-  valg: { overstyrVersjon?: string } = {},
+  /** `paaForbruk` og `foerKall`: tokenbruken og vakten mot dagstaket, se `kjoerGenerator` (PRD §6.4). */
+  valg: { overstyrVersjon?: string } & Forbruksvakt = {},
 ): Promise<Faguttrykksresultat> {
   const brukermelding = formaterAvsnitt(avsnitt);
   const oppsett = await hentPrompt("faguttrykk", valg.overstyrVersjon);
@@ -227,6 +228,8 @@ export async function hentFaguttrykk(
       brukermelding,
       overstyrVersjon: valg.overstyrVersjon,
       kjoering,
+      paaForbruk: valg.paaForbruk,
+      foerKall: valg.foerKall,
     });
 
   const tilKandidater = (

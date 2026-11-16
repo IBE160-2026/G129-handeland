@@ -22,6 +22,7 @@
 
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { db } from "./db";
+import { regnInnHendelse } from "./forbruk";
 import { avsnitt, tekst } from "./skjema";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
 
@@ -118,17 +119,25 @@ export type NyTekst = {
  * Oppretter en Tekst i tilstanden `innlest` (AD-9). Avsnittslisten lages
  * ikke her — den lages av `tekst/las.ts` når eleven godkjenner fase 3b,
  * fordi AD-9 sier at avsnittslisten fryses ved låsing.
+ *
+ * PRD §6.4: har kontoen lagt inn 5 Tekster i dag, kastes `GrenseNaadd`. Ny
+ * tekst-siden viser meldingen før innlesingen; dette er vernet om siden blir
+ * gått forbi (AD-20). Grensen sjekkes og hendelsen skrives i samme
+ * transaksjon som Teksten (`regnInnHendelse`), så sletting gir ikke en ny
+ * plass, og to samtidige innlesinger ikke begge blir den femte.
  */
 export async function opprettTekst(
   t: Tilgang,
   ny: NyTekst,
 ): Promise<TekstRad> {
-  const [rad] = await db
-    .insert(tekst)
-    .values({ ...ny, kontoId: t.kontoId, tilstand: "innlest" })
-    .returning();
-
-  return rad;
+  return db.transaction(async (tx) => {
+    await regnInnHendelse(tx, t.kontoId, "ny_tekst");
+    const [rad] = await tx
+      .insert(tekst)
+      .values({ ...ny, kontoId: t.kontoId, tilstand: "innlest" })
+      .returning();
+    return rad;
+  });
 }
 
 /** FR-37: sletter Teksten og alt generert innhold knyttet til den. */

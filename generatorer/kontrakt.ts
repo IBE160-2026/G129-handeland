@@ -28,8 +28,18 @@ import { hentLagret, lagreSvar, testmodus } from "./lagretsvar";
  * Feilform (§5 — ingen feiltilstand er en blindvei). Står i `feil.ts`.
  * ------------------------------------------------------------------ */
 
-import { FASTE_TEKSTER, GeneratorFeil, kanProevesPaaNytt } from "./feil";
-export { FASTE_TEKSTER, FEILKODER, GeneratorFeil, kanProevesPaaNytt, type Feilkode } from "./feil";
+import { FASTE_TEKSTER, GeneratorFeil, kanProevesPaaNytt, type FoerKall, type Forbrukspost, type PaaForbruk } from "./feil";
+export {
+  FASTE_TEKSTER,
+  FEILKODER,
+  GeneratorFeil,
+  kanProevesPaaNytt,
+  type Feilkode,
+  type FoerKall,
+  type Forbrukspost,
+  type Forbruksvakt,
+  type PaaForbruk,
+} from "./feil";
 
 /* ------------------------------------------------------------------ *
  * AD-14 — manifestet bestemmer hva som er gjeldende
@@ -160,16 +170,19 @@ export async function hentPrompt(
 let klientbuffer: Anthropic | null = null;
 
 /**
- * Forsøkene ganges med hverandre: SDK-ens egne forsøk (nettverksfeil, 408,
- * 409, 429 og 5xx) ganger det ene nye forsøket i `kjoerGenerator`. Med
- * SDK-ens standard (2) ble det opptil seks kall per generatorkall, og flere
- * med generatorenes egne løkker. Derfor ett SDK-forsøk her.
+ * Ingen nye forsøk i SDK-en: `kjoerGenerator` eier alle forsøkene, så hvert
+ * HTTP-kall gir én forbrukspost og passerer vakten mot dagstaket (PRD §6.4).
+ * SDK-ens egne forsøk (nettverksfeil, 408, 409, 429 og 5xx) ville vært
+ * usynlige for tellingen, og de ganget før forsøkene i `kjoerGenerator`.
+ * Følgen er at 429 ikke prøves på nytt: eleven får «vent et minutt» med en
+ * gang (`for_mange_kall`). Nettverksfeil og 5xx blir `modellfeil` og
+ * prøves én gang til i `kjoerGenerator`.
  *
  * Tidsgrensen gjelder hvert kall. Uten den venter SDK-en i opptil ti
  * minutter. 90 sekunder fordi taket er 16 000 tokens (AD-19), og et svar
  * nær taket tar over et minutt. Et tidsavbrudd prøves én gang til.
  */
-const SDK_FORSOEK = 1;
+const SDK_FORSOEK = 0;
 const TIDSGRENSE_MS = 90_000;
 
 function klient(): Anthropic {
@@ -232,6 +245,11 @@ export type Resultat<T> = {
   /** AD-4: begge stemples, slik at to måletall er sammenlignbare. */
   promptversjon: string;
   modell: string;
+  /**
+   * PRD §6.4: ett element per API-kall, også et første forsøk som feilet.
+   * Tomt når svaret kom fra disk (testmodus `les` og `fyll`).
+   */
+  forbruk: Forbrukspost[];
 };
 
 /**
@@ -266,6 +284,8 @@ export async function kjoerGenerator<S extends z.ZodType>({
   kjoering,
   bilde,
   nyttForsoek = true,
+  paaForbruk,
+  foerKall,
 }: {
   oppgave: Oppgave;
   skjema: S;
@@ -292,6 +312,19 @@ export async function kjoerGenerator<S extends z.ZodType>({
    * forsøkene ikke ganges med hverandre.
    */
   nyttForsoek?: boolean;
+  /**
+   * PRD §6.4: kalles én gang per API-kall med tokenbruken, også når kallet
+   * feilet. Kalleren registrerer den (`data/forbruk.ts`), for laget selv
+   * lagrer ingenting (AD-10). Harnessen sender ingen, så målekjøringene havner
+   * ikke i appens forbruk.
+   */
+  paaForbruk?: PaaForbruk;
+  /**
+   * PRD §6.4: kjøres før hvert API-kall, også det nye forsøket. Kalleren
+   * (`underTaket`) lar den kaste når dagstaket er nådd. Ikke i testmodus
+   * `les`, der modellen ikke kalles.
+   */
+  foerKall?: FoerKall;
 }): Promise<Resultat<z.infer<S>>> {
   const valgt = await hentPrompt(oppgave, overstyrVersjon);
   const prompt = overstyrModell ? { ...valgt, modell: overstyrModell } : valgt;
@@ -340,8 +373,16 @@ export async function kjoerGenerator<S extends z.ZodType>({
       data: validert.data as z.infer<S>,
       promptversjon: lagret.promptversjon,
       modell: lagret.modell,
+      // Ingen modellkall, så ingen kostnad (og ingen registrering i `les`).
+      forbruk: [],
     };
   }
+
+  const forbruk: Forbrukspost[] = [];
+  const meld = (post: Forbrukspost) => {
+    forbruk.push(post);
+    paaForbruk?.(post);
+  };
 
   /*
    * PRD §5: feiler kallet med en feil der et nytt kall kan hjelpe, kjøres hele
@@ -353,15 +394,27 @@ export async function kjoerGenerator<S extends z.ZodType>({
    * kaller denne funksjonen per kjøring, så forsøket gjelder hvert kall, ikke
    * serien.
    */
-  const kall = () => kallModellen(prompt, skjema, brukermelding, maksTokens, bilde);
+  const kall = async () => {
+    await foerKall?.();
+    return kallModellen(oppgave, prompt, skjema, brukermelding, maksTokens, bilde, meld);
+  };
+  /** Feilen bærer kallene som ble gjort, så kalleren kan registrere dem også da. */
+  const medForbruk = (e: unknown) => {
+    if (e instanceof GeneratorFeil) e.forbruk = [...forbruk];
+    return e;
+  };
   let data: z.infer<S>;
   try {
     data = await kall();
   } catch (e) {
-    if (!nyttForsoek || !(e instanceof GeneratorFeil) || !kanProevesPaaNytt(e.kode)) throw e;
+    if (!nyttForsoek || !(e instanceof GeneratorFeil) || !kanProevesPaaNytt(e.kode)) throw medForbruk(e);
     // Den første feilen ville ellers forsvunnet uten spor når forsøket lykkes.
     console.warn(`[${oppgave}] ${e.message} — prøver én gang til.`, e.cause ?? "");
-    data = await kall();
+    try {
+      data = await kall();
+    } catch (e2) {
+      throw medForbruk(e2);
+    }
   }
 
   // Testmodus `skriv`: dette er hvordan filene i testdata/ lages. Lagringen
@@ -375,23 +428,87 @@ export async function kjoerGenerator<S extends z.ZodType>({
     data,
     promptversjon: prompt.versjon,
     modell: prompt.modell,
+    forbruk,
+  };
+}
+
+/** `usage` slik API-et gir den. Feltene for buffer kan mangle eller være null. */
+type Bruk = {
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  cache_creation_input_tokens?: number | null;
+  cache_read_input_tokens?: number | null;
+};
+
+/**
+ * Tokens inn er alt som ble lest, også det som ble skrevet til eller lest fra
+ * bufferen. Tokens ut er `output_tokens`, som tar med tenkingen.
+ * `bufferSkriving` skilles ut, fordi skriving til bufferen koster mer enn
+ * vanlig inn (1,25 eller 2 ganger). `data/priser.ts` priser den til 2 ganger.
+ * Lesing fra bufferen er billigere, men prises som vanlig inn. Begge deler gjør
+ * at summen heller blir for høy enn for lav.
+ */
+export function tokensFraBruk(bruk: Bruk | undefined): { inn: number; ut: number; bufferSkriving: number } {
+  const bufferSkriving = bruk?.cache_creation_input_tokens ?? 0;
+  return {
+    inn: (bruk?.input_tokens ?? 0) + bufferSkriving + (bruk?.cache_read_input_tokens ?? 0),
+    ut: bruk?.output_tokens ?? 0,
+    bufferSkriving,
   };
 }
 
 /**
+ * Et bilde koster om lag bredde × høyde / 750 tokens, og API-et skalerer ned
+ * bilder over om lag 1,15 megapiksler, som gir høyst om lag 1 600 tokens.
+ * Bildene krympes til høyst 2 000 piksler (AD-16), så taket brukes.
+ */
+const BILDETOKENS_ANSLAG = 1600;
+
+/**
+ * Et tidsavbrudd har ikke noe svar og dermed ingen `usage`, men modellen kan
+ * ha arbeidet og kostet. Det anslås derfor høyt: hele tokentaket ut, og
+ * om lag tre tegn per token inn. Taket skal heller slå inn for tidlig enn for
+ * sent (PRD §6.4).
+ */
+function anslagVedTidsavbrudd(
+  systemprompt: string,
+  brukermelding: string,
+  maksTokens: number,
+  medBilde: boolean,
+): { inn: number; ut: number } {
+  const tekst = Math.ceil((systemprompt.length + brukermelding.length) / 3);
+  return { inn: tekst + (medBilde ? BILDETOKENS_ANSLAG : 0), ut: maksTokens };
+}
+
+/**
  * Ett kall til modellen, med skjemavalidering og oversetting av feil til
- * `GeneratorFeil`. `kjoerGenerator` kaller den høyst to ganger, og SDK-en
- * prøver selv én gang til ved nettverksfeil, 429 og 5xx (`SDK_FORSOEK`).
+ * `GeneratorFeil`. `kjoerGenerator` kaller den høyst to ganger. SDK-en
+ * prøver ikke selv (`SDK_FORSOEK` er 0), så ett kall her er ett HTTP-kall.
+ *
+ * `meld` får tokenbruken én gang per API-kall (PRD §6.4): fra `usage` når
+ * svaret kom, også når det ikke kunne brukes, og som et anslag ved
+ * tidsavbrudd. Andre feil fra API-et (4xx, 5xx, nettet) har ingen bruk og
+ * meldes med null tokens, så hvert kall likevel står som én rad. Mangler
+ * nøkkelen, gjøres det ikke noe kall, og ingenting meldes.
  */
 async function kallModellen<S extends z.ZodType>(
+  oppgave: Oppgave,
   prompt: Promptvalg,
   skjema: S,
   brukermelding: string,
   maksTokens: number,
   bilde: { mediaType: "image/jpeg" | "image/png"; data: string } | undefined,
+  meld: (post: Forbrukspost) => void,
 ): Promise<z.infer<S>> {
+  const post = (t: { inn: number; ut: number; bufferSkriving?: number }): Forbrukspost => ({ oppgave, modell: prompt.modell, ...t });
+  let kalt = false;
   try {
-    const svar = await klient().messages.parse({
+    // Forespørselen bygges før `kalt` settes: en feil her (for eksempel et
+    // skjema SDK-en ikke kan gjøre om) er ikke et API-kall og skal ikke gi en rad.
+    const format = zodOutputFormat(skjema);
+    const k = klient();
+    kalt = true;
+    const svar = await k.messages.parse({
       model: prompt.modell,
       max_tokens: maksTokens,
       thinking: tilApiform(prompt.tenkning),
@@ -407,8 +524,11 @@ async function kallModellen<S extends z.ZodType>(
             : brukermelding,
         },
       ],
-      output_config: { format: zodOutputFormat(skjema) },
+      output_config: { format },
     });
+    // Før sjekken av svaret: et svar som ikke kan brukes, har også kostet.
+    kalt = false;
+    meld(post(tokensFraBruk(svar.usage)));
 
     if (svar.parsed_output === null || svar.parsed_output === undefined) {
       throw new GeneratorFeil(
@@ -416,12 +536,22 @@ async function kallModellen<S extends z.ZodType>(
         "LeseBuddy fikk et svar den ikke kunne bruke.",
         "Prøv igjen. Skjer det på nytt med samme tekst, kan teksten være vanskelig å behandle — prøv et kortere utdrag.",
         // Til loggen og harnessen: «max_tokens» betyr at tenkingen spiste taket.
-        new Error(`stop_reason=${svar.stop_reason}, output_tokens=${svar.usage.output_tokens}`),
+        new Error(`stop_reason=${svar.stop_reason}, output_tokens=${svar.usage?.output_tokens}`),
       );
     }
 
     return svar.parsed_output as z.infer<S>;
   } catch (e) {
+    // `kalt` er sann bare når API-kallet kastet: da er bruken ikke meldt ennå.
+    if (kalt) {
+      meld(
+        post(
+          e instanceof Anthropic.APIConnectionTimeoutError
+            ? anslagVedTidsavbrudd(prompt.tekst, brukermelding, maksTokens, bilde !== undefined)
+            : { inn: 0, ut: 0 },
+        ),
+      );
+    }
     if (e instanceof GeneratorFeil) throw e;
 
     /*

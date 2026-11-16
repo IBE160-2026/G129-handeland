@@ -61,7 +61,7 @@ export function Overskriftskontroll({
 
   return (
     <form action={send} className="space-y-6">
-      {svar.feil && <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />}
+      {svar.feil && <Feilmelding {...svar.feil} />}
 
       {topp === null ? (
         <button type="button" onClick={() => settTopp("")} className={LITEN}>

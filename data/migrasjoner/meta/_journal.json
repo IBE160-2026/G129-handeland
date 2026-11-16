@@ -50,6 +50,13 @@
       "when": 1792227679646,
       "tag": "0006_etiketter",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794838786110,
+      "tag": "0007_forbruk",
+      "breakpoints": true
     }
   ]
 }

@@ -144,20 +144,41 @@ export function HentOversettelse({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (feil) {
-    return (
-      <div className="my-3 rounded-md border border-slate-300 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-900">
-        <p>{feilTekst ?? `Oversettelsen av ${hva} kom ikke fram. Den norske teksten står som før.`}</p>
-        <button
-          type="button"
-          onClick={kjoer}
-          className="mt-2 underline underline-offset-4"
-        >
-          Prøv igjen
-        </button>
-      </div>
-    );
-  }
+  if (feil) return <OversettelseFeil feil={feil} melding={feilTekst ?? `Oversettelsen av ${hva} kom ikke fram. Den norske teksten står som før.`} kjoer={kjoer} />;
 
   return <Tenker form="linje" aktiv={venter} status={venterTekst ?? `Buddy oversetter ${hva} …`} className="my-3" />;
+}
+
+/**
+ * FR-29: oversettelsen kom ikke fram. Det norske står som før, med «Prøv
+ * igjen». PRD §6.4: er en bruksgrense nådd (`feil.grense`), står grensens
+ * melding uten «Prøv igjen», fordi et nytt trykk ikke kan virke før i morgen.
+ * Egen komponent, så testene kan tegne den uten å kjøre handlingen.
+ */
+export function OversettelseFeil({
+  feil,
+  melding,
+  kjoer,
+}: {
+  feil: NonNullable<Handlingssvar["feil"]>;
+  /** Meldingen ved en vanlig feil. */
+  melding: string;
+  kjoer: () => void;
+}) {
+  return (
+    <div className="my-3 rounded-md border border-slate-300 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-900">
+      {feil.grense ? (
+        <p>
+          {feil.melding} {feil.handling}
+        </p>
+      ) : (
+        <>
+          <p>{melding}</p>
+          <button type="button" onClick={kjoer} className="mt-2 underline underline-offset-4">
+            Prøv igjen
+          </button>
+        </>
+      )}
+    </div>
+  );
 }

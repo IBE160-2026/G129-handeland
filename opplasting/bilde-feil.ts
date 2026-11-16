@@ -4,9 +4,18 @@
  * Samme regel som FR-4: hver feil sier hva som gikk galt og hva eleven kan
  * gjøre, aldri et teknisk spor. BF-4 (lite tekst) er ingen feil her —
  * gjennomsynet vises likevel, så eleven kan skrive inn resten selv.
+ *
+ * BF-6 og BF-7 står ikke i PRD-ens liste. BF-6: dagstaket for hele appen er
+ * nådd (PRD §6.4), og bildet ble ikke sendt til modellen. Å lime inn teksten
+ * koster ikke noe KI-kall, så det er veien videre, med teksten fra bildene
+ * som alt ble lest. BF-7: kontoen har lagt inn 5 tekster i dag, så teksten
+ * kan ikke lagres uansett, og det finnes ingen vei videre før i morgen.
+ * Meldingene er de samme som ellers i appen (`GRENSE_FEIL`).
  */
 
-export type BildeFeilkode = "BF-1" | "BF-2" | "BF-3" | "BF-5";
+import { GRENSE_FEIL } from "../data/grenser";
+
+export type BildeFeilkode = "BF-1" | "BF-2" | "BF-3" | "BF-5" | "BF-6" | "BF-7";
 
 export type BildeValg = "ta_nytt" | "fjern_bilder" | "lim_inn" | "prov_igjen";
 
@@ -68,6 +77,10 @@ export function bildeFeilmelding(kode: BildeFeilkode, d: BildeFeildetaljer = {})
         handling: "Bildene er beholdt. Prøv igjen, eller lim inn teksten.",
         valg: ["prov_igjen", "lim_inn"],
       };
+    case "BF-6":
+      return { melding: GRENSE_FEIL.taket.melding, handling: GRENSE_FEIL.taket.handling, valg: ["lim_inn"] };
+    case "BF-7":
+      return { melding: GRENSE_FEIL.tekster.melding, handling: GRENSE_FEIL.tekster.handling, valg: [] };
   }
 }
 

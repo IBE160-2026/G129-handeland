@@ -15,7 +15,7 @@
 
 import { z } from "zod";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, kjoerGenerator, type FoerKall, type PaaForbruk } from "./kontrakt";
 
 export const MinneversSkjema = z.object({
   linjer: z
@@ -179,6 +179,8 @@ export async function lagMinnevers({
   overstyrModell,
   maksTokens = 16000,
   variant = 0,
+  paaForbruk,
+  foerKall,
 }: {
   avsnitt: Avsnitt[];
   begreper: { uttrykk: string; forklaring: string }[];
@@ -198,6 +200,10 @@ export async function lagMinnevers({
    * bruker den ikke.
    */
   variant?: number;
+  /** Tokenbruken per kall, også i løkken under (PRD §6.4). Harnessen sender ingen. */
+  paaForbruk?: PaaForbruk;
+  /** Vakten mot dagstaket før hvert kall (PRD §6.4). */
+  foerKall?: FoerKall;
 }): Promise<Minneversresultat> {
   if (begreper.length < MIN_FAGUTTRYKK) {
     throw new GeneratorFeil(
@@ -224,6 +230,8 @@ export async function lagMinnevers({
       overstyrModell,
       maksTokens,
       kjoering: variant > 0 ? variant * 10 + k : k === 1 ? undefined : k,
+      paaForbruk,
+      foerKall,
     });
     sisteBrudd = kontrollerVers(r.data, form, begrepssett, avsnitt);
     if (sisteBrudd.length === 0) {

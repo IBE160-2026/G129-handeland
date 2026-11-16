@@ -597,3 +597,45 @@ export const minnevers = pgTable(
   },
   (t) => [index("minnevers_tekst_idx").on(t.tekstId)],
 );
+
+/* ------------------------------------------------------------------ *
+ * Forbruk — PRD §6.4, dagstaket for hele appen
+ * ------------------------------------------------------------------ */
+
+/**
+ * Én rad per API-kall til språkmodellen, også et kall som feilet, og én rad
+ * per ny Tekst og ny Fagsamtale (`hendelse`). Summen for døgnet (norsk tid)
+ * sammenlignes med taket på 30 kroner før hvert nye kall, og hendelsesradene
+ * telles mot grensene per konto (`data/forbruk.ts`).
+ *
+ * `konto_id` har med vilje ingen fremmednøkkel: radene skal overleve at
+ * kontoen eller teksten slettes, ellers kunne eleven slette en tekst og legge
+ * inn en ny over grensen, og forbruket for døgnet ville sunket. Skrives bare
+ * fra serveren, aldri fra harnessen.
+ */
+export const forbruk = pgTable(
+  "forbruk",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    opprettet: timestamp("opprettet", { withTimezone: true }).notNull().defaultNow(),
+    /** Kontoen som gjorde kallet eller hendelsen. Null når den ikke er kjent. Ingen fremmednøkkel, se over. */
+    kontoId: uuid("konto_id"),
+    /** Null for et API-kall. `ny_tekst` eller `ny_fagsamtale` for en hendelse, som koster 0. */
+    hendelse: text("hendelse"),
+    oppgave: text("oppgave").notNull(),
+    modell: text("modell").notNull(),
+    /** Alle tokens inn, også de som ble lest fra eller skrevet til hurtigbufferen. */
+    tokensInn: integer("tokens_inn").notNull(),
+    /** Alle tokens ut, også tenkingen. */
+    tokensUt: integer("tokens_ut").notNull(),
+    /**
+     * Kostnaden etter `data/priser.ts`, i milliondeler av en dollar. Skriving
+     * til hurtigbufferen er priset til 2 ganger vanlig inn.
+     */
+    mikrodollar: integer("mikrodollar").notNull(),
+  },
+  (t) => [
+    index("forbruk_opprettet_idx").on(t.opprettet),
+    index("forbruk_konto_hendelse_idx").on(t.kontoId, t.hendelse, t.opprettet),
+  ],
+);

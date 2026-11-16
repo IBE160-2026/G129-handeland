@@ -7,10 +7,13 @@
 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { taketNaadd } from "../../../../data/forbruk";
 import { tilgang } from "../../../../data/konto";
 import { hentQuiz, listForsoek } from "../../../../data/quiz";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { lagQuiz } from "../../../handlinger";
+import { GRENSE_FEIL } from "../../../../data/grenser";
+import { Grensemelding } from "../../../komponenter/Grensemelding";
 import { Quiz, type SporsmalForElev } from "../../../komponenter/Quiz";
 import { LagQuizAutomatisk } from "../../../komponenter/Skjemaer";
 import { stegtekst } from "../../../../tekst/steg";
@@ -38,6 +41,9 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
   const [quiz, forsoek] = await Promise.all([hentQuiz(t, id), listForsoek(t, id)]);
+  // PRD §6.4: er dagstaket nådd, lages ingen quiz, og meldingen står der
+  // tenkeindikatoren ellers ville stått. `lagQuiz` sjekker det samme.
+  const taket = quiz === null && (await taketNaadd());
 
   const forElev: SporsmalForElev[] =
     quiz?.sporsmal.map((s) => ({
@@ -60,7 +66,11 @@ export default async function Quizside({ params }: PageProps<"/tekst/[id]/quiz">
             alene, og for hvert spørsmål du ikke får til, ser du hvor svaret står.
           </p>
           <div className="mt-6">
-            <LagQuizAutomatisk handling={lagQuiz.bind(null, id, {})} />
+            {taket ? (
+              <Grensemelding {...GRENSE_FEIL.taket} />
+            ) : (
+              <LagQuizAutomatisk handling={lagQuiz.bind(null, id, {})} />
+            )}
           </div>
         </section>
       ) : (

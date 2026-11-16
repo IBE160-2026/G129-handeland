@@ -2,7 +2,8 @@
 title: 'Bruksgrenser (PRD §6.4): 5 tekster og 5 fagsamtaler per konto per døgn, 30 kr per døgn for hele appen'
 type: 'feature'
 created: '2026-11-16'
-status: 'draft'
+status: 'done'
+baseline_commit: '436663067b094c1a07ea4578f1ad002e7b4d7dca'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -70,13 +71,13 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `data/priser.ts` (ny) og test -- prisene per modell, `kostnadMikrodollar(modell, inn, ut)` og `tilKroner`.
-- [ ] `data/skjema.ts` og `data/migrasjoner/0007_forbruk.sql` -- tabellen med `id`, `opprettet` (timestamptz, default now, indeksert), `oppgave`, `modell`, `tokens_inn`, `tokens_ut` og `mikrodollar`. Kjør den lokalt med `npm run db:migrer`.
-- [ ] `data/forbruk.ts` (ny) og test (PGlite som de andre datatestene) -- `registrerForbruk(liste)`, `dagensKroner()`, `taketNaadd()` og `startPaaDoegnet(naa)` for Oslo-midnatt. Grensene per konto: `teksterIDag(t)` og `samtalerIDag(t)`.
-- [ ] `generatorer/kontrakt.ts` og generatorene -- forbruket ut på resultat og feil, med tester.
-- [ ] `app/handlinger.ts` -- taket før kallet og registrering etter, på alle bruksstedene. Grensene per konto ved ny Tekst og ny Fagsamtale.
-- [ ] `app/ny/page.tsx`, `data/arbeidsbord.ts` og Fagsamtale-flatene -- meldingene og statusen fra EXPERIENCE.md.
-- [ ] `maaling/sjekk-tilgjengelighet.mjs` -- seed 5 Tekster for kontoen og sjekk at /ny viser meldingen. Seed forbruk over 30 kr og sjekk at en ny quiz gir takmeldingen. Rydd opp etterpå.
+- [x] `data/priser.ts` (ny) og test -- prisene per modell, `kostnadMikrodollar(modell, inn, ut)` og `tilKroner`.
+- [x] `data/skjema.ts` og `data/migrasjoner/0007_forbruk.sql` -- tabellen med `id`, `opprettet` (timestamptz, default now, indeksert), `oppgave`, `modell`, `tokens_inn`, `tokens_ut` og `mikrodollar`. Kjør den lokalt med `npm run db:migrer`.
+- [x] `data/forbruk.ts` (ny) og test (PGlite som de andre datatestene) -- `registrerForbruk(liste)`, `dagensKroner()`, `taketNaadd()` og `startPaaDoegnet(naa)` for Oslo-midnatt. Grensene per konto: `teksterIDag(t)` og `samtalerIDag(t)`.
+- [x] `generatorer/kontrakt.ts` og generatorene -- forbruket ut på resultat og feil, med tester.
+- [x] `app/handlinger.ts` -- taket før kallet og registrering etter, på alle bruksstedene. Grensene per konto ved ny Tekst og ny Fagsamtale.
+- [x] `app/ny/page.tsx`, `data/arbeidsbord.ts` og Fagsamtale-flatene -- meldingene og statusen fra EXPERIENCE.md.
+- [x] `maaling/sjekk-tilgjengelighet.mjs` -- seed 5 Tekster for kontoen og sjekk at /ny viser meldingen. Seed forbruk over 30 kr og sjekk at en ny quiz gir takmeldingen. Rydd opp etterpå.
 
 **Acceptance Criteria:**
 - Given 5 Tekster i dag, when eleven åpner /ny, then ser hun meldingen før hun har limt inn noe, og en direkte POST til handlingen avvises også.
@@ -89,3 +90,30 @@ context:
 - `npx tsc --noEmit`, `npm test`, `npm run lint` og `npm run build` -- forventet: grønt
 - `npm run db:migrer` -- forventet: 0007 kjørt lokalt
 - `npm run sjekk:tilgjengelighet` og `npm run demotest -- 1` -- forventet: bestått
+
+## Review Triage Log
+
+| # | Kilde | Funn | Vurdering | Rute |
+|---|---|---|---|---|
+| 1 | blind, edge, vgap | SDK-ens egne nye forsøk telles ikke | high: forbruket blir for lavt | patch (maxRetries 0) |
+| 2 | blind | Skriving til hurtigbufferen prises for lavt; kommentaren påstår det motsatte | medium | patch |
+| 3 | edge, blind | Bildetokens mangler i anslaget ved tidsavbrudd | low, direkte retting | patch |
+| 4 | edge | Fantomrad når forespørselen feiler før kallet | low, direkte retting | patch |
+| 5 | blind, edge | Taket sjekkes én gang per handling; samtidige kall kan gå over | high | patch (vakt per kall, og samtidighet dokumentert) |
+| 6 | blind, edge | Sletting nullstiller grensene per konto | medium | patch (hendelsesrader i forbruk, 0007 endret før Neon) |
+| 7 | edge | To samtidige starter kan gi samtale nr. 6 | low | patch (ny sjekk i transaksjonen) |
+| 8 | blind, edge | /api/bilde sjekker ikke tekstgrensen | medium | patch |
+| 9 | edge | BF-6 midt i en serie kaster teksten som alt er lest | medium | patch |
+| 10 | edge, vgap | dagstak i adressen gjelder også dagen etter | medium | patch |
+| 11 | blind, edge | En feil i grensetellingen gir hentefeil for hele bordet | medium | patch |
+| 12 | edge | Skjemaer og Overskriftskontroll sender ikke grense videre | medium | patch |
+| 13 | blind | Grensetekstene står to steder; opplasting importerer fra app; grense er string | low | patch |
+| 14 | blind | Ingenting logges når taket nås | low, direkte retting | patch |
+| 15 | blind | Kommentaren om reserveprisen er misvisende | low, direkte retting | patch |
+| 16 | vgap | 11 KI-kallsteder er uten test av tak og forbruk | patch | patch |
+| 17 | vgap | BF-6-kjeden er uten test | patch | patch |
+| 18 | vgap | Komponentene skjuler ikke «Prøv igjen» ved grense, uten test | patch | patch |
+| 19 | vgap | limInnPdf og limInnBilde er uten grensetest | low, deler hjelper med limInnTekst | defer |
+| 20 | vgap | konto sendes ikke inn på sidenivå, uten test | low | defer |
+| 21 | blind, edge, vgap | Sjekkskriptet teller døgnet feil og gjenoppretter ikke quizen | medium | patch |
+| 22 | vgap | Bilderuten sjekker taket før valideringen | low | avvist |

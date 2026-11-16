@@ -16,6 +16,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { hentBegrepssett } from "../../../../data/begrepssett";
+import { kodeSomGjelder } from "../../../../data/forbruk";
 import { tilgang } from "../../../../data/konto";
 import { harSjekketForstaaelsen } from "../../../../data/sjekket";
 import { hentLeseinnstillinger } from "../../../../data/leseinnstillinger";
@@ -60,7 +61,8 @@ export default async function Lesing({
   const { id } = await params;
   // FR-7: koden fra låsingen, når fagordene ikke kunne lages der.
   const kode = (await searchParams).fagordfeil;
-  const fagordfeil = typeof kode === "string" ? kode : undefined;
+  // PRD §6.4: takkoden gjelder bare mens taket er nådd (`kodeSomGjelder`).
+  const fagordfeil = await kodeSomGjelder(typeof kode === "string" ? kode : undefined);
 
   let tekst;
   try {

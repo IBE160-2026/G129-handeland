@@ -18,6 +18,7 @@ import Link from "next/link";
 import {
   type Bunke,
   hentArbeidsbord,
+  type Kontostatus,
   kortDato,
   kortstatus,
   nesteSteg,
@@ -25,6 +26,7 @@ import {
   type Steg,
   velgBordet,
 } from "../data/arbeidsbord";
+import { samtalegrenseNaadd } from "../data/forbruk";
 import { valgfriTilgang } from "../data/konto";
 import type { Tilgang } from "../data/tilgang";
 import { Arbeidsbord, type Hovedbunke, type Visningsbunke } from "./komponenter/Arbeidsbord";
@@ -53,8 +55,8 @@ function boble(steg: Steg, tittel: string): string {
   }
 }
 
-function visning(b: Bunke): Visningsbunke {
-  const kort = kortstatus(b);
+function visning(b: Bunke, konto: Kontostatus): Visningsbunke {
+  const kort = kortstatus(b, konto);
   return { id: b.id, tittel: b.tittel, dato: kortDato(b.opprettet), framdrift: kort.map((k) => k.paabegynt), kort };
 }
 
@@ -77,8 +79,16 @@ export default async function Forside() {
 
 async function ArbeidsbordSide({ t }: { t: Tilgang }) {
   let bunker: Bunke[] | null = null;
+  // PRD §6.4: Fagsamtale-kortet og neste steg sier fra når dagens samtaler er brukt.
+  let konto: Kontostatus = {};
   try {
-    bunker = await hentArbeidsbord(t);
+    [bunker, konto] = await Promise.all([
+      hentArbeidsbord(t),
+      // Feiler oppslaget, vises bordet likevel, som om grensen ikke er nådd.
+      samtalegrenseNaadd(t)
+        .catch(() => false)
+        .then((naadd) => ({ samtalegrenseNaadd: naadd })),
+    ]);
   } catch (e) {
     console.error("Kunne ikke hente tekstene til arbeidsbordet:", e);
     bunker = null;
@@ -112,8 +122,8 @@ async function ArbeidsbordSide({ t }: { t: Tilgang }) {
     );
   }
 
-  const steg = nesteSteg(hoved);
-  const hovedbunke: Hovedbunke = { ...visning(hoved), neste: { tekst: steg.tekst, href: steg.href }, boble: boble(steg, hoved.tittel) };
+  const steg = nesteSteg(hoved, konto);
+  const hovedbunke: Hovedbunke = { ...visning(hoved, konto), neste: { tekst: steg.tekst, href: steg.href }, boble: boble(steg, hoved.tittel) };
 
   return (
     <main className="bordside mx-auto w-full max-w-[70rem] px-[16px] py-10 min-[760px]:px-5">
@@ -139,7 +149,7 @@ async function ArbeidsbordSide({ t }: { t: Tilgang }) {
           + Ny tekst
         </Link>
       </div>
-      <Arbeidsbord hoved={hovedbunke} smaa={smaa.map(visning)} antall={antall} />
+      <Arbeidsbord hoved={hovedbunke} smaa={smaa.map((b) => visning(b, konto))} antall={antall} />
     </main>
   );
 }

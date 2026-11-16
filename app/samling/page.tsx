@@ -8,7 +8,8 @@
  */
 
 import Link from "next/link";
-import { type Bunke, hentArbeidsbord, nesteSteg, tilstandsord } from "../../data/arbeidsbord";
+import { type Bunke, type Kontostatus, hentArbeidsbord, nesteSteg, tilstandsord } from "../../data/arbeidsbord";
+import { samtalegrenseNaadd } from "../../data/forbruk";
 import { tilgang } from "../../data/konto";
 import { filtrerTekster, tolkSortering } from "../../data/tekstliste";
 import { Hentefeil } from "../komponenter/Hentefeil";
@@ -23,8 +24,16 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
   // FR-35: hentes før try-blokken, se data/konto.ts.
   const t = await tilgang();
   let alle: Bunke[] | null = null;
+  // PRD §6.4: «Neste: Fagsamtale» hoppes over når dagens samtaler er brukt.
+  let konto: Kontostatus = {};
   try {
-    alle = await hentArbeidsbord(t);
+    [alle, konto] = await Promise.all([
+      hentArbeidsbord(t),
+      // Feiler oppslaget, vises listen likevel, som om grensen ikke er nådd.
+      samtalegrenseNaadd(t)
+        .catch(() => false)
+        .then((naadd) => ({ samtalegrenseNaadd: naadd })),
+    ]);
   } catch (e) {
     console.error("Kunne ikke hente tekstene til Samlingen:", e);
     alle = null;
@@ -98,7 +107,7 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
           ) : (
             <ul className="mt-8 divide-y divide-kant border-y border-kant">
               {tekster.map((b) => {
-                const steg = nesteSteg(b);
+                const steg = nesteSteg(b, konto);
                 return (
                   <li key={b.id} className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 py-5">
                     <div className="min-w-0 basis-80 grow">

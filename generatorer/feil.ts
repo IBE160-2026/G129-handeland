@@ -28,6 +28,29 @@ export const FEILKODER = [
 export type Feilkode = (typeof FEILKODER)[number];
 
 /**
+ * Tokenbruken i ett API-kall (PRD §6.4). Generatorlaget lagrer den ikke
+ * (AD-10): `kjoerGenerator` gir den tilbake på resultatet og på feilen, og
+ * melder den til kallerens `paaForbruk`, som registrerer den
+ * (`data/forbruk.ts`). `inn` er alle tokens inn, også bufrede, og `ut` er alle
+ * tokens ut, også tenkingen. `bufferSkriving` er den delen av `inn` som ble
+ * skrevet til hurtigbufferen, som koster mer enn vanlig inn (`data/priser.ts`).
+ */
+export type Forbrukspost = { oppgave: string; modell: string; inn: number; ut: number; bufferSkriving?: number };
+
+/** Kallerens mottaker for tokenbruken, én gang per API-kall. Harnessen sender ingen. */
+export type PaaForbruk = (post: Forbrukspost) => void;
+
+/**
+ * Kallerens vakt før hvert API-kall (PRD §6.4): kaster når dagstaket er nådd,
+ * så en handling med mange kall stopper midt i. Generatorlaget vet ikke hva
+ * vakten sjekker (AD-10). Harnessen sender ingen.
+ */
+export type FoerKall = () => Promise<void>;
+
+/** Det kalleren gir en generator for å telle og begrense kallene. */
+export type Forbruksvakt = { paaForbruk?: PaaForbruk; foerKall?: FoerKall };
+
+/**
  * Alle feil fra generatorlaget har denne formen. Kravet i §5 om at ingen
  * feiltilstand er en blindvei håndheves dermed ett sted, framfor i hver flate
  * som kaller en generator.
@@ -36,6 +59,12 @@ export class GeneratorFeil extends Error {
   readonly kode: Feilkode;
   readonly elevmelding: string;
   readonly anbefaltHandling: string;
+  /**
+   * API-kallene som ble gjort før feilen, med tokenbruken (PRD §6.4). Et kall
+   * som feilet, har også kostet. Settes av `kjoerGenerator`; tom for en feil
+   * som oppsto før noe kall, eller som en generator kaster etter kallet.
+   */
+  forbruk: Forbrukspost[] = [];
 
   constructor(
     kode: Feilkode,
@@ -56,8 +85,8 @@ export class GeneratorFeil extends Error {
  * PRD §5: et kall som feiler, prøves én gang til før eleven får vite det.
  *
  * Bare feilene der et nytt kall kan gi et annet utfall. En avslått nøkkel
- * blir ikke bedre av å prøve igjen, 429 har SDK-ens egne forsøk (og et nytt
- * forsøk her ville bare forsterket presset), og en feil forespørsel, et
+ * blir ikke bedre av å prøve igjen, 429 betyr at vi skal vente (et nytt
+ * forsøk med en gang ville bare forsterket presset), og en feil forespørsel, et
  * manglende oppsett eller et manglende lagret svar er det samme ved neste kall.
  */
 const NYTT_FORSOEK: ReadonlySet<Feilkode> = new Set<Feilkode>(["ugyldig_utdata", "tidsavbrudd", "modellfeil"]);

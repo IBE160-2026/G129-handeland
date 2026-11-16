@@ -52,6 +52,10 @@
  *     i et ord. Fagorddemoen på landingssiden er trykkbar på telefon (knapper
  *     med aria-expanded og aria-controls, forklaringen under teksten, ingen
  *     aria-live, axe), og statisk uten JavaScript og ved redusert bevegelse
+ *   - PRD §6.4, bruksgrensene: med 5 tekster i dag (hendelsesrader, talt fra
+ *     midnatt i Oslo) viser /ny meldingen før innlesingen, og over dagstaket
+ *     gir en ny quiz takmeldingen uten at noen quiz lages, på en egen låst
+ *     tekst uten quiz (axe på begge). Det sjekken legger inn, ryddes bort
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -175,6 +179,10 @@ try {
     DATABASE_URL: DB,
     DATABASE_URL_UNPOOLED: DB,
     LESEVENN_TESTMODUS: "les",
+    // PRD §6.4: testmodus `les` stoppes ellers aldri av dagstaket. Slås på
+    // her, så sjekken av takmeldingen nederst kan kjøre. Ingenting
+    // registreres i `les`, så taket nås bare når sjekken legger inn forbruk.
+    LESEVENN_DAGSTAK_I_TESTMODUS: "1",
     LESEVENN_BYGGEMAPPE: ".next-sjekk",
     LESEVENN_INVITASJONSKODE: KODE,
     BETTER_AUTH_SECRET: "lokal-hemmelighet-kun-for-tilgjengelighetssjekken",
@@ -1544,6 +1552,78 @@ try {
   sjekk("1920 px, 200 % tekst: ingen Følge-Buddy", !(await landStor.locator(".ls-folger").evaluate((e) => e.checkVisibility())));
   await ingenSiderulling(landStor, "landingsside 1920 px, 200 % tekst");
   await landStor.context().close();
+
+  /* --- PRD §6.4: bruksgrensene ------------------------------------- */
+  // Sist, fordi sjekken endrer dataene. Grensen fylles med hendelsesrader
+  // (`forbruk.hendelse = 'ny_tekst'`), slik appen teller, og døgnet regnes fra
+  // midnatt i Oslo. Takmeldingen sjekkes på en egen låst tekst uten quiz, så
+  // EM-bølger beholder sin. Alt sjekken legger inn, ryddes bort etterpå.
+  {
+    const pool = new pg.Pool({ connectionString: DB, max: 1 });
+    const forbruksrader = [];
+    let tomTekst = null;
+    const IDAG = `opprettet >= (date_trunc('day', now() at time zone 'Europe/Oslo') at time zone 'Europe/Oslo')`;
+    try {
+      const [{ id: kontoId }] = (await pool.query(`select id from "user" where email = $1`, [EPOST])).rows;
+      const { rows: idag } = await pool.query(
+        `select count(*)::int as n from forbruk where konto_id = $1 and hendelse = 'ny_tekst' and ${IDAG}`,
+        [kontoId],
+      );
+      for (let i = idag[0].n; i < 5; i++) {
+        const r = await pool.query(
+          `insert into forbruk (konto_id, hendelse, oppgave, modell, tokens_inn, tokens_ut, mikrodollar)
+           values ($1, 'ny_tekst', 'ny_tekst', '', 0, 0, 0) returning id`,
+          [kontoId],
+        );
+        forbruksrader.push(r.rows[0].id);
+      }
+      await pc.goto(`${APP}/ny`);
+      const grense = pc.locator("[data-grense=tekster]");
+      sjekk(
+        "PRD §6.4: 5 tekster i dag — /ny viser meldingen før innlesingen, med lenke til arbeidsbordet",
+        (await grense.count()) === 1 &&
+          // Meldingen står i to avsnitt, så textContent har ikke mellomrom mellom dem.
+          (await grense.textContent()).includes("Du har lagt inn 5 tekster i dag.") &&
+          (await grense.textContent()).includes("Du kan legge inn flere i morgen.") &&
+          (await grense.locator("a[href='/']").count()) === 1 &&
+          (await pc.locator("#tekst").count()) === 0,
+        (await grense.textContent().catch(() => "")) ?? "",
+      );
+      await axe(pc, "ny tekst, grensen er nådd");
+
+      // Taket: over 30 kroner i dag, og en låst tekst uten quiz.
+      const ny = await pool.query(
+        `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, laast_tidspunkt)
+         values ($1, 'Takprøve', $2, $2, 'liming', 'laast', now()) returning id`,
+        [kontoId, eksempel],
+      );
+      tomTekst = ny.rows[0].id;
+      const tak = await pool.query(
+        `insert into forbruk (oppgave, modell, tokens_inn, tokens_ut, mikrodollar)
+         values ('sjekk', 'claude-sonnet-5-5', 0, 0, 3000000) returning id`,
+      );
+      forbruksrader.push(tak.rows[0].id);
+      await pc.goto(`${APP}/tekst/${tomTekst}/quiz`);
+      const takmelding = pc.locator("[data-grense=taket]");
+      await takmelding.waitFor({ timeout: 30000 }).catch(() => {});
+      const { rows: quizer } = await pool.query(`select count(*)::int as n from quiz where tekst_id = $1`, [tomTekst]);
+      sjekk(
+        "PRD §6.4: taket er nådd — ny quiz gir takmeldingen i stedet for tenkeindikatoren, og ingen quiz lages",
+        (await takmelding.count()) === 1 &&
+          (await takmelding.textContent()).includes("LeseBuddy har nådd dagens grense for nye oppgaver.") &&
+          (await pc.locator("text=Buddy lager quizen din").count()) === 0 &&
+          quizer[0].n === 0,
+        `${quizer[0].n} quiz(er)`,
+      );
+      await axe(pc, "quiz, dagstaket er nådd");
+    } finally {
+      if (forbruksrader.length > 0) {
+        await pool.query(`delete from forbruk where id = any($1::uuid[])`, [forbruksrader]).catch(() => {});
+      }
+      if (tomTekst) await pool.query(`delete from tekst where id = $1`, [tomTekst]).catch(() => {});
+      await pool.end();
+    }
+  }
 
   await nettleser.close();
 } catch (e) {

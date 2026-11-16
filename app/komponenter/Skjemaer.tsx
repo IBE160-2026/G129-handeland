@@ -18,7 +18,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
-import { NETTFEIL } from "../kifeil";
+import { NETTFEIL, type Feiltekst } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
@@ -69,7 +69,7 @@ export function AktiveringSkjema({
     <form action={send} className="space-y-4">
       {svar.feil && (
         <>
-          <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+          <Feilmelding {...svar.feil} />
           {/* FR-6: etter én oppfordring kan eleven gå videre med tomt svar. */}
           <input type="hidden" name="tomtEtterOppfordring" value="1" />
         </>
@@ -117,7 +117,7 @@ export function GjennomsynSkjema({
   return (
     <form action={send} className="space-y-4">
       {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+        <Feilmelding {...svar.feil} />
       )}
 
       <div>
@@ -197,7 +197,7 @@ export function LagQuizAutomatisk({
 
   // FR-13: meldingen sier at quizen ikke kunne lages, og fokus går til «Prøv igjen».
   if (feil && !venter) {
-    return <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} proevIgjen={kjoer} />;
+    return <Feilmelding key={antallFeil} {...feil} proevIgjen={kjoer} />;
   }
 
   // Vises også i øyeblikket før overgangen starter og mens siden oppdateres,
@@ -224,13 +224,13 @@ export function FinnFagordPaaNytt({
 }: {
   handling: () => Promise<Handlingssvar>;
   /** Meldingen før eleven har prøvd igjen på denne siden. */
-  standard: { melding: string; handling: string };
+  standard: Feiltekst;
   /** Om «Prøv igjen» får fokus med en gang: når eleven nettopp ble sendt hit av en feil. */
   fokus: boolean;
 }) {
   const router = useRouter();
   const [venter, startOvergang] = useTransition();
-  const [feil, settFeil] = useState(standard);
+  const [feil, settFeil] = useState<Feiltekst>(standard);
   const [antallFeil, settAntallFeil] = useState(0);
 
   const kjoer = () => {
@@ -251,7 +251,7 @@ export function FinnFagordPaaNytt({
 
   return (
     <div className="mt-3">
-      <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} fokus={fokus || antallFeil > 0}>
+      <Feilmelding key={antallFeil} {...feil} fokus={fokus || antallFeil > 0}>
         <button type="button" onClick={kjoer} aria-disabled={venter || undefined} className={KNAPP_PRIMAER}>
           {venter ? "Finner fagordene…" : "Prøv igjen"}
         </button>
@@ -272,7 +272,7 @@ export function LagOppsummeringSkjema({
   return (
     <form action={send} className="mt-4">
       {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+        <Feilmelding {...svar.feil} />
       )}
       <Send venter="Lager oppsummeringen…" klar="Vis en kort oppsummering" status="Buddy lager oppsummeringen …" />
     </form>
@@ -297,7 +297,7 @@ export function HandlingSkjema({
   return (
     <form action={send} className="mt-4">
       {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
+        <Feilmelding {...svar.feil} />
       )}
       <Send venter={venter} klar={klar} status={status} />
     </form>

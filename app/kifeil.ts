@@ -12,8 +12,18 @@
  */
 
 import { FASTE_TEKSTER, FEILKODER, GeneratorFeil, kanProevesPaaNytt, type Feilkode } from "../generatorer/feil";
+import { GRENSE_FEIL, GrenseNaadd, TAK_KODE, type Grense } from "../data/grenser";
 
-export type Feiltekst = { melding: string; handling: string };
+/**
+ * `grense`: meldingen gjelder en bruksgrense (PRD §6.4). Da viser
+ * Feilmelding ingen «Prøv igjen», fordi et nytt trykk ikke kan virke før i
+ * morgen, og en knapp som aldri virker, er en blindvei med et skilt på.
+ */
+export type Feiltekst = { melding: string; handling: string; grense?: Grense };
+
+// Grensetekstene (`GRENSE_FEIL`) står i data/grenser.ts, det eneste stedet.
+
+export { TAK_KODE };
 
 /** Når kallet til handlingen ikke kom fram (nettet borte). Ikke en KI-feil. */
 export const NETTFEIL: Feiltekst = {
@@ -35,6 +45,7 @@ const UKJENT_FEIL: Feiltekst = {
  * som ble glemt gitt eleven en teknisk feilmelding.
  */
 export function somFeil(e: unknown): { feil: Feiltekst } {
+  if (e instanceof GrenseNaadd) return { feil: GRENSE_FEIL[e.grense] };
   if (e instanceof GeneratorFeil) return { feil: { melding: e.elevmelding, handling: e.anbefaltHandling } };
   return { feil: UKJENT_FEIL };
 }
@@ -55,7 +66,8 @@ export function kiFeil(e: unknown, melding: Feiltekst): { feil: Feiltekst } {
 export const UKJENT_KODE = "ukjent";
 
 /** Koden som sendes videre i en omdirigering, så siden kan vise riktig melding (`feiltekstForKode`). */
-export function feilkodeFor(e: unknown): Feilkode | typeof UKJENT_KODE {
+export function feilkodeFor(e: unknown): Feilkode | typeof UKJENT_KODE | typeof TAK_KODE {
+  if (e instanceof GrenseNaadd && e.grense === "taket") return TAK_KODE;
   return e instanceof GeneratorFeil ? e.kode : UKJENT_KODE;
 }
 
@@ -63,9 +75,11 @@ export function feilkodeFor(e: unknown): Feilkode | typeof UKJENT_KODE {
  * Meldingen en side viser når bare koden kom fram i adressen. Koder som
  * prøves på nytt (og en kode som mangler eller er ukjent for adressen), gir
  * funksjonens standardmelding. Ellers sier første linje fortsatt hva som ikke
- * ble laget, og rådet er feilens eget.
+ * ble laget, og rådet er feilens eget. Stoppet dagstaket kallet, er det
+ * takmeldingen (PRD §6.4).
  */
 export function feiltekstForKode(standard: Feiltekst, kode: string | undefined): Feiltekst {
+  if (kode === TAK_KODE) return GRENSE_FEIL.taket;
   if (kode === UKJENT_KODE) return { melding: standard.melding, handling: UKJENT_FEIL.handling };
   const k = FEILKODER.find((x) => x === kode);
   if (!k || kanProevesPaaNytt(k)) return standard;

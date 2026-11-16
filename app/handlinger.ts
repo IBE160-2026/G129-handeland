@@ -59,7 +59,9 @@ import { merkOevekort, type Merking } from "../data/oevekort";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
 import { hentPrompt } from "../generatorer/kontrakt";
-import { KI_FEIL, feilkodeFor, kiFeil, somFeil } from "./kifeil";
+import { KI_FEIL, feilkodeFor, kiFeil, somFeil, type Feiltekst } from "./kifeil";
+import { samtalegrenseNaadd, underTaket } from "../data/forbruk";
+import { GrenseNaadd } from "../data/grenser";
 import { GRENSER } from "../opplasting/pdf-tekst";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
@@ -95,13 +97,34 @@ import { lagMinnevers, type Versform } from "../generatorer/minnevers";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
 export type Handlingssvar = {
-  feil?: { melding: string; handling: string };
+  /** `grense`: en bruksgrense er nådd (PRD §6.4), og «Prøv igjen» vises ikke. */
+  feil?: Feiltekst;
 };
 
 const INGEN_FEIL: Handlingssvar = {};
 
 // `somFeil` og `kiFeil` (meldingene per funksjon, PRD §5) står i `kifeil.ts`,
 // fordi en fil med "use server" bare kan eksportere async-funksjoner.
+//
+// PRD §6.4, bruksgrensene: hvert KI-kall går gjennom `underTaket`
+// (data/forbruk.ts), som stopper før modellen kalles når dagstaket er nådd,
+// og registrerer tokenbruken etterpå, også når kallet feilet. Stoppet gir
+// `GrenseNaadd`, som `somFeil` og `kiFeil` gjør om til takmeldingen.
+// Grensen på 5 Tekster sjekkes i `opprettTekst`, og grensen på 5
+// Fagsamtaler i `startFagsamtale` før første spørsmål lages.
+
+/** `opprettTekst` med grensen på 5 Tekster per døgn (PRD §6.4) som svar framfor kast. */
+async function opprettEllerGrense(
+  t: Tilgang,
+  ny: Parameters<typeof opprettTekst>[1],
+): Promise<{ ny: { id: string }; svar?: undefined } | { ny?: undefined; svar: Handlingssvar }> {
+  try {
+    return { ny: await opprettTekst(t, ny) };
+  } catch (e) {
+    if (e instanceof GrenseNaadd) return { svar: somFeil(e) };
+    throw e;
+  }
+}
 
 /* ------------------------------------------------------------------ *
  * FR-1 — innlesing ved liming
@@ -151,13 +174,14 @@ export async function limInnTekst(_forrige: Handlingssvar, data: FormData) {
     };
   }
 
-  const ny = await opprettTekst(await tilgang(), {
+  const { ny, svar } = await opprettEllerGrense(await tilgang(), {
     tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     // Ved liming er råtekst og redigert tekst like til eleven endrer noe.
     redigertTekst: raatekst,
     vei: "liming",
   });
+  if (!ny) return svar;
 
   redirect(`/tekst/${ny.id}/overskrifter`);
 }
@@ -302,7 +326,7 @@ async function laasOgLagBegrepssett(
   // kappingen skjer én gang ved uttrekk, slik at Lesevisningen og Øvekortene
   // viser nøyaktig samme sett.
   try {
-    const resultat = await hentFaguttrykk(laast.avsnitt);
+    const resultat = await underTaket(t, (vakt) => hentFaguttrykk(laast.avsnitt, vakt));
     await lagreBegrepssett(laast, resultat);
   } catch (e) {
     // Teksten ER låst nå, selv om genereringen feilet. Det er riktig: AD-9
@@ -338,7 +362,7 @@ export async function genererPaaNytt(tekstId: string): Promise<Handlingssvar> {
     }
 
     const laast = await hentLaast(t, tekstId);
-    const resultat = await hentFaguttrykk(laast.avsnitt);
+    const resultat = await underTaket(t, (vakt) => hentFaguttrykk(laast.avsnitt, vakt));
     await lagreBegrepssett(laast, resultat);
   } catch (e) {
     return kiFeil(e, KI_FEIL.fagord);
@@ -367,7 +391,7 @@ export async function lagQuiz(
   try {
     if (!(await hentQuiz(t, tekstId))) {
       const laast = await hentLaast(t, tekstId);
-      const resultat = await genererQuiz(laast.avsnitt);
+      const resultat = await underTaket(t, (vakt) => genererQuiz(laast.avsnitt, vakt));
       await lagreQuiz(laast, resultat);
     }
   } catch (e) {
@@ -550,12 +574,13 @@ export async function limInnBilde(_forrige: Handlingssvar, data: FormData): Prom
   // BF-4: lite tekst stopper ikke. Gjennomsynet vises likevel, så eleven kan
   // skrive inn resten — men delIAvsnitt må gi minst ett avsnitt.
   const avsnitt = delIAvsnitt(raatekst);
-  const ny = await opprettTekst(await tilgang(), {
+  const { ny, svar } = await opprettEllerGrense(await tilgang(), {
     tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     redigertTekst: raatekst,
     vei: "bilde",
   });
+  if (!ny) return svar;
   redirect(`/tekst/${ny.id}/overskrifter`);
 }
 
@@ -575,13 +600,14 @@ export async function limInnPdf(_forrige: Handlingssvar, data: FormData): Promis
   if (forLang) return forLang;
 
   const avsnitt = delIAvsnitt(raatekst);
-  const ny = await opprettTekst(await tilgang(), {
+  const { ny, svar } = await opprettEllerGrense(await tilgang(), {
     tittel: tittel.length > 0 ? tittel : foreslaaTittel(avsnitt),
     raatekst,
     redigertTekst: raatekst,
     vei: "pdf",
     innlesingsrapport: rapport,
   });
+  if (!ny) return svar;
   redirect(`/tekst/${ny.id}/overskrifter`);
 }
 
@@ -620,8 +646,11 @@ export async function startFagsamtale(
   const t = await tilgang();
   let samtaleId: string;
   try {
+    // PRD §6.4: 5 nye Fagsamtaler per døgn. Sjekkes før første spørsmål
+    // lages, så grensen ikke koster et kall. Påbegynte samtaler går videre.
+    if (await samtalegrenseNaadd(t)) throw new GrenseNaadd("samtaler");
     const laast = await hentLaast(t, tekstId);
-    const start = await startSamtale(laast.avsnitt);
+    const start = await underTaket(t, (vakt) => startSamtale(laast.avsnitt, vakt));
     // AD-4: samtalen bruker to prompter, og begge stemples. Vurderingens
     // versjon er den som er gjeldende når samtalen starter.
     const vurdering = await hentPrompt("svarvurdering");
@@ -749,13 +778,16 @@ async function vurderOgLagre(
   let v;
   try {
     const laast = await hentLaast(t, s.tekstId);
-    v = await vurderSvar({
-      avsnitt: laast.avsnitt,
-      tidligere: tidligereRunder(s.runder, nummer),
-      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
-      elevsvar,
-      sisteRunde: nummer >= MAKS_RUNDER,
-    });
+    v = await underTaket(t, (vakt) =>
+      vurderSvar({
+        avsnitt: laast.avsnitt,
+        tidligere: tidligereRunder(s.runder, nummer),
+        gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+        elevsvar,
+        sisteRunde: nummer >= MAKS_RUNDER,
+        ...vakt,
+      }),
+    );
   } catch (e) {
     return { slag: "feil", svar: kiFeil(e, KI_FEIL.vurdering), kode: feilkodeFor(e) };
   }
@@ -822,16 +854,20 @@ export async function lagNesteSporsmal(samtaleId: string, nummer: number): Promi
   let v;
   try {
     const laast = await hentLaast(t, s.tekstId);
-    v = await vurderSvar({
-      avsnitt: laast.avsnitt,
-      tidligere: tidligereRunder(s.runder, nummer),
-      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
-      elevsvar: runde.elevsvar,
-      sisteRunde: nummer >= MAKS_RUNDER,
-      // En begrunnelse som mangler (null), erstattes av modellens i sjekken,
-      // så den ikke stopper hvert «Prøv igjen» for alltid.
-      beholdVurdering: { tilstand: runde.svarvurdering, begrunnelse: runde.vurderingsbegrunnelse },
-    });
+    const { elevsvar, svarvurdering } = runde;
+    v = await underTaket(t, (vakt) =>
+      vurderSvar({
+        avsnitt: laast.avsnitt,
+        tidligere: tidligereRunder(s.runder, nummer),
+        gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+        elevsvar,
+        sisteRunde: nummer >= MAKS_RUNDER,
+        // En begrunnelse som mangler (null), erstattes av modellens i sjekken,
+        // så den ikke stopper hvert «Prøv igjen» for alltid.
+        beholdVurdering: { tilstand: svarvurdering, begrunnelse: runde.vurderingsbegrunnelse },
+        ...vakt,
+      }),
+    );
   } catch (e) {
     return kiFeil(e, KI_FEIL.oppfolging);
   }
@@ -872,14 +908,18 @@ export async function revurderRunde(samtaleId: string, nummer: number): Promise<
       };
     }
     const laast = await hentLaast(t, s.tekstId);
-    const v = await vurderSvar({
-      avsnitt: laast.avsnitt,
-      tidligere: tidligereRunder(s.runder, nummer),
-      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
-      elevsvar: runde.elevsvar,
-      sisteRunde: nummer >= MAKS_RUNDER,
-      nyVurdering: true,
-    });
+    const elevsvar = runde.elevsvar;
+    const v = await underTaket(t, (vakt) =>
+      vurderSvar({
+        avsnitt: laast.avsnitt,
+        tidligere: tidligereRunder(s.runder, nummer),
+        gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+        elevsvar,
+        sisteRunde: nummer >= MAKS_RUNDER,
+        nyVurdering: true,
+        ...vakt,
+      }),
+    );
     // Feilet oppfølgingen, og eleven har et ubesvart neste spørsmål, ville
     // den nye vurderingen stått over et spørsmål som bygger på den gamle.
     // Da lagres ingenting, og den gamle vurderingen står.
@@ -972,7 +1012,7 @@ export async function lagOppsummering(tekstId: string, _forrige: Handlingssvar):
     }
     if (!(await hentOppsummering(t, tekstId))) {
       const avsnittene = await hentAvsnitt(t, tekstId);
-      const r = await oppsummer({ avsnitt: avsnittene });
+      const r = await underTaket(t, (vakt) => oppsummer({ avsnitt: avsnittene, ...vakt }));
       await lagreOppsummering(t, tekstId, r.setninger, { promptversjon: r.promptversjon, modell: r.modell });
     }
   } catch (e) {
@@ -1014,7 +1054,8 @@ export async function lagOversettelse(tekstId: string, type: Oversettelsestype):
       } else {
         let norsk = await hentUtpeking(t, tekstId);
         if (!norsk) {
-          const r = await pekUt({ avsnitt: await hentAvsnitt(t, tekstId), fagord });
+          const avsnittene = await hentAvsnitt(t, tekstId);
+          const r = await underTaket(t, (vakt) => pekUt({ avsnitt: avsnittene, fagord, ...vakt }));
           await lagreUtpeking(t, tekstId, r.uttrykk, { promptversjon: r.promptversjon, modell: r.modell });
           norsk = r.uttrykk;
         }
@@ -1024,7 +1065,7 @@ export async function lagOversettelse(tekstId: string, type: Oversettelsestype):
 
     const hash = kildeHash(elementer);
     if (elementer.length > 0 && !(await hentOversettelse(t, tekstId, spraak.kode, type, hash))) {
-      const r = await oversett({ spraak, elementer, fagord });
+      const r = await underTaket(t, (vakt) => oversett({ spraak, elementer, fagord, ...vakt }));
       await lagreOversettelse(t, tekstId, spraak.kode, type, hash, r.oversatt, {
         promptversjon: r.promptversjon,
         modell: r.modell,
@@ -1046,7 +1087,9 @@ export async function lagVers(tekstId: string, form: Versform, _forrige: Handlin
   const t = await tilgang();
   try {
     const [avsnittene, sett] = await Promise.all([hentAvsnitt(t, tekstId), hentBegrepssett(t, tekstId)]);
-    const r = await lagMinnevers({ avsnitt: avsnittene, begreper: sett?.begreper ?? [], form });
+    const r = await underTaket(t, (vakt) =>
+      lagMinnevers({ avsnitt: avsnittene, begreper: sett?.begreper ?? [], form, ...vakt }),
+    );
     await lagreMinnevers(t, tekstId, r);
   } catch (e) {
     return somFeil(e);
@@ -1127,7 +1170,7 @@ export async function lagEtiketterHandling(tekstId: string): Promise<Handlingssv
     if (rad.tilstand !== "innlest" || rad.genererteOverskrifter !== null || avsnittene.some((a) => a.erOverskrift)) {
       return INGEN_FEIL;
     }
-    const r = await lagEtiketter(avsnittene);
+    const r = await underTaket(t, (vakt) => lagEtiketter(avsnittene, vakt));
     await lagreEtiketter(
       t,
       tekstId,

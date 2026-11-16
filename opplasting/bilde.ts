@@ -125,6 +125,10 @@ export async function lesBilde(data: string, nummer: number, hent: typeof fetch 
       if (svar.ok && innhold.tekst) return innhold.tekst;
       if (innhold.kode === "BF-1") throw new BildeFeil("BF-1", { bilde: nummer });
       if (innhold.kode === "BF-2") throw new BildeFeil("BF-2", { bilde: nummer });
+      // PRD §6.4: dagstaket er nådd. Et nytt forsøk nå ville bare blitt avvist.
+      if (innhold.kode === "BF-6") throw new BildeFeil("BF-6", { bilde: nummer });
+      // PRD §6.4: kontoen har lagt inn 5 tekster i dag.
+      if (innhold.kode === "BF-7") throw new BildeFeil("BF-7", { bilde: nummer });
       // Annet: tjenerfeil — prøv igjen.
     } catch (e) {
       if (e instanceof BildeFeil) throw e;
