@@ -9,7 +9,8 @@
  * stegene synlige, alle fire fagordene i eksempelteksten markert, og
  * forklaringene i en `<dl>` under teksten. Rulleeffektene (LandingEffekter)
  * legges oppå bare når JavaScript kjører og bevegelse er tillatt, og de
- * endrer bare utseendet, aldri innholdet.
+ * endrer bare utseendet, aldri innholdet. På telefon er fagorddemoen i
+ * stedet trykkbar (FagordDemo, bolk 6).
  *
  * Ingen KI-kall og ingen data: eksempelteksten er hardkodet.
  *
@@ -20,6 +21,7 @@
 
 import { Gloock } from "next/font/google";
 import Link from "next/link";
+import { type DemoFagord, FagordDemo } from "./FagordDemo";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "./knapper";
 import { LandingEffekter } from "./LandingEffekter";
 import { BuddyMerke } from "./Merke";
@@ -50,7 +52,7 @@ const STEG = [
 ];
 
 /** Forklaringene i demoen, i samme rekkefølge som fagordene i teksten. */
-const FAGORD = [
+const FAGORD: DemoFagord[] = [
   { ord: "arvestoff", forklaring: "Oppskriften cellen følger, lagret i DNA-et.", avsnitt: 1 },
   { ord: "mitose", forklaring: "Celledeling der én celle blir til to like celler med samme arvestoff.", avsnitt: 1 },
   { ord: "kromosom", forklaring: "En pakke med arvestoff. Mennesket har 46 i hver kroppscelle.", avsnitt: 1 },
@@ -75,14 +77,6 @@ const LAERER = [
     tekst: "Forklaringene kan vises på elevens morsmål, uten å erstatte den norske teksten.",
   },
 ];
-
-function Fagord({ i, children }: { i: number; children: string }) {
-  return (
-    <span className="ls-fagord" data-i={i}>
-      {children}
-    </span>
-  );
-}
 
 function Handlinger({ midtstilt = false }: { midtstilt?: boolean }) {
   return (
@@ -159,37 +153,7 @@ export function Landingsside() {
               ordet står i.
             </p>
           </div>
-          <div className="ls-demo-spor">
-            <div className="ls-innhold ls-demo-klistre">
-              <article className="ls-ark" aria-labelledby="ls-eksempel">
-                <h3 id="ls-eksempel">Celledeling</h3>
-                <p>
-                  Før cellen deler seg, kopieres <Fagord i={0}>arvestoffet</Fagord>. Under <Fagord i={1}>mitose</Fagord>{" "}
-                  fordeles <Fagord i={2}>kromosomene</Fagord> likt mellom to nye celler.
-                </p>
-                <p>
-                  Noen ganger blir det en feil når arvestoffet kopieres. Da kan det oppstå en{" "}
-                  <Fagord i={3}>mutasjon</Fagord>, en endring i oppskriften som cellen gir videre.
-                </p>
-              </article>
-              <div className="ls-forklaringer">
-                <p className="ls-hint" aria-hidden="true">
-                  Rull videre, så markerer Buddy fagordene ett for ett.
-                </p>
-                <dl>
-                  {FAGORD.map((f, i) => (
-                    <div key={f.ord} className="ls-forklaring" data-i={i}>
-                      <dt>{f.ord}</dt>
-                      <dd>
-                        {f.forklaring} <span className="ls-kilde">Avsnitt {f.avsnitt}</span>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="ls-teller" aria-hidden="true" />
-              </div>
-            </div>
-          </div>
+          <FagordDemo fagord={FAGORD} />
         </section>
 
         <section className="ls-seksjon" aria-labelledby="ls-morsmaal" data-boble="Jeg kan forklare på morsmålet ditt også.">

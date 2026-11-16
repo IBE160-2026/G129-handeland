@@ -86,7 +86,7 @@ async function ArbeidsbordSide({ t }: { t: Tilgang }) {
 
   if (bunker === null) {
     return (
-      <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+      <main className="mx-auto w-full max-w-[70rem] px-[16px] py-10 min-[760px]:px-5">
         <h1>Hei!</h1>
         <Hentefeil igjen="/" />
       </main>
@@ -97,7 +97,7 @@ async function ArbeidsbordSide({ t }: { t: Tilgang }) {
 
   if (!hoved) {
     return (
-      <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+      <main className="mx-auto w-full max-w-[70rem] px-[16px] py-10 min-[760px]:px-5">
         <h1>Hei!</h1>
         <div className="bord mt-6">
           <div className="flex flex-col items-center gap-5 px-4 py-14 text-center">
@@ -116,10 +116,21 @@ async function ArbeidsbordSide({ t }: { t: Tilgang }) {
   const hovedbunke: Hovedbunke = { ...visning(hoved), neste: { tekst: steg.tekst, href: steg.href }, boble: boble(steg, hoved.tittel) };
 
   return (
-    <main className="mx-auto w-full max-w-[70rem] px-4 py-10 min-[760px]:px-5">
+    <main className="bordside mx-auto w-full max-w-[70rem] px-[16px] py-10 min-[760px]:px-5">
       <div className="mb-6 flex flex-wrap items-end gap-4">
         <div className="min-w-0">
-          <h1>Hei!</h1>
+          {/*
+            Smalere enn 760 px hilser Buddy (mini, brillene 36 px høye) ved siden av
+            «Hei!» og gjentar neste steg i en boble (bolk 6, utkast C). Pynt, som
+            Buddy på bordet: neste steg står allerede på hovedbunken.
+          */}
+          <div className="hilsen">
+            <h1>Hei!</h1>
+            <div className="hilsen-buddy" aria-hidden="true">
+              <BuddyMerke variant="ansikt" mini storrelse={36} />
+              <span className="hilsen-boble">{hovedbunke.boble}</span>
+            </div>
+          </div>
           <p className="mt-1 text-dempet">
             Du holdt på med <strong className="text-tekst">{hoved.tittel}</strong> {relativDag(hoved.sistAktiv, new Date())}.
           </p>

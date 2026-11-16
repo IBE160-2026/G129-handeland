@@ -675,6 +675,110 @@ html.har-tenkepille body {
   text-align: center;
 }
 
+/*
+ * Hilsenen med Buddy (bolk 6, utkast C): smalere enn 760 px står mini-Buddy
+ * (brillene 36 px høye) ved siden av «Hei!» med neste steg i en boble. Når
+ * bordet sprer bunkene, står Buddy på bordet i stedet (.bord-buddy). Pynt
+ * (`aria-hidden`).
+ *
+ * Bytte skjer ved samme bredde som `@container bord (min-width: 52rem)`.
+ * Hilsenen står utenfor bordet, så siden (.bordside, page.tsx) er en egen
+ * container. Bordet er like bredt som siden, minus kanten på 1 px på hver
+ * side, derav + 2px. Ellers var det et spenn (om lag 760–874 px, og ved stor
+ * tekst) uten Buddy.
+ */
+.bordside {
+  container: bordside / inline-size;
+}
+.hilsen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.hilsen-buddy {
+  display: flex;
+  flex: 1 1 12rem;
+  min-width: 0;
+  align-items: center;
+  gap: 0.625rem;
+}
+.hilsen-boble {
+  min-width: 0;
+  max-width: 16rem;
+  border-radius: 16px;
+  background: var(--lb-flate);
+  box-shadow: 0 10px 26px -14px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--lb-kant);
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+}
+@container bordside (min-width: calc(52rem + 2px)) {
+  .hilsen-buddy {
+    display: none;
+  }
+}
+
+/*
+ * Stripene (bolk 6, utkast C): smalere enn 760 px er de små bunkene striper i
+ * full bredde, med tittelen på hele linjen, framdriften og «N av 5». De er
+ * fortsatt bunker: samme `<li>`, samme knapp og samme navn. Ett ark ligger
+ * rett under forsiden (ikke rotert, så det aldri stikker ut til siden).
+ */
+@media (max-width: 759.98px) {
+  /*
+   * 12 px er et eget mål for bordflaten på telefon, i px og ikke i rem: med
+   * 200 % tekst på 320 px ville marger som vokser med teksten, tatt plassen fra
+   * titlene, så lange ord («Novelleanalyse») ble delt. Sidemargen rundt
+   * bordet er {spacing.gutter-mobile} (16 px, page.tsx).
+   */
+  .bord-flate {
+    padding-inline: 12px;
+  }
+  .bunker {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .bunker > li:not(.bunke-hoved)::before {
+    inset: 0.375rem 0.5rem -0.375rem;
+    transform: none;
+  }
+  .bunker > li:not(.bunke-hoved)::after {
+    display: none;
+  }
+  .bunker > li:not(.bunke-hoved) .bunke-forside {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "tittel tittel" "framdrift antall";
+    align-items: center;
+    gap: 0.25rem 1rem;
+    min-height: 2.75rem;
+    padding: 0.75rem 14px;
+  }
+  .bunker > li:not(.bunke-hoved) .bunke-tittel {
+    grid-area: tittel;
+    font-size: 1.375rem;
+  }
+  .bunker > li:not(.bunke-hoved) .framdrift {
+    grid-area: framdrift;
+    max-width: 8rem;
+    margin: 0;
+    padding: 0;
+  }
+  .bunker > li:not(.bunke-hoved) .framdrift > i {
+    height: 5px;
+  }
+  .bunker > li:not(.bunke-hoved) .bunke-antall {
+    grid-area: antall;
+    white-space: nowrap;
+  }
+  .bunker > li:not(.bunke-hoved) .bunke-dato {
+    display: none;
+  }
+}
+
 /* --- Bunken -------------------------------------------------------- */
 
 .bunke {
@@ -950,6 +1054,160 @@ a.kort:focus-visible {
   from {
     opacity: 0;
     transform: translate(var(--fra-x, 0), var(--fra-y, 0)) scale(0.4);
+  }
+}
+
+/*
+ * Arket (bolk 6, utkast D): smalere enn 760 px glir viften opp fra bunnen som
+ * et ark, med de fem aktivitetene som rader. Det er den samme dialogen.
+ * «Legg sammen» står øverst i arket, så arket dekker den aldri. Arket er
+ * høyst 90 % av skjermen og ruller selv (`overscroll-behavior`, og
+ * html.har-ark stenger rullingen av siden under), så siden aldri ruller
+ * sidelengs eller bak arket. Ingen sveip eller dragging, og derfor ikke noe
+ * grep øverst: arket lukkes med knappen, Esc eller trykk på bakgrunnen.
+ */
+/* Begge: eldre iOS Safari stopper ikke berøringsrulling med bare html. */
+html.har-ark,
+html.har-ark body {
+  overflow: hidden;
+}
+.vifte-bakgrunn {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 18, 38, 0.45);
+}
+.vifte[data-oppsett="ark"] {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 51;
+  /*
+   * Tittelen og «Legg sammen» på samme linje når det er plass. Med stor tekst
+   * havner knappen på linjen under, så tittelen aldri presses smal.
+   */
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 0.75rem 1rem;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-top: 1px solid var(--lb-kant);
+  border-radius: 28px 28px 0 0;
+  background: var(--lb-flate);
+  padding: 1.25rem 16px calc(1.25rem + env(safe-area-inset-bottom));
+  /*
+   * Den andre skyggen er en flate i samme farge rett under arket: {motion.fan}
+   * går litt forbi målet (1,35), og uten den ville siden blitt synlig under
+   * arket et øyeblikk.
+   */
+  box-shadow:
+    0 -14px 40px -18px rgba(0, 0, 0, 0.45),
+    0 4rem 0 0 var(--lb-flate);
+}
+.vifte[data-oppsett="ark"] .vifte-lukk {
+  order: 2;
+  align-self: flex-start;
+  margin-inline-start: auto;
+}
+.vifte[data-oppsett="ark"] .vifte-senter {
+  order: 1;
+  flex: 1 1 9rem;
+  width: auto;
+  min-width: 0;
+  transform: none;
+}
+.vifte[data-oppsett="ark"] .vifte-senter::before,
+.vifte[data-oppsett="ark"] .vifte-senter::after {
+  display: none;
+}
+.vifte[data-oppsett="ark"] .vifte-senter .bunke-forside {
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+.vifte[data-oppsett="ark"] .vifte-senter .bunke-tittel {
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+.vifte[data-oppsett="ark"] .vifte-kort {
+  order: 3;
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.vifte[data-oppsett="ark"] .vifte-kort > li {
+  border-top: 1px solid var(--lb-kant);
+}
+/* Radene: ikonet, navnet og statusen under hverandre, og en pil på de åpne. */
+.vifte[data-oppsett="ark"] .kort {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "ikon navn pil" "ikon status pil";
+  align-items: center;
+  gap: 0 0.75rem;
+  min-height: 3.5rem;
+  height: auto;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  padding: 0.625rem 0.375rem;
+  box-shadow: none;
+  transform: none;
+}
+.vifte[data-oppsett="ark"] a.kort:hover,
+.vifte[data-oppsett="ark"] a.kort:focus-visible {
+  transform: none;
+  background: var(--lb-markering);
+}
+.vifte[data-oppsett="ark"] .kort-ikon {
+  grid-area: ikon;
+}
+.vifte[data-oppsett="ark"] .kort-navn {
+  grid-area: navn;
+  font-size: 1.375rem;
+  line-height: 1.15;
+}
+.vifte[data-oppsett="ark"] .kort-status {
+  grid-area: status;
+}
+.kort-pil {
+  display: none;
+}
+.vifte[data-oppsett="ark"] .kort-pil {
+  display: block;
+  grid-area: pil;
+  color: var(--lb-primaer);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vifte.klar[data-oppsett="ark"] {
+    animation: vifte-ark 0.5s cubic-bezier(0.3, 1.35, 0.5, 1) both;
+  }
+  .vifte.klar[data-oppsett="ark"] .vifte-senter,
+  .vifte.klar[data-oppsett="ark"] .vifte-kort > li {
+    animation: none;
+  }
+  .vifte-bakgrunn {
+    animation: vifte-bakgrunn 0.3s ease both;
+  }
+}
+@keyframes vifte-ark {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes vifte-bakgrunn {
+  from {
+    opacity: 0;
   }
 }
 
@@ -1316,11 +1574,76 @@ body:has(#landingsside) .meny-landing {
 }
 
 /*
- * Med effekten: fagordene lyser opp ett for ett mens eleven ruller. Fra 760 px
- * blir teksten stående (sporet gir rulleveien). På telefon er det ikke noe
- * spor: flaten ruller som vanlig og ordene lyser opp mens den passerer.
- * Sporet står som tomrom i dokumentet under flaten: 1584 px fra demoflaten
- * til overskriften i neste seksjon (målt på 375 × 800, utlogget, bolk 4).
+ * Trykkdemoen (bolk 6, utkast E): smalere enn 760 px, med JavaScript og når
+ * bevegelse er tillatt, er fagordene knapper (FagordDemo), og forklaringen
+ * vises i et panel under teksten med mini-Buddy (brillene 30 px høye) ved
+ * siden av. `<dl>` er da sr-only. Effekt A er av på telefon.
+ */
+/* Med stor tekst er knappen aldri bredere enn linjen; da brytes heller ordet inni den. */
+button.ls-fagord {
+  max-width: 100%;
+  border: 0;
+  margin: 0;
+  padding-block: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  cursor: pointer;
+  /* Overgangen hører til effekt A; her ville teksten blitt hvit før flaten ble fiolett. */
+  transition: none;
+}
+button.ls-fagord[aria-expanded="true"] {
+  background: var(--lb-primaer);
+  color: var(--lb-paa-primaer);
+  text-decoration-color: var(--lb-paa-primaer);
+}
+/*
+ * En knapp brytes som ett tegn, så tegnsettingen etter ordet holdes på samme
+ * linje, og knappen gir plass til den (1ch), så den ikke stikker ut.
+ */
+.ls-ordgruppe {
+  white-space: nowrap;
+}
+.ls-ordgruppe > button.ls-fagord {
+  max-width: calc(100% - 1ch);
+}
+/* Buddy ved siden av panelet; med stor tekst legger panelet seg under Buddy. */
+.ls-trykk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+.ls-trykk-buddy {
+  margin-top: 0.75rem;
+}
+.ls-trykkpanel {
+  flex: 1 1 12rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+  border-inline-start: 5px solid var(--lb-primaer);
+  border-radius: 20px;
+  background: var(--lb-markering);
+  padding: 0.875rem 1.125rem;
+}
+.ls-trykkpanel p {
+  margin: 0;
+}
+.ls-trykk-ord {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/*
+ * Med effekten (bare fra 760 px): fagordene lyser opp ett for ett mens eleven
+ * ruller, og teksten blir stående (sporet gir rulleveien). Sporet står som
+ * tomrom i dokumentet under flaten; på telefon ga det 1584 px fra demoflaten
+ * til overskriften i neste seksjon (målt på 375 × 800, utlogget, bolk 4), og
+ * der er effekten derfor av.
  */
 .effekt-a.ls-demo-klistret .ls-demo-spor {
   height: 240vh;
@@ -1526,6 +1849,20 @@ body:has(#landingsside) .meny-landing {
   #landingsside.effekt-a .ls-teller {
     display: none;
   }
+  /* Trykkdemoen (telefon) skrives ut som den statiske listen. */
+  #landingsside .ls-trykk {
+    display: none;
+  }
+  #landingsside .ls-forklaringer dl.sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+  }
 }
 
 /* Kontrastmodus: tusjen, fagordene og linjen beholder en strek. */
@@ -1541,8 +1878,15 @@ body:has(#landingsside) .meny-landing {
     text-decoration-line: none;
   }
   .ls-forklaring,
+  .ls-trykkpanel,
   .effekt-a .ls-hint {
     border-inline-start-color: CanvasText;
+  }
+  /* Ordet som er vist i trykkdemoen. */
+  button.ls-fagord[aria-expanded="true"] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
   }
   #landingsside .ls-linje,
   #landingsside .ls-linje > i {

@@ -183,6 +183,19 @@ components:
     filled: '{colors.primary}'
     empty: 2px omriss i {colors.text-muted}
     label: '{typography.body-sm}'
+  stack-strip:                  # de små bunkene smalere enn 760 px (bolk 6)
+    width: 100%
+    minHeight: '{spacing.target-min}'
+    radius: '{rounded.lg}'
+    title: 1.375rem Instrument Serif
+    sheetUnder: ett ark rett under forsiden, ikke rotert
+  sheet:                        # viften smalere enn 760 px (bolk 6)
+    background: '{colors.surface}'
+    radius: 28px 28px 0 0
+    maxHeight: 90vh (ruller innvendig)
+    shadow: 0 -14px 40px -18px rgba(0,0,0,.45)
+    backdrop: rgba(15,18,38,.45)
+    row: ikon, navn i Instrument Serif 1.375rem, status i {typography.body-sm}, pil i {colors.primary}; minst 56 px høy
   activity-card:
     minWidth: 168px
     minHeight: 118px
@@ -216,7 +229,7 @@ components:
     pupil: '{colors.text}'
     viewBox: -4 -4 128 128      # dekker hele avslutningen, så B-en aldri klippes
     miniViewBox: 0 35 120 51    # mini: beskåret til brillene, krymper til 0,48 under avslutningen
-    miniSizes: 20px, 22px, 28px # mini-Buddy M1: høyden på brillene (knapp, linje, pille)
+    miniSizes: 20px, 22px, 28px, 30px, 36px # mini-Buddy M1: høyden på brillene (knapp, linje, pille, fagorddemoen og hilsenen på telefon)
   wordmark:
     lese: '{typography.wordmark-lese}'
     uddy: '{typography.wordmark-uddy}'
@@ -304,7 +317,7 @@ Avstandsskalaen bygger på 4 piksler. Innholdet er høyst `{spacing.content-max}
 
 - **Brytepunkt:** smalere enn 760 px gir telefonoppsettet, og 760 px og bredere gir oppsettet for brede skjermer.
 - **Landingssiden:** heroen går over hele bredden. Seksjonene har `{spacing.18}` luft over og under. Stegene i «Slik hjelper Buddy deg» har `{spacing.24}` mellom seg.
-- **Arbeidsbordet:** På brede skjermer er det ett bord med hovedbunken i midten og de fire andre bunkene i hjørnene. Bord, bunker og kort har *minimumsmål*, ikke faste mål, og bordet klipper aldri innholdet. Plasseringen av bunker og viftekort regnes ut fra de målte størrelsene. Er det ikke plass (stor tekst, smal skjerm), faller oppsettet tilbake til et rutenett. På telefon er bordet en kolonne: hovedbunken øverst, de små bunkene i et rutenett med to kolonner, og «Legg en ny tekst på bordet» under.
+- **Arbeidsbordet:** På brede skjermer er det ett bord med hovedbunken i midten og de fire andre bunkene i hjørnene. Bord, bunker og kort har *minimumsmål*, ikke faste mål, og bordet klipper aldri innholdet. Plasseringen av bunker og viftekort regnes ut fra de målte størrelsene. Er det ikke plass (stor tekst, smal skjerm), faller oppsettet tilbake til et rutenett. På telefon (smalere enn 760 px) er bordet en kolonne: hovedbunken øverst, de små bunkene som striper i full bredde (`{components.stack-strip}`), og «Legg en ny tekst på bordet» under. Sidemargene på telefonbordet er i px (`{spacing.gutter-mobile}`), ikke i rem, så titlene har plass også med 200 % tekst på 320 px. Viften er da et ark nedenfra (`{components.sheet}`).
 - **Trykkflater** er minst `{spacing.target-min}` × `{spacing.target-min}`, også rene tekstlenker med egen funksjon.
 
 ## Elevation & Depth
@@ -346,7 +359,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
   - *Brilleansiktet* (med øyne) er figuren.
   - *B-en* er app-ikon, favicon og del av ordmerket.
   - *Brillene uten øyne* er brilleknappen.
-- **Mini-Buddy (M1, valgt 15.11):** brilleansiktet i små størrelser er den samme tegningen, bare mindre, men beskåret til brillene (flaten 0 35 120 51), så størrelsen er høyden på brillene og bredden om lag 2,35 × høyden: 20 px i en knapp, 22 px foran en linje og 28 px i tenkepillen. Ramme, pupiller og stenger er med. Det finnes ingen egen tegning for små størrelser. Under avslutningen krymper mini-merket til 0,48 rundt midten av brillene i samme tidsvindu som rotasjonen, slik at den ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen eller knappen. Utkastet med M1–M3 ligger i [.working/runde-10-mini-buddy-og-mobil.html](.working/runde-10-mini-buddy-og-mobil.html).
+- **Mini-Buddy (M1, valgt 15.11):** brilleansiktet i små størrelser er den samme tegningen, bare mindre, men beskåret til brillene (flaten 0 35 120 51), så størrelsen er høyden på brillene og bredden om lag 2,35 × høyden: 20 px i en knapp, 22 px foran en linje og 28 px i tenkepillen. På telefon brukes den også med brillene 36 px høye i hilsenen på arbeidsbordet og 30 px høye ved forklaringen i fagorddemoen på landingssiden (bolk 6). Ramme, pupiller og stenger er med. Det finnes ingen egen tegning for små størrelser. Under avslutningen krymper mini-merket til 0,48 rundt midten av brillene i samme tidsvindu som rotasjonen, slik at den ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen eller knappen. Utkastet med M1–M3 ligger i [.working/runde-10-mini-buddy-og-mobil.html](.working/runde-10-mini-buddy-og-mobil.html).
 - **Plass til avslutningen:** brilleansiktet tegnes i flaten −4 −4 128 128. Hele banen til avslutningen (rotasjonen −90° rundt (60, 40), flyttingen (−16, 20), stengene og ryggen) holder seg innenfor den, så ingen del av B-en eller stengene klippes. Mini-merket holder seg innenfor sin beskårne flate fordi det krymper (se over). SVG-en har i tillegg `overflow: visible`, og ingen flate rundt merket har `overflow: hidden`.
 - **Kildekode:** [mockups/merke.js](mockups/merke.js) og [mockups/merke.css](mockups/merke.css).
 
@@ -373,6 +386,13 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
 - *Hovedbunken* har fiolett kant, merkelappen «Sist brukt» (statuspille) og en lenke til neste steg.
 - *Titler* brytes. Er tittelen lengre enn tre linjer, avkortes den visuelt med ellipse, men står i sin helhet i det tilgjengelige navnet og øverst i viften.
 - *Hover:* bunken løftes 4 px. *Åpen:* bunken flyttes til midten og skaleres til 80 %.
+- **Stripe** (`{components.stack-strip}`, smalere enn 760 px): de små bunkene er striper i full bredde. Tittelen har hele den første linjen og brytes bare mellom ord. Under står framdriften og «N av 5» (ordet «påbegynt» er skjult tekst for skjermlesere). Datoen vises ikke. Ett ark ligger rett under forsiden, uten rotasjon, så ingenting stikker ut til siden.
+
+**Arket** (`{components.sheet}`, smalere enn 760 px)
+- Viften er et ark som glir opp fra bunnen over en mørk bakgrunn: tittelen og «Legg sammen» øverst (knappen går til linjen under når teksten er stor), og de fem aktivitetene som rader med en tynn skillelinje. Åpne rader har en pil (›), og låste rader har låseikonet og teksten «Låst. Åpnes når du har lest teksten.» i full kontrast.
+- Arket har ikke noe grep øverst, fordi det ikke kan dras (EXPERIENCE.md: ingen sveip).
+
+**Hilsenen på telefon:** mini-Buddy med brillene 36 px høye ved siden av «Hei!», med neste steg i en boble på `{colors.surface}` med tynn kant og `{elevation.sheet}`. Fra 760 px står Buddy på bordet i stedet.
 
 **Aktivitetskort (`{components.activity-card}`)**
 - Har et ikon i en markeringsfarget rute, navnet på aktiviteten i Instrument Serif og en statuslinje i `{typography.body-sm}`. Ikonet er bare dekor.
@@ -382,6 +402,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
 
 **Faguttrykk og forklaringspanel** (`{components.fagord}`, `{components.explanation-panel}`)
 - *Faguttrykket i teksten* får markeringsflate, fiolett understrek (`text-decoration`, ikke skygge, så den overlever kontrastmodus) og fet skrift. *Fokus:* fokusringen rundt ordet.
+- *Fagorddemoen på telefon* (landingssiden, bolk 6): fagordene er knapper med samme utseende. Ordet som er vist, er fylt med `{colors.primary}` og tekst i `{colors.on-primary}`. Forklaringen står i et forklaringspanel under teksten, med mini-Buddy (brillene 30 px høye) ved siden av. Med stor tekst legger panelet seg under Buddy.
 - *Forklaringspanelet* har markeringsflate, fiolett kant på startsiden (`border-inline-start`, så den følger høyre-til-venstre) og ordet i `{typography.term}`. Telefontesten ba om en større forklaringsboks med egen bakgrunn, og panelet følger det.
 
 **Brilleknappen (`{components.glasses-button}`)**

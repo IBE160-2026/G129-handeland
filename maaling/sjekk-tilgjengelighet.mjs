@@ -43,6 +43,15 @@
  *     og axe er grønn mens den vises; på 1280 px er den flaten på 64 px som
  *     før. «Lever» med Buddy i knappen er låst med aria-disabled (fokus blir
  *     stående, opasitet ≥ 0,9, brillene om lag 20 px) og sender ikke to ganger
+ *   - bolk 6, mobilflatene: på 375 px hilser Buddy (36 px) ved «Hei!», de små
+ *     bunkene er striper i full bredde med «N av 5», og viften er et ark
+ *     nederst (fem rader, fokusfelle, Esc, trykk på bakgrunnen, axe, aldri
+ *     høyere enn 90 % av skjermen, og arket og «Legg sammen» innenfor
+ *     skjermen; låste rader for en tekst som bare er lagt inn). Med 200 % tekst
+ *     på 320 px ruller arket internt, og ingen tittel på en stripe deles midt
+ *     i et ord. Fagorddemoen på landingssiden er trykkbar på telefon (knapper
+ *     med aria-expanded og aria-controls, forklaringen under teksten, ingen
+ *     aria-live, axe), og statisk uten JavaScript og ved redusert bevegelse
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -672,14 +681,108 @@ try {
   sjekk("FR-10 telefon: trykk utenfor lukker", (await tDialog.count()) === 0);
   await ingenSiderulling(tlf, "lesevisning etter forklaring");
 
-  // Viften på telefon: kortene i et rutenett under bunken, uten sidelengs rulling.
+  // Bolk 6, utkast C: Buddy hilser ved siden av «Hei!» med neste steg i en boble, som pynt.
   await tlf.goto(`${APP}/`);
-  await tlf.locator("button:has-text('Vis aktiviteter for EM-bølger')").tap(HJOERNE);
-  await tlf.locator("[role=dialog]").waitFor();
-  await tlf.waitForTimeout(1000);
-  sjekk("viften på telefon er et rutenett", (await tlf.locator("[role=dialog]").getAttribute("data-oppsett")) === "rutenett");
-  await ingenSiderulling(tlf, "arbeidsbord med åpen vifte");
-  await axe(tlf, "arbeidsbord med åpen vifte (telefon)");
+  const hilsen = await tlf.evaluate(() => {
+    const h = document.querySelector(".hilsen-buddy");
+    const svg = h?.querySelector("svg.merke.mini");
+    const b = h?.getBoundingClientRect();
+    return {
+      synlig: !!h?.checkVisibility(),
+      skjult: h?.getAttribute("aria-hidden") === "true",
+      brille: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+      boble: h?.querySelector(".hilsen-boble")?.textContent ?? "",
+      innenfor: !!b && b.left >= 0 && b.right <= window.innerWidth,
+    };
+  });
+  sjekk(
+    "bolk 6, 375 px: Buddy (brillene 36 px) hilser ved «Hei!» med neste steg i boblen, aria-hidden",
+    hilsen.synlig && hilsen.skjult && hilsen.brille === 36 && hilsen.boble.includes("EM-bølger") && hilsen.innenfor,
+    JSON.stringify(hilsen),
+  );
+
+  // Bolk 6, utkast D: viften på telefon er et ark som glir opp fra bunnen.
+  const tVifte = tlf.locator("[role=dialog][aria-modal=true]");
+  const tBunke = tlf.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
+  await tBunke.tap(HJOERNE);
+  await tVifte.waitFor();
+  await tlf.waitForTimeout(1000); // arket har glidd opp
+  /** Arket og «Legg sammen» innenfor skjermen, og arket høyst 90 % av den. */
+  const maalArk = (side) =>
+    side.evaluate(() => {
+      const d = document.querySelector("[role=dialog]");
+      const a = d.getBoundingClientRect();
+      const l = d.querySelector(".vifte-lukk").getBoundingClientRect();
+      const inne = (r) => r.left >= 0 && r.top >= 0 && r.right <= window.innerWidth + 0.5 && r.bottom <= window.innerHeight + 0.5;
+      return {
+        oppsett: d.dataset.oppsett,
+        posisjon: getComputedStyle(d).position,
+        arkInne: inne(a),
+        lukkInne: inne(l) && l.top >= a.top && l.bottom <= a.bottom,
+        andel: Math.round((a.height / window.innerHeight) * 100),
+        ruller: d.scrollHeight > d.clientHeight + 1,
+        siden: document.documentElement.scrollHeight > window.innerHeight && getComputedStyle(document.documentElement).overflowY !== "hidden",
+        rader: d.querySelectorAll(".vifte-kort > li").length,
+      };
+    });
+  const tArk = await maalArk(tlf);
+  sjekk(
+    "bolk 6, 375 px: viften er et ark nederst, med fem rader, og arket og «Legg sammen» er innenfor skjermen",
+    tArk.oppsett === "ark" && tArk.posisjon === "fixed" && tArk.arkInne && tArk.lukkInne && tArk.rader === 5,
+    JSON.stringify(tArk),
+  );
+  sjekk("bolk 6, 375 px: arket er høyst 90 % av skjermen, og siden under ruller ikke", tArk.andel <= 90 && !tArk.siden, `${tArk.andel} %`);
+  sjekk(
+    "bolk 6, arket: fokus på den første raden",
+    await tlf.evaluate(() => !!document.activeElement?.closest("[role=dialog]") && document.activeElement.textContent.includes("Teksten")),
+  );
+  let tUtenfor = 0;
+  for (let i = 0; i < 8; i++) {
+    await tlf.keyboard.press("Tab");
+    if (!(await tlf.evaluate(() => !!document.activeElement?.closest("[role=dialog]")))) tUtenfor++;
+  }
+  for (let i = 0; i < 3; i++) {
+    await tlf.keyboard.press("Shift+Tab");
+    if (!(await tlf.evaluate(() => !!document.activeElement?.closest("[role=dialog]")))) tUtenfor++;
+  }
+  sjekk("bolk 6, arket: Tab og Shift+Tab holder fokus i arket", tUtenfor === 0, `${tUtenfor} av 11 trykk gikk ut`);
+  await ingenSiderulling(tlf, "arbeidsbord med åpent ark");
+  await axe(tlf, "arbeidsbord med åpent ark (telefon)");
+  /** Etter hver lukkevei: arket er borte, siden ruller igjen, og fokus er tilbake på bunkens knapp. */
+  async function arketLukket(navn) {
+    await tlf.waitForTimeout(200);
+    const r = await tlf.evaluate(() => ({
+      dialog: document.querySelectorAll("[role=dialog]").length,
+      harArk: document.documentElement.classList.contains("har-ark"),
+      overflow: getComputedStyle(document.documentElement).overflowY,
+    }));
+    const fokus = await tBunke.evaluate((e) => e === document.activeElement);
+    sjekk(
+      `bolk 6, arket: ${navn} lukker, har-ark er borte, siden ruller igjen, og fokus er tilbake på bunkens knapp`,
+      r.dialog === 0 && !r.harArk && r.overflow !== "hidden" && fokus,
+      JSON.stringify({ ...r, fokus }),
+    );
+  }
+  await tlf.keyboard.press("Escape");
+  await arketLukket("Esc");
+  await tBunke.tap(HJOERNE);
+  await tVifte.waitFor();
+  await tlf.waitForTimeout(700);
+  // Et trykk på bakgrunnen over arket legger det sammen (ingen sveip eller dragging).
+  // Midt i plassen mellom toppen av skjermen og toppen av arket.
+  const arkTopp = await tVifte.evaluate((d) => d.getBoundingClientRect().top);
+  if (arkTopp < 10) {
+    sjekk("bolk 6, arket: det er plass over arket til å trykke på bakgrunnen", false, `arket starter ${Math.round(arkTopp)} px fra toppen`);
+  } else {
+    await tlf.touchscreen.tap(187, Math.round(arkTopp / 2));
+    await arketLukket("trykk på bakgrunnen");
+  }
+  if ((await tVifte.count()) === 0) {
+    await tBunke.tap(HJOERNE);
+    await tVifte.waitFor();
+  }
+  await tlf.locator("[role=dialog] button:has-text('Legg sammen')").tap();
+  await arketLukket("«Legg sammen»");
   sjekk(
     "menyen på telefon viser Samlingen og Konto",
     (await tlf.locator("nav a:visible", { hasText: "Samlingen" }).count()) === 1 && (await tlf.locator("nav a:visible", { hasText: "Konto" }).count()) === 1,
@@ -901,7 +1004,8 @@ try {
           if (!/hidden|clip/.test(`${s.overflowX} ${s.overflowY}`)) return false;
           // Skjult tekst for skjermlesere, og tittelen på en bunke, som med vilje
           // avkortes etter tre linjer (EXPERIENCE.md, Lang tittel).
-          if (e.closest(".sr-only") || e.classList.contains("bunke-tittel") || !e.textContent.trim()) return false;
+          // Tekst som er skjult med sr-only, også bare på telefon («påbegynt» på stripene).
+          if (e.closest('.sr-only, [class~="max-[759.98px]:sr-only"]') || e.classList.contains("bunke-tittel") || !e.textContent.trim()) return false;
           return e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1;
         })
         .map((e) => `${e.tagName.toLowerCase()}.${[...e.classList].slice(0, 2).join(".")}`)
@@ -929,8 +1033,15 @@ try {
   await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
   await smal.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
   await smal.locator("[role=dialog]").waitFor();
-  await ingenSiderulling(smal, "åpen vifte 320 px, 200 % tekst");
-  await ingenKlipping(smal, "åpen vifte 320 px, 200 % tekst");
+  await smal.waitForTimeout(800);
+  await ingenSiderulling(smal, "åpent ark 320 px, 200 % tekst");
+  await ingenKlipping(smal, "åpent ark 320 px, 200 % tekst");
+  const stortArk = await maalArk(smal);
+  sjekk(
+    "bolk 6, 320 px, 200 % tekst: arket ruller internt, er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen",
+    stortArk.oppsett === "ark" && stortArk.ruller && stortArk.andel <= 90 && stortArk.arkInne && stortArk.lukkInne && !stortArk.siden,
+    JSON.stringify(stortArk),
+  );
   // PC med 200 % tekst: viften faller tilbake til rutenettet når kortene ikke får plass rundt bunken.
   const storPc = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
   storPc.setDefaultTimeout(120000);
@@ -991,11 +1102,93 @@ try {
   await bunkeTlf.goto(`${APP}/`);
   await ingenDelteOrd(bunkeTlf, "375 px");
   if (process.env.SKJERMBILDE) await bunkeTlf.screenshot({ path: path.join(process.env.SKJERMBILDE, "arbeidsbord-375.png"), fullPage: true });
+  // Bolk 6, utkast C: de små bunkene er striper i full bredde, med tittelen, framdriften og «N av 5».
+  const striper = await bunkeTlf.evaluate(() => {
+    const ul = document.querySelector(".bunker").getBoundingClientRect();
+    return [...document.querySelectorAll(".bunker > li:not(.bunke-hoved)")].map((li) => {
+      const b = li.getBoundingClientRect();
+      const antall = li.querySelector(".bunke-antall");
+      return {
+        full: Math.abs(b.width - ul.width) <= 1,
+        dato: li.querySelector(".bunke-dato").checkVisibility(),
+        // «påbegynt» er visuelt skjult (1 × 1 px), men står i teksten for skjermleseren.
+        synlig: [...antall.childNodes].filter((n) => n.nodeType === Node.TEXT_NODE).map((n) => n.textContent).join("").trim(),
+        skjult: antall.querySelector(".bunke-paabegynt").getBoundingClientRect().width <= 1,
+        lest: antall.textContent.trim(),
+        navn: li.querySelector(".bunke-knapp").textContent,
+      };
+    });
+  });
+  sjekk(
+    "bolk 6, 375 px: de små bunkene er striper i full bredde med «N av 5», og knappen heter fortsatt «Vis aktiviteter for …»",
+    striper.length > 0 &&
+      striper.every((s) => s.full && !s.dato && /^\d av 5$/.test(s.synlig) && s.skjult && s.lest.endsWith("påbegynt") && s.navn.startsWith("Vis aktiviteter for ")),
+    JSON.stringify(striper[0]),
+  );
+  // Låst tekst («Novelleanalyse» er bare lagt inn): fire låste rader i arket.
+  await bunkeTlf.locator("button:has-text('Vis aktiviteter for Novelleanalyse')").tap();
+  await bunkeTlf.locator("[role=dialog]").waitFor();
+  await bunkeTlf.waitForTimeout(800);
+  const rader = await bunkeTlf.evaluate(() =>
+    [...document.querySelectorAll("[role=dialog] .vifte-kort > li")].map((li) => ({
+      lenke: !!li.querySelector("a"),
+      laast: li.textContent.includes("Låst. Åpnes når du har lest teksten."),
+      pil: [...li.querySelectorAll(".kort-pil")].some((p) => p.checkVisibility()),
+    })),
+  );
+  sjekk(
+    "bolk 6, arket: en tekst som bare er lagt inn, har fire låste rader (ikke lenker) etter Teksten",
+    rader.length === 5 && rader[0].lenke && rader.slice(1).every((r) => r.laast && !r.lenke),
+    JSON.stringify(rader),
+  );
+  sjekk(
+    "bolk 6, arket: pilen vises på den åpne raden og ikke på de låste",
+    rader.length === 5 && rader[0].pil && rader.slice(1).every((r) => !r.pil),
+    rader.map((r) => (r.pil ? "pil" : "-")).join(" "),
+  );
+  await axe(bunkeTlf, "arbeidsbord med åpent ark, låst tekst (telefon)");
   await bunkeTlf.context().close();
-  // 320 px med 200 % tekst: her er «Novelleanalyse» om lag 1,5 px bredere enn
-  // kolonnen, og spesifikasjonen (bolk 4) tillater at et ord deles når det ikke
-  // får plass alene. Sjekken kommer tilbake i bolk 6, når de små bunkene blir
-  // striper i full bredde på telefon.
+  // 320 px med 200 % tekst: i bolk 4 var «Novelleanalyse» om lag 1,5 px bredere
+  // enn kolonnen. Med stripene i full bredde (bolk 6) har tittelen hele linjen.
+  const bunkeSmal = await (await nettleser.newContext({ viewport: { width: 320, height: 700 }, locale: "nb-NO" })).newPage();
+  bunkeSmal.setDefaultTimeout(120000);
+  await bunkeSmal.context().addCookies(await pc.context().cookies());
+  await bunkeSmal.goto(`${APP}/`);
+  await bunkeSmal.addStyleTag({ content: "html { font-size: 200% !important; }" });
+  await ingenDelteOrd(bunkeSmal, "320 px, 200 % tekst");
+  // Hilsenen med Buddy og stripene, med alle tekstene på bordet.
+  await ingenSiderulling(bunkeSmal, "arbeidsbord med striper 320 px, 200 % tekst");
+  await ingenKlipping(bunkeSmal, "arbeidsbord med striper 320 px, 200 % tekst");
+  await bunkeSmal.context().close();
+  // FR-48 på 1280 px: telefonflatene fra bolk 6 vises ikke. Ingen hilsen-Buddy
+  // (Buddy står på bordet), datoen og «påbegynt» er synlige på alle bunkene,
+  // og viften har kort uten pil.
+  const bredBord = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
+  bredBord.setDefaultTimeout(120000);
+  await bredBord.context().addCookies(await pc.context().cookies());
+  await bredBord.goto(`${APP}/`);
+  const bredFlater = await bredBord.evaluate(() => {
+    const bredde = (e) => e.getBoundingClientRect().width;
+    return {
+      hilsen: [...document.querySelectorAll(".hilsen-buddy")].some((e) => e.checkVisibility()),
+      bordBuddy: [...document.querySelectorAll(".bord-buddy")].some((e) => e.checkVisibility()),
+      dato: [...document.querySelectorAll(".bunker .bunke-dato")].map((e) => e.checkVisibility() && bredde(e) > 1),
+      paabegynt: [...document.querySelectorAll(".bunker .bunke-paabegynt")].map((e) => e.checkVisibility() && bredde(e) > 1),
+    };
+  });
+  sjekk(
+    "1280 px: ingen hilsen-Buddy (Buddy står på bordet), og datoen og «påbegynt» er synlige på alle bunkene",
+    !bredFlater.hilsen && bredFlater.bordBuddy && bredFlater.dato.length > 1 && bredFlater.dato.every(Boolean) && bredFlater.paabegynt.every(Boolean) && bredFlater.paabegynt.length === bredFlater.dato.length,
+    JSON.stringify(bredFlater),
+  );
+  await bredBord.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
+  await bredBord.locator("[role=dialog]").waitFor();
+  await bredBord.waitForTimeout(800);
+  sjekk(
+    "1280 px: viften har kort uten pil (pilen hører til arket på telefon)",
+    !(await bredBord.evaluate(() => [...document.querySelectorAll("[role=dialog] .kort-pil")].some((p) => p.checkVisibility()))),
+  );
+  await bredBord.context().close();
 
   /* --- FR-47: landingssiden, uten innlogging ------------------------- */
   // Nye kontekster har ingen informasjonskapsler, så ingen er innlogget.
@@ -1040,7 +1233,7 @@ try {
   /** Den statiske versjonen: alle steg synlige, alle fire fagord markert og forklaringslisten synlig. */
   async function statisk(side) {
     return side.evaluate(() => {
-      const synlig = (e) => e.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !e.classList.contains("sr-only");
+      const synlig = (e) => e.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !e.closest(".sr-only");
       const steg = [...document.querySelectorAll("#landingsside .ls-ett")];
       const ord = [...document.querySelectorAll("#landingsside .ls-fagord")];
       const dt = [...document.querySelectorAll("#landingsside .ls-forklaringer dl dt")];
@@ -1207,32 +1400,103 @@ try {
         tomrom: Math.round(neste.getBoundingClientRect().top - flate.getBoundingClientRect().bottom),
       };
     });
+    // Bolk 6: effekt A er av på telefon, med og uten redusert bevegelse.
     sjekk(
-      `landingsside 375 px (${navn}): ingen tomrom over 160 px mellom demoen og neste seksjon`,
-      r.tomrom <= 160 && r.effektA === !redusert,
+      `landingsside 375 px (${navn}): ingen tomrom over 160 px mellom demoen og neste seksjon, og effekt A er av`,
+      r.tomrom <= 160 && !r.effektA,
       `${r.tomrom} px, effekt A ${r.effektA ? "på" : "av"}`,
     );
-    if (!redusert) {
-      // Effekt A virker fortsatt på telefon: ordene lyser opp ett for ett mens flaten passerer.
-      const { sett, antall } = await s.evaluate(async () => {
-        const flate = document.querySelector("#landingsside .ls-demo-klistre");
-        const funnet = new Set();
-        const start = flate.getBoundingClientRect().top + window.scrollY - window.innerHeight;
-        for (let y = start; y < start + window.innerHeight + flate.offsetHeight; y += 40) {
-          window.scrollTo(0, y);
-          await new Promise((ok) => requestAnimationFrame(() => setTimeout(ok, 30)));
-          funnet.add(document.querySelectorAll("#landingsside .ls-fagord.paa").length);
-        }
-        return { sett: [...funnet].sort((x, y) => x - y), antall: document.querySelectorAll("#landingsside .ls-fagord").length };
+    if (redusert) {
+      // Redusert bevegelse: den statiske demoen, uten knapper.
+      const st = await statisk(s);
+      sjekk(
+        "landingsside 375 px, redusert bevegelse: den statiske demoen (fire markert og listen), ingen knapper",
+        statiskOk(st) && (await s.locator("#landingsside button.ls-fagord").count()) === 0,
+        statiskTekst(st),
+      );
+    } else {
+      // Bolk 6, utkast E: fagordene er knapper, og et trykk viser forklaringen i panelet under teksten.
+      const knapper = s.locator("#landingsside button.ls-fagord");
+      const foer = await s.evaluate(() => {
+        const k = [...document.querySelectorAll("#landingsside button.ls-fagord")];
+        const panel = document.getElementById(k[0]?.getAttribute("aria-controls"));
+        return {
+          antall: k.length,
+          lukket: k.every((e) => e.getAttribute("aria-expanded") === "false"),
+          panel: !!panel && k.every((e) => e.getAttribute("aria-controls") === panel.id),
+          panelTekst: panel?.textContent.trim() ?? "",
+          dlSkjult: !!document.querySelector("#landingsside .ls-forklaringer dl.sr-only"),
+          dt: document.querySelectorAll("#landingsside .ls-forklaringer dl dt").length,
+        };
       });
       sjekk(
-        "landingsside 375 px: effekt A markerer fagordene ett for ett",
-        antall > 0 && Array.from({ length: antall + 1 }, (_, n) => n).every((n) => sett.includes(n)),
-        `antall markert underveis: ${sett.join(", ")} av ${antall}`,
+        "landingsside 375 px: fire fagord er knapper (aria-expanded, aria-controls), panelet er aldri tomt, og <dl> er bare visuelt skjult",
+        foer.antall === 4 && foer.lukket && foer.panel && foer.panelTekst.length > 0 && foer.dlSkjult && foer.dt === 4,
+        JSON.stringify(foer),
+      );
+      const mitose = knapper.filter({ hasText: "mitose" });
+      await mitose.scrollIntoViewIfNeeded();
+      const rullFoer = await s.evaluate(() => window.scrollY);
+      await mitose.tap();
+      const etter = await s.evaluate(() => {
+        const k = document.querySelector("#landingsside button.ls-fagord[aria-expanded=true]");
+        const panel = document.getElementById(k?.getAttribute("aria-controls"));
+        const tekst = document.querySelector("#landingsside article").getBoundingClientRect();
+        const pb = panel?.getBoundingClientRect();
+        const buddy = panel?.parentElement.querySelector("svg.merke.mini");
+        return {
+          valgt: k?.textContent,
+          fokus: document.activeElement === k,
+          panel: panel?.textContent ?? "",
+          under: !!pb && pb.top >= tekst.bottom,
+          buddy: buddy ? Math.round(buddy.getBoundingClientRect().height) : 0,
+          live: document.querySelectorAll("#landingsside [aria-live], #landingsside [role=status], #landingsside [role=alert]").length,
+        };
+      });
+      sjekk(
+        "landingsside 375 px: trykk på «mitose» viser forklaringen under teksten med Buddy (30 px), og fokus blir på ordet",
+        etter.valgt === "mitose" && etter.fokus && etter.panel.startsWith("mitose") && etter.panel.includes("Avsnitt 1") && etter.under && etter.buddy === 30,
+        JSON.stringify(etter),
+      );
+      sjekk("landingsside 375 px: trykkdemoen har ingen aria-live", etter.live === 0);
+      sjekk("landingsside 375 px: siden ruller ikke av trykket", Math.abs((await s.evaluate(() => window.scrollY)) - rullFoer) <= 1);
+      await ingenSiderulling(s, "landingsside med trykkdemoen");
+      await axe(s, "landingsside med åpen forklaring i trykkdemoen (telefon)");
+      if (SKJERM) await s.locator(".ls-demo").screenshot({ path: path.join(SKJERM, "landingsside-375-trykkdemo.png") });
+      /** Hvilke ord som er åpne, og hva panelet sier. */
+      const demo = () =>
+        s.evaluate(() => ({
+          aapne: [...document.querySelectorAll("#landingsside button.ls-fagord[aria-expanded=true]")].map((k) => k.textContent),
+          panel: document.querySelector("#landingsside .ls-trykkpanel")?.textContent ?? "",
+        }));
+      // Et trykk på et annet ord flytter aria-expanded og bytter innholdet.
+      await knapper.filter({ hasText: "kromosomene" }).tap();
+      const byttet = await demo();
+      sjekk(
+        "landingsside 375 px: trykk på et annet ord («kromosomene») flytter aria-expanded og bytter forklaringen",
+        byttet.aapne.join() === "kromosomene" && byttet.panel.startsWith("kromosom") && !byttet.panel.includes("mitose"),
+        JSON.stringify(byttet),
+      );
+      // Et nytt trykk på samme ord lukker forklaringen, og hinten kommer tilbake.
+      await knapper.filter({ hasText: "kromosomene" }).tap();
+      const lukket = await demo();
+      sjekk(
+        "landingsside 375 px: nytt trykk på samme ord lukker forklaringen (aria-expanded=false, hinten tilbake)",
+        lukket.aapne.length === 0 && lukket.panel.startsWith("Trykk på et fagord"),
+        JSON.stringify(lukket),
       );
     }
     await s.context().close();
   }
+  // Uten JavaScript på telefon: den statiske demoen.
+  const tlfUtenJs = await landing({ bredde: 375, hoeyde: 740, mobil: true, js: false });
+  const stTlf = await statisk(tlfUtenJs);
+  sjekk(
+    "landingsside 375 px uten JavaScript: den statiske demoen med alle fire forklaringer",
+    statiskOk(stTlf) && (await tlfUtenJs.locator("#landingsside button.ls-fagord").count()) === 0,
+    statiskTekst(stTlf),
+  );
+  await tlfUtenJs.context().close();
   if (SKJERM) {
     for (const [navn, valg] of [
       ["375-lys-redusert", { redusert: true }],
@@ -1256,13 +1520,19 @@ try {
     await ingenSiderulling(s, navn);
     await ingenKlipping(s, navn);
     if (!redusert) {
-      // Demoflaten er høyere enn synsfeltet, så effekt A står av og demoen er statisk.
-      const st = await statisk(s);
+      // Telefonbredde: effekt A er av, og demoen er trykkbar (bolk 6).
+      await s.locator("#landingsside button.ls-fagord", { hasText: "kromosomene" }).click();
+      const st = await s.evaluate(() => ({
+        a: document.getElementById("landingsside").classList.contains("effekt-a"),
+        panel: document.querySelector("#landingsside .ls-trykkpanel")?.textContent ?? "",
+      }));
       sjekk(
-        "320 px, 200 % tekst: effekt A er av, og alle fire forklaringene er synlige",
-        !(await s.evaluate(() => document.getElementById("landingsside").classList.contains("effekt-a"))) && st.forklaringer === 4,
-        statiskTekst(st),
+        "320 px, 200 % tekst: effekt A er av, og trykkdemoen viser forklaringen",
+        !st.a && st.panel.startsWith("kromosom"),
+        JSON.stringify(st),
       );
+      await ingenSiderulling(s, `${navn}, åpen forklaring`);
+      await ingenKlipping(s, `${navn}, åpen forklaring`);
     }
     await s.context().close();
   }

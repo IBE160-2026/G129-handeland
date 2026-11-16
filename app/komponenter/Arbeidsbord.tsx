@@ -21,11 +21,19 @@
  *   - Kortene legges rundt bunken på brede skjermer når de målte
  *     størrelsene gir plass (vifteplass.ts), ellers i et rutenett under.
  *     `{motion.fan}` bare når bevegelse er tillatt (globals.css).
+ *   - Smalere enn 760 px (bolk 6, utkast D) er viften et ark som glir opp
+ *     fra bunnen, med de fem aktivitetene som rader. Det er den samme
+ *     dialogen, med de samme reglene. Arket er høyst 90 % av skjermen og
+ *     ruller selv; siden under ruller ikke. Det lukkes med «Legg sammen»,
+ *     Esc eller trykk på bakgrunnen, aldri med sveip eller dragging.
+ *   - Smalere enn 760 px er de små bunkene striper i full bredde (utkast C):
+ *     tittelen, framdriften og «N av 5». Stilen står i globals.css.
  */
 
 import Link from "next/link";
 import { type CSSProperties, type KeyboardEvent, useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Kort } from "../../data/arbeidsbord";
+import { TELEFON } from "./brytepunkt";
 import { KNAPP_SEKUNDAER } from "./knapper";
 import { BuddyMerke } from "./Merke";
 import { type Punkt, plasserRundt } from "./vifteplass";
@@ -49,6 +57,7 @@ export type Hovedbunke = Visningsbunke & {
 type Oppsett =
   | { modus: "maal" }
   | { modus: "rutenett" }
+  | { modus: "ark" }
   | { modus: "rundt"; hoeyde: number; senter: Punkt; kort: Punkt[] };
 
 const IKON: Record<Kort["navn"], string> = { Teksten: "T", Quiz: "?", Øvekort: "◫", Fagsamtale: "“", Minnevers: "♪" };
@@ -82,11 +91,13 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
   if (apen !== null && !valgt) settApen(null);
 
   /**
-   * Viften prøver å legge kortene rundt bunken bare når bordet selv sprer
-   * bunkene (container query i globals.css: .bord-flate er et rutenett). Da
-   * slår bordoppsettet, Buddy og viftens «rundt» inn ved samme bredde.
+   * På telefon er viften et ark nedenfra. Ellers prøver den å legge kortene
+   * rundt bunken bare når bordet selv sprer bunkene (container query i
+   * globals.css: .bord-flate er et rutenett). Da slår bordoppsettet, Buddy og
+   * viftens «rundt» inn ved samme bredde.
    */
   function startOppsett(): Oppsett {
+    if (matchMedia(TELEFON).matches) return { modus: "ark" };
     const flate = rot.current?.querySelector(".bord-flate");
     return flate && getComputedStyle(flate).display === "grid" ? { modus: "maal" } : { modus: "rutenett" };
   }
@@ -153,9 +164,18 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
     if (!v.classList.contains("klar")) {
       v.classList.add("klar");
       v.querySelector<HTMLElement>(".vifte-kort a, .vifte-kort [tabindex]")?.focus({ preventScroll: true });
-      senter.scrollIntoView({ block: "nearest" });
+      // Arket ligger fast nederst og ruller selv; siden skal ikke flytte seg.
+      if (oppsett.modus !== "ark") senter.scrollIntoView({ block: "nearest" });
     }
   }, [apen, oppsett]);
+
+  // Mens arket er åpent, ruller arket og ikke siden under (globals.css, html.har-ark).
+  const ark = apen !== null && oppsett.modus === "ark";
+  useEffect(() => {
+    if (!ark) return;
+    document.documentElement.classList.add("har-ark");
+    return () => document.documentElement.classList.remove("har-ark");
+  }, [ark]);
 
   // Resten av siden får `inert` mens viften er åpen (bordet selv får det som prop).
   useEffect(() => {
@@ -251,7 +271,7 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
                 <div className="bunke-forside">
                   {erHoved && <p className="bunke-merkelapp">Sist brukt</p>}
                   <h2 className="bunke-tittel">{b.tittel}</h2>
-                  <p className="text-dempet">lagt inn {b.dato}</p>
+                  <p className="bunke-dato text-dempet">lagt inn {b.dato}</p>
                   {erHoved && (
                     <Link href={hoved.neste.href} className="bunke-neste">
                       {hoved.neste.tekst} <span aria-hidden="true">→</span>
@@ -262,8 +282,10 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
                       <i key={n} className={ja ? "ja" : undefined} />
                     ))}
                   </span>
-                  <p className="text-dempet">
-                    {b.framdrift.filter(Boolean).length} av {b.framdrift.length} påbegynt
+                  {/* På stripene (telefon) står bare «N av 5»; «påbegynt» er da skjult tekst. */}
+                  <p className="bunke-antall text-dempet">
+                    {b.framdrift.filter(Boolean).length} av {b.framdrift.length}
+                    <span className={`bunke-paabegynt${erHoved ? "" : " max-[759.98px]:sr-only"}`}> påbegynt</span>
                   </p>
                   {harSkript ? (
                     <button
@@ -305,6 +327,8 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
         )}
       </div>
 
+      {/* Bakgrunnen bak arket: et trykk på den legger arket sammen. Pynt for skjermlesere. */}
+      {valgt && ark && <div className="vifte-bakgrunn" aria-hidden="true" onClick={lukk} />}
       {valgt && (
         <div
           ref={vifte}
@@ -317,8 +341,9 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
           style={rundt ? { height: rundt.hoeyde } : undefined}
           onKeyDown={holdFokus}
           onClick={(e) => {
-            // Et trykk på bordet rundt kortene legger viften sammen.
-            if (e.target === e.currentTarget) lukk();
+            // Et trykk på bordet rundt kortene legger viften sammen. Arket er selve
+            // dialogen, så der er det bakgrunnen (.vifte-bakgrunn) som lukker.
+            if (e.target === e.currentTarget && oppsett.modus !== "ark") lukk();
           }}
         >
           {/* Først i dialogen, fordi den står øverst (WCAG 2.4.3). Fokus går likevel til det første kortet. */}
@@ -385,6 +410,10 @@ function Aktivitetskort({ kort }: { kort: Kort }) {
       </span>
       <span className="kort-navn">{kort.navn}</span>
       <span className="kort-status">{status}</span>
+      {/* Pilen vises bare i radene på arket (telefon). */}
+      <span className="kort-pil" aria-hidden="true">
+        ›
+      </span>
     </Link>
   );
 }

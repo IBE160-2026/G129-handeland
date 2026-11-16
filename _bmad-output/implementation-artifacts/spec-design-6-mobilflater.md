@@ -2,7 +2,8 @@
 title: 'Designfase bolk 6: mobilflatene C, D og E, og animasjonsbanene på mobil'
 type: 'feature'
 created: '2026-11-15'
-status: 'draft'
+status: 'done'
+baseline_commit: 'e9f5472e02d248f1fd991f5b15e895024830058f'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -71,21 +72,21 @@ Til slutt sjekkes alle animasjonsbanene på 375 px.
 - `app/page.tsx` -- hilsenen «Hei!» og hovedbunken.
 - `app/komponenter/Landingsside.tsx` og `LandingEffekter.tsx` -- demoen og effekt A.
 - `app/komponenter/Fagord.tsx` -- mønsteret for knapp og forklaring i lesevisningen. Gjenbruk oppførselen, ikke nødvendigvis komponenten.
-- `app/komponenter/Merke.tsx` -- `BuddyMerke` i 30 og 36 px (M1).
+- `app/komponenter/Merke.tsx` -- `BuddyMerke` med `mini` fra bolk 5. Størrelsene (30 og 36 px) er høyden på brillene, slik bolk 5 definerte dem. Effekt A på telefon ble i bolk 4 gjort om til ordene som tennes uten klistring, og den erstattes nå av trykkdemoen.
 - `maaling/sjekk-tilgjengelighet.mjs` -- telefonsjekkene for bordet og viften. `data-oppsett === "rutenett"` blir `"ark"`.
 
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/page.tsx`, `Arbeidsbord.tsx` og `globals.css` -- C: Buddy og boble ved hilsenen, og stripene under 760 px.
-- [ ] `Arbeidsbord.tsx` og `globals.css` -- D: oppsettet `ark` med rader og animasjon.
-- [ ] `Landingsside.tsx`, `LandingEffekter.tsx` og `globals.css` -- E: trykkdemoen på telefon.
-- [ ] `DESIGN.md` og `EXPERIENCE.md` (Responsive & Platform og Component Patterns: Viften, Bunke og Rulleeffekter) -- oppdater med C, D og E.
-- [ ] `maaling/sjekk-tilgjengelighet.mjs` -- telefon:
+- [x] `app/page.tsx`, `Arbeidsbord.tsx` og `globals.css` -- C: Buddy og boble ved hilsenen, og stripene under 760 px.
+- [x] `Arbeidsbord.tsx` og `globals.css` -- D: oppsettet `ark` med rader og animasjon.
+- [x] `Landingsside.tsx`, `LandingEffekter.tsx` og `globals.css` -- E: trykkdemoen på telefon.
+- [x] `DESIGN.md` og `EXPERIENCE.md` (Responsive & Platform og Component Patterns: Viften, Bunke og Rulleeffekter) -- oppdater med C, D og E.
+- [x] `maaling/sjekk-tilgjengelighet.mjs` -- telefon:
   - arket: fokusfelle, Esc og axe, og at arket ikke er høyere enn skjermen
   - stripene: ingen ord delt, med `ingenDelteOrd` ved 375 px og ved 320 px med 200 % tekst. Sistnevnte ble tatt ut i bolk 4 og skal tilbake her
   - demoen: trykk viser forklaringen, axe, og uten JS
-- [ ] Animasjonsbanene -- et skript (scratchpad) som tar filmstriper på 375 px av: tenkeindikatoren (løkken og avslutningen), viften eller arket som åpnes, effekt C på landingssiden, Buddy-hilsenen og B-en i ordmerket. Se på hver frame og rett det som klippes eller går utenfor.
+- [x] Animasjonsbanene -- et skript (scratchpad) som tar filmstriper på 375 px av: tenkeindikatoren (løkken og avslutningen), viften eller arket som åpnes, effekt C på landingssiden, Buddy-hilsenen og B-en i ordmerket. Se på hver frame og rett det som klippes eller går utenfor.
 
 **Acceptance Criteria:**
 - Given 375 px, when eleven åpner en bunke, then glir arket opp, og ingen del av det eller av «Legg sammen» er utenfor skjermen.
@@ -99,3 +100,25 @@ Til slutt sjekkes alle animasjonsbanene på 375 px.
 
 **Manual checks:**
 - Filmstripene og skjermbilder av bordet, arket og landingsdemoen på 375 px, i lys og mørk modus.
+
+## Review Triage Log
+
+| # | Kilde | Funn | Vurdering | Rute |
+|---|---|---|---|---|
+| 1 | blind, edge | Trykk inne i arket lukker det | medium: bryter mot spesifikasjonen (bare bakgrunnen) | patch |
+| 2 | blind | Kommentaren om gutter-mobile siterer feil token | low, direkte retting | patch |
+| 3 | blind, vgap | Ingen sjekk av at siden ruller igjen etter at arket er lukket | patch | patch |
+| 4 | blind | Fokus tilbake er bare testet for Esc | patch | patch |
+| 5 | blind | Bakgrunnstrykket bruker en hardkodet koordinat | low, direkte retting | patch |
+| 6 | blind | Trykkdemoen er testet med bare ett trykk; valgt blir stående | patch | patch |
+| 7 | blind | 320 px og 200 % er ikke sjekket for klipping og sidelengs rulling | patch | patch |
+| 8 | blind | Håndlaget sr-only i bunke-paabegynt og et bredt clipPath-unntak | low, direkte retting | patch |
+| 9 | blind | Brytepunktet står hardkodet i flere JS-filer | low | patch (delt modul) |
+| 10 | blind, vgap | Kappløp og DOM-bytte når bredden krysser 760 px | medium, ikke verifisert: bare ved rotasjon over brytepunktet | defer |
+| 11 | blind | Dobbel CSS-regel og død klasse | low, direkte retting | patch |
+| 12 | blind | Filmstripene ligger ikke i repoet | low: manuell kontroll etter spesifikasjonen, skriptene ligger i scratchpad | avvist |
+| 13 | blind, vgap | Pilen og elementene som bare er for telefon, er ikke sjekket på 1280 px | patch | patch |
+| 14 | edge | Tegnsetting stikker ut ved 200 % tekst | medium | patch |
+| 15 | edge | overflow:hidden på html stopper ikke rulling i eldre iOS | medium | patch |
+| 16 | edge | Ingen Buddy mellom 760 og 874 px | medium | patch |
+| 17 | edge | Arket animeres på nytt etter rotasjon | low | avvist (hører til #10) |

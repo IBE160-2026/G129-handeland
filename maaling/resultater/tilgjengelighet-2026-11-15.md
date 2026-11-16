@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**190 av 190 sjekker bestått.**
+**211 av 211 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -34,7 +34,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/c2fca29f-c4f0-4917-80c1-14dec142a9e0/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -51,7 +51,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/c2fca29f-c4f0-4917-80c1-14dec142a9e0/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -59,7 +59,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/217c0dc6-f9cc-4291-8507-8ee76fc38527/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/c2fca29f-c4f0-4917-80c1-14dec142a9e0/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -90,7 +90,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794779063455 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794780916946 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -119,9 +119,16 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | FR-10 telefon: rulleposisjonen står stille |  |
 | ✓ | FR-10 telefon: trykk utenfor lukker |  |
 | ✓ | mobil uten sidelengs rulling: lesevisning etter forklaring | 375 px innhold i 375 px vindu |
-| ✓ | viften på telefon er et rutenett |  |
-| ✓ | mobil uten sidelengs rulling: arbeidsbord med åpen vifte | 380 px innhold i 380 px vindu |
-| ✓ | axe: arbeidsbord med åpen vifte (telefon) |  |
+| ✓ | bolk 6, 375 px: Buddy (brillene 36 px) hilser ved «Hei!» med neste steg i boblen, aria-hidden | {"synlig":true,"skjult":true,"brille":36,"boble":"Klar for quizen om EM-bølger?","innenfor":true} |
+| ✓ | bolk 6, 375 px: viften er et ark nederst, med fem rader, og arket og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"andel":66,"ruller":false,"siden":false,"rader":5} |
+| ✓ | bolk 6, 375 px: arket er høyst 90 % av skjermen, og siden under ruller ikke | 66 % |
+| ✓ | bolk 6, arket: fokus på den første raden |  |
+| ✓ | bolk 6, arket: Tab og Shift+Tab holder fokus i arket | 0 av 11 trykk gikk ut |
+| ✓ | mobil uten sidelengs rulling: arbeidsbord med åpent ark | 375 px innhold i 375 px vindu |
+| ✓ | axe: arbeidsbord med åpent ark (telefon) |  |
+| ✓ | bolk 6, arket: Esc lukker og gir fokus tilbake til bunkens knapp |  |
+| ✓ | bolk 6, arket: trykk på bakgrunnen lukker |  |
+| ✓ | bolk 6, arket: «Legg sammen» lukker |  |
 | ✓ | menyen på telefon viser Samlingen og Konto |  |
 | ✓ | bolk 5, 375 px: tenkepillen vises mens quizen lages |  |
 | ✓ | bolk 5, 375 px: pillen ligger fast nederst med mini-Buddy (brillene 28 px) og «Buddy lager quizen din …» | {"posisjon":"fixed","nederst":16,"mini":true,"merke":28} |
@@ -151,12 +158,17 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | ingen tekst klippes: samling 320 px, 200 % tekst |  |
 | ✓ | mobil uten sidelengs rulling: ny tekst 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: ny tekst 320 px, 200 % tekst |  |
-| ✓ | mobil uten sidelengs rulling: åpen vifte 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
-| ✓ | ingen tekst klippes: åpen vifte 320 px, 200 % tekst |  |
+| ✓ | mobil uten sidelengs rulling: åpent ark 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: åpent ark 320 px, 200 % tekst |  |
+| ✓ | bolk 6, 320 px, 200 % tekst: arket ruller internt, er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"andel":90,"ruller":true,"siden":false,"rader":5} |
 | ✓ | 1280 px, 200 % tekst: viften er et rutenett | data-oppsett=rutenett |
 | ✓ | mobil uten sidelengs rulling: åpen vifte 1280 px, 200 % tekst | 1280 px innhold i 1280 px vindu |
 | ✓ | ingen tekst klippes: åpen vifte 1280 px, 200 % tekst |  |
 | ✓ | 375 px: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, EM-bølger |
+| ✓ | bolk 6, 375 px: de små bunkene er striper i full bredde med «N av 5», og knappen heter fortsatt «Vis aktiviteter for …» | {"full":true,"dato":false,"synlig":"0 av 5","skjult":true,"lest":"0 av 5 påbegynt","navn":"Vis aktiviteter for Novelleanalyse"} |
+| ✓ | bolk 6, arket: en tekst som bare er lagt inn, har fire låste rader (ikke lenker) etter Teksten | [{"lenke":true,"laast":false},{"lenke":false,"laast":true},{"lenke":false,"laast":true},{"lenke":false,"laast":true},{"lenke":false,"laast":true}] |
+| ✓ | axe: arbeidsbord med åpent ark, låst tekst (telefon) |  |
+| ✓ | 320 px, 200 % tekst: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, EM-bølger |
 | ✓ | FR-47: / uten innlogging gir 200 med landingssiden, ikke en omdirigering | status 200 |
 | ✓ | FR-47: landingssiden har «Logg inn» og «Registrer deg» |  |
 | ✓ | FR-47: siden sier at registrering krever en kode fra læreren |  |
@@ -186,12 +198,21 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | telefon (mørk): ingen Følge-Buddy |  |
 | ✓ | telefon (mørk): «For lærere» er skjult i topplinjen, men lærerdelen står |  |
 | ✓ | axe: landingsside (telefon, mørk) |  |
-| ✓ | landingsside 375 px (bevegelse tillatt): ingen tomrom over 160 px mellom demoen og neste seksjon | 144 px, effekt A på |
-| ✓ | landingsside 375 px: effekt A markerer fagordene ett for ett | antall markert underveis: 0, 1, 2, 3, 4 av 4 |
-| ✓ | landingsside 375 px (redusert bevegelse): ingen tomrom over 160 px mellom demoen og neste seksjon | 144 px, effekt A av |
+| ✓ | landingsside 375 px (bevegelse tillatt): ingen tomrom over 160 px mellom demoen og neste seksjon, og effekt A er av | 144 px, effekt A av |
+| ✓ | landingsside 375 px: fire fagord er knapper (aria-expanded, aria-controls), panelet er aldri tomt, og <dl> er bare visuelt skjult | {"antall":4,"lukket":true,"panel":true,"panelTekst":"Trykk på et fagord i teksten, så forklarer Buddy det.","dlSkjult":true,"dt":4} |
+| ✓ | landingsside 375 px: trykk på «mitose» viser forklaringen under teksten med Buddy (30 px), og fokus blir på ordet | {"valgt":"mitose","fokus":true,"panel":"mitoseCelledeling der én celle blir til to like celler med samme arvestoff. Avsnitt 1","under":true,"buddy":30,"live":0} |
+| ✓ | landingsside 375 px: trykkdemoen har ingen aria-live |  |
+| ✓ | landingsside 375 px: siden ruller ikke av trykket |  |
+| ✓ | mobil uten sidelengs rulling: landingsside med trykkdemoen | 375 px innhold i 375 px vindu |
+| ✓ | axe: landingsside med åpen forklaring i trykkdemoen (telefon) |  |
+| ✓ | landingsside 375 px (redusert bevegelse): ingen tomrom over 160 px mellom demoen og neste seksjon, og effekt A er av | 144 px, effekt A av |
+| ✓ | landingsside 375 px, redusert bevegelse: den statiske demoen (fire markert og listen), ingen knapper | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | landingsside 375 px uten JavaScript: den statiske demoen med alle fire forklaringer | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
 | ✓ | mobil uten sidelengs rulling: landingsside 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: landingsside 320 px, 200 % tekst |  |
-| ✓ | 320 px, 200 % tekst: effekt A er av, og alle fire forklaringene er synlige | 3 steg, 4 fagord markert, 4 forklaringer, Følge-Buddy skjult |
+| ✓ | 320 px, 200 % tekst: effekt A er av, og trykkdemoen viser forklaringen | {"a":false,"panel":"kromosomEn pakke med arvestoff. Mennesket har 46 i hver kroppscelle. Avsnitt 1"} |
+| ✓ | mobil uten sidelengs rulling: landingsside 320 px, 200 % tekst, åpen forklaring | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: landingsside 320 px, 200 % tekst, åpen forklaring |  |
 | ✓ | mobil uten sidelengs rulling: landingsside 320 px, 200 % tekst, redusert bevegelse | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: landingsside 320 px, 200 % tekst, redusert bevegelse |  |
 | ✓ | 1920 px, 200 % tekst: ingen Følge-Buddy |  |

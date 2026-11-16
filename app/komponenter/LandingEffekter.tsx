@@ -13,11 +13,10 @@
  *      hele tiden, fordi forklaringene som ikke vises, bare skjules visuelt.
  *      Flaten måles med den høyeste forklaringen vist, og effekten slås av
  *      når flaten er høyere enn synsfeltet minus 32 px. Da står demoen
- *      statisk. Fra 760 px blir flaten stående (klistret) mens eleven ruller
- *      gjennom et spor. Smalere enn det er det ikke noe spor: flaten ruller
- *      som vanlig, og ordene lyser opp mens den passerer synsfeltet. Sporet
- *      ga ellers 1584 px tomrom fra demoflaten til overskriften i neste
- *      seksjon (målt på 375 × 800, utlogget, bolk 4).
+ *      statisk. Flaten blir stående (klistret) mens eleven ruller gjennom et
+ *      spor. Bare fra 760 px: på telefon er effekt A av (bolk 6), og demoen
+ *      er i stedet trykkbar (FagordDemo). Demoen tegnes av React og kan
+ *      byttes ut (spenn eller knapper), så elementene hentes på nytt hver gang.
  *   B  Følge-Buddy nede i hjørnet når heroen er rullet forbi. Øynene leser i
  *      takt med rullingen, og boblene er ekko av seksjonsoverskriftene. Bare
  *      pynt (`aria-hidden`), bare fra 760 px, ved vanlig tekststørrelse, og
@@ -33,10 +32,10 @@
  */
 
 import { useEffect, useRef } from "react";
+import { BRED } from "./brytepunkt";
 import { BuddyMerke } from "./Merke";
 
 const REDUSERT = "(prefers-reduced-motion: reduce)";
-const BRED = "(min-width: 760px)";
 /** Hvor lenge en boble står, i ms. Ingen animasjon varer over fem sekunder. */
 const BOBLETID = 4500;
 /** Luft mellom demoflaten og kanten av synsfeltet (EXPERIENCE.md: høyere enn synsfeltet). */
@@ -58,8 +57,8 @@ export function LandingEffekter() {
     const spor = rot.querySelector<HTMLElement>(".ls-demo-spor");
     const klistre = rot.querySelector<HTMLElement>(".ls-demo-klistre");
     const panel = rot.querySelector<HTMLElement>(".ls-forklaringer");
-    const ord = [...rot.querySelectorAll<HTMLElement>(".ls-fagord")];
-    const forklaringer = [...rot.querySelectorAll<HTMLElement>(".ls-forklaring")];
+    const alleOrd = () => [...rot.querySelectorAll<HTMLElement>(".ls-fagord")];
+    const alleForklaringer = () => [...rot.querySelectorAll<HTMLElement>(".ls-forklaring")];
     const teller = rot.querySelector<HTMLElement>(".ls-teller");
     const hero = rot.querySelector<HTMLElement>(".ls-hero");
     const innhold = rot.querySelector<HTMLElement>(".ls-innhold");
@@ -73,8 +72,6 @@ export function LandingEffekter() {
     const remPx = () => proeve.getBoundingClientRect().width || 16;
 
     let a = false;
-    /** Flaten står stille i sporet (fra 760 px). Ellers ruller den fritt. */
-    let klistret = false;
     let b = false;
     let c = false;
     let aktivt = -2;
@@ -88,7 +85,8 @@ export function LandingEffekter() {
     /* --- A ------------------------------------------------------------ */
     /** Tegner demoen for fagord i (−1: ingen ennå). */
     function tegnDemo(i: number) {
-      ord.forEach((o, n) => o.classList.toggle("paa", i >= 0 && n <= i));
+      const forklaringer = alleForklaringer();
+      alleOrd().forEach((o, n) => o.classList.toggle("paa", i >= 0 && n <= i));
       // Bare visuelt skjult (sr-only), så skjermleseren alltid har hele listen.
       forklaringer.forEach((f, n) => {
         f.classList.toggle("paa", n === i);
@@ -104,26 +102,24 @@ export function LandingEffekter() {
     }
     function slaaAvA() {
       rot!.classList.remove("effekt-a", "ls-demo-klistret", "ls-demo-i-gang");
-      ord.forEach((o) => o.classList.remove("paa"));
-      forklaringer.forEach((f) => f.classList.remove("paa", "sr-only"));
+      alleOrd().forEach((o) => o.classList.remove("paa"));
+      alleForklaringer().forEach((f) => f.classList.remove("paa", "sr-only"));
       if (klistre) klistre.style.top = "";
       if (panel) panel.style.minHeight = "";
       if (teller) teller.textContent = "";
       aktivt = -2;
       a = false;
-      klistret = false;
     }
     /** Måler flaten i effektoppsettet, med hver forklaring vist etter tur, og bufrer den høyeste. */
     function maalA() {
       if (!klistre || !panel) return;
-      rot!.classList.add("effekt-a");
-      // Sporet står mens det måles på brede skjermer. Ellers kollapser siden
-      // fra 240vh, og rulleposisjonen klemmes om eleven er forbi demoen.
-      rot!.classList.toggle("ls-demo-klistret", bred.matches);
+      // Sporet står mens det måles. Ellers kollapser siden fra 240vh, og
+      // rulleposisjonen klemmes om eleven er forbi demoen.
+      rot!.classList.add("effekt-a", "ls-demo-klistret");
       panel.style.minHeight = "";
       let flate = 0;
       let pan = 0;
-      for (let i = -1; i < forklaringer.length; i++) {
+      for (let i = -1; i < alleForklaringer().length; i++) {
         tegnDemo(i);
         flate = Math.max(flate, klistre.offsetHeight);
         pan = Math.max(pan, panel.offsetHeight);
@@ -131,19 +127,17 @@ export function LandingEffekter() {
       flateHoeyde = flate;
       panelHoeyde = pan;
     }
-    /** Slår A av eller på ut fra den bufrede høyden og synsfeltet. */
+    /** Slår A av eller på ut fra bredden, den bufrede høyden og synsfeltet. */
     function brukA() {
-      if (!spor || !klistre || !panel || ord.length === 0 || flateHoeyde === 0) return;
-      if (flateHoeyde > window.innerHeight - LUFT) {
+      if (!spor || !klistre || !panel || alleOrd().length === 0 || flateHoeyde === 0) return;
+      if (!bred.matches || flateHoeyde > window.innerHeight - LUFT) {
         slaaAvA();
         return;
       }
-      rot!.classList.add("effekt-a");
-      klistret = bred.matches;
-      rot!.classList.toggle("ls-demo-klistret", klistret);
+      rot!.classList.add("effekt-a", "ls-demo-klistret");
       // Panelet holdes like høyt for alle fagordene, så flaten ikke endrer høyde underveis.
       panel.style.minHeight = `${panelHoeyde}px`;
-      klistre.style.top = klistret ? `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px` : "";
+      klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
       aktivt = -2;
       visFagord(-1);
       a = true;
@@ -216,21 +210,14 @@ export function LandingEffekter() {
         const andel = Math.min(1, Math.max(0, (vh * 0.7 - r.top) / r.height));
         fyll.style.height = `${andel * 100}%`;
       }
-      if (a && klistret && spor && klistre) {
+      if (a && spor && klistre) {
         const d = spor.getBoundingClientRect();
         const topp = parseFloat(klistre.style.top) || 0;
         // Den bufrede høyden, ikke den levende: ordet skal ikke blafre ved stegskillene.
         const lengde = d.height - flateHoeyde;
         const andel = lengde > 0 ? (topp - d.top) / lengde : 0;
-        visFagord(andel < 0 ? -1 : Math.min(forklaringer.length - 1, Math.floor(andel * forklaringer.length)));
-      } else if (a && klistre) {
-        // Uten spor: fra flaten står helt inne i synsfeltet (toppen ved vh − høyden)
-        // til den øverste fjerdedelen er rullet ut. Lengden er positiv, fordi
-        // flaten er minst LUFT lavere enn synsfeltet når effekten står på.
-        const start = vh - flateHoeyde;
-        const lengde = start + flateHoeyde * 0.25;
-        const andel = (start - klistre.getBoundingClientRect().top) / lengde;
-        visFagord(andel < 0 ? -1 : Math.min(forklaringer.length - 1, Math.floor(andel * forklaringer.length)));
+        const antall = alleForklaringer().length;
+        visFagord(andel < 0 ? -1 : Math.min(antall - 1, Math.floor(andel * antall)));
       }
       if (b && hero) {
         folger!.dataset.synlig = hero.getBoundingClientRect().bottom < 0 ? "ja" : "nei";
@@ -259,7 +246,7 @@ export function LandingEffekter() {
       if (!bevegelse && c) slaaAvC();
 
       slaaAvA();
-      if (bevegelse) {
+      if (bevegelse && bred.matches) {
         maalA();
         brukA();
       }
@@ -292,7 +279,7 @@ export function LandingEffekter() {
       if (!redusert.matches && flateHoeyde > 0) {
         const fikk = flateHoeyde <= window.innerHeight - LUFT;
         if (fikk !== a) brukA();
-        else if (a && klistret && klistre) klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
+        else if (a && klistre) klistre.style.top = `${Math.max(LUFT / 2, (window.innerHeight - flateHoeyde) / 2)}px`;
         sist.flate = klistre?.offsetHeight ?? 0;
       }
       planlegg();
