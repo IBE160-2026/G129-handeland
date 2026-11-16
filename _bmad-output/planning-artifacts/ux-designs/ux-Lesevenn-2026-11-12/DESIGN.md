@@ -351,7 +351,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
 - På fylte knapper ligger en ytre ring i `{colors.background}` mellom knappen og fokusringen.
 - `outline: none` er ikke lov uten en like sterk erstatning. I kontrastmodus (`forced-colors`) brukes `Highlight`.
 
-**Merket (`{components.logo-mark}`)**
+**Merket (`{components.logo-mark}`)** I mørk modus er glassene `{colors.text-dark}` og pupillene `{colors.highlight-dark}`, så Buddy har lyse øyne og mørke pupiller som i lys modus.
 - **Brillene** er tegnet i en 120 × 120-flate med to avrundede firkantglass, hvert 39 × 32 med ytre hjørneradius 9. Neserommet ved broen er 10 bredt. Glassene har et neseinnhakk med radius 14 i det indre nedre hjørnet og radius 6 i det indre øvre. Rammen er 8,5 tykk. Broen er en bue over neserommet, og brillestengene går skrått opp fra de ytre øvre hjørnene.
 - **Pupillene** har radius 5,5.
 - **Fra briller til B:** Når brillene roteres −90° rundt midten av overkanten, blir overkanten ryggen i B-en og glassene buene. Ryggen tegnes med strek 10,5.

@@ -3053,3 +3053,10 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 **08:56**
 
 > Fortsett
+
+<details><summary>Commits i økta (2)</summary>
+
+- `f4cbc45` feat(design): bolk 6 – mobilflatene (striper, ark, trykkdemo) og animasjonsbanene
+- `21f42c2` Logg: mobilbolkene 4–6
+
+</details>

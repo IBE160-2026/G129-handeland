@@ -198,6 +198,18 @@ h2 {
   transform-origin: center;
   transform-box: fill-box;
 }
+/* Mørk modus (Arve 16.11): lyse øyne og mørke pupiller, så Buddy ser ut som
+   i lys modus: lavendel ramme, hvite glass, mørkelilla pupiller. */
+.merke .glass {
+  @variant dark {
+    fill: var(--lb-tekst);
+  }
+}
+.merke .oye {
+  @variant dark {
+    fill: var(--lb-markering);
+  }
+}
 .merke .snu {
   transform-origin: 60px 40px;
   transform-box: view-box;
