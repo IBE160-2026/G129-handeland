@@ -25,45 +25,11 @@ import type { Avsnitt } from "../tekst/avsnittsdeling";
 import { hentLagret, lagreSvar, testmodus } from "./lagretsvar";
 
 /* ------------------------------------------------------------------ *
- * Feilform (§5 — ingen feiltilstand er en blindvei)
+ * Feilform (§5 — ingen feiltilstand er en blindvei). Står i `feil.ts`.
  * ------------------------------------------------------------------ */
 
-export type Feilkode =
-  | "prompt_mangler"
-  | "ukjent_oppgave"
-  | "modellfeil"
-  | "ugyldig_utdata"
-  | "tidsavbrudd"
-  | "lagret_svar_mangler"
-  /** Nøkkelen mangler, er utløpt, trukket tilbake, eller mangler rettighet. */
-  | "tilgang_avslaatt"
-  /** Kvote eller takt overskredet. Den ene feilen der «prøv igjen» er sant. */
-  | "for_mange_kall";
-
-/**
- * Alle feil fra generatorlaget har denne formen. Kravet i §5 om at ingen
- * feiltilstand er en blindvei håndheves dermed ett sted, framfor i hver flate
- * som kaller en generator.
- */
-export class GeneratorFeil extends Error {
-  readonly kode: Feilkode;
-  readonly elevmelding: string;
-  readonly anbefaltHandling: string;
-
-  constructor(
-    kode: Feilkode,
-    elevmelding: string,
-    anbefaltHandling: string,
-    årsak?: unknown,
-  ) {
-    super(`${kode}: ${elevmelding}`);
-    this.name = "GeneratorFeil";
-    this.kode = kode;
-    this.elevmelding = elevmelding;
-    this.anbefaltHandling = anbefaltHandling;
-    if (årsak instanceof Error) this.cause = årsak;
-  }
-}
+import { FASTE_TEKSTER, GeneratorFeil, kanProevesPaaNytt } from "./feil";
+export { FASTE_TEKSTER, FEILKODER, GeneratorFeil, kanProevesPaaNytt, type Feilkode } from "./feil";
 
 /* ------------------------------------------------------------------ *
  * AD-14 — manifestet bestemmer hva som er gjeldende
@@ -193,18 +159,39 @@ export async function hentPrompt(
 
 let klientbuffer: Anthropic | null = null;
 
+/**
+ * Forsøkene ganges med hverandre: SDK-ens egne forsøk (nettverksfeil, 408,
+ * 409, 429 og 5xx) ganger det ene nye forsøket i `kjoerGenerator`. Med
+ * SDK-ens standard (2) ble det opptil seks kall per generatorkall, og flere
+ * med generatorenes egne løkker. Derfor ett SDK-forsøk her.
+ *
+ * Tidsgrensen gjelder hvert kall. Uten den venter SDK-en i opptil ti
+ * minutter. 90 sekunder fordi taket er 16 000 tokens (AD-19), og et svar
+ * nær taket tar over et minutt. Et tidsavbrudd prøves én gang til.
+ */
+const SDK_FORSOEK = 1;
+const TIDSGRENSE_MS = 90_000;
+
 function klient(): Anthropic {
   if (klientbuffer) return klientbuffer;
   if (!process.env.ANTHROPIC_API_KEY) {
-    throw new GeneratorFeil(
-      "tilgang_avslaatt",
-      "LeseBuddy mangler tilgangen den trenger for å behandle teksten.",
-      "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er lagret, " +
-        "og du kan lese den videre uten markeringer mens vi retter det.",
-    );
+    const t = FASTE_TEKSTER.tilgang_avslaatt;
+    throw new GeneratorFeil("tilgang_avslaatt", t.elevmelding, t.anbefaltHandling);
   }
-  klientbuffer = new Anthropic();
+  klientbuffer = new Anthropic({ maxRetries: SDK_FORSOEK, timeout: TIDSGRENSE_MS });
   return klientbuffer;
+}
+
+/**
+ * Bare for testene: en falsk klient med `messages.parse`, så det nye forsøket
+ * kan prøves uten modellkall (AD-5). `null` tar bort den falske klienten.
+ * Kaster utenfor en testkjøring, så produksjonskoden ikke kan bytte klienten.
+ */
+export function settKlientForTest(falsk: { messages: { parse: (...a: never[]) => unknown } } | null): void {
+  if (!process.env.VITEST && process.env.NODE_ENV !== "test") {
+    throw new Error("settKlientForTest kan bare brukes i testene.");
+  }
+  klientbuffer = falsk as unknown as Anthropic | null;
 }
 
 /** Tokenbudsjettet når manifestet sier `budsjett`. */
@@ -278,6 +265,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
   maksTokens = 16000,
   kjoering,
   bilde,
+  nyttForsoek = true,
 }: {
   oppgave: Oppgave;
   skjema: S;
@@ -298,6 +286,12 @@ export async function kjoerGenerator<S extends z.ZodType>({
    * (AD-16).
    */
   bilde?: { mediaType: "image/jpeg" | "image/png"; data: string };
+  /**
+   * Det ene nye forsøket ved en feil som kan gå over (PRD §5). `false` for
+   * generatorer som har sin egen løkke med nye forsøk (fagsamtalen), så
+   * forsøkene ikke ganges med hverandre.
+   */
+  nyttForsoek?: boolean;
 }): Promise<Resultat<z.infer<S>>> {
   const valgt = await hentPrompt(oppgave, overstyrVersjon);
   const prompt = overstyrModell ? { ...valgt, modell: overstyrModell } : valgt;
@@ -328,13 +322,8 @@ export async function kjoerGenerator<S extends z.ZodType>({
 
   if (modus === "les" || lagret) {
     if (!lagret) {
-      throw new GeneratorFeil(
-        "lagret_svar_mangler",
-        "LeseBuddy kjører i testmodus, og det finnes ikke noe lagret svar for denne teksten.",
-        "Testmodus dekker bare eksempelteksten som ligger i repoet. Bruk den, " +
-          "eller sett LESEVENN_TESTMODUS=av og legg inn en egen API-nøkkel for å " +
-          "kjøre mot modellen.",
-      );
+      const t = FASTE_TEKSTER.lagret_svar_mangler;
+      throw new GeneratorFeil("lagret_svar_mangler", t.elevmelding, t.anbefaltHandling);
     }
 
     const validert = skjema.safeParse(lagret.data);
@@ -354,6 +343,53 @@ export async function kjoerGenerator<S extends z.ZodType>({
     };
   }
 
+  /*
+   * PRD §5: feiler kallet med en feil der et nytt kall kan hjelpe, kjøres hele
+   * kallet én gang til, og svaret valideres akkurat som det første (AD-11).
+   * Ikke mer enn én gang, og ikke i testmodus `les` (det lagrede svaret over
+   * blir ikke annerledes av å hentes igjen). Forsøket skjer stille: en
+   * serverhandling kan ikke sende status underveis, og tenkeindikatorens
+   * tillegg etter 30 sekunder dekker den lengre ventingen. Selvkonsistensen
+   * kaller denne funksjonen per kjøring, så forsøket gjelder hvert kall, ikke
+   * serien.
+   */
+  const kall = () => kallModellen(prompt, skjema, brukermelding, maksTokens, bilde);
+  let data: z.infer<S>;
+  try {
+    data = await kall();
+  } catch (e) {
+    if (!nyttForsoek || !(e instanceof GeneratorFeil) || !kanProevesPaaNytt(e.kode)) throw e;
+    // Den første feilen ville ellers forsvunnet uten spor når forsøket lykkes.
+    console.warn(`[${oppgave}] ${e.message} — prøver én gang til.`, e.cause ?? "");
+    data = await kall();
+  }
+
+  // Testmodus `skriv`: dette er hvordan filene i testdata/ lages. Lagringen
+  // skjer etter valideringen, så et svar som ikke holdt formen havner aldri
+  // på disk.
+  if (modus === "skriv" || modus === "fyll") {
+    await lagreSvar(oppgave, prompt.versjon, prompt.modell, noekkelmelding, data, kjoering);
+  }
+
+  return {
+    data,
+    promptversjon: prompt.versjon,
+    modell: prompt.modell,
+  };
+}
+
+/**
+ * Ett kall til modellen, med skjemavalidering og oversetting av feil til
+ * `GeneratorFeil`. `kjoerGenerator` kaller den høyst to ganger, og SDK-en
+ * prøver selv én gang til ved nettverksfeil, 429 og 5xx (`SDK_FORSOEK`).
+ */
+async function kallModellen<S extends z.ZodType>(
+  prompt: Promptvalg,
+  skjema: S,
+  brukermelding: string,
+  maksTokens: number,
+  bilde: { mediaType: "image/jpeg" | "image/png"; data: string } | undefined,
+): Promise<z.infer<S>> {
   try {
     const svar = await klient().messages.parse({
       model: prompt.modell,
@@ -384,25 +420,7 @@ export async function kjoerGenerator<S extends z.ZodType>({
       );
     }
 
-    // Testmodus `skriv`: dette er hvordan filene i testdata/ lages. Lagringen
-    // skjer etter valideringen over, så et svar som ikke holdt formen havner
-    // aldri på disk.
-    if (modus === "skriv" || modus === "fyll") {
-      await lagreSvar(
-        oppgave,
-        prompt.versjon,
-        prompt.modell,
-        noekkelmelding,
-        svar.parsed_output,
-        kjoering,
-      );
-    }
-
-    return {
-      data: svar.parsed_output as z.infer<S>,
-      promptversjon: prompt.versjon,
-      modell: prompt.modell,
-    };
+    return svar.parsed_output as z.infer<S>;
   } catch (e) {
     if (e instanceof GeneratorFeil) throw e;
 
@@ -436,23 +454,28 @@ export async function kjoerGenerator<S extends z.ZodType>({
       e instanceof Anthropic.AuthenticationError ||
       e instanceof Anthropic.PermissionDeniedError
     ) {
-      throw new GeneratorFeil(
-        "tilgang_avslaatt",
-        "LeseBuddy mangler tilgangen den trenger for å behandle teksten.",
-        "Dette er en feil hos oss, ikke noe du har gjort. Teksten din er " +
-          "lagret, og du kan lese den videre uten markeringer mens vi retter det.",
-        e,
-      );
+      const t = FASTE_TEKSTER.tilgang_avslaatt;
+      throw new GeneratorFeil("tilgang_avslaatt", t.elevmelding, t.anbefaltHandling, e);
     }
 
     // 429: den ene feilen der «prøv igjen om litt» faktisk er riktig råd.
     if (e instanceof Anthropic.RateLimitError) {
-      throw new GeneratorFeil(
-        "for_mange_kall",
-        "LeseBuddy har for mye å gjøre akkurat nå.",
-        "Vent et minutt og prøv igjen. Teksten din er lagret.",
-        e,
-      );
+      const t = FASTE_TEKSTER.for_mange_kall;
+      throw new GeneratorFeil("for_mange_kall", t.elevmelding, t.anbefaltHandling, e);
+    }
+
+    /*
+     * 400, 404 og 422: forespørselen er feil (et ukjent modellnavn, en
+     * tenkemodus modellen avviser, et skjema API-et ikke godtar). Samme
+     * forespørsel gir samme svar, så den prøves ikke på nytt.
+     */
+    if (
+      e instanceof Anthropic.BadRequestError ||
+      e instanceof Anthropic.NotFoundError ||
+      e instanceof Anthropic.UnprocessableEntityError
+    ) {
+      const t = FASTE_TEKSTER.ugyldig_foresporsel;
+      throw new GeneratorFeil("ugyldig_foresporsel", t.elevmelding, t.anbefaltHandling, e);
     }
 
     throw new GeneratorFeil(

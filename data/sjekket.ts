@@ -3,7 +3,8 @@
  *
  * «Lesevenn er ikke et sammendragsverktøy»: oppsummeringen kommer etter at
  * eleven har lest OG blitt sjekket, og den er ikke tilgjengelig før.
- * Sjekket betyr et levert quizforsøk, eller minst ett svar i en fagsamtale.
+ * Sjekket betyr et levert quizforsøk, eller minst ett vurdert svar i en
+ * fagsamtale.
  *
  * Ett sted, fordi både visningen (skal knappen vises?) og handlingen (skal
  * oppsummeringen lages?) må svare likt. En knapp som bare skjules, er ingen

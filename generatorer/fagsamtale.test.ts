@@ -9,7 +9,8 @@
 
 import { rm } from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import Anthropic from "@anthropic-ai/sdk";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import {
   MAAL_FOR,
@@ -21,7 +22,7 @@ import {
   vurderSvar,
   type Kontekst,
 } from "./fagsamtale";
-import { GeneratorFeil, formaterAvsnitt, hentPrompt } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, hentPrompt, settKlientForTest } from "./kontrakt";
 import { lagreSvar, noekkel } from "./lagretsvar";
 
 const TEKST =
@@ -196,6 +197,104 @@ describe("vurderSvar", () => {
     await gittVurdering(1, svak);
     const v = await vurderSvar(inn);
     expect(v.svakheter.join()).toMatch(/ingen ord eleven/);
+  });
+});
+
+describe("FR-20 — oppfølgingen feiler, vurderingen beholdes", () => {
+  const utenGodOppfolging = { ...god, oppfolging: { ...god.oppfolging, maal: "deler_opp" as const } }; // feil maal
+
+  test("vurderingen holder, oppfølgingen ikke i noen av forsøkene: vurderingen leveres uten neste spørsmål", async () => {
+    await gittVurdering(0, utenGodOppfolging);
+    await gittVurdering(1, utenGodOppfolging);
+    const v = await vurderSvar(inn);
+    expect(v).toMatchObject({ tilstand: "dekkende", oppfolging: null, oppfolgingFeilet: true });
+    expect(v.begrunnelse).toBe(god.begrunnelse);
+  });
+
+  test("bare første forsøk lagret: samme utfall, ikke en feil", async () => {
+    await gittVurdering(0, utenGodOppfolging);
+    expect((await vurderSvar(inn)).oppfolgingFeilet).toBe(true);
+  });
+
+  test("en vurdering som selv bryter kravene, gir fortsatt feil (FR-19)", async () => {
+    const galt = { ...utenGodOppfolging, begrunnelse: "Det er feil." };
+    await gittVurdering(0, galt);
+    await gittVurdering(1, galt);
+    await expect(vurderSvar(inn)).rejects.toBeInstanceOf(GeneratorFeil);
+  });
+
+  test("i siste runde finnes ingen oppfølging å feile", async () => {
+    // Siste runde har en annen melding til modellen, så svaret lagres på den.
+    const sisteMelding = formaterVurdering(avsnitt, [], inn.gjeldende, SVAR, { sisteRunde: true, nyVurdering: false });
+    await lagreSvar("svarvurdering", VURDERING.versjon, VURDERING.modell, sisteMelding, { ...god, oppfolging: null }, 0);
+    try {
+      const v = await vurderSvar({ ...inn, sisteRunde: true });
+      expect(v).toMatchObject({ oppfolging: null, oppfolgingFeilet: false });
+    } finally {
+      await rm(path.join(process.cwd(), "testdata", "modellsvar", "svarvurdering", `${noekkel("svarvurdering", VURDERING.versjon, sisteMelding, 0)}.json`), { force: true });
+    }
+  });
+
+  test("«Prøv igjen» for neste spørsmål: den lagrede vurderingen beholdes, og oppfølgingen må passe den", async () => {
+    // Modellen sier «dekkende» denne gangen, men den lagrede vurderingen er
+    // «delvis». Oppfølgingen med maal for «delvis» godtas, og tilstanden
+    // eleven alt har sett, står.
+    const lagret = { tilstand: "delvis" as const, begrunnelse: "Noe sentralt mangler." };
+    await gittVurdering(0, { ...god, oppfolging: { ...god.oppfolging, maal: MAAL_FOR.delvis } });
+    const v = await vurderSvar({ ...inn, beholdVurdering: lagret });
+    expect(v).toMatchObject({ ...lagret, oppfolgingFeilet: false });
+    expect(v.oppfolging?.maal).toBe(MAAL_FOR.delvis);
+  });
+
+  test("«Prøv igjen» der oppfølgingen ikke passer den lagrede tilstanden, gir ingen oppfølging", async () => {
+    await gittVurdering(0, god); // nytt_aspekt passer «dekkende», ikke «delvis»
+    await gittVurdering(1, god);
+    const v = await vurderSvar({ ...inn, beholdVurdering: { tilstand: "delvis", begrunnelse: "Noe sentralt mangler." } });
+    expect(v).toMatchObject({ tilstand: "delvis", oppfolging: null, oppfolgingFeilet: true });
+  });
+});
+
+describe("FR-20 mot en falsk klient (testmodus av)", () => {
+  afterEach(() => settKlientForTest(null));
+
+  test("forsøk én gir en brukbar vurdering med dårlig oppfølging, forsøk to får tidsavbrudd: vurderingen fra forsøk én", async () => {
+    process.env.LESEVENN_TESTMODUS = "av";
+    const delvisUtenGodOppfolging = {
+      ...god,
+      tilstand: "delvis" as const,
+      begrunnelse: "Noe sentralt mangler.",
+      oppfolging: { ...god.oppfolging, maal: "deler_opp" as const }, // passer ikke «delvis»
+    };
+    const parse = vi
+      .fn()
+      .mockResolvedValueOnce({ parsed_output: delvisUtenGodOppfolging, stop_reason: "end_turn", usage: { output_tokens: 100 } })
+      .mockRejectedValueOnce(new Anthropic.APIConnectionTimeoutError());
+    settKlientForTest({ messages: { parse } });
+
+    const v = await vurderSvar(inn);
+    expect(v).toMatchObject({ tilstand: "delvis", begrunnelse: "Noe sentralt mangler.", oppfolging: null, oppfolgingFeilet: true });
+    // Fagsamtalen har sin egen løkke, så kontrakten prøver ikke i tillegg: to kall, ikke fire.
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("§5: et ugyldig svar i forsøk én prøves én gang til av løkken, og ikke mer", async () => {
+    process.env.LESEVENN_TESTMODUS = "av";
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const ugyldig = { parsed_output: null, stop_reason: "max_tokens", usage: { output_tokens: 16000 } };
+    const parse = vi
+      .fn()
+      .mockResolvedValueOnce(ugyldig)
+      .mockResolvedValueOnce({ parsed_output: god, stop_reason: "end_turn", usage: { output_tokens: 100 } });
+    settKlientForTest({ messages: { parse } });
+    expect((await vurderSvar(inn)).tilstand).toBe("dekkende");
+    expect(parse).toHaveBeenCalledTimes(2);
+
+    parse.mockReset().mockResolvedValue(ugyldig);
+    const e = await vurderSvar(inn).catch((x) => x);
+    expect(e).toBeInstanceOf(GeneratorFeil);
+    expect(e.kode).toBe("ugyldig_utdata");
+    expect(parse).toHaveBeenCalledTimes(2);
+    vi.restoreAllMocks();
   });
 });
 

@@ -30,7 +30,8 @@
 import { z } from "zod";
 import { brukerNoenAv, innfortAvEleven, innholdsord, jaccard } from "../tekst/innholdsord";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, kjoerGenerator } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, kanProevesPaaNytt, kjoerGenerator } from "./kontrakt";
+import { testmodus } from "./lagretsvar";
 
 export const TILSTANDER = ["dekkende", "delvis", "misoppfatning", "uklart", "utenfor"] as const;
 export type Tilstand = (typeof TILSTANDER)[number];
@@ -251,20 +252,40 @@ export function formaterVurdering(
  * ------------------------------------------------------------------ */
 
 /**
- * Et ekstra forsøk etter et mykt brudd. I testmodus `les` finnes det ofte bare
- * et lagret svar for første forsøk — da skal det beste svaret vi alt har,
- * brukes, framfor at hele runden feiler med «lagret svar mangler». Funnet da
- * måleverktøyet for FR-21 ble prøvd med lagrede svar.
+ * Et ekstra forsøk etter et brudd. Feiler det, og vi alt har et svar som kan
+ * brukes, skal det svaret brukes framfor at hele runden feiler. Først funnet i
+ * testmodus `les`, der det ofte bare finnes et lagret svar for første forsøk
+ * (måleverktøyet for FR-21). Gjelder enhver GeneratorFeil fra 16.11: FR-20
+ * sier at vurderingen beholdes når oppfølgingen feiler, og et tidsavbrudd i
+ * forsøk to skal ikke kaste en gyldig vurdering fra forsøk én.
  *
- * Returnerer null når forsøket skal droppes.
+ * Løkkene her ER det nye forsøket i PRD §5 for fagsamtalen (kontraktens er
+ * slått av, `nyttForsoek: false`, så forsøkene ikke ganges med hverandre).
+ * Derfor går en feil i første forsøk som kan gå over (ugyldig svar,
+ * tidsavbrudd, modellfeil), videre til neste forsøk, som i `kjoerGenerator`.
+ * Ikke i testmodus `les`, der et lagret svar ikke blir annerledes.
+ *
+ * Returnerer null når forsøket skal droppes, og `HOPP_OVER` når neste forsøk
+ * skal kjøres.
  */
 type Generert<T> = { data: T; promptversjon: string; modell: string };
 
-async function nyttForsok<T>(forsok: number, harEtSvar: boolean, kall: () => Promise<T>): Promise<T | null> {
+const HOPP_OVER = Symbol("hopp over");
+
+async function nyttForsok<T>(
+  forsok: number,
+  harEtSvar: boolean,
+  kall: () => Promise<T>,
+): Promise<T | null | typeof HOPP_OVER> {
   try {
     return await kall();
   } catch (e) {
-    if (forsok > 0 && harEtSvar && e instanceof GeneratorFeil && e.kode === "lagret_svar_mangler") return null;
+    if (!(e instanceof GeneratorFeil)) throw e;
+    if (forsok > 0 && harEtSvar) return null;
+    if (forsok === 0 && kanProevesPaaNytt(e.kode) && testmodus() !== "les") {
+      console.warn(`[fagsamtale] ${e.message} — prøver én gang til.`, e.cause ?? "");
+      return HOPP_OVER;
+    }
     throw e;
   }
 }
@@ -285,10 +306,12 @@ export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
   // av elevens første svar, og prompten har gjort det sjeldnere, ikke borte
   // (1 av 3 i prøvekjøringen 16.10). Startspørsmålet lages én gang per samtale.
   for (let forsok = 0; forsok < 3; forsok++) {
-    const r: Generert<z.infer<typeof StartSkjema>> | null = await nyttForsok(forsok, beste !== null, () =>
-      kjoerGenerator({ oppgave: "samtalestart", skjema: StartSkjema, brukermelding, kjoering: forsok }),
+    const r: Generert<z.infer<typeof StartSkjema>> | null | typeof HOPP_OVER = await nyttForsok(forsok, beste !== null, () =>
+      // Egen løkke med nye forsøk, så ikke kontraktens i tillegg.
+      kjoerGenerator({ oppgave: "samtalestart", skjema: StartSkjema, brukermelding, kjoering: forsok, nyttForsoek: false }),
     );
     if (!r) break;
+    if (r === HOPP_OVER) continue;
     const { harde, myke } = bruddPaaStart(r.data, avsnitt);
     if (harde.length > 0) {
       siste = harde;
@@ -317,8 +340,14 @@ export async function startSamtale(avsnitt: Avsnitt[]): Promise<Startresultat> {
 export type Vurdering = {
   tilstand: Tilstand;
   begrunnelse: string;
-  /** null i siste runde. */
+  /** null i siste runde, og når oppfølgingen feilet (`oppfolgingFeilet`). */
   oppfolging: { sporsmal: string; kildeavsnittNummer: number; maal: Maal } | null;
+  /**
+   * FR-20: vurderingen holdt, men ingen oppfølging gjorde det etter nytt
+   * forsøk. Vurderingen skal lagres, og samtalen står åpen med «Prøv igjen»
+   * for neste spørsmål. Aldri sann i siste runde.
+   */
+  oppfolgingFeilet: boolean;
   /** Myke brudd som sto igjen etter siste forsøk. Rapporteres, ikke skjules. */
   svakheter: string[];
   promptversjon: string;
@@ -333,6 +362,14 @@ export async function vurderSvar(inn: {
   elevsvar: string;
   sisteRunde: boolean;
   nyVurdering?: boolean;
+  /**
+   * FR-20, «Prøv igjen» for neste spørsmål: vurderingen som alt er lagret, og
+   * som beholdes. Kallet er det samme som ved vurderingen (samme prompt), men
+   * bare oppfølgingen brukes, og den må passe den lagrede tilstanden. Mangler
+   * den lagrede begrunnelsen (null i databasen), brukes modellens, så sjekken
+   * av en tom begrunnelse ikke stopper hvert nytt forsøk.
+   */
+  beholdVurdering?: { tilstand: Tilstand; begrunnelse: string | null };
 }): Promise<Vurdering> {
   const brukermelding = formaterVurdering(inn.avsnitt, inn.tidligere, inn.gjeldende, inn.elevsvar, {
     sisteRunde: inn.sisteRunde,
@@ -346,30 +383,57 @@ export async function vurderSvar(inn: {
     sisteRunde: inn.sisteRunde,
   };
 
-  let beste: { v: Vurderingsutkast; myke: string[]; promptversjon: string; modell: string } | null = null;
+  type Utkast = { v: Vurderingsutkast; myke: string[]; promptversjon: string; modell: string };
+  let beste: Utkast | null = null;
+  /** FR-20: første forsøk der vurderingen holdt, men oppfølgingen ikke gjorde det. */
+  let utenOppfolging: Utkast | null = null;
   let sisteHarde: string[] = [];
 
   for (let forsok = 0; forsok < 2; forsok++) {
-    const r: Generert<Vurderingsutkast> | null = await nyttForsok(forsok, beste !== null, () =>
-      kjoerGenerator({ oppgave: "svarvurdering", skjema: VurderingSkjema, brukermelding, kjoering: forsok }),
+    const r: Generert<Vurderingsutkast> | null | typeof HOPP_OVER = await nyttForsok(forsok, beste !== null || utenOppfolging !== null, () =>
+      // Egen løkke med nye forsøk, så ikke kontraktens i tillegg.
+      kjoerGenerator({ oppgave: "svarvurdering", skjema: VurderingSkjema, brukermelding, kjoering: forsok, nyttForsoek: false }),
     );
     if (!r) break;
-    const { harde, myke } = bruddPaaVurdering(r.data, kontekst);
+    if (r === HOPP_OVER) continue;
+    const behold = inn.beholdVurdering;
+    const data: Vurderingsutkast = behold
+      ? { ...r.data, tilstand: behold.tilstand, begrunnelse: behold.begrunnelse?.trim() || r.data.begrunnelse }
+      : r.data;
+    const { harde, myke } = bruddPaaVurdering(data, kontekst);
     if (harde.length > 0) {
       sisteHarde = harde;
+      // Med `sisteRunde` sjekkes bare vurderingens egne krav, ikke
+      // oppfølgingen. Holder de, kan vurderingen brukes selv om oppfølgingen ikke kan.
+      if (!utenOppfolging && bruddPaaVurdering(data, { ...kontekst, sisteRunde: true }).harde.length === 0) {
+        utenOppfolging = { v: data, myke: [], promptversjon: r.promptversjon, modell: r.modell };
+      }
       continue;
     }
     if (!beste || myke.length < beste.myke.length) {
-      beste = { v: r.data, myke, promptversjon: r.promptversjon, modell: r.modell };
+      beste = { v: data, myke, promptversjon: r.promptversjon, modell: r.modell };
     }
     if (myke.length === 0) break;
+  }
+
+  if (!beste && utenOppfolging && !inn.sisteRunde) {
+    return {
+      tilstand: utenOppfolging.v.tilstand,
+      begrunnelse: utenOppfolging.v.begrunnelse.trim(),
+      oppfolging: null,
+      oppfolgingFeilet: true,
+      // Til loggen og harnessen, ikke til eleven.
+      svakheter: [`oppfølgingen holdt ikke: ${sisteHarde.join("; ")}`],
+      promptversjon: utenOppfolging.promptversjon,
+      modell: utenOppfolging.modell,
+    };
   }
 
   if (!beste) {
     throw new GeneratorFeil(
       "ugyldig_utdata",
       "LeseBuddy fikk ikke vurdert svaret ditt denne gangen.",
-      "Svaret ditt er ikke borte — trykk «Svar» igjen for å prøve på nytt.",
+      "Prøv igjen, så leses svaret på nytt.",
       new Error(`Brudd på vurderingen: ${sisteHarde.join("; ")}`),
     );
   }
@@ -386,6 +450,7 @@ export async function vurderSvar(inn: {
             kildeavsnittNummer: v.oppfolging.kildeavsnitt,
             maal: v.oppfolging.maal,
           },
+    oppfolgingFeilet: false,
     svakheter: beste.myke,
     promptversjon: beste.promptversjon,
     modell: beste.modell,

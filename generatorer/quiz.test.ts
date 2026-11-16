@@ -8,9 +8,9 @@
 
 import { rm } from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
-import { GeneratorFeil, formaterAvsnitt, hentPrompt } from "./kontrakt";
+import { GeneratorFeil, formaterAvsnitt, hentPrompt, settKlientForTest } from "./kontrakt";
 import { lagreSvar, noekkel } from "./lagretsvar";
 import {
   ANTALL_SPORSMAL,
@@ -198,5 +198,38 @@ describe("genererQuiz — settkravene i FR-13", () => {
     // stå først — sannsynligheten for det med sju flervalg er 1/4^7.
     const foerst = q.sporsmal.filter((s) => s.erFlervalg).every((s) => s.alternativer[0] === s.riktigSvar);
     expect(foerst).toBe(false);
+  });
+});
+
+describe("§5 og FR-13 — ett nytt forsøk når kallet feiler", () => {
+  // En falsk klient i stedet for modellen (testmodus av), som i kontrakt.test.ts.
+  afterEach(() => settKlientForTest(null));
+
+  const ti = [
+    flervalg(2, 1), flervalg(3, 2), flervalg(5, 3), flervalg(6, 4), flervalg(8, 5),
+    flervalg(9, 6), flervalg(2, 7), flervalg(5, 8), kortsvar(3, 9), kortsvar(8, 10),
+  ];
+
+  test("modellen gir ugyldig svar én gang: eleven får quizen uten feilmelding", async () => {
+    process.env.LESEVENN_TESTMODUS = "av";
+    const parse = vi
+      .fn()
+      .mockResolvedValueOnce({ parsed_output: null, stop_reason: "max_tokens", usage: { output_tokens: 16000 } })
+      .mockResolvedValueOnce({ parsed_output: { sporsmal: ti }, stop_reason: "end_turn", usage: { output_tokens: 900 } });
+    settKlientForTest({ messages: { parse } });
+    const q = await genererQuiz(avsnitt);
+    expect(q.sporsmal).toHaveLength(ANTALL_SPORSMAL);
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("ugyldig to ganger: ugyldig_utdata, som handlingen gjør til FR-13-meldingen", async () => {
+    process.env.LESEVENN_TESTMODUS = "av";
+    const ugyldig = { parsed_output: null, stop_reason: "max_tokens", usage: { output_tokens: 16000 } };
+    const parse = vi.fn().mockResolvedValue(ugyldig);
+    settKlientForTest({ messages: { parse } });
+    const e = await genererQuiz(avsnitt).catch((x) => x);
+    expect(e).toBeInstanceOf(GeneratorFeil);
+    expect(e.kode).toBe("ugyldig_utdata");
+    expect(parse).toHaveBeenCalledTimes(2);
   });
 });

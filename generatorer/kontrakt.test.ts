@@ -12,14 +12,19 @@
 
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, test } from "vitest";
+import Anthropic from "@anthropic-ai/sdk";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { z } from "zod";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import {
+  FEILKODER,
   GeneratorFeil,
   formaterAvsnitt,
   hentPrompt,
+  kanProevesPaaNytt,
   kjoerGenerator,
+  settKlientForTest,
+  type Feilkode,
   type Oppgave,
 } from "./kontrakt";
 
@@ -218,6 +223,148 @@ describe("§5 — tilgangsfeil gir ikke rådet «prøv igjen»", () => {
       else process.env.LESEVENN_TESTMODUS = foerModus;
       if (foerNoekkel === undefined) delete process.env.ANTHROPIC_API_KEY;
       else process.env.ANTHROPIC_API_KEY = foerNoekkel;
+    }
+  });
+});
+
+describe("§5 — ett nytt forsøk når kallet feiler", () => {
+  // En falsk klient i stedet for modellen (AD-5: `npm test` kaller den aldri).
+  // Hver test gir den en rekke utfall, ett per kall, og teller kallene.
+  const skjema = z.object({ noe: z.string() });
+  const gyldig = { parsed_output: { noe: "svar" }, stop_reason: "end_turn", usage: { output_tokens: 10 } };
+  const ugyldig = { parsed_output: null, stop_reason: "max_tokens", usage: { output_tokens: 16000 } };
+  const tidsavbrudd = () => new Anthropic.APIConnectionTimeoutError();
+  const avslaatt = () => new Anthropic.AuthenticationError(401, undefined, "ugyldig nøkkel", new Headers());
+  const forMange = () => new Anthropic.RateLimitError(429, undefined, "for mange kall", new Headers());
+  const feilForesporsel = () => new Anthropic.BadRequestError(400, undefined, "ukjent felt", new Headers());
+
+  let foerModus: string | undefined;
+  let advarsel: ReturnType<typeof vi.spyOn>;
+  beforeEach(() => {
+    foerModus = process.env.LESEVENN_TESTMODUS;
+    process.env.LESEVENN_TESTMODUS = "av";
+    advarsel = vi.spyOn(console, "warn").mockImplementation(() => {});
+  });
+  afterEach(() => {
+    advarsel.mockRestore();
+    settKlientForTest(null);
+    if (foerModus === undefined) delete process.env.LESEVENN_TESTMODUS;
+    else process.env.LESEVENN_TESTMODUS = foerModus;
+  });
+
+  /** Klienten gir utfallene i rekkefølge: et objekt er et svar, en Error kastes. */
+  function falskKlient(...utfall: (object | (() => Error))[]) {
+    const parse = vi.fn(async () => {
+      const neste = utfall.shift();
+      if (neste === undefined) throw new Error("testen ga for få utfall");
+      if (typeof neste === "function") throw neste();
+      return neste;
+    });
+    settKlientForTest({ messages: { parse } });
+    return parse;
+  }
+
+  const kjoer = () => kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "hva som helst" });
+  const feilkode = (p: Promise<unknown>) =>
+    p.then(
+      () => "ingen feil",
+      (e) => (e instanceof GeneratorFeil ? e.kode : `annen feil: ${e}`),
+    );
+
+  test("første svar ugyldig, andre gyldig: resultatet fra det andre", async () => {
+    const parse = falskKlient(ugyldig, gyldig);
+    const r = await kjoer();
+    expect(r.data).toEqual({ noe: "svar" });
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("to ugyldige svar gir ugyldig_utdata, og ikke et tredje kall", async () => {
+    const parse = falskKlient(ugyldig, ugyldig, gyldig);
+    expect(await feilkode(kjoer())).toBe("ugyldig_utdata");
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("tidsavbrudd, så svar: resultatet", async () => {
+    const parse = falskKlient(tidsavbrudd, gyldig);
+    expect((await kjoer()).data).toEqual({ noe: "svar" });
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("to tidsavbrudd gir tidsavbrudd", async () => {
+    const parse = falskKlient(tidsavbrudd, tidsavbrudd);
+    expect(await feilkode(kjoer())).toBe("tidsavbrudd");
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("en annen modellfeil, så svar: resultatet", async () => {
+    const parse = falskKlient(() => new Error("500 fra leverandøren"), gyldig);
+    expect((await kjoer()).data).toEqual({ noe: "svar" });
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("tilgang avslått (401): ingen nytt forsøk, samme melding som før", async () => {
+    const parse = falskKlient(avslaatt, gyldig);
+    const e = await kjoer().catch((x) => x);
+    expect(e).toBeInstanceOf(GeneratorFeil);
+    expect(e.kode).toBe("tilgang_avslaatt");
+    expect(e.anbefaltHandling).not.toMatch(/prøv igjen/i);
+    expect(parse).toHaveBeenCalledTimes(1);
+  });
+
+  test("429: ingen nytt forsøk her (SDK-en har sine egne)", async () => {
+    const parse = falskKlient(forMange, gyldig);
+    expect(await feilkode(kjoer())).toBe("for_mange_kall");
+    expect(parse).toHaveBeenCalledTimes(1);
+  });
+
+  test("det nye svaret valideres som det første", async () => {
+    // AD-11: det andre kallet går gjennom samme sjekk som det første. Et
+    // ugyldig andre svar slipper ikke gjennom bare fordi det er et nytt forsøk.
+    const parse = falskKlient(tidsavbrudd, ugyldig);
+    expect(await feilkode(kjoer())).toBe("ugyldig_utdata");
+    expect(parse).toHaveBeenCalledTimes(2);
+  });
+
+  test("testmodus les: ingen nytt forsøk, og modellen kalles ikke", async () => {
+    process.env.LESEVENN_TESTMODUS = "les";
+    const parse = falskKlient(gyldig, gyldig);
+    expect(await feilkode(kjoer())).toBe("lagret_svar_mangler");
+    expect(parse).not.toHaveBeenCalled();
+  });
+
+  test("400 (feil forespørsel): ingen nytt forsøk, og en kode som ikke prøves på nytt", async () => {
+    const parse = falskKlient(feilForesporsel, gyldig);
+    expect(await feilkode(kjoer())).toBe("ugyldig_foresporsel");
+    expect(parse).toHaveBeenCalledTimes(1);
+  });
+
+  test("den første feilen logges før det nye forsøket", async () => {
+    falskKlient(ugyldig, gyldig);
+    await kjoer();
+    expect(advarsel).toHaveBeenCalledOnce();
+    expect(String(advarsel.mock.calls[0][0])).toMatch(/quiz.*ugyldig_utdata/);
+  });
+
+  test("nyttForsoek: false (generatorer med egen løkke): ett kall, også ved en feil som kan gå over", async () => {
+    const parse = falskKlient(ugyldig, gyldig);
+    expect(await feilkode(kjoerGenerator({ oppgave: "quiz", skjema, brukermelding: "hva som helst", nyttForsoek: false }))).toBe("ugyldig_utdata");
+    expect(parse).toHaveBeenCalledTimes(1);
+  });
+
+  test("kanProevesPaaNytt følger matrisen, for hver kode som finnes", () => {
+    const proeves: Feilkode[] = ["ugyldig_utdata", "tidsavbrudd", "modellfeil"];
+    for (const k of FEILKODER) expect(kanProevesPaaNytt(k), k).toBe(proeves.includes(k));
+  });
+
+  test("settKlientForTest kaster utenfor en testkjøring", () => {
+    const foer = { vitest: process.env.VITEST, node: process.env.NODE_ENV };
+    delete process.env.VITEST;
+    (process.env as Record<string, string | undefined>).NODE_ENV = "production";
+    try {
+      expect(() => settKlientForTest(null)).toThrow(/bare brukes i testene/);
+    } finally {
+      process.env.VITEST = foer.vitest;
+      (process.env as Record<string, string | undefined>).NODE_ENV = foer.node;
     }
   });
 });

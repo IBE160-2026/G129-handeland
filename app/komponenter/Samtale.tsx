@@ -9,10 +9,11 @@
  */
 
 import { useRouter } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
 import type { Handlingssvar } from "../handlinger";
-import { avsluttSamtale, revurderRunde } from "../handlinger";
+import { avsluttSamtale, lagNesteSporsmal, revurderRunde, vurderLagretSvar } from "../handlinger";
+import { KI_FEIL, NETTFEIL, type Feiltekst } from "../kifeil";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
@@ -133,6 +134,110 @@ export function RevurderKnapp({ samtaleId, nummer }: { samtaleId: string; nummer
       </Tenker>
       {feil && <Feilmelding {...feil} />}
     </div>
+  );
+}
+
+/**
+ * FR-19 og FR-20: en KI-feil midt i samtalen. Meldingen sier hva som ikke ble
+ * laget og at svaret er lagret, og har «Prøv igjen» (Feilmelding).
+ * Knappen er en tenkeknapp: Buddy sitter i den mens det prøves, fokus blir
+ * stående, og feiler det igjen, går knappen tilbake og meldingen vises på nytt
+ * med fokus på knappen.
+ *
+ * Vises av samtalesiden ut fra det som er lagret, ikke ut fra svaret på
+ * handlingen: etter en feil står runden med svar og uten vurdering (FR-19),
+ * eller vurdert og uten neste spørsmål (FR-20), også om eleven laster siden på
+ * nytt. Fokus flyttes bare når feilen nettopp skjedde (`fokus`), eller etter
+ * et mislykket «Prøv igjen», ikke når siden lastes inn med en feil fra før.
+ */
+function ProevIgjen({
+  standard,
+  fokus,
+  status,
+  handling,
+}: {
+  standard: Feiltekst;
+  fokus: boolean;
+  status: string;
+  handling: () => Promise<Handlingssvar>;
+}) {
+  const router = useRouter();
+  const [venter, setVenter] = useState(false);
+  // Siden oppdateres etter et vellykket forsøk. Knappen står låst til det er
+  // gjort, så et nytt trykk i mellomtiden ikke sender en gang til.
+  const [oppdaterer, startOppdatering] = useTransition();
+  const [feil, setFeil] = useState<Feiltekst>(standard);
+  const [antallFeil, setAntallFeil] = useState(0);
+  return (
+    <div className="ml-6">
+      <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} fokus={fokus || antallFeil > 0}>
+        <Tenker
+          form="knapp"
+          aktiv={venter || oppdaterer}
+          status={status}
+          onClick={async () => {
+            setVenter(true);
+            let r: Handlingssvar;
+            try {
+              r = await handling();
+            } catch {
+              r = { feil: NETTFEIL };
+            }
+            if (r.feil) {
+              setVenter(false);
+              setFeil(r.feil);
+              setAntallFeil((n) => n + 1);
+              return;
+            }
+            startOppdatering(() => {
+              setVenter(false);
+              router.refresh();
+            });
+          }}
+          className={KNAPP}
+        >
+          Prøv igjen
+        </Tenker>
+      </Feilmelding>
+    </div>
+  );
+}
+
+/**
+ * FR-19: «Vurderingen feilet. Svaret ditt er lagret.» «Prøv igjen» vurderer
+ * det lagrede svaret. `standard` kan ha rådet til en feil som ikke kan prøves
+ * på nytt (koden fra adressen, se samtalesiden).
+ */
+export function VurderingFeilet({
+  samtaleId,
+  nummer,
+  standard = KI_FEIL.vurdering,
+  fokus,
+}: {
+  samtaleId: string;
+  nummer: number;
+  standard?: Feiltekst;
+  fokus: boolean;
+}) {
+  return (
+    <ProevIgjen
+      standard={standard}
+      fokus={fokus}
+      status="Buddy leser svaret ditt …"
+      handling={() => vurderLagretSvar(samtaleId, nummer)}
+    />
+  );
+}
+
+/** FR-20: vurderingen er lagret og vises. «Prøv igjen» lager neste spørsmål. */
+export function NesteSporsmalFeilet({ samtaleId, nummer, fokus }: { samtaleId: string; nummer: number; fokus: boolean }) {
+  return (
+    <ProevIgjen
+      standard={KI_FEIL.oppfolging}
+      fokus={fokus}
+      status="Buddy lager neste spørsmål …"
+      handling={() => lagNesteSporsmal(samtaleId, nummer)}
+    />
   );
 }
 

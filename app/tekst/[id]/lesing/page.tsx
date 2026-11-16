@@ -41,7 +41,8 @@ import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
 import { HentOversettelse, MorsmaalVelger } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
-import { FinnFagordPaaNyttSkjema, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
+import { FinnFagordPaaNytt, LagOppsummeringSkjema } from "../../../komponenter/Skjemaer";
+import { KI_FEIL, feiltekstForKode } from "../../../kifeil";
 import { KNAPP_PRIMAER } from "../../../komponenter/knapper";
 import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing, velgMorsmaalHandling } from "../../../handlinger";
 import { stegtekst } from "../../../../tekst/steg";
@@ -50,12 +51,16 @@ const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra 
 
 export default async function Lesing({
   params,
+  searchParams,
 }: PageProps<"/tekst/[id]/lesing">) {
   // FR-35: uten innlogging sendes eleven til innloggingssiden. Hentes før
   // noen try-blokk, fordi omdirigeringen er et unntak en catch ville fanget.
   const t = await tilgang();
 
   const { id } = await params;
+  // FR-7: koden fra låsingen, når fagordene ikke kunne lages der.
+  const kode = (await searchParams).fagordfeil;
+  const fagordfeil = typeof kode === "string" ? kode : undefined;
 
   let tekst;
   try {
@@ -179,17 +184,16 @@ export default async function Lesing({
           {sett === null ? (
             /*
              * Teksten kan være låst uten Begrepssett: låsingen og
-             * modellkallet kan feile hver for seg. §5 krever en vei videre,
-             * ikke en tom liste uten forklaring.
+             * modellkallet kan feile hver for seg. §5 og FR-7 krever en vei
+             * videre: meldingen (`role="alert"`) med «Prøv igjen». Kom eleven
+             * hit fra låsingen, bærer adressen feilkoden (`fagordfeil`), så
+             * rådet passer feilen, og «Prøv igjen» får fokus.
              */
-            <div className="mt-3 rounded-md border border-slate-300 bg-slate-50 p-4 text-sm dark:border-slate-700 dark:bg-slate-900">
-              <p>Fagordene er ikke funnet ennå.</p>
-              <p className="mt-2">
-                Det kan være at det gikk galt under genereringen. Du kan lese
-                teksten uten markeringer i mellomtiden — den er den samme.
-              </p>
-              <FinnFagordPaaNyttSkjema handling={genererPaaNytt.bind(null, id)} />
-            </div>
+            <FinnFagordPaaNytt
+              handling={genererPaaNytt.bind(null, id)}
+              standard={feiltekstForKode(KI_FEIL.fagord, fagordfeil)}
+              fokus={fagordfeil !== undefined}
+            />
           ) : sett.begreper.length === 0 ? (
             /*
              * FR-7: tomt Begrepssett sies rett ut. Funksjonen degraderer

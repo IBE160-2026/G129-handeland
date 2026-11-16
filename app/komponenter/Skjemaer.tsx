@@ -18,6 +18,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
+import { NETTFEIL } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
@@ -166,6 +167,8 @@ export function LagQuizAutomatisk({
   const router = useRouter();
   const [venter, startOvergang] = useTransition();
   const [feil, settFeil] = useState<Handlingssvar["feil"]>(undefined);
+  /** Ny nøkkel per feil, så meldingen leses opp og får fokus hver gang. */
+  const [antallFeil, settAntallFeil] = useState(0);
   const startet = useRef(false);
 
   const kjoer = () =>
@@ -175,10 +178,12 @@ export function LagQuizAutomatisk({
       try {
         svar = await handling();
       } catch {
-        svar = { feil: { melding: "Quizen kunne ikke lages akkurat nå.", handling: "Prøv igjen." } };
+        svar = { feil: NETTFEIL };
       }
-      if (svar.feil) settFeil(svar.feil);
-      else router.refresh();
+      if (svar.feil) {
+        settFeil(svar.feil);
+        settAntallFeil((n) => n + 1);
+      } else router.refresh();
     });
 
   useEffect(() => {
@@ -190,15 +195,9 @@ export function LagQuizAutomatisk({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // FR-13: meldingen sier at quizen ikke kunne lages, og fokus går til «Prøv igjen».
   if (feil && !venter) {
-    return (
-      <div>
-        <Feilmelding melding={feil.melding} handling={feil.handling} />
-        <button type="button" onClick={kjoer} className={KNAPP_PRIMAER}>
-          Prøv igjen
-        </button>
-      </div>
-    );
+    return <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} proevIgjen={kjoer} />;
   }
 
   // Vises også i øyeblikket før overgangen starter og mens siden oppdateres,
@@ -209,24 +208,56 @@ export function LagQuizAutomatisk({
 /* ------------------------------------------------------------------ */
 
 /**
- * §5: når uttrekket av fagord har feilet, skal eleven ha en vei videre — ikke
- * bare en forklaring. Handlingen `genererPaaNytt` fantes fra før, men ingen
- * knapp brukte den.
+ * §5 og FR-7: når uttrekket av fagord har feilet, skal eleven ha en vei
+ * videre — ikke bare en forklaring. Lesevisningen viser hele feiltilstanden
+ * her: meldingen (`role="alert"`, ut fra koden i adressen når eleven kom fra
+ * låsingen) med «Prøv igjen» inni. Feiler det igjen, byttes teksten, og
+ * meldingen leses opp og får fokus på nytt. Ingen tekst står to ganger.
+ *
+ * Knappen er låst med `aria-disabled` mens Buddy tenker, ikke `disabled`, så
+ * fokus blir stående på den (som `Tenker form="knapp"`).
  */
-export function FinnFagordPaaNyttSkjema({
+export function FinnFagordPaaNytt({
   handling,
+  standard,
+  fokus,
 }: {
-  handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+  handling: () => Promise<Handlingssvar>;
+  /** Meldingen før eleven har prøvd igjen på denne siden. */
+  standard: { melding: string; handling: string };
+  /** Om «Prøv igjen» får fokus med en gang: når eleven nettopp ble sendt hit av en feil. */
+  fokus: boolean;
 }) {
-  const [svar, send] = useActionState(handling, TOMT);
+  const router = useRouter();
+  const [venter, startOvergang] = useTransition();
+  const [feil, settFeil] = useState(standard);
+  const [antallFeil, settAntallFeil] = useState(0);
+
+  const kjoer = () => {
+    if (venter) return;
+    startOvergang(async () => {
+      let svar: Handlingssvar;
+      try {
+        svar = await handling();
+      } catch {
+        svar = { feil: NETTFEIL };
+      }
+      if (svar.feil) {
+        settFeil(svar.feil);
+        settAntallFeil((n) => n + 1);
+      } else router.refresh();
+    });
+  };
 
   return (
-    <form action={send} className="mt-3">
-      {svar.feil && (
-        <Feilmelding melding={svar.feil.melding} handling={svar.feil.handling} />
-      )}
-      <Send venter="Finner fagordene…" klar="Prøv å finne fagordene igjen" status="Buddy finner fagordene …" />
-    </form>
+    <div className="mt-3">
+      <Feilmelding key={antallFeil} melding={feil.melding} handling={feil.handling} fokus={fokus || antallFeil > 0}>
+        <button type="button" onClick={kjoer} aria-disabled={venter || undefined} className={KNAPP_PRIMAER}>
+          {venter ? "Finner fagordene…" : "Prøv igjen"}
+        </button>
+      </Feilmelding>
+      <Tenker aktiv={venter} status="Buddy finner fagordene …" hjelp="Dette kan ta et halvt minutt." className="mt-3" />
+    </div>
   );
 }
 

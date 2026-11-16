@@ -136,7 +136,11 @@ export async function hentFagsamtale(t: Tilgang, samtaleId: string): Promise<Lag
 
 export type Samtaleliste = { id: string; opprettet: Date; avsluttet: Date | null; antallRunder: number }[];
 
-/** Samtalene om en Tekst, nyeste først (FR-22: kan leses om senere). */
+/**
+ * Samtalene om en Tekst, nyeste først (FR-22: kan leses om senere).
+ * `antallRunder` er de VURDERTE rundene: et svar der vurderingen feilet,
+ * telles ikke (FR-19).
+ */
 export async function listFagsamtaler(t: Tilgang, tekstId: string): Promise<Samtaleliste> {
   await sjekkTekst(t, tekstId);
   const samtaler = await db
@@ -149,46 +153,78 @@ export async function listFagsamtaler(t: Tilgang, tekstId: string): Promise<Samt
     const r = await db
       .select({ nummer: samtalerunde.nummer })
       .from(samtalerunde)
-      .where(and(eq(samtalerunde.fagsamtaleId, s.id), isNotNull(samtalerunde.elevsvar)));
+      .where(and(eq(samtalerunde.fagsamtaleId, s.id), isNotNull(samtalerunde.svarvurdering)));
     ut.push({ ...s, antallRunder: r.length });
   }
   return ut;
 }
 
+export type Neste = { sporsmal: string; kildeavsnittNummer: number; maal: Maal };
+
 /**
- * Lagrer elevens svar og vurderingen, og legger til neste spørsmål — eller
- * avslutter samtalen, når `neste` er null (siste runde, FR-22).
+ * FR-19: lagrer elevens svar FØR det vurderes. Feiler vurderingen, ligger
+ * svaret i databasen, og «Prøv igjen» vurderer det lagrede svaret
+ * (`lagreVurdering`). En runde med svar og uten vurdering telles ikke som en
+ * runde (FR-22), se `listFagsamtaler` og arbeidsbordet.
  *
  * Svaret lagres bare om runden ikke alt er besvart: et dobbeltklikk skal ikke
- * gi to vurderinger, og en vurdering skal ikke kunne skrives over her
- * (ny vurdering har sin egen funksjon).
+ * gi to svar.
  */
-export async function lagreSvar(
+export async function lagreElevsvar(t: Tilgang, samtaleId: string, nummer: number, elevsvar: string): Promise<void> {
+  const s = await eidSamtale(t, samtaleId);
+  if (s.avsluttet) throw new IkkeFunnet("En åpen samtale");
+  const oppdatert = await db
+    .update(samtalerunde)
+    .set({ elevsvar })
+    .where(
+      and(
+        eq(samtalerunde.fagsamtaleId, samtaleId),
+        eq(samtalerunde.nummer, nummer),
+        isNull(samtalerunde.elevsvar),
+      ),
+    )
+    .returning({ id: samtalerunde.id });
+  if (oppdatert.length === 0) throw new IkkeFunnet(`Runde ${nummer} uten svar`);
+}
+
+/**
+ * Lagrer vurderingen av et lagret svar, og så, etter `neste`:
+ *
+ *   et spørsmål  legges til som neste runde
+ *   null         samtalen avsluttes (siste runde, FR-22)
+ *   "mangler"    oppfølgingen feilet (FR-20): vurderingen står, samtalen er
+ *                åpen, og neste spørsmål lages med `lagreNesteSporsmal`
+ *
+ * Bare en runde som har svar og ingen vurdering, kan vurderes her. En
+ * vurdering skal ikke kunne skrives over (ny vurdering har sin egen funksjon).
+ */
+export async function lagreVurdering(
   t: Tilgang,
   samtaleId: string,
   nummer: number,
-  elevsvar: string,
   vurdering: { tilstand: Tilstand; begrunnelse: string },
-  neste: { sporsmal: string; kildeavsnittNummer: number; maal: Maal } | null,
+  neste: Neste | null | "mangler",
 ): Promise<void> {
   const s = await eidSamtale(t, samtaleId);
   if (s.avsluttet) throw new IkkeFunnet("En åpen samtale");
-  const kilde = neste ? await avsnittId(s.tekstId, neste.kildeavsnittNummer) : null;
+  const kilde = neste && neste !== "mangler" ? await avsnittId(s.tekstId, neste.kildeavsnittNummer) : null;
 
   await db.transaction(async (tx) => {
     const oppdatert = await tx
       .update(samtalerunde)
-      .set({ elevsvar, svarvurdering: vurdering.tilstand, vurderingsbegrunnelse: vurdering.begrunnelse })
+      .set({ svarvurdering: vurdering.tilstand, vurderingsbegrunnelse: vurdering.begrunnelse })
       .where(
         and(
           eq(samtalerunde.fagsamtaleId, samtaleId),
           eq(samtalerunde.nummer, nummer),
-          isNull(samtalerunde.elevsvar),
+          isNotNull(samtalerunde.elevsvar),
+          isNull(samtalerunde.svarvurdering),
         ),
       )
       .returning({ id: samtalerunde.id });
-    if (oppdatert.length === 0) throw new IkkeFunnet(`Runde ${nummer} uten svar`);
+    if (oppdatert.length === 0) throw new IkkeFunnet(`Runde ${nummer} med svar og uten vurdering`);
 
+    if (neste === "mangler") return;
     if (neste && kilde) {
       await tx.insert(samtalerunde).values({
         fagsamtaleId: samtaleId,
@@ -204,19 +240,55 @@ export async function lagreSvar(
 }
 
 /**
+ * FR-20, «Prøv igjen» for neste spørsmål: legger til runden etter en vurdert
+ * runde som ikke fikk noe oppfølgingsspørsmål. Bare i en åpen samtale, og bare
+ * når runden er den siste (et dobbeltklikk gir ikke to neste spørsmål).
+ */
+export async function lagreNesteSporsmal(t: Tilgang, samtaleId: string, nummer: number, neste: Neste): Promise<void> {
+  const s = await eidSamtale(t, samtaleId);
+  if (s.avsluttet) throw new IkkeFunnet("En åpen samtale");
+  const kilde = await avsnittId(s.tekstId, neste.kildeavsnittNummer);
+
+  await db.transaction(async (tx) => {
+    const [runde] = await tx
+      .select({ svarvurdering: samtalerunde.svarvurdering })
+      .from(samtalerunde)
+      .where(and(eq(samtalerunde.fagsamtaleId, samtaleId), eq(samtalerunde.nummer, nummer)));
+    const etter = await tx
+      .select({ nummer: samtalerunde.nummer })
+      .from(samtalerunde)
+      .where(and(eq(samtalerunde.fagsamtaleId, samtaleId), gt(samtalerunde.nummer, nummer)));
+    if (!runde || runde.svarvurdering === null || etter.length > 0) {
+      throw new IkkeFunnet(`Runde ${nummer} som venter på neste spørsmål`);
+    }
+    await tx.insert(samtalerunde).values({
+      fagsamtaleId: samtaleId,
+      nummer: nummer + 1,
+      sporsmal: neste.sporsmal,
+      kildeavsnittId: kilde,
+      maal: neste.maal,
+    });
+  });
+}
+
+/**
  * FR-22: «jeg tror du misforsto svaret mitt». Vurderingen av runden byttes ut.
  *
  * Er det siste besvarte runde, og neste spørsmål ikke er besvart ennå, byttes
  * også neste spørsmål — det bygde på vurderingen som nå er endret. Er
  * samtalen kommet lenger, endres bare vurderingen; spørsmålene etter er alt
- * svart på og blir stående.
+ * svart på og blir stående. Mangler neste spørsmål fordi oppfølgingen feilet
+ * (FR-20), og samtalen er åpen, legges det nye til.
+ *
+ * Bare en runde som alt er vurdert: en runde der vurderingen feilet (FR-19),
+ * vurderes med `lagreVurdering`, og bruker ikke opp den ene nye vurderingen.
  */
 export async function lagreNyVurdering(
   t: Tilgang,
   samtaleId: string,
   nummer: number,
   vurdering: { tilstand: Tilstand; begrunnelse: string },
-  neste: { sporsmal: string; kildeavsnittNummer: number; maal: Maal } | null,
+  neste: Neste | null,
 ): Promise<void> {
   const s = await eidSamtale(t, samtaleId);
   const kilde = neste ? await avsnittId(s.tekstId, neste.kildeavsnittNummer) : null;
@@ -225,9 +297,15 @@ export async function lagreNyVurdering(
     const oppdatert = await tx
       .update(samtalerunde)
       .set({ svarvurdering: vurdering.tilstand, vurderingsbegrunnelse: vurdering.begrunnelse, revurdert: true })
-      .where(and(eq(samtalerunde.fagsamtaleId, samtaleId), eq(samtalerunde.nummer, nummer)))
+      .where(
+        and(
+          eq(samtalerunde.fagsamtaleId, samtaleId),
+          eq(samtalerunde.nummer, nummer),
+          isNotNull(samtalerunde.svarvurdering),
+        ),
+      )
       .returning({ id: samtalerunde.id });
-    if (oppdatert.length === 0) throw new IkkeFunnet(`Runde ${nummer}`);
+    if (oppdatert.length === 0) throw new IkkeFunnet(`Vurdert runde ${nummer}`);
 
     if (neste && kilde) {
       const etter = await tx
@@ -239,6 +317,14 @@ export async function lagreNyVurdering(
           .update(samtalerunde)
           .set({ sporsmal: neste.sporsmal, kildeavsnittId: kilde, maal: neste.maal })
           .where(and(eq(samtalerunde.fagsamtaleId, samtaleId), eq(samtalerunde.nummer, nummer + 1)));
+      } else if (etter.length === 0 && !s.avsluttet) {
+        await tx.insert(samtalerunde).values({
+          fagsamtaleId: samtaleId,
+          nummer: nummer + 1,
+          sporsmal: neste.sporsmal,
+          kildeavsnittId: kilde,
+          maal: neste.maal,
+        });
       }
     }
   });

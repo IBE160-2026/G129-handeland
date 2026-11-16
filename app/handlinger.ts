@@ -41,9 +41,12 @@ import {
 import {
   avsluttFagsamtale,
   hentFagsamtale,
+  lagreElevsvar,
+  lagreNesteSporsmal,
   lagreNyVurdering,
-  lagreSvar as lagreSamtalesvar,
+  lagreVurdering,
   opprettFagsamtale,
+  type LagretFagsamtale,
   type Runde,
 } from "../data/fagsamtale";
 import {
@@ -55,7 +58,8 @@ import {
 import { merkOevekort, type Merking } from "../data/oevekort";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
-import { GeneratorFeil, hentPrompt } from "../generatorer/kontrakt";
+import { hentPrompt } from "../generatorer/kontrakt";
+import { KI_FEIL, feilkodeFor, kiFeil, somFeil } from "./kifeil";
 import { GRENSER } from "../opplasting/pdf-tekst";
 import { delIAvsnitt } from "../tekst/avsnittsdeling";
 import { hentLaast, laasTekst } from "../tekst/las";
@@ -96,24 +100,8 @@ export type Handlingssvar = {
 
 const INGEN_FEIL: Handlingssvar = {};
 
-/**
- * Oversetter en GeneratorFeil til elevrettet form.
- *
- * Grunnen til at dette er en egen funksjon er at §5-kravet ellers måtte
- * gjentas i hver handling som kaller en generator — og da ville den første
- * som ble glemt gitt eleven en teknisk feilmelding.
- */
-function somFeil(e: unknown): Handlingssvar {
-  if (e instanceof GeneratorFeil) {
-    return { feil: { melding: e.elevmelding, handling: e.anbefaltHandling } };
-  }
-  return {
-    feil: {
-      melding: "Noe gikk galt hos oss.",
-      handling: "Prøv igjen. Står det ved, er det en feil vi må rette.",
-    },
-  };
-}
+// `somFeil` og `kiFeil` (meldingene per funksjon, PRD §5) står i `kifeil.ts`,
+// fordi en fil med "use server" bare kan eksportere async-funksjoner.
 
 /* ------------------------------------------------------------------ *
  * FR-1 — innlesing ved liming
@@ -221,12 +209,13 @@ export async function lagreAktivering(
   // valgt teksten, og det finnes ingen uttrekksfeil å rette, så den låses
   // slik den ble limt inn. PDF og bilde går via gjennomsynet som før.
   if (rad.vei === "liming") {
-    const { laast, svar: feil } = await laasOgLagBegrepssett(t, tekstId, rad.redigertTekst);
+    const { laast, svar: feil, fagordfeil } = await laasOgLagBegrepssett(t, tekstId, rad.redigertTekst);
     // Feilet låsingen, står teksten fortsatt som aktivert, og feilen vises
     // her. Feilet bare genereringen, er teksten låst, og lesevisningen tåler
-    // et manglende Begrepssett og tilbyr å prøve igjen (AD-9, §5).
+    // et manglende Begrepssett og tilbyr å prøve igjen (AD-9, §5). Koden
+    // følger med, så lesevisningen gir rådet som passer feilen (FR-7).
     if (!laast && feil) return feil;
-    redirect(`/tekst/${tekstId}/lesing`);
+    redirect(lesingEtterLaasing(tekstId, fagordfeil));
   }
 
   redirect(`/tekst/${tekstId}/gjennomsyn`);
@@ -268,9 +257,18 @@ export async function laasOgGenerer(
   }
 
   const t = await tilgang();
-  const { svar } = await laasOgLagBegrepssett(t, tekstId, redigert);
-  if (svar) return svar;
-  redirect(`/tekst/${tekstId}/lesing`);
+  const { laast, svar, fagordfeil } = await laasOgLagBegrepssett(t, tekstId, redigert);
+  // Som i aktiveringen: feilet bare fagordene (FR-7), er teksten låst, og
+  // gjennomsynet kan ikke sendes på nytt. Lesevisningen sier at fagordene
+  // ikke kunne lages, med rådet som passer koden, og har «Prøv igjen».
+  if (!laast && svar) return svar;
+  redirect(lesingEtterLaasing(tekstId, fagordfeil));
+}
+
+/** Lesevisningen etter låsing. Feilet fagordene, bærer adressen koden (FR-7). */
+function lesingEtterLaasing(tekstId: string, fagordfeil: string | undefined): string {
+  const rot = `/tekst/${tekstId}/lesing`;
+  return fagordfeil ? `${rot}?fagordfeil=${encodeURIComponent(fagordfeil)}` : rot;
 }
 
 /**
@@ -283,7 +281,7 @@ async function laasOgLagBegrepssett(
   t: Tilgang,
   tekstId: string,
   redigert: string,
-): Promise<{ laast: boolean; svar: Handlingssvar | null }> {
+): Promise<{ laast: boolean; svar: Handlingssvar | null; fagordfeil?: string }> {
   let laast;
   try {
     laast = await laasTekst(t, tekstId, redigert);
@@ -311,7 +309,7 @@ async function laasOgLagBegrepssett(
     // går bare framover. Eleven sendes videre til lesevisningen, som tåler
     // et manglende Begrepssett og tilbyr å prøve igjen.
     revalidatePath(`/tekst/${tekstId}/lesing`);
-    return { laast: true, svar: somFeil(e) };
+    return { laast: true, svar: kiFeil(e, KI_FEIL.fagord), fagordfeil: feilkodeFor(e) };
   }
   return { laast: true, svar: null };
 }
@@ -323,10 +321,7 @@ async function laasOgLagBegrepssett(
  * være låst uten Begrepssett om modellkallet feilet. Uten denne ville eleven
  * sittet med en låst tekst og ingen vei videre, som er en blindvei (§5).
  */
-export async function genererPaaNytt(
-  tekstId: string,
-  _forrige: Handlingssvar,
-): Promise<Handlingssvar> {
+export async function genererPaaNytt(tekstId: string): Promise<Handlingssvar> {
   const t = await tilgang();
 
   try {
@@ -346,7 +341,7 @@ export async function genererPaaNytt(
     const resultat = await hentFaguttrykk(laast.avsnitt);
     await lagreBegrepssett(laast, resultat);
   } catch (e) {
-    return somFeil(e);
+    return kiFeil(e, KI_FEIL.fagord);
   }
 
   revalidatePath(`/tekst/${tekstId}/lesing`);
@@ -376,7 +371,8 @@ export async function lagQuiz(
       await lagreQuiz(laast, resultat);
     }
   } catch (e) {
-    return somFeil(e);
+    // FR-13: ingen Quiz lagres fra et mislykket kall (lagreQuiz nås ikke).
+    return kiFeil(e, KI_FEIL.quiz);
   }
   revalidatePath(`/tekst/${tekstId}/quiz`);
   return INGEN_FEIL;
@@ -683,30 +679,169 @@ export async function svarISamtale(
     };
   }
 
-  let tekstId: string;
+  let s;
   try {
-    const s = await hentFagsamtale(t, samtaleId);
-    tekstId = s.tekstId;
+    s = await hentFagsamtale(t, samtaleId);
     if (s.avsluttet) {
       return { feil: { melding: "Samtalen er avsluttet.", handling: "Start en ny samtale fra oppgavesiden." } };
     }
-    const runde = s.runder.find((r) => r.nummer === nummer && r.elevsvar === null);
-    if (!runde) {
+    if (!s.runder.some((r) => r.nummer === nummer && r.elevsvar === null)) {
       return { feil: { melding: "Dette spørsmålet er alt besvart.", handling: "Last siden på nytt." } };
     }
-    const laast = await hentLaast(t, s.tekstId);
-    const v = await vurderSvar({
-      avsnitt: laast.avsnitt,
-      tidligere: tidligereRunder(s.runder, nummer),
-      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
-      elevsvar: svar,
-      sisteRunde: nummer >= MAKS_RUNDER,
-    });
-    await lagreSamtalesvar(t, samtaleId, nummer, svar, v, v.oppfolging);
+    // FR-19: svaret lagres før det vurderes. Feiler vurderingen, er svaret
+    // ikke tapt, og «Prøv igjen» vurderer det som ligger i databasen.
+    await lagreElevsvar(t, samtaleId, nummer, svar);
   } catch (e) {
     return somFeil(e);
   }
-  revalidatePath(`/tekst/${tekstId}/samtale/${samtaleId}`);
+  const utfall = await vurderOgLagre(t, s, nummer, svar);
+  const side = `/tekst/${s.tekstId}/samtale/${samtaleId}`;
+  revalidatePath(side);
+  if (utfall.slag === "ok") return INGEN_FEIL;
+  /*
+   * Svaret er lagret, så skjemaet forsvinner når siden tegnes på nytt, og en
+   * melding i skjemaets tilstand ville forsvunnet med det. Siden viser i
+   * stedet feilen ut fra det som er lagret (FR-19, FR-20). Adressen sier at
+   * det skjedde nå (så «Prøv igjen» får fokus), og bærer koden, så en feil
+   * som ikke kan prøves på nytt (401, 429, testmodus, databasen) gir sitt
+   * eget råd.
+   */
+  if (utfall.slag === "oppfolging") redirect(`${side}?feil=oppfolging`);
+  redirect(`${side}?feil=vurdering&kode=${encodeURIComponent(utfall.kode)}`);
+}
+
+type Vurderingsutfall =
+  | { slag: "ok" }
+  /** FR-20: vurderingen er lagret, men neste spørsmål mangler. */
+  | { slag: "oppfolging" }
+  /** FR-19: vurderingen feilet. Svaret er lagret. */
+  | { slag: "feil"; svar: Handlingssvar; kode: string };
+
+/**
+ * Et annet forsøk kom først (en fane til, eller siden ble lastet på nytt
+ * mens kallet pågikk): raden er alt endret, eller neste runde finnes. Da er
+ * ingenting galt, og siden skal bare vise det som ble lagret.
+ */
+function annetForsoekKomFoerst(e: unknown): boolean {
+  if (e instanceof IkkeFunnet) return true;
+  let x: unknown = e;
+  for (let i = 0; i < 3 && x; i++) {
+    if ((x as { code?: unknown }).code === "23505") return true; // brudd på unik-begrensning
+    x = (x as { cause?: unknown }).cause;
+  }
+  return false;
+}
+
+/**
+ * Vurderer et lagret svar og lagrer vurderingen, og neste spørsmål når det
+ * finnes. Felles for svaret (`svarISamtale`) og «Prøv igjen» etter FR-19.
+ * Feiler oppfølgingen (FR-20), lagres vurderingen likevel, og samtalen står
+ * åpen uten neste spørsmål.
+ */
+async function vurderOgLagre(
+  t: Tilgang,
+  s: LagretFagsamtale,
+  nummer: number,
+  elevsvar: string,
+): Promise<Vurderingsutfall> {
+  const runde = s.runder.find((r) => r.nummer === nummer);
+  if (!runde) return { slag: "ok" };
+  let v;
+  try {
+    const laast = await hentLaast(t, s.tekstId);
+    v = await vurderSvar({
+      avsnitt: laast.avsnitt,
+      tidligere: tidligereRunder(s.runder, nummer),
+      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+      elevsvar,
+      sisteRunde: nummer >= MAKS_RUNDER,
+    });
+  } catch (e) {
+    return { slag: "feil", svar: kiFeil(e, KI_FEIL.vurdering), kode: feilkodeFor(e) };
+  }
+  const neste = v.oppfolging ?? (v.oppfolgingFeilet ? "mangler" : null);
+  try {
+    await lagreVurdering(t, s.id, nummer, v, neste);
+  } catch (e) {
+    if (annetForsoekKomFoerst(e)) return { slag: "ok" };
+    return { slag: "feil", svar: somFeil(e), kode: feilkodeFor(e) };
+  }
+  return neste === "mangler" ? { slag: "oppfolging" } : { slag: "ok" };
+}
+
+/** FR-19, «Prøv igjen»: vurderer svaret som ble lagret da vurderingen feilet. */
+export async function vurderLagretSvar(samtaleId: string, nummer: number): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let s;
+  try {
+    s = await hentFagsamtale(t, samtaleId);
+  } catch (e) {
+    return somFeil(e);
+  }
+  const side = `/tekst/${s.tekstId}/samtale/${samtaleId}`;
+  const runde = s.runder.find((r) => r.nummer === nummer);
+  if (!runde || runde.elevsvar === null) {
+    return { feil: { melding: "Dette svaret venter ikke på vurdering.", handling: "Last siden på nytt." } };
+  }
+  // Alt vurdert (et annet forsøk kom først), eller samtalen er avsluttet:
+  // siden viser det som er lagret.
+  if (s.avsluttet || runde.svarvurdering !== null) {
+    revalidatePath(side);
+    return INGEN_FEIL;
+  }
+  const utfall = await vurderOgLagre(t, s, nummer, runde.elevsvar);
+  revalidatePath(side);
+  // FR-20 etter «Prøv igjen»: vurderingen er lagret, og siden viser «Prøv
+  // igjen» for neste spørsmål. Det er ikke en feil i dette trykket.
+  return utfall.slag === "feil" ? utfall.svar : INGEN_FEIL;
+}
+
+/**
+ * FR-20, «Prøv igjen» for neste spørsmål: vurderingen er lagret og beholdes,
+ * og bare oppfølgingen lages på nytt. Den må passe den lagrede tilstanden.
+ */
+export async function lagNesteSporsmal(samtaleId: string, nummer: number): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let s;
+  try {
+    s = await hentFagsamtale(t, samtaleId);
+  } catch (e) {
+    return somFeil(e);
+  }
+  const side = `/tekst/${s.tekstId}/samtale/${samtaleId}`;
+  const runde = s.runder.find((r) => r.nummer === nummer);
+  if (!runde || runde.elevsvar === null || runde.svarvurdering === null) {
+    return { feil: { melding: "Denne runden venter ikke på neste spørsmål.", handling: "Last siden på nytt." } };
+  }
+  // Neste spørsmål finnes alt (et annet forsøk kom først), eller samtalen er
+  // avsluttet: siden viser det som er lagret.
+  if (s.avsluttet || s.runder.some((r) => r.nummer > nummer)) {
+    revalidatePath(side);
+    return INGEN_FEIL;
+  }
+  let v;
+  try {
+    const laast = await hentLaast(t, s.tekstId);
+    v = await vurderSvar({
+      avsnitt: laast.avsnitt,
+      tidligere: tidligereRunder(s.runder, nummer),
+      gjeldende: { sporsmal: runde.sporsmal, kildeavsnittNummer: runde.kildeavsnitt.nummer },
+      elevsvar: runde.elevsvar,
+      sisteRunde: nummer >= MAKS_RUNDER,
+      // En begrunnelse som mangler (null), erstattes av modellens i sjekken,
+      // så den ikke stopper hvert «Prøv igjen» for alltid.
+      beholdVurdering: { tilstand: runde.svarvurdering, begrunnelse: runde.vurderingsbegrunnelse },
+    });
+  } catch (e) {
+    return kiFeil(e, KI_FEIL.oppfolging);
+  }
+  if (!v.oppfolging) return { feil: KI_FEIL.oppfolging };
+  try {
+    await lagreNesteSporsmal(t, samtaleId, nummer, v.oppfolging);
+  } catch (e) {
+    if (!annetForsoekKomFoerst(e)) return somFeil(e);
+  }
+  revalidatePath(side);
   return INGEN_FEIL;
 }
 
@@ -725,6 +860,9 @@ export async function revurderRunde(samtaleId: string, nummer: number): Promise<
     if (!runde || runde.elevsvar === null) {
       return { feil: { melding: "Denne runden har ikke noe svar å vurdere.", handling: "Last siden på nytt." } };
     }
+    // FR-19: vurderingen feilet, så det finnes ingen vurdering å be om på
+    // nytt. «Prøv igjen» (vurderLagretSvar) bruker ikke opp FR-22-muligheten.
+    if (runde.svarvurdering === null) return { feil: KI_FEIL.vurdering };
     if (runde.revurdert) {
       return {
         feil: {
@@ -742,9 +880,14 @@ export async function revurderRunde(samtaleId: string, nummer: number): Promise<
       sisteRunde: nummer >= MAKS_RUNDER,
       nyVurdering: true,
     });
+    // Feilet oppfølgingen, og eleven har et ubesvart neste spørsmål, ville
+    // den nye vurderingen stått over et spørsmål som bygger på den gamle.
+    // Da lagres ingenting, og den gamle vurderingen står.
+    const ubesvartNeste = s.runder.some((r) => r.nummer === nummer + 1 && r.elevsvar === null);
+    if (v.oppfolgingFeilet && ubesvartNeste && !s.avsluttet) return { feil: KI_FEIL.oppfolging };
     await lagreNyVurdering(t, samtaleId, nummer, v, v.oppfolging);
   } catch (e) {
-    return somFeil(e);
+    return kiFeil(e, KI_FEIL.vurdering);
   }
   revalidatePath(`/tekst/${tekstId}/samtale/${samtaleId}`);
   return INGEN_FEIL;

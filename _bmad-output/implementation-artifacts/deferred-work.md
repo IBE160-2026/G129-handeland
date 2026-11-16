@@ -32,3 +32,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-6-mobilflater.md`
   summary: Rotasjon over 760 px på landingssiden og arbeidsbordet (DOM-bytte span/knapp, maalA-kappløp, arket animeres på nytt) er ikke sjekket.
   evidence: Verification-gap- og blind-gjennomgangen av bolk 6; alle sjekker åpner en fersk kontekst med fast bredde.
+- source_spec: `_bmad-output/implementation-artifacts/spec-ki-feil-nytt-forsoek.md`
+  summary: Regelene for hva samtalesiden viser (vurderingFeilet, oppfolgingFeilet, RevurderKnapp) står inne i siden og er ikke testet; en vurdering som pågår, vises som «feilet» ved ny innlasting.
+  evidence: Gjennomgangen av KI-feil-bolken; trekk ut en ren funksjon over Runde[] og test den, og vurder et tidsstempel for når svaret ble lagret.

@@ -16,7 +16,14 @@ import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../../data/tilgang"
 import { MAKS_RUNDER, type Tilstand } from "../../../../../generatorer/fagsamtale";
 import type { Avsnitt } from "../../../../../tekst/avsnittsdeling";
 import { svarISamtale } from "../../../../handlinger";
-import { AvsluttKnapp, RevurderKnapp, SvarSkjema } from "../../../../komponenter/Samtale";
+import { KI_FEIL, feiltekstForKode } from "../../../../kifeil";
+import {
+  AvsluttKnapp,
+  NesteSporsmalFeilet,
+  RevurderKnapp,
+  SvarSkjema,
+  VurderingFeilet,
+} from "../../../../komponenter/Samtale";
 
 const TILSTAND: Record<Tilstand, { navn: string; stil: string }> = {
   dekkende: { navn: "Dekkende", stil: "border-green-600 bg-green-50 dark:border-green-500 dark:bg-green-950/40" },
@@ -26,10 +33,15 @@ const TILSTAND: Record<Tilstand, { navn: string; stil: string }> = {
   utenfor: { navn: "Utenfor tema", stil: "border-slate-500 bg-slate-50 dark:border-slate-500 dark:bg-slate-900" },
 };
 
-export default async function Samtaleside({ params }: PageProps<"/tekst/[id]/samtale/[samtaleId]">) {
+export default async function Samtaleside({ params, searchParams }: PageProps<"/tekst/[id]/samtale/[samtaleId]">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
   const t = await tilgang();
   const { id, samtaleId } = await params;
+  // Satt av `svarISamtale` når vurderingen eller oppfølgingen nettopp feilet:
+  // da får «Prøv igjen» fokus, og koden gir rådet som passer feilen.
+  const sp = await searchParams;
+  const nettoppFeilet = typeof sp.feil === "string";
+  const vurderingstekst = feiltekstForKode(KI_FEIL.vurdering, typeof sp.kode === "string" ? sp.kode : undefined);
 
   let tekst, samtale, avsnitt;
   try {
@@ -46,6 +58,12 @@ export default async function Samtaleside({ params }: PageProps<"/tekst/[id]/sam
 
   const aktiv = samtale.avsluttet ? undefined : samtale.runder.find((r) => r.elevsvar === null);
   const lenke = (n: number) => `/tekst/${id}/lesing#avsnitt-${n}`;
+  const siste = samtale.runder.at(-1);
+  // FR-19: svaret er lagret, men vurderingen feilet. Runden telles ikke.
+  const vurderingFeilet = (r: Runde) => !samtale.avsluttet && r.elevsvar !== null && r.svarvurdering === null;
+  // FR-20: siste runde er vurdert, men samtalen er verken avsluttet eller har
+  // fått neste spørsmål. Det skjer bare når oppfølgingen feilet.
+  const oppfolgingFeilet = (r: Runde) => !samtale.avsluttet && r === siste && r.svarvurdering !== null;
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -63,9 +81,13 @@ export default async function Samtaleside({ params }: PageProps<"/tekst/[id]/sam
         {samtale.runder.map((r) => (
           <li key={r.nummer}>
             <RundeVisning r={r} lenke={lenke(r.kildeavsnitt.nummer)} />
-            {r.elevsvar !== null && !r.revurdert && (
+            {vurderingFeilet(r) && (
+              <VurderingFeilet samtaleId={samtale.id} nummer={r.nummer} standard={vurderingstekst} fokus={nettoppFeilet} />
+            )}
+            {r.svarvurdering !== null && !r.revurdert && (
               <RevurderKnapp samtaleId={samtale.id} nummer={r.nummer} />
             )}
+            {oppfolgingFeilet(r) && <NesteSporsmalFeilet samtaleId={samtale.id} nummer={r.nummer} fokus={nettoppFeilet} />}
             {aktiv?.nummer === r.nummer && (
               <SvarSkjema handling={svarISamtale.bind(null, samtale.id, r.nummer)} nummer={r.nummer} />
             )}

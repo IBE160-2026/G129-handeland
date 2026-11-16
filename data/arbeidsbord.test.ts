@@ -62,6 +62,11 @@ describe("Neste steg — første regel som passer", () => {
     expect(a.nesteSteg(bunke({ samtale: { id: "s1", avsluttet: false, besvarteRunder: 0 } })).tekst).toBe("Fortsett: Fagsamtale, runde 1 av 6");
   });
 
+  test("FR-20: neste spørsmål mangler, så det står ingen rundenummer som ikke finnes", () => {
+    const b = bunke({ samtale: { id: "s1", avsluttet: false, besvarteRunder: 2, venterPaaNesteSporsmal: true } });
+    expect(a.nesteSteg(b)).toMatchObject({ tekst: "Fortsett: Fagsamtale", href: "/tekst/b1/samtale/s1", slag: "samtale" });
+  });
+
   test("runden går aldri over taket", () => {
     expect(a.nesteSteg(bunke({ samtale: { id: "s1", avsluttet: false, besvarteRunder: 6 } })).tekst).toBe("Fortsett: Fagsamtale, runde 6 av 6");
   });
@@ -275,7 +280,7 @@ describe("hentArbeidsbord", () => {
     ]);
     const [s] = await db.insert(skjema.fagsamtale).values({ tekstId: laast.id, promptversjon: "v1", modell: "m" }).returning();
     await db.insert(skjema.samtalerunde).values([
-      { fagsamtaleId: s.id, nummer: 1, sporsmal: "?", kildeavsnittId: avsnitt.id, maal: "nytt_aspekt", elevsvar: "svar" },
+      { fagsamtaleId: s.id, nummer: 1, sporsmal: "?", kildeavsnittId: avsnitt.id, maal: "nytt_aspekt", elevsvar: "svar", svarvurdering: "dekkende", vurderingsbegrunnelse: "b" },
       { fagsamtaleId: s.id, nummer: 2, sporsmal: "?", kildeavsnittId: avsnitt.id, maal: "nytt_aspekt" },
     ]);
 
@@ -287,7 +292,7 @@ describe("hentArbeidsbord", () => {
       antallKan: 1,
       antallMerket: 2,
       sisteQuiz: { antallRiktige: 6, antallTotalt: 8 },
-      samtale: { id: s.id, avsluttet: false, besvarteRunder: 1 },
+      samtale: { id: s.id, avsluttet: false, besvarteRunder: 1, venterPaaNesteSporsmal: false },
       harMinnevers: false,
     });
     expect(a.nesteSteg(bord[0]).tekst).toBe("Fortsett: Fagsamtale, runde 2 av 6");
@@ -347,7 +352,7 @@ describe("hentArbeidsbord", () => {
       .values({ tekstId: tekstA.id, promptversjon: "v1", modell: "m", opprettet: new Date(naa - 3 * DAG) })
       .returning();
     await db.insert(skjema.samtalerunde).values([
-      { fagsamtaleId: aapen.id, nummer: 1, sporsmal: "?", kildeavsnittId: tekstA.avsnittId, maal: "nytt_aspekt", elevsvar: "svar", opprettet: new Date(naa - 3 * DAG) },
+      { fagsamtaleId: aapen.id, nummer: 1, sporsmal: "?", kildeavsnittId: tekstA.avsnittId, maal: "nytt_aspekt", elevsvar: "svar", svarvurdering: "dekkende", vurderingsbegrunnelse: "b", opprettet: new Date(naa - 3 * DAG) },
       { fagsamtaleId: aapen.id, nummer: 2, sporsmal: "?", kildeavsnittId: tekstA.avsnittId, maal: "nytt_aspekt", opprettet: new Date(naa - 3 * DAG) },
     ]);
     await db
@@ -355,8 +360,31 @@ describe("hentArbeidsbord", () => {
       .values({ tekstId: tekstA.id, promptversjon: "v1", modell: "m", opprettet: new Date(naa - DAG), avsluttet: new Date(naa - DAG) });
 
     const bunke = (await a.hentArbeidsbord(t)).find((b) => b.id === tekstA.id)!;
-    expect(bunke.samtale).toEqual({ id: aapen.id, avsluttet: false, besvarteRunder: 1 });
+    expect(bunke.samtale).toEqual({ id: aapen.id, avsluttet: false, besvarteRunder: 1, venterPaaNesteSporsmal: false });
     expect(a.nesteSteg(bunke)).toMatchObject({ tekst: "Fortsett: Fagsamtale, runde 2 av 6", href: `/tekst/${tekstA.id}/samtale/${aapen.id}` });
+  });
+
+  test("FR-19: et svar der vurderingen feilet, teller ikke som en runde", async () => {
+    const { t, a: tekstA } = await toLaasteTekster();
+    const [s] = await db.insert(skjema.fagsamtale).values({ tekstId: tekstA.id, promptversjon: "v1", modell: "m" }).returning();
+    await db.insert(skjema.samtalerunde).values({
+      fagsamtaleId: s.id, nummer: 1, sporsmal: "?", kildeavsnittId: tekstA.avsnittId, maal: "nytt_aspekt", elevsvar: "svar",
+    });
+    const bunke = (await a.hentArbeidsbord(t)).find((b) => b.id === tekstA.id)!;
+    expect(bunke.samtale).toMatchObject({ besvarteRunder: 0, venterPaaNesteSporsmal: false });
+    expect(a.nesteSteg(bunke).tekst).toBe("Fortsett: Fagsamtale, runde 1 av 6");
+  });
+
+  test("FR-20: en vurdert runde uten neste spørsmål gir «Fortsett: Fagsamtale» til samtalen", async () => {
+    const { t, a: tekstA } = await toLaasteTekster();
+    const [s] = await db.insert(skjema.fagsamtale).values({ tekstId: tekstA.id, promptversjon: "v1", modell: "m" }).returning();
+    await db.insert(skjema.samtalerunde).values({
+      fagsamtaleId: s.id, nummer: 1, sporsmal: "?", kildeavsnittId: tekstA.avsnittId, maal: "nytt_aspekt",
+      elevsvar: "svar", svarvurdering: "dekkende", vurderingsbegrunnelse: "b",
+    });
+    const bunke = (await a.hentArbeidsbord(t)).find((b) => b.id === tekstA.id)!;
+    expect(bunke.samtale).toMatchObject({ besvarteRunder: 1, venterPaaNesteSporsmal: true });
+    expect(a.nesteSteg(bunke)).toMatchObject({ tekst: "Fortsett: Fagsamtale", href: `/tekst/${tekstA.id}/samtale/${s.id}` });
   });
 
   test("et tomt Begrepssett gir 0 fagord, ikke null", async () => {

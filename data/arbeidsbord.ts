@@ -42,9 +42,13 @@ export type Bunke = {
   sisteQuiz: { antallRiktige: number; antallTotalt: number } | null;
   /**
    * Samtalen kortet og neste steg handler om: den nyeste som ikke er
-   * avsluttet, ellers den nyeste. `besvarteRunder` er runder eleven har svart på.
+   * avsluttet, ellers den nyeste. `besvarteRunder` er runder eleven har svart
+   * på og som er vurdert. Et svar der vurderingen feilet, telles ikke (FR-19).
+   *
+   * `venterPaaNesteSporsmal`: alle rundene er vurdert, men samtalen er åpen og
+   * har ikke fått neste spørsmål. Det skjer bare når oppfølgingen feilet (FR-20).
    */
-  samtale: { id: string; avsluttet: boolean; besvarteRunder: number } | null;
+  samtale: { id: string; avsluttet: boolean; besvarteRunder: number; venterPaaNesteSporsmal?: boolean } | null;
   harMinnevers: boolean;
 };
 
@@ -110,6 +114,10 @@ export function nesteSteg(b: Bunke): Steg {
   if (b.tilstand === "innlest") return { tekst: "Fortsett: Før du leser", href: `${rot}/aktivering`, slag: "aktivering" };
   if (b.tilstand === "aktivert") return { tekst: "Fortsett: Se over teksten", href: `${rot}/gjennomsyn`, slag: "gjennomsyn" };
   if (b.samtale && !b.samtale.avsluttet) {
+    // FR-20: neste spørsmål mangler, så det finnes ingen runde N+1 å vise ennå.
+    if (b.samtale.venterPaaNesteSporsmal) {
+      return { tekst: "Fortsett: Fagsamtale", href: `${rot}/samtale/${b.samtale.id}`, slag: "samtale" };
+    }
     return {
       tekst: `Fortsett: Fagsamtale, runde ${gjeldendeRunde(b.samtale.besvarteRunder)} av ${MAKS_RUNDER}`,
       href: `${rot}/samtale/${b.samtale.id}`,
@@ -285,7 +293,9 @@ export async function hentArbeidsbord(t: Tilgang): Promise<Bunke[]> {
         tekstId: fagsamtale.tekstId,
         avsluttet: fagsamtale.avsluttet,
         opprettet: fagsamtale.opprettet,
-        besvarte: count(samtalerunde.elevsvar),
+        // FR-19: bare vurderte runder. `count` på en kolonne teller ikke null.
+        besvarte: count(samtalerunde.svarvurdering),
+        runder: count(samtalerunde.id),
         sisteRunde: max(samtalerunde.opprettet),
       })
       .from(fagsamtale)
@@ -332,7 +342,14 @@ export async function hentArbeidsbord(t: Tilgang): Promise<Bunke[]> {
       antallKan: f?.kan ?? 0,
       antallMerket: f?.merket ?? 0,
       sisteQuiz: q[0] ? { antallRiktige: q[0].antallRiktige, antallTotalt: q[0].antallTotalt } : null,
-      samtale: valgt ? { id: valgt.id, avsluttet: valgt.avsluttet !== null, besvarteRunder: valgt.besvarte } : null,
+      samtale: valgt
+        ? {
+            id: valgt.id,
+            avsluttet: valgt.avsluttet !== null,
+            besvarteRunder: valgt.besvarte,
+            venterPaaNesteSporsmal: valgt.avsluttet === null && valgt.besvarte > 0 && valgt.runder === valgt.besvarte,
+          }
+        : null,
       harMinnevers: versTid !== null,
     };
   });

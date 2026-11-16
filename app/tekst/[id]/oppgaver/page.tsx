@@ -123,7 +123,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
                       {DATO.format(s.opprettet)}
                     </Link>{" "}
                     <span className="text-slate-600 dark:text-slate-400">
-                      — {s.antallRunder} svar{s.avsluttet ? ", avsluttet" : ", pågår"}
+                      — {s.antallRunder} vurderte svar{s.avsluttet ? ", avsluttet" : ", pågår"}
                     </span>
                   </li>
                 ))}
