@@ -28,3 +28,20 @@ Bygge to krav som stod i PRD-en, men ikke i koden: KI-feil (§5, FR-7, FR-13, FR
 - **Utrulling** (krever ja): `npm run db:migrer:https -- --kjoer` (0007 mot Neon), deretter merge til `main` og `vercel --prod`.
 - **Punkt 4 (utsatte småting)** er ikke tatt ennå: favicon-reserve, små knapper, test av Hentefeil, `/logg-inn`, temaet etter utlogging, og nytt fra disse bolkene.
 - **Mobilbolkene** er ikke testet på en ekte telefon.
+
+## 2026-11-16 kl. 15:39 — Arve
+
+### Oppgave
+Rulle ut KI-feil og bruksgrenser («Rull ut!»).
+
+### Plan
+- Migrering 0007 mot Neon, deretter spole `main` fram til `grenser` og kjøre `vercel --prod`.
+
+### Resultat
+- Neon: 0007_forbruk er kjørt, så databasen har 8 av 8 migreringer.
+- `main` er 80449ae, rullet ut på https://lesevenn.vercel.app.
+- `/` gir 200, `/api/helse` svarer ok med 22 tabeller, og `/ny` gir 307 (omdirigerer til innlogging).
+
+### Åpne punkter
+- Punkt 4: de utsatte småtingene (se `deferred-work.md`).
+- Test på ekte telefon.

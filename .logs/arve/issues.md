@@ -44,4 +44,4 @@
 - [x] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Rull ut grenen mobil (bolk 4–6, b7a4460..f4cbc45), krever ja (rullet ut 2026-11-16, main = 3db9022)
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Temavalget følger enheten (informasjonskapsel); skal det følge kontoen, trengs migrering
-- [ ] 2026-11-16 [996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser](996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser.md) — Rull ut grenen grenser: Neon-migrering 0007, merge og vercel --prod (krever ja)
+- [x] 2026-11-16 [996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser](996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser.md) — Rull ut grenen grenser: Neon-migrering 0007, merge og vercel --prod (krever ja) (rullet ut 2026-11-16, main = 80449ae)
