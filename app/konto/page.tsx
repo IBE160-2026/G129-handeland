@@ -90,7 +90,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
         <LoggUtKnapp />
       </section>
 
-      <section className="mt-12 rounded-md border border-red-300 p-5 dark:border-red-800">
+      <section className="mt-12 rounded-md border-2 border-fare p-5">
         <h2 className="text-xl font-semibold tracking-tight">Slett kontoen</h2>
         <p className="mt-2">Dette forsvinner for godt, og kan ikke hentes tilbake:</p>
         <ul className="mt-2 list-disc pl-6">

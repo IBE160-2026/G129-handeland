@@ -13,6 +13,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import { useFormStatus } from "react-dom";
 import { KVALITETSSIKRET, SPRAAK } from "../../morsmaal/spraak";
 import type { Handlingssvar } from "../handlinger";
+import { KNAPP_LENKE, KNAPP_SEKUNDAER } from "./knapper";
 import { Tenker } from "./Tenker";
 
 const TOMT: Handlingssvar = {};
@@ -23,7 +24,7 @@ function Lagre() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-md border border-slate-500 px-4 py-2 font-bold hover:bg-slate-100 disabled:opacity-60 dark:border-slate-600 dark:hover:bg-slate-800"
+      className={KNAPP_SEKUNDAER}
     >
       {pending ? "Lagrer …" : "Lagre"}
     </button>
@@ -90,7 +91,7 @@ export function MorsmaalVelger({
         </p>
       )}
       {svar.feil && (
-        <p role="alert" className="text-sm text-red-800 dark:text-red-300">
+        <p role="alert" className="text-sm font-medium text-fare">
           {svar.feil.melding} {svar.feil.handling}
         </p>
       )}
@@ -174,7 +175,7 @@ export function OversettelseFeil({
       ) : (
         <>
           <p>{melding}</p>
-          <button type="button" onClick={kjoer} className="mt-2 underline underline-offset-4">
+          <button type="button" onClick={kjoer} className={`mt-1 ${KNAPP_LENKE}`}>
             Prøv igjen
           </button>
         </>

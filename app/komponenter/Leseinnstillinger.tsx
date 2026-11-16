@@ -81,7 +81,7 @@ export function Leseinnstillinger({
         </fieldset>
         <p className="text-xs text-slate-600 dark:text-slate-400">Valget huskes på kontoen din.</p>
         {svar.feil && (
-          <p role="alert" className="text-sm text-red-800 dark:text-red-300">
+          <p role="alert" className="text-sm font-medium text-fare">
             Innstillingen ble ikke lagret. {svar.feil.handling}
           </p>
         )}

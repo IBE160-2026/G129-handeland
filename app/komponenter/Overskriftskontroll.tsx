@@ -19,8 +19,9 @@ import { KNAPP_PRIMAER } from "./knapper";
 import type { Handlingssvar } from "../handlinger";
 
 const TOMT: Handlingssvar = {};
+// Små knapper i tekst, men med full trykkflate (DESIGN.md: 44 × 44 px).
 const LITEN =
-  "rounded border border-slate-300 px-2 py-1 text-sm hover:bg-slate-100 disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800";
+  "inline-flex min-h-11 min-w-11 items-center justify-center rounded border border-slate-300 px-3 text-sm hover:bg-slate-100 disabled:opacity-40 dark:border-slate-700 dark:hover:bg-slate-800";
 const FELT =
   "w-full rounded-md border border-slate-500 px-3 py-2 text-lg dark:border-slate-400 dark:bg-slate-900";
 
@@ -79,7 +80,7 @@ export function Overskriftskontroll({
             </button>
           </div>
           {topp.trim() !== "" && overskriftsfeil(topp) && (
-            <p className="mt-1 text-sm text-red-800 dark:text-red-300">{overskriftsfeil(topp)}</p>
+            <p className="mt-1 text-sm font-medium text-fare">{overskriftsfeil(topp)}</p>
           )}
         </div>
       )}
@@ -121,7 +122,7 @@ export function Overskriftskontroll({
                       aria-invalid={feil ? true : undefined}
                       className={`mt-1 ${FELT}`}
                     />
-                    {feil && <p className="mt-1 text-sm text-red-800 dark:text-red-300">{feil}</p>}
+                    {feil && <p className="mt-1 text-sm font-medium text-fare">{feil}</p>}
                   </>
                 )}
                 <div className="mt-2 flex flex-wrap gap-2">

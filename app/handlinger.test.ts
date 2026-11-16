@@ -9,11 +9,13 @@
 import { PGlite } from "@electric-sql/pglite";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
+import { eq } from "drizzle-orm";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 import * as skjema from "../data/skjema";
 
-const { innlogget, Omdirigert } = vi.hoisted(() => ({
+const { innlogget, kapsler, Omdirigert } = vi.hoisted(() => ({
   innlogget: { kontoId: "" },
+  kapsler: new Map<string, string>(),
   Omdirigert: class Omdirigert extends Error {
     constructor(readonly adresse: string) {
       super(`omdirigert til ${adresse}`);
@@ -21,7 +23,7 @@ const { innlogget, Omdirigert } = vi.hoisted(() => ({
   },
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
-vi.mock("next/headers", () => ({ cookies: async () => new Map(), headers: async () => new Headers() }));
+vi.mock("next/headers", () => ({ cookies: async () => kapsler, headers: async () => new Headers() }));
 vi.mock("next/navigation", () => ({
   redirect: (adresse: string) => {
     throw new Omdirigert(adresse);
@@ -34,14 +36,14 @@ const db = drizzle(new PGlite(), { schema: skjema, casing: "snake_case" });
 
 const h = await import("./handlinger");
 const f = await import("../data/fagsamtale");
-const { opprettTekst, lagreForkunnskapssvar } = await import("../data/tilgang");
+const { godkjennOverskrifter, opprettTekst, lagreForkunnskapssvar } = await import("../data/tilgang");
 const { laasTekst } = await import("../tekst/las");
 const { settKlientForTest } = await import("../generatorer/kontrakt");
 const { KI_FEIL } = await import("./kifeil");
 const { GRENSE_FEIL } = await import("../data/grenser");
 const { hentQuiz } = await import("../data/quiz");
 const { hentLaast } = await import("../tekst/las");
-const { lagreBegrepssett } = await import("../data/begrepssett");
+const { hentBegrepssett, lagreBegrepssett } = await import("../data/begrepssett");
 const { velgMorsmaal } = await import("../data/morsmaal");
 
 const TEKST =
@@ -298,6 +300,29 @@ describe("bruksgrensene (PRD §6.4)", () => {
     expect(await h.limInnTekst({}, data)).toEqual({ feil: GRENSE_FEIL.tekster });
   });
 
+  test("sjette tekst i dag via PDF og via bilde: handlingene avviser også", async () => {
+    await nyKonto();
+    for (let i = 0; i < 5; i++) {
+      await opprettTekst(innlogget, { tittel: "T", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
+    }
+    const pdf = new FormData();
+    pdf.set("tittel", "Den sjette");
+    pdf.set("raatekst", TEKST);
+    pdf.set(
+      "rapport",
+      JSON.stringify({ sider: 1, fjernedeLinjer: [], sammenslaatteOrddelinger: 0, muligTabellEllerFormel: false }),
+    );
+    expect(await h.limInnPdf({}, pdf)).toEqual({ feil: GRENSE_FEIL.tekster });
+
+    const bilde = new FormData();
+    bilde.set("tittel", "Den sjette");
+    bilde.set("raatekst", TEKST);
+    expect(await h.limInnBilde({}, bilde)).toEqual({ feil: GRENSE_FEIL.tekster });
+
+    // Ingen av dem ble lagret.
+    expect(await db.select().from(skjema.tekst).where(eq(skjema.tekst.kontoId, innlogget.kontoId))).toHaveLength(5);
+  });
+
   test("sjette fagsamtale i dag: avvist før første spørsmål lages", async () => {
     const tekstId = await nyLaastTekst();
     const laast = await hentLaast(innlogget, tekstId);
@@ -450,5 +475,88 @@ describe("bruksgrensene, for hver handling som kaller modellen (PRD §6.4)", () 
     const data = new FormData();
     data.set("tekst", `${TEKST}\n\n${"Mer tekst om mikrobølger og varme. ".repeat(20)}`);
     expect(await h.limInnTekst({}, data)).toEqual({ feil: GRENSE_FEIL.tekster });
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * FR-3 (endret 11.11) og FR-6 — aktiveringen av innlimt tekst låser
+ * ------------------------------------------------------------------ */
+
+/** En innlimt tekst med godkjente overskrifter, klar for aktiveringen. */
+async function innlimtTekst(redigert = TEKST) {
+  await nyKonto();
+  const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
+  await godkjennOverskrifter(innlogget, ny.id, redigert);
+  return ny.id;
+}
+
+/** Sender aktiveringen som skjemaet gjør: gir adressen den omdirigerte til, eller svaret. */
+async function aktiver(tekstId: string): Promise<{ adresse?: string; svar?: unknown }> {
+  const data = new FormData();
+  data.set("svar", "Noe om ovner og varme.");
+  try {
+    return { svar: await h.lagreAktivering(tekstId, {}, data) };
+  } catch (e) {
+    if (e instanceof Omdirigert) return { adresse: e.adresse };
+    throw e;
+  }
+}
+
+async function tilstand(tekstId: string) {
+  const [rad] = await db.select().from(skjema.tekst).where(eq(skjema.tekst.id, tekstId));
+  return rad.tilstand;
+}
+
+describe("lagreAktivering for innlimt tekst (FR-3, FR-6)", () => {
+  test("vellykket: teksten låses, fagordene lagres, og eleven sendes til lesevisningen", async () => {
+    const tekstId = await innlimtTekst();
+    const parse = vi.fn().mockResolvedValue(
+      svar({
+        faguttrykk: [
+          { uttrykk: "vannmolekyler", forklaring: "De minste delene av vann.", viktighetsrangering: 1, kildeavsnitt: 2 },
+        ],
+      }),
+    );
+    settKlientForTest({ messages: { parse } });
+
+    expect(await aktiver(tekstId)).toEqual({ adresse: `/tekst/${tekstId}/lesing` });
+    expect(await tilstand(tekstId)).toBe("laast");
+    const sett = await hentBegrepssett(innlogget, tekstId);
+    expect(sett?.begreper.map((b) => b.uttrykk)).toEqual(["vannmolekyler"]);
+  });
+
+  test("låsingen feiler: feilen vises på aktiveringen, teksten står som aktivert, og modellen kalles ikke", async () => {
+    // Bare blanke linjer gir ingen avsnitt, og laasTekst nekter å låse.
+    const tekstId = await innlimtTekst("   \n\n   ");
+    const parse = vi.fn();
+    settKlientForTest({ messages: { parse } });
+
+    const { adresse, svar: r } = await aktiver(tekstId);
+    expect(adresse).toBeUndefined();
+    expect(r).toMatchObject({ feil: { melding: "Teksten kunne ikke låses." } });
+    expect(await tilstand(tekstId)).toBe("aktivert");
+    expect(parse).not.toHaveBeenCalled();
+  });
+
+  test("genereringen feiler: teksten er låst uten fagord, og lesevisningen får feilkoden", async () => {
+    const tekstId = await innlimtTekst();
+    settKlientForTest({ messages: { parse: vi.fn().mockResolvedValue(ugyldig) } });
+
+    expect(await aktiver(tekstId)).toEqual({ adresse: `/tekst/${tekstId}/lesing?fagordfeil=ugyldig_utdata` });
+    expect(await tilstand(tekstId)).toBe("laast");
+    expect(await hentBegrepssett(innlogget, tekstId)).toBeNull();
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * Temaet ved utlogging (bolk 4)
+ * ------------------------------------------------------------------ */
+
+describe("slettTemaHandling", () => {
+  test("sletter temakapselen, også uten innlogging", async () => {
+    kapsler.set("tema", "moerk");
+    innlogget.kontoId = "";
+    await h.slettTemaHandling();
+    expect(kapsler.has("tema")).toBe(false);
   });
 });

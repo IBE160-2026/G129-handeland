@@ -56,6 +56,12 @@
  *     midnatt i Oslo) viser /ny meldingen før innlesingen, og over dagstaket
  *     gir en ny quiz takmeldingen uten at noen quiz lages, på en egen låst
  *     tekst uten quiz (axe på begge). Det sjekken legger inn, ryddes bort
+ *   - rotasjon over 760 px: landingssiden åpnes på 375 px, endres til 1280 px
+ *     og tilbake (effekt A markerer spenn, trykkdemoen kommer tilbake), og
+ *     arbeidsbordet med arket åpent går over til viften og tilbake uten
+ *     skriptfeil og uten `inert`- eller `har-ark`-rester
+ *   - FR-3 fase 3b: gjennomsynet via PDF og via bilde (tekster lagt rett inn
+ *     i databasen i tilstand `aktivert`), axe i lys og mørk modus
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -1552,6 +1558,152 @@ try {
   sjekk("1920 px, 200 % tekst: ingen Følge-Buddy", !(await landStor.locator(".ls-folger").evaluate((e) => e.checkVisibility())));
   await ingenSiderulling(landStor, "landingsside 1920 px, 200 % tekst");
   await landStor.context().close();
+
+  /* --- Rotasjon over 760 px (bolk 6) -------------------------------- */
+  // Alle sjekkene over åpner en fersk kontekst med fast bredde. Her endres
+  // bredden mens siden er åpen, som når en nettbrett snus: fagorddemoen bytter
+  // mellom knapper og spenn (FagordDemo), effekt A måler på nytt, og viften
+  // går fra ark til vifte og tilbake mens den er åpen.
+  {
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 740 }, locale: "nb-NO" });
+    const s = await ctx.newPage();
+    s.setDefaultTimeout(120000);
+    const feil = [];
+    s.on("pageerror", (e) => feil.push(e.message.split("\n")[0]));
+    await s.goto(`${APP}/`);
+    await s.waitForLoadState("networkidle");
+    const demoTilstand = () =>
+      s.evaluate(() => ({
+        effektA: document.getElementById("landingsside").classList.contains("effekt-a"),
+        knapper: document.querySelectorAll("#landingsside button.ls-fagord").length,
+        spenn: document.querySelectorAll("#landingsside span.ls-fagord").length,
+        paa: document.querySelectorAll("#landingsside .ls-fagord.paa").length,
+        klistret: document.getElementById("landingsside").classList.contains("ls-demo-klistret"),
+        panel: document.querySelector("#landingsside .ls-trykkpanel")?.textContent ?? "",
+      }));
+    const foer = await demoTilstand();
+    sjekk("rotasjon, landingsside 375 px: trykkdemoen med fire knapper, effekt A av", foer.knapper === 4 && !foer.effektA, JSON.stringify(foer));
+    await s.setViewportSize({ width: 1280, height: 900 });
+    await s.waitForTimeout(1000);
+    await s.evaluate(() => window.scrollTo(0, document.querySelector(".ls-demo-spor").offsetTop + window.innerHeight * 0.9));
+    await s.waitForTimeout(800);
+    const bredt = await demoTilstand();
+    sjekk(
+      "rotasjon, landingsside 375 → 1280 px: effekt A markerer span.ls-fagord, og ingen knapper er igjen",
+      bredt.effektA && bredt.knapper === 0 && bredt.spenn === 4 && bredt.paa >= 1 && bredt.panel === "",
+      JSON.stringify(bredt),
+    );
+    await s.setViewportSize({ width: 375, height: 740 });
+    await s.waitForTimeout(1000);
+    const tilbake = await demoTilstand();
+    sjekk(
+      "rotasjon, landingsside 1280 → 375 px: trykkdemoen er tilbake, uten rester av effekt A",
+      !tilbake.effektA && tilbake.knapper === 4 && tilbake.paa === 0 && !tilbake.klistret && tilbake.panel.startsWith("Trykk på et fagord"),
+      JSON.stringify(tilbake),
+    );
+    await s.locator("#landingsside button.ls-fagord", { hasText: "mitose" }).click();
+    const trykket = await demoTilstand();
+    sjekk("rotasjon, landingsside 375 px igjen: et trykk på «mitose» viser forklaringen", trykket.panel.startsWith("mitose"), trykket.panel.slice(0, 40));
+    await ingenSiderulling(s, "landingsside etter rotasjon");
+
+    // Arbeidsbordet med arket åpent.
+    await ctx.addCookies(await pc.context().cookies());
+    await s.goto(`${APP}/`);
+    const bunke = s.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
+    await bunke.click(HJOERNE);
+    const dialog = s.locator("[role=dialog][aria-modal=true]");
+    await dialog.waitFor();
+    await s.waitForTimeout(800);
+    const bord = () =>
+      s.evaluate(() => {
+        const d = document.querySelector("[role=dialog]");
+        return {
+          dialog: !!d,
+          oppsett: d?.dataset.oppsett ?? null,
+          harArk: document.documentElement.classList.contains("har-ark"),
+          overflow: getComputedStyle(document.documentElement).overflowY,
+          inert: document.querySelectorAll("[inert]").length,
+          fokusIDialog: !!document.activeElement?.closest("[role=dialog]"),
+        };
+      });
+    const ark = await bord();
+    sjekk("rotasjon, arbeidsbord 375 px: arket er åpent", ark.oppsett === "ark" && ark.harArk, JSON.stringify(ark));
+    await s.setViewportSize({ width: 1280, height: 900 });
+    await s.waitForTimeout(1500);
+    const vifteBredt = await bord();
+    sjekk(
+      "rotasjon, arbeidsbord 375 → 1280 px med arket åpent: viften står åpen som vifte, uten har-ark, og resten av siden er fortsatt inert",
+      vifteBredt.dialog &&
+        (vifteBredt.oppsett === "rundt" || vifteBredt.oppsett === "rutenett") &&
+        !vifteBredt.harArk &&
+        vifteBredt.overflow !== "hidden" &&
+        vifteBredt.inert > 0,
+      JSON.stringify(vifteBredt),
+    );
+    await ingenSiderulling(s, "arbeidsbord med åpen vifte etter rotasjon");
+    await s.setViewportSize({ width: 375, height: 740 });
+    await s.waitForTimeout(1500);
+    const arkIgjen = await bord();
+    sjekk(
+      "rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen",
+      arkIgjen.dialog && arkIgjen.oppsett === "ark" && arkIgjen.harArk,
+      JSON.stringify(arkIgjen),
+    );
+    await s.keyboard.press("Escape");
+    await s.waitForTimeout(300);
+    const lukket = await bord();
+    sjekk(
+      "rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen",
+      !lukket.dialog && !lukket.harArk && lukket.inert === 0 && lukket.overflow !== "hidden",
+      JSON.stringify(lukket),
+    );
+    sjekk("rotasjon: ingen skriptfeil i nettleseren", feil.length === 0, feil.join(" | "));
+    await ctx.close();
+  }
+
+  /* --- FR-3 fase 3b: gjennomsynet via PDF og bilde -------------------- */
+  // Innlimt tekst går ikke lenger via gjennomsynet (FR-3, 11.11), så sjekken
+  // når det med en tekst som er lagt rett inn i databasen: lest inn fra PDF
+  // eller bilde, med godkjente overskrifter og aktiveringen gjort. Det er
+  // tilstanden en elev står i etter innlesingen. Tekstene ryddes bort.
+  {
+    const pool = new pg.Pool({ connectionString: DB, max: 1 });
+    const lagt = [];
+    try {
+      const [{ id: kontoId }] = (await pool.query(`select id from "user" where email = $1`, [EPOST])).rows;
+      const rapport = { sider: 3, fjernedeLinjer: ["Side 2", "Fysikk 1 – kapittel 4"], sammenslaatteOrddelinger: 2, muligTabellEllerFormel: true };
+      for (const [vei, tittel, innlesingsrapport] of [
+        ["pdf", "PDF-prøve", JSON.stringify(rapport)],
+        ["bilde", "Bildeprøve", null],
+      ]) {
+        const r = await pool.query(
+          `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, innlesingsrapport, overskrifter_godkjent, forkunnskapssvar)
+           values ($1, $2, $3, $3, $4, 'aktivert', $5::jsonb, now(), 'Noe om bølger.') returning id`,
+          [kontoId, tittel, eksempel, vei, innlesingsrapport],
+        );
+        lagt.push(r.rows[0].id);
+        const adresse = `${APP}/tekst/${r.rows[0].id}/gjennomsyn`;
+        for (const [side, modusnavn] of [
+          [pc, "lys"],
+          [moerk, "mørk"],
+        ]) {
+          await side.goto(adresse);
+          const framme = side.url() === adresse && (await side.locator("textarea").count()) > 0;
+          sjekk(`gjennomsyn (${vei}, ${modusnavn}): siden vises med redigeringsfeltet`, framme, side.url().replace(APP, ""));
+          if (vei === "pdf") {
+            sjekk(
+              `gjennomsyn (pdf, ${modusnavn}): innlesingsrapporten står over feltet`,
+              (await side.locator("main", { hasText: "Fysikk 1 – kapittel 4" }).count()) > 0,
+            );
+          }
+          await axe(side, `gjennomsyn via ${vei} (${modusnavn})`);
+        }
+      }
+    } finally {
+      if (lagt.length > 0) await pool.query(`delete from tekst where id = any($1::uuid[])`, [lagt]).catch(() => {});
+      await pool.end();
+    }
+  }
 
   /* --- PRD §6.4: bruksgrensene ------------------------------------- */
   // Sist, fordi sjekken endrer dataene. Grensen fylles med hendelsesrader

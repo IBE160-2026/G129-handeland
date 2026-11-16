@@ -180,7 +180,7 @@ export function Quiz({
                 <legend className="font-medium">
                   <span className="text-slate-500 dark:text-slate-400">{s.nummer}.</span> {s.sporsmal}
                   {visMerke && (
-                    <span className={`ml-2 text-sm font-semibold ${riktig ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"}`}>
+                    <span className={`ml-2 text-sm font-semibold ${riktig ? "text-green-700 dark:text-green-400" : "text-fare"}`}>
                       {riktig ? "Riktig" : "Ikke riktig"}
                     </span>
                   )}
@@ -204,7 +204,7 @@ export function Quiz({
                               fasit
                                 ? "border-green-600 bg-green-50 dark:border-green-500 dark:bg-green-950/40"
                                 : valgt && r
-                                  ? "border-red-600 bg-red-50 dark:border-red-500 dark:bg-red-950/40"
+                                  ? "border-fare bg-fareflate"
                                   : valgt
                                     ? "border-slate-900 bg-slate-100 dark:border-slate-100 dark:bg-slate-800"
                                     : "border-transparent text-slate-500 dark:text-slate-400"

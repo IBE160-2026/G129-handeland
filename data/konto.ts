@@ -73,8 +73,24 @@ export async function tilgangForForesporsel(h: Headers): Promise<Tilgang | null>
   return oekt ? { kontoId: oekt.user.id } : null;
 }
 
-/** For kontosiden: e-postadressen er det eneste kontoen har å vise. */
+/**
+ * E-postadressen til den innloggede, eller `null`. For kontosiden (det eneste
+ * kontoen har å vise) og for /logg-inn og /registrer, som sender en innlogget
+ * elev videre til forsiden.
+ *
+ * Samme vakt som `valgfriTilgang`: feiler øktoppslaget, logges feilen og
+ * svaret er `null`, så /logg-inn og /registrer vises som for en utlogget i
+ * stedet for en 500. `headers()` står utenfor try, og `unstable_rethrow`
+ * slipper gjennom Nexts egne kast.
+ */
 export async function innloggetEpost(): Promise<string | null> {
-  const oekt = await hentOekt(await headers());
-  return oekt?.user.email ?? null;
+  const h = await headers();
+  try {
+    const oekt = await hentOekt(h);
+    return oekt?.user.email ?? null;
+  } catch (e) {
+    unstable_rethrow(e);
+    console.error("Kunne ikke slå opp økten, viser siden som for en utlogget:", e);
+    return null;
+  }
 }

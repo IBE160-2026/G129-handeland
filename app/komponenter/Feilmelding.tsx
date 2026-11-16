@@ -57,10 +57,10 @@ export function Feilmelding({ melding, handling, proevIgjen, children, fokus = t
       ref={ramme}
       role="alert"
       data-grense={grense}
-      className="my-4 rounded-md border border-red-300 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/40"
+      className="my-4 rounded-md border-s-4 border-fare bg-fareflate p-4"
     >
-      <p className="font-medium text-red-900 dark:text-red-200">{melding}</p>
-      <p className="mt-1 text-red-800 dark:text-red-300">{handling}</p>
+      <p className="font-bold">{melding}</p>
+      <p className="mt-1">{handling}</p>
       {harKnapp && (
         <div className="mt-3 flex flex-wrap items-center gap-3">
           {proevIgjen && (

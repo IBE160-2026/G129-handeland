@@ -13,6 +13,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { slett } from "../handlinger";
+import { KNAPP_FARE, KNAPP_LENKE } from "./knapper";
 
 export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: string }) {
   const router = useRouter();
@@ -25,7 +26,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
       <button
         type="button"
         onClick={() => setBekrefter(true)}
-        className="inline-flex min-h-11 items-center px-1 text-dempet underline underline-offset-4 hover:text-fare"
+        className="inline-flex min-h-11 min-w-11 items-center px-1 text-dempet underline underline-offset-4 hover:text-fare"
       >
         Slett<span className="sr-only"> «{tittel}»</span>
       </button>
@@ -60,7 +61,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
               setFeilet(true);
             }
           }}
-          className="fylt min-h-11 rounded-md bg-fare px-3 py-1.5 font-bold text-bakgrunn hover:brightness-94 disabled:opacity-60"
+          className={KNAPP_FARE}
         >
           {venter ? "Sletter…" : "Slett for godt"}
         </button>
@@ -68,7 +69,7 @@ export function SlettTekstKnapp({ tekstId, tittel }: { tekstId: string; tittel: 
           type="button"
           disabled={venter}
           onClick={() => setBekrefter(false)}
-          className="rounded-md px-3 py-1.5 font-bold underline underline-offset-4"
+          className={KNAPP_LENKE}
         >
           Avbryt
         </button>

@@ -9,7 +9,7 @@
 
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { redirect } from "next/navigation";
-import { valgfriTilgang } from "./konto";
+import { innloggetEpost, valgfriTilgang } from "./konto";
 
 const { getSession } = vi.hoisted(() => ({ getSession: vi.fn() }));
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }));
@@ -48,6 +48,38 @@ describe("valgfriTilgang", () => {
     }
     getSession.mockRejectedValue(nextFeil);
     await expect(valgfriTilgang()).rejects.toBe(nextFeil);
+    expect(logg).not.toHaveBeenCalled();
+  });
+});
+
+describe("innloggetEpost (/logg-inn og /registrer)", () => {
+  test("uten økt: null", async () => {
+    getSession.mockResolvedValue(null);
+    await expect(innloggetEpost()).resolves.toBeNull();
+  });
+
+  test("med økt: e-postadressen", async () => {
+    getSession.mockResolvedValue({ user: { id: "konto-1", email: "a@b.no" } });
+    await expect(innloggetEpost()).resolves.toBe("a@b.no");
+  });
+
+  test("øktoppslaget feiler: null (siden vises som for en utlogget), og feilen logges", async () => {
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
+    getSession.mockRejectedValue(new Error("databasen svarer ikke"));
+    await expect(innloggetEpost()).resolves.toBeNull();
+    expect(logg).toHaveBeenCalledOnce();
+  });
+
+  test("Nexts egne kast slippes gjennom, ikke svelges", async () => {
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
+    let nextFeil: unknown;
+    try {
+      redirect("/et-annet-sted");
+    } catch (e) {
+      nextFeil = e;
+    }
+    getSession.mockRejectedValue(nextFeil);
+    await expect(innloggetEpost()).rejects.toBe(nextFeil);
     expect(logg).not.toHaveBeenCalled();
   });
 });

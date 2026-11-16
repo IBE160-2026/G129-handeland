@@ -1217,3 +1217,18 @@ export async function velgTemaHandling(data: FormData): Promise<void> {
   // `n` gir bekreftelsen en ny nøkkel, så to lagringer etter hverandre begge kunngjøres.
   redirect(`/konto?lagret=utseende&n=${Date.now()}`);
 }
+
+/**
+ * Sletter temakapselen ved utlogging og sletting av kontoen, så neste elev
+ * på en delt PC ikke arver valget på landingssiden. Kapselen er httpOnly, så
+ * klienten kan ikke slette den selv.
+ *
+ * Unntaket fra `tilgang()` først: handlingen kalles etter `signOut` og
+ * `deleteUser`, når økten alt er borte. Den rører ingen data på noen konto,
+ * bare en informasjonskapsel på enheten som sender forespørselen, og den
+ * kan bare gjøre enheten til «Følg enheten» (AD-8 gjelder datatilgang).
+ */
+export async function slettTemaHandling(): Promise<void> {
+  (await cookies()).delete(TEMA_KAPSEL);
+  revalidatePath("/", "layout");
+}

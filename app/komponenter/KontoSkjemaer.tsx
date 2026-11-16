@@ -11,9 +11,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
+import { slettTemaHandling } from "../handlinger";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
-import { KNAPP_PRIMAER } from "./knapper";
+import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
 
 type Feil = { melding: string; handling: string };
 
@@ -81,6 +82,19 @@ function somFeil(
 const FELT =
   "mt-1 w-full rounded-md border border-slate-500 px-3 py-2 dark:border-slate-400 dark:bg-slate-900";
 const KNAPP = KNAPP_PRIMAER;
+
+/**
+ * Temakapselen slettes ved utlogging og sletting av kontoen, så neste elev
+ * på en delt PC får «Følg enheten» på landingssiden. Feiler det, går
+ * utloggingen likevel videre: et arvet tema er ikke verdt å stoppe den for.
+ */
+async function glemTema() {
+  try {
+    await slettTemaHandling();
+  } catch (e) {
+    console.error("Kunne ikke slette temavalget:", e);
+  }
+}
 
 /* ------------------------------------------------------------------ */
 
@@ -202,6 +216,7 @@ export function LoggUtKnapp() {
   async function loggUt() {
     setVenter(true);
     await authKlient.signOut();
+    await glemTema();
     router.push("/logg-inn");
     router.refresh();
   }
@@ -235,6 +250,7 @@ export function SlettKontoSkjema() {
     });
     setVenter(false);
     if (error) return setFeil(somFeil(error));
+    await glemTema();
     router.push("/logg-inn");
     router.refresh();
   }
@@ -251,7 +267,7 @@ export function SlettKontoSkjema() {
       <button
         type="submit"
         disabled={venter}
-        className="fylt inline-flex min-h-11 items-center rounded-md bg-red-700 px-5 py-3 font-bold text-white hover:bg-red-800 disabled:opacity-60"
+        className={KNAPP_FARE}
       >
         {venter ? "Sletter…" : "Slett kontoen og alt innholdet"}
       </button>

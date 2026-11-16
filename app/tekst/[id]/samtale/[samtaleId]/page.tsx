@@ -12,6 +12,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { hentFagsamtale, oppsummer, type Runde } from "../../../../../data/fagsamtale";
 import { kodeSomGjelder } from "../../../../../data/forbruk";
+import { samtalevisning } from "../../../../../data/samtalevisning";
 import { tilgang } from "../../../../../data/konto";
 import { IkkeFunnet, hentAvsnitt, hentTekst } from "../../../../../data/tilgang";
 import { MAKS_RUNDER, type Tilstand } from "../../../../../generatorer/fagsamtale";
@@ -61,14 +62,9 @@ export default async function Samtaleside({ params, searchParams }: PageProps<"/
   }
   if (samtale.tekstId !== id) notFound();
 
-  const aktiv = samtale.avsluttet ? undefined : samtale.runder.find((r) => r.elevsvar === null);
   const lenke = (n: number) => `/tekst/${id}/lesing#avsnitt-${n}`;
-  const siste = samtale.runder.at(-1);
-  // FR-19: svaret er lagret, men vurderingen feilet. Runden telles ikke.
-  const vurderingFeilet = (r: Runde) => !samtale.avsluttet && r.elevsvar !== null && r.svarvurdering === null;
-  // FR-20: siste runde er vurdert, men samtalen er verken avsluttet eller har
-  // fått neste spørsmål. Det skjer bare når oppfølgingen feilet.
-  const oppfolgingFeilet = (r: Runde) => !samtale.avsluttet && r === siste && r.svarvurdering !== null;
+  // Hva som vises under hver runde (FR-19, FR-20, FR-22): data/samtalevisning.ts.
+  const visning = samtalevisning(samtale.runder, samtale.avsluttet !== null);
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
@@ -83,17 +79,17 @@ export default async function Samtaleside({ params, searchParams }: PageProps<"/
       </p>
 
       <ol className="mt-8 space-y-8">
-        {samtale.runder.map((r) => (
+        {samtale.runder.map((r, i) => (
           <li key={r.nummer}>
             <RundeVisning r={r} lenke={lenke(r.kildeavsnitt.nummer)} />
-            {vurderingFeilet(r) && (
+            {visning[i].vurderingFeilet && (
               <VurderingFeilet samtaleId={samtale.id} nummer={r.nummer} standard={vurderingstekst} fokus={nettoppFeilet} />
             )}
-            {r.svarvurdering !== null && !r.revurdert && (
+            {visning[i].kanRevurderes && (
               <RevurderKnapp samtaleId={samtale.id} nummer={r.nummer} />
             )}
-            {oppfolgingFeilet(r) && <NesteSporsmalFeilet samtaleId={samtale.id} nummer={r.nummer} fokus={nettoppFeilet} />}
-            {aktiv?.nummer === r.nummer && (
+            {visning[i].oppfolgingFeilet && <NesteSporsmalFeilet samtaleId={samtale.id} nummer={r.nummer} fokus={nettoppFeilet} />}
+            {visning[i].svarSkjema && (
               <SvarSkjema handling={svarISamtale.bind(null, samtale.id, r.nummer)} nummer={r.nummer} />
             )}
           </li>
