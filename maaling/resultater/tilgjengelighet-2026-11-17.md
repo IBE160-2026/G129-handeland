@@ -25,7 +25,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | FR-6: «Helt nytt» kan velges med piltastene | {"type":"radio","navn":"merke-2","verdi":"nytt","valgt":true,"hake":"\"✓\" / \"\"","ring":"solid","sidelengs":false} |
 | ✓ | FR-6: aktiveringen ruller ikke sidelengs på 375 px |  |
 | ✓ | axe: lesevisning |  |
-| ✓ | FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og den helt nye overskriften | Før du leste Du lurte på: Hvorfor kan vi ikke se radiobølger? Fikk du svar? Sjekk om du kan forklare det med egne ord. Til fagsamtalen Helt nytt for deg før du leste: Radiobølger. Litt kjent: Egenskap |
+| ✓ | FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og den helt nye overskriften | Før du leste Du lurte på: Hvorfor kan vi ikke se radiobølger? Fikk du svar? Sjekk om du kan forklare det med egne ord. Til fagsamtalen Helt nytt for deg før du leste: Radiobølger. Hadde hørt om: Egens |
 | ✓ | FR-6: «Før du leste» står rett før «Ferdig med å lese?» |  |
 | ✓ | FR-6: låst aktivering viser «du merket: Helt nytt» ved den helt nye overskriften | Radiobølger— du merket: Helt nytt |
 | ✓ | FR-6: låst aktivering har verken radioknapper eller spørsmålsfelt |  |
@@ -46,7 +46,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/0dca01ff-f900-49e9-8c9b-d90bbae652c0/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/c5043bfd-a4b4-48df-bccc-b0e7176ba7d3/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -64,7 +64,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/0dca01ff-f900-49e9-8c9b-d90bbae652c0/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/c5043bfd-a4b4-48df-bccc-b0e7176ba7d3/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -72,7 +72,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/0dca01ff-f900-49e9-8c9b-d90bbae652c0/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/c5043bfd-a4b4-48df-bccc-b0e7176ba7d3/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -103,7 +103,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794901288509 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794903261911 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -249,15 +249,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":11,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/81efb611-c6f4-4343-b522-929ab35d84ac/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/7168b2e6-fcd4-48b9-b61a-451d49b923a3/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/81efb611-c6f4-4343-b522-929ab35d84ac/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/7168b2e6-fcd4-48b9-b61a-451d49b923a3/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/ca87ccf8-3370-4b74-9811-bc5881e10c36/gjennomsyn |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/0ba9be46-a0b4-4951-b5df-c912ec71732b/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/ca87ccf8-3370-4b74-9811-bc5881e10c36/gjennomsyn |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/0ba9be46-a0b4-4951-b5df-c912ec71732b/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |
 | ✓ | FR-6: gammel tekst viser «Før du leste, skrev du: …» | Før du leste Før du leste, skrev du: Noe om bølger og lys. |
 | ✓ | gjennomsyn: prøvetekstene er ryddet bort | 3 av 3 |

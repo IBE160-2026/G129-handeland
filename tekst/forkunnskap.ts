@@ -1,7 +1,7 @@
 /**
  * FR-6 (endret 17.11.2026): forkunnskapen i aktiveringen.
  *
- * Eleven merker hver overskrift «Kjenner det», «Litt» eller «Helt nytt», og
+ * Eleven merker hver overskrift «Dette kan jeg», «Har hørt om» eller «Helt nytt», og
  * kan skrive ett spørsmål hun lurer på. Ingenting vurderes. I lesevisningen
  * vises det igjen under «Før du leste», så det hun gjorde før lesingen, får
  * en ende.
@@ -17,8 +17,8 @@ export const MERKER = ["kjent", "litt", "nytt"] as const;
 export type Merke = (typeof MERKER)[number];
 
 export const MERKENAVN: Record<Merke, string> = {
-  kjent: "Kjenner det",
-  litt: "Litt",
+  kjent: "Dette kan jeg",
+  litt: "Har hørt om",
   nytt: "Helt nytt",
 };
 
@@ -97,8 +97,8 @@ export function foerDuLeste(rad: {
   const kjent = med("kjent");
   const litt = med("litt");
   const linje = [
-    kjent.length > 0 ? `Kjente fra før: ${somListe(kjent)}.` : "",
-    litt.length > 0 ? `Litt kjent: ${somListe(litt)}.` : "",
+    kjent.length > 0 ? `Dette kunne du fra før: ${somListe(kjent)}.` : "",
+    litt.length > 0 ? `Hadde hørt om: ${somListe(litt)}.` : "",
   ]
     .filter(Boolean)
     .join(" ");

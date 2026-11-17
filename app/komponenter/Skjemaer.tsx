@@ -64,8 +64,8 @@ export type Aktiveringstittel = {
 };
 
 /**
- * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Kjenner det»,
- * «Litt» eller «Helt nytt», og kan skrive ett spørsmål. Merkene er vanlige
+ * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Dette kan jeg»,
+ * «Har hørt om» eller «Helt nytt», og kan skrive ett spørsmål. Merkene er vanlige
  * radioknapper i en `fieldset` per overskrift, så de virker med tastatur
  * (Tab inn i gruppen, piltaster mellom valgene) og uten skript. Utseendet
  * står i globals.css (`.merkevalg`).

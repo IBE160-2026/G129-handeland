@@ -61,7 +61,7 @@ describe("foerDuLeste", () => {
     ).toEqual({
       lurerPaa: "Hvorfor blir maten varm?",
       heltNye: ["Tallerkenen"],
-      oppsummering: "Kjente fra før: Mikrobølger. Litt kjent: Ovnen.",
+      oppsummering: "Dette kunne du fra før: Mikrobølger. Hadde hørt om: Ovnen.",
       gammeltSvar: null,
     });
   });

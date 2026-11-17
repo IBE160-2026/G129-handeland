@@ -240,7 +240,7 @@ Aktiveringssiden viser Tekstens overskrifter i dokumentrekkefølge, uten brødte
 
 #### FR-6: Elevens forkunnskap
 
-Eleven merker hver overskrift «Kjenner det», «Litt» eller «Helt nytt» med ett trykk, kan skrive ett valgfritt spørsmål («Noe du lurer på før du leser?»), og går videre.
+Eleven merker hver overskrift «Dette kan jeg», «Har hørt om» eller «Helt nytt» med ett trykk, kan skrive ett valgfritt spørsmål («Noe du lurer på før du leser?»), og går videre.
 
 **Konsekvenser (testbare):**
 - Merkingen lagres på Teksten med overskriftens tekst og merket, og spørsmålet lagres (høyst 500 tegn). Begge er tilgjengelige for eleven senere i løypen: Lesevisningen har, rett før «Ferdig med å lese?», en del «Før du leste» som viser spørsmålet («Du lurte på: … Fikk du svar?», med lenke til fagsamtalen) og hvilke overskrifter som var helt nye. «Fikk du svar?» er en oppfordring og lagres ikke.
