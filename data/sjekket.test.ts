@@ -26,7 +26,7 @@ async function nyKonto() {
 }
 async function laastTekst(t: { kontoId: string }) {
   const ny = await opprettTekst(t, { tittel: "Celler", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-  await lagreForkunnskapssvar(t, ny.id, "Noe om celler.");
+  await lagreForkunnskapssvar(t, ny.id, { lurerPaa: "Noe om celler." });
   return laasTekst(t, ny.id, TEKST);
 }
 const QUIZ = {

@@ -128,7 +128,9 @@ try {
   await s.click("text=Overskriftene stemmer — videre");
   await s.waitForURL(/\/aktivering$/);
   sjekk("innliming og overskriftskontroll", true);
-  await s.fill("#svar", "Noe om bølger.");
+  // FR-6 (endret 17.11): ett merke og et spørsmål.
+  await s.locator("fieldset").first().locator("label", { hasText: "Kjenner det" }).click();
+  await s.fill("#lurer-paa", "Hva er en bølge?");
   await s.click("text=Videre");
   // FR-3 (11.11): innlimt tekst låses i aktiveringen og går rett til lesingen.
   await s.waitForURL(/\/lesing$/);

@@ -156,7 +156,9 @@ async function loeype(s, { mobil, eksempel, brod }) {
 
   // Steg 3: aktivering.
   sjekk(`${p}3`, "aktiveringen viser ikke brødteksten", !(await s.content()).includes(brod));
-  await s.fill("#svar", "Noe om bølger og stråling, kanskje mikrobølgeovner.");
+  // FR-6 (endret 17.11): merk den første overskriften og skriv et spørsmål.
+  await trykk(s.locator("fieldset").first().locator("label", { hasText: "Helt nytt" }));
+  await s.fill("#lurer-paa", "Hvorfor blir maten varm i mikrobølgeovnen?");
   // Hver side nettleseren lander på etter «Videre», så steg 4 kan vise at
   // gjennomsynet faktisk ble hoppet over, ikke bare at lesingen ble nådd.
   const besokt = [];
@@ -174,6 +176,11 @@ async function loeype(s, { mobil, eksempel, brod }) {
   const lest = await s.locator("main").innerText();
   sjekk(`${p}4`, "den innlimte brødteksten kommer uendret fram i lesingen", lest.replace(/\s+/g, " ").includes(brod));
   sjekk(`${p}4`, "stegtellingen har tre steg", lest.includes("Steg 2 av 3"));
+  sjekk(
+    `${p}3`,
+    "FR-6: spørsmålet og den helt nye overskriften står under «Før du leste»",
+    lest.includes("Du lurte på: Hvorfor blir maten varm i mikrobølgeovnen?") && lest.includes("Helt nytt for deg før du leste:"),
+  );
   await s.goto(`${tekstUrl}/gjennomsyn`);
   sjekk(`${p}4`, "teksten er låst for redigering", !s.url().endsWith("/gjennomsyn") && (await s.locator("textarea#tekst").count()) === 0);
 
@@ -424,7 +431,7 @@ async function enKjoering(nettleser) {
   await pc.waitForURL(/\/overskrifter$/);
   await pc.click("text=Overskriftene stemmer — videre");
   await pc.waitForURL(/\/aktivering$/);
-  await pc.fill("#svar", "Bølger.");
+  await pc.fill("#lurer-paa", "Bølger?");
   await pc.click("text=Videre");
   await pc.waitForURL(/\/gjennomsyn$/);
   sjekk("13", "uttrekket går gjennom fase 3a og 3b (FR-3: PDF og bilde har gjennomsyn)", (await pc.locator("textarea#tekst").inputValue()).length > 100);

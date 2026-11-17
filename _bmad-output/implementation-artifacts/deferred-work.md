@@ -48,3 +48,9 @@
   summary: Grensetestene dekker ikke limInnPdf/limInnBilde direkte, og at sidene sender konto til nesteSteg/kortstatus er ikke testet.
   evidence: Verification-gap-gjennomgangen av bruksgrensene; hjelperen opprettEllerGrense er testet via limInnTekst.
   resolved: cee7f82 (16.11) — limInnPdf og limInnBilde gir GRENSE_FEIL.tekster ved sjette tekst. At sidene sender konto til nesteSteg/kortstatus, er fortsatt ikke testet.
+- source_spec: none
+  summary: Tenkeindikatorens avslutning (briller → B) spilles bare ved quizrettingen; etter navigering eller refresh forsvinner indikatoren uten avslutning, i strid med EXPERIENCE.md.
+  evidence: Delt ut fra forkunnskapsbolken 17.11 (to uavhengige mål). Utviklerens telefontest 17.11 så avslutningen bare i quizen. Bygges som neste bolk.
+- source_spec: `_bmad-output/implementation-artifacts/spec-fr-6-forkunnskap-merk-og-lurer-paa.md`
+  summary: Delen «Før du leste» i lesevisningen viser overskriftene bare på norsk, selv om aktiveringen viste dem med morsmålslinje (FR-26).
+  evidence: Blind-gjennomgangen av FR-6-bolken 17.11; overskriftsoversettelsen finnes alt (elementet «overskrifter»), så den kan trolig gjenbrukes.

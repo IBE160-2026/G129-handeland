@@ -47,6 +47,7 @@ import { KI_FEIL, feiltekstForKode } from "../../../kifeil";
 import { KNAPP_PRIMAER } from "../../../komponenter/knapper";
 import { genererPaaNytt, lagOppsummering, lagOversettelse, lagreLesing, velgMorsmaalHandling } from "../../../handlinger";
 import { stegtekst } from "../../../../tekst/steg";
+import { foerDuLeste, somListe } from "../../../../tekst/forkunnskap";
 
 const KATEGORINAVN = { spraklig_bilde: "Språklige bilder", akademisk: "Ord fra fagspråket" } as const;
 
@@ -140,6 +141,9 @@ export default async function Lesing({
 
   const lenke =
     "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+
+  // FR-6: delen «Før du leste», eller null når det ikke er noe å vise.
+  const foer = foerDuLeste(tekst);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10">
@@ -345,6 +349,43 @@ export default async function Lesing({
           </>
         )}
       </section>
+
+      {/*
+        FR-6 (endret 17.11): det eleven merket og spurte om før hun leste,
+        står igjen her. «Fikk du svar?» lagres ikke; det er en oppfordring.
+        Ingen del når teksten ikke har noe å vise.
+      */}
+      {foer && (
+        <section id="foer-du-leste" aria-labelledby="foer-du-leste-tittel" className="mt-12 max-w-[34rem]">
+          <h2 id="foer-du-leste-tittel" className="font-semibold tracking-tight">
+            Før du leste
+          </h2>
+          <div className="mt-2 space-y-3">
+            {foer.lurerPaa && (
+              <>
+                <p>
+                  Du lurte på: <strong className="font-semibold">{foer.lurerPaa}</strong>
+                </p>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Fikk du svar? Sjekk om du kan forklare det med egne ord.{" "}
+                  <Link href={`/tekst/${id}/oppgaver`} className={lenke}>
+                    Til fagsamtalen
+                  </Link>
+                </p>
+              </>
+            )}
+            {foer.heltNye.length > 0 && (
+              <p>Helt nytt for deg før du leste: {somListe(foer.heltNye)}.</p>
+            )}
+            {foer.oppsummering && <p className="text-slate-600 dark:text-slate-400">{foer.oppsummering}</p>}
+            {foer.gammeltSvar && (
+              <p>
+                Før du leste, skrev du: <span className="italic">{foer.gammeltSvar}</span>
+              </p>
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="mt-12 max-w-[34rem] rounded-md border border-slate-300 p-5 dark:border-slate-700">
         <h2 className="font-semibold tracking-tight">Ferdig med å lese?</h2>

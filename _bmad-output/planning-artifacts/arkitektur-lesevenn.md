@@ -7,7 +7,7 @@ paradigm: lagdelt med rent generatorlag (ports-and-adapters på modellsiden)
 scope: Lesevenn v1 — hele systemet
 status: final
 created: '2026-09-29'
-updated: 2026-10-18
+updated: 2026-11-17
 binds: [FR-1..FR-31, FR-35..FR-46]
 sources:
   - prd-lesevenn.md
@@ -107,13 +107,13 @@ Begrunnelsen er strukturell, og den kan ikke patches bort: **en server action er
 
 - **Binds:** AD-2, FR-1, FR-2, FR-3, FR-5, FR-6, FR-44
 - **Prevents:** at kildeavsnitt-henvisninger peker på tekst som har flyttet seg — og at Aktiveringen kan gjøres om etter at eleven har sett brødteksten
-- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. Overgangen til `Aktivert` krever at eleven har godkjent overskriftene i fase 3a (`tekst.overskrifter_godkjent`, satt 17.10; eldre tekster fikk verdien ved migrasjon 0005). Mangler teksten overskrifter, settes genererte etiketter inn i `Innlest` (FR-5), og hvilke de er, lagres i `tekst.genererte_overskrifter` så de kan merkes. `Aktivert` settes når elevens forkunnskapssvar er lagret, og først da blir brødteksten tilgjengelig for gjennomsyn. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. For **innlimt** tekst er det ingen fase 3b (FR-3, endret 11.11.2026): `Låst` settes rett etter `Aktivert`, i samme handling som lagrer forkunnskapssvaret, med teksten slik den ble limt inn. Overgangene går fortsatt bare framover. Vil eleven endre brødteksten, lager hun en ny Tekst.
+- **Rule:** en Tekst er `Innlest`, `Aktivert` eller `Låst`. Overgangene går bare framover. I `Innlest` er overskriftene redigerbare og brødteksten **ikke tilgjengelig**, verken synlig eller i sidens kildekode. Overgangen til `Aktivert` krever at eleven har godkjent overskriftene i fase 3a (`tekst.overskrifter_godkjent`, satt 17.10; eldre tekster fikk verdien ved migrasjon 0005). Mangler teksten overskrifter, settes genererte etiketter inn i `Innlest` (FR-5), og hvilke de er, lagres i `tekst.genererte_overskrifter` så de kan merkes. `Aktivert` settes når elevens forkunnskap er lagret — merket per overskrift og et valgfritt spørsmål (`tekst.forkunnskap_merking` og `tekst.lurer_paa`, endret 17.11 etter utviklerens test; før det et fritt svar i `tekst.forkunnskapssvar`, som beholdes for eldre tekster) — og først da blir brødteksten tilgjengelig for gjennomsyn. Overskriftene regnes ut på serveren fra den lagrede teksten (AD-12); klienten sender bare et merke per overskriftsnummer, og merkene lagres med overskriftens tekst, fordi gjennomsynet kan flytte avsnittene. `Låst` settes når eleven godkjenner fase 3b, og avsnittslisten er da uforanderlig. For **innlimt** tekst er det ingen fase 3b (FR-3, endret 11.11.2026): `Låst` settes rett etter `Aktivert`, i samme handling som lagrer forkunnskapen, med teksten slik den ble limt inn. Overgangene går fortsatt bare framover. Vil eleven endre brødteksten, lager hun en ny Tekst.
 
 ```mermaid
 stateDiagram-v2
     [*] --> Innlest : innlesing (liming, PDF, bilde)
     Innlest --> Innlest : etiketter (FR-5) og retting av overskrifter (fase 3a)
-    Innlest --> Aktivert : fase 3a godkjent, forkunnskapssvar lagret (FR-6)
+    Innlest --> Aktivert : fase 3a godkjent, forkunnskap lagret (FR-6)
     Aktivert --> Aktivert : retting av broedtekst (fase 3b)
     Aktivert --> Laast : eleven godkjenner fase 3b (PDF, bilde)
     Aktivert --> Laast : rett etter aktivering (innlimt tekst)

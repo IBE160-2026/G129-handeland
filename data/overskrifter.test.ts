@@ -41,7 +41,7 @@ describe("FR-3 fase 3a", () => {
     const t = await nyKonto();
     const rad = await ny(t);
     await godkjennOverskrifter(t, rad.id, TEKST);
-    await lagreForkunnskapssvar(t, rad.id, "Noe om celler.");
+    await lagreForkunnskapssvar(t, rad.id, { lurerPaa: "Noe om celler." });
     await expect(godkjennOverskrifter(t, rad.id, "Annet\n\nTekst.")).rejects.toBeInstanceOf(IkkeFunnet);
   });
 

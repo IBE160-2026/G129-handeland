@@ -29,7 +29,7 @@ async function nyKonto() {
 /** En låst tekst med et Begrepssett på de gitte uttrykkene. */
 async function medSett(t: { kontoId: string }, uttrykk: [string, number][]) {
   const ny = await opprettTekst(t, { tittel: "Celler", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-  await lagreForkunnskapssvar(t, ny.id, "Noe om celler.");
+  await lagreForkunnskapssvar(t, ny.id, { lurerPaa: "Noe om celler." });
   const laast = await laasTekst(t, ny.id, TEKST);
   const resultat = {
     begreper: uttrykk.map(([u, avsnitt], i) => ({

@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-11-13
+updated: 2026-11-17
 ---
 
 # PRD: Lesevenn
@@ -225,7 +225,7 @@ Bildeinngangen leveres uten kvalitetspåstand, og det er synlig i grensesnittet.
 - Tekstgjenkjenning av en hel innskannet bok som PDF. Grensen på fire bilder er bevisst: inngangen er til noen sider eleven jobber med, ikke til å digitalisere en bok.
 ### 4.2 Aktivering
 
-**Beskrivelse:** Første steg i Kjerneløypen viser Tekstens overskrifter og ber eleven skrive kort hva teksten sannsynligvis handler om. Brødteksten er ikke tilgjengelig her — hele poenget er at gjetningen skjer før lesingen, og verdien forsvinner dersom eleven kan kikke. Aktiveringssvaret vurderes ikke og rettes ikke; det finnes ingen feil svar på et spørsmål om hva man tror. Realiserer UJ-1, UJ-2, UJ-4.
+**Beskrivelse:** Første steg i Kjerneløypen viser Tekstens overskrifter og ber eleven merke hvor godt hun kjenner hver av dem fra før, og eventuelt skrive noe hun lurer på. Brødteksten er ikke tilgjengelig her — hele poenget er at forkunnskapen hentes fram før lesingen, og verdien forsvinner dersom eleven kan kikke. Forkunnskapen vurderes ikke og rettes ikke; det finnes ingen feil svar på hva man kjenner fra før. Realiserer UJ-1, UJ-2, UJ-4. *(Endret 17.11.2026, se FR-6.)*
 
 **Funksjonskrav:**
 
@@ -238,14 +238,18 @@ Aktiveringssiden viser Tekstens overskrifter i dokumentrekkefølge, uten brødte
 - Har Teksten ingen gjenkjennelige overskrifter, genererer Lesevenn tre til seks korte avsnittsetiketter fra innholdet, og merker dem synlig som laget av Lesevenn og ikke hentet fra teksten.
 - Brødteksten er ikke tilgjengelig fra aktiveringssiden, verken synlig eller i sidens kildekode.
 
-#### FR-6: Elevens forkunnskapssvar
+#### FR-6: Elevens forkunnskap
 
-Eleven skriver fritt hva teksten sannsynligvis handler om, og går videre.
+Eleven merker hver overskrift «Kjenner det», «Litt» eller «Helt nytt» med ett trykk, kan skrive ett valgfritt spørsmål («Noe du lurer på før du leser?»), og går videre.
 
 **Konsekvenser (testbare):**
-- Svaret lagres på Teksten og er tilgjengelig for eleven senere i løypen, slik at gjetningen kan sammenlignes med det teksten faktisk sa.
-- Svaret får ingen vurdering, ingen retting og ingen poengsum.
-- Eleven kan gå videre med tomt svar etter én oppfordring om å prøve. Steget skal ikke bli en sperre for den eleven som allerede synes dette er vanskelig.
+- Merkingen lagres på Teksten med overskriftens tekst og merket, og spørsmålet lagres (høyst 500 tegn). Begge er tilgjengelige for eleven senere i løypen: Lesevisningen har, rett før «Ferdig med å lese?», en del «Før du leste» som viser spørsmålet («Du lurte på: … Fikk du svar?», med lenke til fagsamtalen) og hvilke overskrifter som var helt nye. «Fikk du svar?» er en oppfordring og lagres ikke.
+- Ingenting får vurdering, retting eller poengsum, og Buddy svarer ikke på spørsmålet. Forkunnskapen sendes aldri til språkmodellen.
+- Merkingen er vanlige radioknapper, én gruppe per overskrift med overskriften som navn, og virker med tastatur og uten skript.
+- Eleven kan gå videre uten merking og uten spørsmål etter én oppfordring om å prøve. Steget skal ikke bli en sperre for den eleven som allerede synes dette er vanskelig.
+- Tekster fra før endringen, som har et fritt svar, viser det under «Før du leste». Har en tekst ingenting, vises ikke delen.
+
+*Endret 17.11.2026:* kravet var et fritt felt, «Hva tror du teksten handler om?». Utviklerens egen test viste at feltet ikke satte i gang noe — det var tomt og uinspirerende — og at svaret aldri ble vist igjen, selv om kravet lovte det, så eleven skrev ut i løse luften. Merkingen krever ett trykk per overskrift, spørsmålet gir eleven en grunn til å lese, og «Før du leste» gir det hun gjorde en ende. Det frie svaret beholdes i databasen for eldre tekster.
 
 ### 4.3 Begrepssett og lesevisning
 

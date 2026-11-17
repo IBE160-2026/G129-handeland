@@ -31,6 +31,7 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import type { Innlesingsrapport } from "../opplasting/pdf-les";
+import type { Overskriftsmerke } from "../tekst/forkunnskap";
 
 /* ------------------------------------------------------------------ *
  * Kodeverk — lukkede sett, aldri fritekst (konsistenskonvensjonene)
@@ -221,8 +222,22 @@ export const tekst = pgTable(
      */
     genererteOverskrifter: jsonb("genererte_overskrifter").$type<string[]>(),
 
-    /** FR-6. Vurderes ikke og rettes ikke. */
+    /**
+     * FR-6 før 17.11.2026: det frie svaret på «Hva tror du teksten handler
+     * om?». Gammel: skrives ikke lenger, men beholdes og vises i
+     * lesevisningen for tekster fra før endringen.
+     */
     forkunnskapssvar: text("forkunnskapssvar"),
+
+    /**
+     * FR-6 (endret 17.11): elevens merke per overskrift, lagret med
+     * overskriftens tekst og ikke nummeret, fordi gjennomsynet kan flytte
+     * avsnittene. Umerkede overskrifter står ikke her. Vurderes ikke.
+     */
+    forkunnskapMerking: jsonb("forkunnskap_merking").$type<Overskriftsmerke[]>(),
+
+    /** FR-6 (endret 17.11): «Noe du lurer på før du leser?». Valgfritt, høyst 500 tegn. */
+    lurerPaa: text("lurer_paa"),
 
     opprettet: timestamp("opprettet", { withTimezone: true })
       .notNull()

@@ -79,7 +79,7 @@ async function nySamtale() {
   const [u] = await db.insert(skjema.user).values({ name: "", email: `h${++n}@test.no` }).returning({ id: skjema.user.id });
   innlogget.kontoId = u.id;
   const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-  await lagreForkunnskapssvar(innlogget, ny.id, "Noe om ovner.");
+  await lagreForkunnskapssvar(innlogget, ny.id, { lurerPaa: "Noe om ovner." });
   const laast = await laasTekst(innlogget, ny.id, TEKST);
   const id = await f.opprettFagsamtale(laast, {
     sporsmal: "Hvorfor blir maten varm?",
@@ -250,7 +250,7 @@ async function nyKonto() {
 async function nyLaastTekst() {
   await nyKonto();
   const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-  await lagreForkunnskapssvar(innlogget, ny.id, "Noe om ovner.");
+  await lagreForkunnskapssvar(innlogget, ny.id, { lurerPaa: "Noe om ovner." });
   await laasTekst(innlogget, ny.id, TEKST);
   return ny.id;
 }
@@ -512,10 +512,16 @@ async function innlimtTekst(redigert = TEKST) {
   return ny.id;
 }
 
-/** Sender aktiveringen som skjemaet gjør: gir adressen den omdirigerte til, eller svaret. */
-async function aktiver(tekstId: string): Promise<{ adresse?: string; svar?: unknown }> {
+/**
+ * Sender aktiveringen som skjemaet gjør: gir adressen den omdirigerte til,
+ * eller svaret. Standard er et spørsmål og ingen merker (FR-6, endret 17.11).
+ */
+async function aktiver(
+  tekstId: string,
+  felt: Record<string, string> = { lurerPaa: "Noe om ovner og varme." },
+): Promise<{ adresse?: string; svar?: unknown }> {
   const data = new FormData();
-  data.set("svar", "Noe om ovner og varme.");
+  for (const [navn, verdi] of Object.entries(felt)) data.set(navn, verdi);
   try {
     return { svar: await h.lagreAktivering(tekstId, {}, data) };
   } catch (e) {
@@ -587,7 +593,7 @@ describe("lagreAktivering for innlimt tekst (FR-3, FR-6)", () => {
     expect(adresse).toBe(`/tekst/${tekstId}/lesing`);
     expect(await tilstand(tekstId)).toBe("laast");
     const [rad] = await db.select().from(skjema.tekst).where(eq(skjema.tekst.id, tekstId));
-    expect(rad.forkunnskapssvar).toBe("Noe om ovner og varme.");
+    expect(rad.lurerPaa).toBe("Noe om ovner og varme.");
   });
 
   test("genereringen feiler: teksten er låst uten fagord, og lesevisningen får feilkoden", async () => {
@@ -597,6 +603,123 @@ describe("lagreAktivering for innlimt tekst (FR-3, FR-6)", () => {
     expect(await aktiver(tekstId)).toEqual({ adresse: `/tekst/${tekstId}/lesing?fagordfeil=ugyldig_utdata` });
     expect(await tilstand(tekstId)).toBe("laast");
     expect(await hentBegrepssett(innlogget, tekstId)).toBeNull();
+  });
+});
+
+/* ------------------------------------------------------------------ *
+ * FR-6 (endret 17.11) — merking av overskriftene og «lurer på»
+ * ------------------------------------------------------------------ */
+
+/**
+ * En PDF-tekst med godkjente overskrifter. PDF går til gjennomsynet etter
+ * aktiveringen, uten låsing og uten modellkall, så bare forkunnskapen prøves.
+ * TEKST har overskriftene «Mikrobølger» (1) og «Tallerkenen» (4).
+ */
+async function pdfTekst(redigert = TEKST) {
+  await nyKonto();
+  const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: redigert, redigertTekst: redigert, vei: "pdf" });
+  await godkjennOverskrifter(innlogget, ny.id, redigert);
+  return ny.id;
+}
+
+async function rad(tekstId: string) {
+  const [r] = await db.select().from(skjema.tekst).where(eq(skjema.tekst.id, tekstId));
+  return r;
+}
+
+describe("lagreAktivering: forkunnskapen (FR-6, endret 17.11)", () => {
+  test("alt fylt ut: merkene lagres med overskriftens tekst, spørsmålet lagres, og teksten blir aktivert", async () => {
+    const tekstId = await pdfTekst();
+    const r = await aktiver(tekstId, { "merke-1": "kjent", "merke-4": "nytt", lurerPaa: "  Hvorfor blir maten varm?  " });
+    expect(r).toEqual({ adresse: `/tekst/${tekstId}/gjennomsyn` });
+    const lagret = await rad(tekstId);
+    expect(lagret.tilstand).toBe("aktivert");
+    expect(lagret.forkunnskapMerking).toEqual([
+      { overskrift: "Mikrobølger", merke: "kjent" },
+      { overskrift: "Tallerkenen", merke: "nytt" },
+    ]);
+    expect(lagret.lurerPaa).toBe("Hvorfor blir maten varm?");
+    expect(lagret.forkunnskapssvar).toBeNull();
+  });
+
+  test("innlimt tekst, alt fylt ut: teksten låses som før, og forkunnskapen er lagret", async () => {
+    const tekstId = await innlimtTekst();
+    settKlientForTest({
+      messages: {
+        parse: vi.fn().mockResolvedValue(
+          svar({ faguttrykk: [{ uttrykk: "vannmolekyler", forklaring: "Vann.", viktighetsrangering: 1, kildeavsnitt: 2 }] }),
+        ),
+      },
+    });
+    const r = await aktiver(tekstId, { "merke-1": "litt", "merke-4": "nytt", lurerPaa: "Hvorfor blir maten varm?" });
+    expect(r).toEqual({ adresse: `/tekst/${tekstId}/lesing` });
+    const lagret = await rad(tekstId);
+    expect(lagret.tilstand).toBe("laast");
+    expect(lagret.forkunnskapMerking).toEqual([
+      { overskrift: "Mikrobølger", merke: "litt" },
+      { overskrift: "Tallerkenen", merke: "nytt" },
+    ]);
+    expect(lagret.lurerPaa).toBe("Hvorfor blir maten varm?");
+  });
+
+  test("bare merking: lagres uten oppfordring, og umerkede overskrifter lagres ikke", async () => {
+    const tekstId = await pdfTekst();
+    expect(await aktiver(tekstId, { "merke-4": "litt" })).toEqual({ adresse: `/tekst/${tekstId}/gjennomsyn` });
+    const lagret = await rad(tekstId);
+    expect(lagret.forkunnskapMerking).toEqual([{ overskrift: "Tallerkenen", merke: "litt" }]);
+    expect(lagret.lurerPaa).toBeNull();
+  });
+
+  test("ingenting: første gang én oppfordring, andre gang lagres tom forkunnskap", async () => {
+    const tekstId = await pdfTekst();
+    const foerste = await aktiver(tekstId, { lurerPaa: "   " });
+    expect(foerste.adresse).toBeUndefined();
+    expect(foerste.svar).toMatchObject({ feil: { melding: "Du har ikke merket noe ennå." } });
+    expect((await rad(tekstId)).tilstand).toBe("innlest");
+
+    expect(await aktiver(tekstId, { tomtEtterOppfordring: "1" })).toEqual({ adresse: `/tekst/${tekstId}/gjennomsyn` });
+    const lagret = await rad(tekstId);
+    expect(lagret.tilstand).toBe("aktivert");
+    expect(lagret.forkunnskapMerking).toEqual([]);
+    expect(lagret.lurerPaa).toBeNull();
+  });
+
+  test("ingen overskrifter: spørsmålet alene holder, og et merke kan ikke lagres", async () => {
+    const uten = "Mikrobølger får vannmolekyler til å riste.\n\nDerfor blir maten varm.";
+    const tekstId = await pdfTekst(uten);
+    expect(await aktiver(tekstId, { "merke-1": "kjent", lurerPaa: "Hva er en mikrobølge?" })).toEqual({
+      adresse: `/tekst/${tekstId}/gjennomsyn`,
+    });
+    const lagret = await rad(tekstId);
+    expect(lagret.forkunnskapMerking).toEqual([]);
+    expect(lagret.lurerPaa).toBe("Hva er en mikrobølge?");
+  });
+
+  test("ingen overskrifter og tomt skjema: oppfordringen handler om spørsmålet, ikke om merking", async () => {
+    const tekstId = await pdfTekst("Mikrobølger får vannmolekyler til å riste.\n\nDerfor blir maten varm.");
+    const r = await aktiver(tekstId, {});
+    expect(r.adresse).toBeUndefined();
+    expect(r.svar).toMatchObject({ feil: { melding: "Du har ikke skrevet noe ennå." } });
+    expect((r.svar as { feil: { handling: string } }).feil.handling).not.toContain("Merk en overskrift");
+    expect((await rad(tekstId)).tilstand).toBe("innlest");
+  });
+
+  test("forfalsket skjema: ukjent nummer, brødtekstnummer og ukjent verdi forkastes stille", async () => {
+    const tekstId = await pdfTekst();
+    // Bare forfalskede felt: ingenting gjenstår, så oppfordringen kommer.
+    const r = await aktiver(tekstId, { "merke-99": "kjent", "merke-2": "nytt", "merke-1": "feil" });
+    expect(r.svar).toMatchObject({ feil: { melding: "Du har ikke merket noe ennå." } });
+
+    expect(
+      await aktiver(tekstId, { "merke-99": "kjent", "merke-1": "feil", "merke-4": "kjent", tomtEtterOppfordring: "1" }),
+    ).toEqual({ adresse: `/tekst/${tekstId}/gjennomsyn` });
+    expect((await rad(tekstId)).forkunnskapMerking).toEqual([{ overskrift: "Tallerkenen", merke: "kjent" }]);
+  });
+
+  test("langt spørsmål: kappes til 500 tegn på serveren", async () => {
+    const tekstId = await pdfTekst();
+    await aktiver(tekstId, { lurerPaa: "a".repeat(800) });
+    expect((await rad(tekstId)).lurerPaa).toBe("a".repeat(500));
   });
 });
 

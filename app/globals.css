@@ -173,6 +173,70 @@ h2 {
 }
 
 /*
+ * FR-6 (17.11): merkene i aktiveringen, «Kjenner det», «Litt», «Helt nytt».
+ * Vanlige radioknapper som ser ut som knapper (button-secondary), så Tab og
+ * piltastene virker som før og ingenting trenger skript. Radioknappen ligger
+ * usynlig over hele valget, så trykkflaten er hele knappen (minst 44 px).
+ * Valgt merke er fylt OG har en hake, så det ses uten farge alene.
+ */
+.merkevalg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--lb-primaer);
+  border-radius: 0.375rem;
+  color: var(--lb-primaer);
+  font-weight: 700;
+  cursor: pointer;
+}
+.merkevalg input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.merkevalg:hover {
+  background: var(--lb-markering);
+}
+.merkevalg:has(input:checked) {
+  background: var(--lb-primaer);
+  color: var(--lb-paa-primaer);
+}
+.merkevalg:has(input:checked)::before {
+  content: "✓";
+  content: "✓" / "";
+}
+.merkevalg:has(input:focus-visible) {
+  outline: 3px solid var(--lb-primaer);
+  outline-offset: 2px;
+}
+/* Uten :has() kan ikke valgt merke og fokus vises på knappen; da vises den vanlige radioknappen. */
+@supports not selector(:has(*)) {
+  .merkevalg input {
+    position: static;
+    opacity: 1;
+  }
+}
+@media (forced-colors: active) {
+  .merkevalg {
+    border-color: ButtonText;
+    color: ButtonText;
+  }
+  .merkevalg:has(input:checked) {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+  .merkevalg:has(input:focus-visible) {
+    outline-color: Highlight;
+  }
+}
+
+/*
  * Buddy-merket (DESIGN.md, logo-mark). Portert uendret fra
  * mockups/merke.css og mockups/merke-tenker.css. Klassene:
  *   .tenker  øynene leser fra side til side i en løkke (1,6 s)

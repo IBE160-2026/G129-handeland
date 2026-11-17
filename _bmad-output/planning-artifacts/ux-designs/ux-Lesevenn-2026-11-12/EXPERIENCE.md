@@ -1,7 +1,7 @@
 ---
 name: LeseBuddy
 status: final
-updated: 2026-11-16
+updated: 2026-11-17
 sources:
   - ../../prd-lesevenn.md
   - ../../product-brief-lesevenn.md
@@ -90,6 +90,8 @@ Hvordan komponentene oppfører seg. Hvordan de ser ut, står i DESIGN.md, under 
 | **Feilmelding** | Alle KI-kall og alle feil | `role="alert"`. Sier hva som ikke ble laget, at det eleven har skrevet er lagret, og har «Prøv igjen». Fokus flyttes til «Prøv igjen». Gjelder FR-7, FR-13, FR-19 og FR-20. |
 | **Brilleknapp** | Lesevisningen | Flytende knapp oppe til høyre som følger med når eleven ruller. Den åpner leseinnstillingene (FR-12) som en dialog (`aria-haspopup="dialog"`, `aria-expanded`). Dette kommer fra telefontesten, der det var tungvint å rulle opp til innstillingene. Knappen heter «Leseinnstillinger», og teksten vises ved siden av på brede skjermer. Lesevisningen setter av plass (`scroll-padding`, `padding-inline-end`), så knappen aldri dekker tekst eller et Faguttrykk som har fokus. |
 | **Faguttrykk og forklaring** | Lesevisningen | Uendret i oppførsel (FR-9, FR-10). Forklaringspanelet er større og har egen bakgrunn, slik telefontesten ba om, og skaleres med leseinnstillingene. |
+| **Merking av overskrifter** | Aktiveringen (FR-6, endret 17.11.2026) | Hver overskrift er en `fieldset` med overskriften som `legend` og tre radioknapper: «Kjenner det», «Litt», «Helt nytt». Valgene ser ut som sekundærknapper; valgt merke er fylt i primærfargen **og** har en hake, så det ses uten farge alene. Tab går fra gruppe til gruppe, piltastene velger i gruppen, og alt virker uten skript. Morsmålslinjen står under overskriften. Under gruppene står ett valgfritt felt, «Noe du lurer på før du leser?» (høyst 500 tegn). Ingenting vurderes. Sender eleven uten merke og uten spørsmål, kommer ÉN oppfordring, og «Videre» en gang til slipper henne videre. Teksten låst og siden åpnet igjen: overskriftene med elevens merke, uten skjema. Endret fordi utviklerens test viste at det frie feltet «Hva tror du teksten handler om?» ikke satte i gang noe, og svaret ble aldri vist igjen. |
+| **Før du leste** | Lesevisningen, rett før «Ferdig med å lese?» (FR-6) | Viser spørsmålet («Du lurte på: …»), så «Fikk du svar?» med en lenke som heter «Til fagsamtalen» og går til oppgavesiden (`/tekst/[id]/oppgaver`), der fagsamtalen startes, deretter overskriftene som var helt nye («Helt nytt for deg før du leste: …») og én linje for de kjente. «Fikk du svar?» lagres ikke, og Buddy svarer ikke på spørsmålet. Tekster fra før 17.11 viser «Før du leste, skrev du: …». Har teksten ingenting, vises ikke delen. Ingen markering av helt nye avsnitt inne i teksten. |
 | **Tekstrad** | Samlingen | Dagens liste fra startsiden (FR-36), flyttet. Hver rad viser tittelen, som er en lenke til neste steg (samme regel som hovedbunken), tilstanden i klartekst og datoen teksten ble lagt inn. Søkefeltet søker i titler, og sorteringen er «Nyeste først» eller «Eldste først» (standard: nyeste). Søk og sortering ligger i adressen og virker uten JavaScript, som i dag. Slett-knappen ber om bekreftelse og navngir teksten og alt som forsvinner (FR-37). |
 | **Følge-Buddy** | Bare landingssiden, bredde 760 px og mer | Dukker opp nede i hjørnet når heroen er rullet forbi. Øynene leser i takt med rullingen. Snakkeboblene er korte ekko av seksjonsoverskriftene, de brytes over linjer, og de er bare pynt (`aria-hidden`). Vises ikke på telefon eller ved stor tekst. |
 | **Rulleeffekter på landingssiden** | Landingssiden | **Den statiske versjonen er grunnlaget.** Den er HTML fra serveren, med alle steg synlige, alle fire Faguttrykk i eksempelteksten markert og forklaringene i en liste (`<dl>`) under teksten. Effektene legges oppå bare når JavaScript kjører og bevegelse er tillatt: **A** markerer fagordene ett for ett mens forklaringen ved siden av skifter, uten `aria-live`, og den klistrede visningen slås av når flaten er høyere enn synsfeltet. **B** er Følge-Buddy. **C** lar stegene dukke fram mens en linje tegnes nedover. Alle tre beholdes. **På telefon** (smalere enn 760 px, bolk 6) er effekt A av, og fagorddemoen er i stedet **trykkbar** når JavaScript kjører og bevegelse er tillatt: fagordene er knapper (`aria-expanded`, `aria-controls`) som viser forklaringen i et panel under teksten, med mini-Buddy (brillene 30 px høye) ved siden av. Fokus blir på ordet. `<dl>` skjules da bare visuelt, så skjermleseren har hele listen. Ingen `aria-live`, og panelet er aldri tomt: før eleven har trykket, står det «Trykk på et fagord i teksten, så forklarer Buddy det.». Uten JavaScript og ved redusert bevegelse er demoen den statiske versjonen. |
@@ -264,7 +266,7 @@ Navnet Tor er et skriveverktøy for denne reisen og vises ingen steder i appen.
 
 1. Fra arbeidsbordet trykker Jonas «+ Ny tekst».
 2. Han limer inn kapittelet om fotosyntese og kontrollerer overskriftene.
-3. Han skriver hva han tror teksten handler om. Fordi teksten er limt inn, går han rett til lesingen etterpå: fase 3b (gjennomsynet av hele teksten) hoppes over (FR-3).
+3. Han merker overskriftene («Kjenner det», «Litt», «Helt nytt») og skriver det han lurer på. Fordi teksten er limt inn, går han rett til lesingen etterpå: fase 3b (gjennomsynet av hele teksten) hoppes over (FR-3).
 4. Han leser med fagordene markert. Brilleknappen følger med nedover, så han kan gjøre teksten større uten å rulle opp.
 5. **Klimaks:** Neste gang han åpner appen, ligger Fotosyntese øverst på bordet som «Sist brukt», og Celledeling har flyttet seg ut til siden.
 
@@ -285,7 +287,7 @@ Navnet Tor er et skriveverktøy for denne reisen og vises ingen steder i appen.
 1. Maria har fått en kode av læreren. Hun åpner LeseBuddy på telefonen, møter landingssiden og trykker «Registrer deg».
 2. Etter registreringen kommer hun til et tomt arbeidsbord: «Her blir tekstene dine liggende. Legg den første på bordet.»
 3. Hun trykker «+ Ny tekst», tar to bilder av boka og følger statusen «Leser bilde 1 av 2 …», så «Leser bilde 2 av 2 …».
-4. Hun kontrollerer overskriftene, skriver forkunnskapene sine og retter uttrekket i gjennomsynet, slik UJ-4 beskriver.
+4. Hun kontrollerer overskriftene, merker hvor godt hun kjenner dem og retter uttrekket i gjennomsynet, slik UJ-4 beskriver.
 5. **Klimaks:** Når hun kommer tilbake til arbeidsbordet, ligger den første bunken hennes der, med neste steg klart.
 
 **Feil:** Koden er feil. Registreringen sier «Invitasjonskoden er feil.» og ber henne sjekke koden hun fikk (som i dag, FR-35).

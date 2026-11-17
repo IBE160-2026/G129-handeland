@@ -30,7 +30,7 @@ async function nyKonto() {
 }
 async function nySamtale(t: { kontoId: string }) {
   const ny = await opprettTekst(t, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-  await lagreForkunnskapssvar(t, ny.id, "Noe om ovner.");
+  await lagreForkunnskapssvar(t, ny.id, { lurerPaa: "Noe om ovner." });
   const laast = await laasTekst(t, ny.id, TEKST);
   const id = await f.opprettFagsamtale(laast, {
     sporsmal: "Hvorfor blir maten varm?",

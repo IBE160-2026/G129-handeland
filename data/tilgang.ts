@@ -25,6 +25,7 @@ import { db } from "./db";
 import { regnInnHendelse } from "./forbruk";
 import { avsnitt, tekst } from "./skjema";
 import type { Avsnitt } from "../tekst/avsnittsdeling";
+import type { Overskriftsmerke } from "../tekst/forkunnskap";
 
 /**
  * Beviset på hvem som spør. Konstrueres av innloggingslaget, aldri av en
@@ -153,7 +154,13 @@ export async function slettTekst(t: Tilgang, tekstId: string): Promise<void> {
 }
 
 /**
- * FR-6: lagrer forkunnskapssvaret og flytter Teksten til `aktivert`.
+ * FR-6: lagrer forkunnskapen og flytter Teksten til `aktivert`.
+ *
+ * Forkunnskapen er merket per overskrift og spørsmålet eleven lurer på
+ * (endret 17.11.2026; før det et fritt svar i `forkunnskapssvar`, som ikke
+ * skrives lenger). Begge kan mangle: FR-6 slipper eleven videre med tomt
+ * skjema etter én oppfordring. Kalleren har lest og validert skjemaet
+ * (`tekst/forkunnskap.ts`).
  *
  * Overgangen hører her og ikke i `tekst/las.ts`, fordi den ikke oppretter
  * noen LåstTekst — men den er like endelig: AD-9 sier at overgangene bare
@@ -163,11 +170,15 @@ export async function slettTekst(t: Tilgang, tekstId: string): Promise<void> {
 export async function lagreForkunnskapssvar(
   t: Tilgang,
   tekstId: string,
-  svar: string,
+  svar: { merking?: Overskriftsmerke[]; lurerPaa?: string },
 ): Promise<void> {
   const oppdatert = await db
     .update(tekst)
-    .set({ forkunnskapssvar: svar, tilstand: "aktivert" })
+    .set({
+      forkunnskapMerking: svar.merking ?? [],
+      lurerPaa: svar.lurerPaa?.trim() || null,
+      tilstand: "aktivert",
+    })
     .where(
       and(
         eq(tekst.id, tekstId),

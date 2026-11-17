@@ -63,7 +63,8 @@ import { KI_FEIL, feilkodeFor, kiFeil, somFeil, type Feiltekst } from "./kifeil"
 import { samtalegrenseNaadd, underTaket } from "../data/forbruk";
 import { GrenseNaadd } from "../data/grenser";
 import { GRENSER } from "../opplasting/pdf-tekst";
-import { delIAvsnitt } from "../tekst/avsnittsdeling";
+import { delIAvsnitt, overskrifter } from "../tekst/avsnittsdeling";
+import { lesLurerPaa, lesMerking } from "../tekst/forkunnskap";
 import { hentLaast, laasTekst } from "../tekst/las";
 import {
   hentMorsmaal,
@@ -195,7 +196,8 @@ export async function lagreAktivering(
   _forrige: Handlingssvar,
   data: FormData,
 ) {
-  const svar = String(data.get("svar") ?? "").trim();
+  // FR-6 (endret 17.11): spørsmålet kappes her også, ikke bare i feltet.
+  const lurerPaa = lesLurerPaa(data.get("lurerPaa"));
   const t = await tilgang();
 
   // FR-3: fase 3a kan ikke hoppes over — heller ikke ved å sende skjemaet
@@ -216,21 +218,40 @@ export async function lagreAktivering(
   const nyttLaaseforsoek = rad.tilstand === "aktivert" && rad.vei === "liming";
   if (rad.tilstand === "aktivert" && !nyttLaaseforsoek) redirect(`/tekst/${tekstId}/gjennomsyn`);
 
-  // FR-6: svaret vurderes ikke og rettes ikke. Et tomt svar får ÉN
-  // oppfordring; sender eleven tomt igjen, slipper hun videre. Steget skal
-  // ikke bli en sperre for den som synes dette er vanskelig. (Før 17.10 ble
-  // tomt svar stoppet for godt — et avvik fra FR-6.)
-  if (!nyttLaaseforsoek && svar.length === 0 && data.get("tomtEtterOppfordring") !== "1") {
+  // FR-6 (endret 17.11): merket per overskrift. Overskriftene regnes ut her
+  // fra den lagrede teksten (AD-12), ikke fra skjemaet, så klienten sender
+  // bare et merke per nummer. Ukjente nummer og verdier forkastes stille.
+  const titler = overskrifter(delIAvsnitt(rad.redigertTekst));
+  const merking = lesMerking(data, titler);
+
+  // FR-6: ingenting vurderes og rettes. Et tomt skjema får ÉN oppfordring;
+  // sender eleven tomt igjen, slipper hun videre. Steget skal ikke bli en
+  // sperre for den som synes dette er vanskelig. (Før 17.10 ble tomt svar
+  // stoppet for godt — et avvik fra FR-6.)
+  if (
+    !nyttLaaseforsoek &&
+    merking.length === 0 &&
+    lurerPaa.length === 0 &&
+    data.get("tomtEtterOppfordring") !== "1"
+  ) {
+    // Uten overskrifter er spørsmålet det eneste feltet.
     return {
-      feil: {
-        melding: "Du har ikke skrevet noe ennå.",
-        handling:
-          "Prøv å skrive et par ord om hva du tror teksten handler om — det blir ikke vurdert. Vil du heller gå rett videre, trykk «Videre» en gang til.",
-      },
+      feil:
+        titler.length > 0
+          ? {
+              melding: "Du har ikke merket noe ennå.",
+              handling:
+                "Merk en overskrift, eller skriv noe du lurer på — det blir ikke vurdert. Vil du heller gå rett videre, trykk «Videre» en gang til.",
+            }
+          : {
+              melding: "Du har ikke skrevet noe ennå.",
+              handling:
+                "Skriv noe du lurer på om emnet — det blir ikke vurdert. Vil du heller gå rett videre, trykk «Videre» en gang til.",
+            },
     };
   }
 
-  if (!nyttLaaseforsoek) await lagreForkunnskapssvar(t, tekstId, svar);
+  if (!nyttLaaseforsoek) await lagreForkunnskapssvar(t, tekstId, { merking, lurerPaa });
 
   // FR-3 (endret 11.11): innlimt tekst har ingen fase 3b. Eleven har selv
   // valgt teksten, og det finnes ingen uttrekksfeil å rette, så den låses

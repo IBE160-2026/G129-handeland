@@ -62,6 +62,10 @@
  *     skriptfeil og uten `inert`- eller `har-ark`-rester
  *   - FR-3 fase 3b: gjennomsynet via PDF og via bilde (tekster lagt rett inn
  *     i databasen i tilstand `aktivert`), axe i lys og mørk modus
+ *   - FR-6 (17.11): på 375 px er hver overskrift i aktiveringen en radiogruppe
+ *     med navn (fieldset og legend), nådd med Tab og styrt med piltastene,
+ *     og valgt merke har hake og fokusring; lesevisningen viser «Før du
+ *     leste» med spørsmålet, lenken og den helt nye overskriften
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -270,7 +274,74 @@ try {
   await pc.waitForURL(/\/aktivering$/);
   await axe(pc, "aktivering");
   sjekk("FR-5: brødteksten finnes ikke i kildekoden i aktiveringen", !(await lekker()));
-  await pc.fill("#svar", "Noe om bølger og stråling.");
+
+  /* --- FR-6 (endret 17.11): merkene, på 375 px og bare med tastatur --- */
+  await pc.setViewportSize({ width: 375, height: 800 });
+  await axe(pc, "aktivering (375 px)");
+  const grupper = await pc.evaluate(() =>
+    [...document.querySelectorAll("main form fieldset")].map((f) => {
+      const radio = [...f.querySelectorAll("input[type=radio]")];
+      return {
+        navn: (f.querySelector(":scope > legend")?.textContent ?? "").trim(),
+        valg: radio.length,
+        feltnavn: new Set(radio.map((r) => r.name)).size,
+      };
+    }),
+  );
+  sjekk(
+    "FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og tre valg",
+    grupper.length >= 2 && grupper.every((g) => g.navn.length > 0 && g.valg === 3 && g.feltnavn === 1),
+    `${grupper.length} grupper: ${grupper.map((g) => `«${g.navn}» (${g.valg})`).join(", ")}`,
+  );
+  const aktiv = () =>
+    pc.evaluate(() => {
+      const e = document.activeElement;
+      const valg = e?.closest(".merkevalg");
+      return {
+        type: e?.type ?? "",
+        navn: e?.name ?? "",
+        verdi: e?.value ?? "",
+        valgt: e?.checked ?? false,
+        hake: valg ? getComputedStyle(valg, "::before").content : "",
+        ring: valg ? getComputedStyle(valg).outlineStyle : "",
+        sidelengs: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+  // Tab fram til første radioknapp.
+  let foersteValg;
+  for (let i = 0; i < 40; i++) {
+    await pc.keyboard.press("Tab");
+    foersteValg = await aktiv();
+    if (foersteValg.type === "radio") break;
+  }
+  sjekk("FR-6: Tab når første radiogruppe", foersteValg.type === "radio" && foersteValg.navn === "merke-1", JSON.stringify(foersteValg));
+  await pc.keyboard.press("ArrowRight");
+  const etterPil = await aktiv();
+  sjekk(
+    "FR-6: piltasten velger neste merke i gruppen",
+    etterPil.navn === "merke-1" && etterPil.verdi === "litt" && etterPil.valgt,
+    JSON.stringify(etterPil),
+  );
+  sjekk(
+    "FR-6: valgt merke har hake (ikke farge alene) og synlig fokusring",
+    etterPil.hake.includes("✓") && etterPil.ring === "solid",
+    `hake ${etterPil.hake}, ring ${etterPil.ring}`,
+  );
+  await pc.keyboard.press("Tab");
+  const andreGruppe = await aktiv();
+  sjekk(
+    "FR-6: Tab går videre til neste radiogruppe",
+    andreGruppe.type === "radio" && andreGruppe.navn !== "merke-1" && andreGruppe.navn.startsWith("merke-"),
+    JSON.stringify(andreGruppe),
+  );
+  // Pil venstre fra første valg går rundt til «Helt nytt».
+  await pc.keyboard.press("ArrowLeft");
+  const nytt = await aktiv();
+  sjekk("FR-6: «Helt nytt» kan velges med piltastene", nytt.verdi === "nytt" && nytt.valgt, JSON.stringify(nytt));
+  sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !nytt.sidelengs);
+  await pc.setViewportSize({ width: 1280, height: 900 });
+
+  await pc.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
   await pc.click("text=Videre");
   // Gjennomsynet nås nå bare via PDF og bilde; innlimt tekst låses i aktiveringen (FR-3, 11.11).
   await pc.waitForURL(/\/lesing$/, { timeout: 240000 });
@@ -278,6 +349,40 @@ try {
   const tekstUrl = lesing.replace(/\/lesing$/, "");
   await pc.waitForSelector("article button");
   await axe(pc, "lesevisning");
+
+  /* --- FR-6: «Før du leste» i lesevisningen --- */
+  const foerDel = (await pc.locator("#foer-du-leste").count()) > 0 ? await pc.locator("#foer-du-leste").innerText() : "";
+  const heltNy = grupper[1]?.navn.replace(/\s*\(laget av LeseBuddy\)$/, "") ?? "";
+  sjekk(
+    "FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og den helt nye overskriften",
+    foerDel.includes("Du lurte på: Hvorfor kan vi ikke se radiobølger?") &&
+      (await pc.locator('#foer-du-leste a[href$="/oppgaver"]').count()) === 1 &&
+      foerDel.includes("Helt nytt for deg før du leste:") &&
+      foerDel.includes(heltNy),
+    foerDel.replace(/\s+/g, " ").slice(0, 200),
+  );
+  const rekkefoelge = await pc.evaluate(() => {
+    const h = [...document.querySelectorAll("main h2")].map((e) => e.textContent.trim());
+    return h.indexOf("Før du leste") >= 0 && h.indexOf("Før du leste") === h.indexOf("Ferdig med å lese?") - 1;
+  });
+  sjekk("FR-6: «Før du leste» står rett før «Ferdig med å lese?»", rekkefoelge);
+
+  // FR-6: aktiveringen åpnet igjen etter låsingen viser merkene, uten skjema.
+  await pc.goto(`${tekstUrl}/aktivering`);
+  const merketRad = pc.locator("main li", { hasText: heltNy }).first();
+  const merketTekst = (await merketRad.count()) > 0 ? await merketRad.innerText() : "";
+  sjekk(
+    "FR-6: låst aktivering viser «du merket: Helt nytt» ved den helt nye overskriften",
+    heltNy.length > 0 && merketTekst.includes("du merket: Helt nytt"),
+    merketTekst.replace(/\s+/g, " ").slice(0, 120),
+  );
+  sjekk(
+    "FR-6: låst aktivering har verken radioknapper eller spørsmålsfelt",
+    (await pc.locator("input[type=radio]").count()) === 0 && (await pc.locator("#lurer-paa").count()) === 0,
+  );
+  // Tilbake til lesevisningen, der FR-10 under fortsetter.
+  await pc.goto(lesing);
+  await pc.waitForSelector("article button");
 
   /* --- FR-10 på PC ------------------------------------------------- */
   const ord = pc.locator("article button[aria-expanded]");
@@ -1745,6 +1850,23 @@ try {
           await axe(side, `gjennomsyn via ${vei} (${modusnavn})`);
         }
       }
+
+      // FR-6: en tekst låst før 17.11 har bare det frie svaret, og de nye
+      // kolonnene er null. Lesevisningen viser det under «Før du leste».
+      const gammelt = "Noe om bølger og lys.";
+      const g = await pool.query(
+        `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, overskrifter_godkjent, forkunnskapssvar, laast_tidspunkt)
+         values ($1, 'Gammel prøve', $2, $2, 'liming', 'laast', now(), $3, now()) returning id`,
+        [kontoId, eksempel, gammelt],
+      );
+      lagt.push(g.rows[0].id);
+      await pc.goto(`${APP}/tekst/${g.rows[0].id}/lesing`);
+      const gammelDel = (await pc.locator("#foer-du-leste").count()) > 0 ? await pc.locator("#foer-du-leste").innerText() : "";
+      sjekk(
+        "FR-6: gammel tekst viser «Før du leste, skrev du: …»",
+        gammelDel.includes(`Før du leste, skrev du: ${gammelt}`),
+        gammelDel.replace(/\s+/g, " ").slice(0, 200),
+      );
     } finally {
       if (lagt.length > 0) {
         try {

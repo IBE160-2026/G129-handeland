@@ -270,7 +270,7 @@ describe("hentArbeidsbord", () => {
     expect(bord[1]).toMatchObject({ tilstand: "innlest", antallFagord: null, sisteQuiz: null, samtale: null, harMinnevers: false });
 
     // Den gamle teksten låses og brukes: den blir hovedbunken.
-    await lagreForkunnskapssvar(t, gammel.id, "Noe om celler.");
+    await lagreForkunnskapssvar(t, gammel.id, { lurerPaa: "Noe om celler." });
     const laast = await laasTekst(t, gammel.id, TEKST);
     const [avsnitt] = await db.select().from(skjema.avsnitt).where(eq(skjema.avsnitt.tekstId, laast.id)).limit(1);
     const [sett] = await db.insert(skjema.begrepssett).values({ tekstId: laast.id, promptversjon: "v1", modell: "m" }).returning();
@@ -313,7 +313,7 @@ describe("hentArbeidsbord", () => {
     const laast = [];
     for (const [tittel, dager] of [["A", 5], ["B", 4]] as const) {
       const ny = await opprettTekst(t, { tittel, raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
-      await lagreForkunnskapssvar(t, ny.id, "Noe.");
+      await lagreForkunnskapssvar(t, ny.id, { lurerPaa: "Noe." });
       await laasTekst(t, ny.id, TEKST);
       const da = new Date(Date.now() - dager * DAG);
       await db.update(skjema.tekst).set({ opprettet: da, laastTidspunkt: da }).where(eq(skjema.tekst.id, ny.id));

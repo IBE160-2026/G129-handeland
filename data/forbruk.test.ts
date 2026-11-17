@@ -220,7 +220,7 @@ describe("grensene per konto (AD-8)", () => {
   test("Fagsamtaler telles per konto og døgn", async () => {
     const t = await nyKonto();
     const ny = await nyTekst(t);
-    await lagreForkunnskapssvar(t, ny.id, "Noe om ovner.");
+    await lagreForkunnskapssvar(t, ny.id, { lurerPaa: "Noe om ovner." });
     const laast = await laasTekst(t, ny.id, TEKST);
     for (let i = 0; i < 5; i++) {
       await opprettFagsamtale(laast, { sporsmal: "Hvorfor?", kildeavsnittNummer: 3, promptversjon: "v", modell: "m" });

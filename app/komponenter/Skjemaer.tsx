@@ -14,12 +14,13 @@
  */
 
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
 import { NETTFEIL, type Feiltekst } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
+import { MAKS_LURER_PAA, MERKENAVN, MERKER, merkefelt } from "../../tekst/forkunnskap";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
 
@@ -52,12 +53,34 @@ function Send({ venter, klar, status }: { venter: string; klar: string; status?:
 
 /* ------------------------------------------------------------------ */
 
+/** En overskrift i aktiveringen, slik siden har regnet den ut (AD-12). */
+export type Aktiveringstittel = {
+  nummer: number;
+  innhold: string;
+  /** FR-5: laget av LeseBuddy, ikke hentet fra teksten. */
+  laget: boolean;
+  /** Morsmålslinjen under overskriften (FR-26), tegnet av siden. */
+  morsmaal?: ReactNode;
+};
+
+/**
+ * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Kjenner det»,
+ * «Litt» eller «Helt nytt», og kan skrive ett spørsmål. Merkene er vanlige
+ * radioknapper i en `fieldset` per overskrift, så de virker med tastatur
+ * (Tab inn i gruppen, piltaster mellom valgene) og uten skript. Utseendet
+ * står i globals.css (`.merkevalg`).
+ */
 export function AktiveringSkjema({
   handling,
+  titler,
+  beskrivelse,
   venter = "Lagrer…",
   status,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
+  titler: Aktiveringstittel[];
+  /** Id-en til instruksjonen på siden, som hver radiogruppe beskrives av. */
+  beskrivelse?: string;
   /** Innlimt tekst låses og får fagordene i samme trykk (FR-3), og det tar tid (§5). */
   venter?: string;
   /** Statusteksten i tenkeindikatoren, når trykket venter på språkmodellen. */
@@ -66,29 +89,58 @@ export function AktiveringSkjema({
   const [svar, send] = useActionState(handling, TOMT);
 
   return (
-    <form action={send} className="space-y-4">
+    <form action={send} className="space-y-6">
       {svar.feil && (
         <>
           <Feilmelding {...svar.feil} />
-          {/* FR-6: etter én oppfordring kan eleven gå videre med tomt svar. */}
+          {/* FR-6: etter én oppfordring kan eleven gå videre med tomt skjema. */}
           <input type="hidden" name="tomtEtterOppfordring" value="1" />
         </>
       )}
 
+      {titler.length > 0 && (
+        <div className="space-y-4">
+          {titler.map((o) => (
+            <fieldset
+              key={o.nummer}
+              aria-describedby={beskrivelse}
+              className="rounded-md border border-slate-300 p-4 dark:border-slate-700"
+            >
+              <legend className="px-1 text-lg font-medium">
+                {o.innhold}
+                {o.laget && (
+                  <span className="ml-2 align-middle text-xs font-normal text-slate-500 dark:text-slate-400">
+                    (laget av LeseBuddy)
+                  </span>
+                )}
+              </legend>
+              {o.morsmaal}
+              <div className="mt-2 flex flex-wrap gap-2">
+                {MERKER.map((m) => (
+                  <label key={m} className="merkevalg">
+                    <input type="radio" name={merkefelt(o.nummer)} value={m} />
+                    {MERKENAVN[m]}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+        </div>
+      )}
+
       <div>
-        <label htmlFor="svar" className="block font-medium">
-          Hva tror du teksten handler om?
+        <label htmlFor="lurer-paa" className="block font-medium">
+          Noe du lurer på før du leser?
         </label>
-        <p id="svar-hjelp" className="mt-1 text-slate-600 dark:text-slate-400">
-          Skriv et par setninger ut fra overskriftene over. Det du skriver blir
-          ikke rettet og ikke vurdert — det er for å sette i gang det du
-          allerede vet.
+        <p id="lurer-paa-hjelp" className="mt-1 text-slate-600 dark:text-slate-400">
+          Valgfritt. Spørsmålet ditt står igjen når du har lest.
         </p>
         <textarea
-          id="svar"
-          name="svar"
-          rows={6}
-          aria-describedby="svar-hjelp"
+          id="lurer-paa"
+          name="lurerPaa"
+          rows={3}
+          maxLength={MAKS_LURER_PAA}
+          aria-describedby="lurer-paa-hjelp"
           className="mt-2 w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
         />
       </div>

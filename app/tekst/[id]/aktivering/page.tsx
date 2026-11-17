@@ -6,6 +6,12 @@
  * lese den kaldt. Viser vi brødteksten her, er det ikke lenger en aktivering —
  * det er bare lesing med et spørsmål foran.
  *
+ * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Kjenner det»,
+ * «Litt» eller «Helt nytt», og kan skrive ett spørsmål hun lurer på. Det frie
+ * feltet «Hva tror du teksten handler om?» er borte; utviklerens egen test
+ * viste at det ikke satte i gang noe. Det hun merket og spurte om, vises igjen
+ * i lesevisningen under «Før du leste».
+ *
  * Overskriftene regnes ut fra `delIAvsnitt` (AD-12) og lagres IKKE. Avsnitts-
  * listen fryses først ved låsing (AD-9): for PDF og bilde i gjennomsynet etter
  * dette steget, der eleven kan rette brødteksten; for innlimt tekst i dette
@@ -22,6 +28,7 @@ import { HentOversettelse } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
+import { MERKENAVN } from "../../../../tekst/forkunnskap";
 import { lagOversettelse, lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema, LaasPaaNyttSkjema } from "../../../komponenter/Skjemaer";
 import { stegtekst } from "../../../../tekst/steg";
@@ -58,6 +65,8 @@ export default async function Aktivering({
   const laasPaaNytt = tekst.tilstand === "aktivert" && tekst.vei === "liming";
   if (tekst.tilstand === "aktivert" && !laasPaaNytt) redirect(`/tekst/${id}/gjennomsyn`);
   const laast = tekst.tilstand === "laast";
+  /** Skjemaet vises bare før forkunnskapen er lagret. */
+  const visSkjema = !laast && !laasPaaNytt;
 
   const avsnitt = delIAvsnitt(tekst.redigertTekst);
   const titler = overskrifter(avsnitt);
@@ -72,6 +81,17 @@ export default async function Aktivering({
       : null;
   const mm = somOppslag(oversatt);
 
+  const laget = (innhold: string) => tekst.genererteOverskrifter?.includes(innhold) ?? false;
+  const morsmaal = (nummer: number) =>
+    spraak ? <Morsmaalstekst spraak={spraak} tekst={mm.get(`o${nummer}`)} className="text-base" /> : undefined;
+
+  // Elevens merke per overskrift, når forkunnskapen er lagret. Slått opp på
+  // overskriftens tekst, fordi det er slik merkene er lagret.
+  const merket = new Map((tekst.forkunnskapMerking ?? []).map((m) => [m.overskrift, m.merke]));
+
+  const lenke =
+    "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
+
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -81,24 +101,43 @@ export default async function Aktivering({
         {tekst.tittel}
       </h1>
 
+      {visSkjema && (
+        <p id="aktivering-hjelp" className="mt-4 text-slate-700 dark:text-slate-300">
+          {titler.length > 0
+            ? "Se på overskriftene før du leser. Hvor godt kjenner du hver av dem fra før? Ingenting her blir vurdert."
+            : "Er det noe du lurer på om emnet før du leser? Ingenting her blir vurdert."}
+        </p>
+      )}
+
       {titler.length > 0 ? (
         <section className="mt-8">
           <h2 className="font-medium">Overskriftene i teksten</h2>
           {spraak && !oversatt && (
             <HentOversettelse handling={lagOversettelse.bind(null, id, "overskrifter")} hva="overskriftene" />
           )}
-          <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-4 dark:border-slate-700">
-            {titler.map((o) => (
-              <li key={o.nummer} className="text-lg">
-                {o.innhold}
-                {/* FR-5: synlig merket når Lesevenn laget den, ikke teksten. */}
-                {tekst.genererteOverskrifter?.includes(o.innhold) && (
-                  <span className="ml-2 align-middle text-xs text-slate-500 dark:text-slate-400">(laget av LeseBuddy)</span>
-                )}
-                {spraak && <Morsmaalstekst spraak={spraak} tekst={mm.get(`o${o.nummer}`)} className="text-base" />}
-              </li>
-            ))}
-          </ul>
+          {/* Med skjemaet står overskriftene i skjemaet, hver med sine valg (FR-6). */}
+          {!visSkjema && (
+            <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-4 dark:border-slate-700">
+              {titler.map((o) => {
+                const merke = merket.get(o.innhold);
+                return (
+                  <li key={o.nummer} className="text-lg">
+                    {o.innhold}
+                    {/* FR-5: synlig merket når Lesevenn laget den, ikke teksten. */}
+                    {laget(o.innhold) && (
+                      <span className="ml-2 align-middle text-xs text-slate-500 dark:text-slate-400">(laget av LeseBuddy)</span>
+                    )}
+                    {merke && (
+                      <span className="ml-2 align-middle text-sm text-slate-600 dark:text-slate-400">
+                        — du merket: {MERKENAVN[merke]}
+                      </span>
+                    )}
+                    {morsmaal(o.nummer)}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
           {spraak && (
             <div className="mt-3">
               <Spraakmerknad spraak={spraak} kvalitetssikret={KVALITETSSIKRET.has(spraak.kode)} />
@@ -108,25 +147,23 @@ export default async function Aktivering({
       ) : (
         /*
          * FR-5: teksten kan mangle overskrifter. Da degraderer steget ærlig
-         * framfor å finne på overskrifter eleven tror står i teksten.
+         * framfor å finne på overskrifter eleven tror står i teksten. Bare
+         * spørsmålsfeltet vises (FR-6).
          */
         <section className="mt-8 rounded-md border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
           <p>
-            LeseBuddy fant ingen overskrifter i denne teksten. Da er det
-            vanskelig å gjette hva den handler om på forhånd — så skriv heller
-            kort om hva du vet om emnet fra før.
+            {visSkjema
+              ? "LeseBuddy fant ingen overskrifter i denne teksten, så det er ingenting å merke her."
+              : "LeseBuddy fant ingen overskrifter i denne teksten."}
           </p>
         </section>
       )}
 
-      <section className="mt-8">
+      <section className={visSkjema && titler.length > 0 ? "mt-3" : "mt-8"}>
         {laast ? (
           <p>
-            Du har alt svart på dette steget.{" "}
-            <Link
-              href={`/tekst/${id}/lesing`}
-              className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
-            >
+            Du har alt gjort dette steget.{" "}
+            <Link href={`/tekst/${id}/lesing`} className={lenke}>
               Gå til teksten
             </Link>
           </p>
@@ -135,6 +172,13 @@ export default async function Aktivering({
         ) : (
           <AktiveringSkjema
             handling={lagreAktivering.bind(null, id)}
+            beskrivelse="aktivering-hjelp"
+            titler={titler.map((o) => ({
+              nummer: o.nummer,
+              innhold: o.innhold,
+              laget: laget(o.innhold),
+              morsmaal: morsmaal(o.nummer),
+            }))}
             venter={tekst.vei === "liming" ? "Finner fagordene…" : "Lagrer…"}
             status={tekst.vei === "liming" ? "Buddy finner fagordene …" : undefined}
           />
@@ -142,10 +186,7 @@ export default async function Aktivering({
       </section>
 
       <p className="mt-10 text-sm">
-        <Link
-          href="/"
-          className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100"
-        >
+        <Link href="/" className={lenke}>
           Tilbake
         </Link>
       </p>
