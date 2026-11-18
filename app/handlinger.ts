@@ -95,6 +95,7 @@ import { harSjekketForstaaelsen } from "../data/sjekket";
 import { lagreLeseinnstillinger } from "../data/leseinnstillinger";
 import { tolkInnstillinger } from "../tekst/leseinnstillinger";
 import { TEMA_KAPSEL, TEMA_LEVETID, tolkTema } from "../data/tema";
+import { HAND_KAPSEL, HAND_LEVETID, tolkHand } from "../data/hand";
 import { lagMinnevers, type Versform } from "../generatorer/minnevers";
 
 /** Formen alle handlingene svarer med ved feil. §5: aldri en blindvei. */
@@ -1244,19 +1245,47 @@ export async function velgTemaHandling(data: FormData): Promise<void> {
 }
 
 /**
- * Sletter temakapselen ved utlogging og sletting av kontoen, så neste elev
- * på en delt PC ikke arver valget på landingssiden. Kapselen er httpOnly, så
- * klienten kan ikke slette den selv.
+ * «Venstrehendt» (design runde 2, bolk 9): speiler øvekortene, så «Må øve
+ * mer» og «Kan» står til venstre. Lagres som temaet: en informasjonskapsel på
+ * denne enheten, `venstre` eller ingen kapsel. En avkrysningsboks i et vanlig
+ * skjema, så det virker uten JavaScript; uten kryss sendes ingenting, og
+ * kapselen slettes. Rotlayouten leser kapselen og setter `data-hand`.
+ */
+export async function velgHandHandling(data: FormData): Promise<void> {
+  await tilgang();
+  const hand = tolkHand(data.get("hand"));
+  const kapsler = await cookies();
+  if (hand === null) {
+    kapsler.delete(HAND_KAPSEL);
+  } else {
+    kapsler.set(HAND_KAPSEL, hand, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: HAND_LEVETID,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+  revalidatePath("/", "layout");
+  // `n` gir bekreftelsen en ny nøkkel, som for temaet.
+  redirect(`/konto?lagret=hand&n=${Date.now()}`);
+}
+
+/**
+ * Sletter valgene som gjelder enheten — temaet og «Venstrehendt» — ved
+ * utlogging og sletting av kontoen, så neste elev på en delt PC ikke arver
+ * dem. Kapslene er httpOnly, så klienten kan ikke slette dem selv.
  *
  * Unntaket fra `tilgang()` først: handlingen kalles etter `signOut` og
  * `deleteUser`, når økten alt er borte. Den rører ingen data på noen konto,
- * bare en informasjonskapsel på enheten som sender forespørselen, og den
- * kan bare gjøre enheten til «Følg enheten» (AD-8 gjelder datatilgang).
+ * bare informasjonskapsler på enheten som sender forespørselen, og den kan
+ * bare sette enheten tilbake til standardvalgene (AD-8 gjelder datatilgang).
  */
-export async function slettTemaHandling(): Promise<void> {
+export async function slettEnhetsvalgHandling(): Promise<void> {
   const kapsler = await cookies();
-  // Uten kapsel er det ingenting å gjøre, og hurtigbufferen får stå.
-  if (!kapsler.has(TEMA_KAPSEL)) return;
-  kapsler.delete(TEMA_KAPSEL);
+  const finnes = [TEMA_KAPSEL, HAND_KAPSEL].filter((k) => kapsler.has(k));
+  // Uten kapsler er det ingenting å gjøre, og hurtigbufferen får stå.
+  if (finnes.length === 0) return;
+  for (const k of finnes) kapsler.delete(k);
   revalidatePath("/", "layout");
 }

@@ -412,6 +412,8 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
 
 **Markeringstusj (`{components.highlighter}`):** en tusjstrek bak nøkkelordet i en overskrift, litt rotert. Den brukes høyst én gang per skjerm.
 
+**Øvekortene (design runde 2, bolk 9):** kortet står i full bredde. Over det, mot høyre kant, står «Må øve mer» over «Kan» som button-secondary (fylt button-primary når merkingen er valgt), like brede og med 12 px mellomrom. Med `data-hand="venstre"` står de mot venstre kant. Under kortet står «← Forrige» og «Neste →» som to like brede button-secondary i full bredde, 12 px mellomrom. Alle har minst 44 × 44 px trykkflate. Plasseringen er CSS (`.oevekort-flate` i `globals.css`) og ser lik ut i lys og mørk modus og fra 320 px.
+
 **Feilmelding (`{components.danger-message}`):** lys feilflate med feilfarget kant på startsiden, en tekst som sier hva som skjedde og hva eleven kan gjøre, og knappen «Prøv igjen».
 
 **Visuelle referanser:** Landingssiden er [mockups/landingsside-1.html](mockups/landingsside-1.html), og arbeidsbordet er [mockups/arbeidsbord-1.html](mockups/arbeidsbord-1.html). Mockene er visuelle utkast, og ved uenighet gjelder dokumentene (se EXPERIENCE.md, Information Architecture).

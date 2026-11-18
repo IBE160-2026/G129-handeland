@@ -2,7 +2,8 @@
 title: 'Design runde 2, bolk 9: øvekortknappene for én hånd og valget «Venstrehendt»'
 type: 'feature'
 created: '2026-11-18'
-status: 'ready-for-dev'
+status: 'in-review'
+baseline_commit: '94ba7bd3afe08faa03d2e72845975a96446ba971'
 route: 'dispatch'
 review_loop_iteration: 0
 context: []
@@ -58,11 +59,11 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/komponenter/Oevekort.tsx`, `app/globals.css` -- ny plassering
-- [ ] `data/hand.ts` (eller en utvidelse av `data/tema.ts`), `app/handlinger.ts`, `app/konto/page.tsx`, `app/layout.tsx` -- valget
-- [ ] tester av tolkingen av kapselen og av sletting ved utlogging (som for temaet)
-- [ ] `maaling/sjekk-tilgjengelighet.mjs` -- sjekken over
-- [ ] EXPERIENCE.md, DESIGN.md
+- [x] `app/komponenter/Oevekort.tsx`, `app/globals.css` -- ny plassering
+- [x] `data/hand.ts` (eller en utvidelse av `data/tema.ts`), `app/handlinger.ts`, `app/konto/page.tsx`, `app/layout.tsx` -- valget
+- [x] tester av tolkingen av kapselen og av sletting ved utlogging (som for temaet)
+- [x] `maaling/sjekk-tilgjengelighet.mjs` -- sjekken over
+- [x] EXPERIENCE.md, DESIGN.md
 
 **Acceptance Criteria:**
 - Given øvekortene på 375 px, when kortet vises, then står «Må øve mer» over «Kan» over kortet til høyre, og «Forrige» og «Neste» står ved siden av hverandre under.
@@ -70,6 +71,13 @@ context: []
 - Given en elev som logger ut, when neste elev åpner appen på samme PC, then er venstrehendt ikke valgt.
 
 ## Implementation Notes
+
+- DOM-rekkefølgen er som vedtatt: kortet, (kildeavsnittet når kortet er snudd), feilmeldingen, «Må øve mer», «Kan», «Forrige», «Neste». `.oevekort-flate` er en flex-kolonne, og `.oevekort-merk` har `order: -1` og `align-self: flex-end` (`flex-start` under `:root[data-hand="venstre"]`). Merkeknappene står i en kolonne som er så bred som den bredeste knappen, og begge strekkes, så de er like brede. «Forrige» og «Neste» er et rutenett med to like kolonner i full bredde.
+- Når kortet er snudd, står «Se hvor det står i teksten» mellom kortet og «Må øve mer» i Tab-rekkefølgen. Den hører til kortet, og rekkefølgen er ellers som vedtatt.
+- Merkeknappene står i `role="group"` med `aria-label="Merk kortet"`.
+- Kapselen heter `hand` med verdien `venstre` (`data/hand.ts`). Ingen kapsel betyr standardoppsettet. På /konto er valget en avkrysningsboks under legenden «Øvekortene», med «Lagre», som temavalget. Bekreftelsen er «Lagret: Venstrehendt.» eller «Lagret: Ikke venstrehendt.» (`?lagret=hand`).
+- `slettTemaHandling` er omdøpt til `slettEnhetsvalgHandling` og sletter både `tema` og `hand` på de samme stedene (etter `signOut` og etter at kontoen er slettet). Ett kall, så utloggingen ikke venter to ganger.
+- Demotesten (steg 14) sjekker nå også at `hand` er slettet ved utlogging. Sjekken av utlogging står der og ikke i `sjekk-tilgjengelighet.mjs`, fordi tilgjengelighetssjekken deler økten mellom kontekstene, og en utlogging der ville logget ut resten av sjekken.
 
 ## Spec Change Log
 

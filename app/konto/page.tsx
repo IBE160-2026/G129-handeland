@@ -7,6 +7,10 @@
  * «Utseende» (bolk 4, EXPERIENCE.md, Gjelder overalt): lys eller mørk modus,
  * eller «Følg enheten». Et vanlig skjema med radioknapper og en server action,
  * så det virker uten JavaScript. Valget gjelder denne enheten.
+ *
+ * «Venstrehendt» (design runde 2, bolk 9): speiler øvekortene, så «Må øve mer»
+ * og «Kan» står til venstre. Lagres som temaet, i en informasjonskapsel på
+ * enheten, med en avkrysningsboks i et vanlig skjema.
  */
 
 import Link from "next/link";
@@ -14,8 +18,9 @@ import { cookies } from "next/headers";
 import { kontoEpost, tilgang } from "../../data/konto";
 import { hentMorsmaal } from "../../data/morsmaal";
 import { listTekster } from "../../data/tilgang";
+import { HAND_KAPSEL, tolkHand } from "../../data/hand";
 import { TEMA_KAPSEL, tolkTema, type Tema } from "../../data/tema";
-import { velgMorsmaalHandling, velgTemaHandling } from "../handlinger";
+import { velgHandHandling, velgMorsmaalHandling, velgTemaHandling } from "../handlinger";
 import { MorsmaalVelger } from "../komponenter/Morsmaal";
 import { LagretMelding, LoggUtKnapp, SlettKontoSkjema } from "../komponenter/KontoSkjemaer";
 
@@ -35,8 +40,10 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
     searchParams,
   ]);
   const tema = tolkTema(kapsler.get(TEMA_KAPSEL)?.value);
+  const venstrehendt = tolkHand(kapsler.get(HAND_KAPSEL)?.value) === "venstre";
   const lagret = sp.lagret === "utseende";
-  // Ny nøkkel for hver lagring (velgTemaHandling), så meldingen kunngjøres hver gang.
+  const lagretHand = sp.lagret === "hand";
+  // Ny nøkkel for hver lagring (velgTemaHandling, velgHandHandling), så meldingen kunngjøres hver gang.
   const lagringsnr = typeof sp.n === "string" ? sp.n : "";
 
   return (
@@ -83,6 +90,33 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
         <LagretMelding
           key={lagringsnr}
           tekst={lagret ? `Lagret: ${TEMAVALG.find((v) => v.verdi === (tema ?? ""))?.navn}.` : null}
+        />
+      </section>
+
+      <section className="mt-8">
+        {/* Nøkkelen tegner avkrysningsboksen på nytt etter lagring, så det som vises er det som er lagret. */}
+        <form key={venstrehendt ? "venstre" : "hoeyre"} action={velgHandHandling}>
+          <fieldset>
+            <legend className="font-medium">Øvekortene</legend>
+            <label className="mt-2 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border border-slate-500 px-3 has-[:checked]:border-primaer has-[:checked]:ring-1 has-[:checked]:ring-primaer has-[:checked]:font-bold dark:border-slate-400">
+              <input type="checkbox" name="hand" value="venstre" defaultChecked={venstrehendt} />
+              Venstrehendt
+            </label>
+          </fieldset>
+          <button
+            type="submit"
+            className="mt-3 min-h-11 rounded-md border border-slate-500 px-4 py-2 font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
+          >
+            Lagre
+          </button>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            «Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
+            gjelder denne enheten.
+          </p>
+        </form>
+        <LagretMelding
+          key={`hand-${lagringsnr}`}
+          tekst={lagretHand ? (venstrehendt ? "Lagret: Venstrehendt." : "Lagret: Ikke venstrehendt.") : null}
         />
       </section>
 

@@ -85,6 +85,14 @@
  *     bildefanen står «Før du tar bildene» (fet og understreket «Før») til
  *     to bilder er valgt, og så «Etter at du har lastet opp bildene» rett over
  *     listen, med axe i lys og mørk modus
+ *   - design bolk 9 (18.11): på 375 px står «Må øve mer» over «Kan» over
+ *     øvekortet til høyre (like brede, minst 44 × 44 px), og «Forrige» og
+ *     «Neste» ved siden av hverandre under; med `hand=venstre` står
+ *     merkeknappene til venstre, og HTML-en fra serveren har allerede
+ *     `data-hand="venstre"`. Tab etter kortet går «Må øve mer» → «Kan» →
+ *     «Forrige» → «Neste». Samme plassering på 320 px, også med 200 % tekst,
+ *     axe i lys og mørk modus, og «Venstrehendt» på /konto setter og sletter
+ *     informasjonskapselen, med og uten JavaScript
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -938,6 +946,167 @@ try {
       `temavalg (${hvordan}): «Følg enheten» sletter informasjonskapselen og følger systemet igjen`,
       !(await ctx.cookies()).some((c) => c.name === "tema") && etter.tema === null && etter.bakgrunn === LYS_BG,
       JSON.stringify(etter),
+    );
+    await ctx.close();
+  }
+
+  /* --- Design bolk 9: øvekortknappene for én hånd og «Venstrehendt» -- */
+  const handKake = (value) => ({ name: "hand", value, url: APP });
+  /** Plasseringen av kortet og de fire knappene, og hva Tab treffer etter kortet. */
+  async function oevekortOppsett(side) {
+    return side.evaluate(() => {
+      const flate = document.querySelector(".oevekort-flate");
+      const kort = flate?.querySelector(":scope > button[aria-pressed]");
+      const knapp = (re) => [...(flate?.querySelectorAll("button") ?? [])].find((b) => re.test(b.textContent.trim()));
+      const r = (e) => {
+        if (!e) return null;
+        const b = e.getBoundingClientRect();
+        return { v: Math.round(b.left), h: Math.round(b.right), t: Math.round(b.top), b: Math.round(b.bottom), w: Math.round(b.width), hoeyde: Math.round(b.height) };
+      };
+      const maa = knapp(/^Må øve mer$/);
+      const kan = knapp(/^Kan$/);
+      return {
+        hand: document.documentElement.dataset.hand ?? null,
+        kort: r(kort),
+        maa: r(maa),
+        kan: r(kan),
+        forrige: r(knapp(/^← Forrige$/)),
+        neste: r(knapp(/^(Neste →|Ferdig)$/)),
+        pressed: [maa?.getAttribute("aria-pressed"), kan?.getAttribute("aria-pressed")],
+      };
+    });
+  }
+  function riktigOppsett(o, venstre) {
+    const { kort, maa, kan, forrige, neste } = o;
+    if (!kort || !maa || !kan || !forrige || !neste) return false;
+    const side = venstre ? Math.abs(maa.v - kort.v) <= 1 && Math.abs(kan.v - kort.v) <= 1 : Math.abs(maa.h - kort.h) <= 1 && Math.abs(kan.h - kort.h) <= 1;
+    return (
+      side &&
+      maa.b <= kan.t && kan.b <= kort.t && // «Må øve mer» over «Kan» over kortet
+      Math.abs(maa.w - kan.w) <= 1 && // like brede
+      [maa, kan, forrige, neste].every((k) => k.w >= 44 && k.hoeyde >= 44) &&
+      forrige.t >= kort.b && Math.abs(forrige.t - neste.t) <= 1 && forrige.h <= neste.v && // ved siden av hverandre under
+      o.pressed.every((p) => p === "true" || p === "false") &&
+      o.hand === (venstre ? "venstre" : null)
+    );
+  }
+  for (const [venstre, farge] of [
+    [false, "light"],
+    [false, "dark"],
+    [true, "light"],
+    [true, "dark"],
+  ]) {
+    const navn = `${venstre ? "venstrehendt" : "høyrehendt"}, ${farge === "dark" ? "mørk" : "lys"}`;
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 800 }, locale: "nb-NO", colorScheme: farge, isMobile: true, hasTouch: true });
+    await ctx.addCookies([...(await pc.context().cookies()), ...(venstre ? [handKake("venstre")] : [])]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    // Første tegning: HTML-en fra serveren har allerede valget, før noe skript kjører.
+    const html = await (await side.request.get(`${tekstUrl}/oevekort`)).text();
+    const htmlTagg = html.match(/<html[^>]*>/)?.[0] ?? "";
+    sjekk(
+      `bolk 9 (${navn}): HTML-en fra serveren ${venstre ? "har" : "har ikke"} data-hand="venstre"`,
+      htmlTagg.includes('data-hand="venstre"') === venstre,
+      htmlTagg.replace(/ class="[^"]*"/, ""),
+    );
+    await side.goto(`${tekstUrl}/oevekort`);
+    await side.locator(".oevekort-flate").waitFor();
+    const o = await oevekortOppsett(side);
+    sjekk(
+      `bolk 9, 375 px (${navn}): «Må øve mer» over «Kan» over kortet til ${venstre ? "venstre" : "høyre"}, like brede, og «Forrige» og «Neste» ved siden av hverandre under`,
+      riktigOppsett(o, venstre),
+      JSON.stringify(o),
+    );
+    // Tab-rekkefølgen: kortet, «Må øve mer», «Kan», «Forrige», «Neste». På første
+    // kort er «Forrige» låst og hoppes over, så det sjekkes på et kort med en før.
+    if (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled()) {
+      await side.locator(".oevekort-nav button", { hasText: /^(Neste →|Ferdig)$/ }).click();
+    }
+    const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
+    if ((await kortet.count()) === 1) {
+      await kortet.focus();
+      const rekke = [];
+      for (let i = 0; i < 4; i++) {
+        await side.keyboard.press("Tab");
+        rekke.push(await side.evaluate(() => document.activeElement?.textContent.trim() ?? ""));
+      }
+      sjekk(
+        `bolk 9 (${navn}): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste»`,
+        rekke.slice(0, 3).join(" | ") === "Må øve mer | Kan | ← Forrige" && /^(Neste →|Ferdig)$/.test(rekke[3]),
+        rekke.join(" | "),
+      );
+    } else {
+      sjekk(`bolk 9 (${navn}): Tab-rekkefølgen`, false, "fant ikke kortet etter «Neste»");
+    }
+    await ingenSiderulling(side, `øvekort 375 px (${navn})`);
+    await axe(side, `øvekort 375 px (${navn})`);
+    // 320 px, også med 200 % tekst: samme plassering, ingen sidelengs rulling.
+    await side.setViewportSize({ width: 320, height: 700 });
+    for (const stor of [false, true]) {
+      await side.goto(`${tekstUrl}/oevekort`);
+      await side.locator(".oevekort-flate").waitFor();
+      if (stor) await side.addStyleTag({ content: "html { font-size: 200% !important; }" });
+      const smalt = `320 px${stor ? ", 200 % tekst" : ""}`;
+      const o2 = await oevekortOppsett(side);
+      sjekk(`bolk 9, ${smalt} (${navn}): samme plassering`, riktigOppsett(o2, venstre), JSON.stringify(o2));
+      await ingenSiderulling(side, `øvekort ${smalt} (${navn})`);
+    }
+    await ctx.close();
+  }
+  // Ugyldig verdi behandles som ingen: standardoppsettet.
+  {
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 800 }, locale: "nb-NO" });
+    await ctx.addCookies([...(await pc.context().cookies()), handKake("hoeyre")]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${tekstUrl}/oevekort`);
+    await side.locator(".oevekort-flate").waitFor();
+    const o = await oevekortOppsett(side);
+    sjekk("bolk 9: hand=hoeyre ignoreres, og merkeknappene står til høyre", riktigOppsett(o, false), JSON.stringify(o));
+    await ctx.close();
+  }
+  // Skjemaet på /konto: en avkrysningsboks, «Lagre» og informasjonskapselen, med og uten skript.
+  for (const js of [true, false]) {
+    const hvordan = js ? "med JavaScript" : "uten JavaScript";
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 740 }, locale: "nb-NO", javaScriptEnabled: js });
+    await ctx.addCookies(await pc.context().cookies());
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${APP}/konto`);
+    const skjema = side.locator("form:has(legend:has-text('Øvekortene'))");
+    const boks = skjema.locator("input[type=checkbox][name=hand]");
+    sjekk(
+      `venstrehendt (${hvordan}): «Venstrehendt» er en avkrysningsboks i en fieldset med legend, ikke valgt`,
+      (await skjema.locator("fieldset > legend", { hasText: "Øvekortene" }).count()) === 1 &&
+        (await skjema.locator("label", { hasText: "Venstrehendt" }).count()) === 1 &&
+        (await boks.count()) === 1 &&
+        !(await boks.isChecked()),
+    );
+    const melding = (tekst) => side.locator("p:visible", { hasText: new RegExp(`^${tekst}$`) });
+    await skjema.locator("label", { hasText: "Venstrehendt" }).click();
+    await skjema.locator("button[type=submit]", { hasText: "Lagre" }).click();
+    await melding("Lagret: Venstrehendt\\.").waitFor();
+    await side.waitForLoadState("load");
+    const kake = (await ctx.cookies()).find((c) => c.name === "hand");
+    const dager = kake ? Math.round((kake.expires - Date.now() / 1000) / 86400) : 0;
+    sjekk(
+      `venstrehendt (${hvordan}): kryss + «Lagre» gir hand=venstre (SameSite=Lax, httpOnly, ett år), og boksen er krysset`,
+      kake?.value === "venstre" && kake.sameSite === "Lax" && kake.httpOnly && dager >= 364 && dager <= 366 && (await boks.isChecked()),
+      kake ? `${kake.value}, ${kake.sameSite}, ${dager} dager` : "ingen informasjonskapsel",
+    );
+    if (js) await axe(side, "konto med «Venstrehendt» valgt");
+    await side.goto(`${tekstUrl}/oevekort`);
+    await side.locator(".oevekort-flate").waitFor();
+    const o = await oevekortOppsett(side);
+    sjekk(`venstrehendt (${hvordan}): øvekortene har merkeknappene til venstre etter lagring`, riktigOppsett(o, true), JSON.stringify(o));
+    await side.goto(`${APP}/konto`);
+    await skjema.locator("label", { hasText: "Venstrehendt" }).click();
+    await skjema.locator("button[type=submit]", { hasText: "Lagre" }).click();
+    await melding("Lagret: Ikke venstrehendt\\.").waitFor();
+    await side.waitForLoadState("load");
+    sjekk(
+      `venstrehendt (${hvordan}): uten kryss + «Lagre» slettes informasjonskapselen`,
+      !(await ctx.cookies()).some((c) => c.name === "hand") && !(await boks.isChecked()),
     );
     await ctx.close();
   }

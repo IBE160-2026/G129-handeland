@@ -492,13 +492,19 @@ async function enKjoering(nettleser) {
   sjekk("14", "testtekst A slettet", etter === forFoer - 1, `${forFoer} → ${etter} tekster`);
   sjekk("14", "raden er borte fra Samlingen", (await raden.count()) === 0);
   // Et temavalg på en delt PC skal ikke arves av neste elev (bolk 4).
-  await pc.context().addCookies([{ name: "tema", value: "moerk", url: APP }]);
+  // Det samme gjelder «Venstrehendt» (design bolk 9).
+  await pc.context().addCookies([
+    { name: "tema", value: "moerk", url: APP },
+    { name: "hand", value: "venstre", url: APP },
+  ]);
   await pc.goto(`${APP}/konto`);
   await pc.click('button:has-text("Logg ut")');
   await pc.waitForURL(/\/logg-inn/);
   sjekk("14", "logget ut", true);
   const temaEtter = (await pc.context().cookies()).find((c) => c.name === "tema");
   sjekk("14", "temakapselen er slettet ved utlogging", !temaEtter, temaEtter ? `tema=${temaEtter.value}` : "");
+  const handEtter = (await pc.context().cookies()).find((c) => c.name === "hand");
+  sjekk("14", "håndkapselen er slettet ved utlogging", !handEtter, handEtter ? `hand=${handEtter.value}` : "");
   await pc.context().close();
 }
 

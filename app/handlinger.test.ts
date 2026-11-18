@@ -735,24 +735,68 @@ describe("lagreAktivering: forkunnskapen (FR-6, endret 17.11)", () => {
 });
 
 /* ------------------------------------------------------------------ *
- * Temaet ved utlogging (bolk 4)
+ * Temaet og «Venstrehendt» ved utlogging (bolk 4 og design bolk 9)
  * ------------------------------------------------------------------ */
 
-describe("slettTemaHandling", () => {
+describe("slettEnhetsvalgHandling", () => {
   test("sletter temakapselen, også uten innlogging (etter signOut)", async () => {
     tilgang.mockImplementation(async () => {
       throw new Omdirigert("/logg-inn");
     });
     kapsler.set("tema", "moerk");
-    await h.slettTemaHandling();
+    await h.slettEnhetsvalgHandling();
     expect(kapsler.get("tema")).toBeUndefined();
     expect(revalidatePath).toHaveBeenCalledOnce();
     expect(tilgang).not.toHaveBeenCalled();
   });
 
+  test("sletter håndkapselen, også uten innlogging (etter signOut)", async () => {
+    tilgang.mockImplementation(async () => {
+      throw new Omdirigert("/logg-inn");
+    });
+    kapsler.set("hand", "venstre");
+    await h.slettEnhetsvalgHandling();
+    expect(kapsler.get("hand")).toBeUndefined();
+    expect(revalidatePath).toHaveBeenCalledOnce();
+    expect(tilgang).not.toHaveBeenCalled();
+  });
+
+  test("sletter begge kapslene i samme kall", async () => {
+    kapsler.set("tema", "lys");
+    kapsler.set("hand", "venstre");
+    await h.slettEnhetsvalgHandling();
+    expect(kapsler.verdier.size).toBe(0);
+    expect(revalidatePath).toHaveBeenCalledOnce();
+  });
+
   test("uten kapsel gjør den ingenting, og hurtigbufferen står", async () => {
-    await h.slettTemaHandling();
+    await h.slettEnhetsvalgHandling();
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("velgHandHandling", () => {
+  test("kryss for «Venstrehendt» setter kapselen", async () => {
+    const data = new FormData();
+    data.set("hand", "venstre");
+    await expect(h.velgHandHandling(data)).rejects.toBeInstanceOf(Omdirigert);
+    expect(kapsler.get("hand")).toEqual({ name: "hand", value: "venstre" });
+  });
+
+  test("uten kryss sendes ingenting, og kapselen slettes", async () => {
+    kapsler.set("hand", "venstre");
+    await expect(h.velgHandHandling(new FormData())).rejects.toBeInstanceOf(Omdirigert);
+    expect(kapsler.get("hand")).toBeUndefined();
+  });
+
+  test("krever innlogging", async () => {
+    tilgang.mockImplementation(async () => {
+      throw new Omdirigert("/logg-inn");
+    });
+    const data = new FormData();
+    data.set("hand", "venstre");
+    await expect(h.velgHandHandling(data)).rejects.toMatchObject({ adresse: "/logg-inn" });
+    expect(kapsler.get("hand")).toBeUndefined();
   });
 });
 

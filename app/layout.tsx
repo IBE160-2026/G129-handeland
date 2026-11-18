@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Atkinson_Hyperlegible, Instrument_Serif, Quicksand } from "next/font/google";
 import { cookies } from "next/headers";
+import { HAND_KAPSEL, tolkHand } from "../data/hand";
 import { TEMA_KAPSEL, tolkTema } from "../data/tema";
 import "./globals.css";
 import { TenkerVert } from "./komponenter/Tenker";
@@ -40,7 +41,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // overalt). Leses her på serveren, så første tegning har riktig modus og
   // ingenting blinker. Uten gyldig valg står ingen data-tema, og siden følger
   // systemet som før. color-scheme følger data-tema i globals.css.
-  const tema = tolkTema((await cookies()).get(TEMA_KAPSEL)?.value);
+  const kapsler = await cookies();
+  const tema = tolkTema(kapsler.get(TEMA_KAPSEL)?.value);
+  // «Venstrehendt» (design bolk 9) på samme måte: `data-hand="venstre"`
+  // speiler øvekortene fra første tegning. Uten valg står ingen data-hand.
+  const hand = tolkHand(kapsler.get(HAND_KAPSEL)?.value);
   return (
     // `lang="nb"` er ikke kosmetikk: skjermlesere velger uttale ut fra den,
     // og engelsk uttale av norsk fagtekst er ubrukelig for den eleven appen
@@ -48,6 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="nb"
       data-tema={tema ?? undefined}
+      data-hand={hand ?? undefined}
       className={`${atkinson.variable} ${instrument.variable} ${quicksand.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bakgrunn font-sans text-tekst">

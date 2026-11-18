@@ -11,7 +11,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
-import { slettTemaHandling } from "../handlinger";
+import { slettEnhetsvalgHandling } from "../handlinger";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
@@ -84,22 +84,22 @@ const FELT =
 const KNAPP = KNAPP_PRIMAER;
 
 /**
- * Temakapselen slettes ved utlogging og sletting av kontoen, så neste elev
- * på en delt PC får «Følg enheten» på landingssiden. Feiler det, går
- * utloggingen likevel videre: et arvet tema er ikke verdt å stoppe den for.
- * Etter 3 sekunder gis det opp, så utloggingen aldri henger.
+ * Tema- og håndkapselen slettes ved utlogging og sletting av kontoen, så
+ * neste elev på en delt PC får «Følg enheten» og øvekortene som vanlig.
+ * Feiler det, går utloggingen likevel videre: et arvet valg er ikke verdt å
+ * stoppe den for. Etter 3 sekunder gis det opp, så utloggingen aldri henger.
  */
-async function glemTema() {
+async function glemEnhetsvalg() {
   let tidsgrense: ReturnType<typeof setTimeout> | undefined;
   try {
     await Promise.race([
-      slettTemaHandling(),
+      slettEnhetsvalgHandling(),
       new Promise((_, nei) => {
         tidsgrense = setTimeout(() => nei(new Error("tidsgrensen på 3 s")), 3000);
       }),
     ]);
   } catch (e) {
-    console.error("Kunne ikke slette temavalget:", e);
+    console.error("Kunne ikke slette valgene på enheten:", e);
   } finally {
     clearTimeout(tidsgrense);
   }
@@ -228,10 +228,10 @@ export function LoggUtKnapp() {
     setFeil(null);
     try {
       // signOut kan svare med en feil uten å kaste. Da er eleven fortsatt
-      // innlogget, og verken temaet slettes eller siden byttes.
+      // innlogget, og verken valgene slettes eller siden byttes.
       const { error } = await authKlient.signOut();
       if (error) return setFeil(somFeil(error));
-      await glemTema();
+      await glemEnhetsvalg();
       router.push("/logg-inn");
       router.refresh();
     } catch {
@@ -275,8 +275,8 @@ export function SlettKontoSkjema() {
       setVenter(false);
       return setFeil(somFeil(error));
     }
-    // Knappen står låst til siden byttes, også mens temaet slettes.
-    await glemTema();
+    // Knappen står låst til siden byttes, også mens valgene slettes.
+    await glemEnhetsvalg();
     router.push("/logg-inn");
     router.refresh();
   }

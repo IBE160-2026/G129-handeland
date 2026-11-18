@@ -11,6 +11,11 @@
  *
  * Kort, merking og den utfellbare kilden er knapper eller summary-elementer,
  * så runden kan tas med tastatur alene (§5).
+ *
+ * Knappene for én hånd (design runde 2, bolk 9): «Må øve mer» og «Kan» står
+ * over hverandre, over kortet til høyre (til venstre med «Venstrehendt»), og
+ * «Forrige» og «Neste» ved siden av hverandre under. Se .oevekort-flate i
+ * globals.css.
  */
 
 import { useMemo, useState } from "react";
@@ -131,49 +136,54 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
         innholdet for skjermleseren, og da hørte eleven «Snu kortet og se
         forklaringen» — aldri selve fagordet. Funnet av axe-core 16.10.
       */}
-      <button
-        type="button"
-        onClick={() => setSnudd((s) => !s)}
-        aria-pressed={snudd}
-        className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
-      >
-        <div aria-live="polite">
-          {!snudd ? (
-            <div className="flex min-h-44 flex-col items-center justify-center text-center">
-              <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
-              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
-            </div>
-          ) : (
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                {gjeldende.uttrykk}
-              </p>
-              <p className="mt-2 text-lg">{gjeldende.forklaring}</p>
-            </div>
-          )}
-        </div>
-      </button>
-      {/*
-        FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
-        kortet, ikke på baksiden (telefontest 9.11: kortet ble tungt å lese).
-        Den står under kortet fordi kortet selv er en knapp, og en knapp kan
-        ikke inneholde en annen interaktiv del. Den forsvinner når kortet snus
-        tilbake eller eleven går til et annet kort, så den er alltid lukket
-        på et nytt kort.
-      */}
-      {snudd && (
-        <div className="mt-3">
-          <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
-        </div>
-      )}
-
-      {feil && <Feilmelding {...feil} />}
-
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <button type="button" onClick={() => gaaTil(indeks - 1)} disabled={indeks === 0} className={KNAPP}>
-          ← Forrige
+      <div className="oevekort-flate">
+        <button
+          type="button"
+          onClick={() => setSnudd((s) => !s)}
+          aria-pressed={snudd}
+          className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
+        >
+          <div aria-live="polite">
+            {!snudd ? (
+              <div className="flex min-h-44 flex-col items-center justify-center text-center">
+                <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
+                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  {gjeldende.uttrykk}
+                </p>
+                <p className="mt-2 text-lg">{gjeldende.forklaring}</p>
+              </div>
+            )}
+          </div>
         </button>
-        <div className="flex flex-wrap gap-3">
+        {/*
+          FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
+          kortet, ikke på baksiden (telefontest 9.11: kortet ble tungt å lese).
+          Den står under kortet fordi kortet selv er en knapp, og en knapp kan
+          ikke inneholde en annen interaktiv del. Den forsvinner når kortet snus
+          tilbake eller eleven går til et annet kort, så den er alltid lukket
+          på et nytt kort.
+        */}
+        {snudd && (
+          <div className="mt-3">
+            <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
+          </div>
+        )}
+
+        {feil && <Feilmelding {...feil} />}
+
+        {/*
+          Design runde 2, bolk 9: merkeknappene står over hverandre, over kortet
+          til høyre, der tommelen når dem. `data-hand="venstre"` på <html>
+          («Venstrehendt» i Konto) flytter dem til venstre. I DOM-en står de
+          ETTER kortet, så Tab og skjermleseren tar kortet først, så merkingen,
+          så «Forrige» og «Neste». Plasseringen over kortet er bare CSS
+          (`order` i .oevekort-flate, globals.css).
+        */}
+        <div role="group" aria-label="Merk kortet" className="oevekort-merk">
           <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={knapp(m === "maa_oeve")}>
             Må øve mer
           </button>
@@ -181,9 +191,15 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
             Kan
           </button>
         </div>
-        <button type="button" onClick={() => gaaTil(indeks + 1)} className={KNAPP}>
-          {indeks === runde.length - 1 ? "Ferdig" : "Neste →"}
-        </button>
+
+        <div className="oevekort-nav">
+          <button type="button" onClick={() => gaaTil(indeks - 1)} disabled={indeks === 0} className={KNAPP}>
+            ← Forrige
+          </button>
+          <button type="button" onClick={() => gaaTil(indeks + 1)} className={KNAPP}>
+            {indeks === runde.length - 1 ? "Ferdig" : "Neste →"}
+          </button>
+        </div>
       </div>
     </section>
   );
