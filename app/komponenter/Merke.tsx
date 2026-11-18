@@ -3,7 +3,13 @@
  *
  * Kraftige firkantede briller i en 120 × 120-flate: ramme 8,5, neserom 10,
  * neseinnhakk 14. Banene er portert uendret fra mockups/merke.js, og
- * bevegelsen ligger i globals.css (klassene «tenker», «slutt» og «ferdig»).
+ * bevegelsen ligger i globals.css (klassene «tenker», «slutt», «ferdig» og
+ * «unnskyld»).
+ *
+ * «unnskyld» (design runde 2, bolk 10): Buddy ser ned, pupillene flakker sakte
+ * fra side til side, og bekymrede bryn bak glassene er løftet inn mot midten.
+ * Brynene tegnes over glasset og under rammen. Bare for ansiktet. Brukes i
+ * merknaden i gjennomsynet for tekster lest fra bilder.
  *
  * Tre varianter:
  *   ansikt   brillene med øyne, figuren
@@ -21,7 +27,7 @@
  */
 
 export type MerkeVariant = "ansikt" | "b" | "briller";
-export type MerkeTilstand = "tenker" | "slutt" | "ferdig";
+export type MerkeTilstand = "tenker" | "slutt" | "ferdig" | "unnskyld";
 
 const GLASS_V = "M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z";
 const GLASS_H = "M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z";
@@ -46,11 +52,18 @@ export function BuddyMerke({
   const erMini = mini && !erB;
   const klasse = erB ? "ferdig" : (tilstand ?? "");
   const oyne = variant === "ansikt";
+  const bryn = oyne && tilstand === "unnskyld";
   const figur = (
     <g className="flytt">
       <g className="snu">
         <path className="glass" d={GLASS_V} />
         <path className="glass" d={GLASS_H} />
+        {bryn && (
+          <g className="bryn">
+            <path className="bryn-v" d="M24 52 Q34 50 46 46" />
+            <path className="bryn-h" d="M74 46 Q86 50 96 52" />
+          </g>
+        )}
         {oyne && (
           <g className="oyne">
             <circle className="oye" cx="33.5" cy="56" r="5.5" />

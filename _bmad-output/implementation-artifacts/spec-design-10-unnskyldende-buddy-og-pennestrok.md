@@ -2,7 +2,8 @@
 title: 'Design runde 2, bolk 10: unnskyldende Buddy i gjennomsynet og rosa pennestrøk under tekstnavnet'
 type: 'feature'
 created: '2026-11-18'
-status: 'ready-for-dev'
+status: 'in-review'
+baseline_commit: '0753e833038ab4484580ebed4325491eb16fb875'
 route: 'dispatch'
 review_loop_iteration: 0
 context: []
@@ -54,11 +55,11 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `Merke.tsx`, `globals.css` -- det unnskyldende uttrykket
-- [ ] `gjennomsyn/page.tsx` -- Buddy i merknaden
-- [ ] felles tusj-komponent eller -klasse, landingssiden og sidetitlene
-- [ ] `maaling/sjekk-tilgjengelighet.mjs` -- sjekkene over
-- [ ] DESIGN.md, EXPERIENCE.md
+- [x] `Merke.tsx`, `globals.css` -- det unnskyldende uttrykket
+- [x] `gjennomsyn/page.tsx` -- Buddy i merknaden
+- [x] felles tusj-komponent eller -klasse, landingssiden og sidetitlene
+- [x] `maaling/sjekk-tilgjengelighet.mjs` -- sjekkene over
+- [x] DESIGN.md, EXPERIENCE.md
 
 **Acceptance Criteria:**
 - Given en tekst lest fra bilder, when gjennomsynet åpnes, then står Buddy med blikket ned og bekymrede bryn i merknaden, og med redusert bevegelse står Buddy stille.
@@ -67,7 +68,11 @@ context: []
 
 ## Implementation Notes
 
+- Byggeagenten stoppet i verifiseringen (18.11). Hovedøkten fullførte. Den nye sjekken av quizen på 320 px med 200 % tekst fant sidelengs rulling som ikke kom av strøket: `fieldset` er som standard min-content bred, og svaralternativene i quizen er flex-barn uten `min-w-0`. Rettet med en felles regel for `fieldset`/`legend` i globals.css og `min-w-0 [overflow-wrap:anywhere]` på alternativene i Quiz.tsx.
+
 ## Spec Change Log
+
+
 
 ## Review Triage Log
 

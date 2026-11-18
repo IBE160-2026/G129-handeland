@@ -149,6 +149,74 @@ h2 {
 }
 
 /*
+ * {components.highlighter}, markeringstusjen (design runde 2, bolk 10, variant
+ * A): en rosa tusj bak den nederste delen av ordet, med ujevne ender og litt
+ * bølge. Brukes på «leser» på landingssiden og på tekstnavnet i sidetitlene
+ * (Tusj.tsx), aldri på lenker eller knapper.
+ * Hvert ord er en egen boks, så hver linje i et langt navn får sin strek.
+ * Ett ord som er for langt for linjen, brytes (overflow-wrap) i stedet for å
+ * gi sidelengs rulling, og da står streken under den nederste linjen.
+ * Streken stikker 0,12 em ut på hver side; det er mindre enn sidemargen.
+ * Den tegnes inn én gang når siden lastes, ord for ord (clip-path, 0,55 s), og
+ * står bare der med redusert bevegelse. Fargen er --lb-tusj, så kontrasten
+ * mellom teksten og streken er den samme som med den jevne stripa før.
+ */
+.tusj {
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.tusj > svg {
+  position: absolute;
+  z-index: -1;
+  left: -0.12em;
+  bottom: 0.02em;
+  width: calc(100% + 0.24em);
+  height: 0.48em;
+  overflow: visible;
+  pointer-events: none;
+  fill: var(--lb-tusj);
+  animation: tusj-tegn 0.55s cubic-bezier(0.3, 0.7, 0.3, 1) calc(var(--tusj-nr, 0) * 0.12s) both;
+}
+@keyframes tusj-tegn {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tusj > svg {
+    animation: none;
+  }
+}
+/* Kontrastmodus: en vanlig understrek, og SVG-en skjules (fyllet ville ikke fulgt systemfargene). */
+@media (forced-colors: active) {
+  .tusj {
+    text-decoration: underline 0.08em;
+  }
+  .tusj > svg {
+    display: none;
+  }
+}
+
+/*
+ * Et fieldset er som standard minst like bredt som innholdet (min-content), så
+ * et langt ord i en legend skjøv quizen ut av vinduet på 320 px med 200 % tekst
+ * (bolk 10-sjekken, 18.11). Nå krymper det, og ordet brytes.
+ */
+fieldset {
+  min-inline-size: 0;
+}
+legend {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/*
  * {components.focus-ring}: én regel for hele appen. 3 px i primærfargen med
  * 2 px avstand. Den gamle regelen brukte currentColor og ble usynlig på
  * fylte knapper.
@@ -434,9 +502,80 @@ h2 {
   }
 }
 
+/*
+ * .unnskyld (design runde 2, bolk 10, variant B i runde-11-buddy-og-pennestrok.html):
+ * Buddy ser ned og beklager seg, i merknaden i gjennomsynet for tekster lest
+ * fra bilder. Pupillene står nede og flakker sakte fra side til side (3,2 s),
+ * og brynene bak glassene (Merke.tsx) er løftet inn mot midten og beveger seg
+ * litt i takt med blikket. Brynene er i primærfargen, som rammen, også i mørk
+ * modus. Med redusert bevegelse står pupillene nede og brynene stille.
+ */
+.merke .bryn path {
+  stroke: var(--lb-primaer);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  fill: none;
+  transform-box: view-box;
+}
+.merke .bryn-v {
+  transform-origin: 46px 46px;
+}
+.merke .bryn-h {
+  transform-origin: 74px 46px;
+}
+.merke.unnskyld .oyne {
+  transform: translate(0, 7px);
+  animation: u-flakk 3.2s ease-in-out infinite;
+}
+.merke.unnskyld .bryn-v {
+  animation: u-bryn-v 3.2s ease-in-out infinite;
+}
+.merke.unnskyld .bryn-h {
+  animation: u-bryn-h 3.2s ease-in-out infinite;
+}
+@keyframes u-flakk {
+  0%,
+  100% {
+    transform: translate(-2.5px, 7px);
+  }
+  40%,
+  55% {
+    transform: translate(2.5px, 7.5px);
+  }
+}
+@keyframes u-bryn-v {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  45% {
+    transform: rotate(-4deg);
+  }
+}
+@keyframes u-bryn-h {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  45% {
+    transform: rotate(4deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .merke.unnskyld .oyne {
+    animation: none;
+    transform: translate(0, 7px);
+  }
+  .merke.unnskyld .bryn-v,
+  .merke.unnskyld .bryn-h {
+    animation: none;
+  }
+}
+
 /* I kontrastmodus tegnes merket i systemfargene, så det ikke forsvinner. */
 @media (forced-colors: active) {
-  .merke .ramme {
+  .merke .ramme,
+  .merke .bryn path {
     stroke: CanvasText;
   }
   .merke .glass {
@@ -1455,22 +1594,9 @@ body:has(#landingsside) .meny-landing {
   overflow-wrap: break-word;
 }
 
-/* {components.highlighter}: én tusjstrek, på «leser» i heroen. */
+/* «leser» i heroen, med tusjen (Tusj.tsx, .tusj under). */
 .ls-tusj {
-  position: relative;
-  isolation: isolate;
   font-style: italic;
-}
-.ls-tusj::after {
-  content: "";
-  position: absolute;
-  inset-inline: -0.06em;
-  bottom: 0.08em;
-  height: 0.34em;
-  z-index: -1;
-  border-radius: 0.2em;
-  background: var(--lb-tusj);
-  transform: rotate(-1.5deg);
 }
 
 /* --- Hero ---------------------------------------------------------- */
@@ -2002,11 +2128,8 @@ button.ls-fagord[aria-expanded="true"] {
   }
 }
 
-/* Kontrastmodus: tusjen, fagordene og linjen beholder en strek. */
+/* Kontrastmodus: fagordene og linjen beholder en strek (tusjen: se .tusj øverst). */
 @media (forced-colors: active) {
-  .ls-tusj {
-    text-decoration: underline 0.08em;
-  }
   .ls-fagord {
     text-decoration-color: CanvasText;
   }
@@ -2065,9 +2188,19 @@ button.ls-fagord[aria-expanded="true"] {
 :root[data-hand="venstre"] .oevekort-merk {
   align-self: flex-start;
 }
+/* Feilmeldingen fra merkingen står over kortet, rett etter knappene eleven trykket på. */
+.oevekort-feil {
+  order: -1;
+  margin-top: 0.75rem;
+}
 .oevekort-nav {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+/* Med stor tekst på 320 px brytes «← Forrige» inne i knappen i stedet for å flyte ut. */
+.oevekort-nav > button {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }

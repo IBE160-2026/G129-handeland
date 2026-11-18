@@ -39,6 +39,7 @@ import {
 } from "../../../../morsmaal/elementer";
 import { KVALITETSSIKRET } from "../../../../morsmaal/spraak";
 import { MarkertAvsnitt } from "../../../komponenter/MarkertAvsnitt";
+import { Tusj } from "../../../komponenter/Tusj";
 import { HentOversettelse, MorsmaalVelger } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { UthevAvsnitt } from "../../../komponenter/UthevAvsnitt";
@@ -151,7 +152,7 @@ export default async function Lesing({
         {stegtekst(tekst.vei, "lesing")} — les teksten
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-        {tekst.tittel}
+        <Tusj>{tekst.tittel}</Tusj>
       </h1>
       {/* Telefontest 9.11: eleven skal kunne bytte språk her, uten å gå til kontosiden. */}
       <div className="mt-3">

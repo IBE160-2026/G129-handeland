@@ -80,7 +80,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
             type="submit"
             className="mt-3 min-h-11 rounded-md border border-slate-500 px-4 py-2 font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
           >
-            Lagre
+            Lagre<span className="sr-only"> utseendet</span>
           </button>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
             Valget gjelder denne enheten. «Følg enheten» bruker lys eller mørk modus etter innstillingen på
@@ -99,20 +99,20 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
           <fieldset>
             <legend className="font-medium">Øvekortene</legend>
             <label className="mt-2 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border border-slate-500 px-3 has-[:checked]:border-primaer has-[:checked]:ring-1 has-[:checked]:ring-primaer has-[:checked]:font-bold dark:border-slate-400">
-              <input type="checkbox" name="hand" value="venstre" defaultChecked={venstrehendt} />
+              <input type="checkbox" name="hand" value="venstre" defaultChecked={venstrehendt} aria-describedby="hand-hjelp" />
               Venstrehendt
             </label>
+            <p id="hand-hjelp" className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              «Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
+              gjelder denne enheten.
+            </p>
           </fieldset>
           <button
             type="submit"
             className="mt-3 min-h-11 rounded-md border border-slate-500 px-4 py-2 font-bold hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
           >
-            Lagre
+            Lagre<span className="sr-only"> valget for øvekortene</span>
           </button>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-            «Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
-            gjelder denne enheten.
-          </p>
         </form>
         <LagretMelding
           key={`hand-${lagringsnr}`}

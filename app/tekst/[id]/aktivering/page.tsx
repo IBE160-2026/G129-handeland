@@ -33,6 +33,7 @@ import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
 import { MERKENAVN, MERKESPOERSMAAL } from "../../../../tekst/forkunnskap";
 import { lagOversettelse, lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema, LaasPaaNyttSkjema } from "../../../komponenter/Skjemaer";
+import { Tusj } from "../../../komponenter/Tusj";
 import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Aktivering({
@@ -100,7 +101,7 @@ export default async function Aktivering({
         {stegtekst(tekst.vei, "aktivering")} — før du leser
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-        {tekst.tittel}
+        <Tusj>{tekst.tittel}</Tusj>
       </h1>
 
       {visSkjema && (

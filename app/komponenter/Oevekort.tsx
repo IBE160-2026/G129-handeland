@@ -160,28 +160,14 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
           </div>
         </button>
         {/*
-          FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
-          kortet, ikke på baksiden (telefontest 9.11: kortet ble tungt å lese).
-          Den står under kortet fordi kortet selv er en knapp, og en knapp kan
-          ikke inneholde en annen interaktiv del. Den forsvinner når kortet snus
-          tilbake eller eleven går til et annet kort, så den er alltid lukket
-          på et nytt kort.
-        */}
-        {snudd && (
-          <div className="mt-3">
-            <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
-          </div>
-        )}
-
-        {feil && <Feilmelding {...feil} />}
-
-        {/*
           Design runde 2, bolk 9: merkeknappene står over hverandre, over kortet
           til høyre, der tommelen når dem. `data-hand="venstre"` på <html>
           («Venstrehendt» i Konto) flytter dem til venstre. I DOM-en står de
           ETTER kortet, så Tab og skjermleseren tar kortet først, så merkingen,
-          så «Forrige» og «Neste». Plasseringen over kortet er bare CSS
-          (`order` i .oevekort-flate, globals.css).
+          så kilden (når kortet er snudd), så «Forrige» og «Neste». Plasseringen
+          over kortet er bare CSS (`order` i .oevekort-flate, globals.css).
+          Feilmeldingen fra merkingen står rett etter knappene, og over kortet
+          sammen med dem, så den havner ved knappen eleven trykket på.
         */}
         <div role="group" aria-label="Merk kortet" className="oevekort-merk">
           <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={knapp(m === "maa_oeve")}>
@@ -191,6 +177,24 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
             Kan
           </button>
         </div>
+        {feil && (
+          <div className="oevekort-feil">
+            <Feilmelding {...feil} />
+          </div>
+        )}
+
+        {/*
+          FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
+          kortet, ikke på baksiden (telefontest 9.11: kortet ble tungt å lese).
+          Kortet er selv en knapp og kan ikke inneholde en annen interaktiv del.
+          Den forsvinner når kortet snus tilbake eller eleven går til et annet
+          kort, så den er alltid lukket på et nytt kort.
+        */}
+        {snudd && (
+          <div className="mt-3">
+            <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
+          </div>
+        )}
 
         <div className="oevekort-nav">
           <button type="button" onClick={() => gaaTil(indeks - 1)} disabled={indeks === 0} className={KNAPP}>

@@ -8,6 +8,7 @@ import { tilgang } from "../../../../data/konto";
 import { hentOevekort } from "../../../../data/oevekort";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { Oevekort } from "../../../komponenter/Oevekort";
+import { Tusj } from "../../../komponenter/Tusj";
 
 export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oevekort">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -26,7 +27,7 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight">{tekst.tittel}</h1>
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
 
       <div className="mt-8">
         {sett.status === "klar" ? (

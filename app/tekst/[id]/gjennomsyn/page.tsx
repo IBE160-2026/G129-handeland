@@ -22,6 +22,8 @@ import { delIAvsnitt } from "../../../../tekst/avsnittsdeling";
 import { laasOgGenerer } from "../../../handlinger";
 import { GjennomsynSkjema } from "../../../komponenter/Skjemaer";
 import { Innlesingsrapport } from "../../../komponenter/Innlesingsrapport";
+import { BuddyMerke } from "../../../komponenter/Merke";
+import { Tusj } from "../../../komponenter/Tusj";
 import { stegtekst } from "../../../../tekst/steg";
 
 export default async function Gjennomsyn({
@@ -58,7 +60,7 @@ export default async function Gjennomsyn({
         {stegtekst(tekst.vei, "gjennomsyn")} — se gjennom
       </p>
       <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-        {tekst.tittel}
+        <Tusj>{tekst.tittel}</Tusj>
       </h1>
 
       {/*
@@ -77,12 +79,20 @@ export default async function Gjennomsyn({
       {/*
         FR-45: bildeuttrekket er umålt, og det sies der eleven leser teksten.
         Utviklerens tekst fra telefontesten 18.11, med oppfordringen om å rette.
+        Bolk 10: Buddy står ved siden av og beklager seg (ser ned, bekymrede
+        bryn). Merket er pynt (aria-hidden); teksten bærer beskjeden.
       */}
       {tekst.vei === "bilde" && (
-        <p role="note" className="mt-6 rounded-md border border-amber-400 bg-amber-50 p-4 text-sm dark:border-amber-600 dark:bg-amber-950/40">
-          Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er
-          lik teksten du tok bilde av. <strong>Rett det som er feil før du går videre.</strong>
-        </p>
+        <div
+          role="note"
+          className="mt-6 flex items-start gap-3.5 rounded-md border border-amber-400 bg-amber-50 p-4 text-sm dark:border-amber-600 dark:bg-amber-950/40"
+        >
+          <BuddyMerke variant="ansikt" tilstand="unnskyld" storrelse={64} />
+          <p className="min-w-0">
+            Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er
+            lik teksten du tok bilde av. <strong>Rett det som er feil før du går videre.</strong>
+          </p>
+        </div>
       )}
 
       <section className="mt-8">

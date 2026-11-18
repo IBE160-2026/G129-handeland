@@ -219,9 +219,12 @@ components:
     radius: '{rounded.lg}'
     term: '{typography.term}'
   highlighter:
-    background: '{colors.highlighter}'
-    height: 0.34em
-    rotate: -1.5deg
+    fill: '{colors.highlighter}'  # i mørk modus {colors.highlighter-dark}
+    shape: tusjstrøk (SVG, preserveAspectRatio none), ujevne ender og litt bølge  # bolk 10, variant A
+    height: 0.48em                # bak den nederste delen av ordet, 0,02 em over bunnen
+    overhang: 0.12em              # på hver side
+    drawIn: clip-path 0.55s, én gang når siden lastes  # står bare der med redusert bevegelse
+    forcedColors: understrek 0.08em
   logo-mark:
     stroke: '{colors.primary}'
     strokeWidth: 8.5 av 120
@@ -230,6 +233,8 @@ components:
     viewBox: -4 -4 128 128      # dekker hele avslutningen, så B-en aldri klippes
     miniViewBox: 0 35 120 51    # mini: beskåret til brillene, krymper til 0,48 under avslutningen
     miniSizes: 20px, 22px, 28px, 30px, 36px # mini-Buddy M1: høyden på brillene (knapp, linje, pille, fagorddemoen og hilsenen på telefon)
+    expressions: tenker, slutt, ferdig, unnskyld  # unnskyld (bolk 10): ser ned, bekymrede bryn
+    brow: '{colors.primary}', strek 4.5 av 120  # bare i «unnskyld», over glasset og under rammen
   wordmark:
     lese: '{typography.wordmark-lese}'
     uddy: '{typography.wordmark-uddy}'
@@ -342,7 +347,7 @@ Avrundingen er tydelig, men ikke boblete:
 
 De runde hjørnene speiler de avrundede glassene i merket.
 
-Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og i markeringstusjen. De brukes ikke andre steder.
+Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De brukes ikke andre steder. Markeringstusjen er ikke lenger rotert (bolk 10); det håndtegnede ligger i de ujevne endene og bølgen.
 
 ## Components
 
@@ -360,6 +365,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
   - *B-en* er app-ikon, favicon og del av ordmerket.
   - *Brillene uten øyne* er brilleknappen.
 - **Mini-Buddy (M1, valgt 15.11):** brilleansiktet i små størrelser er den samme tegningen, bare mindre, men beskåret til brillene (flaten 0 35 120 51), så størrelsen er høyden på brillene og bredden om lag 2,35 × høyden: 20 px i en knapp, 22 px foran en linje og 28 px i tenkepillen. På telefon brukes den også med brillene 36 px høye i hilsenen på arbeidsbordet og 30 px høye ved forklaringen i fagorddemoen på landingssiden (bolk 6). Ramme, pupiller og stenger er med. Det finnes ingen egen tegning for små størrelser. Under avslutningen krymper mini-merket til 0,48 rundt midten av brillene i samme tidsvindu som rotasjonen, slik at den ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen eller knappen. Utkastet med M1–M3 ligger i [.working/runde-10-mini-buddy-og-mobil.html](.working/runde-10-mini-buddy-og-mobil.html).
+- **Uttrykk:** *tenker* (øynene leser fra side til side), *slutt* (avslutningen til B-en), *ferdig* (B-en) og *unnskyld* (design runde 2, bolk 10, variant B i [mockups/runde-11-buddy-og-pennestrok.html](mockups/runde-11-buddy-og-pennestrok.html)). I *unnskyld* ser Buddy ned: pupillene står nederst i glassene (7 px ned) og flakker sakte fra side til side (3,2 s), og bekymrede bryn bak glassene er løftet inn mot midten og beveger seg litt i takt med blikket (±4°). Brynene er en del av den samme tegningen (ingen egen tegning), tegnes over glasset og under rammen i `{colors.primary}` med strek 4,5, og følger mørk modus som rammen. Med redusert bevegelse står pupillene nede og brynene stille. Uttrykket brukes i merknaden i gjennomsynet for tekster lest fra bilder, med merket på 64 px til venstre for teksten.
 - **Plass til avslutningen:** brilleansiktet tegnes i flaten −4 −4 128 128. Hele banen til avslutningen (rotasjonen −90° rundt (60, 40), flyttingen (−16, 20), stengene og ryggen) holder seg innenfor den, så ingen del av B-en eller stengene klippes. Mini-merket holder seg innenfor sin beskårne flate fordi det krymper (se over). SVG-en har i tillegg `overflow: visible`, og ingen flate rundt merket har `overflow: hidden`.
 - **Kildekode:** [mockups/merke.js](mockups/merke.js) og [mockups/merke.css](mockups/merke.css).
 
@@ -410,7 +416,12 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
 - En rund knapp på 48 px med brillene uten øyne, oppe til høyre i lesevisningen.
 - På brede skjermer står teksten «Leseinnstillinger» ved siden av, fordi telefontesten viste at navnet alene ikke var intuitivt.
 
-**Markeringstusj (`{components.highlighter}`):** en tusjstrek bak nøkkelordet i en overskrift, litt rotert. Den brukes høyst én gang per skjerm.
+**Markeringstusj (`{components.highlighter}`):** en rosa tusj bak den nederste delen av ordet, med ujevne ender og litt bølge, som en ekte tusj (design runde 2, bolk 10, variant A i [mockups/runde-11-buddy-og-pennestrok.html](mockups/runde-11-buddy-og-pennestrok.html); den erstatter den jevne, roterte stripa). Den brukes høyst én gang per skjerm: på «leser» i heroen på landingssiden, og på tekstnavnet i sidetitlene inne i appen (quizen, oppgavene, huskeregelen, øvekortene, fagsamtalen, lesevisningen, aktiveringen og gjennomsynet). Bare navnet får strøk, ikke «Quiz:». Den brukes aldri på lenker eller knapper, der den kan forveksles med en lenkeunderstrek.
+- *Tegning:* en SVG med `preserveAspectRatio="none"` bak ordet, 0,48 em høy og 0,12 em bredere enn ordet på hver side, fylt med `{colors.highlighter}` / `{colors.highlighter-dark}`. Ordet er en vanlig `<span>`, og SVG-en er skjult for skjermlesere, så overskriften leses som før. Kontrasten mellom teksten og strøket er den samme som med stripa (5,5:1 og 7,5:1).
+- *Lange navn:* hvert ord har sitt eget strøk, så et navn som brytes over flere linjer har strøk på hver linje. Et ord som er for langt for linjen, brytes i stedet for å gi sidelengs rulling (fra 320 px med 200 % tekst).
+- *Bevegelse:* strøket tegnes inn én gang når siden lastes (clip-path fra venstre, 0,55 s, ord for ord). Med redusert bevegelse står det bare der.
+- *Kontrastmodus* (`forced-colors`): en vanlig understrek (0,08 em), og SVG-en skjules.
+- Kildekode: `app/komponenter/Tusj.tsx` og `.tusj` i `globals.css`.
 
 **Øvekortene (design runde 2, bolk 9):** kortet står i full bredde. Over det, mot høyre kant, står «Må øve mer» over «Kan» som button-secondary (fylt button-primary når merkingen er valgt), like brede og med 12 px mellomrom. Med `data-hand="venstre"` står de mot venstre kant. Under kortet står «← Forrige» og «Neste →» som to like brede button-secondary i full bredde, 12 px mellomrom. Alle har minst 44 × 44 px trykkflate. Plasseringen er CSS (`.oevekort-flate` i `globals.css`) og ser lik ut i lys og mørk modus og fra 320 px.
 

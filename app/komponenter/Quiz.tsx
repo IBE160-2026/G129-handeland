@@ -210,7 +210,7 @@ export function Quiz({
                                     : "border-transparent text-slate-500 dark:text-slate-400"
                             }`}
                           >
-                            <span className={valgt || fasit ? "font-medium" : ""}>{a}</span>
+                            <span className={`min-w-0 [overflow-wrap:anywhere] ${valgt || fasit ? "font-medium" : ""}`}>{a}</span>
                             <span className="shrink-0 text-sm font-semibold">
                               {fasit && valgt ? "Ditt svar — riktig" : fasit ? "Riktig svar" : valgt ? "Ditt svar" : ""}
                             </span>
@@ -241,7 +241,7 @@ export function Quiz({
                           onChange={() => sett(s.id, { valgt: a })}
                           className="mt-1.5"
                         />
-                        <span>{a}</span>
+                        <span className="min-w-0 [overflow-wrap:anywhere]">{a}</span>
                       </label>
                     ))}
                   </div>

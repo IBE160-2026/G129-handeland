@@ -21,6 +21,7 @@ import { MIN_FAGUTTRYKK } from "../../../../generatorer/minnevers";
 import { lagVers } from "../../../handlinger";
 import { Kopier } from "../../../komponenter/Kopier";
 import { HandlingSkjema } from "../../../komponenter/Skjemaer";
+import { Tusj } from "../../../komponenter/Tusj";
 
 const LENKE =
   "underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4 hover:decoration-slate-900 dark:hover:decoration-slate-100";
@@ -51,7 +52,7 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
         </Link>
       </p>
       <h1 className="mt-6 text-2xl font-semibold tracking-tight">
-        Huskeregel: {tekst.tittel} <span className="uferdig-merke">Uferdig</span>
+        Huskeregel: <Tusj>{tekst.tittel}</Tusj> <span className="uferdig-merke">Uferdig</span>
       </h1>
       {/* Versene holder ikke mål (v3 beholdt 26.10, maskinvers stoppet). Det skal eleven vite før hun trykker. */}
       <p className="mt-4 rounded-md border-2 border-dashed border-fare p-4">

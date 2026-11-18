@@ -25,6 +25,7 @@ import { type DemoFagord, FagordDemo } from "./FagordDemo";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "./knapper";
 import { LandingEffekter } from "./LandingEffekter";
 import { BuddyMerke } from "./Merke";
+import { Tusj } from "./Tusj";
 
 // Gloock er heroskriften (det største elementet), så den forhåndslastes, og
 // bare her: inne i appen brukes den ikke (DESIGN.md, Typography).
@@ -101,7 +102,7 @@ export function Landingsside() {
         <section className="ls-hero" aria-labelledby="ls-tittel">
           <div className="ls-innhold ls-hero-rutenett">
             <h1 id="ls-tittel" className="ls-display">
-              Forstå mer av det du <em className="ls-tusj">leser</em>.
+              Forstå mer av det du <em className="ls-tusj"><Tusj>leser</Tusj></em>.
             </h1>
             <div className="ls-hero-tekst">
               <p className="ls-lead">

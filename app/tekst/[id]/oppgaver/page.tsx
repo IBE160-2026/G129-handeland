@@ -15,6 +15,7 @@ import { hentQuiz, listForsoek } from "../../../../data/quiz";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { startFagsamtale } from "../../../handlinger";
 import { StartSamtaleSkjema } from "../../../komponenter/Samtale";
+import { Tusj } from "../../../komponenter/Tusj";
 import { stegtekst } from "../../../../tekst/steg";
 
 const DATO = new Intl.DateTimeFormat("nb-NO", {
@@ -55,7 +56,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <p className="text-sm text-slate-600 dark:text-slate-400">{stegtekst(tekst.vei, "oppgaver")} — sjekk forståelsen</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight">Oppgaver: {tekst.tittel}</h1>
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight">Oppgaver: <Tusj>{tekst.tittel}</Tusj></h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Velg det som passer deg. Du kan gjøre så mange du vil, i den rekkefølgen du vil.
       </p>

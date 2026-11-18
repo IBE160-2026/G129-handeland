@@ -93,6 +93,14 @@
  *     «Forrige» → «Neste». Samme plassering på 320 px, også med 200 % tekst,
  *     axe i lys og mørk modus, og «Venstrehendt» på /konto setter og sletter
  *     informasjonskapselen, med og uten JavaScript
+ *   - design bolk 10 (18.11): i gjennomsynet via bilde står Buddy (64 px,
+ *     aria-hidden) til venstre i merknaden, ser ned med bekymrede bryn, og
+ *     står stille med redusert bevegelse; teksten er den fra bolk 7, og axe
+ *     er grønn i lys og mørk modus. Quizsiden har tusjstrøket bak navnet
+ *     (bare navnet, ikke «Quiz:»), overskriften leses som «Quiz: EM-bølger»,
+ *     og på 320 px med 200 % tekst ruller siden ikke sidelengs, heller ikke
+ *     med et langt navn over flere linjer. «leser» på landingssiden har det
+ *     samme strøket
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -190,6 +198,72 @@ async function ingenSiderulling(side, navn) {
   sjekk(`mobil uten sidelengs rulling: ${navn}`, bredde <= vindu + 1, `${bredde} px innhold i ${vindu} px vindu`);
 }
 
+/**
+ * Navnet på h1 slik Chrome gir det til skjermlesere (tilgjengelighetstreet via
+ * CDP). Playwrights egen navneberegning (getByRole) setter inn mellomrom rundt
+ * inline-block-elementer, så «leser.» ble «leser .» der, men ikke i Chrome.
+ */
+async function overskriftsnavn(side) {
+  const cdp = await side.context().newCDPSession(side);
+  try {
+    const { nodes } = await cdp.send("Accessibility.getFullAXTree");
+    return nodes
+      .filter((n) => n.role?.value === "heading" && n.properties?.some((p) => p.name === "level" && p.value.value === 1))
+      .map((n) => n.name?.value ?? "");
+  } finally {
+    await cdp.detach();
+  }
+}
+
+/** Elementene som stikker ut til høyre for vinduet (de innerste), til feilsøking av sidelengs rulling. */
+async function stikkerUt(side) {
+  return side.evaluate(() =>
+    [...document.querySelectorAll("body *")]
+      .filter((e) => e.getBoundingClientRect().right > window.innerWidth + 1 && ![...e.children].some((b) => b.getBoundingClientRect().right > window.innerWidth + 1))
+      .map((e) => `${e.tagName.toLowerCase()}.${[...e.classList].slice(0, 3).join(".")} (${Math.round(e.getBoundingClientRect().right)} px)`)
+      .slice(0, 5),
+  );
+}
+
+/**
+ * Bolk 10: tusjstrøkene (Tusj.tsx) i elementet `sel`. Ett per ord, hvert med en
+ * SVG (preserveAspectRatio="none", aria-hidden) bak den nederste delen av
+ * ordet, fylt med --lb-tusj, og aldri i en lenke eller knapp.
+ */
+async function tusjer(side, sel) {
+  return side.evaluate((sel) => {
+    const proeve = document.createElement("span");
+    proeve.style.color = "var(--lb-tusj)";
+    document.body.append(proeve);
+    const tusjfarge = getComputedStyle(proeve).color;
+    proeve.remove();
+    return [...document.querySelectorAll(`${sel} .tusj`)].map((e) => {
+      const svg = e.querySelector(":scope > svg");
+      const bane = svg?.querySelector("path");
+      const r = e.getBoundingClientRect();
+      const s = svg?.getBoundingClientRect();
+      const em = parseFloat(getComputedStyle(e).fontSize);
+      return {
+        ord: e.textContent,
+        bane: bane?.getAttribute("d") ?? "",
+        ok:
+          !!svg &&
+          svg.getAttribute("preserveAspectRatio") === "none" &&
+          svg.getAttribute("aria-hidden") === "true" &&
+          getComputedStyle(bane).fill === tusjfarge &&
+          getComputedStyle(svg).position === "absolute" &&
+          getComputedStyle(svg).zIndex === "-1" &&
+          // bak den nederste delen: toppen under midten av ordet, bunnen ved bunnen
+          s.top > r.top + r.height * 0.4 &&
+          s.bottom <= r.bottom + 1 &&
+          s.width >= r.width &&
+          !e.closest("a, button"),
+        hoeyde: s ? Math.round((s.height / em) * 100) / 100 : 0,
+      };
+    });
+  }, sel);
+}
+
 /* ------------------------------------------------------------------ */
 
 try {
@@ -232,6 +306,8 @@ try {
 
   const nettleser = await chromium.launch({ channel: "chrome", headless: true });
   globalThis.__nettleser = nettleser;
+  // Bolk 10: banen til tusjstrøket i sidetitlene, sammenlignet med «leser» på landingssiden.
+  let tusjBane = null;
 
   /* --- PC: løypen fram til lesevisningen --------------------------- */
   const pc = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
@@ -986,6 +1062,8 @@ try {
       Math.abs(maa.w - kan.w) <= 1 && // like brede
       [maa, kan, forrige, neste].every((k) => k.w >= 44 && k.hoeyde >= 44) &&
       forrige.t >= kort.b && Math.abs(forrige.t - neste.t) <= 1 && forrige.h <= neste.v && // ved siden av hverandre under
+      Math.abs(forrige.w - neste.w) <= 1 && // like brede
+      Math.abs(forrige.v - kort.v) <= 1 && Math.abs(neste.h - kort.h) <= 1 && // i full bredde under kortet
       o.pressed.every((p) => p === "true" || p === "false") &&
       o.hand === (venstre ? "venstre" : null)
     );
@@ -1019,8 +1097,10 @@ try {
     );
     // Tab-rekkefølgen: kortet, «Må øve mer», «Kan», «Forrige», «Neste». På første
     // kort er «Forrige» låst og hoppes over, så det sjekkes på et kort med en før.
-    if (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled()) {
-      await side.locator(".oevekort-nav button", { hasText: /^(Neste →|Ferdig)$/ }).click();
+    // Sjekken trenger minst to kort; med ett er «Neste» «Ferdig» og avslutter runden.
+    const ettKort = (await side.locator(".oevekort-nav button", { hasText: /^Ferdig$/ }).count()) === 1;
+    if (!ettKort && (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled())) {
+      await side.locator(".oevekort-nav button", { hasText: /^Neste →$/ }).click();
     }
     const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
     if ((await kortet.count()) === 1) {
@@ -1036,7 +1116,7 @@ try {
         rekke.join(" | "),
       );
     } else {
-      sjekk(`bolk 9 (${navn}): Tab-rekkefølgen`, false, "fant ikke kortet etter «Neste»");
+      sjekk(`bolk 9 (${navn}): Tab-rekkefølgen`, false, ettKort ? "testteksten har bare ett øvekort; sjekken trenger minst to" : "fant ikke kortet etter «Neste»");
     }
     await ingenSiderulling(side, `øvekort 375 px (${navn})`);
     await axe(side, `øvekort 375 px (${navn})`);
@@ -1764,6 +1844,70 @@ try {
     await ingenSiderulling(smal, navn);
     await ingenKlipping(smal, navn);
   }
+
+  /* --- Design bolk 10: tusjstrøket under tekstnavnet i sidetitlene ---- */
+  // «Quiz: EM-bølger»: bare navnet får strøk, ikke «Quiz:», og overskriften
+  // leses som før. På 320 px, også med 200 % tekst, ruller siden ikke sidelengs.
+  // Overskriften og strøkene står innenfor vinduet (vinduet minus 1 px).
+  const innenforVinduet = (side) =>
+    side.evaluate(() =>
+      [document.querySelector("main h1"), ...document.querySelectorAll("main h1 .tusj > svg")].every(
+        (e) => e.getBoundingClientRect().left >= -1 && e.getBoundingClientRect().right <= window.innerWidth + 1,
+      ),
+    );
+  for (const [side, navn] of [
+    [pc, "1280 px"],
+    [moerk, "1280 px, mørk"],
+    [smal, "320 px"],
+    [smal, "320 px, 200 % tekst"],
+  ]) {
+    await side.goto(`${tekstUrl}/quiz`);
+    if (navn.includes("200 %")) await side.addStyleTag({ content: "html { font-size: 200% !important; }" });
+    const t = await tusjer(side, "main h1");
+    tusjBane ??= t[0]?.bane ?? null;
+    sjekk(
+      `bolk 10, quiz ${navn}: «EM-bølger» har tusjstrøket bak den nederste delen, «Quiz:» har det ikke`,
+      t.length === 1 && t[0].ord === "EM-bølger" && t[0].ok && t[0].hoeyde >= 0.4 && t[0].hoeyde <= 0.56,
+      JSON.stringify(t.map(({ bane, ...rest }) => rest)),
+    );
+    const navnene = await overskriftsnavn(side);
+    sjekk(
+      `bolk 10, quiz ${navn}: overskriften leses som «Quiz: EM-bølger» (Chromes tilgjengelighetstre)`,
+      navnene.length === 1 && navnene[0] === "Quiz: EM-bølger",
+      JSON.stringify(navnene),
+    );
+    if (navn === "1280 px" || navn === "1280 px, mørk") await axe(side, `quiz med tusjstrøket (${navn})`);
+    else {
+      sjekk(`bolk 10, quiz ${navn}: overskriften og strøket står innenfor vinduet`, await innenforVinduet(side));
+      await ingenSiderulling(side, `quiz ${navn}`);
+      const ut = await stikkerUt(side);
+      if (ut.length > 0) console.log(`  stikker ut (quiz ${navn}): ${ut.join(", ")}`);
+      await ingenKlipping(side, `quiz ${navn}`);
+    }
+  }
+  // Et langt navn som brytes over flere linjer: hver linje får sitt strøk, og
+  // ingenting ruller sidelengs. Tittelen byttes bare i nettleseren.
+  await smal.goto(`${tekstUrl}/quiz`);
+  await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
+  const langt = await smal.evaluate(() => {
+    const h1 = document.querySelector("main h1");
+    const mal = h1.querySelector(".tusj");
+    for (const e of h1.querySelectorAll(".tusj")) e.remove();
+    for (const [i, o] of ["Fotosyntese", "og", "celleånding", "i", "planter"].entries()) {
+      const k = mal.cloneNode(true);
+      k.firstChild.textContent = o;
+      h1.append(i > 0 ? " " : "", k);
+    }
+    const linjer = new Set([...h1.querySelectorAll(".tusj")].map((e) => Math.round(e.getBoundingClientRect().top)));
+    return { linjer: linjer.size, strok: h1.querySelectorAll(".tusj > svg").length };
+  });
+  sjekk(
+    "bolk 10, 320 px, 200 % tekst: et langt navn brytes over flere linjer med strøk på hvert ord, innenfor vinduet",
+    langt.linjer > 1 && langt.strok === 5 && (await innenforVinduet(smal)),
+    JSON.stringify(langt),
+  );
+  await ingenSiderulling(smal, "quiz med langt navn 320 px, 200 % tekst");
+  await ingenKlipping(smal, "quiz med langt navn 320 px, 200 % tekst");
   // Design bolk 7 (telefontesten 18.11): «Lim inn», «PDF» og «Bilder» står på
   // én rad og er like brede, på 320 og 375 px, også med 200 % tekst.
   for (const bredde of [320, 375]) {
@@ -2060,6 +2204,21 @@ try {
   await land.evaluate(() => window.scrollTo(0, 0));
   await land.waitForTimeout(800);
   await axe(land, "landingsside");
+  // Bolk 10: «leser» har det samme tusjstrøket som tekstnavnet i sidetitlene.
+  const leserTusj = await tusjer(land, "#ls-tittel");
+  sjekk(
+    "bolk 10, landingssiden: «leser» har det samme tusjstrøket som sidetitlene, og overskriften leses som før",
+    leserTusj.length === 1 &&
+      leserTusj[0].ord === "leser" &&
+      leserTusj[0].ok &&
+      !!tusjBane &&
+      leserTusj[0].bane === tusjBane &&
+      (await overskriftsnavn(land)).includes("Forstå mer av det du leser."),
+    JSON.stringify({
+      tusj: leserTusj.map(({ bane, ...rest }) => ({ ...rest, sammeBane: bane === tusjBane })),
+      navn: await overskriftsnavn(land),
+    }),
+  );
   // Bevegelsen slås av mens effektene går: siden går over til den statiske versjonen.
   await land.emulateMedia({ reducedMotion: "reduce" });
   await land.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
@@ -2479,6 +2638,47 @@ try {
               `gjennomsyn (pdf, ${modusnavn}): innlesingsrapporten står over feltet`,
               (await side.locator("main", { hasText: "Fysikk 1 – kapittel 4" }).count()) > 0,
             );
+          }
+          if (vei === "bilde") {
+            // Bolk 10: Buddy beklager seg i merknaden (ser ned, bekymrede bryn),
+            // er skjult for skjermlesere, og teksten fra bolk 7 er uendret.
+            const buddy = () =>
+              side.evaluate(() => {
+                const m = document.querySelector("main [role=note]");
+                const svg = m?.querySelector("svg.merke.unnskyld");
+                const oyne = svg?.querySelector(".oyne");
+                const bryn = [...(svg?.querySelectorAll(".bryn path") ?? [])];
+                return {
+                  merke: !!svg && svg.getAttribute("aria-hidden") === "true" && Math.round(svg.getBoundingClientRect().height) === 64,
+                  tilVenstre: !!svg && m.firstElementChild === svg,
+                  bryn: bryn.length === 2 && bryn.every((b) => getComputedStyle(b).stroke === getComputedStyle(svg.querySelector(".ramme")).stroke),
+                  animasjon: oyne ? getComputedStyle(oyne).animationName : "",
+                  brynAnimasjon: bryn.map((b) => getComputedStyle(b).animationName).join(","),
+                  nede: oyne ? new DOMMatrix(getComputedStyle(oyne).transform).f : 0,
+                  tekst: m?.textContent.replace(/\s+/g, " ").trim() ?? "",
+                };
+              });
+            const b = await buddy();
+            sjekk(
+              `bolk 10, gjennomsyn (bilde, ${modusnavn}): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret`,
+              b.merke &&
+                b.tilVenstre &&
+                b.bryn &&
+                b.animasjon === "u-flakk" &&
+                b.nede >= 6.5 &&
+                b.tekst ===
+                  "Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre.",
+              JSON.stringify(b),
+            );
+            await side.emulateMedia({ reducedMotion: "reduce" });
+            const r = await buddy();
+            sjekk(
+              `bolk 10, gjennomsyn (bilde, ${modusnavn}): med redusert bevegelse står pupillene nede og brynene stille`,
+              r.animasjon === "none" && r.brynAnimasjon === "none,none" && Math.abs(r.nede - 7) < 0.01,
+              JSON.stringify({ animasjon: r.animasjon, bryn: r.brynAnimasjon, nede: r.nede }),
+            );
+            await axe(side, `gjennomsyn via bilde, redusert bevegelse (${modusnavn})`);
+            await side.emulateMedia({ reducedMotion: null });
           }
           await axe(side, `gjennomsyn via ${vei} (${modusnavn})`);
         }

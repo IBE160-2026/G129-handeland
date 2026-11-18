@@ -2,7 +2,7 @@
 title: 'Design runde 2, bolk 9: øvekortknappene for én hånd og valget «Venstrehendt»'
 type: 'feature'
 created: '2026-11-18'
-status: 'in-review'
+status: 'done'
 baseline_commit: '94ba7bd3afe08faa03d2e72845975a96446ba971'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -82,6 +82,22 @@ context: []
 ## Spec Change Log
 
 ## Review Triage Log
+
+Runde 1 (18.11): Blind Hunter (B), Edge Case Hunter (E) og Verification Gap (V).
+
+| Funn | Vurdering | Bevis / rute |
+|---|---|---|
+| E1/B1/B2 Kilden ligger mellom kortet og merkeknappene for Tab når kortet er snudd | low | patch: merkeknappene og feilen rett etter kortet i DOM-en, og kilden etter |
+| B3 Feilmeldingen havner under kortet, langt fra knappen | low | patch: `.oevekort-feil` med `order: -1` |
+| E2 «← Forrige» kan flyte ut på 320 px med 200 % tekst | low | patch: `min-width: 0` og `overflow-wrap` |
+| V1 Forrige/Neste like brede og i full bredde er ikke sjekket | medium | patch: to påstander i `riktigOppsett` |
+| E3/B9 Tab-sjekken gir misvisende melding med ett kort | low | patch: tydelig melding |
+| B7 Forklaringen er ikke koblet til avkrysningsboksen | low | patch: inn i fieldset, `aria-describedby` |
+| B8 To like «Lagre» for skjermleser | low | patch: skjult tillegg |
+| B4 Fokusringen hopper opp og ned, og det er ikke dokumentert | low | patch: EXPERIENCE beskriver rekkefølgen og hvorfor |
+| B5 Enhetstestene for `velgHandHandling` sjekker ikke kapselvalgene | low | Dekket i nettleseren (SameSite, httpOnly, ett år). Avvist |
+| B6 Sletting av konto rydder ikke «Venstrehendt» (ikke testet) | low | Samme hjelper som utloggingen (`glemEnhetsvalg`). Avvist |
+| E4 Tidsavbrudd ved utlogging lar kapselen stå | low | Samme mønster som temaet fra før. Avvist |
 
 ## Verification
 
