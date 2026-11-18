@@ -74,12 +74,14 @@ export default async function Gjennomsyn({
 
       {tekst.innlesingsrapport && <Innlesingsrapport rapport={tekst.innlesingsrapport} />}
 
-      {/* FR-45: bildeuttrekket er umålt, og det sies der eleven leser teksten. */}
+      {/*
+        FR-45: bildeuttrekket er umålt, og det sies der eleven leser teksten.
+        Utviklerens tekst fra telefontesten 18.11, med oppfordringen om å rette.
+      */}
       {tekst.vei === "bilde" && (
         <p role="note" className="mt-6 rounded-md border border-amber-400 bg-amber-50 p-4 text-sm dark:border-amber-600 dark:bg-amber-950/40">
-          <strong>Teksten er lest ut av bilder.</strong> Det blir ofte feil — et ord som er lest galt, en linje
-          som mangler, eller avsnitt i feil rekkefølge. Les gjennom ekstra nøye og rett det som ikke stemmer
-          med boka.
+          Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er
+          lik teksten du tok bilde av. <strong>Rett det som er feil før du går videre.</strong>
         </p>
       )}
 

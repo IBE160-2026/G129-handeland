@@ -76,6 +76,11 @@
  *     fjerner feilen fra adressen og gir «Fagordene er klare.». På 1280 px et
  *     fast kort nederst til høyre med Buddy på 64 px, og siden blir ikke
  *     lengre av kortet
+ *   - design bolk 7 (18.11): på 320 og 375 px, også med 200 % tekst, står
+ *     fanene «Lim inn», «PDF» og «Bilder» på én rad og er like brede; i
+ *     bildefanen står «Før du tar bildene» (fet og understreket «Før») til
+ *     to bilder er valgt, og så «Etter at du har lastet opp bildene» rett over
+ *     listen, med axe i lys og mørk modus
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -678,6 +683,46 @@ try {
   await moerk.locator("article button[aria-expanded]").first().focus();
   await moerk.locator("article [role=dialog]").waitFor();
   await axe(moerk, "lesevisning med åpen forklaring (mørk)");
+
+  /* --- Design bolk 7: bildefanen følger steget (telefontesten 18.11) --- */
+  // Før noe er valgt: «Før du tar bildene». Med ett bilde står den der fortsatt.
+  // Med to eller flere: «Etter at du har lastet opp bildene» med oppfordringen
+  // om rekkefølgen, rett over listen. Axe i lys og mørk modus på begge.
+  // Bildene er tomme PNG-er: valget sjekker bare formatet, og ingenting leses.
+  {
+    const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", "base64");
+    const bilde = (n) => ({ name: `side-${n}.png`, mimeType: "image/png", buffer: PNG });
+    const foer = (side) => side.locator("p", { hasText: "du tar bildene" });
+    const etter = (side) =>
+      side.locator("p:has-text('Etter at du har lastet opp bildene'):has-text('Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.') + ol");
+    for (const [side, modusnavn] of [
+      [pc, "lys"],
+      [moerk, "mørk"],
+    ]) {
+      await side.goto(`${APP}/ny`);
+      await side.click('[role=tab]:text-is("Bilder")');
+      await foer(side).waitFor();
+      const uthevet = await foer(side)
+        .locator("strong")
+        .evaluate((e) => ({ tekst: e.textContent, vekt: Number(getComputedStyle(e).fontWeight), strek: getComputedStyle(e).textDecorationLine }));
+      sjekk(
+        `bolk 7 (${modusnavn}): «Før» er fet og understreket i boksen før opplasting`,
+        uthevet.tekst === "Før" && uthevet.vekt >= 700 && uthevet.strek.includes("underline"),
+        JSON.stringify(uthevet),
+      );
+      await axe(side, `ny tekst, bildefanen før opplasting (${modusnavn})`);
+      await side.setInputFiles("#bilder", [bilde(1)]);
+      await side.locator("ol li").first().waitFor();
+      sjekk(`bolk 7 (${modusnavn}): med ett bilde står «Før du tar bildene» som før`, (await foer(side).count()) === 1 && (await etter(side).count()) === 0);
+      await side.setInputFiles("#bilder", [bilde(2), bilde(3)]);
+      await etter(side).waitFor({ timeout: 10000 }).catch(() => {});
+      sjekk(
+        `bolk 7 (${modusnavn}): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte`,
+        (await etter(side).count()) === 1 && (await foer(side).count()) === 0 && (await side.locator("ol li").count()) === 3,
+      );
+      await axe(side, `ny tekst, bildefanen med tre bilder (${modusnavn})`);
+    }
+  }
 
   /* --- Bolk 4: temavalget («Utseende» på kontosiden) ------------------ */
   /** Modus slik siden er tegnet: data-tema, color-scheme, bakgrunnen og en `dark:`-klasse. */
@@ -1462,6 +1507,32 @@ try {
     await ingenSiderulling(smal, navn);
     await ingenKlipping(smal, navn);
   }
+  // Design bolk 7 (telefontesten 18.11): «Lim inn», «PDF» og «Bilder» står på
+  // én rad og er like brede, på 320 og 375 px, også med 200 % tekst.
+  for (const bredde of [320, 375]) {
+    await smal.setViewportSize({ width: bredde, height: 700 });
+    for (const stor of [false, true]) {
+      await smal.goto(`${APP}/ny`);
+      if (stor) await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
+      const faner = await smal.locator("[role=tablist] [role=tab]").evaluateAll((f) =>
+        f.map((e) => ({ navn: e.textContent.trim(), topp: e.offsetTop, bredde: Math.round(e.getBoundingClientRect().width), valgt: e.getAttribute("aria-selected"), flyter: e.scrollWidth > e.clientWidth + 1 })),
+      );
+      const navn = `${bredde} px${stor ? ", 200 % tekst" : ""}`;
+      sjekk(
+        `bolk 7, ${navn}: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen`,
+        faner.map((f) => f.navn).join(",") === "Lim inn,PDF,Bilder" &&
+          faner.every((f) => f.topp === faner[0].topp && !f.flyter) &&
+          Math.max(...faner.map((f) => f.bredde)) - Math.min(...faner.map((f) => f.bredde)) <= 1 &&
+          faner.map((f) => f.valgt).join(",") === "true,false,false",
+        JSON.stringify(faner),
+      );
+      if (stor) {
+        await ingenSiderulling(smal, `ny tekst ${navn}, fanene`);
+        await ingenKlipping(smal, `ny tekst ${navn}, fanene`);
+      }
+    }
+  }
+  await smal.setViewportSize({ width: 320, height: 700 });
   await smal.goto(`${APP}/`);
   await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
   await smal.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);

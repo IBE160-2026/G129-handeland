@@ -1,0 +1,231 @@
+<title>Buddy og pennestrøk, runde 11</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Gloock&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+  /* Oppsett: én kolonne med to deler (Buddy, pennestrøk), hver med tre varianter i et rutenett som blir én kolonne på telefon. */
+  :root {
+    --bakgrunn: #fff5f7;
+    --flate: #ffffff;
+    --kant: #f5dde5;
+    --tekst: #141a3a;
+    --dempet: #5a5670;
+    --primaer: #6427d6;
+    --markering: #ffe0ee;
+    --tusj: #ff4d9d;
+    --varsel-flate: #fff4dc;
+    --varsel-kant: #e0a526;
+    --skrift: "Atkinson Hyperlegible", system-ui, sans-serif;
+    --overskrift: "Gloock", Georgia, serif;
+    --tittel: "Instrument Serif", Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bakgrunn: #0f1226; --flate: #1a1e3a; --kant: #2c3158; --tekst: #eef0ff; --dempet: #a9afd3;
+      --primaer: #b79bff; --markering: #4a1f3a; --tusj: #c2367a; --varsel-flate: #3a2d10; --varsel-kant: #b07d16;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bakgrunn: #0f1226; --flate: #1a1e3a; --kant: #2c3158; --tekst: #eef0ff; --dempet: #a9afd3;
+    --primaer: #b79bff; --markering: #4a1f3a; --tusj: #c2367a; --varsel-flate: #3a2d10; --varsel-kant: #b07d16;
+    color-scheme: dark;
+  }
+  body { background: var(--bakgrunn); color: var(--tekst); font-family: var(--skrift); font-size: 16px; line-height: 1.5; }
+  main {
+    max-width: 68rem; margin-inline: auto;
+    padding-block: 2rem 4rem;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid; gap: 3rem;
+  }
+  h1 { font-family: var(--overskrift); font-weight: 400; font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.1; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--overskrift); font-weight: 400; font-size: 1.6rem; margin: 0; text-wrap: balance; }
+  h3 { margin: 0; font-size: 1.05rem; }
+  p { margin: 0; max-width: 62ch; }
+  .ingress { color: var(--dempet); }
+  .del { display: grid; gap: 1.25rem; }
+  .rutenett { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.25rem; }
+  .variant { background: var(--flate); border: 1px solid var(--kant); border-radius: 20px; padding: 1.25rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
+  .merkelapp { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; }
+  .bokstav { display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 10px; background: var(--markering); color: var(--primaer); font-weight: 700; }
+  .forklaring { color: var(--dempet); font-size: .95rem; }
+
+  /* --- Buddy: samme tegning som app/komponenter/Merke.tsx ------------ */
+  .merke { overflow: visible; }
+  .merke .ramme { stroke: var(--primaer); stroke-width: 8.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .merke .glass { fill: var(--markering); }
+  .merke .oye { fill: var(--tekst); }
+  .merke .bryn { stroke: var(--primaer); stroke-width: 4.5; stroke-linecap: round; fill: none; }
+  .scene { display: flex; align-items: center; gap: 1rem; }
+  .scene .stor { width: 96px; height: 96px; flex: none; }
+
+  /* Pupillene ser ned og flakker litt. */
+  .ned .oyne { transform: translate(0, 7px); animation: flakk 3.2s ease-in-out infinite; }
+  @keyframes flakk {
+    0%, 100% { transform: translate(-2.5px, 7px); }
+    40% { transform: translate(2.5px, 7.5px); }
+    55% { transform: translate(2.5px, 7.5px); }
+  }
+  /* Brynene løfter seg litt i den indre enden. */
+  .bryn-anim .bryn-v { transform-origin: 46px 46px; animation: bryn-v 3.2s ease-in-out infinite; }
+  .bryn-anim .bryn-h { transform-origin: 74px 46px; animation: bryn-h 3.2s ease-in-out infinite; }
+  @keyframes bryn-v { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(-4deg); } }
+  @keyframes bryn-h { 0%, 100% { transform: rotate(0deg); } 45% { transform: rotate(4deg); } }
+  /* C: hele ansiktet senker seg og vipper, som et lite sukk. */
+  .sukk .hode { transform-origin: 60px 56px; animation: sukk 4.8s ease-in-out infinite; }
+  @keyframes sukk {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    35% { transform: translateY(3px) rotate(-3deg); }
+    60% { transform: translateY(3px) rotate(-3deg); }
+  }
+
+  /* Merknaden i gjennomsynet, slik den står på siden. */
+  .merknad { display: flex; gap: .875rem; align-items: flex-start; background: var(--varsel-flate); border: 1px solid var(--varsel-kant); border-radius: 12px; padding: .875rem 1rem; font-size: .95rem; }
+  .merknad .liten { width: 64px; height: 64px; flex: none; }
+
+  /* --- Pennestrøk ---------------------------------------------------- */
+  .sidetittel { font-family: var(--tittel); font-size: clamp(1.9rem, 6vw, 2.4rem); line-height: 1.15; font-weight: 400; margin: 0; }
+  .navn { position: relative; isolation: isolate; white-space: nowrap; }
+  .navn svg { position: absolute; z-index: -1; pointer-events: none; overflow: visible; }
+  .navn .strok { fill: var(--tusj); }
+  /* A: tusj bak den nederste delen av ordet, med ujevne ender. */
+  .a svg { left: -0.12em; right: -0.12em; bottom: 0.02em; height: 0.48em; width: calc(100% + 0.24em); }
+  /* B: én pennestrek under ordet, tynn i endene. */
+  .b svg { left: -0.06em; bottom: -0.2em; height: 0.32em; width: calc(100% + 0.18em); }
+  /* C: to raske streker under hverandre, den andre kortere. */
+  .c svg { left: -0.04em; bottom: -0.3em; height: 0.46em; width: calc(100% + 0.1em); }
+  .tegnes .strok { animation: tegn 0.55s cubic-bezier(.3,.7,.3,1) both; }
+  .tegnes .strok + .strok { animation-delay: .18s; }
+  @keyframes tegn { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .eksempler { display: grid; gap: .75rem; }
+  .knapp { justify-self: start; font: inherit; font-weight: 700; padding: .5rem 1rem; min-height: 44px; border-radius: 12px; border: 2px solid var(--primaer); background: transparent; color: var(--primaer); cursor: pointer; }
+  .knapp:focus-visible { outline: 3px solid var(--primaer); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ned .oyne { animation: none; transform: translate(0, 7px); }
+    .bryn-anim .bryn-v, .bryn-anim .bryn-h, .sukk .hode, .tegnes .strok { animation: none; }
+  }
+</style>
+
+<main>
+  <header class="del">
+    <h1>Buddy og pennestrøket</h1>
+    <p class="ingress">Skisser til designrunde 2, punkt 5 og 7. Velg én variant i hver del, eller si hva du vil blande. Animasjonene står stille hvis enheten din har redusert bevegelse slått på.</p>
+  </header>
+
+  <!-- Del 1: skyldbetynget Buddy -->
+  <section class="del" aria-labelledby="buddy-tittel">
+    <h2 id="buddy-tittel">Buddy som beklager seg i gjennomsynet</h2>
+    <p class="ingress">Brukes i merknaden når teksten er lest fra bilder. Tegningen er den samme som Buddy i appen, bare med blikket ned og, i B og C, bryn bak brillene.</p>
+    <div class="rutenett">
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">A</span> Ser ned</span>
+        <div class="scene">
+          <svg class="merke stor ned" viewBox="-4 -4 128 128" aria-hidden="true" data-buddy="buddy-uten-bryn"></svg>
+          <p class="forklaring">Pupillene nederst i glassene, flakker sakte fra side til side. Ingen bryn. Minst endring.</p>
+        </div>
+      </article>
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">B</span> Ser ned, bekymrede bryn</span>
+        <div class="scene">
+          <svg class="merke stor ned bryn-anim" viewBox="-4 -4 128 128" aria-hidden="true" data-buddy="buddy-med-bryn"></svg>
+          <p class="forklaring">Som A, pluss bryn bak glassene som er løftet inn mot midten, slik 😔 har. Brynene beveger seg litt i takt med blikket.</p>
+        </div>
+      </article>
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">C</span> Lite sukk</span>
+        <div class="scene">
+          <svg class="merke stor ned bryn-anim sukk" viewBox="-4 -4 128 128" aria-hidden="true" data-buddy="buddy-med-bryn"></svg>
+          <p class="forklaring">Som B, og hele ansiktet senker seg og vipper litt, som et sukk. Tydeligst, men mest bevegelse.</p>
+        </div>
+      </article>
+    </div>
+
+    <h3>Slik ser det ut i gjennomsynet (B)</h3>
+    <div class="merknad">
+      <svg class="merke liten ned bryn-anim" viewBox="-4 -4 128 128" aria-hidden="true" data-buddy="buddy-med-bryn"></svg>
+      <p><strong>Når du laster opp bilder, hender det at Buddy leser feil.</strong> Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre.</p>
+    </div>
+  </section>
+
+  <!-- Del 2: pennestrøk -->
+  <section class="del" aria-labelledby="strok-tittel">
+    <h2 id="strok-tittel">Rosa pennestrøk under tekstnavnet</h2>
+    <p class="ingress">Brukes på sidetitler som «Quiz: Bedrift» og «Oppgaver: Bedrift», og på «leser» på landingssiden. I dag er det en jevn rosa stripe bak ordet.</p>
+    <div class="rutenett">
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">A</span> Tusj bak ordet</span>
+        <div class="eksempler">
+          <p class="sidetittel">Quiz: <span class="navn a tegnes">Bedrift<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path class="strok" d="M4 12 C40 6 90 9 140 6 C165 5 185 6 197 9 L195 14 C196 19 190 24 186 25 C140 27 90 24 46 27 C26 28 10 27 3 24 C6 20 1 16 4 12 Z"/></svg></span></p>
+          <p class="forklaring">Som i dag, men strøket har ujevne ender og litt bølge, som en ekte tusj.</p>
+        </div>
+      </article>
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">B</span> Pennestrek under</span>
+        <div class="eksempler">
+          <p class="sidetittel">Quiz: <span class="navn b tegnes">Bedrift<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path class="strok" d="M2 13 C30 9 70 8 110 8.5 C145 9 175 8 198 4 C199 5 199 6 198 7 C176 12.5 146 13.5 110 13.8 C72 14 34 15 3 16.5 C1.5 15.5 1.5 14 2 13 Z"/></svg></span></p>
+          <p class="forklaring">Én strek under ordet, tykkest på midten og tynn i endene, med en liten løft til slutt.</p>
+        </div>
+      </article>
+
+      <article class="variant">
+        <span class="merkelapp"><span class="bokstav">C</span> To raske streker</span>
+        <div class="eksempler">
+          <p class="sidetittel">Quiz: <span class="navn c tegnes">Bedrift<svg viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><path class="strok" d="M2 8 C50 4 120 3 197 5 C198 6 198 7.5 197 8.5 C120 8 52 9.5 3 11.5 C1.5 10.5 1.5 9 2 8 Z"/><path class="strok" d="M14 21 C60 17 110 16 168 18 C169 19 169 20.5 168 21.5 C110 21 62 22.5 15 24.5 C13.5 23.5 13.5 22 14 21 Z"/></svg></span></p>
+          <p class="forklaring">To streker, som når man understreker noe to ganger. Den andre er kortere og litt skjev.</p>
+        </div>
+      </article>
+    </div>
+    <button type="button" class="knapp" id="tegn-igjen">Tegn strøkene på nytt</button>
+  </section>
+</main>
+
+<!-- Buddy, geometrien fra Merke.tsx (glass, ramme, bro og stenger). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="buddy-uten-bryn">
+      <g class="hode" transform="translate(0 4)">
+        <path class="glass" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+        <path class="glass" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+        <g class="oyne"><circle class="oye" cx="33.5" cy="56" r="5.5"/><circle class="oye" cx="86.5" cy="56" r="5.5"/></g>
+        <path class="ramme" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+        <path class="ramme" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+        <path class="ramme" d="M55 44 Q60 37 65 44"/>
+        <path class="ramme" d="M16 44 L5 37"/><path class="ramme" d="M104 44 L115 37"/>
+      </g>
+    </g>
+    <g id="buddy-med-bryn">
+      <g class="hode" transform="translate(0 4)">
+        <path class="glass" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+        <path class="glass" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+        <path class="bryn bryn-v" d="M24 52 Q34 50 46 46"/>
+        <path class="bryn bryn-h" d="M74 46 Q86 50 96 52"/>
+        <g class="oyne"><circle class="oye" cx="33.5" cy="56" r="5.5"/><circle class="oye" cx="86.5" cy="56" r="5.5"/></g>
+        <path class="ramme" d="M25 40 H49 Q55 40 55 46 V58 Q55 72 41 72 H25 Q16 72 16 63 V49 Q16 40 25 40 Z"/>
+        <path class="ramme" d="M71 40 H95 Q104 40 104 49 V63 Q104 72 95 72 H79 Q65 72 65 58 V46 Q65 40 71 40 Z"/>
+        <path class="ramme" d="M55 44 Q60 37 65 44"/>
+        <path class="ramme" d="M16 44 L5 37"/><path class="ramme" d="M104 44 L115 37"/>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<script>
+  // Hver Buddy får sin egen kopi av tegningen, så klassene på svg-en (ned, bryn-anim, sukk) når pupillene og brynene.
+  for (const svg of document.querySelectorAll("svg[data-buddy]")) {
+    svg.innerHTML = document.getElementById(svg.dataset.buddy).innerHTML;
+  }
+  document.getElementById("tegn-igjen").addEventListener("click", () => {
+    for (const el of document.querySelectorAll(".navn.tegnes")) {
+      el.classList.remove("tegnes");
+      void el.offsetWidth;
+      el.classList.add("tegnes");
+    }
+  });
+</script>

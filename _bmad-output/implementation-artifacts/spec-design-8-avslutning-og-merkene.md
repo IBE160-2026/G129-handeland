@@ -1,0 +1,71 @@
+---
+title: 'Design runde 2, bolk 8: raskere avslutning og nye merker i forkunnskapssteget'
+type: 'feature'
+created: '2026-11-18'
+status: 'ready-for-dev'
+route: 'dispatch'
+review_loop_iteration: 0
+context: []
+---
+
+<frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
+
+## Intent
+
+**Problem:**
+- Utvikleren synes avslutningen (brillene blir til B) henger for lenge, både etter at B-en er tegnet og i pausen etter at pupillene er borte.
+- Merkene «Dette kan jeg», «Har hørt om» og «Helt nytt» fungerte ikke, og det mangler et svar for overskrifter eleven ikke skjønner.
+
+**Approach:**
+- B-en står 0,8 s i stedet for 1,2 s før indikatoren går. Pausen etter at pupillene er tonet ut, kortes fra 700 ms til 450 ms. Resten av avslutningen er uendret.
+- Ett spørsmål over overskriftene, «Hva vet du om dette fra før?», med fire valg per overskrift: «Mye», «Litt», «Ingenting ennå» og «Skjønner ikke overskriften». Vedtatt av utvikleren 18.11.
+- «Før du leste» får en egen linje for overskriftene eleven ikke skjønte: «Disse overskriftene skjønte du ikke: X. Gir de mening nå?»
+
+## Boundaries & Constraints
+
+**Always:**
+- Kodene `kjent`, `litt` og `nytt` er de samme, så lagrede merker vises med de nye navnene: `kjent` = «Mye», `litt` = «Litt», `nytt` = «Ingenting ennå». Den nye koden er `uklar`. Det trengs ingen migrasjon, fordi kolonnen er jsonb og `lesMerking` validerer mot `MERKER`.
+- Spørsmålet står én gang over alle overskriftene, ikke inne i hver gruppe. Hver `fieldset` har det som beskrivelse (`aria-describedby`), og gruppene er fortsatt navngitt av overskriften.
+- De fire valgene får plass i bredden på 320 px. De kan brytes til to rader, men ingen knapp kuttes.
+- Med redusert bevegelse er avslutningen uendret, og B-en vises direkte.
+- Verten (`TenkerVert`) og flaten bruker samme nye lengde.
+
+**Never:**
+- Ingen annen endring i avslutningens tegning eller rekkefølge.
+- Ingen endring i FR-6-reglene (ingen vurdering, én oppfordring ved tomt skjema).
+
+</frozen-after-approval>
+
+## Code Map
+
+- `app/komponenter/Tenker.tsx:78` -- `AVSLUTNING_MS = 4300 + 1200` → den nye lengden: avslutningen + 0,8 s.
+- `app/globals.css:300-400` -- `s-blunk`, `s-snu`, `s-flytt`, `s-stenger`, `s-stang` og `s-krymp` (`:470`) er prosent av 4,3 s. Skriv dem om så pausen etter pupillene er 450 ms og alt etter flyttes 250 ms fram. Lengden blir 4,05 s. Også `docs`-kopien `_bmad-output/.../mockups/merke-tenker.css` hvis den brukes som fasit.
+- `tekst/forkunnskap.ts` -- `MERKER` får `uklar`, `MERKENAVN` får de nye navnene, og `foerDuLeste` får `uklare`.
+- `app/komponenter/Skjemaer.tsx` (`AktiveringSkjema`) og `app/tekst/[id]/aktivering/page.tsx` -- spørsmålet over gruppene og instruksen. Gjennomgangen 17.11 ga instruksen `id="aktivering-hjelp"`, og det skal den beholde.
+- `app/tekst/[id]/lesing/page.tsx` -- «Før du leste» med linjen for de uklare.
+- `tekst/forkunnskap.test.ts`, `app/handlinger.test.ts`, `maaling/demotest.mjs`, `maaling/sjekk-*.mjs` -- de nye navnene, og den nye koden lagres og vises.
+- PRD FR-6, EXPERIENCE.md og DESIGN.md (`motion.thinking-finish` og teksten om avslutningen) -- de nye verdiene og datoen.
+
+## Tasks & Acceptance
+
+**Execution:**
+- [ ] `app/globals.css`, `app/komponenter/Tenker.tsx` -- den nye lengden
+- [ ] `tekst/forkunnskap.ts`, skjemaet, aktiveringssiden, lesevisningen -- de nye merkene og `uklar`
+- [ ] testene og `maaling/*.mjs`
+- [ ] PRD, EXPERIENCE.md, DESIGN.md
+
+**Acceptance Criteria:**
+- Given en avslutning, when den spilles, then er indikatoren borte omtrent 4,85 s etter at den startet (4,05 s + 0,8 s), ikke 5,5 s.
+- Given aktiveringen, when eleven merker én overskrift «Skjønner ikke overskriften» og leser, then viser «Før du leste» «Disse overskriftene skjønte du ikke: …».
+- Given en tekst merket før 18.11 med `kjent`, when lesevisningen eller aktiveringen åpnes, then står merket som «Mye».
+
+## Implementation Notes
+
+## Spec Change Log
+
+## Review Triage Log
+
+## Verification
+
+**Commands:** (fra PowerShell)
+- `npx tsc --noEmit`, `npm test`, `npm run sjekk:tilgjengelighet`, `node maaling/demotest.mjs` -- alle grønne

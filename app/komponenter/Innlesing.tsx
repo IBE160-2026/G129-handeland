@@ -3,7 +3,7 @@
 /**
  * Innlesing på Ny tekst-siden (/ny) — FR-1 (liming) og FR-2 (PDF).
  *
- * To faner som ender i samme løype. PDF-en leses HER, i nettleseren (AD-16):
+ * Tre faner (liming, PDF og bilder) som ender i samme løype. PDF-en leses HER, i nettleseren (AD-16):
  * filen forlater aldri elevens maskin, bare teksten og rapporten om hva
  * uttrekket gjorde sendes til serveren.
  *
@@ -128,6 +128,14 @@ function kutt(tekst: string) {
   return { tekst: k.tekst, slutt: k.tekst.slice(-120), rest: tekst.slice(k.tekst.length).trimStart() };
 }
 
+/** Boksene i bildefanen: samme amber som merknaden om minneverset, men med tydeligere ramme. Lik i mørk modus. */
+const MERKNAD = "rounded-md border-2 border-amber-500 bg-amber-50 p-4 text-sm dark:border-amber-500 dark:bg-amber-950/40";
+
+/** «Før» og «Etter»: fet, i farge og understreket, så uthevingen ikke hviler på fargen alene. */
+function Uthevet({ children }: { children: string }) {
+  return <strong className="font-bold text-amber-800 underline decoration-2 underline-offset-2 dark:text-amber-300">{children}</strong>;
+}
+
 /* ------------------------------------------------------------------ */
 
 type Fane = "lim" | "pdf" | "bilde";
@@ -138,12 +146,17 @@ export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling
   const [startTekst, setStartTekst] = useState("");
   return (
     <div>
-      <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="flex flex-wrap gap-x-2 border-b border-slate-200 dark:border-slate-800">
+      {/*
+        Tre like brede faner på én rad, også på 320 px med 200 % tekst
+        (telefontesten 18.11): rutenettet brytes aldri. Får et navn ikke plass,
+        deles det inne i fanen i stedet for å skyve fanen ned på en ny rad.
+      */}
+      <div role="tablist" aria-label="Hvordan vil du legge inn teksten?" className="grid grid-cols-3 border-b border-slate-200 dark:border-slate-800">
         {(
           [
-            ["lim", "Lim inn tekst"],
-            ["pdf", "Last opp PDF"],
-            ["bilde", "Ta bilder"],
+            ["lim", "Lim inn"],
+            ["pdf", "PDF"],
+            ["bilde", "Bilder"],
           ] as const
         ).map(([id, navn]) => (
           <button
@@ -152,7 +165,7 @@ export function Innlesing({ limInn, limInnPdf, limInnBilde }: { limInn: Handling
             role="tab"
             aria-selected={fane === id}
             onClick={() => setFane(id)}
-            className={`-mb-px border-b-2 px-4 py-2 font-bold ${
+            className={`-mb-px min-w-0 border-b-2 px-1 py-2 text-center font-bold hyphens-auto break-words ${
               fane === id ? "border-slate-900 dark:border-slate-100" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
@@ -473,15 +486,23 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
 
   return (
     <div className="space-y-4">
-      {/* FR-44: påminnelsen kommer før første opplasting. */}
-      <div className="rounded-md border border-slate-300 p-4 text-sm dark:border-slate-700">
-        <p className="font-medium">Før du tar bildene</p>
-        <ul className="mt-1 list-disc pl-5">
-          <li>Ta bare bilde av sidene du skal lese — høyst {BILDEGRENSER.maksBilder}.</li>
-          <li>Én side per bilde, rett ovenfra, i godt lys.</li>
-          <li>Bildene krympes og sendes for å lese teksten, men lagres ikke. Det er bare teksten som tas vare på.</li>
-        </ul>
-      </div>
+      {/*
+        FR-44: påminnelsen kommer før første opplasting. Den følger steget
+        (telefontesten 18.11): med to eller flere bilder byttes den ut med
+        oppfordringen om rekkefølgen, rett over listen.
+      */}
+      {bilder.length < 2 && (
+        <div className={MERKNAD}>
+          <p className="font-medium">
+            <Uthevet>Før</Uthevet> du tar bildene
+          </p>
+          <ul className="mt-1 list-disc pl-5">
+            <li>Ta bare bilde av sidene du skal lese — høyst {BILDEGRENSER.maksBilder}.</li>
+            <li>Én side per bilde, rett ovenfra, i godt lys.</li>
+            <li>Bildene krympes og sendes for å lese teksten, men lagres ikke. Det er bare teksten som tas vare på.</li>
+          </ul>
+        </div>
+      )}
 
       <div>
         <label htmlFor="bilder" className="block font-medium">
@@ -501,6 +522,13 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
           className="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:min-h-11 file:bg-primaer file:px-4 file:py-2 file:font-bold file:text-paa-primaer hover:file:brightness-94"
         />
       </div>
+
+      {bilder.length >= 2 && (
+        <p className={MERKNAD}>
+          <Uthevet>Etter</Uthevet> <span className="font-medium">at du har lastet opp bildene:</span> Sjekk at sidene står
+          i riktig rekkefølge. Bruk pilene for å flytte dem.
+        </p>
+      )}
 
       {bilder.length > 0 && (
         <ol className="space-y-2">

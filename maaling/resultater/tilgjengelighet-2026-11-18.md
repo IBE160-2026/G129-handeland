@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**276 av 276 sjekker bestått.**
+**294 av 294 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -48,7 +48,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/c42f71bf-1acc-4daf-8227-4b9d0c155d23/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -66,7 +66,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/c42f71bf-1acc-4daf-8227-4b9d0c155d23/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -74,7 +74,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/c42f71bf-1acc-4daf-8227-4b9d0c155d23/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -83,6 +83,16 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: konto (mørk) |  |
 | ✓ | axe: arbeidsbord med åpen vifte (mørk) |  |
 | ✓ | axe: lesevisning med åpen forklaring (mørk) |  |
+| ✓ | bolk 7 (lys): «Før» er fet og understreket i boksen før opplasting | {"tekst":"Før","vekt":700,"strek":"underline"} |
+| ✓ | axe: ny tekst, bildefanen før opplasting (lys) |  |
+| ✓ | bolk 7 (lys): med ett bilde står «Før du tar bildene» som før |  |
+| ✓ | bolk 7 (lys): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte |  |
+| ✓ | axe: ny tekst, bildefanen med tre bilder (lys) |  |
+| ✓ | bolk 7 (mørk): «Før» er fet og understreket i boksen før opplasting | {"tekst":"Før","vekt":700,"strek":"underline"} |
+| ✓ | axe: ny tekst, bildefanen før opplasting (mørk) |  |
+| ✓ | bolk 7 (mørk): med ett bilde står «Før du tar bildene» som før |  |
+| ✓ | bolk 7 (mørk): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte |  |
+| ✓ | axe: ny tekst, bildefanen med tre bilder (mørk) |  |
 | ✓ | temavalg (tema=moerk, systemet lyst): HTML-en fra serveren har data-tema | <html lang="nb" data-tema="moerk"> |
 | ✓ | temavalg (tema=moerk, systemet lyst): fargene, color-scheme og dark:-klassene følger valget | {"tema":"moerk","skjema":"dark","bakgrunn":"rgb(15, 18, 38)","darkKlasse":"rgb(169, 175, 211)"} |
 | ✓ | axe: konto (tema=moerk, systemet lyst) |  |
@@ -105,7 +115,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1794995630766 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795035300225 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -163,15 +173,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar |  |
 | ✓ | overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false, /samling |
 | ✓ | overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false (), /samling |
-| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/486d04bc-fa95-4663-a260-9e2c4f104add/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
+| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/f16a8f3d-7953-47f0-a9fa-82d66d5b144f/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
 | ✓ | overleveringen: verten har én statusregion, tom før noe venter | {"antall":1,"tekst":""} |
 | ✓ | overleveringen: en venting som ender med feil, gir ingen avslutning noe sted | {"antall":1,"tekst":""} |
-| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/0c2c9dd0-1800-45d8-b2fe-ed583a45df35/lesing |
+| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/60dcfbf9-91c9-49d5-919c-443341a55d71/lesing |
 | ✓ | overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.» | {"posisjon":"fixed","innenfor":true,"mini":true,"slutt":true,"merke":28,"regioner":1,"regionTekst":"Teksten er klar.","fokusIPillen":false,"variabel":"52px","hoeyde":52,"klasse":true} |
 | ✓ | overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den | 52px / 52px |
 | ✓ | axe: lesevisning med avslutningen i pillen (telefon) |  |
-| ✓ | overleveringen: pillen står gjennom avslutningen (minst 5 s), er så borte, og html har ikke lenger har-tenkepille | 6199 ms, {"antall":1,"tekst":""} |
-| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/0c2c9dd0-1800-45d8-b2fe-ed583a45df35/lesing {"antall":1,"tekst":"Fagordene er klare."} |
+| ✓ | overleveringen: pillen står gjennom avslutningen (minst 5 s), er så borte, og html har ikke lenger har-tenkepille | 6223 ms, {"antall":1,"tekst":""} |
+| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/60dcfbf9-91c9-49d5-919c-443341a55d71/lesing {"antall":1,"tekst":"Fagordene er klare."} |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
@@ -188,6 +198,14 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | ingen tekst klippes: samling 320 px, 200 % tekst |  |
 | ✓ | mobil uten sidelengs rulling: ny tekst 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: ny tekst 320 px, 200 % tekst |  |
+| ✓ | bolk 7, 320 px: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen | [{"navn":"Lim inn","topp":349,"bredde":96,"valgt":"true","flyter":false},{"navn":"PDF","topp":349,"bredde":96,"valgt":"false","flyter":false},{"navn":"Bilder","topp":349,"bredde":96,"valgt":"false","flyter":false}] |
+| ✓ | bolk 7, 320 px, 200 % tekst: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen | [{"navn":"Lim inn","topp":1032,"bredde":85,"valgt":"true","flyter":false},{"navn":"PDF","topp":1032,"bredde":85,"valgt":"false","flyter":false},{"navn":"Bilder","topp":1032,"bredde":85,"valgt":"false","flyter":false}] |
+| ✓ | mobil uten sidelengs rulling: ny tekst 320 px, 200 % tekst, fanene | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: ny tekst 320 px, 200 % tekst, fanene |  |
+| ✓ | bolk 7, 375 px: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen | [{"navn":"Lim inn","topp":281,"bredde":114,"valgt":"true","flyter":false},{"navn":"PDF","topp":281,"bredde":114,"valgt":"false","flyter":false},{"navn":"Bilder","topp":281,"bredde":114,"valgt":"false","flyter":false}] |
+| ✓ | bolk 7, 375 px, 200 % tekst: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen | [{"navn":"Lim inn","topp":936,"bredde":104,"valgt":"true","flyter":false},{"navn":"PDF","topp":936,"bredde":104,"valgt":"false","flyter":false},{"navn":"Bilder","topp":936,"bredde":104,"valgt":"false","flyter":false}] |
+| ✓ | mobil uten sidelengs rulling: ny tekst 375 px, 200 % tekst, fanene | 375 px innhold i 375 px vindu |
+| ✓ | ingen tekst klippes: ny tekst 375 px, 200 % tekst, fanene |  |
 | ✓ | mobil uten sidelengs rulling: åpent ark 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: åpent ark 320 px, 200 % tekst |  |
 | ✓ | bolk 6, 320 px, 200 % tekst: arket ruller internt, er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"andel":90,"ruller":true,"siden":false,"rader":5} |
@@ -266,15 +284,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/d9b2aac5-7463-43f2-9ac5-76f0cba91c82/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/7703f526-c1c7-473c-bcb1-de90493f7dd0/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/d9b2aac5-7463-43f2-9ac5-76f0cba91c82/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/7703f526-c1c7-473c-bcb1-de90493f7dd0/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/da1842d0-7d19-49e2-ad43-853fc8459ba3/gjennomsyn |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/b734c12f-03f9-4e66-8f5b-04fa99d26cd4/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/da1842d0-7d19-49e2-ad43-853fc8459ba3/gjennomsyn |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/b734c12f-03f9-4e66-8f5b-04fa99d26cd4/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |
 | ✓ | FR-6: gammel tekst viser «Før du leste, skrev du: …» | Før du leste Før du leste, skrev du: Noe om bølger og lys. |
 | ✓ | gjennomsyn: prøvetekstene er ryddet bort | 3 av 3 |

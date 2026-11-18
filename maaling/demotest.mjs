@@ -414,7 +414,7 @@ async function enKjoering(nettleser) {
 
   // Steg 11: PF-1.
   await pc.goto(`${APP}/ny`);
-  await pc.click('[role=tab]:has-text("Last opp PDF")');
+  await pc.click('[role=tab]:text-is("PDF")');
   await pc.setInputFiles("#pdf", "testdata/pdf/pf1-skannet.pdf");
   await pc.locator("text=Filen ser ut til å være et bilde av en tekst.").waitFor({ timeout: 30000 });
   sjekk("11", "PF-1: melding og anbefalt handling", (await pc.locator("text=Ta bilder av sidene i stedet").count()) > 0);
@@ -436,8 +436,16 @@ async function enKjoering(nettleser) {
   // Steg 13: to bilder.
   const bilder = await testbilder(nettleser, eksempel);
   await pc.goto(`${APP}/ny`);
-  await pc.click('[role=tab]:has-text("Ta bilder")');
+  await pc.click('[role=tab]:text-is("Bilder")');
   await pc.setInputFiles("#bilder", bilder);
+  // Telefontesten 18.11: med to bilder byttes «Før du tar bildene» ut med oppfordringen om rekkefølgen.
+  const etterBoks = pc.locator("p:has-text('Etter at du har lastet opp bildene'):has-text('Sjekk at sidene står i riktig rekkefølge') + ol");
+  await etterBoks.waitFor({ timeout: 10000 }).catch(() => {});
+  sjekk(
+    "13",
+    "«Etter at du har lastet opp bildene» står over listen, og «Før du tar bildene» er borte",
+    (await etterBoks.count()) === 1 && (await pc.locator("text=du tar bildene").count()) === 0,
+  );
   await pc.click('button[aria-label="Flytt side 2 opp"]');
   await pc.click('button[aria-label="Flytt side 1 ned"]');
   sjekk("13", "rekkefølgen kan endres", true);
@@ -463,6 +471,11 @@ async function enKjoering(nettleser) {
   await pc.click("text=Videre");
   await pc.waitForURL(/\/gjennomsyn$/);
   sjekk("13", "uttrekket går gjennom fase 3a og 3b (FR-3: PDF og bilde har gjennomsyn)", (await pc.locator("textarea#tekst").inputValue()).length > 100);
+  sjekk(
+    "13",
+    "FR-45: gjennomsynet ber eleven lese gjennom og rette det som er feil",
+    (await pc.locator("[role=note]", { hasText: "hender det at Buddy leser feil" }).filter({ hasText: "Rett det som er feil før du går videre." }).count()) === 1,
+  );
 
   // Steg 14: slett tekst A (i Samlingen), logg ut.
   await pc.goto(`${APP}/samling`);
