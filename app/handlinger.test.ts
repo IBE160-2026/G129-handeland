@@ -662,6 +662,17 @@ describe("lagreAktivering: forkunnskapen (FR-6, endret 17.11)", () => {
     expect(lagret.lurerPaa).toBe("Hvorfor blir maten varm?");
   });
 
+  test("«Skjønner ikke overskriften» (18.11): den nye koden uklar lagres som de andre", async () => {
+    const tekstId = await pdfTekst();
+    expect(await aktiver(tekstId, { "merke-1": "uklar", "merke-4": "kjent" })).toEqual({
+      adresse: `/tekst/${tekstId}/gjennomsyn`,
+    });
+    expect((await rad(tekstId)).forkunnskapMerking).toEqual([
+      { overskrift: "Mikrobølger", merke: "uklar" },
+      { overskrift: "Tallerkenen", merke: "kjent" },
+    ]);
+  });
+
   test("bare merking: lagres uten oppfordring, og umerkede overskrifter lagres ikke", async () => {
     const tekstId = await pdfTekst();
     expect(await aktiver(tekstId, { "merke-4": "litt" })).toEqual({ adresse: `/tekst/${tekstId}/gjennomsyn` });

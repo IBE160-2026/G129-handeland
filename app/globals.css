@@ -173,7 +173,9 @@ h2 {
 }
 
 /*
- * FR-6 (17.11): merkene i aktiveringen, «Kjenner det», «Litt», «Helt nytt».
+ * FR-6 (endret 18.11): merkene i aktiveringen, «Mye», «Litt», «Ingenting ennå»
+ * og «Skjønner ikke overskriften». De brytes til flere rader når bredden ikke
+ * rekker (320 px), men ingen knapp kuttes.
  * Vanlige radioknapper som ser ut som knapper (button-secondary), så Tab og
  * piltastene virker som før og ingenting trenger skript. Radioknappen ligger
  * usynlig over hele valget, så trykkflaten er hele knappen (minst 44 px).
@@ -240,8 +242,11 @@ h2 {
  * Buddy-merket (DESIGN.md, logo-mark). Portert uendret fra
  * mockups/merke.css og mockups/merke-tenker.css. Klassene:
  *   .tenker  øynene leser fra side til side i en løkke (1,6 s)
- *   .slutt   avslutningen, én gang (4,3 s): blunk, pupillene tones ut,
- *            700 ms ro, brillene vipper til en B og ryggen tegnes
+ *   .slutt   avslutningen, én gang (4,05 s): blunk, pupillene tones ut,
+ *            450 ms ro, brillene vipper til en B og ryggen tegnes.
+ *            Bolk 8 (18.11): pausen etter pupillene er kortet fra 700 til
+ *            450 ms, og alt etter den er flyttet 250 ms fram. Prosentene er
+ *            de samme millisekundene som før, regnet av 4,05 s.
  *   .ferdig  B-en, statisk
  */
 .merke .ramme {
@@ -309,34 +314,34 @@ h2 {
 }
 
 .merke.slutt .flytt {
-  animation: s-flytt 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+  animation: s-flytt 4.05s cubic-bezier(0.65, 0, 0.3, 1) forwards;
 }
 .merke.slutt .snu {
-  animation: s-snu 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+  animation: s-snu 4.05s cubic-bezier(0.65, 0, 0.3, 1) forwards;
 }
 .merke.slutt .oye {
-  animation: s-blunk 4.3s linear forwards;
+  animation: s-blunk 4.05s linear forwards;
 }
 .merke.slutt .stenger path {
-  animation: s-stenger 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+  animation: s-stenger 4.05s cubic-bezier(0.65, 0, 0.3, 1) forwards;
 }
 .merke.slutt .stang {
-  animation: s-stang 4.3s ease forwards;
+  animation: s-stang 4.05s ease forwards;
 }
 @keyframes s-blunk {
   0% {
     transform: scaleY(1);
     opacity: 1;
   }
-  2.5% {
+  2.65% {
     transform: scaleY(0.1);
   }
-  5%,
-  19% {
+  5.31%,
+  20.17% {
     transform: scaleY(1);
     opacity: 1;
   }
-  28%,
+  29.73%,
   100% {
     opacity: 0;
     transform: scale(0.2);
@@ -344,35 +349,35 @@ h2 {
 }
 @keyframes s-snu {
   0%,
-  44% {
+  40.54% {
     transform: rotate(0);
   }
-  72%,
+  70.27%,
   100% {
     transform: rotate(-90deg);
   }
 }
 @keyframes s-flytt {
   0%,
-  44% {
+  40.54% {
     transform: translate(0, 4px);
   }
-  72%,
+  70.27%,
   100% {
     transform: translate(-16px, 20px);
   }
 }
 @keyframes s-stenger {
   0%,
-  44% {
+  40.54% {
     transform: scale(1);
     opacity: 1;
   }
-  68% {
+  66.02% {
     transform: scale(0.2);
     opacity: 0.3;
   }
-  72%,
+  70.27%,
   100% {
     transform: scale(0);
     opacity: 0;
@@ -380,10 +385,10 @@ h2 {
 }
 @keyframes s-stang {
   0%,
-  70% {
+  68.15% {
     stroke-dashoffset: 96;
   }
-  91%,
+  90.44%,
   100% {
     stroke-dashoffset: 0;
   }
@@ -454,7 +459,7 @@ h2 {
  * Mini-merket er beskåret til brillene (Merke.tsx) og krymper til 0,48 rundt
  * midten av brillene (60, 60) i samme tidsvindu som rotasjonen, så den
  * ferdige B-en får plass i høyden til brillene og aldri går utenfor pillen
- * eller knappen. Krympingen er ferdig ved 56 %, før glassene har vippet
+ * eller knappen. Krympingen er ferdig ved 53 %, før glassene har vippet
  * nevneverdig; ellers ville de skrå brillene stukket ut over og under.
  */
 .merke.mini .krymp {
@@ -462,17 +467,17 @@ h2 {
   transform-box: view-box;
 }
 .merke.mini.slutt .krymp {
-  animation: s-krymp 4.3s cubic-bezier(0.65, 0, 0.3, 1) forwards;
+  animation: s-krymp 4.05s cubic-bezier(0.65, 0, 0.3, 1) forwards;
 }
 .merke.mini.ferdig .krymp {
   transform: scale(0.48);
 }
 @keyframes s-krymp {
   0%,
-  44% {
+  40.54% {
     transform: scale(1);
   }
-  56%,
+  53.28%,
   100% {
     transform: scale(0.48);
   }

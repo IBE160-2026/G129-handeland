@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**294 av 294 sjekker bestått.**
+**298 av 298 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -17,19 +17,23 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: aktivering |  |
 | ✓ | FR-5: brødteksten finnes ikke i kildekoden i aktiveringen |  |
 | ✓ | axe: aktivering (375 px) |  |
-| ✓ | FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og tre valg | 8 grupper: «Egenskaper hos ulike EM-bølger» (3), «Radiobølger» (3), «Mikrobølger» (3), «Infrarød stråling» (3), «Synlig lys» (3), «Ultrafiolett stråling» (3), «Røntgenstråling» (3), «Gammastråling» (3) |
+| ✓ | FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og fire valg | 8 grupper: «Egenskaper hos ulike EM-bølger» (4), «Radiobølger» (4), «Mikrobølger» (4), «Infrarød stråling» (4), «Synlig lys» (4), «Ultrafiolett stråling» (4), «Røntgenstråling» (4), «Gammastråling» (4) |
+| ✓ | FR-6 (18.11): valgene heter «Mye», «Litt», «Ingenting ennå» og «Skjønner ikke overskriften» | Mye / Litt / Ingenting ennå / Skjønner ikke overskriften |
+| ✓ | FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over gruppene og beskriver hver gruppe, sammen med instruksen | Hva vet du om dette fra før? \| Se på overskriftene før du leser, og svar for hver av dem. Ingenting her blir vurdert. |
+| ✓ | FR-6 (18.11): de fire valgene får plass på 320 px uten at noen knapp kuttes, og siden ruller ikke sidelengs | 3 rader |
+| ✓ | axe: aktivering (320 px) |  |
 | ✓ | FR-6: Tab når første radiogruppe | {"type":"radio","navn":"merke-1","verdi":"kjent","valgt":false,"hake":"none","ring":"solid","sidelengs":false} |
 | ✓ | FR-6: piltasten velger neste merke i gruppen | {"type":"radio","navn":"merke-1","verdi":"litt","valgt":true,"hake":"\"✓\" / \"\"","ring":"solid","sidelengs":false} |
 | ✓ | FR-6: valgt merke har hake (ikke farge alene) og synlig fokusring | hake "✓" / "", ring solid |
 | ✓ | FR-6: Tab går videre til neste radiogruppe | {"type":"radio","navn":"merke-2","verdi":"kjent","valgt":false,"hake":"none","ring":"solid","sidelengs":false} |
-| ✓ | FR-6: «Helt nytt» kan velges med piltastene | {"type":"radio","navn":"merke-2","verdi":"nytt","valgt":true,"hake":"\"✓\" / \"\"","ring":"solid","sidelengs":false} |
+| ✓ | FR-6: «Skjønner ikke overskriften» kan velges med piltastene | {"type":"radio","navn":"merke-2","verdi":"uklar","valgt":true,"hake":"\"✓\" / \"\"","ring":"solid","sidelengs":false} |
 | ✓ | FR-6: aktiveringen ruller ikke sidelengs på 375 px |  |
 | ✓ | overleveringen, 1280 px: avslutningen spilles i et fast kort nederst til høyre (16 px), Buddy 64 px, «Teksten er klar.» | {"posisjon":"fixed","hoeyre":16,"nederst":16,"mini":false,"merke":64,"tekst":"Teksten er klar.","side":{"luft":"0px","hoeyde":4230,"pille":false}} |
 | ✓ | overleveringen, 1280 px: siden blir ikke lengre mens kortet vises (ingen luft nederst, ikke har-tenkepille) | {"luft":"0px","hoeyde":4230,"pille":false} / etter {"luft":"0px","hoeyde":4230,"pille":false} |
 | ✓ | axe: lesevisning |  |
-| ✓ | FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og den helt nye overskriften | Før du leste Du lurte på: Hvorfor kan vi ikke se radiobølger? Fikk du svar? Sjekk om du kan forklare det med egne ord. Til fagsamtalen Helt nytt for deg før du leste: Radiobølger. Hadde hørt om: Egens |
+| ✓ | FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og overskriften eleven ikke skjønte (18.11) | Før du leste Du lurte på: Hvorfor kan vi ikke se radiobølger? Fikk du svar? Sjekk om du kan forklare det med egne ord. Til fagsamtalen Disse overskriftene skjønte du ikke: Radiobølger. Gir de mening n |
 | ✓ | FR-6: «Før du leste» står rett før «Ferdig med å lese?» |  |
-| ✓ | FR-6: låst aktivering viser «du merket: Helt nytt» ved den helt nye overskriften | Radiobølger— du merket: Helt nytt |
+| ✓ | FR-6: låst aktivering viser «du merket: Skjønner ikke overskriften» ved overskriften eleven ikke skjønte | Radiobølger— du merket: Skjønner ikke overskriften |
 | ✓ | FR-6: låst aktivering har verken radioknapper eller spørsmålsfelt |  |
 | ✓ | FR-10: fokus åpner forklaringen |  |
 | ✓ | FR-10: Escape lukker |  |
@@ -48,7 +52,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/a1053931-bc75-4a01-901b-1d946d0f5107/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -66,7 +70,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/a1053931-bc75-4a01-901b-1d946d0f5107/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -74,7 +78,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/91bff77c-831f-4925-ac49-a1d1b509b2bb/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/a1053931-bc75-4a01-901b-1d946d0f5107/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -115,7 +119,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795035300225 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795036636408 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -173,15 +177,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar |  |
 | ✓ | overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false, /samling |
 | ✓ | overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false (), /samling |
-| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/f16a8f3d-7953-47f0-a9fa-82d66d5b144f/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
+| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/4c596c00-fe9b-463d-ada9-b3715bbfee8d/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
 | ✓ | overleveringen: verten har én statusregion, tom før noe venter | {"antall":1,"tekst":""} |
 | ✓ | overleveringen: en venting som ender med feil, gir ingen avslutning noe sted | {"antall":1,"tekst":""} |
-| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/60dcfbf9-91c9-49d5-919c-443341a55d71/lesing |
+| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/d88d5837-b5ef-4e8a-8035-8836dd955012/lesing |
 | ✓ | overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.» | {"posisjon":"fixed","innenfor":true,"mini":true,"slutt":true,"merke":28,"regioner":1,"regionTekst":"Teksten er klar.","fokusIPillen":false,"variabel":"52px","hoeyde":52,"klasse":true} |
 | ✓ | overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den | 52px / 52px |
 | ✓ | axe: lesevisning med avslutningen i pillen (telefon) |  |
-| ✓ | overleveringen: pillen står gjennom avslutningen (minst 5 s), er så borte, og html har ikke lenger har-tenkepille | 6223 ms, {"antall":1,"tekst":""} |
-| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/60dcfbf9-91c9-49d5-919c-443341a55d71/lesing {"antall":1,"tekst":"Fagordene er klare."} |
+| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,7 s), er så borte, og html har ikke lenger har-tenkepille | 5522 ms, {"antall":1,"tekst":""} |
+| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/d88d5837-b5ef-4e8a-8035-8836dd955012/lesing {"antall":1,"tekst":"Fagordene er klare."} |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
@@ -284,15 +288,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/7703f526-c1c7-473c-bcb1-de90493f7dd0/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/9435fe44-f8a5-487d-b305-054b18c1d252/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/7703f526-c1c7-473c-bcb1-de90493f7dd0/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/9435fe44-f8a5-487d-b305-054b18c1d252/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/b734c12f-03f9-4e66-8f5b-04fa99d26cd4/gjennomsyn |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/62732085-6c91-4c28-8315-7e4139ae58e6/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/b734c12f-03f9-4e66-8f5b-04fa99d26cd4/gjennomsyn |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/62732085-6c91-4c28-8315-7e4139ae58e6/gjennomsyn |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |
 | ✓ | FR-6: gammel tekst viser «Før du leste, skrev du: …» | Før du leste Før du leste, skrev du: Noe om bølger og lys. |
 | ✓ | gjennomsyn: prøvetekstene er ryddet bort | 3 av 3 |

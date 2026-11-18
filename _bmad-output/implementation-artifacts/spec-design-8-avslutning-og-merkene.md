@@ -2,7 +2,8 @@
 title: 'Design runde 2, bolk 8: raskere avslutning og nye merker i forkunnskapssteget'
 type: 'feature'
 created: '2026-11-18'
-status: 'ready-for-dev'
+status: 'in-review'
+baseline_commit: '53dcb41b65b0d3608fc5e228cfad97b870d105cf'
 route: 'dispatch'
 review_loop_iteration: 0
 context: []
@@ -49,10 +50,10 @@ context: []
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/globals.css`, `app/komponenter/Tenker.tsx` -- den nye lengden
-- [ ] `tekst/forkunnskap.ts`, skjemaet, aktiveringssiden, lesevisningen -- de nye merkene og `uklar`
-- [ ] testene og `maaling/*.mjs`
-- [ ] PRD, EXPERIENCE.md, DESIGN.md
+- [x] `app/globals.css`, `app/komponenter/Tenker.tsx` -- den nye lengden
+- [x] `tekst/forkunnskap.ts`, skjemaet, aktiveringssiden, lesevisningen -- de nye merkene og `uklar`
+- [x] testene og `maaling/*.mjs`
+- [x] PRD, EXPERIENCE.md, DESIGN.md
 
 **Acceptance Criteria:**
 - Given en avslutning, when den spilles, then er indikatoren borte omtrent 4,85 s etter at den startet (4,05 s + 0,8 s), ikke 5,5 s.
@@ -60,6 +61,12 @@ context: []
 - Given en tekst merket før 18.11 med `kjent`, when lesevisningen eller aktiveringen åpnes, then står merket som «Mye».
 
 ## Implementation Notes
+
+- Nøkkelbildene er regnet om i millisekunder: alt til og med at pupillene er tonet ut (1204 ms) står på samme tid som før, og alt etter er flyttet 250 ms fram, så lengden er 4050 ms. Nye prosenter: blunk 2,65/5,31/20,17/29,73 %, rotasjonen og stengene starter 40,54 %, ferdig 70,27 % (stengene 66,02 %), ryggen 68,15–90,44 %, mini-krympingen 40,54–53,28 %. Den gamle pausen var i praksis 688 ms (beskrevet som 700); den nye er 438 ms (beskrevet som 450). Samme regel er brukt i `mockups/merke-tenker.css`. `.working/`-kopien er ikke rørt.
+- `AVSLUTNING_MS = 4050 + 800` brukes av både flaten og `TenkerVert`.
+- Spørsmålet er en `<p id="merke-spoersmaal">` øverst i `AktiveringSkjema`. Hver `fieldset` har `aria-describedby="merke-spoersmaal aktivering-hjelp"`, altså spørsmålet først og så instruksen. Instruksen har fortsatt `id="aktivering-hjelp"`, men spørsmålet er tatt ut av den, så det ikke står to ganger: «Se på overskriftene før du leser, og svar for hver av dem. Ingenting her blir vurdert.»
+- «Før du leste»-linjen står i flertall slik spesifikasjonen sier, også når bare én overskrift er uklar. Den står etter linjen om de helt nye overskriftene. Teksten «Helt nytt for deg før du leste» og oppsummeringslinjen for `kjent`/`litt` er ikke endret.
+- `sjekk-tilgjengelighet`: tre valg er blitt fire, og den har nye sjekker for navnene, for spørsmålet (én gang, og i hver gruppes beskrivelse) og for 320 px (ingen knapp utenfor gruppen eller kuttet). Gruppe 2 merkes nå «Skjønner ikke overskriften» med piltasten, og «Før du leste» og den låste aktiveringen sjekkes for det. Pillen må stå i 4,5–5,9 s (målt 5522 ms); før var kravet minst 5 s.
 
 ## Spec Change Log
 

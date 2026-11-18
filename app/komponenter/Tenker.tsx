@@ -27,7 +27,7 @@
  *     tilfeldig om skjermleseren sier noe.
  *   - Mens `aktiv`: øynene leser i en løkke. Etter 30 s kommer et tillegg.
  *   - Går den fra aktiv til ikke aktiv med `ferdigStatus`, spilles
- *     avslutningen (4,3 s) én gang i indikatorens plass, og statusen settes
+ *     avslutningen (4,05 s) én gang i indikatorens plass, og statusen settes
  *     til `ferdigStatus`. Uten `ferdigStatus` (feil) forsvinner indikatoren
  *     bare. Pillen glir bort etter avslutningen.
  *
@@ -74,8 +74,8 @@ import { TELEFON } from "./brytepunkt";
 import { BuddyMerke } from "./Merke";
 
 const LANG_VENTING_MS = 30_000;
-/** Avslutningen er 4,3 s; B-en blir stående litt før indikatoren går. */
-const AVSLUTNING_MS = 4300 + 1200;
+/** Avslutningen er 4,05 s; B-en blir stående 0,8 s før indikatoren går (bolk 8, 18.11). */
+const AVSLUTNING_MS = 4050 + 800;
 /**
  * Pillen er borte når `tenker-pille-ut` er ferdig (animationend). Tidtakeren
  * er en reserve for når animasjonen ikke kjører: på PC og med redusert

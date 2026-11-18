@@ -2,7 +2,7 @@
 name: LeseBuddy
 description: Visuell identitet for LeseBuddy (kodenavn Lesevenn), lesestøtte for videregående. Next.js med Tailwind CSS v4 og egne komponenter, uten komponentbibliotek. Lys og mørk modus.
 status: final
-updated: 2026-11-15
+updated: 2026-11-18
 sources:
   - ../../prd-lesevenn.md
   - ../../product-brief-lesevenn.md
@@ -138,7 +138,7 @@ motion:
   fan: 500ms cubic-bezier(.3,1.35,.5,1), 45 ms forsinkelse per kort
   fade: 300ms ease
   thinking-loop: 1.6s ease-in-out, i løkke mens det ventes
-  thinking-finish: 4.3s, én gang
+  thinking-finish: 4.05s, én gang; B-en står 0,8 s før indikatoren går (endret 18.11, var 4.3s og 1,2 s)
 components:
   focus-ring:
     outline: 3px solid {colors.primary}
@@ -371,7 +371,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet og 
   - *Knapp:* mini-Buddy med brillene 20 px høye inne i knappen som ble trykket, med statusteksten som knappetekst. Ramme og pupiller tegnes i knappens forgrunnsfarge (`currentColor`), og glassene har ikke fyll, så glass og ramme ikke flyter sammen i mørk modus. Knappen er låst mens Buddy tenker (`aria-disabled`, så fokus blir stående), men tones ikke ned (opasitet 1). Brukes ved korte ventinger, som et svar i fagsamtalen.
   - *Linje:* mini-Buddy med brillene 22 px høye foran én linje med status. Brukes for oversettelser som lages i bakgrunnen.
 - *Tenker:* øynene leser fra side til side i en løkke (`{motion.thinking-loop}`).
-- *Ferdig:* en avslutning (`{motion.thinking-finish}`). Buddy blunker, pupillene blir værende 0,8 sekunder og tones ut, det blir 700 ms ro, brillene vipper til en B mens stengene trekkes inn, og til slutt tegnes ryggen.
+- *Ferdig:* en avslutning (`{motion.thinking-finish}`). Buddy blunker, pupillene blir værende 0,8 sekunder og tones ut, det blir 450 ms ro, brillene vipper til en B mens stengene trekkes inn, og til slutt tegnes ryggen. B-en står 0,8 s før indikatoren går, så hele avslutningen tar omtrent 4,85 s. *Endret 18.11:* pausen var 700 ms og B-en sto 1,2 s (5,5 s i alt); utvikleren syntes avslutningen hang for lenge. Resten av tegningen og rekkefølgen er uendret, og med redusert bevegelse vises B-en direkte som før.
 - Avslutningen spilles i indikatorens plass mens innholdet allerede vises under: i flaten, i pillen eller i knappen. Den får plass i alle størrelser.
 - **Etter at siden er byttet** (17.11): har svaret sendt eleven til en ny side eller byttet innholdet der indikatoren sto, spilles avslutningen av en vert i rotlayouten. Smalere enn 760 px er det tenkepillen, på samme sted som pillen sto. Fra 760 px er det et lite fast kort nederst til høyre: merket på 64 px og statusen i fet skrift, på `{colors.surface}` med 2 px kant i `{colors.primary}`, radius 32 px og `{elevation.floating}`, 16 px fra kanten. Kortet vises bare under avslutningen og forsvinner uten å gli, som flaten. Det ligger over innholdet i hjørnet og teller ikke med i luften nederst (`--tenker-pille`), så siden blir ikke lengre av det; pillen på telefon teller med som før. Kortet og pillen deler kant, flate, radius, skygge og lag (egendefinerte egenskaper i globals.css). Regelen om at det aldri er en pille fra 760 px gjelder ventingen, ikke avslutningen etter at siden er byttet. Verten flytter ikke fokus. Når den spiller, og når den ikke gjør det (feil, forlat-vernet, rettingen av quizen), står i EXPERIENCE.md under Tenkeindikator.
 - Kildekode: [mockups/merke-tenker.css](mockups/merke-tenker.css). Et eksempel å trykke på ligger øverst i [mockups/runde-8-ordmerke.html](mockups/runde-8-ordmerke.html). Ordmerkene lenger ned på den siden er valgt bort.

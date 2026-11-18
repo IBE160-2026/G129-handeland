@@ -6,8 +6,10 @@
  * lese den kaldt. Viser vi brødteksten her, er det ikke lenger en aktivering —
  * det er bare lesing med et spørsmål foran.
  *
- * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Dette kan jeg»,
- * «Har hørt om» eller «Helt nytt», og kan skrive ett spørsmål hun lurer på. Det frie
+ * FR-6 (endret 17.11.2026, merkene 18.11): over overskriftene står ett
+ * spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver
+ * overskrift «Mye», «Litt», «Ingenting ennå» eller «Skjønner ikke
+ * overskriften». Hun kan skrive ett spørsmål hun lurer på. Det frie
  * feltet «Hva tror du teksten handler om?» er borte; utviklerens egen test
  * viste at det ikke satte i gang noe. Det hun merket og spurte om, vises igjen
  * i lesevisningen under «Før du leste».
@@ -104,7 +106,7 @@ export default async function Aktivering({
       {visSkjema && (
         <p id="aktivering-hjelp" className="mt-4 text-slate-700 dark:text-slate-300">
           {titler.length > 0
-            ? "Se på overskriftene før du leser. Hvor godt kjenner du hver av dem fra før? Ingenting her blir vurdert."
+            ? "Se på overskriftene før du leser, og svar for hver av dem. Ingenting her blir vurdert."
             : "Er det noe du lurer på om emnet før du leser? Ingenting her blir vurdert."}
         </p>
       )}

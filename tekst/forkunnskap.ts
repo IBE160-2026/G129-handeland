@@ -1,10 +1,11 @@
 /**
- * FR-6 (endret 17.11.2026): forkunnskapen i aktiveringen.
+ * FR-6 (endret 17.11.2026, merkene 18.11): forkunnskapen i aktiveringen.
  *
- * Eleven merker hver overskrift «Dette kan jeg», «Har hørt om» eller «Helt nytt», og
- * kan skrive ett spørsmål hun lurer på. Ingenting vurderes. I lesevisningen
- * vises det igjen under «Før du leste», så det hun gjorde før lesingen, får
- * en ende.
+ * Over overskriftene står ett spørsmål, «Hva vet du om dette fra før?», og
+ * eleven svarer for hver overskrift «Mye», «Litt», «Ingenting ennå» eller
+ * «Skjønner ikke overskriften». Hun kan skrive ett spørsmål hun lurer på.
+ * Ingenting vurderes. I lesevisningen vises det igjen under «Før du leste»,
+ * så det hun gjorde før lesingen, får en ende.
  *
  * Rene funksjoner, uten database og rammeverk: skjemaet leses her, og
  * lesevisningen bygger delen sin her. Begge kan dermed enhetstestes.
@@ -12,14 +13,22 @@
 
 import type { Avsnitt } from "./avsnittsdeling";
 
-/** Lukket kodeverk, aldri fritekst. Rekkefølgen er rekkefølgen i skjemaet. */
-export const MERKER = ["kjent", "litt", "nytt"] as const;
+/**
+ * Lukket kodeverk, aldri fritekst. Rekkefølgen er rekkefølgen i skjemaet.
+ * Kodene fra 17.11 er de samme, bare navnene er nye (18.11), så merker lagret
+ * før endringen vises med de nye navnene uten migrasjon. `uklar` er ny.
+ */
+export const MERKER = ["kjent", "litt", "nytt", "uklar"] as const;
 export type Merke = (typeof MERKER)[number];
 
+/** Spørsmålet som står én gang over alle overskriftene i skjemaet. */
+export const MERKESPOERSMAAL = "Hva vet du om dette fra før?";
+
 export const MERKENAVN: Record<Merke, string> = {
-  kjent: "Dette kan jeg",
-  litt: "Har hørt om",
-  nytt: "Helt nytt",
+  kjent: "Mye",
+  litt: "Litt",
+  nytt: "Ingenting ennå",
+  uklar: "Skjønner ikke overskriften",
 };
 
 /**
@@ -73,9 +82,11 @@ export function somListe(deler: string[]): string {
 export type FoerDuLeste = {
   /** Spørsmålet eleven skrev, eller null. */
   lurerPaa: string | null;
-  /** Overskriftene hun merket «Helt nytt». */
+  /** Overskriftene hun merket «Ingenting ennå». */
   heltNye: string[];
-  /** «kjent» og «litt» oppsummert i én linje, eller null. */
+  /** Overskriftene hun merket «Skjønner ikke overskriften». */
+  uklare: string[];
+  /** «Mye» og «Litt» oppsummert i én linje, eller null. */
   oppsummering: string | null;
   /** Det frie svaret fra før 17.11, eller null. */
   gammeltSvar: string | null;
@@ -106,10 +117,16 @@ export function foerDuLeste(rad: {
   const del: FoerDuLeste = {
     lurerPaa: rad.lurerPaa?.trim() || null,
     heltNye: med("nytt"),
+    uklare: med("uklar"),
     oppsummering: linje || null,
     gammeltSvar: rad.forkunnskapssvar?.trim() || null,
   };
 
-  const tom = !del.lurerPaa && del.heltNye.length === 0 && !del.oppsummering && !del.gammeltSvar;
+  const tom =
+    !del.lurerPaa &&
+    del.heltNye.length === 0 &&
+    del.uklare.length === 0 &&
+    !del.oppsummering &&
+    !del.gammeltSvar;
   return tom ? null : del;
 }

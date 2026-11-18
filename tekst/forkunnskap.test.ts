@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { delIAvsnitt, overskrifter } from "./avsnittsdeling";
-import { MAKS_LURER_PAA, foerDuLeste, lesLurerPaa, lesMerking, somListe } from "./forkunnskap";
+import { MAKS_LURER_PAA, MERKENAVN, MERKER, foerDuLeste, lesLurerPaa, lesMerking, somListe } from "./forkunnskap";
 
 const TEKST = "Mikrobølger\n\nMikrobølger får vannmolekyler til å riste.\n\nTallerkenen\n\nEn tallerken uten vann blir ikke varm.";
 const titler = overskrifter(delIAvsnitt(TEKST));
@@ -20,6 +20,20 @@ describe("lesMerking (FR-6, endret 17.11)", () => {
 
   test("uten overskrifter blir det ingen merking", () => {
     expect(lesMerking(skjema({ "merke-1": "kjent" }), [])).toEqual([]);
+  });
+
+  test("«Skjønner ikke overskriften» (18.11): koden uklar godtas", () => {
+    expect(lesMerking(skjema({ "merke-1": "uklar" }), titler)).toEqual([{ overskrift: "Mikrobølger", merke: "uklar" }]);
+  });
+});
+
+describe("merkene (endret 18.11)", () => {
+  test("fire valg i skjemarekkefølge, og de gamle kodene får de nye navnene", () => {
+    expect(MERKER.map((m) => MERKENAVN[m])).toEqual(["Mye", "Litt", "Ingenting ennå", "Skjønner ikke overskriften"]);
+    // Lagret før 18.11 med de samme kodene: ingen migrasjon.
+    expect(MERKENAVN.kjent).toBe("Mye");
+    expect(MERKENAVN.litt).toBe("Litt");
+    expect(MERKENAVN.nytt).toBe("Ingenting ennå");
   });
 });
 
@@ -61,6 +75,7 @@ describe("foerDuLeste", () => {
     ).toEqual({
       lurerPaa: "Hvorfor blir maten varm?",
       heltNye: ["Tallerkenen"],
+      uklare: [],
       oppsummering: "Dette kunne du fra før: Mikrobølger. Hadde hørt om: Ovnen.",
       gammeltSvar: null,
     });
@@ -70,9 +85,22 @@ describe("foerDuLeste", () => {
     expect(foerDuLeste({ forkunnskapMerking: null, lurerPaa: null, forkunnskapssvar: "Noe om ovner." })).toEqual({
       lurerPaa: null,
       heltNye: [],
+      uklare: [],
       oppsummering: null,
       gammeltSvar: "Noe om ovner.",
     });
+  });
+
+  test("uklare overskrifter (18.11): egen liste, og de alene gir en del", () => {
+    const del = foerDuLeste({
+      forkunnskapMerking: [
+        { overskrift: "Mikrobølger", merke: "uklar" },
+        { overskrift: "Tallerkenen", merke: "uklar" },
+      ],
+      lurerPaa: null,
+      forkunnskapssvar: null,
+    });
+    expect(del).toEqual({ lurerPaa: null, heltNye: [], uklare: ["Mikrobølger", "Tallerkenen"], oppsummering: null, gammeltSvar: null });
   });
 
   test("tom: ingen del, verken for ny eller gammel tekst", () => {

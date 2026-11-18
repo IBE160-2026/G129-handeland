@@ -351,7 +351,7 @@ export default async function Lesing({
       </section>
 
       {/*
-        FR-6 (endret 17.11): det eleven merket og spurte om før hun leste,
+        FR-6 (endret 17.11, merkene 18.11): det eleven merket og spurte om før hun leste,
         står igjen her. «Fikk du svar?» lagres ikke; det er en oppfordring.
         Ingen del når teksten ikke har noe å vise.
       */}
@@ -376,6 +376,10 @@ export default async function Lesing({
             )}
             {foer.heltNye.length > 0 && (
               <p>Helt nytt for deg før du leste: {somListe(foer.heltNye)}.</p>
+            )}
+            {/* 18.11: overskriftene eleven merket «Skjønner ikke overskriften». */}
+            {foer.uklare.length > 0 && (
+              <p>Disse overskriftene skjønte du ikke: {somListe(foer.uklare)}. Gir de mening nå?</p>
             )}
             {foer.oppsummering && <p className="text-slate-600 dark:text-slate-400">{foer.oppsummering}</p>}
             {foer.gammeltSvar && (

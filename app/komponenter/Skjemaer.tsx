@@ -21,7 +21,7 @@ import type { Handlingssvar } from "../handlinger";
 import { oppdaterUtenFeil } from "./oppdaterUtenFeil";
 import { NETTFEIL, type Feiltekst } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
-import { MAKS_LURER_PAA, MERKENAVN, MERKER, merkefelt } from "../../tekst/forkunnskap";
+import { MAKS_LURER_PAA, MERKENAVN, MERKER, MERKESPOERSMAAL, merkefelt } from "../../tekst/forkunnskap";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
 
@@ -89,12 +89,18 @@ export type Aktiveringstittel = {
   morsmaal?: ReactNode;
 };
 
+/** Id-en til spørsmålet over radiogruppene, som hver gruppe beskrives av. */
+const SPOERSMAAL_ID = "merke-spoersmaal";
+
 /**
- * FR-6 (endret 17.11.2026): eleven merker hver overskrift «Dette kan jeg»,
- * «Har hørt om» eller «Helt nytt», og kan skrive ett spørsmål. Merkene er vanlige
- * radioknapper i en `fieldset` per overskrift, så de virker med tastatur
- * (Tab inn i gruppen, piltaster mellom valgene) og uten skript. Utseendet
- * står i globals.css (`.merkevalg`).
+ * FR-6 (endret 17.11.2026, merkene 18.11): over overskriftene står ett
+ * spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver
+ * overskrift «Mye», «Litt», «Ingenting ennå» eller «Skjønner ikke
+ * overskriften». Hun kan skrive ett spørsmål. Merkene er vanlige radioknapper
+ * i en `fieldset` per overskrift, så de virker med tastatur (Tab inn i
+ * gruppen, piltaster mellom valgene) og uten skript. Gruppen er navngitt av
+ * overskriften (`legend`) og beskrevet av spørsmålet og instruksen på siden
+ * (`aria-describedby`). Utseendet står i globals.css (`.merkevalg`).
  */
 export function AktiveringSkjema({
   handling,
@@ -126,10 +132,14 @@ export function AktiveringSkjema({
 
       {titler.length > 0 && (
         <div className="space-y-4">
+          {/* Spørsmålet står én gang, over alle gruppene (18.11). */}
+          <p id={SPOERSMAAL_ID} className="text-lg font-semibold">
+            {MERKESPOERSMAAL}
+          </p>
           {titler.map((o) => (
             <fieldset
               key={o.nummer}
-              aria-describedby={beskrivelse}
+              aria-describedby={beskrivelse ? `${SPOERSMAAL_ID} ${beskrivelse}` : SPOERSMAAL_ID}
               className="rounded-md border border-slate-300 p-4 dark:border-slate-700"
             >
               <legend className="px-1 text-lg font-medium">

@@ -156,8 +156,8 @@ async function loeype(s, { mobil, eksempel, brod }) {
 
   // Steg 3: aktivering.
   sjekk(`${p}3`, "aktiveringen viser ikke brødteksten", !(await s.content()).includes(brod));
-  // FR-6 (endret 17.11): merk den første overskriften og skriv et spørsmål.
-  await trykk(s.locator("fieldset").first().locator("label", { hasText: "Helt nytt" }));
+  // FR-6 (endret 17.11, merkene 18.11): merk den første overskriften og skriv et spørsmål.
+  await trykk(s.locator("fieldset").first().locator("label", { hasText: "Ingenting ennå" }));
   await s.fill("#lurer-paa", "Hvorfor blir maten varm i mikrobølgeovnen?");
   // Hver side nettleseren lander på etter «Videre», så steg 4 kan vise at
   // gjennomsynet faktisk ble hoppet over, ikke bare at lesingen ble nådd.
@@ -225,7 +225,7 @@ async function loeype(s, { mobil, eksempel, brod }) {
     const t = f.locator("textarea");
     if (await t.count()) await t.fill("Det har med frekvens å gjøre.");
   }
-  // Luften nederst måles først når avslutningen er ferdig (4,3 s + 1,2 s og utgangen).
+  // Luften nederst måles først når avslutningen er ferdig (4,05 s + 0,8 s og utgangen).
   const vertBorte = await vert.waitFor({ state: "detached", timeout: 20000 }).then(
     () => true,
     () => false,

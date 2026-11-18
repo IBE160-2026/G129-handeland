@@ -65,7 +65,11 @@
  *   - FR-6 (17.11): på 375 px er hver overskrift i aktiveringen en radiogruppe
  *     med navn (fieldset og legend), nådd med Tab og styrt med piltastene,
  *     og valgt merke har hake og fokusring; lesevisningen viser «Før du
- *     leste» med spørsmålet, lenken og den helt nye overskriften
+ *     leste» med spørsmålet, lenken og overskriften eleven ikke skjønte.
+ *     Merkene 18.11: fire valg («Mye», «Litt», «Ingenting ennå», «Skjønner
+ *     ikke overskriften»), spørsmålet «Hva vet du om dette fra før?» én gang
+ *     over gruppene og i hver gruppes beskrivelse, og på 320 px kuttes ingen
+ *     knapp
  *   - overleveringen (17.11): når svaret sender eleven til en ny side, spilles
  *     avslutningen av verten i rotlayouten. På 375 px: en lenke i topplinjen
  *     trykket mens Buddy tenker, gir ingen avslutning (forlat-vernet); et
@@ -290,24 +294,68 @@ try {
   await axe(pc, "aktivering");
   sjekk("FR-5: brødteksten finnes ikke i kildekoden i aktiveringen", !(await lekker()));
 
-  /* --- FR-6 (endret 17.11): merkene, på 375 px og bare med tastatur --- */
+  /* --- FR-6 (endret 17.11, merkene 18.11): merkene, på 320 og 375 px og bare med tastatur --- */
   await pc.setViewportSize({ width: 375, height: 800 });
   await axe(pc, "aktivering (375 px)");
   const grupper = await pc.evaluate(() =>
     [...document.querySelectorAll("main form fieldset")].map((f) => {
       const radio = [...f.querySelectorAll("input[type=radio]")];
+      const beskrevet = (f.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
       return {
         navn: (f.querySelector(":scope > legend")?.textContent ?? "").trim(),
         valg: radio.length,
         feltnavn: new Set(radio.map((r) => r.name)).size,
+        beskrivelse: beskrevet.map((id) => document.getElementById(id)?.textContent.trim() ?? "").join(" | "),
+        etiketter: [...f.querySelectorAll(".merkevalg")].map((l) => l.textContent.trim()).join(" / "),
       };
     }),
   );
   sjekk(
-    "FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og tre valg",
-    grupper.length >= 2 && grupper.every((g) => g.navn.length > 0 && g.valg === 3 && g.feltnavn === 1),
+    "FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og fire valg",
+    grupper.length >= 2 && grupper.every((g) => g.navn.length > 0 && g.valg === 4 && g.feltnavn === 1),
     `${grupper.length} grupper: ${grupper.map((g) => `«${g.navn}» (${g.valg})`).join(", ")}`,
   );
+  sjekk(
+    "FR-6 (18.11): valgene heter «Mye», «Litt», «Ingenting ennå» og «Skjønner ikke overskriften»",
+    grupper.every((g) => g.etiketter === "Mye / Litt / Ingenting ennå / Skjønner ikke overskriften"),
+    grupper[0]?.etiketter ?? "",
+  );
+  sjekk(
+    "FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over gruppene og beskriver hver gruppe, sammen med instruksen",
+    (await pc.locator("main form #merke-spoersmaal", { hasText: "Hva vet du om dette fra før?" }).count()) === 1 &&
+      (await pc.locator("fieldset #merke-spoersmaal").count()) === 0 &&
+      grupper.every(
+        (g) => g.beskrivelse.startsWith("Hva vet du om dette fra før?") && g.beskrivelse.includes("Ingenting her blir vurdert."),
+      ),
+    grupper[0]?.beskrivelse ?? "",
+  );
+  // De fire valgene får plass på 320 px: de kan brytes til flere rader, men
+  // ingen knapp går utenfor gruppen eller får teksten kuttet.
+  await pc.setViewportSize({ width: 320, height: 800 });
+  const smalMerker = await pc.evaluate(() => {
+    const feil = [];
+    for (const f of document.querySelectorAll("main form fieldset")) {
+      const fb = f.getBoundingClientRect();
+      for (const l of f.querySelectorAll(".merkevalg")) {
+        const b = l.getBoundingClientRect();
+        if (b.left < fb.left - 0.5 || b.right > fb.right + 0.5 || l.scrollWidth > l.clientWidth + 1) {
+          feil.push(`${l.textContent.trim()} (${Math.round(b.left)}–${Math.round(b.right)} i ${Math.round(fb.left)}–${Math.round(fb.right)})`);
+        }
+      }
+    }
+    const foerste = document.querySelector("main form fieldset");
+    const rader = new Set(
+      [...(foerste?.querySelectorAll(".merkevalg") ?? [])].map((l) => Math.round(l.getBoundingClientRect().top)),
+    ).size;
+    return { feil, rader, sidelengs: document.documentElement.scrollWidth > window.innerWidth };
+  });
+  sjekk(
+    "FR-6 (18.11): de fire valgene får plass på 320 px uten at noen knapp kuttes, og siden ruller ikke sidelengs",
+    smalMerker.feil.length === 0 && !smalMerker.sidelengs,
+    `${smalMerker.rader} rader${smalMerker.feil.length ? `; kuttet: ${smalMerker.feil.join(", ")}` : ""}`,
+  );
+  await axe(pc, "aktivering (320 px)");
+  await pc.setViewportSize({ width: 375, height: 800 });
   const aktiv = () =>
     pc.evaluate(() => {
       const e = document.activeElement;
@@ -349,11 +397,15 @@ try {
     andreGruppe.type === "radio" && andreGruppe.navn !== "merke-1" && andreGruppe.navn.startsWith("merke-"),
     JSON.stringify(andreGruppe),
   );
-  // Pil venstre fra første valg går rundt til «Helt nytt».
+  // Pil venstre fra første valg går rundt til «Skjønner ikke overskriften» (18.11).
   await pc.keyboard.press("ArrowLeft");
-  const nytt = await aktiv();
-  sjekk("FR-6: «Helt nytt» kan velges med piltastene", nytt.verdi === "nytt" && nytt.valgt, JSON.stringify(nytt));
-  sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !nytt.sidelengs);
+  const uklar = await aktiv();
+  sjekk(
+    "FR-6: «Skjønner ikke overskriften» kan velges med piltastene",
+    uklar.verdi === "uklar" && uklar.valgt,
+    JSON.stringify(uklar),
+  );
+  sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !uklar.sidelengs);
   await pc.setViewportSize({ width: 1280, height: 900 });
 
   await pc.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
@@ -417,13 +469,12 @@ try {
 
   /* --- FR-6: «Før du leste» i lesevisningen --- */
   const foerDel = (await pc.locator("#foer-du-leste").count()) > 0 ? await pc.locator("#foer-du-leste").innerText() : "";
-  const heltNy = grupper[1]?.navn.replace(/\s*\(laget av LeseBuddy\)$/, "") ?? "";
+  const uklarOverskrift = grupper[1]?.navn.replace(/\s*\(laget av LeseBuddy\)$/, "") ?? "";
   sjekk(
-    "FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og den helt nye overskriften",
+    "FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og overskriften eleven ikke skjønte (18.11)",
     foerDel.includes("Du lurte på: Hvorfor kan vi ikke se radiobølger?") &&
       (await pc.locator('#foer-du-leste a[href$="/oppgaver"]').count()) === 1 &&
-      foerDel.includes("Helt nytt for deg før du leste:") &&
-      foerDel.includes(heltNy),
+      foerDel.includes(`Disse overskriftene skjønte du ikke: ${uklarOverskrift}. Gir de mening nå?`),
     foerDel.replace(/\s+/g, " ").slice(0, 200),
   );
   const rekkefoelge = await pc.evaluate(() => {
@@ -434,11 +485,11 @@ try {
 
   // FR-6: aktiveringen åpnet igjen etter låsingen viser merkene, uten skjema.
   await pc.goto(`${tekstUrl}/aktivering`);
-  const merketRad = pc.locator("main li", { hasText: heltNy }).first();
+  const merketRad = pc.locator("main li", { hasText: uklarOverskrift }).first();
   const merketTekst = (await merketRad.count()) > 0 ? await merketRad.innerText() : "";
   sjekk(
-    "FR-6: låst aktivering viser «du merket: Helt nytt» ved den helt nye overskriften",
-    heltNy.length > 0 && merketTekst.includes("du merket: Helt nytt"),
+    "FR-6: låst aktivering viser «du merket: Skjønner ikke overskriften» ved overskriften eleven ikke skjønte",
+    uklarOverskrift.length > 0 && merketTekst.includes("du merket: Skjønner ikke overskriften"),
     merketTekst.replace(/\s+/g, " ").slice(0, 120),
   );
   sjekk(
@@ -1298,7 +1349,7 @@ try {
         await tlf.waitForTimeout(500);
         const slapp = await forlatHold.slipp();
         await tlf.waitForURL(/\/samling(\?.*)?$/, { timeout: 60000 });
-        // Verten ville vist seg straks etter byttet (og stått i 5,5 s).
+        // Verten ville vist seg straks etter byttet (og stått i 4,85 s).
         await tlf.waitForTimeout(1500);
         const sett = await vertSett(tlf);
         forlatOk = slapp && !sett && (await tlf.locator(VERT).count()) === 0;
@@ -1416,8 +1467,10 @@ try {
           `${p.variabel} / ${p.hoeyde}px`,
         );
         await axe(tlf, "lesevisning med avslutningen i pillen (telefon)");
-        // Avslutningen er 4,3 s + 1,2 s, og så glir pillen bort. Romslig grense,
-        // men den skal ha stått omtrent hele avslutningen.
+        // Avslutningen er 4,05 s + 0,8 s (bolk 8, 18.11), og så glir pillen bort
+        // (0,3 s). Romslig nedre grense, men den skal ha stått omtrent hele
+        // avslutningen; den øvre skiller den nye lengden fra den gamle (5,5 s + 0,3 s og
+        // ventetiden i målingen, ca. 0,4 s; målt 5,5 s med den nye 18.11).
         const borte = await vert.waitFor({ state: "detached", timeout: 20000 }).then(
           () => true,
           () => false,
@@ -1425,9 +1478,10 @@ try {
         const varte = Date.now() - kom_t;
         const etter = await vertRegion(tlf);
         sjekk(
-          "overleveringen: pillen står gjennom avslutningen (minst 5 s), er så borte, og html har ikke lenger har-tenkepille",
+          "overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille",
           borte &&
-            varte >= 5000 &&
+            varte >= 4500 &&
+            varte < 5900 &&
             etter.tekst === "" &&
             !(await tlf.evaluate(() => document.documentElement.classList.contains("har-tenkepille"))),
           `${varte} ms, ${JSON.stringify(etter)}`,
