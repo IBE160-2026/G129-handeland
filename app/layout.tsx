@@ -3,6 +3,7 @@ import { Atkinson_Hyperlegible, Instrument_Serif, Quicksand } from "next/font/go
 import { cookies } from "next/headers";
 import { TEMA_KAPSEL, tolkTema } from "../data/tema";
 import "./globals.css";
+import { TenkerVert } from "./komponenter/Tenker";
 import { Topplinje } from "./komponenter/Topplinje";
 
 // DESIGN.md, typography: Atkinson til all brødtekst, Instrument Serif til
@@ -65,6 +66,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <div id="innhold" tabIndex={-1} className="flex flex-1 flex-col outline-none">
           {children}
         </div>
+        {/*
+          Verten for tenkeindikatorens avslutning når svaret sender eleven til
+          en ny side eller bytter innholdet (Tenker.tsx). Den står utenfor
+          sidene, så den lever videre gjennom navigeringen.
+        */}
+        <TenkerVert />
       </body>
     </html>
   );

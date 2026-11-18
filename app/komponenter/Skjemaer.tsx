@@ -18,6 +18,7 @@ import { useActionState, useEffect, useRef, useState, useTransition, type ReactN
 import { useFormStatus } from "react-dom";
 import { Feilmelding } from "./Feilmelding";
 import type { Handlingssvar } from "../handlinger";
+import { oppdaterUtenFeil } from "./oppdaterUtenFeil";
 import { NETTFEIL, type Feiltekst } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
 import { MAKS_LURER_PAA, MERKENAVN, MERKER, merkefelt } from "../../tekst/forkunnskap";
@@ -30,8 +31,27 @@ const TOMT: Handlingssvar = {};
  * Knappen beholder den korte teksten («Finner fagordene…») og låses. Venter
  * skjemaet på språkmodellen (`status`), vises tenkeindikatoren under; ellers
  * får skjermleseren ventteksten i en statusregion som finnes fra før.
+ *
+ * `ferdigStatus` er statusen når svaret kom («Teksten er klar.»). Mens det
+ * ventes, står den alltid, så avslutningen gis videre når siden byttes
+ * (Tenker.tsx). Når ventingen er over, står den bare når handlingen ikke
+ * svarte med en feil (`feilet`), så en feil aldri gir en avslutning.
+ * Skjemaet kan ikke vite svaret selv, så Tenker sjekker i tillegg adressen
+ * etter byttet og om eleven selv gikk fra siden (forlat-vernet).
  */
-function Send({ venter, klar, status }: { venter: string; klar: string; status?: string }) {
+function Send({
+  venter,
+  klar,
+  status,
+  ferdigStatus,
+  feilet = false,
+}: {
+  venter: string;
+  klar: string;
+  status?: string;
+  ferdigStatus?: string;
+  feilet?: boolean;
+}) {
   const { pending } = useFormStatus();
   return (
     <>
@@ -39,7 +59,13 @@ function Send({ venter, klar, status }: { venter: string; klar: string; status?:
         {pending ? venter : klar}
       </button>
       {status ? (
-        <Tenker aktiv={pending} status={status} hjelp="Dette kan ta et halvt minutt." className="mt-3" />
+        <Tenker
+          aktiv={pending}
+          status={status}
+          ferdigStatus={pending || !feilet ? ferdigStatus : undefined}
+          hjelp="Dette kan ta et halvt minutt."
+          className="mt-3"
+        />
       ) : (
         <p role="status" className="sr-only">
           {pending ? venter : ""}
@@ -145,7 +171,7 @@ export function AktiveringSkjema({
         />
       </div>
 
-      <Send venter={venter} klar="Videre" status={status} />
+      <Send venter={venter} klar="Videre" status={status} ferdigStatus="Teksten er klar." feilet={!!svar.feil} />
     </form>
   );
 }
@@ -164,7 +190,13 @@ export function LaasPaaNyttSkjema({
     <form action={send} className="space-y-4">
       {svar.feil && <Feilmelding {...svar.feil} />}
       <p>Svaret ditt er lagret, men teksten ble ikke klar til lesing. Prøv igjen.</p>
-      <Send venter="Finner fagordene…" klar="Prøv igjen" status="Buddy finner fagordene …" />
+      <Send
+        venter="Finner fagordene…"
+        klar="Prøv igjen"
+        status="Buddy finner fagordene …"
+        ferdigStatus="Teksten er klar."
+        feilet={!!svar.feil}
+      />
     </form>
   );
 }
@@ -217,7 +249,13 @@ export function GjennomsynSkjema({
         </p>
       </div>
 
-      <Send venter="Finner fagordene…" klar="Lås og finn fagordene" status="Buddy finner fagordene …" />
+      <Send
+        venter="Finner fagordene…"
+        klar="Lås og finn fagordene"
+        status="Buddy finner fagordene …"
+        ferdigStatus="Teksten er klar."
+        feilet={!!svar.feil}
+      />
     </form>
   );
 }
@@ -240,11 +278,14 @@ export function LagQuizAutomatisk({
   const [feil, settFeil] = useState<Handlingssvar["feil"]>(undefined);
   /** Ny nøkkel per feil, så meldingen leses opp og får fokus hver gang. */
   const [antallFeil, settAntallFeil] = useState(0);
+  /** Quizen er laget, og siden oppdateres: avslutningen gis videre (Tenker.tsx). */
+  const [klar, settKlar] = useState(false);
   const startet = useRef(false);
 
   const kjoer = () =>
     startOvergang(async () => {
       settFeil(undefined);
+      settKlar(false);
       let svar: Handlingssvar;
       try {
         svar = await handling();
@@ -254,7 +295,10 @@ export function LagQuizAutomatisk({
       if (svar.feil) {
         settFeil(svar.feil);
         settAntallFeil((n) => n + 1);
-      } else router.refresh();
+      } else {
+        settKlar(true);
+        router.refresh();
+      }
     });
 
   useEffect(() => {
@@ -273,7 +317,17 @@ export function LagQuizAutomatisk({
 
   // Vises også i øyeblikket før overgangen starter og mens siden oppdateres,
   // så eleven aldri ser en tom side.
-  return <Tenker aktiv status="Buddy lager quizen din …" hjelp="Det tar som regel 10–20 sekunder." />;
+  // `ferdigStatus` står først når quizen er laget, så en feil eller en elev
+  // som går fra siden mens Buddy tenker, ikke gir noen avslutning.
+  return (
+    <Tenker
+      aktiv
+      status="Buddy lager quizen din …"
+      ferdigStatus={klar ? "Quizen er klar." : undefined}
+      kjentSvar
+      hjelp="Det tar som regel 10–20 sekunder."
+    />
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -303,10 +357,13 @@ export function FinnFagordPaaNytt({
   const [venter, startOvergang] = useTransition();
   const [feil, settFeil] = useState<Feiltekst>(standard);
   const [antallFeil, settAntallFeil] = useState(0);
+  /** Fagordene er funnet, og siden oppdateres: avslutningen gis videre (Tenker.tsx). */
+  const [klar, settKlar] = useState(false);
 
   const kjoer = () => {
     if (venter) return;
     startOvergang(async () => {
+      settKlar(false);
       let svar: Handlingssvar;
       try {
         svar = await handling();
@@ -316,7 +373,13 @@ export function FinnFagordPaaNytt({
       if (svar.feil) {
         settFeil(svar.feil);
         settAntallFeil((n) => n + 1);
-      } else router.refresh();
+        return;
+      }
+      settKlar(true);
+      // Samme sti uten `fagordfeil`, så ingen gammel feil står igjen i
+      // adressen. I en overgang, så indikatoren venter til siden er byttet og
+      // avslutningen gis videre, i stedet for å kuttes.
+      startOvergang(() => oppdaterUtenFeil(router));
     });
   };
 
@@ -327,7 +390,14 @@ export function FinnFagordPaaNytt({
           {venter ? "Finner fagordene…" : "Prøv igjen"}
         </button>
       </Feilmelding>
-      <Tenker aktiv={venter} status="Buddy finner fagordene …" hjelp="Dette kan ta et halvt minutt." className="mt-3" />
+      <Tenker
+        aktiv={venter}
+        status="Buddy finner fagordene …"
+        ferdigStatus={klar ? "Fagordene er klare." : undefined}
+        kjentSvar
+        hjelp="Dette kan ta et halvt minutt."
+        className="mt-3"
+      />
     </div>
   );
 }
@@ -345,7 +415,13 @@ export function LagOppsummeringSkjema({
       {svar.feil && (
         <Feilmelding {...svar.feil} />
       )}
-      <Send venter="Lager oppsummeringen…" klar="Vis en kort oppsummering" status="Buddy lager oppsummeringen …" />
+      <Send
+        venter="Lager oppsummeringen…"
+        klar="Vis en kort oppsummering"
+        status="Buddy lager oppsummeringen …"
+        ferdigStatus="Oppsummeringen er klar."
+        feilet={!!svar.feil}
+      />
     </form>
   );
 }
@@ -356,12 +432,15 @@ export function HandlingSkjema({
   venter,
   klar,
   status,
+  ferdigStatus,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   venter: string;
   klar: string;
   /** Statusteksten i tenkeindikatoren, for eksempel «Buddy lager verset …». */
   status?: string;
+  /** Statusen når svaret kom, for eksempel «Verset er klart.». */
+  ferdigStatus?: string;
 }) {
   const [svar, send] = useActionState(handling, TOMT);
 
@@ -370,7 +449,7 @@ export function HandlingSkjema({
       {svar.feil && (
         <Feilmelding {...svar.feil} />
       )}
-      <Send venter={venter} klar={klar} status={status} />
+      <Send venter={venter} klar={klar} status={status} ferdigStatus={ferdigStatus} feilet={!!svar.feil} />
     </form>
   );
 }

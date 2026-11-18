@@ -66,6 +66,16 @@
  *     med navn (fieldset og legend), nådd med Tab og styrt med piltastene,
  *     og valgt merke har hake og fokusring; lesevisningen viser «Før du
  *     leste» med spørsmålet, lenken og den helt nye overskriften
+ *   - overleveringen (17.11): når svaret sender eleven til en ny side, spilles
+ *     avslutningen av verten i rotlayouten. På 375 px: en lenke i topplinjen
+ *     trykket mens Buddy tenker, gir ingen avslutning (forlat-vernet); et
+ *     tomt skjema i aktiveringen (feil, komponenten står) gir ingen
+ *     avslutning; «Videre» på en innlimt tekst gir pillen på lesevisningen
+ *     med «Teksten er klar.» i statusregionen, axe med pillen, og den står
+ *     gjennom avslutningen og er så borte; «Prøv igjen» med ?fagordfeil
+ *     fjerner feilen fra adressen og gir «Fagordene er klare.». På 1280 px et
+ *     fast kort nederst til høyre med Buddy på 64 px, og siden blir ikke
+ *     lengre av kortet
  *
  * Bruker Chrome som er installert på maskinen (playwright-core laster ikke ned
  * nettlesere). Rører ALDRI Neon: databaseadressen settes til 127.0.0.1, og
@@ -347,6 +357,56 @@ try {
   await pc.waitForURL(/\/lesing$/, { timeout: 240000 });
   const lesing = pc.url();
   const tekstUrl = lesing.replace(/\/lesing$/, "");
+  // Overleveringen (17.11): fra 760 px spilles avslutningen etter sidebyttet i
+  // et lite fast kort nederst til høyre, med Buddy på 64 px og statusen.
+  // Kortet teller ikke i pilleregnskapet, så siden blir ikke lengre av det.
+  const maalSiden = () =>
+    pc.evaluate(() => ({
+      luft: getComputedStyle(document.body).paddingBottom,
+      hoeyde: document.documentElement.scrollHeight,
+      pille: document.documentElement.classList.contains("har-tenkepille"),
+    }));
+  const pcVert = await pc
+    .locator(".tenker-vert")
+    .waitFor({ timeout: 10000 })
+    .then(
+      async () => ({
+        ...(await pc.locator(".tenker-vert").evaluate((el) => {
+          const svg = [...el.querySelectorAll("svg.merke")].find((m) => getComputedStyle(m).display !== "none");
+          const b = el.getBoundingClientRect();
+          return {
+            posisjon: getComputedStyle(el).position,
+            hoeyre: Math.round(window.innerWidth - b.right),
+            nederst: Math.round(window.innerHeight - b.bottom),
+            mini: !!svg?.classList.contains("mini"),
+            merke: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+            tekst: el.querySelector("[role=status]")?.textContent ?? "",
+          };
+        })),
+        side: await maalSiden(),
+      }),
+      () => null,
+    );
+  sjekk(
+    "overleveringen, 1280 px: avslutningen spilles i et fast kort nederst til høyre (16 px), Buddy 64 px, «Teksten er klar.»",
+    !!pcVert &&
+      pcVert.posisjon === "fixed" &&
+      pcVert.hoeyre === 16 &&
+      pcVert.nederst === 16 &&
+      !pcVert.mini &&
+      pcVert.merke === 64 &&
+      pcVert.tekst === "Teksten er klar.",
+    JSON.stringify(pcVert),
+  );
+  if (pcVert) {
+    await pc.locator(".tenker-vert").waitFor({ state: "detached", timeout: 20000 }).catch(() => {});
+    const etterKortet = await maalSiden();
+    sjekk(
+      "overleveringen, 1280 px: siden blir ikke lengre mens kortet vises (ingen luft nederst, ikke har-tenkepille)",
+      !pcVert.side.pille && pcVert.side.luft === etterKortet.luft && pcVert.side.hoeyde <= etterKortet.hoeyde,
+      `${JSON.stringify(pcVert.side)} / etter ${JSON.stringify(etterKortet)}`,
+    );
+  }
   await pc.waitForSelector("article button");
   await axe(pc, "lesevisning");
 
@@ -1120,6 +1180,251 @@ try {
       sjekk("bolk 5, knapp: et nytt trykk mens Buddy tenker, sender ikke en gang til", leverHold.antall === 1, `${leverHold.antall} kall`);
     } finally {
       sjekk("bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar", await leverHold.slipp());
+    }
+  }
+
+  /* --- Overleveringen (17.11): avslutningen når svaret bytter side ---- */
+  // Svaret sender eleven til en ny side, så indikatoren i skjemaet forsvinner.
+  // Avslutningen gis videre til verten i rotlayouten (TenkerVert), som spiller
+  // den i pillen på lesevisningen. Tekstene legges rett inn i databasen, limt
+  // inn og med godkjente overskrifter (aktiveringen er neste steg), eller låst
+  // uten fagord (lesevisningen med «Prøv igjen»). De ryddes bort etterpå, så
+  // arbeidsbordet er som før for sjekkene under.
+  {
+    const pool = new pg.Pool({ connectionString: DB, max: 1 });
+    const proever = [];
+    const VERT = ".tenker-vert";
+    const vertRegion = (side) =>
+      side.evaluate(() => {
+        // Verten er den siste statusregionen i <body>, rett etter #innhold.
+        const r = [...document.querySelectorAll("body > [role=status], body > div > [role=status]")].filter((e) => !e.closest("#innhold"));
+        return { antall: r.length, tekst: r.map((e) => e.textContent).join(" | ") };
+      });
+    // Merker om verten viser seg en eneste gang, også mellom to målinger.
+    // Lever gjennom navigeringen i appen (samme vindu).
+    const vaktVert = (side) =>
+      side.evaluate((sel) => {
+        window.__vertSett = !!document.querySelector(sel);
+        window.__vertVakt?.disconnect();
+        window.__vertVakt = new MutationObserver(() => {
+          const v = document.querySelector(sel);
+          if (v) {
+            window.__vertSett = true;
+            window.__vertTekst = `${location.pathname}: ${v.textContent}`;
+          }
+        });
+        window.__vertVakt.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"] });
+      }, VERT);
+    const vertSett = (side) => side.evaluate(() => window.__vertSett === true);
+    const nyTekst = async (kontoId, tittel, laast, innhold = eksempel) => {
+      const r = await pool.query(
+        laast
+          ? `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, overskrifter_godkjent, laast_tidspunkt)
+             values ($1, $2, $3, $3, 'liming', 'laast', now(), now()) returning id`
+          : `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, overskrifter_godkjent)
+             values ($1, $2, $3, $3, 'liming', 'innlest', now()) returning id`,
+        [kontoId, tittel, innhold],
+      );
+      proever.push(r.rows[0].id);
+      return r.rows[0].id;
+    };
+    try {
+      const [{ id: kontoId }] = (await pool.query(`select id from "user" where email = $1`, [EPOST])).rows;
+
+      // Forlat-vernet: eleven trykker en lenke i topplinjen mens Buddy tenker.
+      // Handlingen holdes igjen til lenken er trykket, og slippes så.
+      const forlatt = await nyTekst(kontoId, "Overleveringsprøve, forlatt", false);
+      await tlf.goto(`${APP}/tekst/${forlatt}/aktivering`);
+      // Et svar i skjemaet, så handlingen ikke bare svarer med oppfordringen.
+      await tlf.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
+      await tlf.locator("input[type=radio]").first().check({ force: true });
+      const forlatHold = await holdHandlinger(tlf);
+      let forlatOk = false;
+      let forlatDetaljer = "";
+      try {
+        await tlf.locator("button[type=submit]", { hasText: "Videre" }).click();
+        await tlf.locator(PILLE).waitFor({ timeout: 15000 });
+        await vaktVert(tlf);
+        const lenke = tlf.locator("header a[href]:visible", { hasText: "Samlingen" }).first();
+        await lenke.click();
+        // React fletter navigeringen sammen med handlingen som venter, så
+        // siden byttes først når handlingen har svart. Next forkaster svaret
+        // (navigeringen går foran), og eleven havner på Samlingen.
+        await tlf.waitForTimeout(500);
+        const slapp = await forlatHold.slipp();
+        await tlf.waitForURL(/\/samling(\?.*)?$/, { timeout: 60000 });
+        // Verten ville vist seg straks etter byttet (og stått i 5,5 s).
+        await tlf.waitForTimeout(1500);
+        const sett = await vertSett(tlf);
+        forlatOk = slapp && !sett && (await tlf.locator(VERT).count()) === 0;
+        forlatDetaljer = `svar ${slapp}, verten sett ${sett}, ${tlf.url().replace(APP, "")}`;
+      } catch (e) {
+        await forlatHold.slipp().catch(() => false);
+        forlatDetaljer = e.message.split("\n")[0];
+      }
+      sjekk("overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning", forlatOk, forlatDetaljer);
+
+      // Forlat-vernet med «tilbake» (popstate): eleven kom til aktiveringen fra
+      // Samlingen i appen, og trykker tilbake mens Buddy tenker.
+      const tilbakeTekst = await nyTekst(kontoId, "Overleveringsprøve, tilbake", false);
+      await tlf.goto(`${APP}/samling`);
+      await tlf.locator(`a[href="/tekst/${tilbakeTekst}/aktivering"]`).first().click();
+      await tlf.waitForURL(/\/aktivering$/);
+      await tlf.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
+      const tilbakeHold = await holdHandlinger(tlf);
+      let tilbakeOk = false;
+      let tilbakeDetaljer = "";
+      try {
+        await tlf.locator("button[type=submit]", { hasText: "Videre" }).click();
+        await tlf.locator(PILLE).waitFor({ timeout: 15000 });
+        await vaktVert(tlf);
+        await tlf.goBack();
+        await tlf.waitForTimeout(500);
+        const slapp = await tilbakeHold.slipp();
+        await tlf.waitForURL(/\/samling(\?.*)?$/, { timeout: 60000 });
+        await tlf.waitForTimeout(1500);
+        const sett = await vertSett(tlf);
+        tilbakeOk = slapp && !sett && (await tlf.locator(VERT).count()) === 0;
+        tilbakeDetaljer = `svar ${slapp}, verten sett ${sett} (${await tlf.evaluate(() => window.__vertTekst ?? "")}), ${tlf.url().replace(APP, "")}`;
+      } catch (e) {
+        await tilbakeHold.slipp().catch(() => false);
+        tilbakeDetaljer = e.message.split("\n")[0];
+      }
+      sjekk("overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning", tilbakeOk, tilbakeDetaljer);
+
+      // Omdirigering til en feiladresse: teksten låses, men fagordene kan ikke
+      // lages (i testmodus `les` finnes ikke noe lagret svar for denne
+      // teksten), så eleven havner på /lesing?fagordfeil=… Ingen avslutning.
+      const feilTekst = await nyTekst(kontoId, "Overleveringsprøve, fagordfeil", false, `${eksempel}\n\nEt ekstra avsnitt som bare finnes i feilprøven.`);
+      await tlf.goto(`${APP}/tekst/${feilTekst}/aktivering`);
+      await tlf.fill("#lurer-paa", "Hva er en bølge?");
+      await vaktVert(tlf);
+      await tlf.locator("button[type=submit]", { hasText: "Videre" }).click();
+      const tilFeil = await tlf.waitForURL((u) => u.pathname.endsWith("/lesing") && u.searchParams.has("fagordfeil"), { timeout: 120000 }).then(
+        () => true,
+        () => false,
+      );
+      await tlf.waitForTimeout(1500);
+      const feilSett = await vertSett(tlf);
+      sjekk(
+        "overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning",
+        tilFeil && !feilSett,
+        `${tlf.url().replace(APP, "")}, verten sett ${feilSett}`,
+      );
+
+      const proeve = await nyTekst(kontoId, "Overleveringsprøve", false);
+      await tlf.goto(`${APP}/tekst/${proeve}/aktivering`);
+      const foer = await vertRegion(tlf);
+      sjekk("overleveringen: verten har én statusregion, tom før noe venter", foer.antall === 1 && foer.tekst === "", JSON.stringify(foer));
+
+      // En venting som ender med feil (tomt skjema gir oppfordringen): komponenten står, ingen avslutning.
+      const videre = tlf.locator("button[type=submit]", { hasText: "Videre" });
+      await vaktVert(tlf);
+      await videre.click();
+      await tlf.locator("[role=alert]", { hasText: "Du har ikke merket noe ennå" }).waitFor({ timeout: 60000 });
+      await tlf.waitForTimeout(800);
+      const etterFeil = await vertRegion(tlf);
+      sjekk(
+        "overleveringen: en venting som ender med feil, gir ingen avslutning noe sted",
+        !(await vertSett(tlf)) && etterFeil.tekst === "" && (await tlf.locator("text=Teksten er klar.").count()) === 0,
+        JSON.stringify(etterFeil),
+      );
+
+      // «Videre» en gang til: lesevisningen, og avslutningen spilles i pillen der.
+      await videre.click();
+      await tlf.waitForURL(/\/lesing(\?.*)?$/, { timeout: 240000 });
+      const vert = tlf.locator(VERT);
+      const kom = await vert.waitFor({ timeout: 10000 }).then(
+        () => true,
+        () => false,
+      );
+      const kom_t = Date.now();
+      sjekk("overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen", kom, tlf.url().replace(APP, ""));
+      if (kom) {
+        await tlf.waitForTimeout(400); // inngangen (0,3 s) er ferdig
+        const p = await vert.evaluate((el) => {
+          const svg = [...el.querySelectorAll("svg.merke")].find((m) => getComputedStyle(m).display !== "none");
+          const b = el.getBoundingClientRect();
+          const rot = document.documentElement;
+          return {
+            posisjon: getComputedStyle(el).position,
+            innenfor: b.left >= 0 && b.right <= window.innerWidth && b.bottom <= window.innerHeight,
+            mini: !!svg?.classList.contains("mini"),
+            slutt: !!svg?.classList.contains("slutt"),
+            merke: svg ? Math.round(svg.getBoundingClientRect().height) : 0,
+            regioner: el.querySelectorAll("[role=status]").length,
+            regionTekst: el.querySelector("[role=status]")?.textContent ?? "",
+            fokusIPillen: el.contains(document.activeElement),
+            variabel: getComputedStyle(rot).getPropertyValue("--tenker-pille").trim(),
+            hoeyde: el.offsetHeight,
+            klasse: rot.classList.contains("har-tenkepille"),
+          };
+        });
+        sjekk(
+          "overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.»",
+          p.posisjon === "fixed" && p.innenfor && p.mini && p.slutt && p.merke === 28 && p.regioner === 1 && p.regionTekst === "Teksten er klar.",
+          JSON.stringify(p),
+        );
+        sjekk(
+          "overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den",
+          p.klasse && p.variabel === `${p.hoeyde}px` && !p.fokusIPillen,
+          `${p.variabel} / ${p.hoeyde}px`,
+        );
+        await axe(tlf, "lesevisning med avslutningen i pillen (telefon)");
+        // Avslutningen er 4,3 s + 1,2 s, og så glir pillen bort. Romslig grense,
+        // men den skal ha stått omtrent hele avslutningen.
+        const borte = await vert.waitFor({ state: "detached", timeout: 20000 }).then(
+          () => true,
+          () => false,
+        );
+        const varte = Date.now() - kom_t;
+        const etter = await vertRegion(tlf);
+        sjekk(
+          "overleveringen: pillen står gjennom avslutningen (minst 5 s), er så borte, og html har ikke lenger har-tenkepille",
+          borte &&
+            varte >= 5000 &&
+            etter.tekst === "" &&
+            !(await tlf.evaluate(() => document.documentElement.classList.contains("har-tenkepille"))),
+          `${varte} ms, ${JSON.stringify(etter)}`,
+        );
+      }
+
+      // «Prøv igjen» på lesevisningen med en gammel feil i adressen: lykkes
+      // det, er `fagordfeil` borte fra adressen, og avslutningen spilles.
+      // Teksten fra «Videre» over er låst gjennom den ekte flyten, så den har
+      // avsnittene, og i testmodus `les` finnes det lagrede svaret for
+      // fagordene. En tekst lagt rett inn som låst har ingen avsnittsrader, og
+      // da feiler «Prøv igjen» på et manglende lagret svar. Fagordene slettes,
+      // så siden tilbyr «Prøv igjen».
+      const retry = proeve;
+      await pool.query(`delete from begrepssett where tekst_id = $1`, [retry]);
+      await tlf.goto(`${APP}/tekst/${retry}/lesing?fagordfeil=ukjent`);
+      await vaktVert(tlf);
+      await tlf.locator("aside button", { hasText: "Prøv igjen" }).click();
+      const utenFeil = await tlf.waitForURL((u) => u.pathname.endsWith("/lesing") && !u.searchParams.has("fagordfeil"), { timeout: 120000 }).then(
+        () => true,
+        () => false,
+      );
+      const retryVert = await vert.waitFor({ timeout: 15000 }).then(
+        () => vertRegion(tlf),
+        () => null,
+      );
+      sjekk(
+        "overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.»",
+        utenFeil && retryVert?.tekst === "Fagordene er klare.",
+        `${tlf.url().replace(APP, "")} ${JSON.stringify(retryVert)}`,
+      );
+      await vert.waitFor({ state: "detached", timeout: 20000 }).catch(() => {});
+    } finally {
+      for (const id of proever) {
+        try {
+          const { rowCount } = await pool.query(`delete from tekst where id = $1`, [id]);
+          sjekk("overleveringen: prøveteksten er ryddet bort", rowCount === 1);
+        } catch (e) {
+          sjekk("overleveringen: prøveteksten er ryddet bort", false, e.message.split("\n")[0]);
+        }
+      }
+      await pool.end();
     }
   }
 

@@ -207,12 +207,30 @@ async function loeype(s, { mobil, eksempel, brod }) {
   // quizen lages av seg selv når siden åpnes — ingen knapp å trykke.
   await s.goto(`${tekstUrl}/quiz`);
   await s.waitForSelector("ol fieldset", { timeout: 240000 });
+  // Overleveringen (17.11): quizen erstatter indikatoren, så «Quizen er klar.»
+  // spilles av verten i rotlayouten, som så forsvinner.
+  const vert = s.locator(".tenker-vert");
+  const quizKlar = await vert
+    .locator("[role=status]", { hasText: "Quizen er klar." })
+    .waitFor({ timeout: 5000 })
+    .then(
+      () => true,
+      () => false,
+    );
+  const vertKom = Date.now();
+  sjekk(`${p}6`, "verten sier «Quizen er klar.» når quizen er laget", quizKlar);
   for (const f of await s.locator("ol > li fieldset").all()) {
     const radio = f.locator("input[type=radio]");
     if (await radio.count()) await radio.first().check();
     const t = f.locator("textarea");
     if (await t.count()) await t.fill("Det har med frekvens å gjøre.");
   }
+  // Luften nederst måles først når avslutningen er ferdig (4,3 s + 1,2 s og utgangen).
+  const vertBorte = await vert.waitFor({ state: "detached", timeout: 20000 }).then(
+    () => true,
+    () => false,
+  );
+  sjekk(`${p}6`, "verten er borte etter avslutningen", vertBorte, `${Date.now() - vertKom} ms`);
   const luftFoer = await s.evaluate(() => getComputedStyle(document.body).paddingBottom);
   await trykk(s.locator('button:has-text("Lever")'));
   if (mobil) {
@@ -426,6 +444,16 @@ async function enKjoering(nettleser) {
   await pc.click('button:has-text("Les teksten fra de 2 bildene")');
   await pc.locator("text=Det blir ofte feil når tekst leses fra bilder").waitFor({ timeout: 240000 });
   sjekk("13", "merknaden om at bildeuttrekk ikke er kvalitetssikret vises", true);
+  // Overleveringen (17.11): lesingen er ferdig og indikatoren borte, så verten
+  // spiller «Bildene er lest.».
+  const bilderLest = await pc
+    .locator(".tenker-vert [role=status]", { hasText: "Bildene er lest." })
+    .waitFor({ timeout: 5000 })
+    .then(
+      () => true,
+      () => false,
+    );
+  sjekk("13", "verten sier «Bildene er lest.» når bildene er lest", bilderLest);
   await pc.fill("#tittel", "Fra bilder");
   await pc.click('button[type=submit]:visible:has-text("Begynn")');
   await pc.waitForURL(/\/overskrifter$/);

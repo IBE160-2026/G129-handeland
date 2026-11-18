@@ -17,6 +17,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hentBegrepssett, lagreBegrepssett } from "../data/begrepssett";
 import { tilgang } from "../data/konto";
+import { FAGORDFEIL, FEIL, FEILKODE } from "./feiladresse";
 import {
   IkkeFunnet,
   godkjennOverskrifter,
@@ -316,7 +317,7 @@ export async function laasOgGenerer(
 /** Lesevisningen etter låsing. Feilet fagordene, bærer adressen koden (FR-7). */
 function lesingEtterLaasing(tekstId: string, fagordfeil: string | undefined): string {
   const rot = `/tekst/${tekstId}/lesing`;
-  return fagordfeil ? `${rot}?fagordfeil=${encodeURIComponent(fagordfeil)}` : rot;
+  return fagordfeil ? `${rot}?${FAGORDFEIL}=${encodeURIComponent(fagordfeil)}` : rot;
 }
 
 /**
@@ -759,8 +760,8 @@ export async function svarISamtale(
    * som ikke kan prøves på nytt (401, 429, testmodus, databasen) gir sitt
    * eget råd.
    */
-  if (utfall.slag === "oppfolging") redirect(`${side}?feil=oppfolging`);
-  redirect(`${side}?feil=vurdering&kode=${encodeURIComponent(utfall.kode)}`);
+  if (utfall.slag === "oppfolging") redirect(`${side}?${FEIL}=oppfolging`);
+  redirect(`${side}?${FEIL}=vurdering&${FEILKODE}=${encodeURIComponent(utfall.kode)}`);
 }
 
 type Vurderingsutfall =

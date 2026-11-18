@@ -75,7 +75,7 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
       ) : valgt === null ? (
         <section className="mt-6">
           <p>LeseBuddy lager et vers på fire til seks linjer med minst tre av fagordene.</p>
-          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager verset…" klar="Lag et minnevers" status="Buddy lager verset …" />
+          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager verset…" klar="Lag et minnevers" status="Buddy lager verset …" ferdigStatus="Verset er klart." />
         </section>
       ) : (
         <section className="mt-6">
@@ -115,7 +115,7 @@ export default async function Minnevers({ params }: PageProps<"/tekst/[id]/minne
             <span className="font-medium">Fagord i verset:</span> {valgt.faguttrykk.join(", ")}
           </p>
 
-          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager et nytt vers…" klar="Lag et nytt vers" status="Buddy lager et nytt vers …" />
+          <HandlingSkjema handling={lagVers.bind(null, id, "vers")} venter="Lager et nytt vers…" klar="Lag et nytt vers" status="Buddy lager et nytt vers …" ferdigStatus="Verset er klart." />
           <p className="mt-8 text-xs text-slate-500 dark:text-slate-400">
             Laget av {valgt.modell}, prompt {valgt.promptversjon}. Fagordene og avsnittene er kontrollert mot
             teksten; påstandene er det ikke.

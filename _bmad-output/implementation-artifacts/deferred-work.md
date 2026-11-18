@@ -54,3 +54,12 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-fr-6-forkunnskap-merk-og-lurer-paa.md`
   summary: Delen «Før du leste» i lesevisningen viser overskriftene bare på norsk, selv om aktiveringen viste dem med morsmålslinje (FR-26).
   evidence: Blind-gjennomgangen av FR-6-bolken 17.11; overskriftsoversettelsen finnes alt (elementet «overskrifter»), så den kan trolig gjenbrukes.
+- source_spec: `_bmad-output/implementation-artifacts/spec-tenkeindikator-avslutning-etter-navigering.md`
+  summary: Uprøvd om skjermleseren faktisk leser opp vertens «… er klar» når Next samtidig kunngjør den nye siden (medium, ikke bekreftet).
+  evidence: Blind-gjennomgangen 17.11; sjekkene ser bare på textContent. Avgjøres med NVDA/VoiceOver på et sidebytte etter aktiveringen.
+- source_spec: `_bmad-output/implementation-artifacts/spec-tenkeindikator-avslutning-etter-navigering.md`
+  summary: Samtalens Send (feilet-sperren) og RevurderKnapp (opplåsing ved feil) har ingen test.
+  evidence: Verification-gap-gjennomgangen 17.11; samtalesiden mangler egen nettlesersjekk med feiltilstand.
+- source_spec: `_bmad-output/implementation-artifacts/spec-tenkeindikator-avslutning-etter-navigering.md`
+  summary: Appen har ingen `app/error.tsx`, så en serverhandling som kaster mens tenkeindikatoren venter, kan gi «… er klar» over Nexts standard feilside.
+  evidence: Blind-gjennomgangen runde 2, 18.11; dokumentert som kjent begrensning i EXPERIENCE.md.

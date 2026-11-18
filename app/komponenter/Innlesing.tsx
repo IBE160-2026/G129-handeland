@@ -13,7 +13,7 @@
  */
 
 import { useActionState, useEffect, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { flushSync, useFormStatus } from "react-dom";
 import { PdfFeil as PdfFeilKlasse, type PdfFeildetaljer, type PdfFeilkode, type Valg } from "../../opplasting/pdf-feil";
 import { trekkUtPdf, type Uttrekk } from "../../opplasting/pdf-les";
 import { GRENSER, kuttVedTak } from "../../opplasting/pdf-tekst";
@@ -349,6 +349,12 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
   const [feil, setFeil] = useState<{ kode: BildeFeilkode; detaljer: BildeFeildetaljer } | null>(null);
   /** Teksten fra bildene som ble lest før en feil. */
   const [delvis, setDelvis] = useState("");
+  /**
+   * Alle bildene er lest. Indikatoren tegnes én gang til, nå med
+   * `ferdigStatus`, før visningen byttes til «ferdig»: da gis avslutningen
+   * videre (Tenker.tsx). En feil eller et fanebytte midt i lesingen gir ingen.
+   */
+  const [lest, setLest] = useState(false);
 
   // Forhåndsvisningene er lånt minne; gi det tilbake når komponenten går.
   const bilderRef = useRef(bilder);
@@ -388,6 +394,7 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
 
   async function les() {
     setStatus("leser");
+    setLest(false);
     setFeil(null);
     setKuttet(null);
     const deler: string[] = [];
@@ -398,6 +405,9 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
         deler.push(await lesBilde(data, i + 1));
       }
       setTekst(deler.join("\n\n"));
+      // Først en tegning der indikatoren fortsatt venter og har fått
+      // `ferdigStatus`, så bytter visningen (og indikatoren går).
+      flushSync(() => setLest(true));
       setStatus("ferdig");
     } catch (e) {
       // PRD §6.4: stopper dagstaket serien midt i (BF-6), er teksten fra
@@ -517,10 +527,16 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
 
       {status === "feil" && feil && <BildeFeil kode={feil.kode} detaljer={feil.detaljer} onValg={valg} />}
 
-      {/* EXPERIENCE.md: ved bildeinnlesing sier statusen hvilket steg den er på. */}
+      {/*
+        EXPERIENCE.md: ved bildeinnlesing sier statusen hvilket steg den er på.
+        Er bildene lest (`lest`), byttes visningen, og avslutningen gis
+        videre (Tenker.tsx). En feil eller et fanebytte gir ingen avslutning.
+      */}
       <Tenker
         aktiv={status === "leser"}
         status={`Buddy leser bilde ${framdrift} av ${bilder.length} …`}
+        ferdigStatus={lest ? "Bildene er lest." : undefined}
+        kjentSvar
         hjelp="Det tar noen sekunder per bilde."
       />
       {status !== "leser" && bilder.length > 0 && (

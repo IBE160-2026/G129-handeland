@@ -28,15 +28,49 @@
  *   - Mens `aktiv`: øynene leser i en løkke. Etter 30 s kommer et tillegg.
  *   - Går den fra aktiv til ikke aktiv med `ferdigStatus`, spilles
  *     avslutningen (4,3 s) én gang i indikatorens plass, og statusen settes
- *     til `ferdigStatus`. Uten `ferdigStatus` (feil, eller siden byttes)
- *     forsvinner indikatoren bare. Pillen glir bort etter avslutningen.
+ *     til `ferdigStatus`. Uten `ferdigStatus` (feil) forsvinner indikatoren
+ *     bare. Pillen glir bort etter avslutningen.
+ *
+ * Overleveringen (17.11): forsvinner en flate eller knapp mens den venter,
+ * fordi svaret kom og siden byttet side (`redirect`) eller innhold
+ * (`revalidatePath`, `router.refresh`), gir den avslutningen videre til
+ * `TenkerVert` i rotlayouten, som lever videre gjennom navigeringen. Det
+ * skjer bare når stedet har en `ferdigStatus` i siste tegning mens det
+ * ventet. Linjeformen og `bareAvslutning` gir ikke videre. Reglene:
+ *
+ *   - Steder som selv vet svaret (`kjentSvar`: quizen som lages, fagord på
+ *     nytt, «Prøv igjen» og ny vurdering i samtalen, bildeinnlesingen)
+ *     setter `ferdigStatus` først når kallet har lyktes, og sjekker ikke
+ *     adressen.
+ *   - Serverskjemaene kan ikke vite svaret. De setter `ferdigStatus` mens det
+ *     ventes, og avslutningen gis videre bare når siden eleven havner på ikke
+ *     har en feil i adressen (`feil`, `fagordfeil`, app/feiladresse.ts), og
+ *     skjemaet ikke fikk en feil tilbake.
+ *   - Forlat-vernet: trykker eleven en lenke eller går tilbake mens det
+ *     ventes, avbrytes overleveringen.
+ *
+ * Overleveringen utsettes til etter tegningen og avbrytes om samme instans
+ * monteres igjen (StrictMode i utvikling monterer to ganger). Verten spiller
+ * avslutningen i tenkepillen på telefon, og fra 760 px i et lite fast kort
+ * nederst til høyre, som ikke teller i pilleregnskapet. Verten flytter ikke
+ * fokus og holder aldri igjen navigeringen.
  *
  * Med `prefers-reduced-motion` står øynene stille, avslutningen viser B-en
  * direkte, og pillen forsvinner uten bevegelse (globals.css). Statusteksten
  * bærer beskjeden.
  */
 
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
+import { feilIAdressen } from "../feiladresse";
+import { TELEFON } from "./brytepunkt";
 import { BuddyMerke } from "./Merke";
 
 const LANG_VENTING_MS = 30_000;
@@ -107,6 +141,156 @@ function meldPille(el: HTMLElement): () => void {
 }
 
 /* ------------------------------------------------------------------ */
+/*
+ * Overleveringen til verten. En liten butikk på modulnivå, som `TenkerVert`
+ * abonnerer på med `useSyncExternalStore`. Den holder høyst én avslutning;
+ * en ny erstatter den gamle, med ny id, så avslutningen starter på nytt.
+ */
+export type Avslutning = { id: number; status: string };
+
+let avslutning: Avslutning | null = null;
+let nesteAvslutning = 0;
+const lyttere = new Set<() => void>();
+
+function varsle() {
+  for (const l of lyttere) l();
+}
+
+export function abonnerAvslutning(lytter: () => void): () => void {
+  lyttere.add(lytter);
+  return () => {
+    lyttere.delete(lytter);
+  };
+}
+
+export function hentAvslutning(): Avslutning | null {
+  return avslutning;
+}
+
+const ingenAvslutning = () => null;
+
+/** Verten er ferdig med avslutningen. En nyere avslutning får stå. */
+export function avslutningFerdig(id: number) {
+  if (avslutning?.id !== id) return;
+  avslutning = null;
+  varsle();
+}
+
+/**
+ * «Tilbake» i nettleseren, talt av én varig lytter. Når eleven trykker
+ * tilbake, gjør React sidebyttet synkront inne i Nexts egen popstate-lytter,
+ * før en lytter som bare lever mens indikatoren venter, rekker å kjøre (målt
+ * i sjekk:tilgjengelighet 18.11). Telleren leses derfor først i
+ * overleveringens tidsbryter, når popstate er ferdig sendt.
+ */
+let antallTilbake = 0;
+let lytterPaaTilbake = false;
+
+export function lyttEtterTilbake(): void {
+  if (lytterPaaTilbake || typeof window === "undefined") return;
+  lytterPaaTilbake = true;
+  window.addEventListener("popstate", () => {
+    antallTilbake++;
+  });
+}
+
+/** Hvor mange ganger eleven har gått tilbake (eller fram) i historikken. */
+export function hentAntallTilbake(): number {
+  return antallTilbake;
+}
+
+/**
+ * Gir avslutningen videre, utsatt til etter tegningen: da står den nye
+ * adressen i nettleseren, og StrictMode har rukket å montere instansen igjen
+ * og avbryte. Returnerer avbrytelsen.
+ *
+ * `sjekkAdressen`: et serverskjema kan ikke vite svaret, så har siden eleven
+ * havner på en feil i adressen (`feil`, `fagordfeil`, app/feiladresse.ts),
+ * spilles ingen avslutning. Steder som selv vet at kallet lyktes
+ * (`kjentSvar`), sjekker ikke adressen.
+ */
+export function giAvslutningVidere(
+  status: string,
+  {
+    sjekkAdressen = true,
+    sok = () => window.location.search,
+    gikkTilbake,
+  }: { sjekkAdressen?: boolean; sok?: () => string; gikkTilbake?: () => boolean } = {},
+): () => void {
+  const t = setTimeout(() => {
+    // Forlat-vernet for «tilbake»: lest her, etter at popstate er sendt.
+    if (gikkTilbake?.()) return;
+    if (sjekkAdressen && feilIAdressen(sok())) return;
+    avslutning = { id: ++nesteAvslutning, status };
+    varsle();
+  }, 0);
+  return () => clearTimeout(t);
+}
+
+/**
+ * Forlat-vernet: forlater et klikk siden? Bare et vanlig venstreklikk på en
+ * lenke som åpnes i samme fane, og som ikke bare er et anker på samme side.
+ * Ren logikk, så den kan testes uten nettleser.
+ */
+export function klikkForlater(
+  k: { button: number; metaKey: boolean; ctrlKey: boolean; shiftKey: boolean; altKey: boolean },
+  lenke: { href: string; target: string; download: boolean } | null,
+  her: string,
+): boolean {
+  if (!lenke || k.button !== 0 || k.metaKey || k.ctrlKey || k.shiftKey || k.altKey) return false;
+  if (lenke.download || (lenke.target !== "" && lenke.target !== "_self")) return false;
+  let til: URL;
+  let fra: URL;
+  try {
+    til = new URL(lenke.href, her);
+    fra = new URL(her);
+  } catch {
+    return false;
+  }
+  if (til.protocol !== "http:" && til.protocol !== "https:") return false;
+  const sammeSide = til.origin === fra.origin && til.pathname === fra.pathname && til.search === fra.search;
+  // Et anker på samme side, også et tomt «#», forlater ikke siden.
+  return !(sammeSide && (til.hash !== "" || lenke.href.startsWith("#")));
+}
+
+type Siste = {
+  aktiv: boolean;
+  ferdigStatus?: string;
+  form: TenkerForm;
+  bareAvslutning: boolean;
+  /** Stedet setter `ferdigStatus` først når kallet har lyktes. */
+  kjentSvar: boolean;
+  /** Eleven trykket en lenke mens det ventet. */
+  forlatt: boolean;
+  /** Gikk eleven tilbake mens det ventet? Leses i tidsbryteren (se `lyttEtterTilbake`). */
+  gikkTilbake?: () => boolean;
+};
+
+/**
+ * Overleveringen for én instans: `montert()` i en effekt uten avhengigheter,
+ * `gaar(siste)` i oppryddingen. Ren logikk, så den kan testes uten React.
+ */
+export function lagOverlevering(
+  gi: (status: string, sjekkAdressen: boolean, gikkTilbake?: () => boolean) => () => void = (
+    status,
+    sjekkAdressen,
+    gikkTilbake,
+  ) => giAvslutningVidere(status, { sjekkAdressen, gikkTilbake }),
+) {
+  let avbryt: (() => void) | null = null;
+  return {
+    montert() {
+      avbryt?.();
+      avbryt = null;
+    },
+    gaar(s: Siste) {
+      if (!s.aktiv || !s.ferdigStatus || s.form === "linje" || s.bareAvslutning || s.forlatt) return;
+      avbryt = gi(s.ferdigStatus, !s.kjentSvar, s.gikkTilbake);
+    },
+  };
+}
+
+/* ------------------------------------------------------------------ */
 
 export type TenkerForm = "flate" | "knapp" | "linje";
 
@@ -114,8 +298,20 @@ type Felles = {
   aktiv: boolean;
   /** Hva Buddy gjør, for eksempel «Buddy finner fagordene …». */
   status: string;
-  /** Settes bare når svaret kom og komponenten lever videre, for eksempel «Quizen er rettet.». */
+  /**
+   * Statusen når svaret kom, for eksempel «Quizen er rettet.». Settes bare
+   * når ingen feil er kjent. Går indikatoren fra aktiv til ikke aktiv med
+   * den, spilles avslutningen på plassen. Forsvinner flaten eller knappen
+   * mens den venter og har den, gis avslutningen videre til `TenkerVert`.
+   */
   ferdigStatus?: string;
+  /**
+   * Stedet vet selv at svaret kom: `ferdigStatus` settes først når kallet
+   * eller lesingen har lyktes, aldri mens det ventes. Da sjekkes ikke
+   * adressen ved overleveringen. Serverskjemaene kan ikke vite svaret og
+   * lar den stå av.
+   */
+  kjentSvar?: boolean;
   /** Avstand rundt indikatoren (flate, linje) eller knappens klasser (knapp). */
   className?: string;
 };
@@ -145,7 +341,7 @@ type Knapp = Felles & {
 type Fase = "hvile" | "slutt" | "gaar";
 
 export function Tenker(props: Flate | Linje | Knapp) {
-  const { aktiv, status, ferdigStatus, className = "" } = props;
+  const { aktiv, status, ferdigStatus, kjentSvar = false, className = "" } = props;
   const form: TenkerForm = props.form ?? "flate";
   const hjelp = props.form === "knapp" ? undefined : props.hjelp;
   const bareAvslutning = props.form === undefined || props.form === "flate" ? (props.bareAvslutning ?? false) : false;
@@ -158,6 +354,13 @@ export function Tenker(props: Flate | Linje | Knapp) {
   const [lenge, settLenge] = useState(false);
   const [montert, settMontert] = useState(false);
   const flateRef = useRef<HTMLDivElement>(null);
+  // Siste tegning som ble vist, og overleveringen når komponenten går.
+  const siste = useRef<Omit<Siste, "forlatt">>({ aktiv, ferdigStatus, form, bareAvslutning, kjentSvar });
+  const [overlevering] = useState(() => lagOverlevering());
+  /** Forlat-vernet: eleven trykket en lenke eller gikk tilbake mens det ventet. */
+  const forlatt = useRef(false);
+  /** Telleren for «tilbake» og stien da ventingen begynte (forlat-vernet). */
+  const ventFra = useRef({ tilbake: 0, sti: "" });
 
   if (aktiv !== forrigeAktiv) {
     settForrigeAktiv(aktiv);
@@ -173,6 +376,56 @@ export function Tenker(props: Flate | Linje | Knapp) {
     const id = requestAnimationFrame(() => settMontert(true));
     return () => cancelAnimationFrame(id);
   }, []);
+
+  // I en layouteffekt, så verdien fra hver tegning er på plass før neste
+  // tegning kan fjerne komponenten (bildeinnlesingen bytter visning rett
+  // etter tegningen som satte `ferdigStatus`).
+  useLayoutEffect(() => {
+    siste.current = { aktiv, ferdigStatus, form, bareAvslutning, kjentSvar };
+  });
+
+  // Forlat-vernet: mens det ventes, lytter indikatoren på klikk på lenker og
+  // på «tilbake». Går eleven selv fra siden, er det ikke svaret som byttet
+  // den, og overleveringen avbrytes. En ny venting starter med blanke ark.
+  useEffect(() => {
+    if (!aktiv) return;
+    forlatt.current = false;
+    const klikk = (e: globalThis.MouseEvent) => {
+      const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
+      const lenke = a && {
+        href: a.getAttribute("href") ?? "",
+        target: a.getAttribute("target") ?? "",
+        download: a.hasAttribute("download"),
+      };
+      if (klikkForlater(e, lenke, window.location.href)) forlatt.current = true;
+    };
+    // «Tilbake»: telleren og stien da ventingen begynte. Et anker på samme
+    // side gir også popstate, så bare et bytte av sti eller søk teller.
+    lyttEtterTilbake();
+    ventFra.current = { tilbake: hentAntallTilbake(), sti: window.location.pathname + window.location.search };
+    document.addEventListener("click", klikk, true);
+    return () => {
+      document.removeEventListener("click", klikk, true);
+    };
+  }, [aktiv]);
+
+  // Går komponenten mens den venter, kom svaret og siden ble byttet: gi
+  // avslutningen videre til verten. Monteres samme instans igjen
+  // (StrictMode), avbrytes den.
+  useEffect(() => {
+    overlevering.montert();
+    const ref = siste;
+    const vern = forlatt;
+    const fra = ventFra;
+    return () => {
+      const { tilbake, sti } = fra.current;
+      overlevering.gaar({
+        ...ref.current,
+        forlatt: vern.current,
+        gikkTilbake: () => hentAntallTilbake() !== tilbake && window.location.pathname + window.location.search !== sti,
+      });
+    };
+  }, [overlevering]);
 
   useEffect(() => {
     if (!aktiv) return;
@@ -289,6 +542,69 @@ export function Tenker(props: Flate | Linje | Knapp) {
       )}
       <div role="status" aria-live="polite" className={synlig && montert ? "min-w-0" : "sr-only"}>
         {montert && innhold}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * Verten for avslutninger som er gitt videre (overleveringen over). Montert
+ * én gang i rotlayouten, utenfor sidene, så den lever videre gjennom
+ * navigeringen. Den har én statusregion, som finnes tom fra første tegning.
+ * Avslutningen tegnes med flatens markering: på telefon er det tenkepillen,
+ * fra 760 px et lite fast kort nederst til høyre (`.tenker-vert`,
+ * globals.css). Den vises bare under avslutningen, aldri mens Buddy tenker,
+ * og flytter ikke fokus.
+ */
+export function TenkerVert() {
+  const a = useSyncExternalStore(abonnerAvslutning, hentAvslutning, ingenAvslutning);
+  const [montert, settMontert] = useState(false);
+  /** Id-en til avslutningen som glir bort. */
+  const [gaarId, settGaarId] = useState<number | null>(null);
+  const flateRef = useRef<HTMLDivElement>(null);
+  const gaar = a !== null && gaarId === a.id;
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => settMontert(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    if (!a) return;
+    const t = setTimeout(() => settGaarId(a.id), AVSLUTNING_MS);
+    return () => clearTimeout(t);
+  }, [a]);
+
+  // Reserve når utgangen ikke animeres (PC, redusert bevegelse).
+  useEffect(() => {
+    if (!a || !gaar) return;
+    const t = setTimeout(() => avslutningFerdig(a.id), UTGANG_RESERVE_MS);
+    return () => clearTimeout(t);
+  }, [a, gaar]);
+
+  // Bare pillen på telefon teller i pilleregnskapet. Kortet fra 760 px ligger
+  // i hjørnet, og siden skal ikke bli lengre av det.
+  const id = a?.id;
+  useEffect(() => {
+    const el = flateRef.current;
+    if (id === undefined || !el || !window.matchMedia(TELEFON).matches) return;
+    return meldPille(el);
+  }, [id]);
+
+  return (
+    <div
+      ref={flateRef}
+      className={a ? `tenker-flate tenker-vert flex items-center gap-4 ${gaar ? "gaar" : ""}` : "contents"}
+      onAnimationEnd={(e) => {
+        if (a && e.target === e.currentTarget && e.animationName === "tenker-pille-ut") avslutningFerdig(a.id);
+      }}
+    >
+      {a && <BuddyMerke key={`s${a.id}`} variant="ansikt" tilstand="slutt" storrelse="var(--tenker-merke)" />}
+      {a && <BuddyMerke key={`m${a.id}`} variant="ansikt" mini tilstand="slutt" storrelse="var(--tenker-merke)" />}
+      <div role="status" aria-live="polite" className={a ? "min-w-0" : "sr-only"}>
+        {montert && a && <p className="font-bold">{a.status}</p>}
       </div>
     </div>
   );

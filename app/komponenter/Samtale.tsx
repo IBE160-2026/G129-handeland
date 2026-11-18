@@ -11,6 +11,7 @@
 import { useRouter } from "next/navigation";
 import { useActionState, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
+import { oppdaterUtenFeil } from "./oppdaterUtenFeil";
 import type { Handlingssvar } from "../handlinger";
 import { avsluttSamtale, lagNesteSporsmal, revurderRunde, vurderLagretSvar } from "../handlinger";
 import { KI_FEIL, NETTFEIL, type Feiltekst } from "../kifeil";
@@ -20,15 +21,21 @@ import { Tenker } from "./Tenker";
 
 const TOMT: Handlingssvar = {};
 const KNAPP = KNAPP_PRIMAER;
+
 const LENKEKNAPP =
   "inline-flex min-h-11 items-center text-sm underline underline-offset-4 hover:text-slate-900 disabled:opacity-60 dark:hover:text-slate-100";
 
 /**
  * Første spørsmål tar tid og vises i flaten (på telefon som pillen nederst).
  * Svar på en runde er en kort venting, så Buddy sitter i knappen (bolk 5).
+ *
+ * `ferdigStatus` står alltid mens det ventes, så avslutningen gis videre når
+ * siden byttes (Tenker.tsx), og etterpå bare når handlingen ikke svarte med
+ * en feil (`feilet`). Skjemaet kan ikke vite svaret selv, så Tenker sjekker
+ * i tillegg adressen etter byttet og om eleven selv gikk fra siden.
  */
 function Send(
-  props: { klar: string; status: string } & (
+  props: { klar: string; status: string; ferdigStatus: string; feilet: boolean } & (
     | {
         form: "flate";
         /** Den korte knappeteksten mens det ventes (i knappen står statusen i stedet). */
@@ -39,9 +46,10 @@ function Send(
 ) {
   const { klar, status } = props;
   const { pending } = useFormStatus();
+  const ferdigStatus = pending || !props.feilet ? props.ferdigStatus : undefined;
   if (props.form === "knapp") {
     return (
-      <Tenker form="knapp" type="submit" aktiv={pending} status={status} className={KNAPP}>
+      <Tenker form="knapp" type="submit" aktiv={pending} status={status} ferdigStatus={ferdigStatus} className={KNAPP}>
         {klar}
       </Tenker>
     );
@@ -51,7 +59,7 @@ function Send(
       <button type="submit" disabled={pending} className={KNAPP}>
         {pending ? props.venter : klar}
       </button>
-      <Tenker aktiv={pending} status={status} hjelp="Det kan ta noen sekunder." className="mt-3" />
+      <Tenker aktiv={pending} status={status} ferdigStatus={ferdigStatus} hjelp="Det kan ta noen sekunder." className="mt-3" />
     </>
   );
 }
@@ -66,7 +74,14 @@ export function StartSamtaleSkjema({
   return (
     <form action={send}>
       {svar.feil && <Feilmelding {...svar.feil} />}
-      <Send form="flate" venter="Lager første spørsmål…" klar="Start en fagsamtale" status="Buddy lager det første spørsmålet …" />
+      <Send
+        form="flate"
+        venter="Lager første spørsmål…"
+        klar="Start en fagsamtale"
+        status="Buddy lager det første spørsmålet …"
+        ferdigStatus="Det første spørsmålet er klart."
+        feilet={!!svar.feil}
+      />
     </form>
   );
 }
@@ -95,7 +110,13 @@ export function SvarSkjema({
         placeholder="Forklar med egne ord. Vet du ikke, kan du skrive det."
         className="w-full rounded-md border border-slate-500 p-3 leading-relaxed dark:border-slate-400 dark:bg-slate-900"
       />
-      <Send form="knapp" klar="Svar" status="Buddy leser svaret ditt …" />
+      <Send
+        form="knapp"
+        klar="Svar"
+        status="Buddy leser svaret ditt …"
+        ferdigStatus="Buddy har lest svaret ditt."
+        feilet={!!svar.feil}
+      />
     </form>
   );
 }
@@ -107,26 +128,41 @@ export function SvarSkjema({
 export function RevurderKnapp({ samtaleId, nummer }: { samtaleId: string; nummer: number }) {
   const router = useRouter();
   const [venter, setVenter] = useState(false);
+  // Som i `ProevIgjen`: knappen står låst til siden er oppdatert, så
+  // avslutningen gis videre (eller spilles i knappen) når den nye vurderingen
+  // vises, ikke før (Tenker.tsx).
+  const [oppdaterer, startOppdatering] = useTransition();
+  const [klar, setKlar] = useState(false);
   const [feil, setFeil] = useState<Handlingssvar["feil"]>();
   return (
     <div className="mt-2">
       <Tenker
         form="knapp"
-        aktiv={venter}
+        aktiv={venter || oppdaterer}
         status="Buddy leser svaret ditt på nytt …"
+        ferdigStatus={klar ? "Buddy har lest svaret ditt på nytt." : undefined}
+        kjentSvar
         onClick={async () => {
           setVenter(true);
           setFeil(undefined);
+          setKlar(false);
           // Kaster kallet (nettet borte), skal knappen likevel låses opp igjen.
+          let r: Handlingssvar;
           try {
-            const r = await revurderRunde(samtaleId, nummer);
-            if (r.feil) setFeil(r.feil);
-            else router.refresh();
+            r = await revurderRunde(samtaleId, nummer);
           } catch {
-            setFeil({ melding: "Svaret kom ikke fram.", handling: "Sjekk nettet og prøv igjen." });
-          } finally {
-            setVenter(false);
+            r = { feil: { melding: "Svaret kom ikke fram.", handling: "Sjekk nettet og prøv igjen." } };
           }
+          if (r.feil) {
+            setFeil(r.feil);
+            setVenter(false);
+            return;
+          }
+          setKlar(true);
+          startOppdatering(() => {
+            setVenter(false);
+            oppdaterUtenFeil(router);
+          });
         }}
         className={LENKEKNAPP}
       >
@@ -154,11 +190,14 @@ function ProevIgjen({
   standard,
   fokus,
   status,
+  ferdigStatus,
   handling,
 }: {
   standard: Feiltekst;
   fokus: boolean;
   status: string;
+  /** Statusen når forsøket lyktes, for eksempel «Buddy har lest svaret ditt.». */
+  ferdigStatus: string;
   handling: () => Promise<Handlingssvar>;
 }) {
   const router = useRouter();
@@ -168,6 +207,8 @@ function ProevIgjen({
   const [oppdaterer, startOppdatering] = useTransition();
   const [feil, setFeil] = useState<Feiltekst>(standard);
   const [antallFeil, setAntallFeil] = useState(0);
+  /** Forsøket lyktes, og siden oppdateres: avslutningen gis videre (Tenker.tsx). */
+  const [klar, setKlar] = useState(false);
   return (
     <div className="ml-6">
       <Feilmelding key={antallFeil} {...feil} fokus={fokus || antallFeil > 0}>
@@ -175,8 +216,11 @@ function ProevIgjen({
           form="knapp"
           aktiv={venter || oppdaterer}
           status={status}
+          ferdigStatus={klar ? ferdigStatus : undefined}
+          kjentSvar
           onClick={async () => {
             setVenter(true);
+            setKlar(false);
             let r: Handlingssvar;
             try {
               r = await handling();
@@ -189,9 +233,10 @@ function ProevIgjen({
               setAntallFeil((n) => n + 1);
               return;
             }
+            setKlar(true);
             startOppdatering(() => {
               setVenter(false);
-              router.refresh();
+              oppdaterUtenFeil(router);
             });
           }}
           className={KNAPP}
@@ -224,6 +269,7 @@ export function VurderingFeilet({
       standard={standard}
       fokus={fokus}
       status="Buddy leser svaret ditt …"
+      ferdigStatus="Buddy har lest svaret ditt."
       handling={() => vurderLagretSvar(samtaleId, nummer)}
     />
   );
@@ -236,6 +282,7 @@ export function NesteSporsmalFeilet({ samtaleId, nummer, fokus }: { samtaleId: s
       standard={KI_FEIL.oppfolging}
       fokus={fokus}
       status="Buddy lager neste spørsmål …"
+      ferdigStatus="Neste spørsmål er klart."
       handling={() => lagNesteSporsmal(samtaleId, nummer)}
     />
   );
