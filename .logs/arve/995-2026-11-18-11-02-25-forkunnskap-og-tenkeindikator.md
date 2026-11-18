@@ -27,10 +27,11 @@ Arve syntes forkunnskapssteget (aktiveringen) ikke inspirerte til å skrive, og 
   - Runde 1 ble rullet tilbake etter bad_spec: falsk avslutning, og retry uten avslutning. Spesifikasjonen fikk regler og ble bygget på nytt.
   - I runde 2 fant en ny nettlesersjekk en ekte feil: React bytter siden synkront i Nexts popstate-lytter, før vernets lytter kjører. Den ble løst med en varig teller som leses i overleveringens tidsbryter.
   - npm test 660, tilgjengelighet 276/276, demotest 3/3 (også «Quizen er klar.» og «Bildene er lest.»).
+- **Utrulling 18.11** (Arve valgte å teste i prod med tilbakerulling som reserve, fordi forhåndsversjonen på Vercel mangler innloggingsinnstillingene): migrasjon 0008 kjørt mot Neon (9 av 9), `main` spolt fram til `tenkeindikator` (750474a) og `vercel --prod`. Med fulgte nøyaktig 339ba8a, 2842272, eb63c37 og 102470d. Forsiden svarer 200, og /samling sender til /logg-inn.
 - `vitest` feiler i Git Bash («reading 'config'»), men virker i PowerShell.
 
 ### Åpne punkter
-- Utrulling av `forkunnskap` + `tenkeindikator`: merge til main, migrasjon 0008 mot Neon og `vercel --prod`. Alt krever ja.
+- Arve tester på telefon i prod. Feiler noe: `vercel rollback` til forrige versjon (migrasjonen kan stå, den bare legger til kolonner).
 - «Før du leste» viser overskriftene bare på norsk, ikke med morsmålslinje (deferred-work.md).
 - Tenkeindikatoren: ikke prøvd med ekte skjermleser om «… er klar» leses opp ved sidebytte (deferred-work.md).
 - Tenkeindikatoren: samtalesiden mangler nettlesersjekk av `feilet`-sperren, `RevurderKnapp` og `oppdaterUtenFeil` (deferred-work.md).
