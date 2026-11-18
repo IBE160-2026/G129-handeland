@@ -45,3 +45,9 @@
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Temavalget følger enheten (informasjonskapsel); skal det følge kontoen, trengs migrering
 - [x] 2026-11-16 [996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser](996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser.md) — Rull ut grenen grenser: Neon-migrering 0007, merge og vercel --prod (krever ja) (rullet ut 2026-11-16, main = 80449ae)
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Rull ut grenene forkunnskap og tenkeindikator: merge til main, Neon-migrering 0008 og vercel --prod (krever ja)
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — «Før du leste» mangler morsmålslinje (deferred-work.md)
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Tenkeindikatoren: prøv med ekte skjermleser at «… er klar» leses opp ved sidebytte
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Samtalesiden: nettlesersjekk av feilet-sperren, RevurderKnapp og oppdaterUtenFeil (deferred-work.md)
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Ingen app/error.tsx: en serverhandling som kaster kan gi «… er klar» over feilsiden
+- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Demotesten lager nye lagrede oversettelsessvar hver kjøring (nøklene er ikke faste), og det koster modellkall
