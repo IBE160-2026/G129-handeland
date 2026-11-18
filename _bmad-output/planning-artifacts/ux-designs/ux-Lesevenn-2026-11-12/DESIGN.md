@@ -138,7 +138,7 @@ motion:
   fan: 500ms cubic-bezier(.3,1.35,.5,1), 45 ms forsinkelse per kort
   fade: 300ms ease
   thinking-loop: 1.6s ease-in-out, i løkke mens det ventes
-  thinking-finish: 4.05s, én gang; B-en står 0,8 s før indikatoren går (endret 18.11, var 4.3s og 1,2 s)
+  thinking-finish: 4.05s, én gang; indikatoren står 0,8 s etter animasjonen, så den ferdige B-en står ca. 1,2 s (endret 18.11, var 4.3s + 1,2 s, ca. 1,6 s)
 components:
   focus-ring:
     outline: 3px solid {colors.primary}

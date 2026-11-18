@@ -73,6 +73,11 @@ export function lesLurerPaa(verdi: unknown): string {
   return verdi.replace(/\r\n?/g, "\n").trim().slice(0, MAKS_LURER_PAA).trim();
 }
 
+/** En overskrift i en setning: uten avsluttende tegn, så «Hva er lys?.» ikke kan oppstå. */
+export function iSetning(overskrift: string): string {
+  return overskrift.replace(/[.?!:;]+$/u, "");
+}
+
 /** «A», «A og B», «A, B og C». */
 export function somListe(deler: string[]): string {
   if (deler.length <= 1) return deler.join("");
@@ -103,13 +108,13 @@ export function foerDuLeste(rad: {
   forkunnskapssvar: string | null;
 }): FoerDuLeste | null {
   const merking = rad.forkunnskapMerking ?? [];
-  const med = (m: Merke) => merking.filter((x) => x.merke === m).map((x) => x.overskrift);
+  const med = (m: Merke) => merking.filter((x) => x.merke === m).map((x) => iSetning(x.overskrift));
 
   const kjent = med("kjent");
   const litt = med("litt");
   const linje = [
-    kjent.length > 0 ? `Dette kunne du fra før: ${somListe(kjent)}.` : "",
-    litt.length > 0 ? `Hadde hørt om: ${somListe(litt)}.` : "",
+    kjent.length > 0 ? `Du visste mye om: ${somListe(kjent)}.` : "",
+    litt.length > 0 ? `Du visste litt om: ${somListe(litt)}.` : "",
   ]
     .filter(Boolean)
     .join(" ");

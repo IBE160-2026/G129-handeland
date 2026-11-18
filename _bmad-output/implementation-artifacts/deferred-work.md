@@ -63,3 +63,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-tenkeindikator-avslutning-etter-navigering.md`
   summary: Appen har ingen `app/error.tsx`, så en serverhandling som kaster mens tenkeindikatoren venter, kan gi «… er klar» over Nexts standard feilside.
   evidence: Blind-gjennomgangen runde 2, 18.11; dokumentert som kjent begrensning i EXPERIENCE.md.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-7-innlesing-og-gjennomsyn.md`
+  summary: Fanene på «Legg inn tekst» har role=tab, men mangler aria-controls, tabpanel og piltastnavigasjon (ARIA-mønsteret for faner).
+  evidence: Blind-gjennomgangen av bolk 7, 18.11; fantes før bolken, axe fanger det ikke.

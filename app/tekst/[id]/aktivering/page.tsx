@@ -30,7 +30,7 @@ import { HentOversettelse } from "../../../komponenter/Morsmaal";
 import { Morsmaalstekst, Spraakmerknad } from "../../../komponenter/Tospraak";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { delIAvsnitt, overskrifter } from "../../../../tekst/avsnittsdeling";
-import { MERKENAVN } from "../../../../tekst/forkunnskap";
+import { MERKENAVN, MERKESPOERSMAAL } from "../../../../tekst/forkunnskap";
 import { lagOversettelse, lagreAktivering } from "../../../handlinger";
 import { AktiveringSkjema, LaasPaaNyttSkjema } from "../../../komponenter/Skjemaer";
 import { stegtekst } from "../../../../tekst/steg";
@@ -118,6 +118,9 @@ export default async function Aktivering({
             <HentOversettelse handling={lagOversettelse.bind(null, id, "overskrifter")} hva="overskriftene" />
           )}
           {/* Med skjemaet står overskriftene i skjemaet, hver med sine valg (FR-6). */}
+          {!visSkjema && merket.size > 0 && (
+            <p className="mt-3 text-slate-600 dark:text-slate-400">{MERKESPOERSMAAL}</p>
+          )}
           {!visSkjema && (
             <ul className="mt-3 space-y-2 border-l-2 border-slate-300 pl-4 dark:border-slate-700">
               {titler.map((o) => {
@@ -129,7 +132,7 @@ export default async function Aktivering({
                     {laget(o.innhold) && (
                       <span className="ml-2 align-middle text-xs text-slate-500 dark:text-slate-400">(laget av LeseBuddy)</span>
                     )}
-                    {merke && (
+                    {merke && MERKENAVN[merke] && (
                       <span className="ml-2 align-middle text-sm text-slate-600 dark:text-slate-400">
                         — du merket: {MERKENAVN[merke]}
                       </span>
@@ -174,7 +177,6 @@ export default async function Aktivering({
         ) : (
           <AktiveringSkjema
             handling={lagreAktivering.bind(null, id)}
-            beskrivelse="aktivering-hjelp"
             titler={titler.map((o) => ({
               nummer: o.nummer,
               innhold: o.innhold,

@@ -245,13 +245,13 @@ Over overskriftene står ett spørsmål, «Hva vet du om dette fra før?», og e
 **Konsekvenser (testbare):**
 - Merkingen lagres på Teksten med overskriftens tekst og merket, og spørsmålet lagres (høyst 500 tegn). Begge er tilgjengelige for eleven senere i løypen: Lesevisningen har, rett før «Ferdig med å lese?», en del «Før du leste» som viser spørsmålet («Du lurte på: … Fikk du svar?», med lenke til fagsamtalen), hvilke overskrifter som var helt nye, og hvilke hun ikke skjønte («Disse overskriftene skjønte du ikke: … Gir de mening nå?»). «Fikk du svar?» er en oppfordring og lagres ikke.
 - Ingenting får vurdering, retting eller poengsum, og Buddy svarer ikke på spørsmålet. Forkunnskapen sendes aldri til språkmodellen.
-- Merkingen er vanlige radioknapper, én gruppe per overskrift med overskriften som navn og spørsmålet som beskrivelse, og virker med tastatur og uten skript. De fire valgene får plass på 320 px; de kan brytes til to rader, men ingen knapp kuttes.
+- Merkingen er vanlige radioknapper, én gruppe per overskrift med overskriften som navn og spørsmålet som beskrivelse, og virker med tastatur og uten skript. De fire valgene får plass på 320 px; de kan brytes til flere rader, men ingen knapp kuttes.
 - Eleven kan gå videre uten merking og uten spørsmål etter én oppfordring om å prøve. Steget skal ikke bli en sperre for den eleven som allerede synes dette er vanskelig.
 - Tekster fra før endringen, som har et fritt svar, viser det under «Før du leste». Har en tekst ingenting, vises ikke delen.
 
 *Endret 17.11.2026:* kravet var et fritt felt, «Hva tror du teksten handler om?». Utviklerens egen test viste at feltet ikke satte i gang noe — det var tomt og uinspirerende — og at svaret aldri ble vist igjen, selv om kravet lovte det, så eleven skrev ut i løse luften. Merkingen krever ett trykk per overskrift, spørsmålet gir eleven en grunn til å lese, og «Før du leste» gir det hun gjorde en ende. Det frie svaret beholdes i databasen for eldre tekster.
 
-*Endret 18.11.2026:* merkene var «Dette kan jeg», «Har hørt om» og «Helt nytt». De fungerte ikke for utvikleren, og det manglet et svar for overskrifter eleven ikke skjønner. Nå står ett spørsmål over overskriftene med fire svar, og «Før du leste» har en egen linje for overskriftene eleven ikke skjønte. Kodene som lagres, er de samme (`kjent` = «Mye», `litt` = «Litt», `nytt` = «Ingenting ennå»), så merker fra før vises med de nye navnene uten migrasjon. Den nye koden er `uklar`.
+*Endret 18.11.2026:* merkene var «Dette kan jeg», «Har hørt om» og «Helt nytt». Utviklerens test viste at «Dette kan jeg» lovet for mye, at «Har hørt om» var vagt, og at det manglet et svar for overskrifter eleven ikke skjønner. Nå står ett spørsmål over overskriftene med fire svar, og «Før du leste» har en egen linje for overskriftene eleven ikke skjønte. Kodene som lagres, er de samme (`kjent` = «Mye», `litt` = «Litt», `nytt` = «Ingenting ennå»), så merker fra før vises med de nye navnene uten migrasjon. Det er et bevisst valg at gamle svar tolkes om: «Dette kan jeg» leses som «Mye» og «Har hørt om» som «Litt». Den nye koden er `uklar`.
 
 ### 4.3 Begrepssett og lesevisning
 

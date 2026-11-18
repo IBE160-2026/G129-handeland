@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Innlesing på Ny tekst-siden (/ny) — FR-1 (liming) og FR-2 (PDF).
+ * Innlesing på Ny tekst-siden (/ny) — FR-1 (liming), FR-2 (PDF) og FR-44 (bilder).
  *
  * Tre faner (liming, PDF og bilder) som ender i samme løype. PDF-en leses HER, i nettleseren (AD-16):
  * filen forlater aldri elevens maskin, bare teksten og rapporten om hva
@@ -455,7 +455,7 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
         <div role="status" className="rounded-md border border-amber-400 bg-amber-50 p-4 text-sm dark:border-amber-600 dark:bg-amber-950/40">
           <p className="font-medium">Teksten er lest ut av {bilder.length === 1 ? "bildet" : `${bilder.length} bilder`}.</p>
           <p className="mt-1">
-            Det blir ofte feil når tekst leses fra bilder. Les gjennom teksten ekstra nøye når du får se den, og
+            Det hender at Buddy leser feil når tekst leses fra bilder. Les gjennom teksten ekstra nøye når du får se den, og
             rett det som ikke stemmer.
           </p>
           {tekst.length < GRENSER.minTegnTotalt && (
@@ -523,10 +523,18 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
         />
       </div>
 
+      {/* Byttet til «Etter» leses opp: regionen finnes fra før, og teksten skrives inn når boksen byttes. */}
+      <p role="status" className="sr-only">
+        {bilder.length >= 2 ? "Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem." : ""}
+      </p>
       {bilder.length >= 2 && (
         <p className={MERKNAD}>
           <Uthevet>Etter</Uthevet> <span className="font-medium">at du har lastet opp bildene:</span> Sjekk at sidene står
           i riktig rekkefølge. Bruk pilene for å flytte dem.
+          {/* Grensen og personvernlinjen fra «Før»-boksen står igjen, kort, mens eleven kan legge til flere. */}
+          <span className="mt-1 block">
+            Høyst {BILDEGRENSER.maksBilder} bilder. Bildene lagres ikke, bare teksten.
+          </span>
         </p>
       )}
 

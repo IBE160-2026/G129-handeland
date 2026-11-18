@@ -74,7 +74,11 @@ import { TELEFON } from "./brytepunkt";
 import { BuddyMerke } from "./Merke";
 
 const LANG_VENTING_MS = 30_000;
-/** Avslutningen er 4,05 s; B-en blir stående 0,8 s før indikatoren går (bolk 8, 18.11). */
+/**
+ * Avslutningen er 4,05 s, og indikatoren står 0,8 s til etter den. Ryggen i
+ * B-en er ferdig tegnet ved ca. 3,66 s, så B-en står ferdig i ca. 1,2 s (før
+ * 18.11: ca. 1,6 s). Bolk 8.
+ */
 const AVSLUTNING_MS = 4050 + 800;
 /**
  * Pillen er borte når `tenker-pille-ut` er ferdig (animationend). Tidtakeren

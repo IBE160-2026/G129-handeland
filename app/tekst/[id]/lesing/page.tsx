@@ -375,11 +375,15 @@ export default async function Lesing({
               </>
             )}
             {foer.heltNye.length > 0 && (
-              <p>Helt nytt for deg før du leste: {somListe(foer.heltNye)}.</p>
+              <p>Du visste ingenting om dette fra før: {somListe(foer.heltNye)}.</p>
             )}
             {/* 18.11: overskriftene eleven merket «Skjønner ikke overskriften». */}
             {foer.uklare.length > 0 && (
-              <p>Disse overskriftene skjønte du ikke: {somListe(foer.uklare)}. Gir de mening nå?</p>
+              <p>
+                {foer.uklare.length === 1
+                  ? `Denne overskriften skjønte du ikke: ${foer.uklare[0]}. Gir den mening nå?`
+                  : `Disse overskriftene skjønte du ikke: ${somListe(foer.uklare)}. Gir de mening nå?`}
+              </p>
             )}
             {foer.oppsummering && <p className="text-slate-600 dark:text-slate-400">{foer.oppsummering}</p>}
             {foer.gammeltSvar && (

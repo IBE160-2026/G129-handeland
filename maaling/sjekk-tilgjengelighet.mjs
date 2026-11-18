@@ -321,11 +321,11 @@ try {
     grupper[0]?.etiketter ?? "",
   );
   sjekk(
-    "FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over gruppene og beskriver hver gruppe, sammen med instruksen",
+    "FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over gruppene og beskriver hver gruppe (instruksen leses ikke på nytt for hver gruppe)",
     (await pc.locator("main form #merke-spoersmaal", { hasText: "Hva vet du om dette fra før?" }).count()) === 1 &&
       (await pc.locator("fieldset #merke-spoersmaal").count()) === 0 &&
       grupper.every(
-        (g) => g.beskrivelse.startsWith("Hva vet du om dette fra før?") && g.beskrivelse.includes("Ingenting her blir vurdert."),
+        (g) => g.beskrivelse === "Hva vet du om dette fra før?",
       ),
     grupper[0]?.beskrivelse ?? "",
   );
@@ -474,7 +474,7 @@ try {
     "FR-6: «Før du leste» viser spørsmålet, lenken til fagsamtalen og overskriften eleven ikke skjønte (18.11)",
     foerDel.includes("Du lurte på: Hvorfor kan vi ikke se radiobølger?") &&
       (await pc.locator('#foer-du-leste a[href$="/oppgaver"]').count()) === 1 &&
-      foerDel.includes(`Disse overskriftene skjønte du ikke: ${uklarOverskrift}. Gir de mening nå?`),
+      foerDel.includes(`Denne overskriften skjønte du ikke: ${uklarOverskrift.replace(/[.?!:;]+$/u, "")}. Gir den mening nå?`),
     foerDel.replace(/\s+/g, " ").slice(0, 200),
   );
   const rekkefoelge = await pc.evaluate(() => {
@@ -765,13 +765,47 @@ try {
       await side.setInputFiles("#bilder", [bilde(1)]);
       await side.locator("ol li").first().waitFor();
       sjekk(`bolk 7 (${modusnavn}): med ett bilde står «Før du tar bildene» som før`, (await foer(side).count()) === 1 && (await etter(side).count()) === 0);
-      await side.setInputFiles("#bilder", [bilde(2), bilde(3)]);
-      await etter(side).waitFor({ timeout: 10000 }).catch(() => {});
+      // Grensen: nøyaktig to bilder gir «Etter».
+      await side.setInputFiles("#bilder", [bilde(2)]);
+      const toBilder = await etter(side).waitFor({ timeout: 10000 }).then(() => true, () => false);
+      sjekk(
+        `bolk 7 (${modusnavn}): med to bilder står «Etter» rett over listen, og «Før» er borte`,
+        toBilder && (await foer(side).count()) === 0 && (await side.locator("ol li").count()) === 2,
+        `etter ${toBilder}, før ${await foer(side).count()}, ${await side.locator("ol li").count()} bilder`,
+      );
+      await side.setInputFiles("#bilder", [bilde(3)]);
+      await side.locator("ol li").nth(2).waitFor();
+      const etterTekst = await etter(side).count();
       sjekk(
         `bolk 7 (${modusnavn}): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte`,
-        (await etter(side).count()) === 1 && (await foer(side).count()) === 0 && (await side.locator("ol li").count()) === 3,
+        etterTekst === 1 && (await foer(side).count()) === 0 && (await side.locator("ol li").count()) === 3,
+        `etter ${etterTekst}, før ${await foer(side).count()}`,
+      );
+      const uthevetEtter = await side
+        .locator("p:has-text('Etter at du har lastet opp bildene') strong")
+        .evaluate((e) => ({ tekst: e.textContent, vekt: Number(getComputedStyle(e).fontWeight), strek: getComputedStyle(e).textDecorationLine }));
+      sjekk(
+        `bolk 7 (${modusnavn}): «Etter» er fet og understreket`,
+        uthevetEtter.tekst === "Etter" && uthevetEtter.vekt >= 700 && uthevetEtter.strek.includes("underline"),
+        JSON.stringify(uthevetEtter),
+      );
+      const etterBoks = await side.locator("p:has-text('Etter at du har lastet opp bildene')").textContent();
+      const status = await side.locator("p[role=status].sr-only", { hasText: "riktig rekkefølge" }).count();
+      sjekk(
+        `bolk 7 (${modusnavn}): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion)`,
+        /Høyst [0-9]+ bilder/.test(etterBoks) && etterBoks.includes("lagres ikke") && status === 1,
+        `${etterBoks} / status ${status}`,
       );
       await axe(side, `ny tekst, bildefanen med tre bilder (${modusnavn})`);
+      // Fjernes bildene ned til ett, kommer «Før» tilbake.
+      await side.locator("button[aria-label='Fjern side 3']").click();
+      await side.locator("button[aria-label='Fjern side 2']").click();
+      const tilbake = await foer(side).waitFor({ timeout: 10000 }).then(() => true, () => false);
+      sjekk(
+        `bolk 7 (${modusnavn}): fjernes bildene ned til ett, står «Før du tar bildene» igjen`,
+        tilbake && (await etter(side).count()) === 0 && (await side.locator("ol li").count()) === 1,
+        `før ${tilbake}, ${await side.locator("ol li").count()} bilder`,
+      );
     }
   }
 

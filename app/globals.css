@@ -183,6 +183,8 @@ h2 {
  */
 .merkevalg {
   position: relative;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;

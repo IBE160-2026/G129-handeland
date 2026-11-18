@@ -76,7 +76,7 @@ describe("foerDuLeste", () => {
       lurerPaa: "Hvorfor blir maten varm?",
       heltNye: ["Tallerkenen"],
       uklare: [],
-      oppsummering: "Dette kunne du fra før: Mikrobølger. Hadde hørt om: Ovnen.",
+      oppsummering: "Du visste mye om: Mikrobølger. Du visste litt om: Ovnen.",
       gammeltSvar: null,
     });
   });
@@ -101,6 +101,24 @@ describe("foerDuLeste", () => {
       forkunnskapssvar: null,
     });
     expect(del).toEqual({ lurerPaa: null, heltNye: [], uklare: ["Mikrobølger", "Tallerkenen"], oppsummering: null, gammeltSvar: null });
+  });
+
+  test("blandede merker: hver liste får sine, og avsluttende tegn fjernes i setningen", () => {
+    const del = foerDuLeste({
+      forkunnskapMerking: [
+        { overskrift: "Hva er lys?", merke: "uklar" },
+        { overskrift: "Bølger", merke: "nytt" },
+        { overskrift: "Ovnen", merke: "kjent" },
+        { overskrift: "Stråling:", merke: "litt" },
+      ],
+      lurerPaa: null,
+      forkunnskapssvar: null,
+    });
+    expect(del).toMatchObject({
+      uklare: ["Hva er lys"],
+      heltNye: ["Bølger"],
+      oppsummering: "Du visste mye om: Ovnen. Du visste litt om: Stråling.",
+    });
   });
 
   test("tom: ingen del, verken for ny eller gammel tekst", () => {

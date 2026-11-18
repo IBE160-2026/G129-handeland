@@ -179,7 +179,7 @@ async function loeype(s, { mobil, eksempel, brod }) {
   sjekk(
     `${p}3`,
     "FR-6: spørsmålet og den helt nye overskriften står under «Før du leste»",
-    lest.includes("Du lurte på: Hvorfor blir maten varm i mikrobølgeovnen?") && lest.includes("Helt nytt for deg før du leste:"),
+    lest.includes("Du lurte på: Hvorfor blir maten varm i mikrobølgeovnen?") && lest.includes("Du visste ingenting om dette fra før:"),
   );
   await s.goto(`${tekstUrl}/gjennomsyn`);
   sjekk(`${p}4`, "teksten er låst for redigering", !s.url().endsWith("/gjennomsyn") && (await s.locator("textarea#tekst").count()) === 0);
@@ -450,7 +450,7 @@ async function enKjoering(nettleser) {
   await pc.click('button[aria-label="Flytt side 1 ned"]');
   sjekk("13", "rekkefølgen kan endres", true);
   await pc.click('button:has-text("Les teksten fra de 2 bildene")');
-  await pc.locator("text=Det blir ofte feil når tekst leses fra bilder").waitFor({ timeout: 240000 });
+  await pc.locator("text=Det hender at Buddy leser feil når tekst leses fra bilder").waitFor({ timeout: 240000 });
   sjekk("13", "merknaden om at bildeuttrekk ikke er kvalitetssikret vises", true);
   // Overleveringen (17.11): lesingen er ferdig og indikatoren borte, så verten
   // spiller «Bildene er lest.».

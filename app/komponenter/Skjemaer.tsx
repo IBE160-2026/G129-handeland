@@ -105,14 +105,11 @@ const SPOERSMAAL_ID = "merke-spoersmaal";
 export function AktiveringSkjema({
   handling,
   titler,
-  beskrivelse,
   venter = "Lagrer…",
   status,
 }: {
   handling: (s: Handlingssvar, d: FormData) => Promise<Handlingssvar>;
   titler: Aktiveringstittel[];
-  /** Id-en til instruksjonen på siden, som hver radiogruppe beskrives av. */
-  beskrivelse?: string;
   /** Innlimt tekst låses og får fagordene i samme trykk (FR-3), og det tar tid (§5). */
   venter?: string;
   /** Statusteksten i tenkeindikatoren, når trykket venter på språkmodellen. */
@@ -139,7 +136,7 @@ export function AktiveringSkjema({
           {titler.map((o) => (
             <fieldset
               key={o.nummer}
-              aria-describedby={beskrivelse ? `${SPOERSMAAL_ID} ${beskrivelse}` : SPOERSMAAL_ID}
+              aria-describedby={SPOERSMAAL_ID}
               className="rounded-md border border-slate-300 p-4 dark:border-slate-700"
             >
               <legend className="px-1 text-lg font-medium">

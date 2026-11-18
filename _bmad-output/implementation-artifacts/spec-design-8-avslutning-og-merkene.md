@@ -2,7 +2,7 @@
 title: 'Design runde 2, bolk 8: raskere avslutning og nye merker i forkunnskapssteget'
 type: 'feature'
 created: '2026-11-18'
-status: 'in-review'
+status: 'done'
 baseline_commit: '53dcb41b65b0d3608fc5e228cfad97b870d105cf'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -71,6 +71,27 @@ context: []
 ## Spec Change Log
 
 ## Review Triage Log
+
+Runde 1 (18.11): Blind Hunter (B), Edge Case Hunter (E) og Verification Gap (V).
+
+| Funn | Vurdering | Bevis / rute |
+|---|---|---|
+| B1/E6/V2 «Før du leste» bruker de gamle ordene (akseptkriteriet «Mye» i lesevisningen) | medium | `foerDuLeste` og lesevisningen. patch: «Du visste mye/litt om», «Du visste ingenting om dette fra før» |
+| E2 Flertall ved én uklar overskrift | low | patch: entall ved én |
+| E1 Dobbelt tegn når overskriften slutter med «?» | low | patch: `iSetning` |
+| B4 B-en står ca. 1,2 s, ikke 0,8 s (animasjonen har en stille hale) | low | Utviklerens ønske var 0,4 s raskere, og det er oppfylt (ca. 1,6 → 1,2 s). patch: tallene i DESIGN.md og Tenker.tsx |
+| B8 Instruksen leses for hver gruppe | low | patch: beskrivelsen er bare spørsmålet |
+| B3 Låst aktivering mangler spørsmålet | low | patch: spørsmålet over listen |
+| E5 Ukjent lagret kode gir «du merket: » | low | patch: vakt |
+| E3 Valgene kan flyte ut med stor tekst | low | patch: `max-width`/`overflow-wrap` |
+| V1/B7 «To rader» stemmer ikke (tre rader målt) | low | patch: «flere rader» i PRD og EXPERIENCE |
+| B9/B2 PRD-begrunnelsen er tynn, og omtolkingen av gamle svar er ikke sagt | low | patch: PRD |
+| B12 Ingen test med blandede merker | low | patch: enhetstest |
+| B5 Varigheten står mange steder | low | Ikke en direkte rettelse. Avvist |
+| B6/E4 Trange marginer i tidstesten | low | Målt 5,5 s mot grensen 5,9 s; den gamle ville gitt ca. 6,2 s. Avvist |
+| B10 «Skjønner ikke» fører ikke videre | low | Hensikten var linjen i «Før du leste». Avvist (kan tas opp med utvikleren) |
+| B11 Kodenavnene (`heltNye`) passer ikke med visningen | low | Kodene er bevart for lagrede data. Avvist |
+| V3 Resultatfilen er fra en annen grense | false | Kjørt på nytt 18.11, 306/306 |
 
 ## Verification
 
