@@ -731,3 +731,25 @@ export const mappeforsoek = pgTable(
   },
   (t) => [index("mappeforsoek_mappe_idx").on(t.mappeId)],
 );
+
+/* ------------------------------------------------------------------ *
+ * Vilkår og aldersgrense — FR-35, FR-53 (tatt inn 19.11.2026)
+ * ------------------------------------------------------------------ */
+
+/**
+ * FR-53: at eleven bekreftet «15 år eller eldre» og «har lest vilkårene» da
+ * kontoen ble laget, og hvilken versjon (`VILKAARSVERSJON` i data/vilkaar.ts).
+ * Ingen alder og ingen fødselsdato (FR-35): bare at, når og hvilken versjon.
+ *
+ * Én rad per konto, skrevet i samme transaksjon som kontoen (data/auth.ts),
+ * så en konto laget etter 19.11 finnes ikke uten raden. Kontoer fra før har
+ * ingen rad, med vilje: endringen gjelder bare nye kontoer. Kaskaden er
+ * FR-37: slettes kontoen, slettes raden.
+ */
+export const vilkaarsbekreftelse = pgTable("vilkaarsbekreftelse", {
+  kontoId: uuid("konto_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  versjon: text("versjon").notNull(),
+  bekreftet: timestamp("bekreftet", { withTimezone: true }).notNull().defaultNow(),
+});

@@ -124,6 +124,13 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
         <LoggUtKnapp />
       </section>
 
+      <p className="mt-8">
+        <Link href="/vilkaar" className="underline underline-offset-4">
+          Vilkår og personvern
+        </Link>
+        <span className="text-slate-600 dark:text-slate-400">: hva som lagres, hvor tekstene dine går, og hvem du kontakter.</span>
+      </p>
+
       <section className="mt-12 rounded-md border-2 border-fare p-5">
         <h2 className="text-xl font-semibold tracking-tight">Slett kontoen</h2>
         <p className="mt-2">Dette forsvinner for godt, og kan ikke hentes tilbake:</p>

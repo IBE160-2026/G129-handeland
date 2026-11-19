@@ -323,6 +323,31 @@ try {
   await pc.fill("#epost", EPOST);
   await pc.fill("#passord", PASSORD);
   await pc.fill("#gjenta", PASSORD);
+  // FR-53: uten avkrysningene stopper nettleseren innsendingen. Ingen er
+  // forhåndsavkrysset, og begge har en lesbar etikett.
+  sjekk(
+    "FR-53: avkrysningene for alder og vilkår er påkrevde og ikke forhåndsavkrysset",
+    (await pc.locator("#alder:required:not(:checked)").count()) === 1 &&
+      (await pc.locator("#vilkaar:required:not(:checked)").count()) === 1 &&
+      (await pc.getByLabel("Jeg er 15 år eller eldre").count()) === 1 &&
+      (await pc.getByLabel("Jeg har lest vilkårene og personvernerklæringen").count()) === 1,
+  );
+  await pc.click("form button[type=submit]");
+  await pc.waitForTimeout(500);
+  sjekk(
+    "FR-53: uten avkrysning sendes ikke skjemaet",
+    new URL(pc.url()).pathname === "/registrer" && (await pc.locator("#alder:invalid").count()) === 1,
+    pc.url(),
+  );
+  sjekk(
+    "FR-53: registreringen lenker til «Vilkår og personvern»",
+    (await pc.locator("main a[href='/vilkaar']").count()) >= 1,
+  );
+  // Tastatur: mellomrom krysser av når boksen har fokus.
+  await pc.focus("#alder");
+  await pc.keyboard.press("Space");
+  await pc.check("#vilkaar");
+  sjekk("FR-53: avkrysningen virker med tastaturet", await pc.isChecked("#alder"));
   await pc.click("form button[type=submit]");
   await pc.waitForURL(`${APP}/`);
   // FR-48: en ny elev lander på et tomt arbeidsbord.
@@ -860,6 +885,7 @@ try {
     ["mappe: øvekort", `${mappeUrl}/oevekort`],
     ["mappe: quiz", `${mappeUrl}/quiz?lengde=kort`],
     ["konto", `${APP}/konto`],
+    ["vilkår og personvern", `${APP}/vilkaar`],
   ]) {
     await moerk.goto(url);
     // Etter låsingen sender overskriftssiden videre; da er det en annen side som sjekkes.
@@ -2322,6 +2348,36 @@ try {
   );
   sjekk("FR-47: siden sier at registrering krever en kode fra læreren", (await land.locator("text=Har du fått en kode fra læreren? Da kan du registrere deg.").count()) > 0);
   sjekk("landingssiden har én h1", (await land.locator("h1").count()) === 1);
+
+  // FR-53: «Vilkår og personvern» åpnes fra landingssiden uten innlogging.
+  {
+    const ctx = await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" });
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${APP}/`);
+    await side.click("a[href='/vilkaar']");
+    await side.waitForURL(`${APP}/vilkaar`);
+    sjekk(
+      "FR-53: «Vilkår og personvern» vises uten innlogging, fra landingssiden",
+      (await side.locator("h1", { hasText: "Vilkår og personvern" }).count()) === 1,
+      side.url(),
+    );
+    sjekk(
+      "FR-53: siden sier hva som lagres, hvor teksten går, hvordan man sletter og hvem man kontakter",
+      (await side.locator("h2", { hasText: "Hva som lagres" }).count()) === 1 &&
+        (await side.locator("h2", { hasText: "Hvor tekstene dine går" }).count()) === 1 &&
+        (await side.locator("text=Slett kontoen:").count()) === 1 &&
+        (await side.locator("a[href^='mailto:']").count()) >= 1,
+    );
+    await axe(side, "vilkår og personvern");
+    await ctx.close();
+    const tlfCtx = await nettleser.newContext({ viewport: { width: 375, height: 740 }, locale: "nb-NO", isMobile: true, hasTouch: true });
+    const tlfSide = await tlfCtx.newPage();
+    tlfSide.setDefaultTimeout(120000);
+    await tlfSide.goto(`${APP}/vilkaar`);
+    await ingenSiderulling(tlfSide, "vilkår og personvern");
+    await tlfCtx.close();
+  }
   sjekk("demoen har overskriften «Se hvordan Buddy markerer fagord»", (await land.locator("h2", { hasText: "Se hvordan Buddy markerer fagord" }).count()) === 1);
   sjekk(
     "topplinjen på landingssiden: «For lærere» og «Logg inn», ikke appmenyen",

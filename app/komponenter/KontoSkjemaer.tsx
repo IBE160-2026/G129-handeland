@@ -8,15 +8,38 @@
  * server action som kalte `auth.api` direkte ville gått forbi den.
  */
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
+import {
+  ALDER_BEKREFTET,
+  ALDER_HEADER,
+  VILKAAR_FEIL,
+  VILKAAR_HEADER,
+  VILKAARSVERSJON,
+} from "../../data/vilkaar";
 import { slettEnhetsvalgHandling } from "../handlinger";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
 
-type Feil = { melding: string; handling: string };
+/** `vilkaarslenke`: meldingen får en lenke til «Vilkår og personvern». */
+type Feil = { melding: string; handling: string; vilkaarslenke?: boolean };
+
+/** Feilmeldingen, med lenke til vilkårene når feilen gjelder dem. */
+function VisFeil({ feil }: { feil: Feil }) {
+  const { vilkaarslenke, ...resten } = feil;
+  return (
+    <Feilmelding {...resten}>
+      {vilkaarslenke ? (
+        <Link href="/vilkaar" className="font-medium underline underline-offset-4">
+          Les vilkårene og personvernerklæringen
+        </Link>
+      ) : undefined}
+    </Feilmelding>
+  );
+}
 
 /**
  * Oversetter Better Auths feilkoder til §5-form: hva som gikk galt, og hva
@@ -64,6 +87,26 @@ function somFeil(
       return {
         melding: "Passordet er feil. Ingenting er slettet.",
         handling: "Skriv inn passordet du logger inn med.",
+      };
+    // FR-53. Skjemaet krever begge avkrysningene, så disse kommer bare om
+    // nettleseren ikke stoppet innsendingen, eller vilkårene er endret.
+    case VILKAAR_FEIL.alder:
+      return {
+        melding: "Du må bekrefte at du er 15 år eller eldre.",
+        handling:
+          "LeseBuddy er for elever fra 15 år. Er du 15 eller eldre, kryss av for det og prøv igjen.",
+      };
+    case VILKAAR_FEIL.vilkaar:
+      return {
+        melding: "Du må bekrefte at du har lest vilkårene og personvernerklæringen.",
+        handling: "Les dem, kryss av for at du har lest dem, og prøv igjen.",
+        vilkaarslenke: true,
+      };
+    case VILKAAR_FEIL.endret:
+      return {
+        melding: "Vilkårene er endret — last siden på nytt.",
+        handling: "Last siden på nytt, les de nye vilkårene, og kryss av igjen.",
+        vilkaarslenke: true,
       };
   }
   if (feil?.status === 403) {
@@ -129,7 +172,7 @@ export function InnloggingSkjema() {
 
   return (
     <form onSubmit={send} className="space-y-4">
-      {feil && <Feilmelding {...feil} />}
+      {feil && <VisFeil feil={feil} />}
       <div>
         <label htmlFor="epost" className="block font-medium">E-post</label>
         <input id="epost" name="epost" type="email" autoComplete="email" required className={FELT} />
@@ -177,6 +220,9 @@ export function RegistreringSkjema() {
       fetchOptions: {
         headers: {
           [INVITASJONSKODE_HEADER]: String(data.get("kode") ?? ""),
+          // FR-53: serveren sjekker begge, så en tom verdi avvises der også.
+          [ALDER_HEADER]: data.get("alder") === "ja" ? ALDER_BEKREFTET : "",
+          [VILKAAR_HEADER]: data.get("vilkaar") === "ja" ? VILKAARSVERSJON : "",
         },
       },
     });
@@ -188,7 +234,7 @@ export function RegistreringSkjema() {
 
   return (
     <form onSubmit={send} className="space-y-4">
-      {feil && <Feilmelding {...feil} />}
+      {feil && <VisFeil feil={feil} />}
       <div>
         <label htmlFor="kode" className="block font-medium">Invitasjonskode</label>
         <input id="kode" name="kode" type="text" autoComplete="off" required className={FELT} />
@@ -208,6 +254,48 @@ export function RegistreringSkjema() {
       <div>
         <label htmlFor="gjenta" className="block font-medium">Gjenta passordet</label>
         <input id="gjenta" name="gjenta" type="password" autoComplete="new-password" minLength={8} required className={FELT} />
+      </div>
+      {/*
+        FR-53: to påkrevde avkrysninger, aldri forhåndsavkrysset. Dette er
+        ikke samtykke: grunnlaget er avtale, og boksene bekrefter at eleven
+        er gammel nok og har fått informasjonen.
+      */}
+      <div>
+        <label className="flex min-h-11 cursor-pointer items-start gap-3 py-1">
+          <input
+            id="alder"
+            name="alder"
+            type="checkbox"
+            value="ja"
+            required
+            aria-describedby="alder-hjelp"
+            className="mt-1 size-5 shrink-0"
+          />
+          <span className="font-medium">Jeg er 15 år eller eldre</span>
+        </label>
+        <p id="alder-hjelp" className="ms-8 text-sm text-slate-600 dark:text-slate-400">
+          LeseBuddy er for elever fra 15 år. Vi spør ikke om alderen din og lagrer den ikke.
+        </p>
+      </div>
+      <div>
+        <label className="flex min-h-11 cursor-pointer items-start gap-3 py-1">
+          <input
+            id="vilkaar"
+            name="vilkaar"
+            type="checkbox"
+            value="ja"
+            required
+            aria-describedby="vilkaar-hjelp"
+            className="mt-1 size-5 shrink-0"
+          />
+          <span className="font-medium">Jeg har lest vilkårene og personvernerklæringen</span>
+        </label>
+        <p id="vilkaar-hjelp" className="ms-8 text-sm text-slate-600 dark:text-slate-400">
+          <Link href="/vilkaar" target="_blank" className="font-medium underline underline-offset-4">
+            Les vilkår og personvern
+          </Link>{" "}
+          (åpnes i en ny fane). Der står det hva som lagres, hvor tekstene dine går, og hvordan du sletter alt.
+        </p>
       </div>
       <button type="submit" disabled={venter} className={KNAPP}>
         {venter ? "Oppretter konto…" : "Opprett konto"}
@@ -243,7 +331,7 @@ export function LoggUtKnapp() {
 
   return (
     <>
-      {feil && <Feilmelding {...feil} />}
+      {feil && <VisFeil feil={feil} />}
       <button type="button" onClick={loggUt} disabled={venter} className={KNAPP}>
         {venter ? "Logger ut…" : "Logg ut"}
       </button>
@@ -283,7 +371,7 @@ export function SlettKontoSkjema() {
 
   return (
     <form onSubmit={send} className="space-y-4">
-      {feil && <Feilmelding {...feil} />}
+      {feil && <VisFeil feil={feil} />}
       <div>
         <label htmlFor="slett-passord" className="block font-medium">
           Skriv passordet ditt for å bekrefte

@@ -114,6 +114,9 @@ try {
   await s.fill("#epost", EPOST);
   await s.fill("#passord", PASSORD);
   await s.fill("#gjenta", PASSORD);
+  // FR-53: 15 år eller eldre, og vilkårene lest.
+  await s.check("#alder");
+  await s.check("#vilkaar");
   await s.click("form button[type=submit]");
   await s.waitForURL(`${APP}/`);
   sjekk("registrering med invitasjonskoden fra .env.example", true);

@@ -381,6 +381,9 @@ async function enKjoering(nettleser) {
   await pc.fill("#epost", epost);
   await pc.fill("#passord", PASSORD);
   await pc.fill("#gjenta", PASSORD);
+  // FR-53: 15 år eller eldre, og vilkårene lest.
+  await pc.check("#alder");
+  await pc.check("#vilkaar");
   await pc.click("form button[type=submit]");
   await pc.waitForURL(`${APP}/`);
   sjekk("1", "konto opprettet og innlogget", true);

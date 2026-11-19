@@ -202,7 +202,12 @@ export function Landingsside() {
         <LandingEffekter />
       </main>
       <footer className="ls-bunn">
-        <div className="ls-innhold">LeseBuddy · et studentprosjekt i IBE160</div>
+        <div className="ls-innhold">
+          LeseBuddy · et studentprosjekt i IBE160 ·{" "}
+          <Link href="/vilkaar" className="underline underline-offset-4">
+            Vilkår og personvern
+          </Link>
+        </div>
       </footer>
     </>
   );

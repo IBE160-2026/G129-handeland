@@ -78,3 +78,6 @@ Thumbs.db
 # Avledet av pdfjs-dist, kopieres før dev og build (opplasting/kopier-pdf-worker.mjs)
 /public/pdf.worker.min.mjs
 .next-sjekk/
+
+# Innsyn for én konto (data/innsyn.mjs): inneholder elevens tekster, aldri i git
+innsyn-*.json

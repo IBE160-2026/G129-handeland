@@ -75,6 +75,37 @@ const FEIL = [
     fra: "user: { deleteUser: { enabled: true } },",
     til: "user: { deleteUser: { enabled: false } },",
   },
+  // Lagt til 19.11.2026 (FR-53, spec-vilkaar-og-aldersgrense, kodefunn 28).
+  {
+    regel: "Alder og vilkår sjekkes ved hver registrering, også rett mot ruten",
+    fil: "data/auth.ts",
+    fra: "if (feil) throw feil;",
+    til: "if (feil) void feil;",
+  },
+  {
+    regel: "Bekreftelsen av vilkårene lagres når kontoen lages",
+    fil: "data/auth.ts",
+    fra: `if (ctx?.path !== "/sign-up/email") return;`,
+    til: "return;",
+  },
+  {
+    regel: "Ingen konto uten bekreftelse: begge lagres i samme transaksjon",
+    fil: "data/auth.ts",
+    fra: "transaction: true,",
+    til: "transaction: false,",
+  },
+  {
+    regel: "IP-adressen lagres ikke i klartekst i telleren for innloggingsforsøk",
+    fil: "data/auth.ts",
+    fra: "const key = hashTellernoekkel(noekkel, hemmelighet());",
+    til: "const key = noekkel;",
+  },
+  {
+    regel: "Begrensningen av innloggingsforsøk virker med hashet nøkkel",
+    fil: "data/auth.ts",
+    fra: "if (sist === naa) {",
+    til: "if (sist === naa || true) {",
+  },
 ];
 
 /* ------------------------------------------------------------------ */
