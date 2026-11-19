@@ -486,9 +486,32 @@ I gjennomgangen oppdaget jeg noe som ikke stemte helt overens, og ønsket å dr�
 
 ---
 
+## 2026-11-19 — ENDRET: vilkår og aldersgrense — avtale framfor samtykke, 15 år framfor 13
+
+**Verktøy:** Claude Code (Claude Opus 5.5), BMAD (bmad-build), med en underagent til implementeringen.
+
+**Hva jeg ba om:** vilkår eleven kan lese og godta, og en aldersgrense, fordi brukerne er 15–19 år og tekstene sendes til en leverandør i USA. Før dette sto informasjonen bare i en ingress på registreringssiden.
+
+**Hva som kom tilbake:** et utkast til «Vilkår og personvern» for en 15-åring, og en spesifikasjon (`spec-vilkaar-og-aldersgrense.md`) med to påkrevde avkrysninger ved registrering. To valg i utkastet er verdt å skille fra hverandre:
+
+- **Avtale, ikke samtykke, som behandlingsgrunnlag** (GDPR art. 6 nr. 1 bokstav b). Opplysningene er det som trengs for at tjenesten skal virke. Samtykke ville betydd at eleven kunne trekke det tilbake og fortsatt ha krav på tjenesten, og for mindreårige under 13 år krevd samtykke fra foresatte. Avkrysningen er derfor en bekreftelse på at eleven har fått informasjonen, ikke et samtykke.
+- **15 år, ikke 13.** Kilde: Datatilsynet, «Barn og unge forbrukere» (<https://www.datatilsynet.no/personvern-pa-ulike-omrader/kundehandtering-handel-og-medlemskap/digitale-tjenester-og-forbrukeres-personopplysninger/barn-og-unge-forbrukere/>, lest 19.11.2026): for informasjonssamfunnstjenester «må foreldre samtykke til behandling av personopplysninger på vegne av barn under 13 år», etter personvernforordningen art. 8 og personopplysningsloven § 5. Siden knytter 13-årsgrensen til **samtykke**; den sier ingenting om avtale som grunnlag. Grensen på 13 år er altså ikke et krav her, og 15 år er et valg, ikke en lovtolkning.
+
+Under arbeidet kom det fram at telleren for innloggingsforsøk lagret IP-adressen i klartekst, selv om kommentaren i koden sa det motsatte (kodefunn 28).
+
+**Hva jeg gjorde:** omskrev og rettet utkastet og godkjente det 19.11. Avgjorde at det gjelder bare nye kontoer, at kontaktadressen er min egen (arvehand@gmail.com) og står offentlig, at IP-adressen i telleren skal hashes, at det skal finnes et innsynsskript, og at sletting etter ett skoleår bare står som plan.
+
+**Begrunnelse — utviklerens vurdering (Arve, med hans ord fra den godkjente teksten):** «Tekstene dine sendes til et selskap utenfor Norge, og da mener vi at det er riktig med en høyere grense enn det loven krever for nettjenester (13 år).»
+
+**Konsekvens:** FR-35 har fått aldersgrensen som egenerklæring, FR-53 er nytt i PRD §4.10, og §6.2 har fått behandlingsgrunnlaget og begrensningen: avkrysningen kontrolleres ikke, og den reelle porten er invitasjonskoden. Mutasjonstesten har fem nye regler (12 av 12 oppdaget). Ikke juridisk rådgivning; vurderingen bygger på PRD §6.2, addendum §6 og Datatilsynets side.
+
+**Spor:** `spec-vilkaar-og-aldersgrense.md` · `vilkaar-tekst-utkast.md` · PRD FR-35, FR-53, §6.2 · `app/vilkaar/page.tsx`, `data/vilkaar.ts`, `data/auth.ts`, `data/innsyn.mjs`, migrasjon `0010_vilkaar` · kodefunn 28 · `gjennomgang-innlogging.md`
+
+---
+
 ## Status mot FR-38, per 19. november
 
-Tjuefem oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+Tjueseks oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -517,6 +540,7 @@ Tjuefem oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godt
 | 23 | Egen vurdering endret etter samtale med KI | Menneskelig vurdering påvirket av KI-argument |
 | 24 | AD-6 som byggtest | Avvik mellom arkitektur og kode, rettet utover kravet |
 | 25 | Mapper tatt inn igjen, i en lett variant | Egen beslutning snudd for andre gang; KI-forslaget avgrenset slik at ingen ny måling trengs |
+| 26 | Vilkår og aldersgrense: avtale framfor samtykke, 15 år framfor 13 | KI-utkast omskrevet og godkjent; aldersgrensen er utviklerens eget valg, og arbeidet avdekket en lovnad koden ikke holdt (kodefunn 28) |
 
 Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–9). Implementasjonsfasen (10–15) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (12, 14), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (15). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 

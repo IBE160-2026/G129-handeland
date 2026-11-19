@@ -614,14 +614,28 @@ som aldri er positiv. κ over unionen er altså ≤ 0 uansett hvor enige rundene
 
 ---
 
+## Funn 28 — Kommentaren lovet at IP-adressen ikke lagres, men telleren lagret den i klartekst
+
+**Hvor:** `data/auth.ts`, `rateLimit: { storage: "database" }`, og kommentaren ved `databaseHooks.session` («IP-adressen BRUKES til å begrense innloggingsforsøk, men LAGRES ikke»). Tabellen `rate_limit` i `data/skjema.ts`.
+
+**Hva:** økten lagret riktignok ikke IP-adressen, og testen «økten lagrer verken IP-adresse eller nettleserinfo» var grønn. Men Better Auths databaseteller bruker IP-adressen og stien som nøkkel, så `rate_limit.key` inneholdt adressen i klartekst for hver som hadde logget inn eller registrert seg. Kommentaren og toppen av fila («Ikke IP-adresse») sa noe mer enn koden holdt. Mutasjonstestens regel 4 («IP-adresse og nettleserinfo lagres ikke») sjekket bare økten, så den fant det heller ikke.
+
+**Hvordan det ble funnet:** da vilkårsteksten skulle si hva som lagres (spec-vilkaar-og-aldersgrense, 19.11). Å skrive «IP-adressen lagres ikke» for en 15-åring krevde å sjekke hver tabell, ikke bare den kommentaren pekte på.
+
+**Rettelse:** 19.11: telleren er byttet til `rateLimit.customStorage`, som lagrer HMAC-SHA256 av nøkkelen med `BETTER_AUTH_SECRET` (ingen ny miljøvariabel i Vercel). Samme regel som før: tre forsøk per ti sekunder på innlogging og registrering. Migrasjon `0010_vilkaar` sletter de gamle radene én gang. Nye tester sjekker at nøkkelen er en hash uten adressen, at sperren fortsatt slår inn, og at en annen adresse ikke sperres; mutasjonstesten har to nye regler for dette (11 og 12).
+
+**Mønsteret:** samme form som funn 3 og 4: en kommentar med riktig begrunnelse og en grønn test, men testen sjekket stedet kommentaren pekte på, ikke alle steder dataene kunne havne. Et bibliotek lagrer det det trenger, og en lovnad om hva som ikke lagres, må sjekkes mot hele databasen.
+
+---
+
 ## Status mot FR-41
 
 | Krav | Status |
 |---|---|
-| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 27 funn over |
+| Minst tre konkrete feil eller svakheter dokumentert, med hvordan de ble funnet | **Innfridd** — 28 funn over |
 | Versjonskontroll gjennom semesteret, med sporbare commit-meldinger | Pågår |
 | Automatiserte tester for de maskinsjekkbare kravene | FR-4, FR-7, FR-20, FR-25 (begrepsanker) og FR-31 (maskinell del) dekket i `npm test`. FR-10, FR-12 og §5 i nettleseren (`npm run sjekk:tilgjengelighet`). Hele demoløypen i §9.5 i `npm run demotest`, 3 av 3. FR-14 og FR-21 er manuelle målinger (M1) |
-| Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 7 av 7 brudd oppdaget (`npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |
+| Innlogging, lagring og sletting gjennomgått og dokumentert (metoden endret 15.10, se FR-41) | Mutasjonstest: 12 av 12 brudd oppdaget 19.11 (7 av 7 15.10; `npm run sjekk:innlogging`, rapport i `maaling/resultater/`). Utviklerens egne tester i appen (A–C) er gjort og dokumentert i `gjennomgang-innlogging.md` |
 
 **Et mønster til refleksjonsrapporten.** Ingen av de første åtte funnene ble oppdaget av
 å lese koden og synes den virket feil. Funn 1 kom av å spørre hvilke inndata som

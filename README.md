@@ -27,7 +27,11 @@ npm run dev                  # http://localhost:3000
 ```
 
 Opprett en konto på <http://localhost:3000/registrer> med invitasjonskoden
-`lokal` fra `.env.example`. Kontoen finnes bare i den lokale databasen.
+`lokal` fra `.env.example`, og kryss av for «Jeg er 15 år eller eldre» og «Jeg
+har lest vilkårene og personvernerklæringen» (se <http://localhost:3000/vilkaar>).
+Kontoen finnes bare i den lokale databasen. Alt som er lagret om én konto kan
+hentes ut som JSON med `node data/innsyn.mjs <e-post>` (se
+`_bmad-output/planning-artifacts/gjennomgang-innlogging.md`, «Innsyn»).
 
 **Uten Docker.** `npx pglite-server --port=5433` starter en Postgres i minnet
 (PGlite, ligger i devDependencies). Sett

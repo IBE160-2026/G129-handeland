@@ -113,6 +113,7 @@ export async function samleInnsyn(sporring, epost) {
     leggTil(tabell, rader);
   }
 
+  /** @type {Record<string, Record<string, unknown>[]>} */
   const tabeller = {};
   for (const tabell of [...funnet.keys()].sort()) {
     const rader = [...funnet.get(tabell).values()].map(rens);

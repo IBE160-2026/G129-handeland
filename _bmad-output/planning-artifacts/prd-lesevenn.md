@@ -13,7 +13,7 @@ En nettapp som fører eleven gjennom en lesestrategi-sekvens for fagtekst, med K
 
 Dokumentet er skrevet for én leser: utvikleren som skal bygge Lesevenn alene i løpet av høstsemesteret 2026, i emnet IBE160 Programmering med KI ved Høgskolen i Molde. Det bygger på `product-brief-lesevenn.md` i samme mappe og gjentar ikke begrunnelsen som ligger der — briefen svarer på *hvorfor*, dette dokumentet svarer på *hva som skal virke, og hvordan man vet at det virker*.
 
-Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-52, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
+Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-53, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
 
 Emnets mappevurdering høsten 2026 har to deler: prosjektkode og funksjonalitet teller 70 prosent, og «dokumentasjon må vise hvordan KI ble brukt, og hvordan studentene har kvalitetssikret koden». Refleksjonsrapporten teller 30 prosent. Det er nesten en tredjedel av karakteren som ikke er kode, og formuleringen sier *koden* — ikke bare det KI-genererte innholdet appen produserer. Dokumentasjonsleveransen er derfor modellert som en funksjonsseksjon med egne krav (§4.11), på linje med resten, og milepælsplanen i §9 verner tid til den. Tekniske valg som er løsning og ikke krav, ligger i `addendum-lesevenn.md`.
 
@@ -708,6 +708,7 @@ Eleven kan opprette konto og logge inn.
 
 **Konsekvenser (testbare):**
 - Registrering krever e-post og passord. Ingen navn, skole, klasse, alder eller fødselsdato samles inn.
+- *(Lagt til 19. november.)* Aldersgrensen er **15 år**. Registrering krever at eleven krysser av for «Jeg er 15 år eller eldre» — en egenerklæring, ikke en kontroll — og serveren avviser registreringen uten den. Bare bekreftelsen lagres (konto, vilkårsversjon, tidspunkt), aldri alderen. Se FR-53.
 - Passord lagres aldri i klartekst.
 - Innhold er alltid privat for kontoen som eier det. Det finnes ingen delingsfunksjon i v1.
 
@@ -728,6 +729,18 @@ Eleven kan slette.
 - Eleven kan slette én Tekst, og alt generert innhold knyttet til den slettes med.
 - Eleven kan slette kontoen sin, og all tilhørende data slettes.
 - Sletting krever bekreftelse som navngir hva som forsvinner.
+
+#### FR-53: Vilkår og personvern
+
+*(Lagt til 19. november.)* Eleven kan lese hva hun sier ja til, og bekrefter det når kontoen lages.
+
+**Konsekvenser (testbare):**
+- En offentlig side, «Vilkår og personvern» (`/vilkaar`), skrevet for en 15-åring, sier hva som lagres, hvor tekstene går (leverandør og behandlingssted), hvordan eleven sletter, hvem som er behandlingsansvarlig og hvem hun kontakter. Siden vises uten innlogging og er lenket fra registreringen, landingssiden og kontosiden.
+- Registreringen har to påkrevde avkrysninger, aldri forhåndsavkrysset: «Jeg er 15 år eller eldre» og «Jeg har lest vilkårene og personvernerklæringen». Nettleseren hindrer innsending uten dem, og serveren avviser registreringen uansett vei inn, også en forespørsel rett mot ruten.
+- Bekreftelsen lagres med konto, vilkårsversjon og tidspunkt, i samme transaksjon som kontoen: det finnes ingen ny konto uten bekreftelse. En registrering med en eldre vilkårsversjon avvises med beskjed om å laste siden på nytt.
+- Gjelder bare nye kontoer. Kontoer fra før 19. november logger inn som før, uten ny godkjenning.
+- Eleven kan få en kopi av alt som er lagret om kontoen (`node data/innsyn.mjs <e-post>`, uten passordhash og økttokener).
+- Telleren for innloggingsforsøk lagrer ikke IP-adressen i klartekst, bare som hash.
 
 ### 4.11 KI-bruk og kvalitetssikring
 
@@ -881,6 +894,8 @@ Alle Tekstene er samlet på ett sted.
 ### 6.2 Personvern og databehandling
 
 - Datainnsamlingen holdes på et minimum: e-post, passord, elevens tekster og eget arbeid. Ingen navn, skole, klasse eller alder (FR-35).
+- **Behandlingsgrunnlag: avtale** (personvernforordningen art. 6 nr. 1 bokstav b), ikke samtykke. *(Lagt til 19. november.)* Eleven inngår en avtale om å bruke tjenesten når kontoen lages, og opplysningene er det som trengs for at den skal virke. Avkrysningen ved registrering (FR-53) er en bekreftelse på at eleven har fått informasjonen, ikke et samtykke. Annen bruk, som å bruke tekster til å forbedre appen, ville krevd et eget, frivillig samtykke.
+- **Aldersgrense 15 år, som egenerklæring.** 13 år er grensen for samtykke til informasjonssamfunnstjenester (art. 8, personopplysningsloven § 5); den gjelder ikke direkte når grunnlaget er avtale. 15 år er valgt fordi tekstene sendes til en leverandør utenfor EU/EØS. **Begrensningen:** egenerklæringen kontrolleres ikke, og LeseBuddy kan ikke vite elevens alder uten å samle den inn, noe FR-35 utelukker. Den reelle porten er invitasjonskoden: bare den som er invitert, kan registrere seg.
 - Før første innsending sier appen tydelig at teksten sendes til en ekstern språkmodell-leverandør for behandling. Eleven skal vite hvor teksten går.
 - Ingen tredjeparts analyse- eller sporingsverktøy.
 - Sletting virker og sletter faktisk (FR-37).
