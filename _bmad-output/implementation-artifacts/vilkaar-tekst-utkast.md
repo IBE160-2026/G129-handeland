@@ -1,12 +1,12 @@
 # Utkast: Vilkår og personvern for LeseBuddy
 
-Status: **godkjent av Arve 19.11.2026** (utkast av Claude, omskrevet og rettet av Arve). Teksten under streken er fast innhold på `/vilkaar` (spec-vilkaar-og-aldersgrense.md), versjon 2026-11-19. Målgruppe: en elev på 15 år. Korte setninger, ingen juss-ord uten forklaring.
+Status: **godkjent av Arve 19.11.2026, rettet 20.11.2026 etter gjennomgangen** (IP-setningen, to rettigheter, retting, stor L) (utkast av Claude, omskrevet og rettet av Arve). Teksten under streken er fast innhold på `/vilkaar` (spec-vilkaar-og-aldersgrense.md), versjon 2026-11-20. Målgruppe: en elev på 15 år. Korte setninger, ingen juss-ord uten forklaring.
 
 ---
 
 # Vilkår og personvern
 
-Sist endret 19. november 2026.
+Sist endret 20. november 2026.
 
 LeseBuddy hjelper deg å forstå fagtekster: før du leser, mens du leser og etter at du har lest. Her står det hva du sier ja til når du lager en konto, og hva som skjer med det du legger inn.
 
@@ -17,7 +17,7 @@ LeseBuddy hjelper deg å forstå fagtekster: før du leser, mens du leser og ett
 - Tekstene du legger inn, **sendes til Anthropic**, som lager oppgavene med en språkmodell. De brukes **ikke** til å trene modeller.
 - Du kan **slette alt** selv, når du vil.
 - LeseBuddy er et **studentprosjekt i testfase**, og den kan ta feil. Teksten din er alltid kilden.
--  **legg ikke inn noe personlig**, som navnet ditt, dagboktekster eller noe om helsen din. LeseBuddy er laget for fagtekster.
+- **Legg ikke inn noe personlig**, som navnet ditt, dagboktekster eller noe om helsen din. LeseBuddy er laget for fagtekster.
 - Du kan lagre et **morsmål**, så LeseBuddy kan forklare på morsmålet ditt. Dette er valgfritt, og trengs ikke for å bruke LeseBuddy. 
 
 ## Hvem står bak
@@ -53,7 +53,7 @@ Du trenger en invitasjonskode for å registrere deg. Den får du av den som har 
 
 **Sporing:** LeseBuddy bruker ingen analyseverktøy, annonser eller sporing. Informasjonskapsler (cookies) brukes bare til det appen trenger: at du er logget inn, og hvilket tema og hvilken hånd du har valgt.
 
-**Innloggingsforsøk:** for å stoppe noen som prøver å gjette passord, teller LeseBuddy innloggingsforsøk per IP-adresse (adressen nettet ditt har). IP-adressen lagres ikke i klartekst, bare som en kode som ikke kan gjøres tilbake til adressen.
+**Innloggingsforsøk:** for å stoppe noen som prøver å gjette passord, teller LeseBuddy innloggingsforsøk per IP-adresse (adressen nettet ditt har). IP-adressen lagres ikke i klartekst, bare som en kode laget med en hemmelig nøkkel, så adressen ikke kan leses ut av databasen.
 
 ## Hvor tekstene dine går
 
@@ -86,8 +86,10 @@ Etter at kontoen er slettet, står det igjen en **telling av hvor mye appen ble 
 
 Du har rett til å:
 - **få vite** hvilke opplysninger som er lagret om deg, og få en kopi
-- **få rettet** opplysninger som er feil
+- **få rettet** opplysninger som er feil (skriv til oss; e-postadressen kan ikke endres i appen ennå)
 - **få slettet** opplysningene dine (det kan du gjøre selv)
+- **få dataene dine utlevert** i en fil du kan ta med deg
+- **be om at vi slutter å bruke opplysningene en periode**, mens noe blir avklart
 - **klage til Datatilsynet** hvis du mener LeseBuddy behandler opplysningene dine feil: datatilsynet.no
 
 Skriv til arvehand@gmail.com om du vil bruke en av rettighetene. Du får svar innen én måned.

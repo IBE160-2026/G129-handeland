@@ -17,7 +17,7 @@
  * `/vilkaar`, endres denne, og registreringer med den gamle avvises med
  * «Vilkårene er endret» (et skjema lastet før endringen sender den gamle).
  */
-export const VILKAARSVERSJON = "2026-11-19";
+export const VILKAARSVERSJON = "2026-11-20";
 
 /** Header med `ja` når eleven har krysset av for «Jeg er 15 år eller eldre». */
 export const ALDER_HEADER = "x-lesevenn-alder-15";

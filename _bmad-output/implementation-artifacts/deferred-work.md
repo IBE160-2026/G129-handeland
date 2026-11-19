@@ -72,3 +72,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-10-unnskyldende-buddy-og-pennestrok.md`
   summary: Merknaden med Buddy (64 px) i gjennomsynet gir en smal tekstkolonne på 320 px med 200 % tekst.
   evidence: Blind-gjennomgangen av bolk 10, 19.11; vurder mini-Buddy eller å stable merket over teksten på smale skjermer.
+- source_spec: `_bmad-output/implementation-artifacts/spec-vilkaar-og-aldersgrense.md`
+  summary: Test at registreringsskjemaet viser riktig tekst for FR-53-feilkodene (særlig VILKAAR_ENDRET), ikke «Invitasjonskoden er feil».
+  evidence: Ingen test dekker `somFeil` i KontoSkjemaer.tsx; stien nås først ved neste versjonsbytte av vilkårene. Kan legges som steg i sjekk-tilgjengelighet.mjs som sender en gammel x-lesevenn-vilkaarsversjon.

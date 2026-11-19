@@ -2,9 +2,10 @@
 title: 'Vilkår og aldersgrense 15 år ved registrering'
 type: 'feature'
 created: '2026-11-19'
-status: 'draft'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
+baseline_commit: '9a33ec1520539b49351b66ec5c77d2d97694f9ac'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/gjennomgang-innlogging.md'
@@ -73,19 +74,19 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `_bmad-output/planning-artifacts/prd-lesevenn.md` -- FR-35 får aldersgrense og avkrysning som egenerklæring; ny FR-53 «Vilkår og personvern» i §4.10; §6.2 får behandlingsgrunnlaget (avtale) og begrensningen (egenerklæring, invitasjonskoden er porten) -- sporbarhet.
-- [ ] `_bmad-output/planning-artifacts/ki-logg.md` -- ny oppføring: avtale framfor samtykke, 15 år framfor 13, med Datatilsynets side som kilde; utviklerens vurdering markert som hans.
-- [ ] `data/skjema.ts` + migrasjon 0010 -- tabellen.
-- [ ] `data/vilkaar.ts` (klientsikker) -- versjon og headernavn.
-- [ ] `data/auth.ts` -- sjekk og lagring.
-- [ ] `app/vilkaar/page.tsx` -- siden.
-- [ ] `app/komponenter/KontoSkjemaer.tsx`, `app/registrer/page.tsx`, landingsside, konto -- skjema og lenker.
-- [ ] `data/auth.test.ts` -- matrisens rader mot ekte Better Auth og PGlite, inkludert rett mot ruten.
-- [ ] `data/sjekk-innlogging.mjs`, `gjennomgang-innlogging.md` -- ny regel i mutasjonstesten (vilkår), og at begrensningen fortsatt virker med hashet nøkkel.
-- [ ] `data/auth.ts` + `data/auth.test.ts` -- hashet nøkkel i `rate_limit`; test at sperren virker og at nøkkelen ikke inneholder IP-adressen; engangssletting av gamle rader (i migrasjon 0010 eller eget skript, dokumentert).
-- [ ] `data/innsyn.mjs` + test -- innsynsskriptet; `README.md` eller `gjennomgang-innlogging.md` sier hvordan det brukes.
-- [ ] `_bmad-output/planning-artifacts/kodefunn.md` -- nytt funn: kommentaren lovet at IP ikke lagres, men telleren lagret den i klartekst.
-- [ ] `maaling/demotest.mjs`, `maaling/sjekk-readme.mjs`, `maaling/sjekk-tilgjengelighet.mjs` -- avkrysning; siden sjekkes med axe.
+- [x] `_bmad-output/planning-artifacts/prd-lesevenn.md` -- FR-35 får aldersgrense og avkrysning som egenerklæring; ny FR-53 «Vilkår og personvern» i §4.10; §6.2 får behandlingsgrunnlaget (avtale) og begrensningen (egenerklæring, invitasjonskoden er porten) -- sporbarhet.
+- [x] `_bmad-output/planning-artifacts/ki-logg.md` -- ny oppføring: avtale framfor samtykke, 15 år framfor 13, med Datatilsynets side som kilde; utviklerens vurdering markert som hans.
+- [x] `data/skjema.ts` + migrasjon 0010 -- tabellen.
+- [x] `data/vilkaar.ts` (klientsikker) -- versjon og headernavn.
+- [x] `data/auth.ts` -- sjekk og lagring.
+- [x] `app/vilkaar/page.tsx` -- siden.
+- [x] `app/komponenter/KontoSkjemaer.tsx`, `app/registrer/page.tsx`, landingsside, konto -- skjema og lenker.
+- [x] `data/auth.test.ts` -- matrisens rader mot ekte Better Auth og PGlite, inkludert rett mot ruten.
+- [x] `data/sjekk-innlogging.mjs`, `gjennomgang-innlogging.md` -- ny regel i mutasjonstesten (vilkår), og at begrensningen fortsatt virker med hashet nøkkel.
+- [x] `data/auth.ts` + `data/auth.test.ts` -- hashet nøkkel i `rate_limit`; test at sperren virker og at nøkkelen ikke inneholder IP-adressen; engangssletting av gamle rader (i migrasjon 0010 eller eget skript, dokumentert).
+- [x] `data/innsyn.mjs` + test -- innsynsskriptet; `README.md` eller `gjennomgang-innlogging.md` sier hvordan det brukes.
+- [x] `_bmad-output/planning-artifacts/kodefunn.md` -- nytt funn: kommentaren lovet at IP ikke lagres, men telleren lagret den i klartekst.
+- [x] `maaling/demotest.mjs`, `maaling/sjekk-readme.mjs`, `maaling/sjekk-tilgjengelighet.mjs` -- avkrysning; siden sjekkes med axe.
 
 **Acceptance Criteria:**
 - Given en ny elev på /registrer, when hun ikke krysser av, then nettleseren hindrer innsending og serveren ville avvist den uansett.
@@ -101,3 +102,38 @@ context:
 - `npm run sjekk:innlogging` -- alle mutanter fanget
 - `npm run sjekk:tilgjengelighet`, `npm run sjekk:readme`, `npm run demotest -- 1` -- grønne
 - `npm run build` -- bygger
+
+## Implementation Notes
+
+- Implementert av underagent (commits 0df9ec4, 50d0181, a9f3744); diff lest av hovedøkta mot baseline.
+- Bekreftelsen skrives i `databaseHooks.account.create.before` inne i registreringstransaksjonen (`drizzleAdapter({ transaction: true })`); transaksjonen gjøres tilgjengelig for kroken via en Proxy rundt databasen og `AsyncLocalStorage`. `user.create.after` kjører etter commit og kunne ikke brukes. Drift bruker `neon-serverless` (WebSocket-pool), som støtter transaksjoner.
+- Telleren: `rateLimit.customStorage` med HMAC-SHA256(`BETTER_AUTH_SECRET`) av nøkkelen, én atomisk `INSERT … ON CONFLICT`. Migrasjon 0010 sletter eksisterende `rate_limit`-rader én gang.
+- Sideteksten er sjekket setning for setning mot `vilkaar-tekst-utkast.md`: ordrett.
+- Verifisert av hovedøkta: tsc, lint 0 feil, `npm test` 726/726, `sjekk:innlogging` 12/12, tilgjengelighet 419/419, README 8/8, build. Demotest 1/1 kjørt av underagenten.
+
+## Review Triage Log
+
+| # | Kilde | Funn | Verdikt | Begrunnelse | Rute |
+|---|-------|------|---------|-------------|------|
+| 1 | blind, edge, verif | `innsyn.mjs <e-post>` uten `--ut` gir bruksmelding og exit 2 | high | Bekreftet ved kjøring av to lag; `utIndeks+1 === 0` utelukker args[0] | patch |
+| 2 | blind, edge, verif | Ingen test kjører skriptet med e-post | medium | Bekreftet; derfor slapp #1 gjennom | patch |
+| 3 | blind | `--ut kopi.json` i dokumentasjonen dekkes ikke av .gitignore; fila har elevens tekster | medium | Bekreftet mot .gitignore (`innsyn-*.json`) | patch |
+| 4 | blind | /vilkaar: «kan ikke gjøres tilbake til adressen» lover mer enn HMAC holder for den som har hemmeligheten | medium | Riktig; samme mønster som kodefunn 28 | ordlyd avgjort av Arve 20.11, rettet |
+| 5 | blind | Rettighetslisten mangler dataportabilitet og begrensning; «få rettet» sier ikke hvordan | low | Riktig for avtale som grunnlag | ordlyd avgjort av Arve 20.11, rettet |
+| 6 | blind | Liten «legg» i Kort fortalt | low | Skrivefeil i godkjent tekst | avgjort av Arve, rettet |
+| 7 | blind, edge, verif | Telleren tolker `lastRequest === naa` som «tillatt»; sperret forsøk i samme millisekund slipper gjennom | low | Krever to forsøk på samme nøkkel i samme ms; ett ekstra forsøk i verste fall | avvist |
+| 8 | verif | Tilbakestilling etter tidsvinduet er ikke testet | medium | Bekreftet; uten den kunne en elev bli sperret ute for godt uten at noe feilet | patch |
+| 9 | blind | Testen for hashet nøkkel har død sjekk og avhenger av rekkefølge | low | Direkte retting | patch |
+| 10 | edge | Traverseringen i innsyn stopper stille etter 20 runder | low | Dagens dybde er ≤5; én linje gjør at den aldri later som den er komplett | patch |
+| 11 | edge | Sammensatte fremmednøkler gir kryssprodukt | false | Ingen sammensatte fremmednøkler i skjemaet | avvist |
+| 12 | blind | Migrasjonsmetadata mangler i diffen | false | `_journal.json` har 0010 og snapshot er i git; meta var ekskludert fra diffen av hovedøkta | avvist |
+| 13 | blind | ki-logg sier «22 funn per 26. oktober» | low | Bekreftet l.545; direkte retting | patch |
+| 14 | blind | Lenken fra /konto er ikke sjekket | low | Direkte tillegg i a11y-skriptet | patch |
+| 15 | blind | Innsyn over Neon uten felles øyeblikksbilde | low | Manuelt, sjeldent, én konto | avvist |
+| 16 | blind | «Hva jeg tenker om resultatet» tom | low | Er Arves egen vurdering med vilje | avvist (meldt Arve) |
+| 17 | blind | VILKAAR_ENDRET har ingen knapp for å laste siden på nytt | low | Nås bare ved versjonsbytte | avvist |
+| 18 | blind | account.create.before dekker bare /sign-up/email | low | Ingen andre kontoveier finnes | avvist |
+| 19 | blind | Manglende BETTER_AUTH_SECRET feiler ved hver innlogging | false | Better Auth krever hemmeligheten uansett i drift | avvist |
+| 20 | blind | UTELATTE_KOLONNER filtrerer på kolonnenavn i alle tabeller | low | Bare framtidige kolonner; ingen i dag | avvist |
+| 21 | verif | Klientteksten for FR-53-feilkodene er ikke testet | medium (umålt) | Nås ved versjonsbytte; ingen komponenttestoppsett for skjemaet | defer |
+- Etter gjennomgangen (21 funn, 9 rettet i 927813e + ordlyd): Arve avgjorde 20.11 ny IP-setning, to nye rettigheter (utlevering, begrensning), hvordan retting skjer, og stor L. Versjonen er derfor 2026-11-20. Verifisert: `npm test` 729/729, `sjekk:innlogging` 13/13, tilgjengelighet 420/420, README 8/8, demotest 3/3, build; innsyn mot ukjent e-post gir exit 1.

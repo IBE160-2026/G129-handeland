@@ -69,7 +69,7 @@ export default function Vilkaar() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
       <h1 className="text-3xl font-semibold tracking-tight">Vilkår og personvern</h1>
-      <p className="mt-2 text-slate-600 dark:text-slate-400">Sist endret 19. november 2026.</p>
+      <p className="mt-2 text-slate-600 dark:text-slate-400">Sist endret 20. november 2026.</p>
 
       <p className={AVSNITT}>
         LeseBuddy hjelper deg å forstå fagtekster: før du leser, mens du leser og etter at du har lest. Her står
@@ -101,7 +101,7 @@ export default function Vilkaar() {
           kilden.
         </li>
         <li>
-          <strong>legg ikke inn noe personlig</strong>, som navnet ditt, dagboktekster eller noe om helsen din.
+          <strong>Legg ikke inn noe personlig</strong>, som navnet ditt, dagboktekster eller noe om helsen din.
           LeseBuddy er laget for fagtekster.
         </li>
         <li>
@@ -181,7 +181,7 @@ export default function Vilkaar() {
       <p className={AVSNITT}>
         <strong>Innloggingsforsøk:</strong> for å stoppe noen som prøver å gjette passord, teller LeseBuddy
         innloggingsforsøk per IP-adresse (adressen nettet ditt har). IP-adressen lagres ikke i klartekst, bare som
-        en kode som ikke kan gjøres tilbake til adressen.
+        en kode laget med en hemmelig nøkkel, så adressen ikke kan leses ut av databasen.
       </p>
 
       <H2 id="hvor">Hvor tekstene dine går</H2>
@@ -245,10 +245,16 @@ export default function Vilkaar() {
           <strong>få vite</strong> hvilke opplysninger som er lagret om deg, og få en kopi
         </li>
         <li>
-          <strong>få rettet</strong> opplysninger som er feil
+          <strong>få rettet</strong> opplysninger som er feil (skriv til oss; e-postadressen kan ikke endres i appen ennå)
         </li>
         <li>
           <strong>få slettet</strong> opplysningene dine (det kan du gjøre selv)
+        </li>
+        <li>
+          <strong>få dataene dine utlevert</strong> i en fil du kan ta med deg
+        </li>
+        <li>
+          <strong>be om at vi slutter å bruke opplysningene en periode</strong>, mens noe blir avklart
         </li>
         <li>
           <strong>klage til Datatilsynet</strong> hvis du mener LeseBuddy behandler opplysningene dine feil:{" "}

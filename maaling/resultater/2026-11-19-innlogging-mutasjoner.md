@@ -4,7 +4,7 @@ Kjørt med `npm run sjekk:innlogging` (data/sjekk-innlogging.mjs). Hver rad er e
 regel innloggingen skal holde. Regelen ble brutt i koden, testene i
 `data/auth.test.ts` ble kjørt, og fila ble satt tilbake.
 
-**12 av 12 brudd ble oppdaget av testene.**
+**13 av 13 brudd ble oppdaget av testene.**
 
 | Nr | Regel | Fil | Utfall | Testene som feilet |
 |---|---|---|---|---|
@@ -18,5 +18,6 @@ regel innloggingen skal holde. Regelen ble brutt i koden, testene i
 | 8 | Alder og vilkår sjekkes ved hver registrering, også rett mot ruten | `data/auth.ts` | oppdaget | mangler alder: ingen konto, ingen rad, og meldingen sier aldersgrensen; mangler vilkår: ingen konto, og meldingen viser til siden; rett mot ruten med riktig kode, men uten headerne: avvist; alder må være nettopp «ja», ikke hva som helst; gammel versjon: avvist med «Vilkårene er endret — last siden på nytt»; serverkallet går også gjennom vilkårssjekken |
 | 9 | Bekreftelsen av vilkårene lagres når kontoen lages | `data/auth.ts` | oppdaget | godkjent: kontoen lages, med én rad med gjeldende versjon og tidspunkt; kontosletting tar med bekreftelsen (cascade); ingen konto uten bekreftelse: mislykkes lagringen, finnes ikke kontoen |
 | 10 | Ingen konto uten bekreftelse: begge lagres i samme transaksjon | `data/auth.ts` | oppdaget | serverkallet med riktig kode i headeren lykkes; navnet klienten sendte lagres ikke; passordet lagres aldri i klartekst; økten lagrer verken IP-adresse eller nettleserinfo; id-ene er UUID, slik fremmednøkkelen fra tekst krever; én konto finner ikke en annens tekst, selv med riktig id; feil passord sletter ingenting; kontoen og alt innholdet forsvinner; gjentatte feil passord stoppes; godkjent: kontoen lages, med én rad med gjeldende versjon og tidspunkt; eksisterende konto uten bekreftelse logger inn som før; kontosletting tar med bekreftelsen (cascade); ingen konto uten bekreftelse: mislykkes lagringen, finnes ikke kontoen |
-| 11 | IP-adressen lagres ikke i klartekst i telleren for innloggingsforsøk | `data/auth.ts` | oppdaget | telleren lagrer ikke IP-adressen i klartekst — kodefunn 28 |
-| 12 | Begrensningen av innloggingsforsøk virker med hashet nøkkel | `data/auth.ts` | oppdaget | gjentatte feil passord stoppes; en annen IP-adresse sperres ikke av den første |
+| 11 | IP-adressen lagres ikke i klartekst i telleren for innloggingsforsøk | `data/auth.ts` | oppdaget | telleren lagrer ikke IP-adressen i klartekst — kodefunn 28; etter tidsvinduet slipper telleren gjennom igjen, og starter på 1 |
+| 12 | Begrensningen av innloggingsforsøk virker med hashet nøkkel | `data/auth.ts` | oppdaget | gjentatte feil passord stoppes; etter tidsvinduet slipper telleren gjennom igjen, og starter på 1; en annen IP-adresse sperres ikke av den første |
+| 13 | Etter tidsvinduet slipper telleren gjennom igjen | `data/auth.ts` | oppdaget | etter tidsvinduet slipper telleren gjennom igjen, og starter på 1 |
