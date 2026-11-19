@@ -83,7 +83,7 @@
  *   - design bolk 7 (18.11): på 320 og 375 px, også med 200 % tekst, står
  *     fanene «Lim inn», «PDF» og «Bilder» på én rad og er like brede; i
  *     bildefanen står «Før du tar bildene» (fet og understreket «Før») til
- *     to bilder er valgt, og så «Etter at du har lastet opp bildene» rett over
+ *     to bilder er valgt, og så «Etter at du har valgt bildene» rett over
  *     listen, med axe i lys og mørk modus
  *   - design bolk 9 (18.11): på 375 px står «Må øve mer» over «Kan» over
  *     øvekortet til høyre (like brede, minst 44 × 44 px), og «Forrige» og
@@ -821,7 +821,7 @@ try {
 
   /* --- Design bolk 7: bildefanen følger steget (telefontesten 18.11) --- */
   // Før noe er valgt: «Før du tar bildene». Med ett bilde står den der fortsatt.
-  // Med to eller flere: «Etter at du har lastet opp bildene» med oppfordringen
+  // Med to eller flere: «Etter at du har valgt bildene» med oppfordringen
   // om rekkefølgen, rett over listen. Axe i lys og mørk modus på begge.
   // Bildene er tomme PNG-er: valget sjekker bare formatet, og ingenting leses.
   {
@@ -829,7 +829,7 @@ try {
     const bilde = (n) => ({ name: `side-${n}.png`, mimeType: "image/png", buffer: PNG });
     const foer = (side) => side.locator("p", { hasText: "du tar bildene" });
     const etter = (side) =>
-      side.locator("p:has-text('Etter at du har lastet opp bildene'):has-text('Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.') + ol");
+      side.locator("p:has-text('Etter at du har valgt bildene'):has-text('Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.') + ol");
     for (const [side, modusnavn] of [
       [pc, "lys"],
       [moerk, "mørk"],
@@ -861,19 +861,19 @@ try {
       await side.locator("ol li").nth(2).waitFor();
       const etterTekst = await etter(side).count();
       sjekk(
-        `bolk 7 (${modusnavn}): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte`,
+        `bolk 7 (${modusnavn}): med tre bilder står «Etter at du har valgt bildene» rett over listen, og «Før» er borte`,
         etterTekst === 1 && (await foer(side).count()) === 0 && (await side.locator("ol li").count()) === 3,
         `etter ${etterTekst}, før ${await foer(side).count()}`,
       );
       const uthevetEtter = await side
-        .locator("p:has-text('Etter at du har lastet opp bildene') strong")
+        .locator("p:has-text('Etter at du har valgt bildene') strong")
         .evaluate((e) => ({ tekst: e.textContent, vekt: Number(getComputedStyle(e).fontWeight), strek: getComputedStyle(e).textDecorationLine }));
       sjekk(
         `bolk 7 (${modusnavn}): «Etter» er fet og understreket`,
         uthevetEtter.tekst === "Etter" && uthevetEtter.vekt >= 700 && uthevetEtter.strek.includes("underline"),
         JSON.stringify(uthevetEtter),
       );
-      const etterBoks = await side.locator("p:has-text('Etter at du har lastet opp bildene')").textContent();
+      const etterBoks = await side.locator("p:has-text('Etter at du har valgt bildene')").textContent();
       const status = await side.locator("p[role=status].sr-only", { hasText: "riktig rekkefølge" }).count();
       sjekk(
         `bolk 7 (${modusnavn}): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion)`,

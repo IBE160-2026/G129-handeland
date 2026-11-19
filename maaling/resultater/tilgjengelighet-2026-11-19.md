@@ -52,7 +52,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/142470c1-a5e9-447a-9037-f615c71eccbd/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/5fe6a910-9831-4542-902a-ff0cf2f1e2dd/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -70,7 +70,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/142470c1-a5e9-447a-9037-f615c71eccbd/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/5fe6a910-9831-4542-902a-ff0cf2f1e2dd/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -78,7 +78,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/142470c1-a5e9-447a-9037-f615c71eccbd/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/5fe6a910-9831-4542-902a-ff0cf2f1e2dd/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -91,18 +91,18 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: ny tekst, bildefanen før opplasting (lys) |  |
 | ✓ | bolk 7 (lys): med ett bilde står «Før du tar bildene» som før |  |
 | ✓ | bolk 7 (lys): med to bilder står «Etter» rett over listen, og «Før» er borte | etter true, før 0, 2 bilder |
-| ✓ | bolk 7 (lys): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte | etter 1, før 0 |
+| ✓ | bolk 7 (lys): med tre bilder står «Etter at du har valgt bildene» rett over listen, og «Før» er borte | etter 1, før 0 |
 | ✓ | bolk 7 (lys): «Etter» er fet og understreket | {"tekst":"Etter","vekt":700,"strek":"underline"} |
-| ✓ | bolk 7 (lys): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion) | Etter at du har lastet opp bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.Høyst 4 bilder. Bildene lagres ikke, bare teksten. / status 1 |
+| ✓ | bolk 7 (lys): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion) | Etter at du har valgt bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.Høyst 4 bilder. Bildene lagres ikke, bare teksten. / status 1 |
 | ✓ | axe: ny tekst, bildefanen med tre bilder (lys) |  |
 | ✓ | bolk 7 (lys): fjernes bildene ned til ett, står «Før du tar bildene» igjen | før true, 1 bilder |
 | ✓ | bolk 7 (mørk): «Før» er fet og understreket i boksen før opplasting | {"tekst":"Før","vekt":700,"strek":"underline"} |
 | ✓ | axe: ny tekst, bildefanen før opplasting (mørk) |  |
 | ✓ | bolk 7 (mørk): med ett bilde står «Før du tar bildene» som før |  |
 | ✓ | bolk 7 (mørk): med to bilder står «Etter» rett over listen, og «Før» er borte | etter true, før 0, 2 bilder |
-| ✓ | bolk 7 (mørk): med tre bilder står «Etter at du har lastet opp bildene» rett over listen, og «Før» er borte | etter 1, før 0 |
+| ✓ | bolk 7 (mørk): med tre bilder står «Etter at du har valgt bildene» rett over listen, og «Før» er borte | etter 1, før 0 |
 | ✓ | bolk 7 (mørk): «Etter» er fet og understreket | {"tekst":"Etter","vekt":700,"strek":"underline"} |
-| ✓ | bolk 7 (mørk): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion) | Etter at du har lastet opp bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.Høyst 4 bilder. Bildene lagres ikke, bare teksten. / status 1 |
+| ✓ | bolk 7 (mørk): «Etter»-boksen har grensen og «lagres ikke», og byttet leses opp (statusregion) | Etter at du har valgt bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.Høyst 4 bilder. Bildene lagres ikke, bare teksten. / status 1 |
 | ✓ | axe: ny tekst, bildefanen med tre bilder (mørk) |  |
 | ✓ | bolk 7 (mørk): fjernes bildene ned til ett, står «Før du tar bildene» igjen | før true, 1 bilder |
 | ✓ | temavalg (tema=moerk, systemet lyst): HTML-en fra serveren har data-tema | <html lang="nb" data-tema="moerk"> |
@@ -127,7 +127,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795096328348 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795100143624 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -237,15 +237,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar |  |
 | ✓ | overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false, /samling |
 | ✓ | overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false (), /samling |
-| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/0578a806-1ef7-44a3-a15b-5abd6f5a8d3b/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
+| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/0c61c3e4-5b92-4e12-ad29-2e41b96d8639/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
 | ✓ | overleveringen: verten har én statusregion, tom før noe venter | {"antall":1,"tekst":""} |
 | ✓ | overleveringen: en venting som ender med feil, gir ingen avslutning noe sted | {"antall":1,"tekst":""} |
-| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/1f2e3d23-6288-4d7c-a54f-8fe5a4dc1e46/lesing |
+| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/c3df72d3-e6d6-4cd9-a557-477f3117db62/lesing |
 | ✓ | overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.» | {"posisjon":"fixed","innenfor":true,"mini":true,"slutt":true,"merke":28,"regioner":1,"regionTekst":"Teksten er klar.","fokusIPillen":false,"variabel":"52px","hoeyde":52,"klasse":true} |
 | ✓ | overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den | 52px / 52px |
 | ✓ | axe: lesevisning med avslutningen i pillen (telefon) |  |
-| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5261 ms, {"antall":1,"tekst":""} |
-| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/1f2e3d23-6288-4d7c-a54f-8fe5a4dc1e46/lesing {"antall":1,"tekst":"Fagordene er klare."} |
+| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5544 ms, {"antall":1,"tekst":""} |
+| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/c3df72d3-e6d6-4cd9-a557-477f3117db62/lesing {"antall":1,"tekst":"Fagordene er klare."} |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
@@ -372,19 +372,19 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/2e6ea803-93d4-4fc6-a84e-b65cdd83dd41/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/85759f8c-25f1-4997-8a12-d5358e75e438/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/2e6ea803-93d4-4fc6-a84e-b65cdd83dd41/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/85759f8c-25f1-4997-8a12-d5358e75e438/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/2954c8c5-0d62-425a-9055-5274ff24ba0e/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(100, 39, 214)","pupillFarge":"rgb(20, 26, 58)","rammeFarge":"rgb(100, 39, 214)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00816,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/6dc48309-7cb6-494a-bf41-0ccc1421fc85/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(100, 39, 214)","pupillFarge":"rgb(20, 26, 58)","rammeFarge":"rgb(100, 39, 214)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00597,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, lys): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (lys) |  |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/2954c8c5-0d62-425a-9055-5274ff24ba0e/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(74, 31, 58)","pupillFarge":"rgb(74, 31, 58)","rammeFarge":"rgb(183, 155, 255)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.01073,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/6dc48309-7cb6-494a-bf41-0ccc1421fc85/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(74, 31, 58)","pupillFarge":"rgb(74, 31, 58)","rammeFarge":"rgb(183, 155, 255)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00412,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, mørk): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (mørk) |  |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |

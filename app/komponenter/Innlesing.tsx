@@ -529,7 +529,7 @@ function Bilder({ handling, tilLiming }: { handling: Handling; tilLiming: (tekst
       </p>
       {bilder.length >= 2 && (
         <p className={MERKNAD}>
-          <Uthevet>Etter</Uthevet> <span className="font-medium">at du har lastet opp bildene:</span> Sjekk at sidene står
+          <Uthevet>Etter</Uthevet> <span className="font-medium">at du har valgt bildene:</span> Sjekk at sidene står
           i riktig rekkefølge. Bruk pilene for å flytte dem.
           {/* Grensen og personvernlinjen fra «Før»-boksen står igjen, kort, mens eleven kan legge til flere. */}
           <span className="mt-1 block">

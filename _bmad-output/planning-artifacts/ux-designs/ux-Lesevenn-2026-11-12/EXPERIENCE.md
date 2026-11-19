@@ -170,7 +170,7 @@ Endret etter telefontesten 18.11 (design runde 2, bolk 7).
 |---|---|
 | Fanene | Tre like brede faner på én rad: «Lim inn», «PDF» og «Bilder» (`role="tablist"`, `tab`, `aria-selected`). De står på én rad fra 320 px, også med 200 % tekst. Fanene kan krympe, og et navn kan deles inne i fanen, men fanene brytes aldri til to rader. |
 | Bilder, ingenting eller ett bilde valgt | Boksen «**Før** du tar bildene» (FR-44): høyst 4 bilder (`BILDEGRENSER.maksBilder`), én side per bilde rett ovenfra i godt lys, og at bildene ikke lagres. «Før» er fet, i farge og understreket (ikke farge alene). Boksen har tydelig ramme og amber flate, som merknaden om minneverset, og samme stil i mørk modus. |
-| Bilder, to eller flere valgt | «Før»-boksen er borte. Rett over listen med pilene står i samme stil: «**Etter** at du har lastet opp bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.» Under står kort: «Høyst 4 bilder. Bildene lagres ikke, bare teksten.» Byttet leses opp av en statusregion som finnes fra før. Fjernes bildene ned til ett, kommer «Før»-boksen tilbake. |
+| Bilder, to eller flere valgt | «Før»-boksen er borte. Rett over listen med pilene står i samme stil: «**Etter** at du har valgt bildene: Sjekk at sidene står i riktig rekkefølge. Bruk pilene for å flytte dem.» Under står kort: «Høyst 4 bilder. Bildene lagres ikke, bare teksten.» Byttet leses opp av en statusregion som finnes fra før. Fjernes bildene ned til ett, kommer «Før»-boksen tilbake. |
 | Gjennomsynet, tekst lest fra bilder | Merknaden (FR-45): «Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre.» Til venstre for teksten står Buddy på 64 px med uttrykket *unnskyld* (bolk 10, DESIGN.md logo-mark): blikket ned, pupillene flakker sakte, og bekymrede bryn er løftet inn mot midten. Med redusert bevegelse står Buddy stille. Buddy er skjult for skjermlesere; teksten bærer beskjeden. Gjennomsynet for PDF er uendret, og innlimt tekst har ikke gjennomsyn (FR-3). |
 
 ### Bruksgrenser
@@ -300,7 +300,7 @@ Navnet Tor er et skriveverktøy for denne reisen og vises ingen steder i appen.
 
 1. Maria har fått en kode av læreren. Hun åpner LeseBuddy på telefonen, møter landingssiden og trykker «Registrer deg».
 2. Etter registreringen kommer hun til et tomt arbeidsbord: «Her blir tekstene dine liggende. Legg den første på bordet.»
-3. Hun trykker «+ Ny tekst», velger «Bilder», tar to bilder av boka, sjekker rekkefølgen når «Etter at du har lastet opp bildene» ber om det, og følger statusen «Leser bilde 1 av 2 …», så «Leser bilde 2 av 2 …».
+3. Hun trykker «+ Ny tekst», velger «Bilder», tar to bilder av boka, sjekker rekkefølgen når «Etter at du har valgt bildene» ber om det, og følger statusen «Leser bilde 1 av 2 …», så «Leser bilde 2 av 2 …».
 4. Hun kontrollerer overskriftene, merker hvor godt hun kjenner dem og retter uttrekket i gjennomsynet, slik UJ-4 beskriver.
 5. **Klimaks:** Når hun kommer tilbake til arbeidsbordet, ligger den første bunken hennes der, med neste steg klart.
 

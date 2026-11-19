@@ -439,11 +439,11 @@ async function enKjoering(nettleser) {
   await pc.click('[role=tab]:text-is("Bilder")');
   await pc.setInputFiles("#bilder", bilder);
   // Telefontesten 18.11: med to bilder byttes «Før du tar bildene» ut med oppfordringen om rekkefølgen.
-  const etterBoks = pc.locator("p:has-text('Etter at du har lastet opp bildene'):has-text('Sjekk at sidene står i riktig rekkefølge') + ol");
+  const etterBoks = pc.locator("p:has-text('Etter at du har valgt bildene'):has-text('Sjekk at sidene står i riktig rekkefølge') + ol");
   await etterBoks.waitFor({ timeout: 10000 }).catch(() => {});
   sjekk(
     "13",
-    "«Etter at du har lastet opp bildene» står over listen, og «Før du tar bildene» er borte",
+    "«Etter at du har valgt bildene» står over listen, og «Før du tar bildene» er borte",
     (await etterBoks.count()) === 1 && (await pc.locator("text=du tar bildene").count()) === 0,
   );
   await pc.click('button[aria-label="Flytt side 2 opp"]');
