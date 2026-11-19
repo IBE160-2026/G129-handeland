@@ -58,4 +58,4 @@
 - [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Fanene på /ny mangler aria-controls, tabpanel og piltaster (deferred-work.md)
 - [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Rull ut grenen mapper: Neon-migrering 0009 før koden, merge til main og vercel --prod (krever ja)
 - [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Les og rett KI-logg nr. 25 (skrevet i din stemme av agenten), og vurder å føre inn hva du selv kontrollerte
-- [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Avgjør om Mapper skal ha egen suksessmetrikk eller et steg i demotesten (§9.5)
+- [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Avgjør om Mapper skal ha egen suksessmetrikk eller et steg i demotesten (§9.5) (løst 2026-11-19: steg 13b og SM-13)
