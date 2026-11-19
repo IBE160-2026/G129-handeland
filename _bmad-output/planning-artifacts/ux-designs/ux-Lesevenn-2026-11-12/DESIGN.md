@@ -234,7 +234,7 @@ components:
     miniViewBox: 0 35 120 51    # mini: beskåret til brillene, krymper til 0,48 under avslutningen
     miniSizes: 20px, 22px, 28px, 30px, 36px # mini-Buddy M1: høyden på brillene (knapp, linje, pille, fagorddemoen og hilsenen på telefon)
     expressions: tenker, slutt, ferdig, unnskyld  # unnskyld (bolk 10): ser ned, bekymrede bryn
-    brow: '{colors.primary}', strek 4.5 av 120  # bare i «unnskyld», over glasset og under rammen
+    brow: "{colors.primary} (mørk modus: som pupillene), strek 4.5 av 120"  # bare i «unnskyld», tegnet over glasset og under rammen
   wordmark:
     lese: '{typography.wordmark-lese}'
     uddy: '{typography.wordmark-uddy}'

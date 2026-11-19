@@ -66,3 +66,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-design-7-innlesing-og-gjennomsyn.md`
   summary: Fanene på «Legg inn tekst» har role=tab, men mangler aria-controls, tabpanel og piltastnavigasjon (ARIA-mønsteret for faner).
   evidence: Blind-gjennomgangen av bolk 7, 18.11; fantes før bolken, axe fanger det ikke.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-10-unnskyldende-buddy-og-pennestrok.md`
+  summary: Tusjens ord er inline-block; skjermlesernavnet på sidetitlene er bare sjekket i Chrome, ikke i Safari/VoiceOver.
+  evidence: Blind-gjennomgangen av bolk 10, 19.11. Prøves i neste telefontest.
+- source_spec: `_bmad-output/implementation-artifacts/spec-design-10-unnskyldende-buddy-og-pennestrok.md`
+  summary: Merknaden med Buddy (64 px) i gjennomsynet gir en smal tekstkolonne på 320 px med 200 % tekst.
+  evidence: Blind-gjennomgangen av bolk 10, 19.11; vurder mini-Buddy eller å stable merket over teksten på smale skjermer.

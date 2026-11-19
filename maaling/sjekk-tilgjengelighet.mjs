@@ -1095,10 +1095,13 @@ try {
       riktigOppsett(o, venstre),
       JSON.stringify(o),
     );
-    // Tab-rekkefølgen: kortet, «Må øve mer», «Kan», «Forrige», «Neste». På første
+    // Tab-rekkefølgen: kortet, «Må øve mer», «Kan», (feilmeldingen), (kilden når
+    // kortet er snudd), «Forrige», «Neste». På første
     // kort er «Forrige» låst og hoppes over, så det sjekkes på et kort med en før.
     // Sjekken trenger minst to kort; med ett er «Neste» «Ferdig» og avslutter runden.
-    const ettKort = (await side.locator(".oevekort-nav button", { hasText: /^Ferdig$/ }).count()) === 1;
+    const ettKort =
+      (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled()) &&
+      (await side.locator(".oevekort-nav button", { hasText: /^Ferdig$/ }).count()) === 1;
     if (!ettKort && (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled())) {
       await side.locator(".oevekort-nav button", { hasText: /^Neste →$/ }).click();
     }
@@ -1115,6 +1118,21 @@ try {
         rekke.slice(0, 3).join(" | ") === "Må øve mer | Kan | ← Forrige" && /^(Neste →|Ferdig)$/.test(rekke[3]),
         rekke.join(" | "),
       );
+      // Snudd kort: «Se hvor det står i teksten» kommer etter merkeknappene.
+      await kortet.click();
+      await side.locator("summary", { hasText: "Se hvor det står i teksten" }).waitFor();
+      await kortet.focus();
+      const snudd = [];
+      for (let i = 0; i < 4; i++) {
+        await side.keyboard.press("Tab");
+        snudd.push(await side.evaluate(() => document.activeElement?.textContent.trim() ?? ""));
+      }
+      sjekk(
+        `bolk 9 (${navn}): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige»`,
+        snudd.join(" | ") === "Må øve mer | Kan | Se hvor det står i teksten | ← Forrige",
+        snudd.join(" | "),
+      );
+      await kortet.click();
     } else {
       sjekk(`bolk 9 (${navn}): Tab-rekkefølgen`, false, ettKort ? "testteksten har bare ett øvekort; sjekken trenger minst to" : "fant ikke kortet etter «Neste»");
     }
@@ -1161,6 +1179,26 @@ try {
         (await skjema.locator("label", { hasText: "Venstrehendt" }).count()) === 1 &&
         (await boks.count()) === 1 &&
         !(await boks.isChecked()),
+    );
+    const navn = await side.evaluate(() => {
+      const boks = document.querySelector("input[name=hand]");
+      const hjelp = document.getElementById(boks?.getAttribute("aria-describedby") ?? "");
+      const tema = document.querySelector("fieldset[aria-describedby]");
+      return {
+        knapper: [...document.querySelectorAll("main form button[type=submit]")].map((b) => b.textContent.trim()).filter((t) => t.startsWith("Lagre")),
+        hjelp: hjelp?.textContent.replace(/\s+/g, " ").trim() ?? "",
+        hjelpIFieldset: !!hjelp?.closest("fieldset"),
+        tema: document.getElementById(tema?.getAttribute("aria-describedby") ?? "")?.textContent.trim() ?? "",
+      };
+    });
+    sjekk(
+      `venstrehendt (${hvordan}): «Lagre»-knappene har ulike navn, og hjelpetekstene er koblet til valgene`,
+      navn.knapper.includes("Lagre utseendet") &&
+        navn.knapper.includes("Lagre valget for øvekortene") &&
+        navn.hjelp.startsWith("«Må øve mer» og «Kan» står til venstre") &&
+        navn.hjelpIFieldset &&
+        navn.tema.startsWith("Valget gjelder denne enheten."),
+      JSON.stringify(navn),
     );
     const melding = (tekst) => side.locator("p:visible", { hasText: new RegExp(`^${tekst}$`) });
     await skjema.locator("label", { hasText: "Venstrehendt" }).click();
@@ -1884,6 +1922,42 @@ try {
       if (ut.length > 0) console.log(`  stikker ut (quiz ${navn}): ${ut.join(", ")}`);
       await ingenKlipping(side, `quiz ${navn}`);
     }
+  }
+  // Tusjen med redusert bevegelse står bare der, og i kontrastmodus er den en
+  // vanlig understrek (SVG-en skjult).
+  {
+    await pc.goto(`${tekstUrl}/quiz`);
+    const stil = () =>
+      pc.evaluate(() => {
+        const t = document.querySelector("main h1 .tusj");
+        const svg = t?.querySelector("svg");
+        return {
+          animasjon: svg ? getComputedStyle(svg).animationName : "",
+          vises: svg ? getComputedStyle(svg).display : "",
+          strek: t ? getComputedStyle(t).textDecorationLine : "",
+        };
+      });
+    await pc.emulateMedia({ reducedMotion: "reduce" });
+    const rolig = await stil();
+    sjekk("bolk 10: med redusert bevegelse tegnes tusjen ikke inn", rolig.animasjon === "none" && rolig.vises !== "none", JSON.stringify(rolig));
+    await pc.emulateMedia({ reducedMotion: null, forcedColors: "active" });
+    const kontrast = await stil();
+    sjekk("bolk 10: i kontrastmodus er tusjen en vanlig understrek", kontrast.vises === "none" && kontrast.strek.includes("underline"), JSON.stringify(kontrast));
+    await pc.emulateMedia({ reducedMotion: null, forcedColors: null });
+  }
+  // Et langt ord i et svaralternativ på 320 px med 200 % tekst: alternativet
+  // brytes, og siden ruller ikke sidelengs.
+  {
+    await smal.goto(`${tekstUrl}/quiz`);
+    await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
+    const byttet = await smal.evaluate(() => {
+      const s = document.querySelector("main fieldset label span, main fieldset li > span");
+      if (!s) return false;
+      s.textContent = "Elektromagnetiskstrålingsspekterets";
+      return true;
+    });
+    sjekk("bolk 10, 320 px, 200 % tekst: fant et svaralternativ å prøve et langt ord i", byttet);
+    await ingenSiderulling(smal, "quiz med langt ord i et svar 320 px, 200 % tekst");
   }
   // Et langt navn som brytes over flere linjer: hver linje får sitt strøk, og
   // ingenting ruller sidelengs. Tittelen byttes bare i nettleseren.
@@ -2651,7 +2725,15 @@ try {
                 return {
                   merke: !!svg && svg.getAttribute("aria-hidden") === "true" && Math.round(svg.getBoundingClientRect().height) === 64,
                   tilVenstre: !!svg && m.firstElementChild === svg,
-                  bryn: bryn.length === 2 && bryn.every((b) => getComputedStyle(b).stroke === getComputedStyle(svg.querySelector(".ramme")).stroke),
+                  // Lys modus: som rammen. Mørk modus: som pupillene (lyse glass).
+                  bryn:
+                    bryn.length === 2 &&
+                    bryn.every((b) =>
+                      [getComputedStyle(svg.querySelector(".ramme")).stroke, getComputedStyle(oyne.querySelector(".oye")).fill].includes(getComputedStyle(b).stroke),
+                    ),
+                  brynFarge: bryn[0] ? getComputedStyle(bryn[0]).stroke : "",
+                  pupillFarge: oyne ? getComputedStyle(oyne.querySelector(".oye")).fill : "",
+                  rammeFarge: svg ? getComputedStyle(svg.querySelector(".ramme")).stroke : "",
                   animasjon: oyne ? getComputedStyle(oyne).animationName : "",
                   brynAnimasjon: bryn.map((b) => getComputedStyle(b).animationName).join(","),
                   nede: oyne ? new DOMMatrix(getComputedStyle(oyne).transform).f : 0,
@@ -2665,6 +2747,8 @@ try {
                 b.tilVenstre &&
                 b.bryn &&
                 b.animasjon === "u-flakk" &&
+                b.brynAnimasjon === "u-bryn-v,u-bryn-h" &&
+                b.brynFarge === (modusnavn.includes("mørk") ? b.pupillFarge : b.rammeFarge) &&
                 b.nede >= 6.5 &&
                 b.tekst ===
                   "Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre.",

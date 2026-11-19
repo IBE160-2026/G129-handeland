@@ -507,8 +507,9 @@ legend {
  * Buddy ser ned og beklager seg, i merknaden i gjennomsynet for tekster lest
  * fra bilder. Pupillene står nede og flakker sakte fra side til side (3,2 s),
  * og brynene bak glassene (Merke.tsx) er løftet inn mot midten og beveger seg
- * litt i takt med blikket. Brynene er i primærfargen, som rammen, også i mørk
- * modus. Med redusert bevegelse står pupillene nede og brynene stille.
+ * litt i takt med blikket. Brynene er i primærfargen, som rammen. I mørk modus
+ * er glassene lyse, og lavendel mot dem ga om lag 2:1, så brynene har da samme
+ * farge som pupillene. Med redusert bevegelse står pupillene nede og brynene stille.
  */
 .merke .bryn path {
   stroke: var(--lb-primaer);
@@ -516,6 +517,11 @@ legend {
   stroke-linecap: round;
   fill: none;
   transform-box: view-box;
+}
+.merke .bryn path {
+  @variant dark {
+    stroke: var(--lb-markering);
+  }
 }
 .merke .bryn-v {
   transform-origin: 46px 46px;
@@ -2167,8 +2173,9 @@ button.ls-fagord[aria-expanded="true"] {
  * står merkeknappene til venstre fra første tegning.
  *
  * I DOM-en kommer merkeknappene etter kortet, så Tab og skjermleseren går
- * kortet → «Må øve mer» → «Kan» → «Forrige» → «Neste». `order` flytter dem
- * bare visuelt over kortet.
+ * kortet → «Må øve mer» → «Kan» → feilmeldingen → «Se hvor det står i teksten»
+ * (når kortet er snudd) → «Forrige» → «Neste». `order` flytter knappene og
+ * feilmeldingen bare visuelt over kortet.
  */
 .oevekort-flate {
   display: flex;

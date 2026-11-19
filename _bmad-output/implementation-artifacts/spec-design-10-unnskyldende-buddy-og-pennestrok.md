@@ -2,7 +2,7 @@
 title: 'Design runde 2, bolk 10: unnskyldende Buddy i gjennomsynet og rosa pennestrøk under tekstnavnet'
 type: 'feature'
 created: '2026-11-18'
-status: 'in-review'
+status: 'done'
 baseline_commit: '0753e833038ab4484580ebed4325491eb16fb875'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -75,6 +75,29 @@ context: []
 
 
 ## Review Triage Log
+
+Runde 1 (18.–19.11): Blind Hunter (B), Edge Case Hunter (E) og Verification Gap (V).
+
+| Funn | Vurdering | Bevis / rute |
+|---|---|---|
+| B1 DESIGN.md-frontmatteren er ugyldig YAML | medium | js-yaml stoppet på `brow`. patch, validert |
+| B2 Brynene er svake i mørk modus (ca. 2:1 mot lyse glass) | medium | patch: som pupillene i mørk modus, sjekket per modus |
+| E3/B5 Løse tegn («–») får eget strøk | low | patch: bare ord med bokstaver eller tall, enhetstest |
+| E4/B5 Hardt mellomrom deles | low | patch: deler bare på vanlige mellomrom, enhetstest |
+| E5/B6 Forsinkelsen per ord har ikke noe tak | low | patch: høyst 4 × 0,12 s, enhetstest |
+| E1/E2 Tab-sjekken: feil vurdering av ett kort | low | patch: «Forrige» låst og «Ferdig» |
+| E8/B9 Kommentaren for øvekortene er utdatert | low | patch |
+| V1/B9 Snudd kort: Tab-rekkefølgen er ikke sjekket | medium | patch: nettlesersjekk |
+| V2/B11 Konto: navnene og beskrivelsene er ikke sjekket; utseende uten beskrivelse | low | patch: `aria-describedby` på utseende, og sjekk |
+| V3/B7 Tusjen med redusert bevegelse og kontrastmodus er ikke sjekket | medium | patch: nettlesersjekk |
+| V4 Langt ord i et quizsvar er ikke sjekket | low | patch: nettlesersjekk |
+| V5/B10 Brynenes animasjon er ikke sjekket | low | patch |
+| B13 EXPERIENCE beskriver ikke tusjen | low | patch: egen rad |
+| E6/E7 Sjekkene kan krasje på null | low | Gir en feil i kjøringen i stedet for en rød sjekk; begge synes. Avvist |
+| B3 Skjermlesernavnet er bare sjekket i Chrome | low | Tas med i telefontesten (VoiceOver). Utsatt |
+| B4 Bare quizsiden og landingssiden er sjekket for tusjen | low | Samme komponent på alle titler. Avvist |
+| B8 Merknaden i gjennomsynet på 320 px med 200 % tekst | low | Smal tekstkolonne ved siden av Buddy. Utsatt |
+| B12 Regelen for fieldset/legend gjelder hele appen | low | Bevisst; begrunnelsen står i globals.css. Avvist |
 
 ## Verification
 

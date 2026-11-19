@@ -62,7 +62,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
       <section className="mt-8">
         {/* Nøkkelen tegner radioknappene på nytt etter lagring, så valget som vises er det som er lagret. */}
         <form key={tema ?? "enhet"} action={velgTemaHandling}>
-          <fieldset>
+          <fieldset aria-describedby="tema-hjelp">
             <legend className="font-medium">Utseende</legend>
             <div className="mt-2 flex flex-wrap gap-2">
               {TEMAVALG.map((v) => (
@@ -82,7 +82,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
           >
             Lagre<span className="sr-only"> utseendet</span>
           </button>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          <p id="tema-hjelp" className="mt-2 text-sm text-slate-600 dark:text-slate-400">
             Valget gjelder denne enheten. «Følg enheten» bruker lys eller mørk modus etter innstillingen på
             telefonen eller PC-en.
           </p>

@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**378 av 378 sjekker bestått.**
+**386 av 388 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -52,7 +52,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/7ca0034e-2b41-48b7-9efb-8b56f1399e62/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/9727a70b-88e2-4fb9-978b-503bdba8519d/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -70,7 +70,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/7ca0034e-2b41-48b7-9efb-8b56f1399e62/quiz |
+| ✓ | FR-49: tittelen i Samlingen lenker til neste steg | /tekst/9727a70b-88e2-4fb9-978b-503bdba8519d/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlingen som aktiv |  |
 | ✓ | innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen |  |
@@ -78,7 +78,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/7ca0034e-2b41-48b7-9efb-8b56f1399e62/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/9727a70b-88e2-4fb9-978b-503bdba8519d/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -127,7 +127,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795042210358 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795042752130 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -135,6 +135,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 9 (høyrehendt, lys): HTML-en fra serveren har ikke data-hand="venstre" | <html lang="nb"> |
 | ✓ | bolk 9, 375 px (høyrehendt, lys): «Må øve mer» over «Kan» over kortet til høyre, like brede, og «Forrige» og «Neste» ved siden av hverandre under | {"hand":null,"kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":227,"h":359,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":227,"h":359,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | bolk 9 (høyrehendt, lys): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste» | Må øve mer \| Kan \| ← Forrige \| Neste → |
+| ✓ | bolk 9 (høyrehendt, lys): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige» | Må øve mer \| Kan \| Se hvor det står i teksten \| ← Forrige |
 | ✓ | mobil uten sidelengs rulling: øvekort 375 px (høyrehendt, lys) | 375 px innhold i 375 px vindu |
 | ✓ | axe: øvekort 375 px (høyrehendt, lys) |  |
 | ✓ | bolk 9, 320 px (høyrehendt, lys): samme plassering | {"hand":null,"kort":{"v":16,"h":304,"t":397,"b":625,"w":288,"hoeyde":228},"maa":{"v":172,"h":304,"t":277,"b":325,"w":132,"hoeyde":48},"kan":{"v":172,"h":304,"t":337,"b":385,"w":132,"hoeyde":48},"forrige":{"v":16,"h":154,"t":649,"b":697,"w":138,"hoeyde":48},"neste":{"v":166,"h":304,"t":649,"b":697,"w":138,"hoeyde":48},"pressed":["false","false"]} |
@@ -144,6 +145,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 9 (høyrehendt, mørk): HTML-en fra serveren har ikke data-hand="venstre" | <html lang="nb"> |
 | ✓ | bolk 9, 375 px (høyrehendt, mørk): «Må øve mer» over «Kan» over kortet til høyre, like brede, og «Forrige» og «Neste» ved siden av hverandre under | {"hand":null,"kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":227,"h":359,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":227,"h":359,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | bolk 9 (høyrehendt, mørk): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste» | Må øve mer \| Kan \| ← Forrige \| Neste → |
+| ✓ | bolk 9 (høyrehendt, mørk): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige» | Må øve mer \| Kan \| Se hvor det står i teksten \| ← Forrige |
 | ✓ | mobil uten sidelengs rulling: øvekort 375 px (høyrehendt, mørk) | 375 px innhold i 375 px vindu |
 | ✓ | axe: øvekort 375 px (høyrehendt, mørk) |  |
 | ✓ | bolk 9, 320 px (høyrehendt, mørk): samme plassering | {"hand":null,"kort":{"v":16,"h":304,"t":397,"b":625,"w":288,"hoeyde":228},"maa":{"v":172,"h":304,"t":277,"b":325,"w":132,"hoeyde":48},"kan":{"v":172,"h":304,"t":337,"b":385,"w":132,"hoeyde":48},"forrige":{"v":16,"h":154,"t":649,"b":697,"w":138,"hoeyde":48},"neste":{"v":166,"h":304,"t":649,"b":697,"w":138,"hoeyde":48},"pressed":["false","false"]} |
@@ -153,6 +155,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 9 (venstrehendt, lys): HTML-en fra serveren har data-hand="venstre" | <html lang="nb" data-hand="venstre"> |
 | ✓ | bolk 9, 375 px (venstrehendt, lys): «Må øve mer» over «Kan» over kortet til venstre, like brede, og «Forrige» og «Neste» ved siden av hverandre under | {"hand":"venstre","kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":16,"h":148,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | bolk 9 (venstrehendt, lys): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste» | Må øve mer \| Kan \| ← Forrige \| Neste → |
+| ✓ | bolk 9 (venstrehendt, lys): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige» | Må øve mer \| Kan \| Se hvor det står i teksten \| ← Forrige |
 | ✓ | mobil uten sidelengs rulling: øvekort 375 px (venstrehendt, lys) | 375 px innhold i 375 px vindu |
 | ✓ | axe: øvekort 375 px (venstrehendt, lys) |  |
 | ✓ | bolk 9, 320 px (venstrehendt, lys): samme plassering | {"hand":"venstre","kort":{"v":16,"h":304,"t":397,"b":625,"w":288,"hoeyde":228},"maa":{"v":16,"h":148,"t":277,"b":325,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":337,"b":385,"w":132,"hoeyde":48},"forrige":{"v":16,"h":154,"t":649,"b":697,"w":138,"hoeyde":48},"neste":{"v":166,"h":304,"t":649,"b":697,"w":138,"hoeyde":48},"pressed":["false","false"]} |
@@ -162,6 +165,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 9 (venstrehendt, mørk): HTML-en fra serveren har data-hand="venstre" | <html lang="nb" data-hand="venstre"> |
 | ✓ | bolk 9, 375 px (venstrehendt, mørk): «Må øve mer» over «Kan» over kortet til venstre, like brede, og «Forrige» og «Neste» ved siden av hverandre under | {"hand":"venstre","kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":16,"h":148,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | bolk 9 (venstrehendt, mørk): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste» | Må øve mer \| Kan \| ← Forrige \| Neste → |
+| ✓ | bolk 9 (venstrehendt, mørk): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige» | Må øve mer \| Kan \| Se hvor det står i teksten \| ← Forrige |
 | ✓ | mobil uten sidelengs rulling: øvekort 375 px (venstrehendt, mørk) | 375 px innhold i 375 px vindu |
 | ✓ | axe: øvekort 375 px (venstrehendt, mørk) |  |
 | ✓ | bolk 9, 320 px (venstrehendt, mørk): samme plassering | {"hand":"venstre","kort":{"v":16,"h":304,"t":397,"b":625,"w":288,"hoeyde":228},"maa":{"v":16,"h":148,"t":277,"b":325,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":337,"b":385,"w":132,"hoeyde":48},"forrige":{"v":16,"h":154,"t":649,"b":697,"w":138,"hoeyde":48},"neste":{"v":166,"h":304,"t":649,"b":697,"w":138,"hoeyde":48},"pressed":["false","false"]} |
@@ -170,11 +174,13 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | mobil uten sidelengs rulling: øvekort 320 px, 200 % tekst (venstrehendt, mørk) | 327 px innhold i 327 px vindu |
 | ✓ | bolk 9: hand=hoeyre ignoreres, og merkeknappene står til høyre | {"hand":null,"kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":227,"h":359,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":227,"h":359,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | venstrehendt (med JavaScript): «Venstrehendt» er en avkrysningsboks i en fieldset med legend, ikke valgt |  |
+| ✗ | venstrehendt (med JavaScript): «Lagre»-knappene har ulike navn, og hjelpetekstene er koblet til valgene | {"knapper":["Lagre","Lagre utseendet","Lagre valget for øvekortene"],"hjelp":"«Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget gjelder denne enheten.","hjelpIFieldset":true,"tema":"Valget gjelder denne enhete"} |
 | ✓ | venstrehendt (med JavaScript): kryss + «Lagre» gir hand=venstre (SameSite=Lax, httpOnly, ett år), og boksen er krysset | venstre, Lax, 365 dager |
 | ✓ | axe: konto med «Venstrehendt» valgt |  |
 | ✓ | venstrehendt (med JavaScript): øvekortene har merkeknappene til venstre etter lagring | {"hand":"venstre","kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":16,"h":148,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | venstrehendt (med JavaScript): uten kryss + «Lagre» slettes informasjonskapselen |  |
 | ✓ | venstrehendt (uten JavaScript): «Venstrehendt» er en avkrysningsboks i en fieldset med legend, ikke valgt |  |
+| ✗ | venstrehendt (uten JavaScript): «Lagre»-knappene har ulike navn, og hjelpetekstene er koblet til valgene | {"knapper":["Lagre","Lagre utseendet","Lagre valget for øvekortene"],"hjelp":"«Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget gjelder denne enheten.","hjelpIFieldset":true,"tema":"Valget gjelder denne enhete"} |
 | ✓ | venstrehendt (uten JavaScript): kryss + «Lagre» gir hand=venstre (SameSite=Lax, httpOnly, ett år), og boksen er krysset | venstre, Lax, 365 dager |
 | ✓ | venstrehendt (uten JavaScript): øvekortene har merkeknappene til venstre etter lagring | {"hand":"venstre","kort":{"v":16,"h":359,"t":353,"b":581,"w":343,"hoeyde":228},"maa":{"v":16,"h":148,"t":233,"b":281,"w":132,"hoeyde":48},"kan":{"v":16,"h":148,"t":293,"b":341,"w":132,"hoeyde":48},"forrige":{"v":16,"h":182,"t":605,"b":653,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":605,"b":653,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | venstrehendt (uten JavaScript): uten kryss + «Lagre» slettes informasjonskapselen |  |
@@ -231,15 +237,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar |  |
 | ✓ | overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false, /samling |
 | ✓ | overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false (), /samling |
-| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/247d9c1c-30b9-40e5-bdea-8e671f31618e/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
+| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/8762b5ca-df43-4ec6-bc94-8c80a17171b3/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
 | ✓ | overleveringen: verten har én statusregion, tom før noe venter | {"antall":1,"tekst":""} |
 | ✓ | overleveringen: en venting som ender med feil, gir ingen avslutning noe sted | {"antall":1,"tekst":""} |
-| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/3a54d2a7-0ec1-41b5-84f4-1b6507043ae5/lesing |
+| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/ea84a70f-90c3-40a5-a52b-4f0bfb2a579c/lesing |
 | ✓ | overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.» | {"posisjon":"fixed","innenfor":true,"mini":true,"slutt":true,"merke":28,"regioner":1,"regionTekst":"Teksten er klar.","fokusIPillen":false,"variabel":"52px","hoeyde":52,"klasse":true} |
 | ✓ | overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den | 52px / 52px |
 | ✓ | axe: lesevisning med avslutningen i pillen (telefon) |  |
-| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5286 ms, {"antall":1,"tekst":""} |
-| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/3a54d2a7-0ec1-41b5-84f4-1b6507043ae5/lesing {"antall":1,"tekst":"Fagordene er klare."} |
+| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5356 ms, {"antall":1,"tekst":""} |
+| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/ea84a70f-90c3-40a5-a52b-4f0bfb2a579c/lesing {"antall":1,"tekst":"Fagordene er klare."} |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
@@ -272,6 +278,10 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 10, quiz 320 px, 200 % tekst: overskriften og strøket står innenfor vinduet |  |
 | ✓ | mobil uten sidelengs rulling: quiz 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: quiz 320 px, 200 % tekst |  |
+| ✓ | bolk 10: med redusert bevegelse tegnes tusjen ikke inn | {"animasjon":"none","vises":"block","strek":"none"} |
+| ✓ | bolk 10: i kontrastmodus er tusjen en vanlig understrek | {"animasjon":"tusj-tegn","vises":"none","strek":"underline"} |
+| ✓ | bolk 10, 320 px, 200 % tekst: fant et svaralternativ å prøve et langt ord i |  |
+| ✓ | mobil uten sidelengs rulling: quiz med langt ord i et svar 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | bolk 10, 320 px, 200 % tekst: et langt navn brytes over flere linjer med strøk på hvert ord, innenfor vinduet | {"linjer":4,"strok":5} |
 | ✓ | mobil uten sidelengs rulling: quiz med langt navn 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: quiz med langt navn 320 px, 200 % tekst |  |
@@ -362,19 +372,19 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
 | ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/caf1ea62-d273-4187-b78d-b5ee7ac1c3c1/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/3386efef-7ce8-41df-b3fa-152c2ac19d45/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/caf1ea62-d273-4187-b78d-b5ee7ac1c3c1/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/3386efef-7ce8-41df-b3fa-152c2ac19d45/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/e72a6a23-b02e-40e1-a732-0085a5d20e29/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00817,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/d8cda809-14a9-4c4e-96ae-a79722de1cc2/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(100, 39, 214)","pupillFarge":"rgb(20, 26, 58)","rammeFarge":"rgb(100, 39, 214)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00817,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, lys): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (lys) |  |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/e72a6a23-b02e-40e1-a732-0085a5d20e29/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.01073,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/d8cda809-14a9-4c4e-96ae-a79722de1cc2/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(74, 31, 58)","pupillFarge":"rgb(74, 31, 58)","rammeFarge":"rgb(183, 155, 255)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00597,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, mørk): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (mørk) |  |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |
