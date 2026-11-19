@@ -51,3 +51,8 @@
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Samtalesiden: nettlesersjekk av feilet-sperren, RevurderKnapp og oppdaterUtenFeil (deferred-work.md)
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Ingen app/error.tsx: en serverhandling som kaster kan gi «… er klar» over feilsiden
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Demotesten lager nye lagrede oversettelsessvar hver kjøring (nøklene er ikke faste), og det koster modellkall
+- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen design-runde-2 (bolk 7–10): merge til main og vercel --prod (krever ja)
+- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Avgjør: «Etter at du har lastet opp bildene» → «valgt»?
+- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Avgjør: skal «Skjønner ikke overskriften» føre videre (for eksempel til fagsamtalen)?
+- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Telefontest: fanenavn med stor tekst, tusjen i VoiceOver, Buddy-merknaden på 320 px med 200 % tekst
+- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Fanene på /ny mangler aria-controls, tabpanel og piltaster (deferred-work.md)
