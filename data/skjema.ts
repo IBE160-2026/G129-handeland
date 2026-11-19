@@ -654,3 +654,80 @@ export const forbruk = pgTable(
     index("forbruk_konto_hendelse_idx").on(t.kontoId, t.hendelse, t.opprettet),
   ],
 );
+
+/* ------------------------------------------------------------------ *
+ * Mapper lett — FR-50 til FR-52 (PRD §4.9, tatt inn 19.11.2026)
+ * ------------------------------------------------------------------ */
+
+/**
+ * FR-52: lengden eleven valgte for den samlede quizen. Antall spørsmål per
+ * Tekst står i `data/mapper.ts` (`SPORSMAL_PER_TEKST`), ikke her.
+ */
+export const mappequizLengde = pgEnum("mappequiz_lengde", ["kort", "middels", "alle"]);
+
+/**
+ * FR-50: elevens egen samling av Tekster. Eies av kontoen (AD-8), og
+ * kaskaden er FR-37: slettes kontoen, slettes Mappene.
+ *
+ * Mappen eier ikke noe generert innhold. Øvekort og spørsmål hentes fra
+ * Tekstene den peker på, så ingenting lages to ganger.
+ */
+export const mappe = pgTable(
+  "mappe",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kontoId: uuid("konto_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    /** 1–80 tegn, sjekket i `data/mapper.ts`. */
+    tittel: text("tittel").notNull(),
+    opprettet: timestamp("opprettet", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("mappe_konto_idx").on(t.kontoId)],
+);
+
+/**
+ * FR-50: hvilke Tekster som ligger i hvilke Mapper. En Tekst kan ligge i
+ * flere Mapper, men bare én gang i hver (den unike skranken). Kaskade fra
+ * begge sider: slettes Teksten (FR-37), forsvinner den fra Mappen.
+ */
+export const mappeTekst = pgTable(
+  "mappe_tekst",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    mappeId: uuid("mappe_id")
+      .notNull()
+      .references(() => mappe.id, { onDelete: "cascade" }),
+    tekstId: uuid("tekst_id")
+      .notNull()
+      .references(() => tekst.id, { onDelete: "cascade" }),
+    lagtTil: timestamp("lagt_til", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique("mappe_tekst_unik").on(t.mappeId, t.tekstId),
+    index("mappe_tekst_tekst_idx").on(t.tekstId),
+  ],
+);
+
+/**
+ * FR-52 og FR-15: forsøk på den samlede quizen. Samme form som
+ * `quizforsoek`, men knyttet til Mappen og ikke til én Quiz, fordi
+ * spørsmålene kommer fra flere. Antallet lagres, så et forsøk står med sitt
+ * antall også etter at en av Tekstene er slettet.
+ */
+export const mappeforsoek = pgTable(
+  "mappeforsoek",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    mappeId: uuid("mappe_id")
+      .notNull()
+      .references(() => mappe.id, { onDelete: "cascade" }),
+    lengde: mappequizLengde("lengde").notNull(),
+    /** Elevens svar per spørsmål, som JSON-tekst (som `quizforsoek.svar`). */
+    svar: text("svar").notNull(),
+    antallRiktige: integer("antall_riktige").notNull(),
+    antallTotalt: integer("antall_totalt").notNull(),
+    gjennomfoert: timestamp("gjennomfoert", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("mappeforsoek_mappe_idx").on(t.mappeId)],
+);

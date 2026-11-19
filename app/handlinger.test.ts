@@ -808,3 +808,74 @@ describe("velgTemaHandling", () => {
     expect(kapsler.get("tema")).toEqual({ name: "tema", value: "moerk" });
   });
 });
+
+describe("leverMappequiz (FR-52)", () => {
+  /** En Mappe med én låst Tekst som har en Quiz på åtte spørsmål (annethvert flervalg). */
+  async function mappeMedQuiz() {
+    const m = await import("../data/mapper");
+    const { lagreQuiz } = await import("../data/quiz");
+    const [u] = await db.insert(skjema.user).values({ name: "", email: `hm${++n}@test.no` }).returning({ id: skjema.user.id });
+    innlogget.kontoId = u.id;
+    const ny = await opprettTekst(innlogget, { tittel: "Mikrobølger", raatekst: TEKST, redigertTekst: TEKST, vei: "liming" });
+    await lagreForkunnskapssvar(innlogget, ny.id, {});
+    const laast = await laasTekst(innlogget, ny.id, TEKST);
+    await lagreQuiz(laast, {
+      sporsmal: Array.from({ length: 8 }, (_, i) =>
+        i % 2 === 0
+          ? { erFlervalg: true, sporsmal: `Spørsmål ${i + 1}?`, alternativer: ["A", "B", "C", "D"], riktigSvar: "A", kildeavsnittNummer: 2 }
+          : { erFlervalg: false, sporsmal: `Spørsmål ${i + 1}?`, alternativer: [], riktigSvar: "Eksempel.", kildeavsnittNummer: 3 },
+      ),
+      forkastet: [],
+      udekkedeDeler: [],
+      promptversjon: "v1",
+      modell: "testmodell",
+    });
+    const mappeId = await m.opprettMappe(innlogget, "Fysikk");
+    await m.leggTilTekst(innlogget, mappeId, ny.id);
+    // «Middels»: nr. 1, 3, 5 og 7, alle flervalg.
+    const sporsmal = await m.hentMappequiz(innlogget, mappeId, "middels");
+    const antallForsoek = async () =>
+      (await db.select().from(skjema.mappeforsoek).where(eq(skjema.mappeforsoek.mappeId, mappeId))).length;
+    return { m, mappeId, sporsmal, antallForsoek };
+  }
+
+  test("riktige og gale svar gir riktig antall og per spørsmål; et ubesvart spørsmål lagres som ubesvart", async () => {
+    const { mappeId, sporsmal } = await mappeMedQuiz();
+    const [a, b, c, d] = sporsmal;
+    const ut = await h.leverMappequiz(mappeId, "middels", [
+      { sporsmalId: a.id, valgt: "A" },
+      { sporsmalId: b.id, valgt: "B" },
+      { sporsmalId: c.id, valgt: "A" },
+      { sporsmalId: d.id },
+    ]);
+    expect(ut.feil).toBeUndefined();
+    expect(ut.resultat).toMatchObject({ antallRiktige: 2, antallTotalt: 4 });
+    expect(ut.resultat!.per.map((p) => p.riktig)).toEqual([true, false, true, false]);
+
+    const [rad] = await db.select().from(skjema.mappeforsoek).where(eq(skjema.mappeforsoek.id, ut.resultat!.forsoekId));
+    expect(rad).toMatchObject({ lengde: "middels", antallRiktige: 2, antallTotalt: 4 });
+    const lagret = JSON.parse(rad.svar).find((s: { sporsmalId: string }) => s.sporsmalId === d.id);
+    expect(lagret).toEqual({ sporsmalId: d.id });
+  });
+
+  test("ugyldig lengde og for mange svar avvises uten lagring", async () => {
+    const { mappeId, sporsmal, antallForsoek } = await mappeMedQuiz();
+    const svar = sporsmal.map((s) => ({ sporsmalId: s.id, valgt: "A" }));
+    expect((await h.leverMappequiz(mappeId, "lang", svar)).feil?.melding).toBe("Svarene kom ikke fram i riktig form.");
+    const forMange = Array.from({ length: 65 }, () => ({ sporsmalId: sporsmal[0].id, valgt: "A" }));
+    expect((await h.leverMappequiz(mappeId, "middels", forMange)).feil?.melding).toBe("Svarene kom ikke fram i riktig form.");
+    expect(await antallForsoek()).toBe(0);
+  });
+
+  test("et annet sett spørsmål enn serverens avvises uten lagring", async () => {
+    const { mappeId, sporsmal, antallForsoek } = await mappeMedQuiz();
+    const feil = { melding: "Mappen er endret siden du åpnet quizen.", handling: "Last siden på nytt for å få de nye spørsmålene." };
+    // Ett spørsmål mangler (eleven så færre enn serveren har nå).
+    const faerre = sporsmal.slice(0, 3).map((s) => ({ sporsmalId: s.id, valgt: "A" }));
+    expect((await h.leverMappequiz(mappeId, "middels", faerre)).feil).toEqual(feil);
+    // Like mange, men ett av dem er ikke i utvalget.
+    const annet = [...faerre, { sporsmalId: "00000000-0000-4000-8000-000000000000", valgt: "A" }];
+    expect((await h.leverMappequiz(mappeId, "middels", annet)).feil).toEqual(feil);
+    expect(await antallForsoek()).toBe(0);
+  });
+});

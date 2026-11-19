@@ -22,7 +22,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { leverQuiz, vurderKortsvar, type Leveringssvar } from "../handlinger";
+import { leverQuiz, vurderKortsvar, type Leveringssvar, type Vurderingssvar } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
 import { Kildeavsnitt } from "./Kildeavsnitt";
 import { KNAPP_PRIMAER } from "./knapper";
@@ -35,19 +35,35 @@ export type SporsmalForElev = {
   sporsmal: string;
   erFlervalg: boolean;
   alternativer: string[];
+  /** Den samlede quizen i en Mappe (FR-52): Teksten spørsmålet er fra. */
+  tekst?: { id: string; tittel: string };
 };
+
+/** Elevens svar slik de sendes til levering. Ingen selvvurdering. */
+export type Innsending = { sporsmalId: string; valgt?: string; skrevet?: string }[];
 
 type Fase = "svarer" | "ferdig";
 type Svar = { valgt?: string; skrevet?: string };
 
 const KNAPP = KNAPP_PRIMAER;
 
+/**
+ * Tekstquizen gir `tekstId`, og leverer med `leverQuiz` og `vurderKortsvar`.
+ * Den samlede quizen i en Mappe (FR-52) gir i stedet egne handlinger
+ * (`lever`, `vurder`), og hvert spørsmål bærer sin egen Tekst, som
+ * Kildeavsnittet lenker til. Rettingen er den samme: på serveren, med
+ * `rettQuiz`.
+ */
 export function Quiz({
   tekstId,
   sporsmal,
+  lever: leverHandling,
+  vurder: vurderHandling,
 }: {
-  tekstId: string;
+  tekstId?: string;
   sporsmal: SporsmalForElev[];
+  lever?: (svar: Innsending) => Promise<Leveringssvar>;
+  vurder?: (forsoekId: string, sporsmalId: string, riktig: boolean) => Promise<Vurderingssvar>;
 }) {
   const router = useRouter();
   const [fase, setFase] = useState<Fase>("svarer");
@@ -78,10 +94,8 @@ export function Quiz({
     setFeil(null);
     let ut: Leveringssvar;
     try {
-      ut = await leverQuiz(
-        tekstId,
-        sporsmal.map((s) => ({ sporsmalId: s.id, ...svar[s.id] })),
-      );
+      const innsending = sporsmal.map((s) => ({ sporsmalId: s.id, ...svar[s.id] }));
+      ut = leverHandling ? await leverHandling(innsending) : await leverQuiz(tekstId!, innsending);
     } catch {
       ut = { feil: { melding: "Svarene kom ikke fram.", handling: "Sjekk nettet og prøv igjen." } };
     }
@@ -101,9 +115,11 @@ export function Quiz({
     setVurdering((v) => ({ ...v, [sporsmalId]: riktig }));
     setLagrer(sporsmalId);
     setFeil(null);
-    let ut: Awaited<ReturnType<typeof vurderKortsvar>>;
+    let ut: Vurderingssvar;
     try {
-      ut = await vurderKortsvar(tekstId, resultat.forsoekId, sporsmalId, riktig);
+      ut = vurderHandling
+        ? await vurderHandling(resultat.forsoekId, sporsmalId, riktig)
+        : await vurderKortsvar(tekstId!, resultat.forsoekId, sporsmalId, riktig);
     } catch {
       ut = { feil: { melding: "Avkrysningen ble ikke lagret.", handling: "Sjekk nettet og prøv igjen." } };
     }
@@ -178,6 +194,7 @@ export function Quiz({
             <li key={s.id} className="rounded-md border border-slate-200 p-5 dark:border-slate-800">
               <fieldset>
                 <legend className="font-medium">
+                  {s.tekst && <span className="mb-1 block text-base font-normal text-dempet">Fra «{s.tekst.tittel}»</span>}
                   <span className="text-slate-500 dark:text-slate-400">{s.nummer}.</span> {s.sporsmal}
                   {visMerke && (
                     <span className={`ml-2 text-sm font-semibold ${riktig ? "text-green-700 dark:text-green-400" : "text-fare"}`}>
@@ -293,14 +310,14 @@ export function Quiz({
                       Du svarte ikke på dette spørsmålet, så det teller som ikke riktig.
                     </p>
                   )}
-                  <Kildeavsnitt tekstId={tekstId} {...r.kildeavsnitt} />
+                  <Kildeavsnitt tekstId={s.tekst?.id ?? tekstId!} {...r.kildeavsnitt} />
                 </div>
               )}
 
               {/* FR-15: feil flervalgssvar viser hvor i teksten svaret står — bak en knapp. */}
               {r && !r.riktig && s.erFlervalg && (
                 <div className="mt-4">
-                  <Kildeavsnitt tekstId={tekstId} {...r.kildeavsnitt} />
+                  <Kildeavsnitt tekstId={s.tekst?.id ?? tekstId!} {...r.kildeavsnitt} />
                 </div>
               )}
             </li>

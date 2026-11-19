@@ -38,14 +38,26 @@ function startIndeks(runde: Kort[], merking: Record<string, Merking | null>): nu
   return i === -1 ? 0 : i;
 }
 
-export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
+/**
+ * Et kort, og i en Mappe (FR-51) også Teksten det er fra. Merkingen lagres
+ * på kortets egen Tekst (`merkKort`), så den er den samme i Mappen og i
+ * Teksten.
+ */
+type Kortet = Kort & { tekst?: { id: string; tittel: string } };
+
+/**
+ * Øvekortene for én Tekst (`tekstId`), eller for en Mappe, der hvert kort
+ * bærer sin egen Tekst og tittelen vises på kortet.
+ */
+export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }) {
+  const tekstFor = (k: Kortet) => k.tekst?.id ?? tekstId!;
   const [merking, setMerking] = useState<Record<string, Merking | null>>(() =>
     Object.fromEntries(kort.map((k) => [k.id, k.merking])),
   );
   const [modus, setModus] = useState<Modus>("alle");
   // Runden er fast mens den pågår: et kort som merkes «kan» underveis i en
   // «må øve»-runde, skal ikke forsvinne under eleven.
-  const [runde, setRunde] = useState<Kort[]>(kort);
+  const [runde, setRunde] = useState<Kortet[]>(kort);
   const [indeks, setIndeks] = useState(() => startIndeks(kort, Object.fromEntries(kort.map((k) => [k.id, k.merking]))));
   const [snudd, setSnudd] = useState(false);
   const [ferdig, setFerdig] = useState(false);
@@ -74,7 +86,7 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
     const ny = forrige === m ? null : m; // trykk igjen for å angre
     setMerking((x) => ({ ...x, [gjeldende.id]: ny }));
     setFeil(null);
-    const r = await merkKort(tekstId, gjeldende.id, ny);
+    const r = await merkKort(tekstFor(gjeldende), gjeldende.id, ny);
     if (r.feil) {
       setMerking((x) => ({ ...x, [gjeldende.id]: forrige }));
       setFeil(r.feil);
@@ -146,11 +158,13 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
           <div aria-live="polite">
             {!snudd ? (
               <div className="flex min-h-44 flex-col items-center justify-center text-center">
+                {gjeldende.tekst && <p className="mb-3 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
                 <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
                 <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
               </div>
             ) : (
               <div>
+                {gjeldende.tekst && <p className="mb-2 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
                 <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   {gjeldende.uttrykk}
                 </p>
@@ -192,7 +206,7 @@ export function Oevekort({ tekstId, kort }: { tekstId: string; kort: Kort[] }) {
         */}
         {snudd && (
           <div className="mt-3">
-            <Kildeavsnitt tekstId={tekstId} {...gjeldende.kildeavsnitt} />
+            <Kildeavsnitt tekstId={tekstFor(gjeldende)} {...gjeldende.kildeavsnitt} />
           </div>
         )}
 

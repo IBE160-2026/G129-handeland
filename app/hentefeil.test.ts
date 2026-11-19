@@ -44,6 +44,12 @@ vi.mock("../data/arbeidsbord", async (original) => ({
   hentArbeidsbord,
 }));
 vi.mock("../data/forbruk", () => ({ samtalegrenseNaadd: async () => false }));
+// FR-50: Mappene i Samlingen. Byttet ut, så testene ikke treffer databasen.
+const { listMapper } = vi.hoisted(() => ({ listMapper: vi.fn(async () => []) }));
+vi.mock("../data/mapper", async (original) => ({
+  ...(await original<typeof import("../data/mapper")>()),
+  listMapper,
+}));
 // Landingssiden laster skrifter med next/font, som bare virker i Next-bygget.
 vi.mock("./komponenter/Landingsside", () => ({ Landingsside: function Landingsside() { return null; } }));
 
@@ -101,6 +107,18 @@ describe("Samlingen (/samling)", () => {
     const html = renderToStaticMarkup(await samling());
     expect(html).toContain(FEILTEKST);
     expect(html).toMatch(/<a href="\/samling"[^>]*>Prøv igjen<\/a>/);
+    expect(logg).toHaveBeenCalledOnce();
+  });
+
+  test("listMapper kaster: tekstene vises likevel, uten Hentefeil (FR-50)", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    hentArbeidsbord.mockResolvedValue([]);
+    listMapper.mockRejectedValueOnce(new Error("relation \"mappe\" does not exist"));
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const html = renderToStaticMarkup(await samling());
+    expect(html).not.toContain(FEILTEKST);
+    expect(html).toContain("Mappene dine");
     expect(logg).toHaveBeenCalledOnce();
   });
 

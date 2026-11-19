@@ -2,7 +2,7 @@
 title: Lesevenn
 status: final
 created: 2026-09-25
-updated: 2026-11-17
+updated: 2026-11-19
 ---
 
 # PRD: Lesevenn
@@ -13,7 +13,7 @@ En nettapp som fører eleven gjennom en lesestrategi-sekvens for fagtekst, med K
 
 Dokumentet er skrevet for én leser: utvikleren som skal bygge Lesevenn alene i løpet av høstsemesteret 2026, i emnet IBE160 Programmering med KI ved Høgskolen i Molde. Det bygger på `product-brief-lesevenn.md` i samme mappe og gjentar ikke begrunnelsen som ligger der — briefen svarer på *hvorfor*, dette dokumentet svarer på *hva som skal virke, og hvordan man vet at det virker*.
 
-Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-49, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
+Strukturen er: ordlisten i §3 fastsetter vokabularet, funksjonene i §4 er gruppert med globalt nummererte funksjonskrav (FR-1 til FR-52, der FR-32 til FR-34 er trukket tilbake og ikke gjenbrukes — se §4.9) nestet under seg, og tverrgående krav ligger samlet i §5 og §6. Antakelser er merket `[ANTAKELSE]` der de står og samlet i §12.
 
 Emnets mappevurdering høsten 2026 har to deler: prosjektkode og funksjonalitet teller 70 prosent, og «dokumentasjon må vise hvordan KI ble brukt, og hvordan studentene har kvalitetssikret koden». Refleksjonsrapporten teller 30 prosent. Det er nesten en tredjedel av karakteren som ikke er kode, og formuleringen sier *koden* — ikke bare det KI-genererte innholdet appen produserer. Dokumentasjonsleveransen er derfor modellert som en funksjonsseksjon med egne krav (§4.11), på linje med resten, og milepælsplanen i §9 verner tid til den. Tekniske valg som er løsning og ikke krav, ligger i `addendum-lesevenn.md`.
 
@@ -100,7 +100,7 @@ Termene under brukes ordrett i resten av dokumentet. Synonymer er en disiplinbri
 - **Kvalitetssikret språk** — et Morsmål utvikleren har målt oversettelseskvaliteten for mot Gullsettet i §4.7, og som derfor vises uten forbehold.
 - **Modellstøttet språk** — et Morsmål språkmodellen håndterer, men som ikke er målt. Vises alltid med synlig merknad om at kvaliteten ikke er kontrollert.
 - **Minnevers** — et kort rim eller vers som knytter sammen Faguttrykk fra Begrepssettet, til pugging. Alternativt en ferdig formulert Suno-prompt eleven kan bruke i et eksternt verktøy.
-- **Mappe** — en samling av to eller flere Tekster med én felles Quiz eller Fagsamtale. *Utsatt til etter v1 (§4.9); termen står her fordi den er referert i videreføringen.*
+- **Mappe** — elevens egen samling av Tekster, for eksempel til samme prøve. Har samlet øving på Øvekortene og en samlet Quiz, begge satt sammen av det Tekstene alt har lagret (§4.9). *Endret 19. november: før det var termen «to eller flere Tekster med én felles Quiz eller Fagsamtale», utsatt til etter v1. Samlet Fagsamtale er fortsatt ute.*
 - **Gullsett** — et testsett utvikleren har annotert manuelt, som KI-utdata måles mot. Hver måleterskel i dokumentet peker til et Gullsett.
 - **KI-logg** — den løpende loggen over hvordan KI ble brukt under *utviklingen* av Lesevenn. Skilles fra Promptregisteret, som gjelder appens egne kjøretidsprompter.
 - **Promptregister** — de versjonerte promptene appen selv sender til språkmodellen under kjøring, med måleresultat per versjon.
@@ -652,15 +652,50 @@ Verset skal ikke lyve for rimets skyld.
 - Ingen påstand i verset motsier Teksten. Måles på et Gullsett av **10 genererte vers**, manuelt vurdert av utvikleren: antall usanne påstander i det som vises eleven er **null**. Funn under målingen dokumenteres og brukes til å stramme prompten.
 - Grensesnittet oppfordrer eleven til å sjekke verset mot teksten før hun pugger det.
 
-### 4.9 Mapper — utsatt til etter v1
+### 4.9 Mapper lett — i v1 fra 19. november
 
-**Status per 27. september: ute av v1.** Mapper var tidligere betinget mål i M2. Den ble tatt ut for å gi plass til bildeinnlesing (FR-44, FR-45), etter at det ble klart at en stor del av målgruppen har papirbok eller nettbok uten kopiering.
+**Status per 19. november: Mapper er i v1 i en lett variant (variant B), FR-50 til FR-52.** Eleven lager Mapper, legger egne Tekster i dem, og får to samlede aktiviteter som bare gjenbruker lagret innhold: alle Øvekortene fra Tekstene i Mappen, og en samlet Quiz satt sammen av spørsmålene Tekstene allerede har. Ingen nye modellkall og ingen ny kvalitetspåstand: hvert kort og hvert spørsmål er det samme som i sin egen Tekst, med sitt Kildeavsnitt, og er dermed dekket av målingene i FR-8 og FR-14 slik de står.
 
-Byttet er verdt å begrunne, fordi det reverserer en tidligere beslutning i dette prosjektet. Mapper er **additiv**: uten den virker alt annet, og alle målbare kvalitetspåstander står. Bildeinnlesing er **eksistensiell**: uten den kan en stor del av målgruppen ikke bruke appen i det hele tatt. En funksjon som utvider nytten for dem som alt er i gang, taper mot en funksjon som avgjør om de kommer i gang. Da den forrige avveiningen ble gjort, var ikke tilgangsproblemet kjent.
+**Historikken, fordi beslutningen er snudd to ganger.** Mapper var betinget mål i M2 (25. september), og ble tatt ut 27. september for å gi plass til bildeinnlesing (FR-44, FR-45), etter at det ble klart at en stor del av målgruppen har papirbok eller nettbok uten kopiering. Begrunnelsen da var at Mapper er **additiv** — uten den virker alt annet — mens bildeinnlesing er **eksistensiell**. Den avveiningen står: bildeinnlesingen ble bygget først. 19. november, med M1 levert og en uke slakk før kodefrys 27. november, valgte utvikleren å ta inn en lett variant. Den er lett fordi den ikke gjør det som gjorde den opprinnelige varianten dyr: den har ingen samlet Fagsamtale, ingen generering på tvers av Tekster, og dermed ingen ny forankringsregel og ikke noe nytt Gullsett (innvendingen fra 25. september, åpent spørsmål 8).
 
-**FR-32, FR-33 og FR-34 er trukket tilbake, og numrene gjenbrukes ikke.** Kravene er bevart i versjonshistorikken framfor å slettes, slik at de kan hentes fram om prosjektet videreføres. Innholdet er oppsummert i §8.2 og i `addendum-lesevenn.md` §5.
+**FR-32, FR-33 og FR-34 er fortsatt trukket tilbake, og numrene gjenbrukes ikke.** De beskrev den fulle varianten med samlet Fagsamtale. Den lette varianten har egne numre.
 
-Ordlistens definisjon av **Mappe** er beholdt, siden begrepet er referert i FR-1 som en foreslått vei videre for tekst over lengdegrensen. Den veien er i v1 «del teksten i flere Tekster» uten en mappe å samle dem i.
+**Hva som fortsatt er ute:** samlet Fagsamtale, samlet Minnevers, og all ny generering på tvers av Tekster (§8.2).
+
+**Funksjonskrav:**
+
+#### FR-50: Mappe
+
+Eleven kan samle egne Tekster i Mapper.
+
+**Konsekvenser (testbare):**
+- Eleven kan lage en Mappe med en tittel på 1–80 tegn, gi den nytt navn og slette den. Sletting av en Mappe sletter ikke Tekstene i den.
+- Eleven kan legge egne Tekster i en Mappe og ta dem ut igjen. En Tekst kan ligge i flere Mapper, men bare én gang i hver. Valget for å legge til viser hvilke Tekster som alt er med.
+- Høyst **20 Mapper per konto** og høyst **8 Tekster per Mappe**. Når en grense er nådd, sier appen hvilken grense det er og hvorfor, og hva eleven kan gjøre (§5).
+- En Tekst som eies av en annen konto, kan ikke legges i Mappen, og en annen kontos Mappe finnes ikke (AD-8). Sletting av en Tekst eller kontoen rydder Mappene (FR-37).
+- Mappene står i en egen del øverst i Samlingen (FR-49), og Arbeidsbordet har en lenke dit. Arbeidsbordets fem bunker (FR-48) er uendret.
+- Tekster som ikke er låst, mangler Begrepssett eller mangler Quiz, vises i Mappen med hva som mangler og en lenke til Teksten. Mappen lager aldri noe selv.
+
+#### FR-51: Samlet øving
+
+Eleven kan øve på alle Øvekortene fra Tekstene i en Mappe samlet.
+
+**Konsekvenser (testbare):**
+- Kortene er Øvekortene til de låste Tekstene i Mappen (FR-16), Tekst for Tekst, med Teksten de er fra synlig på kortet og Kildeavsnittet på baksiden.
+- Merkingen «kan» / «må øve mer» er den samme som i Teksten (FR-17): et kort merket i Mappen står merket når Teksten åpnes alene.
+- En Tekst uten Faguttrykk gir ingen kort, og grunnen oppgis.
+
+#### FR-52: Samlet quiz
+
+Eleven kan ta en samlet Quiz med spørsmålene Tekstene i Mappen allerede har.
+
+**Konsekvenser (testbare):**
+- Spørsmålene er Quizspørsmålene til de låste Tekstene med Quiz (FR-13, FR-14), uendret og med sitt Kildeavsnitt. Ingen spørsmål lages for Mappen.
+- Eleven velger lengden ved start: **Kort** (2 per Tekst), **Middels** (4 per Tekst) eller **Alle** (8 per Tekst). For en gitt lengde er utvalget fast og jevnt fordelt over spørsmålsnumrene, så samme lengde gir samme spørsmål.
+- Rettingen er som i FR-15, på serveren, og fasiten når ikke nettleseren før levering. Kortsvar vurderes av eleven selv i resultatet.
+- Forsøkene lagres med lengden, og vises under «Tidligere forsøk» med antall riktige av totalt og lengden. Et forsøk beholder antallet sitt også om en av Tekstene slettes etterpå.
+- Har ingen av Tekstene Quiz, vises ingen quiz, men en forklaring og lenker til Tekstene.
+
 ### 4.10 Brukerkonto og lagring
 
 **Beskrivelse:** Kontoen finnes fordi tekstene skal samles på Arbeidsbordet og i Samlingen (FR-48, FR-49), og fordi eleven skal kunne komme tilbake til Øvekortene før prøven. Den er ikke en plattform: ingen deling, ingen sosiale funksjoner, ingen profil. Minst mulig data, fordi en stor del av brukergruppen er mindreårige og innholdet ofte er opphavsrettslig beskyttet lærebokstoff.
@@ -913,6 +948,7 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 - Morsmålsstøtte: ukrainsk som Kvalitetssikret språk, øvrige som Modellstøttede med synlig forbehold, additiv visning med norsk fagord i parentes, arabisk høyre-til-venstre bygget og demonstrert uansett nivå, utpeking av språklige bilder og akademisk allmennspråk.
 - Minnevers eller Suno-prompt, med faktasjekk.
 - Brukerkonto med lagring, historikk og sletting.
+- Mapper lett (FR-50 til FR-52, tatt inn 19. november): egne samlinger av Tekster med samlet øving på Øvekortene og en samlet Quiz av spørsmålene Tekstene alt har.
 - Dokumentasjonsleveransen i §4.11: KI-logg, Promptregister, Gullsett med tall i repoet, kodekvalitetssikring, etikk og jus, refleksjon.
 - Kjørbarhet for andre (FR-46): testmodus med lagrede modellsvar for eksempelteksten, og lokal database i Docker, slik at hele Kjerneløypen kan gås gjennom uten prosjektets API-nøkkel.
 
@@ -920,7 +956,7 @@ Eleven legger inn innhold hun ikke eier. Det er den mest åpenbare etiske spenni
 
 - **Innlesing fra URL.** Tekst, PDF og bilde dekker de veiene målgruppen faktisk har.
 - **Tekstgjenkjenning av hele innskannede bøker.** Bildeinngangen tar inntil fire sider (FR-44). Å digitalisere en bok er en annen oppgave, med en annen opphavsrettslig karakter.
-- **Mapper med samlet Quiz og Fagsamtale.** Var betinget mål i M2, tatt ut 27. september for å gi plass til bildeinnlesing. Mapper er additiv — uten den virker alt annet — mens bildeinnlesing avgjør om en stor del av målgruppen kommer i gang i det hele tatt. FR-32 til FR-34 er trukket tilbake og numrene gjenbrukes ikke (§4.9).
+- **Samlet Fagsamtale, samlet Minnevers og ny generering på tvers av Tekster i en Mappe.** Mapper var betinget mål i M2, tatt ut 27. september for å gi plass til bildeinnlesing, og tatt inn igjen 19. november i en lett variant som bare gjenbruker lagret innhold (FR-50 til FR-52). Det som krever nye modellkall på tvers av Tekster, og dermed ny forankringsregel og nytt Gullsett, er fortsatt ute. FR-32 til FR-34 er trukket tilbake og numrene gjenbrukes ikke (§4.9).
 - **Talebasert fagsamtale.** Skriftlig først; tale legger til lydopptak, transkribering og en helt ny feilkjede. `[MERKNAD: pedagogisk er dette det mest interessante neste steget — noen elever forklarer mye bedre muntlig enn skriftlig. Verdt å nevne i rapportens videreføringsdel.]`
 - **CSV-eksport til Kahoot eller Blooket.** Verdien ligger hos klassen, via læreren — og læreren er ikke bruker i v1 (§2.2). Funksjonen hører sammen med lærerdashbordet, ikke før det. Krever i tillegg kjennskap til to eksterne formater.
 - **Flere Kvalitetssikrede språk enn ukrainsk.** Nivået krever en ekstern morsmålsbruker per språk (FR-28), og tre slike avhengigheter før M1 ville gjort den mest usikre antakelsen i dokumentet til en forutsetning for å bli ferdig. Utsatt av risikohensyn, ikke fordi oversettelse til flere språk er vanskelig — de er tilgjengelige som Modellstøttede fra dag én.
@@ -970,7 +1006,9 @@ Dette er prosjektet i briefens forstand, og det nivået som svarer til påstande
 
 ### 9.3 Stabilisering og slakk (20.–27. november)
 
-Det finnes **ikke** noe M2-nivå lenger. Mapper var det eneste betingede målet, og det er ute av v1 (§4.9). Uken mellom M1 og kodefrys er derfor ikke en funksjonsuke — den er slakk, og det er et bevisst valg framfor et tomrom.
+Det finnes **ikke** noe M2-nivå lenger. Mapper var det eneste betingede målet, og det ble tatt ut av v1 27. september (§4.9). Uken mellom M1 og kodefrys er derfor ikke en funksjonsuke — den er slakk, og det er et bevisst valg framfor et tomrom.
+
+**Mapper lett (bestemt 19. november).** Utvikleren tok likevel inn en lett variant av Mapper i slakken (FR-50 til FR-52). Som designfasen er det en ny funksjon i slakken, det SM-C2 advarer mot, og det skal stå åpent. Den er holdt lett med vilje: ingen nye modellkall, ingen ny kvalitetspåstand og ingen ny måling, bare nye sider og tabeller over det som alt er lagret. Kuttes den, virker alt annet som før.
 
 **Designfase (bestemt 16. oktober).** En samlet designrunde — felles farger, avstander, typografi og knapper, og mobil — legges hit, senest i denne uka. Den tar av bufferen, og krymper først om M1 skrider. **Designfasen ble gjort 12.–13. november** og la til tre nye funksjoner: landingsside, arbeidsbord og samling (FR-47 til FR-49). Det er nye funksjoner i slakken, altså nettopp det SM-C2 advarer mot, og det skal stå åpent. Begrunnelsen er at inngangen avgjør om en lærer eller elev forstår appen i det hele tatt. Kuttrekkefølge om tiden ikke strekker til: først rulleeffektene på landingssiden, så viften på arbeidsbordet (bunkene blir lenker), og til slutt arbeidsbordet selv (Samlingen blir startsiden). Brukervennlighetsfeil rettes fortløpende og venter ikke hit; §5 er funksjonskrav, ikke pynt.
 
@@ -1035,7 +1073,7 @@ Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på 
 - **SM-10: Én testbruker utenfor utvikleren kommer gjennom løypen uten hjelp.** Én elev eller annen frivillig fullfører Kjerneløypen uten instruksjon, og friksjonspunktene skrives ned — særlig om gjennomsynet av hele teksten for PDF og bilde (FR-3 fase 3b) er der de stopper, siden det er friksjon Lesevenn legger til med vilje. `[ANTAKELSE: én testbruker er oppnåelig innen fristen. Én er nok til å finne det som er åpenbart galt, og langt bedre enn ingen.]`
 - **SM-11: En elev med papirbok kommer gjennom løypen.** Bildeinnlesing av inntil fire sider gir en Råtekst som eleven kan rette i gjennomsynet og fullføre Kjerneløypen fra. Demonstreres i demoløypens steg 13. Validerer FR-44, FR-45. **Merk at dette ikke er en kvalitetspåstand:** metrikken sier at veien finnes og virker ende til ende, ikke at uttrekket er treffsikkert. Det siste er umålt i v1, og det står i FR-45.
 - **SM-12: Noen andre kan kjøre appen.** Kjerneløypen fullføres fra et rent utsjekk av repoet, etter stegene i README, uten prosjektets API-nøkkel og uten tilgang til driftsdatabasen. Validerer FR-46. **Dette er ikke en kvalitetspåstand om modellsvarene** — de er lagret på forhånd, og sier derfor ingenting om hvordan appen svarer på en ny tekst. Metrikken sier at kodeveien finnes, er validert og kan vises fram av noen som ikke er utvikleren.
-- **Merknad om briefens mappekriterium.** Briefen listet «flere tekster samlet i en mappe med én felles quiz» som et funksjonelt suksesskriterium. Det er ikke innfridd i v1, fordi Mapper er tatt ut (§4.9). Det skal stå i rapporten som et bevisst bytte med begrunnelse, ikke forsvinne fordi metrikken ble fjernet sammen med funksjonen.
+- **Merknad om briefens mappekriterium.** Briefen listet «flere tekster samlet i en mappe med én felles quiz» som et funksjonelt suksesskriterium. Fra 19. november er det innfridd i den lette varianten (FR-50 til FR-52): Tekstene samles i en Mappe, og den felles Quizen settes sammen av spørsmålene Tekstene alt har. Det er ikke en kvalitetspåstand utover FR-14: spørsmålene er de samme, og målingen deres gjelder uendret. Den felles Fagsamtalen er fortsatt ikke innfridd. I rapporten skal begge byttene stå — uttaket 27. september og den lette varianten 19. november — med begrunnelse, ikke bare sluttilstanden.
 
 **Motmetrikker — skal ikke optimaliseres**
 
@@ -1053,7 +1091,7 @@ Merkingen verner i tillegg mot det motsatte: havner Gullsettet ved et uhell på 
 5. ~~**Stemmer emnets ukeplan med milepælsplanen i §9?**~~ **Avklart 25. september:** uke 44–45 i ukeplanen er anbefalt framdrift, ikke egne innleveringer. M1-vinduet er intakt, og Mapper har dermed en reell sjanse framfor å være nærmest utelukket.
 6. **Tåler det obligatoriske gjennomsynssteget (FR-3) en reell elev?** Det er begrunnet i kvalitet, men det er også ekstra friksjon rett foran den eleven som strever mest. Prøv på testbrukeren i SM-10. **Delvis avklart 11.11:** utviklerens telefontest viste at steget ikke var verdt friksjonen for innlimt tekst, og fase 3b hoppes nå over der (FR-3). For PDF og bilde står spørsmålet åpent til SM-10.
 7. ~~**Hva skjer når eleven limer inn noe som ikke er en fagtekst?**~~ **Avklart:** mykt, ikke-blokkerende varsel, spesifisert i FR-7. En oppskrift, en chatlogg, et dikt. Trolig et mykt varsel med mulighet for å fortsette — men oppførselen er ikke spesifisert, og bør avklares eller bevisst utsettes.
-8. ~~**Skal samlet Fagsamtale (FR-34) måles?**~~ **Bortfalt 27. september:** Mapper er ute av v1, så spørsmålet er ikke lenger aktuelt. Det samme resonnementet — en funksjon kan leveres umålt så lenge det oppgis — er nå brukt på bildeinnlesing i stedet (FR-45).
+8. ~~**Skal samlet Fagsamtale (FR-34) måles?**~~ **Bortfalt 27. september:** Mapper er ute av v1, så spørsmålet er ikke lenger aktuelt. Det samme resonnementet — en funksjon kan leveres umålt så lenge det oppgis — er nå brukt på bildeinnlesing i stedet (FR-45). *Fortsatt bortfalt 19. november:* Mapper lett (FR-50 til FR-52) har ingen samlet Fagsamtale, og den samlede Quizen bruker spørsmål som alt er målt (FR-14).
 9. **Er tetthetstaket i FR-7 riktig kalibrert for videregående?** Tallene — 4 prosent av løpende ord, 12 unike Faguttrykk per 1 000 ord — ble satt da målgruppen var ungdomstrinnet. Videregåendetekster er tettere på fagspråk, så taket kan nå binde for hardt og kutte uttrykk eleven faktisk trengte. Annoteringen av Gullsettet i FR-8 gir svaret: er det jevnlig flere enn 12 uttrykk per 1 000 ord i den manuelle annoteringen, skal taket heves — men da med tallet fra annoteringen, ikke med et anslag. Avklares i M0, siden annoteringen skjer der.
 10. ~~**Er de-orddeling av PDF mulig uten en norsk ordliste?**~~ **Avklart:** FR-2 dekker de vanlige tilfellene uten ordliste, og restfeilene fanges i gjennomsynet (FR-3 fase 3b). FR-2 krever at «informa-\nsjon» slås sammen mens «KI-assistert» beholdes. Uten en ordliste er den grensen vanskelig å treffe pålitelig. Avklar om en enkel ordliste skal inn, eller om kravet skal senkes til å gjelde de vanlige tilfellene og resten fanges av gjennomsynet i FR-3.
 11. ~~**Hvilken modell, og er den en «Covered Model»?**~~ **Avklart på nytt 8. oktober:** modellen er byttet til `claude-haiku-5-5` etter at stabilitetsmålingen viste at den er dobbelt så stabil, en femtedel så dyr i utdatatokens og åtte ganger raskere enn `claude-haiku-4-5`. Sjekken er gjort om mot to primærkilder, med ordrette sitater, URL og lesedato i addendum §6: Covered Models er Claude Fable 5.1, Mythos 5.1, Fable 5 og Mythos 5, og **Claude Haiku står ikke på listen i noen versjon**. 30-dagerslagringen gjelder altså ikke, og konklusjonen i §6 står. **Ett forbehold er ført i §6 og er ikke lukket:** støtteartikkelen med listen er sist oppdatert 1. september, mens modellen ble utgitt 7. oktober, så listen er eldre enn modellen. Må kontrolleres på nytt nærmere innlevering. *(Forrige avklaring, 2. oktober:)* `claude-haiku-4-5` som standard og `claude-sonnet-5` for svarvurdering. **Begge er utenfor Covered Models**, så 30-dagerslagringen gjelder ikke og konklusjonen i addendum §6 står. Fordelingen per oppgave i addendum §3. Gjenstår: måle uttrekket mot FR-8 før valget låses. Opprinnelig formulering: Leverandør er avklart (Anthropic for M0), og vilkårene er dokumentert i addendum §6 — Commercial Terms sier «Anthropic may not train models on Customer Content from Services». Men spinen pinner ingen modell, og lagringsdokumentasjonen gjør unntak for «Covered Models» med 30 dagers oppbevaring. Hvilke modeller som er dekket er ikke belagt med kilde. **Må avklares før generatorkoden skrives**, siden konklusjonen om elevenes data henger på det. Opprinnelig formulering: *(Delvis avklart 30. september: Anthropic er valgt for M0, med sammenligning mot minst én annen leverandør før M1, målt på gullsettet i FR-8. Gjenstår kravene under.)* Inndata skal ikke brukes til trening, behandlingsstedet skal være kjent. Les vilkårene for det du faktisk bruker — forbruker- og API-versjoner av samme tjeneste har ofte ulike vilkår her — og skriv ned hvilke vilkår og hvilken dato. Avklares før M0, siden det er leverandøren appen bygges mot.
@@ -1068,7 +1106,7 @@ Hver oppføring er merket `[ANTAKELSE]` der den står, og skal bekreftes eller a
 
 1. **§2.2** — Bruk i v1 er utviklerens testing og frivillige testbrukere som samtykker, ikke drift i en reell klasse med reelle elevdata.
 2. **§2.2** — Det er videregåendetekster (Vg1–Vg3) som brukes i testing, demo og Gullsett. Flyttes målgruppen, må Gullsettene annoteres på nytt — nivået sitter i annoteringen, ikke i koden.
-3. **§2.3, §4.1** — En stor del av målgruppen har papirbok eller nettbok uten brukbar kopiering. Dette er grunnlaget for at bildeinnlesing (FR-44) er i v1 og Mapper ikke er. Opplyst av utvikleren 27. september; ikke tallfestet.
+3. **§2.3, §4.1** — En stor del av målgruppen har papirbok eller nettbok uten brukbar kopiering. Dette er grunnlaget for at bildeinnlesing (FR-44) ble prioritert foran Mapper 27. september; Mapper kom inn i en lett variant 19. november (§4.9), etter at bildeinnlesingen var bygget. Opplyst av utvikleren 27. september; ikke tallfestet.
 4. **§4.1, FR-45** — Et multimodalt modellkall gir godt nok tekstuttrekk fra et mobilbilde av en boksides tekst til at gjennomsynet i FR-3 fase 3b holder som sikkerhetsnett. Ikke målt, og bevisst ikke målt.
 5. **§4.1, FR-3** — Gjennomsynet av hele teksten (fase 3b) er verdt friksjonen for PDF og bilde. *Endret 11.11:* for innlimt tekst holdt antakelsen ikke, og steget er fjernet der. For PDF og bilde bør den fortsatt prøves på testbruker.
 6. **§4.7** — Kontrollkilden for ukrainsk er tilgjengelig i M1-vinduet. *(Avklart 25. september: ukrainsk morsmålsbruker funnet.)*

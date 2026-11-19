@@ -320,11 +320,17 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
         <Link href="/ny" className="bord-ny">
           + Legg en ny tekst på bordet
         </Link>
-        {antall > alle.length && (
-          <Link href="/samling" className="bord-samling inline-flex min-h-11 items-center text-dempet underline underline-offset-4">
-            Se alle {antall} tekstene i samlingen
+        {/* FR-50: «Mappene dine» står ved siden av Samlingslenken. Bunkene (FR-48) er de samme. */}
+        <p className="bord-samling flex flex-wrap justify-center gap-x-6">
+          {antall > alle.length && (
+            <Link href="/samling" className="inline-flex min-h-11 items-center text-dempet underline underline-offset-4">
+              Se alle {antall} tekstene i samlingen
+            </Link>
+          )}
+          <Link href="/samling#mapper" className="inline-flex min-h-11 items-center text-dempet underline underline-offset-4">
+            Mappene dine
           </Link>
-        )}
+        </p>
       </div>
 
       {/* Bakgrunnen bak arket: et trykk på den legger arket sammen. Pynt for skjermlesere. */}

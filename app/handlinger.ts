@@ -57,6 +57,20 @@ import {
   type TidligereRunde,
 } from "../generatorer/fagsamtale";
 import { merkOevekort, type Merking } from "../data/oevekort";
+import {
+  fjernTekst,
+  giNyttNavn,
+  hentMappequiz,
+  lagreMappeforsoek,
+  leggTilTekst,
+  MAPPEGRENSER,
+  MappeAvvist,
+  oppdaterMappeSelvvurdering,
+  opprettMappe,
+  slettMappe,
+  SPORSMAL_PER_TEKST,
+  tolkLengde,
+} from "../data/mapper";
 import { hentFaguttrykk } from "../generatorer/faguttrykk";
 import { genererQuiz } from "../generatorer/quiz";
 import { hentPrompt } from "../generatorer/kontrakt";
@@ -433,15 +447,15 @@ export async function lagQuiz(
  * for hånd. Ingen selvvurdering her: den gjøres i resultatet, etter levering
  * (`vurderKortsvar`), og et kortsvar teller ikke før eleven har krysset av.
  */
-const ElevsvarSkjema = z
-  .array(
-    z.object({
-      sporsmalId: z.string().uuid(),
-      valgt: z.string().max(2000).optional(),
-      skrevet: z.string().max(5000).optional(),
-    }),
-  )
-  .max(20);
+const Elevsvarelement = z.object({
+  sporsmalId: z.string().uuid(),
+  valgt: z.string().max(2000).optional(),
+  skrevet: z.string().max(5000).optional(),
+});
+const ElevsvarSkjema = z.array(Elevsvarelement).max(20);
+
+/** FR-52: den samlede quizen har høyst 8 spørsmål fra hver av høyst 8 Tekster. */
+const MappesvarSkjema = z.array(Elevsvarelement).max(MAPPEGRENSER.tekster * SPORSMAL_PER_TEKST.alle);
 
 export type Leveringssvar = Handlingssvar & {
   resultat?: {
@@ -658,6 +672,178 @@ export async function merkKort(
   }
   revalidatePath(`/tekst/${tekstId}/oppgaver`);
   return INGEN_FEIL;
+}
+
+/* ------------------------------------------------------------------ *
+ * FR-50 til FR-52 — Mapper lett
+ *
+ * Ingen av handlingene kaller en generator: Mappen leser bare det Tekstene
+ * har lagret. Eierskapet til både Mappen og hver Tekst sjekkes i
+ * `data/mapper.ts` (AD-8).
+ * ------------------------------------------------------------------ */
+
+const MappeId = z.string().uuid();
+
+/** Avvisninger fra datalaget, som tekst eleven kan handle på (§5). */
+function mappefeil(e: unknown): { feil: Feiltekst } {
+  if (e instanceof MappeAvvist) return { feil: { melding: e.melding, handling: e.handling } };
+  if (e instanceof IkkeFunnet) {
+    return {
+      feil: {
+        melding: "Fant ikke mappen eller teksten.",
+        handling: "Last siden på nytt. Er den slettet, finner du resten i Samlingen.",
+      },
+    };
+  }
+  return somFeil(e);
+}
+
+function oppdaterMappesider(mappeId?: string) {
+  revalidatePath("/samling");
+  if (mappeId) revalidatePath(`/mappe/${mappeId}`);
+}
+
+/** FR-50: lager en Mappe og sender eleven dit. */
+export async function opprettMappeHandling(_forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const t = await tilgang();
+  let id: string;
+  try {
+    id = await opprettMappe(t, String(data.get("tittel") ?? ""));
+  } catch (e) {
+    return mappefeil(e);
+  }
+  oppdaterMappesider();
+  redirect(`/mappe/${id}`);
+}
+
+export async function giMappeNyttNavn(mappeId: string, _forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const t = await tilgang();
+  if (!MappeId.safeParse(mappeId).success) return mappefeil(new IkkeFunnet("Mappen"));
+  try {
+    await giNyttNavn(t, mappeId, String(data.get("tittel") ?? ""));
+  } catch (e) {
+    return mappefeil(e);
+  }
+  oppdaterMappesider(mappeId);
+  return INGEN_FEIL;
+}
+
+/** Sletter Mappen. Tekstene står igjen. Svarer som `slett`, så knappen kan vise en feil. */
+export async function slettMappeHandling(mappeId: string): Promise<{ slettet: boolean }> {
+  const t = await tilgang();
+  if (!MappeId.safeParse(mappeId).success) return { slettet: false };
+  try {
+    await slettMappe(t, mappeId);
+  } catch {
+    return { slettet: false };
+  }
+  oppdaterMappesider();
+  return { slettet: true };
+}
+
+export async function leggTilIMappe(mappeId: string, _forrige: Handlingssvar, data: FormData): Promise<Handlingssvar> {
+  const t = await tilgang();
+  const tekstId = String(data.get("tekstId") ?? "");
+  if (!MappeId.safeParse(mappeId).success || !MappeId.safeParse(tekstId).success) {
+    return { feil: { melding: "Velg en tekst å legge til.", handling: "Velg en av tekstene dine i listen, og trykk «Legg til»." } };
+  }
+  try {
+    await leggTilTekst(t, mappeId, tekstId);
+  } catch (e) {
+    return mappefeil(e);
+  }
+  oppdaterMappesider(mappeId);
+  return INGEN_FEIL;
+}
+
+export async function fjernFraMappe(mappeId: string, tekstId: string, _forrige: Handlingssvar): Promise<Handlingssvar> {
+  const t = await tilgang();
+  if (!MappeId.safeParse(mappeId).success || !MappeId.safeParse(tekstId).success) {
+    return mappefeil(new IkkeFunnet("Teksten i mappen"));
+  }
+  try {
+    await fjernTekst(t, mappeId, tekstId);
+  } catch (e) {
+    return mappefeil(e);
+  }
+  oppdaterMappesider(mappeId);
+  return INGEN_FEIL;
+}
+
+/**
+ * FR-52: retter og lagrer et forsøk på den samlede quizen, som `leverQuiz`.
+ * Spørsmålene hentes på nytt her med lengden, og rettes mot fasiten i
+ * databasen med `rettQuiz`. Svarene lagres per spørsmål serveren valgte, så
+ * et spørsmål nettleseren ikke sendte, står som ubesvart.
+ */
+export async function leverMappequiz(mappeId: string, lengde: string, svar: unknown): Promise<Leveringssvar> {
+  const t = await tilgang();
+  const l = tolkLengde(lengde);
+  const tolket = MappesvarSkjema.safeParse(svar);
+  if (!l || !tolket.success || !MappeId.safeParse(mappeId).success) {
+    return { feil: { melding: "Svarene kom ikke fram i riktig form.", handling: "Last siden på nytt og prøv igjen." } };
+  }
+  try {
+    const sporsmal = await hentMappequiz(t, mappeId, l);
+    if (sporsmal.length === 0) {
+      return { feil: { melding: "Ingen av tekstene i mappen har quiz.", handling: "Gå tilbake til mappen og lag quizen i en av tekstene." } };
+    }
+    // Er Mappen endret siden quizen ble åpnet, er settet et annet enn eleven
+    // så. Da rettes og lagres ingenting, i stedet for å rette spørsmål hun
+    // ikke har sett.
+    const innsendt = new Set(tolket.data.map((s) => s.sporsmalId));
+    if (innsendt.size !== sporsmal.length || sporsmal.some((s) => !innsendt.has(s.id))) {
+      return { feil: { melding: "Mappen er endret siden du åpnet quizen.", handling: "Last siden på nytt for å få de nye spørsmålene." } };
+    }
+    const fra = new Map(tilElevsvar(tolket.data).map((s) => [s.sporsmalId, s]));
+    const elevsvar = sporsmal.map((s) => fra.get(s.id) ?? { sporsmalId: s.id });
+    const retting = rettQuiz(sporsmal, elevsvar);
+    const forsoekId = await lagreMappeforsoek(t, mappeId, l, elevsvar, retting);
+
+    revalidatePath(`/mappe/${mappeId}/quiz`);
+    return {
+      resultat: {
+        forsoekId,
+        antallRiktige: retting.antallRiktige,
+        antallTotalt: retting.antallTotalt,
+        per: sporsmal.map((s) => ({
+          sporsmalId: s.id,
+          riktig: retting.per.find((p) => p.sporsmalId === s.id)?.riktig ?? false,
+          riktigSvar: s.riktigSvar,
+          kildeavsnitt: s.kildeavsnitt,
+        })),
+      },
+    };
+  } catch (e) {
+    return mappefeil(e);
+  }
+}
+
+/** FR-52 og FR-15: selvvurderingen av et kortsvar i den samlede quizen, som `vurderKortsvar`. */
+export async function vurderMappeKortsvar(
+  mappeId: string,
+  forsoekId: string,
+  sporsmalId: string,
+  riktig: boolean,
+): Promise<Vurderingssvar> {
+  const t = await tilgang();
+  const tolket = VurderingSkjema.safeParse({ forsoekId, sporsmalId, riktig });
+  if (!tolket.success || !MappeId.safeParse(mappeId).success) {
+    return { feil: { melding: "Avkrysningen kom ikke fram i riktig form.", handling: "Last siden på nytt og prøv igjen." } };
+  }
+  try {
+    const retting = await oppdaterMappeSelvvurdering(t, mappeId, forsoekId, sporsmalId, riktig);
+    revalidatePath(`/mappe/${mappeId}/quiz`);
+    return { antallRiktige: retting.antallRiktige };
+  } catch (e) {
+    if (e instanceof UgyldigVurdering) {
+      return { feil: { melding: e.message, handling: "Last siden på nytt." } };
+    }
+    if (e instanceof IkkeFunnet) {
+      return { feil: { melding: "Fant ikke forsøket.", handling: "Last siden på nytt og ta quizen igjen." } };
+    }
+    return { feil: { melding: "Avkrysningen ble ikke lagret.", handling: "Prøv igjen." } };
+  }
 }
 
 /* ------------------------------------------------------------------ *

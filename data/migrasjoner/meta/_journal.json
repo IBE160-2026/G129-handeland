@@ -64,6 +64,13 @@
       "when": 1794899840157,
       "tag": "0008_forkunnskap_merking",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795102226131,
+      "tag": "0009_mapper",
+      "breakpoints": true
     }
   ]
 }

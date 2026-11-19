@@ -11,7 +11,10 @@ import Link from "next/link";
 import { type Bunke, type Kontostatus, hentArbeidsbord, nesteSteg, tilstandsord } from "../../data/arbeidsbord";
 import { samtalegrenseNaadd } from "../../data/forbruk";
 import { tilgang } from "../../data/konto";
+import { listMapper, MAPPEGRENSER, type Mapperad } from "../../data/mapper";
 import { filtrerTekster, tolkSortering } from "../../data/tekstliste";
+import { opprettMappeHandling } from "../handlinger";
+import { NyMappeSkjema } from "../komponenter/Mappeskjemaer";
 import { Hentefeil } from "../komponenter/Hentefeil";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "../komponenter/knapper";
 import { SlettTekstKnapp } from "../komponenter/SlettTekstKnapp";
@@ -26,13 +29,19 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
   let alle: Bunke[] | null = null;
   // PRD §6.4: «Neste: Fagsamtale» hoppes over når dagens samtaler er brukt.
   let konto: Kontostatus = {};
+  let mapper: Mapperad[] = [];
   try {
-    [alle, konto] = await Promise.all([
+    [alle, konto, mapper] = await Promise.all([
       hentArbeidsbord(t),
       // Feiler oppslaget, vises listen likevel, som om grensen ikke er nådd.
       samtalegrenseNaadd(t)
         .catch(() => false)
         .then((naadd) => ({ samtalegrenseNaadd: naadd })),
+      // Feiler mappeoppslaget, vises tekstene likevel, uten mapper.
+      listMapper(t).catch((e) => {
+        console.error("Kunne ikke hente mappene til Samlingen:", e);
+        return [];
+      }),
     ]);
   } catch (e) {
     console.error("Kunne ikke hente tekstene til Samlingen:", e);
@@ -59,6 +68,8 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
           </Link>
         )}
       </div>
+
+      {alle !== null && <Mapper mapper={mapper} />}
 
       {alle === null ? (
         <Hentefeil igjen="/samling" />
@@ -134,5 +145,43 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
         </>
       )}
     </main>
+  );
+}
+
+/**
+ * FR-50: Mappene øverst i Samlingen (beslutning 19.11). Hver Mappe er en
+ * lenke med antall Tekster. Er grensen på 20 nådd, står det i stedet for
+ * skjemaet, med hvorfor og hva eleven kan gjøre (§5).
+ */
+function Mapper({ mapper }: { mapper: Mapperad[] }) {
+  return (
+    <section id="mapper" aria-labelledby="mapper-tittel" className="mt-8 rounded-lg border border-kant bg-flate p-5">
+      <h2 id="mapper-tittel" className="text-[1.75rem]">
+        Mappene dine
+      </h2>
+      <p className="mt-1 text-dempet">
+        Samle tekstene til samme prøve, og øv på øvekortene og quizene deres samlet.
+      </p>
+      {mapper.length > 0 && (
+        <ul className="mt-4 divide-y divide-kant border-y border-kant">
+          {mapper.map((m) => (
+            <li key={m.id} className="flex flex-wrap items-baseline justify-between gap-x-4 py-2">
+              <Link href={`/mappe/${m.id}`} className={`inline-flex min-h-11 items-center text-[1.25rem] font-bold [overflow-wrap:anywhere] ${LENKE}`}>
+                {m.tittel}
+              </Link>
+              <span className="text-dempet">{m.antallTekster === 1 ? "1 tekst" : `${m.antallTekster} tekster`}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {mapper.length >= MAPPEGRENSER.mapper ? (
+        <p className="mt-4">
+          Du har {MAPPEGRENSER.mapper} mapper, og det er flest LeseBuddy tar, så Samlingen holder seg oversiktlig.
+          Slett en mappe du ikke bruker lenger, så kan du lage en ny.
+        </p>
+      ) : (
+        <NyMappeSkjema handling={opprettMappeHandling} />
+      )}
+    </section>
   );
 }

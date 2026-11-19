@@ -21,6 +21,10 @@
  *     (fem kort, fokus i dialogen, `inert`, Esc og «Legg sammen» gir fokus
  *     tilbake), og at Tab fra «+ Ny tekst» aldri treffer et usynlig element
  *   - FR-49: Samlingen, tittelen til neste steg, og søk uten treff
+ *   - FR-50 til FR-52: en Mappe lages fra Samlingen, eksempelteksten legges
+ *     til, og mappesiden, de samlede øvekortene og den samlede quizen sjekkes
+ *     med axe på PC, i mørk modus og på telefon (uten sidelengs rulling);
+ *     arbeidsbordet lenker til «Mappene dine»
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlingen og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -780,6 +784,59 @@ try {
   sjekk("menyen markerer Samlingen som aktiv", (await pc.locator("nav a[aria-current=page]").textContent()) === "Samlingen");
   sjekk("innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen", await ingenLandingsmeny(pc));
 
+  /* --- FR-50 til FR-52: Mapper lett ------------------------------------ */
+  // Mappen lages fra Samlingen, teksten legges til, og de tre mappesidene
+  // sjekkes med axe. Ingen generator kalles fra mappesidene.
+  await pc.goto(`${APP}/samling`);
+  sjekk("FR-50: Samlingen har «Mappene dine» øverst", (await pc.locator("#mapper h2", { hasText: "Mappene dine" }).count()) === 1);
+  await pc.fill("#mapper input[name=tittel]", "Naturfag");
+  await pc.click("#mapper button[type=submit]");
+  await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/, { timeout: 60000 });
+  const mappeUrl = pc.url();
+  await axe(pc, "mappe uten tekster");
+  await pc.click("main button:has-text('Legg til')");
+  await pc.locator("main h3 a", { hasText: "EM-bølger" }).waitFor();
+  sjekk("FR-50: teksten ligger i mappen", (await pc.locator("main h3 a", { hasText: "EM-bølger" }).count()) === 1);
+  await axe(pc, "mappe");
+  for (const [navn, url] of [
+    ["mappe: øvekort", `${mappeUrl}/oevekort`],
+    ["mappe: quiz, valg av lengde", `${mappeUrl}/quiz`],
+    ["mappe: quiz, kort", `${mappeUrl}/quiz?lengde=kort`],
+  ]) {
+    await pc.goto(url);
+    await axe(pc, navn);
+  }
+  // FR-51: et kort i mappen bærer sin egen Tekst. Kildeavsnittet lenker dit,
+  // og «Kan» lagres på begrepet, så teksten alene viser kortet som merket.
+  {
+    const tekstSti = tekstUrl.replace(APP, "");
+    await pc.goto(`${mappeUrl}/oevekort`);
+    await pc.locator(".oevekort-flate > button[aria-pressed]").click();
+    await pc.locator("summary", { hasText: "Se hvor det står i teksten" }).click();
+    const kilde = await pc.locator("a", { hasText: "Les avsnittet i teksten" }).getAttribute("href");
+    sjekk("FR-51: kildeavsnittet i mappen lenker til kortets egen tekst", !!kilde && kilde.startsWith(`${tekstSti}/lesing`), kilde ?? "");
+    await pc.locator(".oevekort-merk button", { hasText: /^Kan$/ }).click();
+    const lagret = await pc.getByText(/Kan: 1 ·|Du kan 1 av/).first().waitFor({ timeout: 15000 }).then(
+      () => true,
+      () => false,
+    );
+    await pc.goto(`${tekstUrl}/oevekort`);
+    const iTeksten = (await pc.getByText(/Kan: 1 ·/).count()) === 1;
+    sjekk("FR-51: et kort merket «Kan» i mappen står som merket i teksten", lagret && iTeksten);
+    // Sjekkene av øvekortene lenger ned venter umerkede kort.
+    const pool = new pg.Pool({ connectionString: DB, max: 1 });
+    try {
+      await pool.query(
+        "update begrep set merking = null where begrepssett_id in (select id from begrepssett where tekst_id = $1)",
+        [tekstSti.split("/").pop()],
+      );
+    } finally {
+      await pool.end();
+    }
+  }
+  await pc.goto(`${APP}/`);
+  sjekk("FR-50: arbeidsbordet lenker til «Mappene dine»", (await pc.locator("main a[href='/samling#mapper']", { hasText: "Mappene dine" }).count()) === 1);
+
   /* --- Mørk modus: axe på de samme sidene ----------------------------- */
   const moerkUt = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" })).newPage();
   moerkUt.setDefaultTimeout(120000);
@@ -799,6 +856,9 @@ try {
     ["oppgaver", `${tekstUrl}/oppgaver`],
     ["øvekort", `${tekstUrl}/oevekort`],
     ["minnevers", `${tekstUrl}/minnevers`],
+    ["mappe", mappeUrl],
+    ["mappe: øvekort", `${mappeUrl}/oevekort`],
+    ["mappe: quiz", `${mappeUrl}/quiz?lengde=kort`],
     ["konto", `${APP}/konto`],
   ]) {
     await moerk.goto(url);
@@ -1254,6 +1314,9 @@ try {
     ["oppgaver", `${tekstUrl}/oppgaver`],
     ["øvekort", `${tekstUrl}/oevekort`],
     ["minnevers", `${tekstUrl}/minnevers`],
+    ["mappe", mappeUrl],
+    ["mappe: øvekort", `${mappeUrl}/oevekort`],
+    ["mappe: quiz", `${mappeUrl}/quiz?lengde=kort`],
     ["konto", `${APP}/konto`],
   ]) {
     await tlf.goto(url);
@@ -1597,6 +1660,29 @@ try {
       sjekk("bolk 5, knapp: et nytt trykk mens Buddy tenker, sender ikke en gang til", leverHold.antall === 1, `${leverHold.antall} kall`);
     } finally {
       sjekk("bolk 5: handlingen som ble holdt igjen (rettingen), fikk svar", await leverHold.slipp());
+    }
+  }
+
+  /* --- FR-52: levering av den samlede quizen ------------------------- */
+  // Quizen til eksempelteksten finnes nå. Mappequizen med lengden «Kort»
+  // (2 spørsmål fra den ene teksten) leveres uten svar, og forsøket står
+  // under «Tidligere forsøk» med lengden og antallet.
+  {
+    await pc.goto(`${mappeUrl}/quiz?lengde=kort`);
+    const leverM = pc.locator("button.tenker-knapp", { hasText: "Lever" });
+    const fant = await leverM.waitFor({ timeout: 60000 }).then(
+      () => true,
+      () => false,
+    );
+    const antallSp = await pc.locator("main ol > li").count();
+    sjekk("FR-52: mappequizen «Kort» har 2 spørsmål og «Lever»", fant && antallSp === 2, `${antallSp} spørsmål`);
+    if (fant) {
+      await leverM.click();
+      await pc.locator("main [role=status]", { hasText: /Du fikk 0 av 2 riktige/ }).waitFor({ timeout: 60000 });
+      await axe(pc, "mappe: quiz, levert");
+      await pc.goto(`${mappeUrl}/quiz`);
+      const rad = pc.locator("main li", { hasText: "Kort" }).filter({ hasText: "0 av 2 riktige" });
+      sjekk("FR-52: forsøket står under «Tidligere forsøk» med lengden og antallet", (await rad.count()) === 1);
     }
   }
 

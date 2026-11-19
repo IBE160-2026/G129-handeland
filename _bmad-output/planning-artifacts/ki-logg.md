@@ -468,9 +468,27 @@ I gjennomgangen oppdaget jeg noe som ikke stemte helt overens, og ønsket å dr�
 
 ---
 
-## Status mot FR-38, per 11. november
+## 2026-11-19 — ENDRET: Mapper tatt inn igjen, i en lett variant (B)
 
-Tjuefire oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
+**Verktøy:** Claude Code (Claude Opus 5.5), BMAD (bmad-build), med en underagent til implementeringen.
+
+**Hva jeg ba om:** å vurdere om Mapper kunne tas inn før kodefrys 27. november, og hvilke varianter som fantes. Claude la fram varianter med ulik pris; jeg valgte variant B, «Mapper lett».
+
+**Hva som kom tilbake:** en spesifikasjon (`_bmad-output/implementation-artifacts/spec-mapper-lett.md`) der Mappen bare gjenbruker det Tekstene alt har lagret: alle Øvekortene samlet, og en samlet Quiz av spørsmålene Tekstene har. Ingen samlet Fagsamtale, ingen ny generering. Tre spørsmål jeg måtte avgjøre: quizlengden (eleven velger Kort, Middels eller Alle, med et fast utvalg per lengde), om en Tekst kan ligge i flere Mapper (ja), og hvor Mappene står (øverst i Samlingen, med en lenke fra Arbeidsbordet, uten å endre de fem bunkene).
+
+**Hva jeg gjorde:** Beslutningen om Mapper er dermed snudd for andre gang. 25. september forkastet jeg rådet om å kutte Mapper (oppføring 3), 27. september kuttet jeg den likevel for å gi plass til bildeinnlesing (oppføring 5), og nå er den tatt inn igjen — men ikke i den formen som ble kuttet. Den fulle varianten med samlet Fagsamtale er fortsatt ute, og FR-32 til FR-34 gjenbrukes ikke. Den lette varianten fikk nye krav, FR-50 til FR-52 i PRD §4.9.
+
+**Begrunnelse:** Bildeinnlesingen, som Mapper ble kuttet for, er bygget, og M1 er levert, så avveiningen fra 27. september holder fortsatt: den eksistensielle funksjonen kom først. Variant B koster lite fordi den ikke gjør det som gjorde Mapper dyr. **Ingen ny måling trengs:** hvert øvekort er et Begrep fra et Begrepssett som alt er målt mot Gullsettet (FR-8), og hvert quizspørsmål er et spørsmål som alt er målt (FR-14), med sitt eget Kildeavsnitt. Mappen setter dem sammen, men lager ingenting, så det finnes ingen ny KI-utdata å måle. Innvendingen fra den adversariske gjennomgangen 25. september — at samlet fagsamtale krever forankring på tvers av tekster og et nytt testsett — gjelder fortsatt, og derfor er samlet Fagsamtale ute.
+
+**Konsekvens:** PRD §4.9, ordlisten, §8.1, §8.2, §9.3 og merknaden om briefens mappekriterium er skrevet om. Briefens kriterium «flere tekster samlet i en mappe med én felles quiz» er innfridd i den lette formen; den felles fagsamtalen er det ikke. Det er en ny funksjon i slakken, det SM-C2 advarer mot, og det står åpent i §9.3.
+
+**Spor:** `spec-mapper-lett.md` · PRD §4.9 (FR-50, FR-51, FR-52) · `data/mapper.ts`, `data/mapper.test.ts`, migrasjon `0009_mapper` · oppføring 3 og 5
+
+---
+
+## Status mot FR-38, per 19. november
+
+Tjuefem oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke godtatt uten uavhengig kontroll, eller der et funn om verktøyet eller om metoden kom ut av arbeidet:
 
 | # | Oppføring | Type |
 |---|---|---|
@@ -498,10 +516,11 @@ Tjuefire oppføringer der KI-forslaget ble forkastet, vesentlig endret, ikke god
 | 22 | Utrulling uten å si hva som fulgte med | Feil gjort av KI; arbeidsmåten endret etterpå |
 | 23 | Egen vurdering endret etter samtale med KI | Menneskelig vurdering påvirket av KI-argument |
 | 24 | AD-6 som byggtest | Avvik mellom arkitektur og kode, rettet utover kravet |
+| 25 | Mapper tatt inn igjen, i en lett variant | Egen beslutning snudd for andre gang; KI-forslaget avgrenset slik at ingen ny måling trengs |
 
 Minimumskravet på fem ble innfridd alt i planleggingsfasen (1–9). Implementasjonsfasen (10–15) har gitt en annen type oppføringer: færre forkastede råd, flere feil i KI-utdata som bare viste seg når jeg testet selv (12, 14), og én avgjørelse om å stoppe et arbeid som ikke ble bedre (15). Feil og svakheter i KI-generert kode føres for seg i [`kodefunn.md`](kodefunn.md), som har 22 funn per 26. oktober; FR-41 krever minst tre.
 
-**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 5 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt.
+**Et mønster verdt å skrive om i refleksjonsrapporten.** Oppføring 3 og 5 hører sammen: først forkastet jeg et råd om å kutte Mapper, og to dager senere kuttet jeg den likevel. Den forrige avgjørelsen var ikke feil da den ble tatt — den bygget på det jeg visste. Det som endret seg var at et tilgangsproblem kom fram som ingen av oss hadde vurdert. Det illustrerer noe om hvordan KI-assistert planlegging faktisk virker: modellen kan holde et dokument internt konsistent, men den vet bare det jeg har fortalt den, og de dyreste feilene ligger i det ingen har nevnt. Oppføring 25 føyer seg til: 19. november kom Mapper inn igjen, men i en lett variant uten samlet fagsamtale, så innvendingen fra 25. september fortsatt gjelder for det som står ute.
 
 ---
 
