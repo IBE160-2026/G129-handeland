@@ -267,6 +267,7 @@ describe("begrensning av innloggingsforsøk", () => {
       begrensForsoek: true,
     });
     const ip = "192.0.2.44";
+    await db.delete(skjema.rateLimit);
     await begrenset.handler(
       new Request(`${BASE}/api/auth/sign-in/email`, {
         method: "POST",
@@ -275,12 +276,42 @@ describe("begrensning av innloggingsforsøk", () => {
       }),
     );
     const rader = await db.select().from(skjema.rateLimit);
-    expect(rader.length).toBeGreaterThan(0);
-    for (const r of rader) {
-      expect(r.key).not.toContain(ip);
-      expect(r.key).not.toContain("198.51.100.9");
-      expect(r.key).toMatch(/^[0-9a-f]{64}$/);
-    }
+    expect(rader).toHaveLength(1);
+    expect(rader[0].key).not.toContain(ip);
+    expect(rader[0].key).toMatch(/^[0-9a-f]{64}$/);
+    // Better Auth lager nøkkelen som `<ip>|<sti>`; det er den, hashet, som lagres.
+    expect(rader[0].key).toBe(hashTellernoekkel(`${ip}|/sign-in/email`, "x".repeat(32)));
+  });
+
+  test("etter tidsvinduet slipper telleren gjennom igjen, og starter på 1", async () => {
+    const begrenset = lagAuth(db, {
+      secret: "x".repeat(32),
+      baseURL: BASE,
+      begrensForsoek: true,
+    });
+    const ip = "198.51.100.30";
+    const forsoek = () =>
+      begrenset.handler(
+        new Request(`${BASE}/api/auth/sign-in/email`, {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: BASE, "x-forwarded-for": ip },
+          body: JSON.stringify({ email: "ingen@test.no", password: "feil-passord-xx" }),
+        }),
+      );
+    const statuser: number[] = [];
+    for (let i = 0; i < 5; i++) statuser.push((await forsoek()).status);
+    expect(statuser).toContain(429);
+
+    // Flytt forrige forsøk tilbake forbi vinduet (10 s for innlogging).
+    const key = hashTellernoekkel(`${ip}|/sign-in/email`, "x".repeat(32));
+    await db
+      .update(skjema.rateLimit)
+      .set({ lastRequest: Date.now() - 60_000 })
+      .where(eq(skjema.rateLimit.key, key));
+
+    expect((await forsoek()).status).not.toBe(429);
+    const [rad] = await db.select().from(skjema.rateLimit).where(eq(skjema.rateLimit.key, key));
+    expect(rad.count).toBe(1);
   });
 
   test("samme adresse gir samme nøkkel, en annen adresse en annen", () => {

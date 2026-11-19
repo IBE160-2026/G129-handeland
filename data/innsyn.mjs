@@ -3,7 +3,9 @@
  * å få en kopi i «Vilkår og personvern»).
  *
  *   node data/innsyn.mjs <e-post>              skriver innsyn-<dato>.json
- *   node data/innsyn.mjs <e-post> --ut fil.json
+ *   node data/innsyn.mjs <e-post> --ut innsyn-kopi.json
+ *
+ * Bruk et filnavn som begynner med `innsyn-`, så `.gitignore` dekker det.
  *
  * Leser `.env.local` som data/migrer-https.mjs, og peker derfor som regel mot
  * produksjonsdatabasen. **Bare lesing:** skriptet kjører ingen INSERT,
@@ -90,7 +92,12 @@ export async function samleInnsyn(sporring, epost) {
   };
 
   // Følg fremmednøklene nedover til ingen nye rader dukker opp.
-  for (let runde = 0; runde < 20; runde++) {
+  const MAKS_RUNDER = 20;
+  for (let runde = 0; ; runde++) {
+    if (runde === MAKS_RUNDER) {
+      // Aldri en eksport som later som den er komplett.
+      throw new Error(`Innsynet ble ikke ferdig etter ${MAKS_RUNDER} runder; eksporten ville vært ufullstendig.`);
+    }
     let nye = 0;
     for (const k of kanter) {
       const foreldre = funnet.get(k.forelder);
@@ -135,9 +142,9 @@ async function hovedprogram() {
   const args = process.argv.slice(2);
   const utIndeks = args.indexOf("--ut");
   const utfil = utIndeks >= 0 ? args[utIndeks + 1] : undefined;
-  const epost = args.find((a, i) => !a.startsWith("--") && i !== utIndeks + 1);
+  const epost = args.find((a, i) => !a.startsWith("--") && !(utIndeks >= 0 && i === utIndeks + 1));
   if (!epost) {
-    console.error("Bruk: node data/innsyn.mjs <e-post> [--ut fil.json]");
+    console.error("Bruk: node data/innsyn.mjs <e-post> [--ut innsyn-kopi.json]");
     process.exit(2);
   }
 
@@ -178,7 +185,8 @@ async function hovedprogram() {
     process.exit(1);
   }
   const fil = utfil ?? `innsyn-${new Date().toISOString().slice(0, 10)}.json`;
-  await writeFile(fil, JSON.stringify(innsyn, null, 2) + "\n", "utf8");
+  // Bare eieren kan lese fila: den inneholder elevens tekster.
+  await writeFile(fil, JSON.stringify(innsyn, null, 2) + "\n", { encoding: "utf8", mode: 0o600 });
   const antall = Object.values(innsyn.tabeller).reduce((n, r) => n + r.length, 0);
   console.log(`Vert: ${new URL(url).hostname}`);
   console.log(`${antall} rader fra ${Object.keys(innsyn.tabeller).length} tabeller skrevet til ${path.resolve(fil)}`);

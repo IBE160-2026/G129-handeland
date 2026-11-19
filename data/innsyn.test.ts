@@ -11,6 +11,9 @@ import { migrate } from "drizzle-orm/pglite/migrator";
 import { eq } from "drizzle-orm";
 import { beforeAll, describe, expect, test } from "vitest";
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import * as skjema from "./skjema";
 import { ALDER_HEADER, INVITASJONSKODE_HEADER, VILKAAR_HEADER, VILKAARSVERSJON, lagAuth } from "./auth";
 import { samleInnsyn } from "./innsyn.mjs";
@@ -135,5 +138,33 @@ describe("innsyn — FR-53", () => {
     const ut = spawnSync(process.execPath, ["data/innsyn.mjs"], { encoding: "utf8" });
     expect(ut.status).not.toBe(0);
     expect(ut.stderr).toContain("Bruk: node data/innsyn.mjs");
+  });
+
+  /** Skriptet med e-post, uten database: i en tom mappe uten .env.local. */
+  function kjoerUtenDatabase(args: string[]) {
+    const mappe = mkdtempSync(path.join(tmpdir(), "innsyn-"));
+    try {
+      return spawnSync(process.execPath, [path.resolve("data/innsyn.mjs"), ...args], {
+        encoding: "utf8",
+        cwd: mappe,
+        env: { ...process.env, DATABASE_URL: "", DATABASE_URL_UNPOOLED: "" },
+      });
+    } finally {
+      rmSync(mappe, { recursive: true, force: true });
+    }
+  }
+
+  test("skriptet med e-post leser e-posten og går videre til databasen", () => {
+    const ut = kjoerUtenDatabase(["elev@innsyn.no"]);
+    expect(ut.status).not.toBe(0);
+    expect(ut.stderr).toContain("Fant ingen DATABASE_URL");
+    expect(ut.stderr).not.toContain("Bruk:");
+  });
+
+  test("skriptet med --ut etter e-posten leser også e-posten", () => {
+    const ut = kjoerUtenDatabase(["elev@innsyn.no", "--ut", "innsyn-kopi.json"]);
+    expect(ut.status).not.toBe(0);
+    expect(ut.stderr).toContain("Fant ingen DATABASE_URL");
+    expect(ut.stderr).not.toContain("Bruk:");
   });
 });

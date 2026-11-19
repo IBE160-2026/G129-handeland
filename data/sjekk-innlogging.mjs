@@ -106,6 +106,13 @@ const FEIL = [
     fra: "if (sist === naa) {",
     til: "if (sist === naa || true) {",
   },
+  {
+    regel: "Etter tidsvinduet slipper telleren gjennom igjen",
+    fil: "data/auth.ts",
+    // Fjerner begge utløpsgrenene i telleren: et gammelt forsøk teller som nytt.
+    fra: "const utloept = sql`${rl.lastRequest} <= ${vinduStart}`;",
+    til: "const utloept = sql`false`;",
+  },
 ];
 
 /* ------------------------------------------------------------------ */

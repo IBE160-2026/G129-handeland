@@ -20,8 +20,8 @@ Gjennomgangen består nå av tre deler:
 1. **To punkter gjort for hånd** (under), for å forstå metoden: jeg brøt en
    regel i koden, kjørte testene, og så at de oppdaget det.
 2. **Resten av den samme metoden gjort av et skript**, `npm run sjekk:innlogging`
-   (`data/sjekk-innlogging.mjs`). Det bryter tolv regler (sju fra 15.10, fem
-   lagt til 19.11 for vilkårene og telleren) én om gangen og sjekker
+   (`data/sjekk-innlogging.mjs`). Det bryter tretten regler (sju fra 15.10, seks
+   lagt til 19.–20.11 for vilkårene og telleren) én om gangen og sjekker
    at testene oppdager hver av dem. Rapporten ligger i `maaling/resultater/`.
    Skriptet kan kjøres om av hvem som helst, også sensor.
 3. **Tre tester i appen** som jeg gjør selv, uten å røre koden: jeg prøver
@@ -93,6 +93,7 @@ Kjørt 19.11.2026: **12 av 12 brudd ble oppdaget av testene.** Full tabell i
 | 10 | Ingen konto uten bekreftelse: begge lagres i samme transaksjon | 13 tester |
 | 11 | IP-adressen lagres ikke i klartekst i telleren for innloggingsforsøk | 1 test |
 | 12 | Begrensningen av innloggingsforsøk virker med hashet nøkkel | 2 tester |
+| 13 | Etter tidsvinduet slipper telleren gjennom igjen *(lagt til 20.11 etter gjennomgang; sjekket enkeltvis, ikke med i kjøringen 19.11)* | 1 test |
 
 Nr. 1–7 ble oppdaget som før; nr. 2 fanges nå av ni tester, fordi stien også
 styrer vilkårssjekken. Nr. 10 er bredt fanget fordi registreringen nekter å
@@ -139,7 +140,7 @@ kopi. Slik svares det:
 ```bash
 npx vercel env pull .env.local          # hvis .env.local ikke peker mot Neon
 node data/innsyn.mjs elev@eksempel.no   # skriver innsyn-<dato>.json
-node data/innsyn.mjs elev@eksempel.no --ut kopi.json
+node data/innsyn.mjs elev@eksempel.no --ut innsyn-kopi.json
 ```
 
 Skriptet leser bare (spørringene går i `READ ONLY`-transaksjoner), og henter

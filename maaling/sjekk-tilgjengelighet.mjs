@@ -358,6 +358,13 @@ try {
   );
   await axe(pc, "arbeidsbord (tomt)");
 
+  // FR-53: kontosiden lenker til «Vilkår og personvern».
+  await pc.goto(`${APP}/konto`);
+  sjekk(
+    "FR-53: kontosiden lenker til «Vilkår og personvern»",
+    (await pc.locator("main a[href='/vilkaar']", { hasText: "Vilkår og personvern" }).count()) === 1,
+  );
+
   // Hopp-lenken skal være det første Tab treffer etter en sidelasting.
   await pc.goto(`${APP}/`);
   await pc.keyboard.press("Tab");
