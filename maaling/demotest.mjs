@@ -5,7 +5,7 @@
  *   npm run demotest -- 1       én kjøring
  *
  * «Et nivå er ferdig når demoløypen kjører gjennom på en tom database, tre
- * ganger etter hverandre, uten inngrep fra utvikleren.» De 14 stegene står i
+ * ganger etter hverandre, uten inngrep fra utvikleren.» De 14 stegene (pluss 13b, Mapper, fra 19.11) står i
  * §9.5 og er gjengitt i rapporten. Hvert steg er en sjekk her.
  *
  * Testmodus `fyll`: et lagret modellsvar brukes når det finnes; ellers kalles
@@ -477,12 +477,69 @@ async function enKjoering(nettleser) {
     (await pc.locator("[role=note]", { hasText: "hender det at Buddy leser feil" }).filter({ hasText: "Rett det som er feil før du går videre." }).count()) === 1,
   );
 
-  // Steg 14: slett tekst A (i Samlingen), logg ut.
+  const bildetekstId = pc.url().split("/")[4];
+  const tekstAId = tekstUrl.split("/").pop();
+
+  // Steg 13b (FR-50–52, lagt til 19.11): Mapper lett. Tekst A (fra PC, med
+  // quiz og øvekort) og bildeteksten (ikke låst) legges i en Mappe. Mappen
+  // lager ingenting, så steget koster ingen modellkall.
+  await pc.goto(`${APP}/samling`);
+  await pc.fill("#mapper input[name=tittel]", "Prøve");
+  await pc.click('#mapper button:has-text("Lag mappe")');
+  await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/);
+  const mappeUrl = pc.url();
+  const mappeId = mappeUrl.split("/").pop();
+  for (const id of [tekstAId, bildetekstId]) {
+    await pc.selectOption("main select[name=tekstId]", id);
+    await pc.click("main button:has-text('Legg til')");
+    await pc.locator(`main h3 a[href^="/tekst/${id}/"]`).waitFor({ timeout: 15000 });
+  }
+  sjekk("13b", "mappen har tekst A og bildeteksten", (await pc.locator("main h3 a[href^='/tekst/']").count()) === 2);
+  const bildeRad = pc.locator("main li", { has: pc.locator(`h3 a[href^="/tekst/${bildetekstId}/"]`) });
+  sjekk(
+    "13b",
+    "bildeteksten står med hva den mangler, og lenke til teksten — mappen lager ingenting selv",
+    (await bildeRad.locator("text=Ikke lest ferdig ennå").count()) > 0 &&
+      (await bildeRad.locator(`a[href="/tekst/${bildetekstId}/aktivering"]`).count()) > 0,
+  );
+
+  // Samlet øving: kortet viser hvilken tekst det er fra, og merkingen lagres på tekst A.
+  await pc.goto(`${mappeUrl}/oevekort`);
+  sjekk("13b", "mappekortet viser hvilken tekst det er fra", (await pc.locator("text=Fra «EM-bølger»").count()) > 0);
+  await pc.click('button:has-text("Trykk for å snu")');
+  await pc.getByRole("button", { name: "Kan", exact: true }).click();
+  await pc.waitForTimeout(1500);
+  await pc.goto(`${tekstUrl}/oppgaver`);
+  sjekk("13b", "kort merket i mappen står merket i tekst A (kan 2 · må øve 1)", (await pc.locator("text=/kan 2 · må øve 1/").count()) > 0);
+
+  // Samlet quiz, lengde Middels: 4 av tekst A sine 8 spørsmål.
+  await pc.goto(`${mappeUrl}/quiz`);
+  await pc.click(`a[href="/mappe/${mappeId}/quiz?lengde=middels"]`);
+  await pc.waitForSelector("ol fieldset");
+  const antallSp = await pc.locator("ol > li fieldset").count();
+  sjekk("13b", "samlet quiz «Middels» har 4 spørsmål fra tekst A", antallSp === 4, `${antallSp} spørsmål`);
+  for (const f of await pc.locator("ol > li fieldset").all()) {
+    const radio = f.locator("input[type=radio]");
+    if (await radio.count()) await radio.first().check();
+    const t = f.locator("textarea");
+    if (await t.count()) await t.fill("Det har med frekvens å gjøre.");
+  }
+  await pc.click('button:has-text("Lever")');
+  await pc.waitForSelector("text=/Du fikk \\d+ av 4 riktige/", { timeout: 30000 });
+  sjekk("13b", "samlet quiz levert og rettet", true, (await pc.locator("text=/Du fikk/").first().textContent())?.trim());
+  await pc.goto(`${mappeUrl}/quiz`);
+  sjekk(
+    "13b",
+    "forsøket står under «Tidligere forsøk» med lengden",
+    (await pc.locator("main li", { hasText: "Middels" }).filter({ hasText: /av 4 riktige/ }).count()) === 1,
+  );
+
+  // Steg 14: slett tekst A (i Samlingen), logg ut. Tekst A er PC-teksten fra
+  // steg 2–9, den som ligger i mappen (steg 12 lager en til med samme tittel).
   await pc.goto(`${APP}/samling`);
   const forFoer = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
-  const kort = pc.locator("main li").filter({ hasText: "EM-bølger" }).first();
-  // Tittelen lenker til neste steg under /tekst/<id>/, så id-en finnes i lenken.
-  const slettetId = (await kort.locator("h2 a").getAttribute("href")).split("/")[2];
+  const kort = pc.locator("main li", { has: pc.locator(`h2 a[href^="/tekst/${tekstAId}/"]`) }).first();
+  const slettetId = tekstAId;
   await kort.locator('button:has-text("Slett")').click();
   await pc.click('[role=alertdialog] button:has-text("Slett for godt")');
   await pc.waitForURL(/\/samling$/);
@@ -491,6 +548,15 @@ async function enKjoering(nettleser) {
   const etter = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
   sjekk("14", "testtekst A slettet", etter === forFoer - 1, `${forFoer} → ${etter} tekster`);
   sjekk("14", "raden er borte fra Samlingen", (await raden.count()) === 0);
+  // FR-50/FR-37: tekst A forsvinner fra mappen, og forsøket står med sitt antall.
+  const iMappen = (await sql(`SELECT count(*)::int AS n FROM mappe_tekst WHERE mappe_id = $1`, [mappeId]))[0].n;
+  const forsoekEtter = await sql(`SELECT antall_totalt FROM mappeforsoek WHERE mappe_id = $1`, [mappeId]);
+  sjekk(
+    "14",
+    "tekst A er borte fra mappen, og det samlede forsøket står med sitt antall",
+    iMappen === 1 && forsoekEtter.length === 1 && forsoekEtter[0].antall_totalt === 4,
+    `${iMappen} tekst(er) i mappen, ${forsoekEtter.length} forsøk`,
+  );
   // Et temavalg på en delt PC skal ikke arves av neste elev (bolk 4).
   // Det samme gjelder «Venstrehendt» (design bolk 9).
   await pc.context().addCookies([
