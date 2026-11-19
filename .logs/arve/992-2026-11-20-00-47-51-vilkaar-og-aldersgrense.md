@@ -25,3 +25,22 @@ Avkrysning for «jeg har lest vilkårene» og aldersgrense ved registrering. Arv
 - Etter utrulling: gjør del 3-test C (feil passord på rad) i prod på nytt, siden telleren er byttet.
 - Fyll ut «Hva jeg tenker om resultatet» i den nye delen av gjennomgang-innlogging.md.
 - Les KI-logg nr. 26 (skrevet av agenten med dine ord fra vilkårsteksten).
+
+## 2026-11-20 kl. 00:54 — Arve
+
+### Oppgave
+Rull ut vilkår og aldersgrense.
+
+### Plan
+- List endringer siden forrige utrulling, Neon-migrering 0010 før koden, spol main fram, vercel --prod, røyktest.
+
+### Resultat
+- Med fulgte: 0df9ec4, 927813e, dcb6f99 (kode) pluss spesifikasjon, dokumentasjon og logg. I prod før: Mapper (a15fada).
+- Neon: 0010_vilkaar kjørt (11 av 11, «à jour»); `rate_limit` tømt av migrasjonen.
+- main spolt fram til dddbfea og pushet; vercel --prod → lesevenn-7b0d6s290 (Ready, alias lesevenn.vercel.app).
+- Røyktest: /, /vilkaar og /registrer svarer 200, /samling sender til /logg-inn. /vilkaar har «Sist endret 20. november 2026» og den nye IP-setningen; /registrer har avkrysningen for 15 år.
+- Ikke testet i prod: en faktisk registrering (ville laget en ekte konto) og serversperren uten avkrysning.
+- Reserve: `vercel rollback`. 0010 er bare et tillegg; gammel kode tåler tabellen.
+
+### Åpne punkter
+- Registrer en ny testkonto i prod (på telefon), og prøv feil passord flere ganger på rad (del 3-test C).
