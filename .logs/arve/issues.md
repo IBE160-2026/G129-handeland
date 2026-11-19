@@ -60,3 +60,7 @@
 - [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Les og rett KI-logg nr. 25 (skrevet i din stemme av agenten), og vurder å føre inn hva du selv kontrollerte
 - [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Avgjør om Mapper skal ha egen suksessmetrikk eller et steg i demotesten (§9.5) (løst 2026-11-19: steg 13b og SM-13)
 - [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Test mappene på telefon i prod
+- [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Rull ut grenen vilkaar: Neon-migrering 0010 før koden, merge og vercel --prod (krever ja)
+- [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Etter utrulling: del 3-test C (feil passord på rad) i prod på nytt
+- [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Fyll ut «Hva jeg tenker om resultatet» i gjennomgang-innlogging.md
+- [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Les KI-logg nr. 26
