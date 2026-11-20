@@ -3,7 +3,8 @@
  * variant A i mockups/runde-11-buddy-og-pennestrok.html).
  *
  * En rosa tusj bak den nederste delen av ordet, med ujevne ender og litt bølge.
- * Brukes på «leser» på landingssiden og på tekstnavnet i sidetitlene («Quiz:
+ * Brukes på «leser» på landingssiden, på «Samlingen» i Samlingens overskrift,
+ * og på tekst- og mappenavnet i sidetitlene («Quiz:
  * Bedrift» får strøk bare under «Bedrift»). Aldri på lenker eller knapper: der
  * kan den forveksles med en lenkeunderstrek.
  *

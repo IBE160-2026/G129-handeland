@@ -18,6 +18,7 @@ import { NyMappeSkjema } from "../komponenter/Mappeskjemaer";
 import { Hentefeil } from "../komponenter/Hentefeil";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "../komponenter/knapper";
 import { SlettTekstKnapp } from "../komponenter/SlettTekstKnapp";
+import { Tusj } from "../komponenter/Tusj";
 
 const DATO = new Intl.DateTimeFormat("nb-NO", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/Oslo" });
 const FELT = "min-h-11 rounded-md border border-slate-500 bg-flate px-3 dark:border-slate-400";
@@ -57,7 +58,9 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <div className="flex flex-wrap items-end gap-4">
         <div className="min-w-0">
-          <h1>Samlingen</h1>
+          <h1>
+            <Tusj>Samlingen</Tusj>
+          </h1>
           {alle && alle.length > 0 && (
             <p className="mt-1 text-dempet">{alle.length === 1 ? "1 tekst" : `Alle de ${alle.length} tekstene dine`}.</p>
           )}
