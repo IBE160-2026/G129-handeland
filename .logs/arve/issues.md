@@ -64,4 +64,4 @@
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Etter utrulling: del 3-test C (feil passord på rad) i prod på nytt, og registrer en ny testkonto i prod
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Fyll ut «Hva jeg tenker om resultatet» i gjennomgang-innlogging.md
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Les KI-logg nr. 26
-- [ ] 2026-11-20 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen samling-tusj (krever ja)
+- [x] 2026-11-20 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen samling-tusj (krever ja) (rullet ut 2026-11-20, main = 3759cd3)
