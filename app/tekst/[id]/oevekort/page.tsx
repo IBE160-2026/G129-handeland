@@ -26,15 +26,21 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      {/* Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11). */}
+    <main className="mx-auto w-full max-w-2xl px-4 py-10 min-[760px]:max-w-[64rem] min-[760px]:px-8">
+      {/*
+        Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11).
+        Runde 3, bolk 3: bare under 760 px. Fra 760 px står den nederst på siden
+        (se under). Den andre er `display: none`, så bare én er synlig og i
+        tilgjengelighetstreet om gangen. Fra 760 px er siden opptil 1024 px
+        bred med 32 px marg, så kortet blir opptil 960 px.
+      */}
       <header>
-        <p>
+        <p className="min-[760px]:hidden">
           <Link href={`/tekst/${id}/oppgaver`} className={LENKE_TILBAKE}>
             <span aria-hidden="true">←&nbsp;</span>Tilbake til oppgavene
           </Link>
         </p>
-        <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
+        <p className="mt-4 min-[760px]:mt-0 text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
       </header>
 
@@ -59,6 +65,17 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
           </div>
         )}
       </div>
+
+      {/*
+        Runde 3, bolk 3 (avgjort av Arve 23.11): på stor skjerm står
+        tilbakelenken nederst på siden, venstrejustert og 24 px lenger ut mot
+        kanten enn kortet. Den ruller med siden; ingen fast posisjon.
+      */}
+      <p className="mt-10 hidden min-[760px]:-ml-6 min-[760px]:block">
+        <Link href={`/tekst/${id}/oppgaver`} className={LENKE_TILBAKE}>
+          <span aria-hidden="true">←&nbsp;</span>Tilbake til oppgavene
+        </Link>
+      </p>
     </main>
   );
 }

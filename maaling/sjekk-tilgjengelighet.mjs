@@ -990,7 +990,7 @@ try {
   {
     const tekstSti = tekstUrl.replace(APP, "");
     await pc.goto(`${mappeUrl}/oevekort`);
-    await pc.locator(".oevekort-flate > button[aria-pressed]").click();
+    await pc.locator(".oevekort-ramme > button[aria-pressed]").click();
     await pc.locator("summary", { hasText: "Se hvor det står i teksten" }).click();
     const kilde = await pc.locator("a", { hasText: "Les avsnittet i teksten" }).getAttribute("href");
     sjekk("FR-51: kildeavsnittet i mappen lenker til kortets egen tekst", !!kilde && kilde.startsWith(`${tekstSti}/lesing`), kilde ?? "");
@@ -1272,7 +1272,7 @@ try {
   async function oevekortOppsett(side) {
     return side.evaluate(() => {
       const flate = document.querySelector(".oevekort-flate");
-      const kort = flate?.querySelector(":scope > button[aria-pressed]");
+      const kort = flate?.querySelector(".oevekort-ramme > button[aria-pressed]");
       // Navnet skjermleseren hører: aria-label om den finnes (pilknappene), ellers teksten.
       const knapp = (re) => [...(flate?.querySelectorAll("button") ?? [])].find((b) => re.test(b.getAttribute("aria-label") ?? b.textContent.trim()));
       const r = (e) => {
@@ -1351,7 +1351,7 @@ try {
         const e = document.activeElement;
         return e?.getAttribute("aria-label") ?? e?.textContent.trim() ?? "";
       });
-    const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
+    const kortet = side.locator(".oevekort-ramme > button[aria-pressed]");
     if ((await kortet.count()) === 1) {
       await kortet.focus();
       const rekke = [];
@@ -1432,11 +1432,15 @@ try {
       JSON.stringify({ bf, bn }),
     );
     // Tilbakelenken på begge øvekortsidene: én gang, i headeren over overskriften,
-    // minst 44 px høy, og til riktig side.
-    for (const [url, tekst, riktigHref] of [
-      [`${mappeUrl}/oevekort`, "Tilbake til mappen", (h) => h === mappeUrl.replace(APP, "")],
-      [`${tekstUrl}/oevekort`, "Tilbake til oppgavene", (h) => h === `${tekstUrl.replace(APP, "")}/oppgaver`],
-    ]) {
+    // minst 44 px høy, og til riktig side. Det gjelder under 760 px (375 og
+    // 759 px); fra 760 px står den nederst (runde 3, bolk 3, sjekket lenger ned).
+    // Lenken nederst finnes i DOM-en, men er display: none, så den telles ikke
+    // som synlig og er ikke i tilgjengelighetstreet (getByRole).
+    for (const [url, tekst, riktigHref, bredde] of [375, 759].flatMap((b) => [
+      [`${mappeUrl}/oevekort`, "Tilbake til mappen", (h) => h === mappeUrl.replace(APP, ""), b],
+      [`${tekstUrl}/oevekort`, "Tilbake til oppgavene", (h) => h === `${tekstUrl.replace(APP, "")}/oppgaver`, b],
+    ])) {
+      await side.setViewportSize({ width: bredde, height: 800 });
       await side.goto(url);
       await side.locator("main h1").waitFor();
       const tilbake = side.locator("main header a", { hasText: tekst });
@@ -1444,22 +1448,24 @@ try {
       const bt = await boks(tilbake);
       const href = bt ? await tilbake.getAttribute("href") : null;
       sjekk(
-        `bolk 2b: «${tekst}» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til ${tekst === "Tilbake til mappen" ? "mappen" : "oppgavene"}`,
+        `bolk 2b, ${bredde} px: «${tekst}» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til ${tekst === "Tilbake til mappen" ? "mappen" : "oppgavene"}`,
         !!bt &&
           !!h1 &&
           bt.y + bt.height <= h1.y &&
           bt.height >= 44 &&
           !!href &&
           riktigHref(href) &&
-          (await side.locator("main a", { hasText: tekst }).count()) === 1,
+          (await side.locator("main a:visible", { hasText: tekst }).count()) === 1 &&
+          (await side.getByRole("link", { name: tekst }).count()) === 1,
         JSON.stringify({ bt, href }),
       );
     }
+    await side.setViewportSize({ width: 375, height: 800 });
     await side.locator(".oevekort-flate").waitFor();
     const teller = side.locator("main p", { hasText: /^Kort \d+ av \d+/ }).first();
     const kortnr = async () => Number((await teller.textContent()).match(/Kort (\d+)/)?.[1]);
     const antall = Number((await teller.textContent()).match(/av (\d+)/)?.[1]);
-    const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
+    const kortet = side.locator(".oevekort-ramme > button[aria-pressed]");
     const snudd = async () => (await kortet.getAttribute("aria-pressed")) === "true";
     const slippFokus = () => side.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
     // Fokus på body: ← på første gjør ingenting, mellomrom snur, → går videre med forsiden opp, ← tilbake.
@@ -1525,6 +1531,161 @@ try {
         funnet.ferdig,
       JSON.stringify({ start, antall, ...funnet }),
     );
+    await ctx.close();
+  }
+  // Runde 3, bolk 3: øvekortene på stor skjerm. Fra 760 px står «Må øve mer»
+  // og «Har kontroll» nederst inne i rammen rundt kortet, side om side (byttet
+  // om med «Venstrehendt»), kortet er opptil 960 px bredt, og tilbakelenken
+  // står nederst til venstre, utenfor kortkanten. 759 px er sjekket som 2b over.
+  /** Plasseringen av rammen, kortet, merkeknappene, pilene og tilbakelenkene. */
+  async function stortOppsett(side) {
+    return side.evaluate(() => {
+      const r = (e) => {
+        if (!e || e.getClientRects().length === 0) return null;
+        const b = e.getBoundingClientRect();
+        return { v: Math.round(b.left), h: Math.round(b.right), t: Math.round(b.top), b: Math.round(b.bottom), w: Math.round(b.width), hoeyde: Math.round(b.height) };
+      };
+      const ramme = document.querySelector(".oevekort-ramme");
+      const kort = ramme?.querySelector(":scope > button[aria-pressed]");
+      const knapp = (re) => [...(ramme?.querySelectorAll(".oevekort-merk button") ?? [])].find((b) => re.test(b.textContent.trim()));
+      const lenker = [...document.querySelectorAll("main a")].filter((a) => /^Tilbake til/.test(a.textContent.replace(/^←\s*/, "").trim()));
+      const synlige = lenker.filter((a) => a.getClientRects().length > 0);
+      return {
+        hand: document.documentElement.dataset.hand ?? null,
+        ramme: r(ramme),
+        rammeVisning: ramme ? getComputedStyle(ramme).display : null,
+        kortKant: kort ? getComputedStyle(kort).borderTopWidth : null,
+        kort: r(kort),
+        maa: r(knapp(/^Må øve mer$/)),
+        kan: r(knapp(/^Har kontroll$/)),
+        nav: r(document.querySelector(".oevekort-nav")),
+        synlige: synlige.length,
+        iHeader: synlige.filter((a) => a.closest("header")).length,
+        lenke: r(synlige[0]),
+        href: synlige[0]?.getAttribute("href") ?? null,
+      };
+    });
+  }
+  function stortRiktig(o, venstre, { bredt, kanBryte }) {
+    const { ramme, kort, maa, kan, nav, lenke } = o;
+    if (!ramme || !kort || !maa || !kan || !nav || !lenke) return false;
+    // I rammen og under kortflaten.
+    const inne = (k) => k.v >= ramme.v && k.h <= ramme.h && k.t >= kort.b - 1 && k.b <= ramme.b;
+    const enRad = Math.abs(maa.t - kan.t) <= 1;
+    // «Må øve mer» til venstre og «Har kontroll» til høyre, byttet om med «Venstrehendt», hver mot sin kant.
+    const [vk, hk] = venstre ? [kan, maa] : [maa, kan];
+    const sideOmSide = vk.h <= hk.v && vk.v - ramme.v <= 30 && ramme.h - hk.h <= 30;
+    return (
+      o.rammeVisning === "flex" &&
+      o.kortKant === "0px" && // kortknappen har ingen egen ramme
+      inne(maa) &&
+      inne(kan) &&
+      (enRad ? sideOmSide : kanBryte && maa.b <= kan.t) && // to rader bare med stor tekst
+      [maa, kan].every((k) => k.w >= 44 && k.hoeyde >= 44) &&
+      Math.abs(kort.v - ramme.v) <= 2 && Math.abs(kort.h - ramme.h) <= 2 && // kortflaten fyller rammen i bredden
+      (!bredt || (ramme.w >= 940 && ramme.w <= 980)) && // om lag 960 px
+      nav.t >= ramme.b &&
+      o.synlige === 1 &&
+      o.iHeader === 0 &&
+      lenke.v < ramme.v && // lenger ut mot kanten enn kortet
+      lenke.t >= nav.b && // nederst på siden
+      lenke.hoeyde >= 44 &&
+      o.hand === (venstre ? "venstre" : null)
+    );
+  }
+  for (const [bredde, venstre, farge, stor] of [
+    [1280, false, "light", false],
+    [1280, false, "dark", false],
+    [1280, true, "light", false],
+    [1280, true, "dark", false],
+    [760, false, "light", false],
+    [760, false, "light", true],
+    [760, true, "light", true],
+  ]) {
+    const navn = `${bredde} px${stor ? ", 200 % tekst" : ""}, ${venstre ? "venstrehendt" : "høyrehendt"}, ${farge === "dark" ? "mørk" : "lys"}`;
+    const ctx = await nettleser.newContext({ viewport: { width: bredde, height: 900 }, locale: "nb-NO", colorScheme: farge });
+    await ctx.addCookies([...(await pc.context().cookies()), ...(venstre ? [handKake("venstre")] : [])]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    for (const [url, tekst, riktigHref] of [
+      [`${tekstUrl}/oevekort`, "Tilbake til oppgavene", `${tekstUrl.replace(APP, "")}/oppgaver`],
+      [`${mappeUrl}/oevekort`, "Tilbake til mappen", mappeUrl.replace(APP, "")],
+    ]) {
+      const iTeksten = tekst === "Tilbake til oppgavene";
+      const hvor = `${navn}, ${iTeksten ? "teksten" : "mappen"}`;
+      await side.goto(url);
+      await side.locator(".oevekort-flate").waitFor();
+      if (stor) await side.addStyleTag({ content: "html { font-size: 200% !important; }" });
+      const o = await stortOppsett(side);
+      sjekk(
+        `bolk 3, ${hvor}: knappene nederst i rammen (${venstre ? "«Har kontroll»" : "«Må øve mer»"} til venstre)${bredde === 1280 ? ", kortet om lag 960 px" : ""}, og «${tekst}» én gang, nederst til venstre utenfor kortkanten, ikke øverst`,
+        stortRiktig(o, venstre, { bredt: bredde === 1280, kanBryte: stor }) &&
+          o.href === riktigHref &&
+          (await side.getByRole("link", { name: tekst }).count()) === 1,
+        JSON.stringify(o),
+      );
+      await ingenSiderulling(side, `øvekort ${hvor}`);
+      if (iTeksten && !stor) {
+        // Klikk i rammen utenfor knappene (nede til venstre, i margen rundt
+        // knappene) snur kortet; et klikk på kortflaten snur det tilbake.
+        const kortet = side.locator(".oevekort-ramme > button[aria-pressed]");
+        const snudd = async () => (await kortet.getAttribute("aria-pressed")) === "true";
+        const foer = await snudd();
+        await side.locator(".oevekort-ramme").click({ position: { x: 8, y: o.ramme.hoeyde - 8 } });
+        const etterRamme = await snudd();
+        await kortet.click({ position: { x: 20, y: 20 } });
+        const etterKort = await snudd();
+        sjekk(
+          `bolk 3, ${hvor}: klikk i rammen utenfor knappene snur kortet, og klikk på kortflaten snur det tilbake`,
+          !foer && etterRamme && !etterKort,
+          JSON.stringify({ foer, etterRamme, etterKort }),
+        );
+        // Feilmeldingen fra merkingen står i rammen rett over knappene. Merkingen
+        // feiler ikke på bestilling, så plasseringen sjekkes med en innsatt
+        // .oevekort-feil der komponenten setter den (sist i rammen).
+        const feil = await side.evaluate(() => {
+          const ramme = document.querySelector(".oevekort-ramme");
+          const d = document.createElement("div");
+          d.className = "oevekort-feil";
+          d.textContent = "Prøvefeil";
+          ramme.append(d);
+          const r = (e) => e.getBoundingClientRect();
+          const [f, k, m, ra] = [r(d), r(ramme.querySelector(":scope > button")), r(ramme.querySelector(".oevekort-merk")), r(ramme)];
+          d.remove();
+          return { iRammen: f.left >= ra.left && f.right <= ra.right && f.bottom <= ra.bottom, underKortet: f.top >= k.bottom - 1, overKnappene: f.bottom <= m.top + 1 };
+        });
+        sjekk(`bolk 3, ${hvor}: feilmeldingen fra merkingen står i rammen, over knappene`, feil.iRammen && feil.underKortet && feil.overKnappene, JSON.stringify(feil));
+        if (bredde === 1280) {
+          // Tab: kortet, «Må øve mer», «Har kontroll», pilene, og så tilbakelenken.
+          // På første kort er «Forrige kort» låst, så det sjekkes på et kort med en før.
+          const nav = side.locator(".oevekort-nav");
+          if (await nav.getByRole("button", { name: "Forrige kort", exact: true }).isDisabled()) {
+            await nav.getByRole("button", { name: "Neste kort", exact: true }).click();
+          }
+          const fokusnavn = () =>
+            side.evaluate(() => {
+              const e = document.activeElement;
+              return (e?.getAttribute("aria-label") ?? e?.textContent ?? "").replace(/^←\s*/, "").trim();
+            });
+          await kortet.focus();
+          const rekke = [];
+          for (let i = 0; i < 5; i++) {
+            await side.keyboard.press("Tab");
+            rekke.push(await fokusnavn());
+          }
+          sjekk(
+            `bolk 3, ${hvor}: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «${tekst}»`,
+            rekke[0] === "Må øve mer" &&
+              rekke[1] === "Har kontroll" &&
+              rekke[2] === "Forrige kort" &&
+              /^(Neste kort|Ferdig)$/.test(rekke[3]) &&
+              rekke[4] === tekst,
+            rekke.join(" | "),
+          );
+        }
+        if (bredde === 1280) await axe(side, `øvekort ${navn}`);
+      }
+    }
     await ctx.close();
   }
   // Skjemaet på /konto: en avkrysningsboks, «Lagre» og informasjonskapselen, med og uten skript.

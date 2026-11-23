@@ -2291,6 +2291,10 @@ button.ls-fagord[aria-expanded="true"] {
   display: flex;
   flex-direction: column;
 }
+/* Under 760 px er rammen usynlig for oppsettet: barna er flex-elementer i .oevekort-flate. */
+.oevekort-ramme {
+  display: contents;
+}
 .oevekort-merk {
   order: -1;
   align-self: flex-end;
@@ -2320,4 +2324,66 @@ button.ls-fagord[aria-expanded="true"] {
 .oevekort-nav > button {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/*
+ * Stor skjerm (runde 3, bolk 3, avgjort av Arve 23.11): fra 760 px er kortet
+ * opptil 960 px bredt (siden, se øvekortsidene), og «Må øve mer» og «Har
+ * kontroll» står nederst inne i kortet, side om side: «Må øve mer» til
+ * venstre, «Har kontroll» til høyre, byttet om med «Venstrehendt».
+ *
+ * Kortet er en knapp og kan ikke inneholde knapper, så «inne i kortet» er
+ * .oevekort-ramme: kant, bakgrunn og skygge rundt kortknappen, feilmeldingen
+ * og merkeknappene. Kortknappen mister sin egen ramme. Rekkefølgen i rammen
+ * er kortet, feilmeldingen, knappene (`order`); DOM-en og Tab er uendret.
+ * Et klikk på rammen utenfor knappene snur kortet (Oevekort.tsx). Med stor
+ * tekst brytes knappene til to rader i rammen.
+ */
+@media (min-width: 760px) {
+  .oevekort-ramme {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.75rem;
+    border: 2px solid var(--color-slate-300);
+    border-radius: var(--radius-lg);
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+    @variant dark {
+      border-color: var(--color-slate-600);
+      background: var(--color-slate-900);
+    }
+  }
+  .oevekort-ramme:hover {
+    border-color: var(--color-slate-500);
+  }
+  .oevekort-ramme > button[aria-pressed] {
+    margin-top: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .oevekort-ramme > .oevekort-feil {
+    order: 1;
+    margin: 0 1.5rem 0.75rem;
+  }
+  .oevekort-ramme > .oevekort-merk {
+    order: 2;
+    align-self: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 1.5rem 1.5rem;
+  }
+  /* align-self også her: regelen for venstrehendt under 760 px (flex-start) er mer spesifikk. */
+  :root[data-hand="venstre"] .oevekort-ramme > .oevekort-merk {
+    align-self: stretch;
+    flex-direction: row-reverse;
+  }
+  /* Like brede, og med stor tekst brytes navnet inne i knappen heller enn å flyte ut. */
+  .oevekort-ramme > .oevekort-merk > button {
+    flex: 0 1 12rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 }

@@ -21,6 +21,11 @@
  * «Venstrehendt»), og pilknappene (← «Forrige kort», → «Neste kort», på siste
  * kort «Ferdig») ved siden av hverandre under. Se .oevekort-flate i
  * globals.css.
+ *
+ * Stor skjerm (runde 3, bolk 3, fra 760 px): kortet, merkeknappene og
+ * feilmeldingen står i én ramme (.oevekort-ramme), og knappene står nederst
+ * i den, side om side. Kortknappen mister da sin egen ramme. Under 760 px er
+ * rammen `display: contents`, så oppsettet er som over.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -197,54 +202,74 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
         forklaringen» — aldri selve fagordet. Funnet av axe-core 16.10.
       */}
       <div className="oevekort-flate">
-        <button
-          ref={kortRef}
-          type="button"
-          onClick={() => setSnudd((s) => !s)}
-          aria-pressed={snudd}
-          className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
-        >
-          <div aria-live="polite">
-            {!snudd ? (
-              <div className="flex min-h-44 flex-col items-center justify-center text-center">
-                {gjeldende.tekst && <p className="mb-3 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
-                <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
-                <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
-              </div>
-            ) : (
-              <div>
-                {gjeldende.tekst && <p className="mb-2 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
-                <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  {gjeldende.uttrykk}
-                </p>
-                <p className="mt-2 text-lg">{gjeldende.forklaring}</p>
-              </div>
-            )}
-          </div>
-        </button>
         {/*
-          Design runde 2, bolk 9: merkeknappene står over hverandre, over kortet
-          til høyre, der tommelen når dem. `data-hand="venstre"` på <html>
-          («Venstrehendt» i Konto) flytter dem til venstre. I DOM-en står de
-          ETTER kortet, så Tab og skjermleseren tar kortet først, så merkingen,
-          så kilden (når kortet er snudd), så pilknappene. Plasseringen
-          over kortet er bare CSS (`order` i .oevekort-flate, globals.css).
-          Feilmeldingen fra merkingen står rett etter knappene, og over kortet
-          sammen med dem, så den havner ved knappen eleven trykket på.
+          Runde 3, bolk 3: rammen rundt kortet, merkeknappene og feilmeldingen.
+          Kortet er en knapp og kan ikke inneholde knapper, så «inne i kortet»
+          er en felles ramme (kant, bakgrunn, skygge) fra 760 px. Et klikk på
+          rammen utenfor knappene og feilmeldingen snur kortet, som et klikk på
+          kortet. Det er bare for mus og trykk: med tastatur er kortknappen den
+          samme som før, og rammen tar aldri fokus. Klikk på en knapp i rammen
+          (også kortet selv) håndteres av knappen.
         */}
-        <div role="group" aria-label="Merk kortet" className="oevekort-merk">
-          <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={knapp(m === "maa_oeve")}>
-            Må øve mer
+        <div
+          className="oevekort-ramme"
+          onClick={(e) => {
+            if ((e.target as Element).closest("button, a, .oevekort-feil")) return;
+            setSnudd((s) => !s);
+          }}
+        >
+          <button
+            ref={kortRef}
+            type="button"
+            onClick={() => setSnudd((s) => !s)}
+            aria-pressed={snudd}
+            className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
+          >
+            <div aria-live="polite">
+              {!snudd ? (
+                <div className="flex min-h-44 flex-col items-center justify-center text-center">
+                  {gjeldende.tekst && <p className="mb-3 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
+                  <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
+                  <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
+                </div>
+              ) : (
+                <div>
+                  {gjeldende.tekst && <p className="mb-2 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
+                  <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    {gjeldende.uttrykk}
+                  </p>
+                  <p className="mt-2 text-lg">{gjeldende.forklaring}</p>
+                </div>
+              )}
+            </div>
           </button>
-          <button type="button" onClick={() => merk("kan")} aria-pressed={m === "kan"} className={knapp(m === "kan")}>
-            Har kontroll
-          </button>
-        </div>
-        {feil && (
-          <div className="oevekort-feil">
-            <Feilmelding {...feil} />
+          {/*
+            Design runde 2, bolk 9: merkeknappene står over hverandre, over kortet
+            til høyre, der tommelen når dem. `data-hand="venstre"` på <html>
+            («Venstrehendt» i Konto) flytter dem til venstre. I DOM-en står de
+            ETTER kortet, så Tab og skjermleseren tar kortet først, så merkingen,
+            så kilden (når kortet er snudd), så pilknappene. Plasseringen
+            over kortet er bare CSS (`order` i .oevekort-flate, globals.css).
+            Feilmeldingen fra merkingen står rett etter knappene, og over kortet
+            sammen med dem, så den havner ved knappen eleven trykket på.
+            Fra 760 px (runde 3, bolk 3) står knappene nederst i rammen, side om
+            side («Må øve mer» til venstre, byttet om med «Venstrehendt»), og
+            feilmeldingen rett over dem. DOM-rekkefølgen er den samme.
+          */}
+          <div role="group" aria-label="Merk kortet" className="oevekort-merk">
+            <button type="button" onClick={() => merk("maa_oeve")} aria-pressed={m === "maa_oeve"} className={knapp(m === "maa_oeve")}>
+              Må øve mer
+            </button>
+            <button type="button" onClick={() => merk("kan")} aria-pressed={m === "kan"} className={knapp(m === "kan")}>
+              Har kontroll
+            </button>
           </div>
-        )}
+          {feil && (
+            <div className="oevekort-feil">
+              <Feilmelding {...feil} />
+            </div>
+          )}
+        </div>
 
         {/*
           FR-16 (endret 11.11): kildeavsnittet ligger i en utfellbar del under
