@@ -63,6 +63,8 @@ import {
   hentMappequiz,
   lagreMappeforsoek,
   leggTilTekst,
+  listMapper,
+  mapperPerTekst,
   MAPPEGRENSER,
   MappeAvvist,
   oppdaterMappeSelvvurdering,
@@ -754,6 +756,41 @@ export async function leggTilIMappe(mappeId: string, _forrige: Handlingssvar, da
   }
   oppdaterMappesider(mappeId);
   return INGEN_FEIL;
+}
+
+/** Svaret til «Legg i mappe» og draget i Samlinger. */
+export type Mappesvar = Handlingssvar & {
+  /** Ved suksess: Mappen Teksten nå ligger i, og om den lå der fra før (da er ingenting endret). */
+  lagtI?: { mappeId: string; mappetittel: string; altMed: boolean };
+};
+
+/**
+ * Runde 3, bolk 4: «Legg i mappe» og dra og slipp i Samlinger. Begge ids
+ * kommer fra skjemaet. Reglene er de samme som på mappesiden: `leggTilTekst`
+ * sjekker eierskap og grensen på 8, og avvisningene går gjennom `mappefeil`.
+ * Ligger Teksten der fra før, endres ingenting, og svaret sier det.
+ */
+export async function leggTekstIMappe(_forrige: Mappesvar, data: FormData): Promise<Mappesvar> {
+  const t = await tilgang();
+  const mappeId = String(data.get("mappeId") ?? "");
+  const tekstId = String(data.get("tekstId") ?? "");
+  if (!MappeId.safeParse(mappeId).success || !MappeId.safeParse(tekstId).success) {
+    return { feil: { melding: "Velg en mappe å legge teksten i.", handling: "Velg en av mappene dine i listen, og trykk «Legg i mappen»." } };
+  }
+  let lagtI: NonNullable<Mappesvar["lagtI"]>;
+  try {
+    const [mapper, medlemskap] = await Promise.all([listMapper(t), mapperPerTekst(t)]);
+    const altMed = medlemskap.get(tekstId)?.includes(mappeId) ?? false;
+    // Eierskap og grensen sjekkes her; en fremmed Mappe gir IkkeFunnet før tittelen trengs.
+    await leggTilTekst(t, mappeId, tekstId);
+    const tittel = mapper.find((m) => m.id === mappeId)?.tittel;
+    if (tittel === undefined) throw new IkkeFunnet("Mappen");
+    lagtI = { mappeId, mappetittel: tittel, altMed };
+  } catch (e) {
+    return mappefeil(e);
+  }
+  if (!lagtI.altMed) oppdaterMappesider(mappeId);
+  return { lagtI };
 }
 
 export async function fjernFraMappe(mappeId: string, tekstId: string, _forrige: Handlingssvar): Promise<Handlingssvar> {

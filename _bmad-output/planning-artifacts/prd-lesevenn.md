@@ -677,7 +677,8 @@ Eleven kan samle egne Tekster i Mapper.
 - Eleven kan legge egne Tekster i en Mappe og ta dem ut igjen. En Tekst kan ligge i flere Mapper, men bare én gang i hver. Valget for å legge til viser hvilke Tekster som alt er med.
 - Høyst **20 Mapper per konto** og høyst **8 Tekster per Mappe**. Når en grense er nådd, sier appen hvilken grense det er og hvorfor, og hva eleven kan gjøre (§5).
 - En Tekst som eies av en annen konto, kan ikke legges i Mappen, og en annen kontos Mappe finnes ikke (AD-8). Sletting av en Tekst eller kontoen rydder Mappene (FR-37).
-- Mappene står i en egen del øverst i Samlinger (FR-49), og Arbeidsbordet har en lenke dit. Arbeidsbordets fem bunker (FR-48) er uendret.
+- Mappene står i en egen del øverst i Samlinger (FR-49), og Arbeidsbordet har en lenke dit. Arbeidsbordets fem bunker (FR-48) er uendret. *(Endret 23.11.2026: fra 760 px står Mappene til høyre i Samlinger, se FR-49; under 760 px står de øverst som før.)*
+- *(Tatt inn 23.11.2026.)* En Tekst kan legges i en Mappe rett fra Samlinger: «Legg i mappe» på hver tekstrad (virker uten JavaScript og med tastatur og skjermleser; Mappene Teksten alt ligger i, står som «(alt med)» og kan ikke velges), og på stor skjerm også ved å dra Teksten til Mappen. Begge følger de samme reglene som over, og resultatet kunngjøres i en statusregion. Har eleven ingen Mapper, vises verken knappen eller draget.
 - Tekster som ikke er låst, mangler Begrepssett eller mangler Quiz, vises i Mappen med hva som mangler og en lenke til Teksten. Mappen lager aldri noe selv.
 
 #### FR-51: Samlet øving
@@ -878,6 +879,7 @@ Alle Tekstene er samlet på ett sted.
 **Konsekvenser (testbare):**
 - Samlinger viser alle elevens Tekster, kan sorteres på dato og søkes i på tittel (FR-36), og nås fra menyen og fra Arbeidsbordet.
 - Hver Tekst kan åpnes og slettes herfra (FR-37).
+- *(Tatt inn 23.11.2026.)* Fra 760 px er Samlinger todelt: søket og Tekstene i en smal kolonne til venstre (om lag 30 %), Mappene som kort i et rutenett til høyre (om lag 70 %). Kildekoden har Mappene først, så Tab går gjennom dem før Tekstene. Under 760 px er siden én kolonne med Mappene øverst (FR-50), uten sidelengs rulling på 320 px eller med 200 % tekst.
 
 ## 5. Tverrgående krav
 

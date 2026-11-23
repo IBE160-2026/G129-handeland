@@ -87,6 +87,23 @@ export async function listMapper(t: Tilgang): Promise<Mapperad[]> {
 }
 
 /**
+ * Hvilke av elevens Mapper hver Tekst ligger i: tekstId → mappeIder.
+ * Samlinger bruker det til «(alt med)» i «Legg i mappe». Bare kontoens egne
+ * Mapper og Tekster (AD-8); en Tekst uten Mappe er ikke med i kartet.
+ */
+export async function mapperPerTekst(t: Tilgang): Promise<Map<string, string[]>> {
+  const rader = await db
+    .select({ tekstId: mappeTekst.tekstId, mappeId: mappeTekst.mappeId })
+    .from(mappeTekst)
+    .innerJoin(mappe, eq(mappeTekst.mappeId, mappe.id))
+    .innerJoin(tekst, eq(mappeTekst.tekstId, tekst.id))
+    .where(and(eq(mappe.kontoId, t.kontoId), eq(tekst.kontoId, t.kontoId)));
+  const kart = new Map<string, string[]>();
+  for (const r of rader) kart.set(r.tekstId, [...(kart.get(r.tekstId) ?? []), r.mappeId]);
+  return kart;
+}
+
+/**
  * Lager en Mappe. Høyst 20 per konto: telles i samme transaksjon som
  * innsettingen, med kontoraden låst, så to samtidige forespørsler ikke begge
  * blir den tjuende.

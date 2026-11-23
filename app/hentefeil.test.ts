@@ -45,10 +45,14 @@ vi.mock("../data/arbeidsbord", async (original) => ({
 }));
 vi.mock("../data/forbruk", () => ({ samtalegrenseNaadd: async () => false }));
 // FR-50: Mappene i Samlingen. Byttet ut, så testene ikke treffer databasen.
-const { listMapper } = vi.hoisted(() => ({ listMapper: vi.fn(async () => []) }));
+const { listMapper, mapperPerTekst } = vi.hoisted(() => ({
+  listMapper: vi.fn(async () => []),
+  mapperPerTekst: vi.fn(async () => new Map<string, string[]>()),
+}));
 vi.mock("../data/mapper", async (original) => ({
   ...(await original<typeof import("../data/mapper")>()),
   listMapper,
+  mapperPerTekst,
 }));
 // Landingssiden laster skrifter med next/font, som bare virker i Next-bygget.
 vi.mock("./komponenter/Landingsside", () => ({ Landingsside: function Landingsside() { return null; } }));
@@ -118,6 +122,19 @@ describe("Samlingen (/samling)", () => {
 
     const html = renderToStaticMarkup(await samling());
     expect(html).not.toContain(FEILTEKST);
+    expect(html).toContain("Mappene dine");
+    expect(logg).toHaveBeenCalledOnce();
+  });
+
+  test("mapperPerTekst kaster: mappene og tekstene vises likevel (runde 3, bolk 4)", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    hentArbeidsbord.mockResolvedValue([]);
+    mapperPerTekst.mockRejectedValueOnce(new Error("databasen svarer ikke"));
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const html = renderToStaticMarkup(await samling());
+    expect(html).not.toContain(FEILTEKST);
+    expect(html).not.toContain('role="alert"');
     expect(html).toContain("Mappene dine");
     expect(logg).toHaveBeenCalledOnce();
   });

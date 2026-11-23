@@ -123,6 +123,31 @@ describe("FR-50 — Mappe og medlemskap", () => {
     expect(await db.select().from(skjema.tekst).where(eq(skjema.tekst.id, a))).toHaveLength(1);
   });
 
+  test("mapperPerTekst gir Mappene hver Tekst ligger i, bare for egen konto", async () => {
+    const t = await nyKonto();
+    const annen = await nyKonto();
+    const a = await raaTekst(t, "Celler");
+    const b = await raaTekst(t, "Arv");
+    const uten = await raaTekst(t, "Uten mappe");
+    const m1 = await m.opprettMappe(t, "Biologi");
+    const m2 = await m.opprettMappe(t, "Eksamen");
+    await m.leggTilTekst(t, m1, a);
+    await m.leggTilTekst(t, m2, a);
+    await m.leggTilTekst(t, m2, b);
+    // Den andre kontoen har sin egen Mappe og Tekst; de skal ikke komme med.
+    const fremmedMappe = await m.opprettMappe(annen, "Fremmed");
+    const fremmed = await raaTekst(annen, "Fremmed tekst");
+    await m.leggTilTekst(annen, fremmedMappe, fremmed);
+
+    const kart = await m.mapperPerTekst(t);
+    expect([...(kart.get(a) ?? [])].sort()).toEqual([m1, m2].sort());
+    expect(kart.get(b)).toEqual([m2]);
+    expect(kart.has(uten)).toBe(false);
+    expect(kart.has(fremmed)).toBe(false);
+    expect([...kart.values()].flat()).not.toContain(fremmedMappe);
+    expect([...(await m.mapperPerTekst(annen)).entries()]).toEqual([[fremmed, [fremmedMappe]]]);
+  });
+
   test("tittelen må ha 1–80 tegn", async () => {
     const t = await nyKonto();
     await expect(m.opprettMappe(t, "   ")).rejects.toThrow(m.MappeAvvist);

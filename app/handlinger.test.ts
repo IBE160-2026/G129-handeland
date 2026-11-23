@@ -879,3 +879,75 @@ describe("leverMappequiz (FR-52)", () => {
     expect(await antallForsoek()).toBe(0);
   });
 });
+
+describe("leggTekstIMappe (runde 3, bolk 4: Samlinger)", () => {
+  async function konto() {
+    const [u] = await db.insert(skjema.user).values({ name: "", email: `hl${++n}@test.no` }).returning({ id: skjema.user.id });
+    innlogget.kontoId = u.id;
+    return { kontoId: u.id };
+  }
+  async function raaTekst(kontoId: string, tittel: string) {
+    const [r] = await db
+      .insert(skjema.tekst)
+      .values({ kontoId, tittel, raatekst: TEKST, redigertTekst: TEKST, vei: "liming" })
+      .returning({ id: skjema.tekst.id });
+    return r.id;
+  }
+  const skjemadata = (mappeId: string, tekstId: string) => {
+    const d = new FormData();
+    d.set("mappeId", mappeId);
+    d.set("tekstId", tekstId);
+    return d;
+  };
+
+  test("legger Teksten i Mappen og svarer med mappetittelen; andre gang er den alt med", async () => {
+    const m = await import("../data/mapper");
+    const t = await konto();
+    const tekstId = await raaTekst(t.kontoId, "EM-bølger");
+    const mappeId = await m.opprettMappe(t, "Naturfag");
+    revalidatePath.mockClear();
+
+    const ut = await h.leggTekstIMappe({}, skjemadata(mappeId, tekstId));
+    expect(ut).toEqual({ lagtI: { mappeId, mappetittel: "Naturfag", altMed: false } });
+    expect((await m.hentMappe(t, mappeId)).tekster.map((x) => x.id)).toEqual([tekstId]);
+    expect(revalidatePath).toHaveBeenCalledWith("/samling");
+
+    revalidatePath.mockClear();
+    const igjen = await h.leggTekstIMappe({}, skjemadata(mappeId, tekstId));
+    expect(igjen).toEqual({ lagtI: { mappeId, mappetittel: "Naturfag", altMed: true } });
+    expect((await m.hentMappe(t, mappeId)).tekster).toHaveLength(1);
+    // Ingenting er endret, så Samlinger revalideres ikke.
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("en full Mappe avvises med teksten fra MAPPE_AVVIST", async () => {
+    const m = await import("../data/mapper");
+    const t = await konto();
+    const mappeId = await m.opprettMappe(t, "Full");
+    for (let i = 0; i < 8; i++) await m.leggTilTekst(t, mappeId, await raaTekst(t.kontoId, `Tekst ${i + 1}`));
+    const niende = await raaTekst(t.kontoId, "Tekst 9");
+    const ut = await h.leggTekstIMappe({}, skjemadata(mappeId, niende));
+    const avvist = m.MAPPE_AVVIST.forMangeTekster();
+    expect(ut).toEqual({ feil: { melding: avvist.melding, handling: avvist.handling } });
+    expect((await m.hentMappe(t, mappeId)).tekster).toHaveLength(8);
+  });
+
+  test("en fremmed Mappe eller Tekst finnes ikke, og ugyldige ids ber eleven velge en mappe", async () => {
+    const m = await import("../data/mapper");
+    const eier = await konto();
+    const fremmedMappe = await m.opprettMappe(eier, "Eiers");
+    const fremmedTekst = await raaTekst(eier.kontoId, "Eiers tekst");
+    const t = await konto();
+    const egenMappe = await m.opprettMappe(t, "Min");
+    const egenTekst = await raaTekst(t.kontoId, "Min tekst");
+
+    const ikkeFunnet = "Fant ikke mappen eller teksten.";
+    expect((await h.leggTekstIMappe({}, skjemadata(fremmedMappe, egenTekst))).feil?.melding).toBe(ikkeFunnet);
+    expect((await h.leggTekstIMappe({}, skjemadata(egenMappe, fremmedTekst))).feil?.melding).toBe(ikkeFunnet);
+    expect((await m.hentMappe(eier, fremmedMappe)).tekster).toHaveLength(0);
+    expect((await m.hentMappe(t, egenMappe)).tekster).toHaveLength(0);
+
+    const tom = await h.leggTekstIMappe({}, skjemadata("", egenTekst));
+    expect(tom.feil?.melding).toBe("Velg en mappe å legge teksten i.");
+  });
+});

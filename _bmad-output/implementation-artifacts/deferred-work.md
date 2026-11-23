@@ -96,3 +96,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2a-forkunnskapsglider.md`
   summary: Demotestens telefonløp går i Chromium; WebKit (iPhone) bør med, siden glideren oppfører seg annerledes der.
   evidence: iOS-feilen i gjennomgangen av 2a ble ikke fanget av noen test; krever at Playwright-WebKit er installert.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-4-samlinger-stor-skjerm.md`
+  summary: Feilveien i draget i Samlinger (full mappe, nettfeil) er ikke testet i nettleseren.
+  evidence: Bolk 4-blokken i maaling/sjekk-tilgjengelighet.mjs sjekker bare vellykket slipp og «alt med»; regelen er testet i leggTekstIMappe, men ikke at Feilmelding vises og antallet står stille (gjennomgang 23.11, funn 10).
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-4-samlinger-stor-skjerm.md`
+  summary: «Legg i mappe» uten JavaScript er ikke testet.
+  evidence: Spesifikasjonen og FR-50 lover at skjemaet virker uten JavaScript, men ingen kontekst med javaScriptEnabled: false sender det; avgjøres med en slik e2e-sjekk (gjennomgang 23.11, funn 11, maybe-false).

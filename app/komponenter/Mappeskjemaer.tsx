@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useActionState, useId, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { MAPPEGRENSER } from "../../data/mappegrenser";
-import type { Handlingssvar } from "../handlinger";
+import type { Handlingssvar, Mappesvar } from "../handlinger";
 import { slettMappeHandling } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_FARE, KNAPP_LENKE, KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "./knapper";
@@ -140,6 +140,82 @@ export function LeggTilTekstSkjema({
         <Send klar="Legg til" venter="Legger til …" klasse={KNAPP_SEKUNDAER} />
       </div>
     </form>
+  );
+}
+
+/** Meldingen etter at en Tekst er lagt i en Mappe, fra «Legg i mappe» og fra draget i Samlinger. */
+export function lagtIMeldingen(tittel: string, lagtI: NonNullable<Mappesvar["lagtI"]>) {
+  return lagtI.altMed
+    ? `«${tittel}» ligger alt i «${lagtI.mappetittel}». Ingenting er endret.`
+    : `«${tittel}» ligger nå i «${lagtI.mappetittel}».`;
+}
+
+/**
+ * «Legg i mappe» på en tekstrad i Samlinger (runde 3, bolk 4). Samme handling
+ * som draget på stor skjerm, for tastatur, skjermleser og telefon, og virker
+ * uten JavaScript. Ligger bak en utfellbar del, som «Gi mappen nytt navn».
+ * Mappene Teksten alt ligger i, står i listen, men kan ikke velges.
+ *
+ * Meldingene står utenfor `<details>`: uten JavaScript lastes siden på nytt
+ * med delen lukket, og meldingen skal likevel synes. Statusregionen står
+ * alltid i siden, så den nye teksten leses opp.
+ */
+export function LeggIMappeSkjema({
+  handling,
+  tekstId,
+  tittel,
+  mapper,
+}: {
+  handling: (s: Mappesvar, d: FormData) => Promise<Mappesvar>;
+  tekstId: string;
+  tittel: string;
+  mapper: { id: string; tittel: string; erMed: boolean }[];
+}) {
+  const [svar, send] = useActionState(handling, TOMT as Mappesvar);
+  const id = useId();
+  const ledige = mapper.filter((m) => !m.erMed);
+  return (
+    <div className="min-w-0 max-w-full">
+      <details>
+        <summary className="inline-flex min-h-11 cursor-pointer items-center font-bold underline underline-offset-4">
+          Legg i mappe<span className="sr-only"> «{tittel}»</span>
+        </summary>
+        <form action={send} className="mt-2">
+          <input type="hidden" name="tekstId" value={tekstId} />
+          <label htmlFor={id} className="font-bold">
+            Velg en mappe
+          </label>
+          <div className="mt-1 flex flex-wrap items-end gap-3">
+            <select
+              // Nullstilles når Teksten havner i en ny Mappe, så valget aldri står på en den alt ligger i.
+              key={mapper.filter((m) => m.erMed).map((m) => m.id).join(",")}
+              id={id}
+              name="mappeId"
+              required
+              defaultValue={ledige[0]?.id ?? ""}
+              aria-describedby={ledige.length === 0 ? `${id}-alle` : undefined}
+              className={`min-w-0 max-w-full grow basis-48 ${FELT.replace("w-full ", "")}`}
+            >
+              {mapper.map((m) => (
+                <option key={m.id} value={m.id} disabled={m.erMed}>
+                  {m.erMed ? `${m.tittel} (alt med)` : m.tittel}
+                </option>
+              ))}
+            </select>
+            {ledige.length > 0 && <Send klar="Legg i mappen" venter="Legger i mappen …" klasse={KNAPP_SEKUNDAER} />}
+          </div>
+          {ledige.length === 0 && (
+            <p id={`${id}-alle`} className="mt-1 text-dempet">
+              Teksten ligger alt i alle mappene dine.
+            </p>
+          )}
+        </form>
+      </details>
+      {svar.feil && <Feilmelding {...svar.feil} fokus={false} />}
+      <p role="status" className="[overflow-wrap:anywhere]">
+        {svar.lagtI ? lagtIMeldingen(tittel, svar.lagtI) : ""}
+      </p>
+    </div>
   );
 }
 

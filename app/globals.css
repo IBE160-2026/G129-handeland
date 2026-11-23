@@ -2390,3 +2390,97 @@ button.ls-fagord[aria-expanded="true"] {
     overflow-wrap: anywhere;
   }
 }
+
+/*
+ * Samlinger på stor skjerm (runde 3, bolk 4, avgjort av Arve 23.11): fra
+ * 760 px er siden todelt, søket og tekstene til venstre (3 av 10 deler) og
+ * Mappene til høyre (7 av 10). Kildekoden har Mappene først, så Tab går
+ * gjennom dem før tekstene; under 760 px står de øverst, i én kolonne, som
+ * før (FR-50). Mappene er kort i et rutenett (navn og antall), og hele kortet
+ * er et slippmål for en tekst som dras (DraTilMappe.tsx). Tekstradene i den
+ * smale kolonnen stables: tittel, tilstand og dato, neste steg, så knappene
+ * («Legg i mappe» og «Slett»).
+ */
+@media (min-width: 760px) {
+  .samling-oppsett {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+    column-gap: 2rem;
+    align-items: start;
+  }
+  .samling-oppsett > .samling-tekster {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .samling-oppsett > .samling-mapper {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .samling-tekster .tekstrad {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .samling-tekster .tekstrad > * {
+    flex-basis: auto;
+    max-width: 100%;
+  }
+  .samling-tekster .tekstrad[draggable="true"] {
+    cursor: grab;
+  }
+  .mappekort-liste {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
+    gap: 1rem;
+    border: 0;
+  }
+  /* Kortene har egen kant; skillelinjene fra listen på telefon tas bort. */
+  .mappekort-liste > .mappekort {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 7rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-slate-300);
+    border-radius: var(--radius-lg);
+    background: var(--lb-bakgrunn);
+    @variant dark {
+      border-color: var(--color-slate-600);
+    }
+  }
+  /* Mens en tekst dras: alle kortene viser at de tar imot (stiplet kant). */
+  .mappekort-liste > .mappekort.slippmaal-klar {
+    border-style: dashed;
+    border-color: var(--lb-primaer);
+  }
+  /*
+   * Kortet teksten er over: heltrukken 2 px kant og en 3 px ring
+   * (box-shadow) i primærfargen, markeringsflaten og teksten «Slipp for å
+   * legge i mappen» i fet skrift — ikke bare farge.
+   */
+  .mappekort-liste > .mappekort.slippmaal-over {
+    border-style: solid;
+    border-color: var(--lb-primaer);
+    box-shadow: 0 0 0 3px var(--lb-primaer);
+    background: var(--lb-markering);
+  }
+  /* Bare fet: understrek betyr lenke i appen. */
+  .slippmaal-hint {
+    font-weight: 700;
+  }
+  .tekstrad-dras {
+    opacity: 0.6;
+  }
+}
+@media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .mappekort-liste > .mappekort {
+    transition:
+      box-shadow 120ms ease-out,
+      background-color 120ms ease-out;
+  }
+}
+@media (forced-colors: active) {
+  .mappekort-liste > .mappekort.slippmaal-over {
+    outline: 3px solid Highlight;
+  }
+}

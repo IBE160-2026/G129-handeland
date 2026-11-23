@@ -25,6 +25,15 @@
  *     til, og mappesiden, de samlede øvekortene og den samlede quizen sjekkes
  *     med axe på PC, i mørk modus og på telefon (uten sidelengs rulling);
  *     arbeidsbordet lenker til «Mappene dine»
+ *   - runde 3, bolk 4 (23.11): uten mapper ingen «Legg i mappe» og ingen
+ *     dragbar rad; på 1280 px to kolonner (tekstene ~30 % til venstre,
+ *     mappene ~70 % som kort i et rutenett til høyre, mappene først i
+ *     kildekoden), tekstraden stablet; dra «EM-bølger» til en mappe markerer
+ *     slippmålet (kant, skygge, tekst), gir status-melding og øker antallet,
+ *     og teksten står på mappesiden; et nytt slipp sier at den alt ligger
+ *     der; «Legg i mappe» med bare tastaturet, med «(alt med)» deaktivert;
+ *     axe; på 759 og 375 px én kolonne med mappene øverst, knappen finnes og
+ *     ingen rad er dragbar
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -968,6 +977,14 @@ try {
   // sjekkes med axe. Ingen generator kalles fra mappesidene.
   await pc.goto(`${APP}/samling`);
   sjekk("FR-50: Samlinger har «Mappene dine» øverst", (await pc.locator("#mapper h2", { hasText: "Mappene dine" }).count()) === 1);
+  // Runde 3, bolk 4: uten mapper er det ingen «Legg i mappe» og ingen dra-markering.
+  // `data-dra` settes av DraTilMappe etter hydrering, så tellingen skjer etter at draget er avgjort.
+  const draUten = await pc.locator("main [data-dra]").getAttribute("data-dra", { timeout: 30000 }).catch(() => null);
+  sjekk(
+    "bolk 4 (23.11): uten mapper har Samlinger ingen «Legg i mappe» og ingen dragbar tekstrad",
+    draUten === "av" && (await pc.locator("main summary", { hasText: "Legg i mappe" }).count()) === 0 && (await pc.locator("main [draggable]").count()) === 0,
+    `data-dra=${draUten}`,
+  );
   await pc.fill("#mapper input[name=tittel]", "Naturfag");
   await pc.click("#mapper button[type=submit]");
   await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/, { timeout: 60000 });
@@ -1015,6 +1032,178 @@ try {
   }
   await pc.goto(`${APP}/`);
   sjekk("FR-50: arbeidsbordet lenker til «Mappene dine»", (await pc.locator("main a[href='/samling#mapper']", { hasText: "Mappene dine" }).count()) === 1);
+
+  /* --- Runde 3, bolk 4: Samlinger på stor skjerm, dra og slipp -------- */
+  // Avgjort av Arve 23.11: fra 760 px søket og tekstene til venstre (~30 %),
+  // mappene som kort til høyre (~70 %); en tekst dras til en mappe, og
+  // «Legg i mappe» på raden gjør det samme uten mus. «EM-bølger» ligger alt i
+  // «Naturfag»; to nye mapper tar imot draget og knappen.
+  {
+    for (const navn of ["Prøve", "Eksamen"]) {
+      await pc.goto(`${APP}/samling`);
+      await pc.fill("#mapper input[name=tittel]", navn);
+      await pc.click("#mapper button[type=submit]");
+      await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/, { timeout: 60000 });
+    }
+    await pc.goto(`${APP}/samling`);
+    const rad = pc.locator("main li.tekstrad", { hasText: "EM-bølger" });
+    const kort = (navn) => pc.locator("#mapper li.mappekort", { has: pc.locator("a", { hasText: new RegExp(`^${navn}$`) }) });
+    const antall = async (navn) => (await kort(navn).locator(".mappekort-antall").textContent())?.trim();
+    await rad.and(pc.locator("[draggable=true]")).waitFor({ timeout: 15000 }).catch(() => {});
+
+    const oppsett = await pc.evaluate(() => {
+      const t = document.querySelector(".samling-tekster").getBoundingClientRect();
+      const m = document.querySelector("#mapper").getBoundingClientRect();
+      // Det første som synes i tekstkolonnen (søket), mot kanten på mappedelen.
+      const foerste = document.querySelector(".samling-tekster > :first-child").getBoundingClientRect();
+      const liste = document.querySelector(".mappekort-liste");
+      return {
+        andel: t.width / (t.width + m.width),
+        mapperTilHoeyre: m.left >= t.right,
+        sammeTopp: Math.abs(m.top - foerste.top) < 2,
+        rutenett: getComputedStyle(liste).display === "grid",
+        mapperFoerst: !!(document.querySelector("#mapper").compareDocumentPosition(document.querySelector(".samling-tekster")) & Node.DOCUMENT_POSITION_FOLLOWING),
+        sidelengs: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+    sjekk(
+      "bolk 4 (23.11), 1280 px: to kolonner, tekstene ~30 % til venstre og mappene ~70 % til høyre, i flukt øverst",
+      oppsett.andel > 0.25 && oppsett.andel < 0.35 && oppsett.mapperTilHoeyre && oppsett.sammeTopp && !oppsett.sidelengs,
+      JSON.stringify(oppsett),
+    );
+    sjekk("bolk 4, 1280 px: mappene er kort i et rutenett, og står først i kildekoden (Tab går gjennom dem før tekstene)", oppsett.rutenett && oppsett.mapperFoerst);
+    // Tekstraden stables i den smale kolonnen: knappene under teksten.
+    const stablet = await rad.evaluate((li) => {
+      const [tekst, knapper] = li.children;
+      return knapper.getBoundingClientRect().top >= tekst.getBoundingClientRect().bottom - 1;
+    });
+    sjekk("bolk 4, 1280 px: tekstraden er stablet, knappene under tittel, tilstand og neste steg", stablet);
+    sjekk("bolk 4, 1280 px: tekstraden er dragbar når eleven har mapper", (await rad.getAttribute("draggable")) === "true");
+    sjekk("bolk 4: «Prøve» og «Eksamen» starter tomme", (await antall("Prøve")) === "0 tekster" && (await antall("Eksamen")) === "0 tekster");
+
+    // Dra med musen: slippmålet markeres med kant, skygge og tekst mens noe er over det.
+    const proeveUrl = await kort("Prøve").locator("a").getAttribute("href");
+    await rad.locator("h2").hover();
+    await pc.mouse.down();
+    await kort("Prøve").hover();
+    await kort("Prøve").hover({ position: { x: 20, y: 20 } });
+    const markering = await kort("Prøve").evaluate((li) => {
+      const s = getComputedStyle(li);
+      return { klasse: li.classList.contains("slippmaal-over"), skygge: s.boxShadow !== "none", kant: s.borderTopStyle, tekst: li.textContent.includes("Slipp for å legge i mappen") };
+    });
+    sjekk(
+      "bolk 4: slippmålet markeres mens teksten dras over det (heltrukken kant, skygge og «Slipp for å legge i mappen»)",
+      markering.klasse && markering.skygge && markering.kant === "solid" && markering.tekst,
+      JSON.stringify(markering),
+    );
+    await pc.mouse.up();
+    const lagt = await pc
+      .locator("[role=status]", { hasText: "«EM-bølger» ligger nå i «Prøve»." })
+      .waitFor({ timeout: 30000 })
+      .then(() => true, () => false);
+    await pc.waitForFunction(() => [...document.querySelectorAll("#mapper li.mappekort")].some((k) => /^Prøve$/.test(k.querySelector("a")?.textContent ?? "") && k.querySelector(".mappekort-antall")?.textContent === "1 tekst"), null, { timeout: 30000 }).catch(() => {});
+    sjekk("bolk 4: dra «EM-bølger» til «Prøve» gir status-melding, og antallet øker til 1", lagt && (await antall("Prøve")) === "1 tekst", `${await antall("Prøve")}`);
+    // Allerede med: ingenting endres, og meldingen sier det.
+    // Fra øvre venstre hjørne: midten av den stablede raden kan være knappene, som ikke starter et drag.
+    await rad.dragTo(kort("Prøve"), { sourcePosition: { x: 8, y: 8 } });
+    const altMed = await pc
+      .locator("[role=status]", { hasText: "«EM-bølger» ligger alt i «Prøve». Ingenting er endret." })
+      .waitFor({ timeout: 30000 })
+      .then(() => true, () => false);
+    sjekk("bolk 4: dra til en mappe teksten alt ligger i, endrer ingenting og sier det", altMed && (await antall("Prøve")) === "1 tekst");
+
+    // «Legg i mappe» med tastaturet: summary → Enter → Tab til valget → Tab til knappen → Enter.
+    await pc.goto(`${APP}/samling`);
+    const summary = rad.locator("summary", { hasText: "Legg i mappe" });
+    const valg = rad.locator("select[name=mappeId]");
+    sjekk(
+      "bolk 4: «Legg i mappe» har tekstens tittel i navnet for skjermlesere",
+      (await summary.textContent())?.replace(/\s+/g, " ").trim() === "Legg i mappe «EM-bølger»",
+      `${await summary.textContent()}`,
+    );
+    await summary.focus();
+    await pc.keyboard.press("Enter");
+    await pc.keyboard.press("Tab");
+    const valgFokus = await valg.evaluate((s) => document.activeElement === s && !!s.labels?.[0]?.textContent.includes("Velg en mappe"));
+    const opsjoner = await valg.locator("option").evaluateAll((o) => o.map((x) => ({ tekst: x.textContent, av: x.disabled })));
+    const deaktivert = opsjoner.filter((o) => o.av).map((o) => o.tekst).sort();
+    sjekk(
+      "bolk 4: mappene teksten alt ligger i, står som «(alt med)» og kan ikke velges",
+      JSON.stringify(deaktivert) === JSON.stringify(["Naturfag (alt med)", "Prøve (alt med)"]) && (await valg.inputValue()) === (await kort("Eksamen").locator("a").getAttribute("href")).split("/").pop(),
+      JSON.stringify(opsjoner),
+    );
+    await pc.keyboard.press("Tab");
+    const knappFokus = await pc.evaluate(() => document.activeElement?.textContent?.trim() === "Legg i mappen");
+    await pc.keyboard.press("Enter");
+    const knappLagt = await pc
+      .locator("[role=status]", { hasText: "«EM-bølger» ligger nå i «Eksamen»." })
+      .waitFor({ timeout: 30000 })
+      .then(() => true, () => false);
+    await pc.waitForFunction(() => [...document.querySelectorAll("#mapper li.mappekort")].some((k) => /^Eksamen$/.test(k.querySelector("a")?.textContent ?? "") && k.querySelector(".mappekort-antall")?.textContent === "1 tekst"), null, { timeout: 30000 }).catch(() => {});
+    sjekk(
+      "bolk 4: «Legg i mappe» med bare tastaturet: valget, knappen og meldingen nås, og «Eksamen» får 1 tekst",
+      valgFokus && knappFokus && knappLagt && (await antall("Eksamen")) === "1 tekst",
+      JSON.stringify({ valgFokus, knappFokus, knappLagt, antall: await antall("Eksamen") }),
+    );
+    await axe(pc, "samling med mapper og åpen «Legg i mappe»");
+    // Mappesiden viser teksten som ble dratt dit.
+    await pc.goto(`${APP}${proeveUrl}`);
+    sjekk("bolk 4: teksten som ble dratt til «Prøve», står på /mappe/{id}", (await pc.locator("main h3 a", { hasText: "EM-bølger" }).count()) === 1);
+
+    // Under 760 px: én kolonne, mappene øverst, knappen finnes, ingen rad er dragbar.
+    const smalPc = await (await nettleser.newContext({ viewport: { width: 759, height: 900 }, locale: "nb-NO" })).newPage();
+    smalPc.setDefaultTimeout(120000);
+    await smalPc.context().addCookies(await pc.context().cookies());
+    for (const [bredde, side] of [[759, smalPc], [375, null]]) {
+      const s = side ?? (await (await nettleser.newContext({ viewport: { width: bredde, height: 800 }, locale: "nb-NO", isMobile: true, hasTouch: true })).newPage());
+      if (!side) await s.context().addCookies(await pc.context().cookies());
+      await s.goto(`${APP}/samling`);
+      // Etter hydrering (DraTilMappe setter `data-dra`), ellers teller sjekken før `draggable` kunne kommet.
+      const dra = await s.locator("main [data-dra]").getAttribute("data-dra", { timeout: 30000 }).catch(() => null);
+      const smal = await s.evaluate(() => {
+        const t = document.querySelector(".samling-tekster").getBoundingClientRect();
+        const m = document.querySelector("#mapper").getBoundingClientRect();
+        return { mapperOver: m.bottom <= t.top + 1, sidelengs: document.documentElement.scrollWidth > window.innerWidth };
+      });
+      const dragbare = await s.locator("main [draggable]").count();
+      const knapper = await s.locator("main summary", { hasText: "Legg i mappe" }).count();
+      sjekk(
+        `bolk 4, ${bredde} px: én kolonne med mappene øverst, «Legg i mappe» finnes, og ingen rad er dragbar`,
+        dra === "av" && smal.mapperOver && !smal.sidelengs && dragbare === 0 && knapper > 0,
+        JSON.stringify({ dra, ...smal, dragbare, knapper }),
+      );
+      await s.context().close();
+    }
+
+    // 760 px med 200 % tekst: tekstkolonnen er om lag 200 px, men oppsettet er
+    // fortsatt todelt, og siden ruller ikke sidelengs.
+    {
+      const s = await (await nettleser.newContext({ viewport: { width: 760, height: 900 }, locale: "nb-NO" })).newPage();
+      s.setDefaultTimeout(120000);
+      await s.context().addCookies(await pc.context().cookies());
+      await s.goto(`${APP}/samling`);
+      await s.addStyleTag({ content: "html { font-size: 200% !important; }" });
+      const dra = await s.locator("main [data-dra]").getAttribute("data-dra", { timeout: 30000 }).catch(() => null);
+      // Med «Legg i mappe» åpen, det bredeste raden kan bli.
+      await s.locator("main li.tekstrad summary").first().click();
+      const stor = await s.evaluate(() => {
+        const t = document.querySelector(".samling-tekster").getBoundingClientRect();
+        const m = document.querySelector("#mapper").getBoundingClientRect();
+        return {
+          tekstbredde: Math.round(t.width),
+          toKolonner: getComputedStyle(document.querySelector(".samling-oppsett")).display === "grid" && m.left >= t.right,
+          sidelengs: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+      sjekk(
+        "bolk 4, 760 px med 200 % tekst: fortsatt to kolonner, og siden ruller ikke sidelengs",
+        dra === "på" && stor.toKolonner && !stor.sidelengs,
+        JSON.stringify({ dra, ...stor }),
+      );
+      await ingenKlipping(s, "samling 760 px, 200 % tekst");
+      await s.context().close();
+    }
+  }
 
   /* --- Mørk modus: axe på de samme sidene ----------------------------- */
   const moerkUt = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" })).newPage();
