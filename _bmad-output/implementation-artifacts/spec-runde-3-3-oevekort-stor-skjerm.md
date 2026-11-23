@@ -2,7 +2,7 @@
 title: 'Runde 3, bolk 3: Ã¸vekortene pÃ¥ stor skjerm'
 type: 'feature'
 created: '2026-11-23'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '5f9881e7f592142d22680e820593f6a4ad01eebc'
@@ -71,7 +71,27 @@ context:
 - `npm run demotest` med `LESEVENN_TESTMODUS=les` -- bestÃ¥tt uten modellkall
 
 ## Implementation Notes
+- Etter gjennomgangen (63f292e): rammeklikk bare fra 760 px og aldri i `.oevekort-merk`/ved markert tekst, fokus til kortet. Sluttsjekk før utrulling: npm test 775/775, tilgjengelighet 493/493, demotest 3/3, README 9/9 (første npm test-kjøring feilet i oppstart av vitest-arbeidere etter 3 t; maskinen i dvale, ikke gjentatt).
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+| # | Lag | Funn | Verdikt | Begrunnelse | Rute |
+|---|---|---|---|---|---|
+| 1 | verif, blind, edge | Under 760 px snur rammens `onClick` kortet ved trykk i mellomrommet mellom merkeknappene | medium | Rammen er `display: contents`, men får fortsatt klikkene; bryter «under 760 px uendret» | patch (bare fra 760 px, og aldri i `.oevekort-merk`) |
+| 2 | blind | Bom ved siden av en merkeknapp på stor skjerm snur kortet, så eleven kan tro hun merket | medium | `space-between` gir et stort tomt felt mellom knappene | patch (samme som #1) |
+| 3 | verif | Unntaket for `.oevekort-feil` prøves aldri | low | Sjekken måler bare plassering | patch |
+| 4 | edge | Fokus faller til body etter klikk på rammen | low | Rammen kan ikke ha fokus; én linje | patch |
+| 5 | blind, edge | Markering av tekst med dra snur kortet | low | Én vakt på `getSelection()` | patch |
+| 6 | edge | Tab-sjekken venter i 120 s og stopper hele kjøringen om testteksten har ett kort | low | Robusthet i testen | patch |
+| 7 | blind, edge | På mappesiden kommer lenkene i «Tekster uten øvekort» før tilbakelenken | low | Riktig: det er sidens innhold i rekkefølge | avvist |
+| 8 | edge | axe kjøres ikke på mappesidens store oppsett | low | Siden lastes alt i løkka | patch |
+| 9 | blind | PRD sier «rekkefølgen er uendret», men tilbakelenken går fra først til sist på stor skjerm | low | Tekstfeil; EXPERIENCE.md er riktig | patch |
+| 10 | blind | Venstrehendt + 200 % tekst: radene står mot høyre | low | 760 px med 200 % er sjeldent; specen krever bare brytning | avvist |
+| 11 | blind | `#ffffff` i stedet for token | low | Én verdi | patch |
+| 12 | blind | Rammen mangler `cursor: pointer` | low | Én linje | patch |
+| 13 | blind | Overstyrte Tailwind-klasser på kortknappen; tvungne farger; test-matrisehull; duplisert lenke | low | Virker og er målt (kortkant 0); liten gevinst | avvist |
+| 14 | blind | Feilmeldingen testes med en kunstig node | low | Ekte merkefeil er vanskelig å utløse; plasseringen er målt | avvist |
+| 15 | blind | jsx-a11y-regler for `onClick` på `div` | false | `npx eslint app` er uten feil | avvist |
+| 16 | (implementasjon) | Hjelpeteksten om «Venstrehendt» på kontosiden sier «til venstre»; på stor skjerm byttes knappene | low | Tekst eleven ser | patch |
