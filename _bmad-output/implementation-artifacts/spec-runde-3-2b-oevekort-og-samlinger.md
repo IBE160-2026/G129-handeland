@@ -2,7 +2,7 @@
 title: 'Runde 3, bolk 2b: øvekortene (piler, tastatur, «Har kontroll») og «Samlinger»'
 type: 'feature'
 created: '2026-11-23'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '7043a31cc3a6a927ba7c6c5a3b64f32be13eb8c3'
@@ -82,7 +82,29 @@ context:
 - Utenfor Code Map, samme regel: «Kan»/«samlingen» også i `data/arbeidsbord.ts` (status «Har kontroll på N av M»), `app/tekst/[id]/oppgaver/page.tsx`, `app/konto/page.tsx`, `data/mappegrenser.ts`, `app/komponenter/Arbeidsbord.tsx`. «Øv på de N du ikke kan ennå» → «… du vil øve mer på».
 - `maaling/demotest.mjs`: modusen var hardkodet til `fyll`; nå `process.env.LESEVENN_TESTMODUS ?? "fyll"`, så `=les` virker.
 - Sjekker: vitest 50/50, tilgjengelighet 424/424, demotest 3/3 (les), README 8/8.
+- Etter gjennomgangen (a7246ee): vitest 53/53, tilgjengelighet 425/425, demotest 3/3 (les), README 8/8 (første kjøring 6/7: tidsavbrudd 180 s mellom aktivering og lesing i den ferske klonen, ikke gjentatt; 2b rører ikke den veien).
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+| # | Lag | Funn | Verdikt | Begrunnelse | Rute |
+|---|---|---|---|---|---|
+| 1 | verif | «Tilbake til mappen» på `/mappe/[id]/oevekort` har ingen sjekk; ingen av lenkene får sjekket `href` | medium | Forhåndsverifisert; bolk 2b-blokken sjekker bare tekstsiden | patch |
+| 2 | verif, edge, blind | EXPERIENCE.md sier fortsatt «samlingen» (rad «Flere enn 5 tekster», og navigasjonsraden for Arbeidsbord) | low | Motsier koden og raden over; tekstretting | patch |
+| 3 | edge, blind | `e.repeat` ignoreres ikke: holdt → raser til «Runden er ferdig», holdt mellomrom blinker | medium | Lytteren i `Oevekort.tsx` sjekker bare `defaultPrevented` | patch |
+| 4 | edge, blind | Shift ignoreres ikke: Shift+mellomrom snur i stedet for å bla opp | low | `Taster` har ikke `shift`; én linje | patch |
+| 5 | edge, blind | Fokus faller til body når kildelenken/summary forsvinner ved kortbytte med tastene | medium | `snudd` → false avmonterer `Kildeavsnitt` mens den har fokus | patch (flytt fokus til kortet når fokus er tapt) |
+| 6 | blind | «Ferdig» avmonterer kortflaten, fokus til body | low | Fantes før (samme knapp/oppførsel før 2b); oppsummeringen er `role="status"` og leses | defer |
+| 7 | blind | Skjermleseren får ikke vite om kortbytte med tastene | false | Kortinnholdet ligger i `aria-live="polite"` inne i kortknappen og leses når det byttes | avvist |
+| 8 | blind | Ingen synlig hint om tastene | low | Ikke bestilt; ny UI | avvist |
+| 9 | blind | Ingen tilbakelenke nederst etter flyttingen | low | Intensjonen sier øverst; bolk 3 legger den nede til venstre på stor skjerm | avvist |
+| 10 | blind | Kommentarer, logglinjer og testnavn sier fortsatt «Samlingen» | low | Specen sier kommentarer og logglinjer kan stå; eleven ser dem ikke | avvist |
+| 11 | blind | Ingen begrunnelse for «Samlinger» | false | Arves avgjørelse 23.11, står i oppdraget | avvist |
+| 12 | blind | PRD FR-17: «må øve mer» med liten forbokstav ved siden av «Må øve mer» | low | Tekstretting | patch |
+| 13 | blind | Klassestrengen `TILBAKE` kopiert i to sider | low | Bolk 3 endrer lenkens plass og stil på stor skjerm, og da kommer sidene ut av takt | patch |
+| 14 | blind | Testhull: rollene i `MELLOMROM_EGEN_ROLLE`/`FELTROLLER` testes bare med én verdi | low | Trivielt å legge til | patch |
+| 15 | blind | Testene viser til en spec som ikke er i diffen | false | Specen ligger i repoet: `_bmad-output/implementation-artifacts/spec-runde-3-2b-oevekort-og-samlinger.md` | avvist |
+| 16 | blind | Demotest-endringen er uavhengig og ikke vist å virke i `les` | false | Nødvendig for specens verifisering; kjørt 3/3 i `les` (Implementation Notes) | avvist |
+| 17 | edge | `LESEVENN_TESTMODUS=""` slipper gjennom `??` | low | `||` er én tegnendring | patch |
+| 18 | blind | «har kontroll 3 · må øve 2» og «Fer\|dig» på 320 px | low | Smak / fantes før (`overflow-wrap` i CSS) | avvist |

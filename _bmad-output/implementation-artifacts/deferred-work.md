@@ -84,3 +84,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2b-oevekort-og-samlinger.md`
   summary: Runde 3, bolk 2a — forkunnskapen som glider (Ingenting ennå – Litt – Mye), «Skjønner ikke» som av/på-knapp under; urørt glider = ikke merket (Arve, 23.11).
   evidence: Delt fra bolk 2 fordi glideren erstatter radioknappene som 15–20 sjekker bygger på; bygges som neste spec.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2b-oevekort-og-samlinger.md`
+  summary: Når øvekortrunden avsluttes («Ferdig» eller → på siste kort), avmonteres kortflaten og fokus faller til body; fokus bør flyttes til «Runden er ferdig».
+  evidence: Gjaldt «Ferdig»-knappen også før runde 3; oppsummeringen er `role="status"` og leses opp, så skaden er at tastaturbrukeren mister plassen sin.
