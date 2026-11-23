@@ -8,8 +8,8 @@
  * hvor mange tekster eleven har (ingen N+1).
  *
  * Reglene for neste steg, status på kortene i viften og hvilke fem bunker som
- * ligger på bordet, er rene funksjoner over resultatet, så de kan testes uten
- * database (data/arbeidsbord.test.ts).
+ * ligger på bordet (også Mappene, `settSammenBordet`), er rene funksjoner over
+ * resultatet, så de kan testes uten database (data/arbeidsbord.test.ts).
  *
  * «Sist aktiv» regnes ut fra tidsstemplene som finnes (beslutning 13.11, uten
  * nytt felt og uten migrering). Å åpne lesevisningen og å merke øvekort har
@@ -99,6 +99,76 @@ export function velgBordet<T extends Pick<Bunke, "id" | "sistAktiv" | "opprettet
 ): { hoved: T | null; smaa: T[]; antall: number } {
   const sortert = sorterEtterSistAktiv(bunker).slice(0, PLASSER_PAA_BORDET);
   return { hoved: sortert[0] ?? null, smaa: sortert.slice(1), antall: bunker.length };
+}
+
+/* --- Mapper på bordet (runde 3, bolk 5, avgjort 23.11) ------------- */
+
+/** Det bordet trenger å vite om en Mappe (`Mapperad` i data/mapper.ts har mer). */
+export type Bordmappe = { id: string; tittel: string; opprettet: Date };
+
+/**
+ * En Mappe med minst én Tekst, som én bunke. `tekster` er sortert med den
+ * som sist var aktiv først, og Mappen er like aktiv som den (`sistAktiv`).
+ * `opprettet` er Mappens egen, og skiller bare to bunker som er like aktive.
+ */
+export type Mappebunke = {
+  slag: "mappe";
+  id: string;
+  tittel: string;
+  opprettet: Date;
+  sistAktiv: Date;
+  tekster: Bunke[];
+};
+
+/** Én plass på bordet: en Tekst uten Mappe, eller en Mappe. */
+export type Bordplass = (Bunke & { slag: "tekst" }) | Mappebunke;
+
+/**
+ * Bordet med Mapper (EXPERIENCE.md, Arbeidsbord):
+ *
+ *   - En Tekst som ligger i én eller flere Mapper, er ikke egen bunke; den
+ *     ligger under HVER Mappe den er i. Tekster uten Mappe er som før.
+ *   - En Mappe uten Tekster ligger ikke på bordet.
+ *   - Mappene og de løse Tekstene deler de fem plassene, sortert etter sist
+ *     aktiv, med hovedbunken først (`velgBordet`).
+ *   - `antall` er alle Tekstene, og `synlige` hvor mange ulike av dem som kan
+ *     nås fra bordet (løse bunker og Tekstene i mappebunkene). Er de ulike,
+ *     viser siden «Se alle N tekstene i Samlinger».
+ *
+ * Et medlemskap i en Mappe som ikke er i `mapper` (slettet i mellomtiden),
+ * hoppes over. Uten Mapper er bordet det samme som `velgBordet(tekster)`.
+ */
+export function settSammenBordet(
+  tekster: readonly Bunke[],
+  mapper: readonly Bordmappe[],
+  medlemskap: ReadonlyMap<string, readonly string[]>,
+): { hoved: Bordplass | null; smaa: Bordplass[]; antall: number; synlige: number } {
+  const kjente = new Map(mapper.map((m) => [m.id, m]));
+  const iMappe = new Map<string, Bunke[]>();
+  const loese: Bordplass[] = [];
+  for (const t of tekster) {
+    const mapperFor = [...new Set(medlemskap.get(t.id) ?? [])].filter((id) => kjente.has(id));
+    if (mapperFor.length === 0) loese.push({ ...t, slag: "tekst" });
+    for (const id of mapperFor) iMappe.set(id, [...(iMappe.get(id) ?? []), t]);
+  }
+  const mappebunker = [...iMappe].map(([id, innhold]): Mappebunke => {
+    const m = kjente.get(id)!;
+    const sortert = sorterEtterSistAktiv(innhold);
+    return { slag: "mappe", id: m.id, tittel: m.tittel, opprettet: m.opprettet, sistAktiv: sortert[0].sistAktiv, tekster: sortert };
+  });
+
+  const { hoved, smaa } = velgBordet([...loese, ...mappebunker]);
+  const synlige = new Set<string>();
+  for (const p of hoved ? [hoved, ...smaa] : []) {
+    if (p.slag === "tekst") synlige.add(p.id);
+    else for (const t of p.tekster) synlige.add(t.id);
+  }
+  return { hoved, smaa, antall: tekster.length, synlige: synlige.size };
+}
+
+/** Teksten en plass handler om: Teksten selv, eller den i Mappen som sist var aktiv. */
+export function sistBrukteTekst(p: Bordplass): Bunke {
+  return p.slag === "tekst" ? p : p.tekster[0];
 }
 
 export type Steg = {

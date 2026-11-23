@@ -1148,6 +1148,39 @@ html.har-tenkepille body {
   .bunker > li:not(.bunke-hoved) .bunke-dato {
     display: none;
   }
+  /*
+   * Mappestripen (runde 3, bolk 5): samme flik, og «Mappe» foran tittelen.
+   * Er det ikke plass til begge på én linje (stor tekst), går tittelen ned på
+   * neste linje i stedet for å deles midt i et ord. «N tekster» står til
+   * høyre, der tekststripene har «N av 5».
+   */
+  /*
+   * Fanen (0.875rem) står over stripen, og arket under stripen over stikker
+   * 0.375rem ned: 1.25rem til sammen, mot 1rem mellomrom. Litt ekstra luft, så
+   * fanen ikke ligger oppå stripen over.
+   */
+  .bunker > li.bunke-mappe:not(.bunke-hoved) {
+    margin-top: 0.5rem;
+  }
+  .bunker > li.bunke-mappe:not(.bunke-hoved) .bunke-forside {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+  }
+  .bunker > li.bunke-mappe:not(.bunke-hoved) .bunke-mappemerke {
+    align-self: center;
+  }
+  .bunker > li.bunke-mappe:not(.bunke-hoved) .bunke-tittel {
+    flex: 1 1 0;
+    min-width: min-content;
+  }
+  .bunker > li.bunke-mappe:not(.bunke-hoved) .bunke-tekster {
+    flex-basis: 100%;
+    margin: 0;
+    text-align: end;
+    white-space: nowrap;
+  }
 }
 
 /* --- Bunken -------------------------------------------------------- */
@@ -1233,6 +1266,41 @@ html.har-tenkepille body {
   font-weight: 700;
   white-space: nowrap;
 }
+/*
+ * Mappebunken (runde 3, bolk 5, avgjort 23.11): en mappefane, en flik øverst
+ * til venstre i samme kant og flate som forsiden, så bunken ser ut som en
+ * mappe. Fanen er pynt; forskjellen bæres av ordet «Mappe» (merkelappen) og
+ * «N tekster», og av knappens navn («Vis tekstene i mappen …»).
+ *
+ * Fanen står på forsiden, ikke på bunken, så den følger kanten (2 px i
+ * primærfargen på hovedbunken og midt i viften). `bottom: 100%` er regnet fra
+ * innsiden av kanten, så fanen dekker forsidens kant der de møtes.
+ */
+.bunke-mappe > .bunke-forside::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 1.25rem;
+  width: 4.5rem;
+  height: 0.875rem;
+  border: inherit;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: inherit;
+}
+.bunke-mappemerke {
+  align-self: flex-start;
+  margin: 0;
+  border: 2px solid var(--lb-primaer);
+  border-radius: 6px;
+  padding: 0 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--lb-tekst);
+}
 /* Knappen (eller lenken uten JavaScript) dekker hele bunken. */
 .bunke-knapp {
   position: absolute;
@@ -1294,6 +1362,38 @@ html.har-tenkepille body {
 .vifte-lukk {
   align-self: flex-end;
 }
+/*
+ * Knappene øverst. Uten «Tilbake til mappen» er beholderen borte fra
+ * oppsettet, og «Legg sammen» står som før. Med den (en Tekst valgt i en
+ * Mappe, runde 3, bolk 5) står de på én rad: tilbake til venstre, «Legg
+ * sammen» til høyre, og under hverandre når det ikke er plass.
+ */
+.vifte-topp {
+  display: contents;
+}
+.vifte-topp.med-tilbake {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 0.75rem;
+}
+.vifte-topp.med-tilbake > .vifte-lukk {
+  align-self: flex-start;
+  margin-inline-start: auto;
+}
+/* Tekstkortene i en Mappe er knapper, og de samlede kortene har lengre navn. */
+button.kort {
+  width: 100%;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.kort-tekst .kort-navn,
+.kort-samlet .kort-navn {
+  font-size: 1.375rem;
+  overflow-wrap: break-word;
+}
 /* Prøven Arbeidsbord.tsx og LandingEffekter.tsx måler tekststørrelsen med (1 rem). */
 .bord-proeve {
   position: absolute;
@@ -1331,7 +1431,9 @@ html.har-tenkepille body {
   transition: transform 0.2s ease;
 }
 a.kort:hover,
-a.kort:focus-visible {
+a.kort:focus-visible,
+button.kort:hover,
+button.kort:focus-visible {
   transform: scale(1.06);
   border-color: var(--lb-primaer);
 }
@@ -1414,6 +1516,16 @@ a.kort:focus-visible {
   position: absolute;
   top: 1rem;
   right: 1rem;
+}
+.vifte[data-oppsett="rundt"] .vifte-topp,
+.vifte[data-oppsett="maal"] .vifte-topp {
+  display: contents;
+}
+.vifte[data-oppsett="rundt"] .vifte-tilbake,
+.vifte[data-oppsett="maal"] .vifte-tilbake {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 .vifte-senter .bunke-forside {
   border: 2px solid var(--lb-primaer);
@@ -1513,8 +1625,14 @@ html.har-ark body {
   transform: none;
 }
 .vifte[data-oppsett="ark"] .vifte-senter::before,
-.vifte[data-oppsett="ark"] .vifte-senter::after {
+.vifte[data-oppsett="ark"] .vifte-senter::after,
+.vifte[data-oppsett="ark"] .vifte-senter .bunke-forside::before {
   display: none;
+}
+/* «Tilbake til mappen» og «Legg sammen» på en egen rad øverst i arket, over tittelen. */
+.vifte[data-oppsett="ark"] .vifte-topp.med-tilbake {
+  order: 0;
+  flex: 1 1 100%;
 }
 .vifte[data-oppsett="ark"] .vifte-senter .bunke-forside {
   min-height: 0;
@@ -1554,7 +1672,9 @@ html.har-ark body {
   transform: none;
 }
 .vifte[data-oppsett="ark"] a.kort:hover,
-.vifte[data-oppsett="ark"] a.kort:focus-visible {
+.vifte[data-oppsett="ark"] a.kort:focus-visible,
+.vifte[data-oppsett="ark"] button.kort:hover,
+.vifte[data-oppsett="ark"] button.kort:focus-visible {
   transform: none;
   background: var(--lb-markering);
 }
@@ -1639,6 +1759,11 @@ html.har-ark body {
   .bunke-merkelapp,
   .pille {
     border: 1px solid CanvasText;
+  }
+  /* Mappefanen og «Mappe» står med kant også i kontrastmodus. */
+  .bunke-mappe > .bunke-forside::before,
+  .bunke-mappemerke {
+    border-color: CanvasText;
   }
 }
 

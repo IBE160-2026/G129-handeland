@@ -102,6 +102,84 @@ describe("arbeidsbordet (/)", () => {
   });
 });
 
+/* --- Runde 3, bolk 5: arbeidsbordet grupperer etter Mappe --------------- */
+
+describe("arbeidsbordet med mapper (/)", () => {
+  const T0 = new Date("2026-11-20T10:00:00Z");
+  const tekst = (id: string, tittel: string, dager: number) => ({
+    id,
+    tittel,
+    tilstand: "laast" as const,
+    opprettet: T0,
+    sistAktiv: new Date(T0.getTime() + dager * 86_400_000),
+    antallFagord: 10,
+    antallKan: 0,
+    antallMerket: 0,
+    sisteQuiz: null,
+    samtale: null,
+    harMinnevers: false,
+  });
+  const EM = "11111111-1111-4111-8111-111111111111";
+  const DIKT = "22222222-2222-4222-8222-222222222222";
+  const NATURFAG = "33333333-3333-4333-8333-333333333333";
+
+  test("siste tekst i en mappe: mappen er hovedbunken med «Mappe», og teksten er ikke egen bunke", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    hentArbeidsbord.mockResolvedValue([tekst(EM, "EM-bølger", 2), tekst(DIKT, "Diktanalyse", 1)]);
+    listMapper.mockResolvedValueOnce([{ id: NATURFAG, tittel: "Naturfag", opprettet: T0, antallTekster: 1 }] as never);
+    mapperPerTekst.mockResolvedValueOnce(new Map([[EM, [NATURFAG]]]));
+
+    const html = renderToStaticMarkup(await forside());
+    // Uten skript (tegnet på serveren) er mappebunken en lenke til mappesiden.
+    expect(html).toMatch(new RegExp(`<a href="/mappe/${NATURFAG}" class="bunke-knapp"><span class="sr-only">Vis tekstene i mappen Naturfag</span></a>`));
+    expect(html).toContain('<p class="bunke-mappemerke">Mappe</p>');
+    expect(html).toContain("1 tekst</p>");
+    // Hovedbunken er mappen, og neste steg gjelder teksten, med tittelen i lenken.
+    expect(html).toMatch(/<li[^>]*class="bunke bunke-hoved bunke-mappe"/);
+    expect(html).toMatch(new RegExp(`<a class="bunke-neste" href="/tekst/${EM}/quiz">EM-bølger: Neste: Ta quizen`));
+    expect(html).toContain("Du holdt på med <strong");
+    expect(html).toMatch(/Du holdt på med <strong[^>]*>EM-bølger<\/strong>/);
+    expect(html).not.toContain("Vis aktiviteter for EM-bølger");
+    expect(html).toContain("Vis aktiviteter for Diktanalyse");
+    expect(html).not.toContain("Se alle");
+  });
+
+  test("tre tekster i én mappe: alle kan nås fra bordet, så ingen «Se alle»", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    const ider = ["a", "b", "c"].map((x) => `${x.repeat(8)}-${x.repeat(4)}-4${x.repeat(3)}-8${x.repeat(3)}-${x.repeat(12)}`);
+    hentArbeidsbord.mockResolvedValue(ider.map((id, i) => tekst(id, `Tekst ${i}`, i)));
+    listMapper.mockResolvedValueOnce([{ id: NATURFAG, tittel: "Naturfag", opprettet: T0, antallTekster: 3 }] as never);
+    mapperPerTekst.mockResolvedValueOnce(new Map(ider.map((id) => [id, [NATURFAG]])));
+
+    const html = renderToStaticMarkup(await forside());
+    expect(html).toContain("Vis tekstene i mappen Naturfag");
+    expect(html).not.toContain("Se alle");
+  });
+
+  test("sju løse tekster: fem på bordet, og «Se alle 7 tekstene i Samlinger»", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    hentArbeidsbord.mockResolvedValue(Array.from({ length: 7 }, (_, i) => tekst(`${i}`.repeat(8) + "-1111-4111-8111-111111111111", `Tekst ${i}`, i)));
+
+    const html = renderToStaticMarkup(await forside());
+    expect(html).toContain("Se alle 7 tekstene i Samlinger");
+  });
+
+  test("mappeoppslaget feiler: bordet som før, med bare tekstene, og feilen logges", async () => {
+    innlogget.tilgang = { kontoId: "konto-1" };
+    hentArbeidsbord.mockResolvedValue([tekst(EM, "EM-bølger", 2), tekst(DIKT, "Diktanalyse", 1)]);
+    mapperPerTekst.mockRejectedValueOnce(new Error("databasen svarer ikke"));
+    const logg = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const html = renderToStaticMarkup(await forside());
+    expect(html).not.toContain(FEILTEKST);
+    expect(html).not.toContain("bunke-mappe");
+    expect(html).toContain("Vis aktiviteter for EM-bølger");
+    expect(html).toContain("Vis aktiviteter for Diktanalyse");
+    expect(html).toMatch(new RegExp(`<a class="bunke-neste" href="/tekst/${EM}/quiz">Neste: Ta quizen`));
+    expect(logg).toHaveBeenCalledOnce();
+  });
+});
+
 describe("Samlingen (/samling)", () => {
   test("hentArbeidsbord kaster: Hentefeil med «Prøv igjen» til /samling, og feilen logges", async () => {
     innlogget.tilgang = { kontoId: "konto-1" };

@@ -63,10 +63,37 @@ describe("viften rundt bunken", () => {
     }
   });
 
-  test("0 kort, eller flere enn 5, gir null", () => {
+  test("0 kort, eller flere enn 10, gir null", () => {
     expect(plasserRundt(1040, SENTER, [], LUFT)).toBeNull();
-    expect(plasserRundt(1040, SENTER, [...KORT, KORT[0]], LUFT)).toBeNull();
+    expect(plasserRundt(1600, SENTER, Array.from({ length: 11 }, () => KORT[0]), LUFT)).toBeNull();
   });
+
+  test("fem kort ligger der de alltid har ligget: øverst, så med klokka", () => {
+    const p = plasserRundt(1040, SENTER, KORT, LUFT)!;
+    const [topp, oppeH, nedeH, nedeV, oppeV] = p.kort;
+    expect(Math.abs(topp.x - p.senter.x)).toBeLessThan(0.001);
+    expect(topp.y).toBeLessThan(p.senter.y);
+    expect(oppeH.x).toBeGreaterThan(p.senter.x);
+    expect(nedeH.x).toBeGreaterThan(p.senter.x);
+    expect(nedeH.y).toBeGreaterThan(p.senter.y);
+    expect(nedeV.x).toBeLessThan(p.senter.x);
+    expect(oppeV.x).toBeLessThan(p.senter.x);
+    expect(oppeV.y).toBeLessThan(p.senter.y);
+  });
+
+  // Runde 3, bolk 5: en Mappe har opptil 8 Tekster og 2 samlede kort.
+  for (const antall of [3, 7, 10]) {
+    test(`en mappe med ${antall} kort: ingen dekker bunken eller hverandre, eller null`, () => {
+      const kort = Array.from({ length: antall }, () => ({ b: 168, h: 118 }));
+      const p = plasserRundt(1600, SENTER, kort, LUFT);
+      if (antall <= 7) expect(p).not.toBeNull();
+      if (!p) return;
+      expect(p.kort).toHaveLength(antall);
+      const flater = [{ ...p.senter, ...SENTER }, ...p.kort.map((k, i) => ({ ...k, ...kort[i] }))];
+      for (let i = 0; i < flater.length; i++)
+        for (let j = i + 1; j < flater.length; j++) expect(overlapper(flater[i], flater[j]), `${i} og ${j}`).toBe(false);
+    });
+  }
 
   test("uten plass i bredden gir den null, og viften blir et rutenett", () => {
     expect(plasserRundt(600, SENTER, KORT, LUFT)).toBeNull();

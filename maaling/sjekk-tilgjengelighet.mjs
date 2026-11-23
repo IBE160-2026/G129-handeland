@@ -34,6 +34,23 @@
  *     der; «Legg i mappe» med bare tastaturet, med «(alt med)» deaktivert;
  *     axe; på 759 og 375 px én kolonne med mappene øverst, knappen finnes og
  *     ingen rad er dragbar
+ *   - runde 3, bolk 5 (23.11): bordsjekkene for FR-48 over kjører før det
+ *     finnes mapper, og er uendret (bordet som før). Etter bolk 4 ligger
+ *     «EM-bølger» i tre mapper: tre mappebunker med fane, «Mappe», «1 tekst»
+ *     og «Vis tekstene i mappen …», teksten er ikke egen bunke, hovedbunken
+ *     er en mappe med neste steg «EM-bølger: …», og hilsenen nevner teksten.
+ *     Med bare tastaturet: Enter åpner mappen (tekstkortet og de to samlede
+ *     kortene, fokus på det første), Enter velger teksten (fem kort og
+ *     «Tilbake til mappen», fokus på det første), Shift+Tab og Enter går
+ *     tilbake (fokus på tekstkortet), Esc og «Legg sammen» lukker fra begge
+ *     nivåene (fokus på mappebunken), og fokus står alltid på et synlig
+ *     element; kortene dekker ikke hverandre på 1280 px; tvungne farger
+ *     (fanen og «Mappe» har kant); uten JavaScript lenker mappebunken til
+ *     /mappe/{id}. På 375 px er mappen en stripe med flik og «Mappe» foran
+ *     tittelen, og arket har mappens tre rader, så tekstens fem og «Tilbake
+ *     til mappen»; 320 px og 1280 px med 200 % tekst uten sidelengs rulling;
+ *     axe i lys og mørk modus på begge nivåene. Vifte-, ark- og
+ *     rotasjonssjekkene lenger ned åpner «EM-bølger» via mappen
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -1205,6 +1222,223 @@ try {
     }
   }
 
+  /* --- Runde 3, bolk 5: arbeidsbordet grupperer etter Mappe ----------- */
+  // Avgjort av Arve 23.11: en Tekst i én eller flere Mapper er ikke egen
+  // bunke, men ligger under hver Mappe. «EM-bølger» ligger nå i «Naturfag»,
+  // «Prøve» og «Eksamen», og er elevens eneste tekst: bordet har tre
+  // mappebunker. Hovedbunken er en av dem, og neste steg gjelder teksten.
+  {
+    await pc.goto(`${APP}/`);
+    const mappeknapp = pc.locator("button[aria-expanded]", { hasText: "Vis tekstene i mappen Naturfag" });
+    await mappeknapp.waitFor();
+    const bordet = await pc.evaluate(() =>
+      [...document.querySelectorAll(".bunker > li")].map((li) => {
+        const forside = li.querySelector(".bunke-forside");
+        const fane = getComputedStyle(forside, "::before");
+        return {
+          mappe: li.classList.contains("bunke-mappe"),
+          hoved: li.classList.contains("bunke-hoved"),
+          tittel: li.querySelector(".bunke-tittel").textContent,
+          merke: li.querySelector(".bunke-mappemerke")?.textContent ?? null,
+          tekster: li.querySelector(".bunke-tekster")?.textContent ?? null,
+          dato: !!li.querySelector(".bunke-dato"),
+          // Fliken øverst til venstre: finnes, synes og står i venstre halvdel.
+          fane: fane.content !== "none" && fane.display !== "none" && parseFloat(fane.height) > 0 && parseFloat(fane.left) < forside.offsetWidth / 2,
+          navn: li.querySelector(".bunke-knapp").textContent,
+        };
+      }),
+    );
+    sjekk(
+      "bolk 5 (23.11): «EM-bølger» ligger i tre mapper og er ikke egen bunke; bordet har tre mappebunker",
+      bordet.length === 3 && bordet.every((b) => b.mappe) && (await pc.locator(".bunker", { hasText: "Vis aktiviteter for EM-bølger" }).count()) === 0,
+      bordet.map((b) => `${b.mappe ? "mappe" : "tekst"}:${b.tittel}`).join(", "),
+    );
+    sjekk(
+      "bolk 5: mappebunken har fane, «Mappe» og «1 tekst» i stedet for «lagt inn …», og knappen heter «Vis tekstene i mappen …»",
+      bordet.every((b) => b.fane && b.merke === "Mappe" && b.tekster === "1 tekst" && !b.dato && b.navn === `Vis tekstene i mappen ${b.tittel}`),
+      JSON.stringify(bordet[0]),
+    );
+    const tekstSti = tekstUrl.replace(APP, "");
+    const hovedNeste = pc.locator(".bunke-hoved a.bunke-neste");
+    const nesteTekst = (await hovedNeste.textContent())?.trim() ?? "";
+    sjekk(
+      "bolk 5: hovedbunken («Sist brukt») er en mappe, og neste steg gjelder teksten, med tittelen i lenken",
+      bordet[0].hoved && bordet[0].mappe && nesteTekst.startsWith("EM-bølger: ") && (await hovedNeste.getAttribute("href"))?.startsWith(`${tekstSti}/`),
+      `${bordet[0].tittel}: «${nesteTekst}» → ${await hovedNeste.getAttribute("href")}`,
+    );
+    sjekk("bolk 5: hilsenen nevner teksten, ikke mappen", (await pc.locator("main p:has-text('Du holdt på med EM-bølger')").count()) === 1);
+    await axe(pc, "arbeidsbord med mappebunker");
+
+    /** Fokus står på et synlig element (ikke body, ikke skjult, ikke inert). */
+    const synligFokus = () =>
+      pc.evaluate(() => {
+        const e = document.activeElement;
+        if (!e || e === document.body) return false;
+        const b = e.getBoundingClientRect();
+        return b.width > 0 && b.height > 0 && e.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !e.closest("[inert],[aria-hidden=true]");
+      });
+    /** Ingen to flater i dialogen dekker hverandre: bunken, knappene øverst og kortene. */
+    const overlappIDialogen = () =>
+      pc.locator("[role=dialog]").evaluate((d) => {
+        const flater = [
+          ["bunken", d.querySelector(".vifte-senter .bunke-forside")],
+          ...[...d.querySelectorAll(".vifte-topp > button")].map((k) => [k.textContent.trim(), k]),
+          ...[...d.querySelectorAll(".vifte-kort > li > .kort")].map((k) => [k.querySelector(".kort-navn").textContent, k]),
+        ].map(([navn, e]) => [navn, e.getBoundingClientRect()]);
+        const funn = [];
+        for (let i = 0; i < flater.length; i++)
+          for (let j = i + 1; j < flater.length; j++) {
+            const [a, b] = [flater[i][1], flater[j][1]];
+            if (a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) funn.push(`${flater[i][0]}/${flater[j][0]}`);
+          }
+        return funn;
+      });
+    const dialog = pc.locator("[role=dialog][aria-modal=true]");
+    const iDialogen = () => pc.evaluate(() => !!document.activeElement?.closest("[role=dialog]"));
+
+    // Åpne mappen med tastaturet.
+    await mappeknapp.focus();
+    await pc.keyboard.press("Enter");
+    await dialog.waitFor();
+    await pc.waitForTimeout(1000); // kortene er ferdige med å fly ut
+    const mappeSti = mappeUrl.replace(APP, "");
+    const mappenivaa = await dialog.evaluate((d) => ({
+      navn: document.getElementById(d.getAttribute("aria-labelledby"))?.textContent,
+      merke: d.querySelector(".vifte-senter .bunke-mappemerke")?.textContent ?? null,
+      kort: [...d.querySelectorAll(".vifte-kort > li")].map((li) => `${li.querySelector(".kort-navn").textContent}|${li.querySelector(".kort-status").textContent}`),
+      lenker: [...d.querySelectorAll(".vifte-kort a")].map((a) => a.getAttribute("href")),
+      fokus: !!document.activeElement?.classList.contains("kort-tekst") && document.activeElement.textContent.includes("EM-bølger"),
+      tilbake: d.querySelectorAll(".vifte-tilbake").length,
+      oppsett: d.dataset.oppsett,
+    }));
+    sjekk(
+      "bolk 5: Enter på mappebunken åpner viften med tekstkortene, «Øvekort for hele mappen» og «Quiz for hele mappen», og fokus på det første kortet",
+      mappenivaa.navn === "Naturfag" &&
+        mappenivaa.merke === "Mappe" &&
+        mappenivaa.kort.length === 3 &&
+        /^EM-bølger\|\d av 5 påbegynt$/.test(mappenivaa.kort[0]) &&
+        mappenivaa.kort[1].startsWith("Øvekort for hele mappen|") &&
+        mappenivaa.kort[2].startsWith("Quiz for hele mappen|") &&
+        JSON.stringify(mappenivaa.lenker) === JSON.stringify([`${mappeSti}/oevekort`, `${mappeSti}/quiz`]) &&
+        mappenivaa.fokus &&
+        mappenivaa.tilbake === 0 &&
+        (await mappeknapp.getAttribute("aria-expanded")) === "true",
+      JSON.stringify(mappenivaa),
+    );
+    const mappeOverlapp = await overlappIDialogen();
+    sjekk("bolk 5, 1280 px: mappens kort dekker ikke hverandre, bunken eller «Legg sammen»", mappeOverlapp.length === 0, `${mappenivaa.oppsett}: ${mappeOverlapp.join(", ")}`);
+    let ut = 0;
+    for (let i = 0; i < 6; i++) {
+      await pc.keyboard.press("Tab");
+      if (!(await iDialogen())) ut++;
+    }
+    for (let i = 0; i < 3; i++) {
+      await pc.keyboard.press("Shift+Tab");
+      if (!(await iDialogen())) ut++;
+    }
+    sjekk("bolk 5: Tab og Shift+Tab holder fokus i mappens vifte", ut === 0, `${ut} av 9 trykk gikk ut`);
+    await axe(pc, "arbeidsbord med åpen mappe");
+
+    // Velg teksten med tastaturet.
+    await dialog.locator("button.kort-tekst", { hasText: "EM-bølger" }).focus();
+    await pc.keyboard.press("Enter");
+    await dialog.locator(".vifte-tilbake").waitFor();
+    await pc.waitForTimeout(1000);
+    const tekstnivaa = await dialog.evaluate((d) => ({
+      navn: document.getElementById(d.getAttribute("aria-labelledby"))?.textContent,
+      kort: [...d.querySelectorAll(".vifte-kort > li .kort-navn")].map((n) => {
+        const kopi = n.cloneNode(true);
+        kopi.querySelector(".kort-merke")?.remove();
+        return kopi.textContent.trim();
+      }),
+      // Navnet uten pilen, som er aria-hidden.
+      tilbake: [...(d.querySelector(".vifte-tilbake")?.childNodes ?? [])].filter((n) => !(n instanceof Element && n.getAttribute("aria-hidden") === "true")).map((n) => n.textContent).join("").trim(),
+      fokus: !!document.activeElement?.closest(".vifte-kort") && document.activeElement.textContent.includes("Teksten"),
+      oppsett: d.dataset.oppsett,
+    }));
+    sjekk(
+      "bolk 5: Enter på tekstkortet viser tekstens fem aktivitetskort og «Tilbake til mappen» (med mappens navn for skjermlesere) i samme dialog, med fokus på det første aktivitetskortet",
+      tekstnivaa.navn === "EM-bølger" && tekstnivaa.kort.join(",") === "Teksten,Quiz,Øvekort,Fagsamtale,Minnevers" && tekstnivaa.tilbake === "Tilbake til mappen «Naturfag»" && tekstnivaa.fokus && (await synligFokus()),
+      JSON.stringify(tekstnivaa),
+    );
+    const tekstOverlapp = await overlappIDialogen();
+    sjekk(
+      "bolk 5, 1280 px: kortene ligger rundt bunken og dekker ikke hverandre, bunken, «Tilbake til mappen» eller «Legg sammen»",
+      tekstnivaa.oppsett === "rundt" && tekstOverlapp.length === 0,
+      `${tekstnivaa.oppsett}: ${tekstOverlapp.join(", ")}`,
+    );
+    ut = 0;
+    for (let i = 0; i < 9; i++) {
+      await pc.keyboard.press("Tab");
+      if (!(await iDialogen())) ut++;
+    }
+    sjekk("bolk 5: Tab holder fokus i dialogen også når en tekst er valgt", ut === 0, `${ut} av 9 trykk gikk ut`);
+    await axe(pc, "arbeidsbord, tekst valgt i mappe");
+
+    // Tilbake med tastaturet: fra det første aktivitetskortet er «Legg sammen» og «Tilbake til mappen» rett før.
+    await dialog.locator(".vifte-kort a").first().focus();
+    await pc.keyboard.press("Shift+Tab");
+    await pc.keyboard.press("Shift+Tab");
+    const paaTilbake = await pc.evaluate(() => !!document.activeElement?.classList.contains("vifte-tilbake"));
+    await pc.keyboard.press("Enter");
+    await dialog.locator(".vifte-tilbake").waitFor({ state: "detached" });
+    await pc.waitForTimeout(800);
+    const etterTilbake = await dialog.evaluate((d) => ({
+      navn: document.getElementById(d.getAttribute("aria-labelledby"))?.textContent,
+      kort: d.querySelectorAll(".vifte-kort > li").length,
+      fokus: !!document.activeElement?.classList.contains("kort-tekst") && document.activeElement.textContent.includes("EM-bølger"),
+    }));
+    sjekk(
+      "bolk 5: «Tilbake til mappen» (nådd med Shift+Tab) viser mappens kort igjen, med fokus på tekstkortet eleven kom fra",
+      paaTilbake && etterTilbake.navn === "Naturfag" && etterTilbake.kort === 3 && etterTilbake.fokus && (await synligFokus()),
+      JSON.stringify({ paaTilbake, ...etterTilbake }),
+    );
+    await pc.keyboard.press("Escape");
+    sjekk(
+      "bolk 5: Esc lukker mappens vifte og gir fokus tilbake til mappebunken",
+      (await dialog.count()) === 0 && (await mappeknapp.evaluate((e) => e === document.activeElement)) && (await synligFokus()),
+    );
+    // Esc og «Legg sammen» lukker også når en tekst er valgt.
+    await mappeknapp.click(HJOERNE);
+    await dialog.locator("button.kort-tekst", { hasText: "EM-bølger" }).click();
+    await dialog.locator(".vifte-tilbake").waitFor();
+    await pc.keyboard.press("Escape");
+    const escFraTekst = (await dialog.count()) === 0 && (await mappeknapp.evaluate((e) => e === document.activeElement));
+    await mappeknapp.click(HJOERNE);
+    await dialog.locator("button.kort-tekst", { hasText: "EM-bølger" }).click();
+    await dialog.locator(".vifte-tilbake").waitFor();
+    await pc.click("[role=dialog] button:has-text('Legg sammen')");
+    sjekk(
+      "bolk 5: Esc og «Legg sammen» lukker også med en tekst valgt, og fokus går til mappebunken",
+      escFraTekst && (await dialog.count()) === 0 && (await mappeknapp.evaluate((e) => e === document.activeElement)) && (await synligFokus()),
+    );
+    // Et nytt åpne starter i mappen, ikke i teksten som var valgt sist.
+    await mappeknapp.click(HJOERNE);
+    await dialog.waitFor();
+    sjekk("bolk 5: viften åpner alltid på mappens kort", (await dialog.locator(".vifte-tilbake").count()) === 0 && (await dialog.locator("button.kort-tekst").count()) === 1);
+    await pc.keyboard.press("Escape");
+
+    // Kontrastmodus: fanen og «Mappe» har kant.
+    await pc.emulateMedia({ forcedColors: "active" });
+    const tvungen = await pc.evaluate(() => {
+      const li = document.querySelector(".bunker > li.bunke-mappe");
+      const fane = getComputedStyle(li.querySelector(".bunke-forside"), "::before");
+      const merke = getComputedStyle(li.querySelector(".bunke-mappemerke"));
+      return { fane: fane.borderTopStyle !== "none" && parseFloat(fane.borderTopWidth) > 0, merke: merke.borderTopStyle !== "none" && parseFloat(merke.borderTopWidth) > 0 };
+    });
+    await pc.emulateMedia({ forcedColors: "none" });
+    sjekk("bolk 5, tvungne farger: mappefanen og «Mappe» har synlig kant", tvungen.fane && tvungen.merke, JSON.stringify(tvungen));
+
+    // Uten JavaScript er mappebunken en lenke til mappesiden.
+    const utenJs = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", javaScriptEnabled: false })).newPage();
+    utenJs.setDefaultTimeout(120000);
+    await utenJs.context().addCookies(await pc.context().cookies());
+    await utenJs.goto(`${APP}/`);
+    const lenke = utenJs.locator(".bunker a.bunke-knapp", { hasText: "Vis tekstene i mappen Naturfag" });
+    sjekk("bolk 5, uten JavaScript: mappebunken er en lenke til /mappe/{id}", (await lenke.count()) === 1 && (await lenke.getAttribute("href")) === mappeSti, `${await lenke.getAttribute("href").catch(() => null)}`);
+    await utenJs.context().close();
+  }
+
   /* --- Mørk modus: axe på de samme sidene ----------------------------- */
   const moerkUt = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO", colorScheme: "dark" })).newPage();
   moerkUt.setDefaultTimeout(120000);
@@ -1238,11 +1472,16 @@ try {
     }
     await axe(moerk, `${navn} (mørk)`);
   }
+  // Bolk 5: «EM-bølger» ligger i mapper, så viften åpnes via mappen, og begge nivåene sjekkes.
   await moerk.goto(`${APP}/`);
-  await moerk.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
+  await moerk.locator("button:has-text('Vis tekstene i mappen Naturfag')").click(HJOERNE);
   await moerk.locator("[role=dialog]").waitFor();
   await moerk.waitForTimeout(1000);
-  await axe(moerk, "arbeidsbord med åpen vifte (mørk)");
+  await axe(moerk, "arbeidsbord med åpen mappe (mørk)");
+  await moerk.locator("[role=dialog] button.kort-tekst", { hasText: "EM-bølger" }).click();
+  await moerk.locator("[role=dialog] .vifte-tilbake").waitFor();
+  await moerk.waitForTimeout(1000);
+  await axe(moerk, "arbeidsbord med åpen vifte, tekst valgt i mappe (mørk)");
   await moerk.goto(lesing);
   await moerk.locator("article button[aria-expanded]").first().focus();
   await moerk.locator("article [role=dialog]").waitFor();
@@ -2053,8 +2292,31 @@ try {
   );
 
   // Bolk 6, utkast D: viften på telefon er et ark som glir opp fra bunnen.
+  // Bolk 5 (23.11): «EM-bølger» ligger i mapper, så arket åpnes på mappen
+  // «Naturfag» (en stripe), og teksten velges der. Lukkeveiene gjelder mappebunken.
   const tVifte = tlf.locator("[role=dialog][aria-modal=true]");
-  const tBunke = tlf.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
+  const tBunke = tlf.locator("button[aria-expanded]", { hasText: "Vis tekstene i mappen Naturfag" });
+  // Mappestripen: samme flik, «Mappe» foran tittelen og «1 tekst», i full bredde.
+  const mappestripe = await tlf.evaluate(() => {
+    const ul = document.querySelector(".bunker").getBoundingClientRect();
+    const li = [...document.querySelectorAll(".bunker > li.bunke-mappe:not(.bunke-hoved)")].find((l) => l.querySelector(".bunke-tittel").textContent === "Naturfag");
+    if (!li) return null;
+    const merke = li.querySelector(".bunke-mappemerke").getBoundingClientRect();
+    const tittel = li.querySelector(".bunke-tittel").getBoundingClientRect();
+    const fane = getComputedStyle(li.querySelector(".bunke-forside"), "::before");
+    return {
+      full: Math.abs(li.getBoundingClientRect().width - ul.width) <= 1,
+      fane: fane.content !== "none" && fane.display !== "none" && parseFloat(fane.height) > 0,
+      foran: merke.right <= tittel.left + 1 || merke.bottom <= tittel.top + 1,
+      merke: li.querySelector(".bunke-mappemerke").textContent,
+      tekster: li.querySelector(".bunke-tekster")?.checkVisibility() ? li.querySelector(".bunke-tekster").textContent : null,
+    };
+  });
+  sjekk(
+    "bolk 5, 375 px: mappen er en stripe i full bredde med flik, «Mappe» foran tittelen og «1 tekst»",
+    !!mappestripe && mappestripe.full && mappestripe.fane && mappestripe.foran && mappestripe.merke === "Mappe" && mappestripe.tekster === "1 tekst",
+    JSON.stringify(mappestripe),
+  );
   await tBunke.tap(HJOERNE);
   await tVifte.waitFor();
   await tlf.waitForTimeout(1000); // arket har glidd opp
@@ -2064,19 +2326,41 @@ try {
       const d = document.querySelector("[role=dialog]");
       const a = d.getBoundingClientRect();
       const l = d.querySelector(".vifte-lukk").getBoundingClientRect();
+      const t = d.querySelector(".vifte-tilbake")?.getBoundingClientRect();
       const inne = (r) => r.left >= 0 && r.top >= 0 && r.right <= window.innerWidth + 0.5 && r.bottom <= window.innerHeight + 0.5;
       return {
         oppsett: d.dataset.oppsett,
         posisjon: getComputedStyle(d).position,
         arkInne: inne(a),
         lukkInne: inne(l) && l.top >= a.top && l.bottom <= a.bottom,
+        tilbakeInne: !t || (inne(t) && t.top >= a.top && t.bottom <= a.bottom),
         andel: Math.round((a.height / window.innerHeight) * 100),
         ruller: d.scrollHeight > d.clientHeight + 1,
         siden: document.documentElement.scrollHeight > window.innerHeight && getComputedStyle(document.documentElement).overflowY !== "hidden",
         rader: d.querySelectorAll(".vifte-kort > li").length,
       };
     });
+  const tMappe = await maalArk(tlf);
+  sjekk(
+    "bolk 5, 375 px: mappens ark har tekstkortet og de to samlede kortene som rader, med fokus på tekstkortet",
+    tMappe.oppsett === "ark" &&
+      tMappe.arkInne &&
+      tMappe.lukkInne &&
+      tMappe.rader === 3 &&
+      (await tlf.evaluate(() => !!document.activeElement?.classList.contains("kort-tekst") && document.activeElement.textContent.includes("EM-bølger"))),
+    JSON.stringify(tMappe),
+  );
+  await ingenSiderulling(tlf, "arbeidsbord med åpent mappeark");
+  await axe(tlf, "arbeidsbord med åpent mappeark (telefon)");
+  await tlf.keyboard.press("Enter");
+  await tVifte.locator(".vifte-tilbake").waitFor();
+  await tlf.waitForTimeout(500);
   const tArk = await maalArk(tlf);
+  sjekk(
+    "bolk 5, 375 px: «Tilbake til mappen» står i arket, innenfor skjermen",
+    tArk.tilbakeInne && (await tVifte.locator(".vifte-tilbake").isVisible()),
+    JSON.stringify(tArk),
+  );
   sjekk(
     "bolk 6, 375 px: viften er et ark nederst, med fem rader, og arket og «Legg sammen» er innenfor skjermen",
     tArk.oppsett === "ark" && tArk.posisjon === "fixed" && tArk.arkInne && tArk.lukkInne && tArk.rader === 5,
@@ -2114,6 +2398,15 @@ try {
       JSON.stringify({ ...r, fokus }),
     );
   }
+  // Bolk 5: et trykk på «Tilbake til mappen» viser mappens rader igjen, med fokus på tekstkortet.
+  await tVifte.locator(".vifte-tilbake").tap();
+  await tVifte.locator(".vifte-tilbake").waitFor({ state: "detached" });
+  const tTilbake = await tlf.evaluate(() => ({
+    rader: document.querySelectorAll("[role=dialog] .vifte-kort > li").length,
+    fokus: !!document.activeElement?.classList.contains("kort-tekst") && document.activeElement.textContent.includes("EM-bølger"),
+    oppsett: document.querySelector("[role=dialog]")?.dataset.oppsett,
+  }));
+  sjekk("bolk 5, arket: «Tilbake til mappen» gir mappens tre rader og fokus på tekstkortet", tTilbake.rader === 3 && tTilbake.fokus && tTilbake.oppsett === "ark", JSON.stringify(tTilbake));
   await tlf.keyboard.press("Escape");
   await arketLukket("Esc");
   await tBunke.tap(HJOERNE);
@@ -2781,9 +3074,21 @@ try {
   await smal.setViewportSize({ width: 320, height: 700 });
   await smal.goto(`${APP}/`);
   await smal.addStyleTag({ content: "html { font-size: 200% !important; }" });
-  await smal.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
+  // Bolk 5: mappen først, så teksten i den.
+  await smal.locator("button:has-text('Vis tekstene i mappen Naturfag')").click(HJOERNE);
   await smal.locator("[role=dialog]").waitFor();
   await smal.waitForTimeout(800);
+  await ingenSiderulling(smal, "åpent mappeark 320 px, 200 % tekst");
+  await ingenKlipping(smal, "åpent mappeark 320 px, 200 % tekst");
+  const stortMappeark = await maalArk(smal);
+  sjekk(
+    "bolk 5, 320 px, 200 % tekst: mappens ark er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen",
+    stortMappeark.oppsett === "ark" && stortMappeark.andel <= 90 && stortMappeark.arkInne && stortMappeark.lukkInne && !stortMappeark.siden,
+    JSON.stringify(stortMappeark),
+  );
+  await smal.locator("[role=dialog] button.kort-tekst", { hasText: "EM-bølger" }).click();
+  await smal.locator("[role=dialog] .vifte-tilbake").waitFor();
+  await smal.waitForTimeout(500);
   await ingenSiderulling(smal, "åpent ark 320 px, 200 % tekst");
   await ingenKlipping(smal, "åpent ark 320 px, 200 % tekst");
   const stortArk = await maalArk(smal);
@@ -2792,14 +3097,21 @@ try {
     stortArk.oppsett === "ark" && stortArk.ruller && stortArk.andel <= 90 && stortArk.arkInne && stortArk.lukkInne && !stortArk.siden,
     JSON.stringify(stortArk),
   );
+  sjekk("bolk 5, 320 px, 200 % tekst: «Tilbake til mappen» er innenfor arket og skjermen", stortArk.tilbakeInne, JSON.stringify(stortArk));
   // PC med 200 % tekst: viften faller tilbake til rutenettet når kortene ikke får plass rundt bunken.
   const storPc = await (await nettleser.newContext({ viewport: { width: 1280, height: 900 }, locale: "nb-NO" })).newPage();
   storPc.setDefaultTimeout(120000);
   await storPc.context().addCookies(await pc.context().cookies());
   await storPc.goto(`${APP}/`);
   await storPc.addStyleTag({ content: "html { font-size: 200% !important; }" });
-  await storPc.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
+  await storPc.locator("button:has-text('Vis tekstene i mappen Naturfag')").click(HJOERNE);
   await storPc.locator("[role=dialog]").waitFor();
+  await storPc.waitForTimeout(800);
+  await ingenSiderulling(storPc, "åpen mappe 1280 px, 200 % tekst");
+  await ingenKlipping(storPc, "åpen mappe 1280 px, 200 % tekst");
+  await storPc.locator("[role=dialog] button.kort-tekst", { hasText: "EM-bølger" }).click();
+  await storPc.locator("[role=dialog] .vifte-tilbake").waitFor();
+  await storPc.waitForTimeout(500);
   const storOppsett = await storPc.locator("[role=dialog]").getAttribute("data-oppsett");
   sjekk("1280 px, 200 % tekst: viften er et rutenett", storOppsett === "rutenett", `data-oppsett=${storOppsett}`);
   await ingenSiderulling(storPc, "åpen vifte 1280 px, 200 % tekst");
@@ -2853,9 +3165,10 @@ try {
   await ingenDelteOrd(bunkeTlf, "375 px");
   if (process.env.SKJERMBILDE) await bunkeTlf.screenshot({ path: path.join(process.env.SKJERMBILDE, "arbeidsbord-375.png"), fullPage: true });
   // Bolk 6, utkast C: de små bunkene er striper i full bredde, med tittelen, framdriften og «N av 5».
+  // Bolk 5: mappestripene har «N tekster» i stedet, og sjekkes for seg (over og under).
   const striper = await bunkeTlf.evaluate(() => {
     const ul = document.querySelector(".bunker").getBoundingClientRect();
-    return [...document.querySelectorAll(".bunker > li:not(.bunke-hoved)")].map((li) => {
+    return [...document.querySelectorAll(".bunker > li:not(.bunke-hoved):not(.bunke-mappe)")].map((li) => {
       const b = li.getBoundingClientRect();
       const antall = li.querySelector(".bunke-antall");
       return {
@@ -2874,6 +3187,20 @@ try {
     striper.length > 0 &&
       striper.every((s) => s.full && !s.dato && /^\d av 5$/.test(s.synlig) && s.skjult && s.lest.endsWith("påbegynt") && s.navn.startsWith("Vis aktiviteter for ")),
     JSON.stringify(striper[0]),
+  );
+  // Bolk 5: de løse tekstene og mappene deler de fem plassene, sist aktiv først:
+  // «Diktanalyse» og «Novelleanalyse» (nyest), så de tre mappene med «EM-bølger».
+  const plassene = await bunkeTlf.evaluate(() =>
+    [...document.querySelectorAll(".bunker > li")].map((li) => `${li.classList.contains("bunke-mappe") ? "mappe" : "tekst"}:${li.querySelector(".bunke-tittel").textContent}`),
+  );
+  sjekk(
+    "bolk 5: løse tekster og mapper deler de fem plassene, sortert etter sist aktiv, og «EM-bølger» er ikke egen bunke",
+    plassene.length === 5 &&
+      plassene.slice(0, 2).join(",") === "tekst:Diktanalyse,tekst:Novelleanalyse" &&
+      plassene.slice(2).every((p) => p.startsWith("mappe:")) &&
+      !plassene.includes("tekst:EM-bølger") &&
+      (await bunkeTlf.locator("main a[href='/samling']", { hasText: "Se alle" }).count()) === 0,
+    plassene.join(", "),
   );
   // Låst tekst («Novelleanalyse» er bare lagt inn): fire låste rader i arket.
   await bunkeTlf.locator("button:has-text('Vis aktiviteter for Novelleanalyse')").tap();
@@ -2931,7 +3258,8 @@ try {
     !bredFlater.hilsen && bredFlater.bordBuddy && bredFlater.dato.length > 1 && bredFlater.dato.every(Boolean) && bredFlater.paabegynt.every(Boolean) && bredFlater.paabegynt.length === bredFlater.dato.length,
     JSON.stringify(bredFlater),
   );
-  await bredBord.locator("button:has-text('Vis aktiviteter for EM-bølger')").click(HJOERNE);
+  // Bolk 5: «EM-bølger» ligger i mapper; «Diktanalyse» er hovedbunken og en løs tekst.
+  await bredBord.locator("button:has-text('Vis aktiviteter for Diktanalyse')").click(HJOERNE);
   await bredBord.locator("[role=dialog]").waitFor();
   await bredBord.waitForTimeout(800);
   sjekk(
@@ -3411,8 +3739,12 @@ try {
       // Arbeidsbordet med arket åpent.
       await ctx.addCookies(await pc.context().cookies());
       await s.goto(`${APP}/`);
-      const bunke = s.locator("button[aria-expanded]", { hasText: "Vis aktiviteter for EM-bølger" });
+      // Bolk 5: «EM-bølger» ligger i mapper; arket åpnes på mappen, og teksten
+      // velges, så rotasjonene skjer med det andre nivået i dialogen.
+      const bunke = s.locator("button[aria-expanded]", { hasText: "Vis tekstene i mappen Naturfag" });
       await bunke.click(HJOERNE);
+      await s.locator("[role=dialog] button.kort-tekst", { hasText: "EM-bølger" }).click();
+      await s.locator("[role=dialog] .vifte-tilbake").waitFor();
       const bord = () =>
         s.evaluate(() => {
           const d = document.querySelector("[role=dialog]");
@@ -3423,6 +3755,8 @@ try {
             overflow: getComputedStyle(document.documentElement).overflowY,
             inert: document.querySelectorAll("[inert]").length,
             fokusIDialog: !!document.activeElement?.closest("[role=dialog]"),
+            // Bolk 5: teksten valgt i mappen står valgt gjennom rotasjonene.
+            tekstIMappe: !!d?.querySelector(".vifte-tilbake"),
           };
         });
       /** Venter til viften er åpen med et av oppsettene, og har-ark stemmer med det. */
@@ -3448,7 +3782,8 @@ try {
           (vifteBredt.oppsett === "rundt" || vifteBredt.oppsett === "rutenett") &&
           !vifteBredt.harArk &&
           vifteBredt.overflow !== "hidden" &&
-          vifteBredt.inert > 0,
+          vifteBredt.inert > 0 &&
+          vifteBredt.tekstIMappe,
         JSON.stringify(vifteBredt),
       );
       await ingenSiderulling(s, "arbeidsbord med åpen vifte etter rotasjon");
@@ -3457,7 +3792,7 @@ try {
       const arkIgjen = await bord();
       sjekk(
         "rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen",
-        arkIgjen.dialog && arkIgjen.oppsett === "ark" && arkIgjen.harArk,
+        arkIgjen.dialog && arkIgjen.oppsett === "ark" && arkIgjen.harArk && arkIgjen.tekstIMappe,
         JSON.stringify(arkIgjen),
       );
       await s.keyboard.press("Escape");

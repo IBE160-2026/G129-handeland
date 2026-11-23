@@ -189,6 +189,11 @@ components:
     radius: '{rounded.lg}'
     title: 1.375rem Instrument Serif
     sheetUnder: ett ark rett under forsiden, ikke rotert
+  stack-folder:                 # mappebunken (runde 3, bolk 5, 23.11), på stack-main, stack-small og stack-strip
+    tab: flik øverst til venstre, 4.5rem × 0.875rem, samme kant og flate som forsiden, ingen kant nederst, radius 10px 10px 0 0
+    label: «Mappe», {typography.body-sm} 0.875rem fet med versaler, 2px kant i {colors.primary}, tekst i {colors.text}
+    meta: «N tekster» i stedet for datoen; ingen framdrift
+    forcedColors: kant i CanvasText på fliken og merkelappen
   sheet:                        # viften smalere enn 760 px (bolk 6)
     background: '{colors.surface}'
     radius: 28px 28px 0 0
@@ -394,9 +399,10 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De
 - *Titler* brytes. Er tittelen lengre enn tre linjer, avkortes den visuelt med ellipse, men står i sin helhet i det tilgjengelige navnet og øverst i viften.
 - *Hover:* bunken løftes 4 px. *Åpen:* bunken flyttes til midten og skaleres til 80 %.
 - **Stripe** (`{components.stack-strip}`, smalere enn 760 px): de små bunkene er striper i full bredde. Tittelen har hele den første linjen og brytes bare mellom ord. Under står framdriften og «N av 5» (ordet «påbegynt» er skjult tekst for skjermlesere). Datoen vises ikke. Ett ark ligger rett under forsiden, uten rotasjon, så ingenting stikker ut til siden.
+- **Mappebunke** (`{components.stack-folder}`, runde 3, bolk 5, 23.11): en Mappe med Tekster er én bunke med en mappefane, en flik øverst til venstre i samme kant og flate som forsiden (fiolett på hovedbunken). Forsiden viser merkelappen «Mappe», tittelen og «N tekster» i stedet for «lagt inn …», uten framdrift. Er den hovedbunken, har den «Sist brukt» og lenken til neste steg for Teksten som sist ble brukt, med tittelen først («EM-bølger: Neste: Ta quizen →»). På telefon får stripen den samme fliken og «Mappe» foran tittelen, og «N tekster» til høyre; er det ikke plass til begge på én linje, går tittelen ned på neste linje i stedet for å deles. Forskjellen bæres av teksten, ikke bare av formen; i kontrastmodus har fliken og merkelappen kant.
 
 **Arket** (`{components.sheet}`, smalere enn 760 px)
-- Viften er et ark som glir opp fra bunnen over en mørk bakgrunn: tittelen og «Legg sammen» øverst (knappen går til linjen under når teksten er stor), og de fem aktivitetene som rader med en tynn skillelinje. Åpne rader har en pil (›), og låste rader har låseikonet og teksten «Låst. Åpnes når du har lest teksten.» i full kontrast.
+- Viften er et ark som glir opp fra bunnen over en mørk bakgrunn: tittelen og «Legg sammen» øverst (knappen går til linjen under når teksten er stor), og de fem aktivitetene som rader med en tynn skillelinje. For en Mappe er radene Tekstene og de to samlede kortene; med en Tekst valgt står «Tilbake til mappen» og «Legg sammen» på en egen rad over tittelen (runde 3, bolk 5, 23.11). Åpne rader har en pil (›), og låste rader har låseikonet og teksten «Låst. Åpnes når du har lest teksten.» i full kontrast.
 - Arket har ikke noe grep øverst, fordi det ikke kan dras (EXPERIENCE.md: ingen sveip).
 
 **Hilsenen på telefon:** mini-Buddy med brillene 36 px høye ved siden av «Hei!», med neste steg i en boble på `{colors.surface}` med tynn kant og `{elevation.sheet}`. Fra 760 px står Buddy på bordet i stedet.

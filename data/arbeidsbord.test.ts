@@ -213,6 +213,83 @@ describe("Sist aktiv og bordet", () => {
   });
 });
 
+describe("bordet med Mapper (runde 3, bolk 5)", () => {
+  const dag = (n: number) => new Date(T0.getTime() + n * DAG);
+  const mappe = (id: string, tittel: string, opprettet = T0) => ({ id, tittel, opprettet });
+  const ider = (bord: ReturnType<typeof a.settSammenBordet>) =>
+    (bord.hoved ? [bord.hoved, ...bord.smaa] : []).map((p) => `${p.slag}:${p.id}`);
+
+  test("ingen mapper: bordet som før", () => {
+    const tekster = [bunke({ id: "a", sistAktiv: dag(1) }), bunke({ id: "b", sistAktiv: dag(3) }), bunke({ id: "c", sistAktiv: dag(2) })];
+    const bord = a.settSammenBordet(tekster, [], new Map());
+    const foer = a.velgBordet(tekster);
+    expect(ider(bord)).toEqual(["tekst:b", "tekst:c", "tekst:a"]);
+    expect([bord.hoved?.id, ...bord.smaa.map((p) => p.id)]).toEqual([foer.hoved?.id, ...foer.smaa.map((b) => b.id)]);
+    expect(bord.hoved).toMatchObject(foer.hoved!);
+    expect(bord).toMatchObject({ antall: 3, synlige: 3 });
+  });
+
+  test("siste tekst i en mappe: mappen er hovedbunken, teksten er ikke egen bunke, og den er sist brukt", () => {
+    const em = bunke({ id: "em", tittel: "EM-bølger", sistAktiv: dag(5) });
+    const tekster = [em, bunke({ id: "dikt", sistAktiv: dag(2) }), bunke({ id: "celle", sistAktiv: dag(1) })];
+    const bord = a.settSammenBordet(tekster, [mappe("nf", "Naturfag")], new Map([["em", ["nf"]], ["celle", ["nf"]]]));
+    expect(ider(bord)).toEqual(["mappe:nf", "tekst:dikt"]);
+    expect(bord.hoved).toMatchObject({ slag: "mappe", tittel: "Naturfag", sistAktiv: dag(5) });
+    expect(a.sistBrukteTekst(bord.hoved!).id).toBe("em");
+    // Neste steg er tekstens, uendret.
+    expect(a.nesteSteg(a.sistBrukteTekst(bord.hoved!))).toEqual(a.nesteSteg(em));
+    expect(bord.hoved?.slag === "mappe" && bord.hoved.tekster.map((t) => t.id)).toEqual(["em", "celle"]);
+  });
+
+  test("en tekst i to mapper: to mappebunker, og teksten står i begge", () => {
+    const tekster = [bunke({ id: "em", sistAktiv: dag(5) }), bunke({ id: "løs", sistAktiv: dag(1) })];
+    const bord = a.settSammenBordet(tekster, [mappe("nf", "Naturfag"), mappe("pr", "Prøve", dag(-1))], new Map([["em", ["nf", "pr"]]]));
+    expect(ider(bord)).toEqual(["mappe:nf", "mappe:pr", "tekst:løs"]);
+    for (const p of [bord.hoved!, ...bord.smaa].filter((p) => p.slag === "mappe")) expect(p.slag === "mappe" && p.tekster.map((t) => t.id)).toEqual(["em"]);
+    expect(bord).toMatchObject({ antall: 2, synlige: 2 });
+  });
+
+  test("like aktive mapper: den nyeste mappen først, så id", () => {
+    const tekster = [bunke({ id: "em", sistAktiv: dag(5) })];
+    const mapper = [mappe("nf", "Naturfag", dag(1)), mappe("ek", "Eksamen", dag(3)), mappe("pr", "Prøve", dag(2))];
+    const bord = a.settSammenBordet(tekster, mapper, new Map([["em", ["nf", "pr", "ek"]]]));
+    expect(ider(bord)).toEqual(["mappe:ek", "mappe:pr", "mappe:nf"]);
+  });
+
+  test("en tom mappe ligger ikke på bordet, og et medlemskap i en ukjent mappe hoppes over", () => {
+    const tekster = [bunke({ id: "a", sistAktiv: dag(1) }), bunke({ id: "b", sistAktiv: dag(2) })];
+    const bord = a.settSammenBordet(tekster, [mappe("tom", "Tom")], new Map([["a", ["slettet"]]]));
+    expect(ider(bord)).toEqual(["tekst:b", "tekst:a"]);
+  });
+
+  test("mappen er like aktiv som sin nyeste tekst, og sorteres mellom de løse tekstene", () => {
+    const tekster = [
+      bunke({ id: "t1", sistAktiv: dag(1) }),
+      bunke({ id: "t2", sistAktiv: dag(2) }),
+      bunke({ id: "t3", sistAktiv: dag(3) }),
+      bunke({ id: "t4", sistAktiv: dag(4) }),
+    ];
+    const bord = a.settSammenBordet(tekster, [mappe("m", "Mappe")], new Map([["t1", ["m"]], ["t3", ["m"]]]));
+    expect(ider(bord)).toEqual(["tekst:t4", "mappe:m", "tekst:t2"]);
+  });
+
+  test("mappene og de løse tekstene deler fem plasser; «Se alle» når ikke alle tekstene kan nås", () => {
+    const tekster = Array.from({ length: 9 }, (_, i) => bunke({ id: `t${i}`, sistAktiv: dag(i) }));
+    // t8 og t0 i samme mappe: mappen er like aktiv som t8 og blir hovedbunken.
+    const bord = a.settSammenBordet(tekster, [mappe("m", "Mappe")], new Map([["t8", ["m"]], ["t0", ["m"]]]));
+    expect(ider(bord)).toEqual(["mappe:m", "tekst:t7", "tekst:t6", "tekst:t5", "tekst:t4"]);
+    // Synlige: t8 og t0 (i mappen) og t7–t4.
+    expect(bord).toMatchObject({ antall: 9, synlige: 6 });
+    // Alt får plass: ingen «Se alle».
+    const lite = a.settSammenBordet(tekster.slice(0, 3), [mappe("m", "Mappe")], new Map([["t0", ["m"]], ["t1", ["m"]]]));
+    expect(lite).toMatchObject({ antall: 3, synlige: 3 });
+  });
+
+  test("0 tekster: tomt bord, også med mapper", () => {
+    expect(a.settSammenBordet([], [mappe("m", "Mappe")], new Map())).toEqual({ hoved: null, smaa: [], antall: 0, synlige: 0 });
+  });
+});
+
 describe("relativ dag (norsk tid)", () => {
   const naa = new Date("2026-11-13T09:00:00Z"); // 10:00 i Oslo
 

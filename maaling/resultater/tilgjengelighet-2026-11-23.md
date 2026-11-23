@@ -2,7 +2,7 @@
 
 Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk modus) og telefon (375 px, berøring), axe-core WCAG 2.1 A/AA.
 
-**511 av 511 sjekker bestått.**
+**544 av 544 sjekker bestått.**
 
 | | Sjekk | Detalj |
 |---|---|---|
@@ -69,7 +69,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: øvekort |  |
 | ✓ | axe: minnevers |  |
 | ✓ | axe: konto |  |
-| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/quiz |
+| ✓ | FR-48: hovedbunken har neste steg som egen lenke, rett til steget | «Neste: Ta quizen →» → /tekst/d290d740-c15f-49e2-a56a-32967745967e/quiz |
 | ✓ | FR-48: hilsenen sier hvilken tekst eleven holdt på med |  |
 | ✓ | axe: arbeidsbord |  |
 | ✓ | viften finnes ikke i DOM-en når den er lukket |  |
@@ -87,7 +87,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | «Legg sammen» lukker viften og gir fokus tilbake |  |
 | ✓ | Tab fra «+ Ny tekst» treffer aldri et usynlig element |  |
 | ✓ | axe: samling |  |
-| ✓ | FR-49: tittelen i Samlinger lenker til neste steg | /tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/quiz |
+| ✓ | FR-49: tittelen i Samlinger lenker til neste steg | /tekst/d290d740-c15f-49e2-a56a-32967745967e/quiz |
 | ✓ | FR-49: søk uten treff sier det, med «Vis alle» |  |
 | ✓ | menyen markerer Samlinger som aktiv |  |
 | ✓ | overskriften på /samling er «Samlinger» |  |
@@ -100,7 +100,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: mappe: øvekort |  |
 | ✓ | axe: mappe: quiz, valg av lengde |  |
 | ✓ | axe: mappe: quiz, kort |  |
-| ✓ | FR-51: kildeavsnittet i mappen lenker til kortets egen tekst | /tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/lesing#avsnitt-3 |
+| ✓ | FR-51: kildeavsnittet i mappen lenker til kortets egen tekst | /tekst/d290d740-c15f-49e2-a56a-32967745967e/lesing#avsnitt-3 |
 | ✓ | FR-51: et kort merket «Har kontroll» i mappen står som merket i teksten |  |
 | ✓ | FR-50: arbeidsbordet lenker til «Mappene dine» |  |
 | ✓ | bolk 4 (23.11), 1280 px: to kolonner, tekstene ~30 % til venstre og mappene ~70 % til høyre, i flukt øverst | {"andel":0.2999913832720588,"mapperTilHoeyre":true,"sammeTopp":true,"rutenett":true,"mapperFoerst":true,"sidelengs":false} |
@@ -120,11 +120,30 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 4, 375 px: én kolonne med mappene øverst, «Legg i mappe» finnes, og ingen rad er dragbar | {"dra":"av","mapperOver":true,"sidelengs":false,"dragbare":0,"knapper":1} |
 | ✓ | bolk 4, 760 px med 200 % tekst: fortsatt to kolonner, og siden ruller ikke sidelengs | {"dra":"på","tekstbredde":190,"toKolonner":true,"sidelengs":false} |
 | ✓ | ingen tekst klippes: samling 760 px, 200 % tekst |  |
+| ✓ | bolk 5 (23.11): «EM-bølger» ligger i tre mapper og er ikke egen bunke; bordet har tre mappebunker | mappe:Eksamen, mappe:Prøve, mappe:Naturfag |
+| ✓ | bolk 5: mappebunken har fane, «Mappe» og «1 tekst» i stedet for «lagt inn …», og knappen heter «Vis tekstene i mappen …» | {"mappe":true,"hoved":true,"tittel":"Eksamen","merke":"Mappe","tekster":"1 tekst","dato":false,"fane":true,"navn":"Vis tekstene i mappen Eksamen"} |
+| ✓ | bolk 5: hovedbunken («Sist brukt») er en mappe, og neste steg gjelder teksten, med tittelen i lenken | Eksamen: «EM-bølger: Neste: Ta quizen →» → /tekst/d290d740-c15f-49e2-a56a-32967745967e/quiz |
+| ✓ | bolk 5: hilsenen nevner teksten, ikke mappen |  |
+| ✓ | axe: arbeidsbord med mappebunker |  |
+| ✓ | bolk 5: Enter på mappebunken åpner viften med tekstkortene, «Øvekort for hele mappen» og «Quiz for hele mappen», og fokus på det første kortet | {"navn":"Naturfag","merke":"Mappe","kort":["EM-bølger\|1 av 5 påbegynt","Øvekort for hele mappen\|Fagordene fra alle tekstene","Quiz for hele mappen\|Spørsmål fra alle tekstene"],"lenker":["/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930/oevekort","/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930/quiz"],"fokus":true,"tilbake":0,"oppsett":"rundt"} |
+| ✓ | bolk 5, 1280 px: mappens kort dekker ikke hverandre, bunken eller «Legg sammen» | rundt:  |
+| ✓ | bolk 5: Tab og Shift+Tab holder fokus i mappens vifte | 0 av 9 trykk gikk ut |
+| ✓ | axe: arbeidsbord med åpen mappe |  |
+| ✓ | bolk 5: Enter på tekstkortet viser tekstens fem aktivitetskort og «Tilbake til mappen» (med mappens navn for skjermlesere) i samme dialog, med fokus på det første aktivitetskortet | {"navn":"EM-bølger","kort":["Teksten","Quiz","Øvekort","Fagsamtale","Minnevers"],"tilbake":"Tilbake til mappen «Naturfag»","fokus":true,"oppsett":"rundt"} |
+| ✓ | bolk 5, 1280 px: kortene ligger rundt bunken og dekker ikke hverandre, bunken, «Tilbake til mappen» eller «Legg sammen» | rundt:  |
+| ✓ | bolk 5: Tab holder fokus i dialogen også når en tekst er valgt | 0 av 9 trykk gikk ut |
+| ✓ | axe: arbeidsbord, tekst valgt i mappe |  |
+| ✓ | bolk 5: «Tilbake til mappen» (nådd med Shift+Tab) viser mappens kort igjen, med fokus på tekstkortet eleven kom fra | {"paaTilbake":true,"navn":"Naturfag","kort":3,"fokus":true} |
+| ✓ | bolk 5: Esc lukker mappens vifte og gir fokus tilbake til mappebunken |  |
+| ✓ | bolk 5: Esc og «Legg sammen» lukker også med en tekst valgt, og fokus går til mappebunken |  |
+| ✓ | bolk 5: viften åpner alltid på mappens kort |  |
+| ✓ | bolk 5, tvungne farger: mappefanen og «Mappe» har synlig kant | {"fane":true,"merke":true} |
+| ✓ | bolk 5, uten JavaScript: mappebunken er en lenke til /mappe/{id} | /mappe/ab44ea04-0432-4ecb-9016-f113be2b0930 |
 | ✓ | axe: registrering (mørk) |  |
 | ✓ | axe: arbeidsbord (mørk) |  |
 | ✓ | axe: samling (mørk) |  |
 | ✓ | axe: ny tekst (mørk) |  |
-| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/aktivering |
+| ✓ | mørk: overskriftskontroll (3a) omdirigert, sjekkes ikke her | /tekst/d290d740-c15f-49e2-a56a-32967745967e/aktivering |
 | ✓ | axe: aktivering (mørk) |  |
 | ✓ | axe: lesevisning (mørk) |  |
 | ✓ | axe: oppgaver (mørk) |  |
@@ -135,7 +154,8 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | axe: mappe: quiz (mørk) |  |
 | ✓ | axe: konto (mørk) |  |
 | ✓ | axe: vilkår og personvern (mørk) |  |
-| ✓ | axe: arbeidsbord med åpen vifte (mørk) |  |
+| ✓ | axe: arbeidsbord med åpen mappe (mørk) |  |
+| ✓ | axe: arbeidsbord med åpen vifte, tekst valgt i mappe (mørk) |  |
 | ✓ | axe: lesevisning med åpen forklaring (mørk) |  |
 | ✓ | bolk 7 (lys): «Før» er fet og understreket i boksen før opplasting | {"tekst":"Før","vekt":700,"strek":"underline"} |
 | ✓ | axe: ny tekst, bildefanen før opplasting (lys) |  |
@@ -177,7 +197,7 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | temavalg (med JavaScript): andre sider er også mørke |  |
 | ✓ | temavalg (med JavaScript): «Følg enheten» sletter informasjonskapselen og følger systemet igjen | {"tema":null,"skjema":"light dark","bakgrunn":"rgb(255, 245, 247)","darkKlasse":"rgb(90, 86, 112)"} |
 | ✓ | temavalg (uten JavaScript): «Utseende» er en fieldset med legend og tre radioknapper, «Følg enheten» valgt |  |
-| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795473320084 |
+| ✓ | temavalg (uten JavaScript): etter «Lagre» er «Mørk» valgt og statusen sier «Lagret: Mørk.» | valgt moerk, adresse /konto?lagret=utseende&n=1795476788486 |
 | ✓ | temavalg (uten JavaScript): ny innlasting av /konto viser «Mørk» valgt, uten gammel melding | valgt moerk, 0 meldinger |
 | ✓ | temavalg (uten JavaScript): «Mørk» + «Lagre» gir tema=moerk (SameSite=Lax, ett år) og mørk side | moerk, Lax, 365 dager, rgb(15, 18, 38) |
 | ✓ | temavalg (uten JavaScript): andre sider er også mørke |  |
@@ -228,60 +248,60 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | mobil uten sidelengs rulling: øvekort 320 px, 200 % tekst (venstrehendt, mørk) | 327 px innhold i 327 px vindu |
 | ✓ | bolk 9: hand=hoeyre ignoreres, og merkeknappene står til høyre | {"hand":null,"kort":{"v":16,"h":359,"t":413,"b":641,"w":343,"hoeyde":228},"maa":{"v":226,"h":359,"t":293,"b":341,"w":133,"hoeyde":48},"kan":{"v":226,"h":359,"t":353,"b":401,"w":133,"hoeyde":48},"forrige":{"v":16,"h":182,"t":665,"b":713,"w":166,"hoeyde":48},"neste":{"v":194,"h":359,"t":665,"b":713,"w":166,"hoeyde":48},"pressed":["false","false"]} |
 | ✓ | bolk 2b: pilknappene heter «Forrige kort» og «Neste kort» (eller «Ferdig» på siste) og er minst 44 × 44 px | {"bf":{"x":16,"y":664.59375,"width":165.5,"height":48},"bn":{"x":193.5,"y":664.59375,"width":165.5,"height":48}} |
-| ✓ | bolk 2b, 375 px: «Tilbake til mappen» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til mappen | {"bt":{"x":16,"y":105,"width":163.671875,"height":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
-| ✓ | bolk 2b, 375 px: «Tilbake til oppgavene» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til oppgavene | {"bt":{"x":16,"y":105,"width":185.40625,"height":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
-| ✓ | bolk 2b, 759 px: «Tilbake til mappen» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til mappen | {"bt":{"x":59.5,"y":105,"width":163.671875,"height":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
-| ✓ | bolk 2b, 759 px: «Tilbake til oppgavene» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til oppgavene | {"bt":{"x":59.5,"y":105,"width":185.40625,"height":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 2b, 375 px: «Tilbake til mappen» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til mappen | {"bt":{"x":16,"y":105,"width":163.671875,"height":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
+| ✓ | bolk 2b, 375 px: «Tilbake til oppgavene» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til oppgavene | {"bt":{"x":16,"y":105,"width":185.40625,"height":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
+| ✓ | bolk 2b, 759 px: «Tilbake til mappen» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til mappen | {"bt":{"x":59.5,"y":105,"width":163.671875,"height":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
+| ✓ | bolk 2b, 759 px: «Tilbake til oppgavene» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til oppgavene | {"bt":{"x":59.5,"y":105,"width":185.40625,"height":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | bolk 2b: ← (ikke på første), → (forsiden opp), mellomrom (én gang, også på kortet), ikke i skjemafelt, ikke med Ctrl, og → på siste avslutter runden | {"start":1,"antall":8,"venstrePaaFoerste":1,"mellomromSnur":true,"mellomromSnurTilbake":true,"hoeyre":2,"forsidenOpp":true,"venstre":1,"ctrl":1,"paaKortet":true,"paaSummary":true,"iFeltet":true,"ferdig":true} |
-| ✓ | bolk 3, 1280 px, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 1280 px, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, høyrehendt, lys, teksten | 1280 px innhold i 1280 px vindu |
 | ✓ | bolk 3, 1280 px, høyrehendt, lys, teksten: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke | {"foer":false,"etterRamme":true,"fokusPaaKortet":true,"etterKort":false,"etterMellomrom":false} |
 | ✓ | bolk 3, 1280 px, høyrehendt, lys, teksten: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet | {"iRammen":true,"underKortet":true,"overKnappene":true,"klikkSnurIkke":true} |
 | ✓ | bolk 3, 1280 px, høyrehendt, lys, teksten: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «Tilbake til oppgavene» | Må øve mer \| Har kontroll \| Forrige kort \| Neste kort \| Tilbake til oppgavene |
 | ✓ | axe: øvekort 1280 px, høyrehendt, lys |  |
-| ✓ | bolk 3, 1280 px, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 1280 px, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, høyrehendt, lys, mappen | 1280 px innhold i 1280 px vindu |
 | ✓ | axe: øvekort fra mappen 1280 px, høyrehendt, lys |  |
-| ✓ | bolk 3, 1280 px, høyrehendt, mørk, teksten: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 1280 px, høyrehendt, mørk, teksten: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, høyrehendt, mørk, teksten | 1280 px innhold i 1280 px vindu |
 | ✓ | bolk 3, 1280 px, høyrehendt, mørk, teksten: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke | {"foer":false,"etterRamme":true,"fokusPaaKortet":true,"etterKort":false,"etterMellomrom":false} |
 | ✓ | bolk 3, 1280 px, høyrehendt, mørk, teksten: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet | {"iRammen":true,"underKortet":true,"overKnappene":true,"klikkSnurIkke":true} |
 | ✓ | bolk 3, 1280 px, høyrehendt, mørk, teksten: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «Tilbake til oppgavene» | Må øve mer \| Har kontroll \| Forrige kort \| Neste kort \| Tilbake til oppgavene |
 | ✓ | axe: øvekort 1280 px, høyrehendt, mørk |  |
-| ✓ | bolk 3, 1280 px, høyrehendt, mørk, mappen: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 1280 px, høyrehendt, mørk, mappen: knappene nederst i rammen («Må øve mer» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, høyrehendt, mørk, mappen | 1280 px innhold i 1280 px vindu |
 | ✓ | axe: øvekort fra mappen 1280 px, høyrehendt, mørk |  |
-| ✓ | bolk 3, 1280 px, venstrehendt, lys, teksten: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 1280 px, venstrehendt, lys, teksten: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, venstrehendt, lys, teksten | 1280 px innhold i 1280 px vindu |
 | ✓ | bolk 3, 1280 px, venstrehendt, lys, teksten: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke | {"foer":false,"etterRamme":true,"fokusPaaKortet":true,"etterKort":false,"etterMellomrom":false} |
 | ✓ | bolk 3, 1280 px, venstrehendt, lys, teksten: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet | {"iRammen":true,"underKortet":true,"overKnappene":true,"klikkSnurIkke":true} |
 | ✓ | bolk 3, 1280 px, venstrehendt, lys, teksten: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «Tilbake til oppgavene» | Må øve mer \| Har kontroll \| Forrige kort \| Neste kort \| Tilbake til oppgavene |
 | ✓ | axe: øvekort 1280 px, venstrehendt, lys |  |
-| ✓ | bolk 3, 1280 px, venstrehendt, lys, mappen: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 1280 px, venstrehendt, lys, mappen: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, venstrehendt, lys, mappen | 1280 px innhold i 1280 px vindu |
 | ✓ | axe: øvekort fra mappen 1280 px, venstrehendt, lys |  |
-| ✓ | bolk 3, 1280 px, venstrehendt, mørk, teksten: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 1280 px, venstrehendt, mørk, teksten: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":233,"b":533,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":235,"b":459,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":557,"b":605,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":321,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, venstrehendt, mørk, teksten | 1280 px innhold i 1280 px vindu |
 | ✓ | bolk 3, 1280 px, venstrehendt, mørk, teksten: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke | {"foer":false,"etterRamme":true,"fokusPaaKortet":true,"etterKort":false,"etterMellomrom":false} |
 | ✓ | bolk 3, 1280 px, venstrehendt, mørk, teksten: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet | {"iRammen":true,"underKortet":true,"overKnappene":true,"klikkSnurIkke":true} |
 | ✓ | bolk 3, 1280 px, venstrehendt, mørk, teksten: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «Tilbake til oppgavene» | Må øve mer \| Har kontroll \| Forrige kort \| Neste kort \| Tilbake til oppgavene |
 | ✓ | axe: øvekort 1280 px, venstrehendt, mørk |  |
-| ✓ | bolk 3, 1280 px, venstrehendt, mørk, mappen: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 1280 px, venstrehendt, mørk, mappen: knappene nederst i rammen («Har kontroll» til venstre), kortet om lag 960 px, og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":160,"h":1120,"t":237,"b":537,"w":960,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":162,"h":1118,"t":239,"b":463,"w":956,"hoeyde":224},"maa":{"v":902,"h":1094,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":186,"h":378,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":160,"h":1120,"t":561,"b":609,"w":960,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":136,"h":300,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 1280 px, venstrehendt, mørk, mappen | 1280 px innhold i 1280 px vindu |
 | ✓ | axe: øvekort fra mappen 1280 px, venstrehendt, mørk |  |
-| ✓ | bolk 3, 760 px, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":32,"h":728,"t":233,"b":533,"w":696,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":34,"h":726,"t":235,"b":459,"w":692,"hoeyde":224},"maa":{"v":58,"h":250,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":510,"h":702,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":32,"h":728,"t":557,"b":605,"w":696,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":8,"h":193,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 760 px, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":32,"h":728,"t":233,"b":533,"w":696,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":34,"h":726,"t":235,"b":459,"w":692,"hoeyde":224},"maa":{"v":58,"h":250,"t":459,"b":507,"w":192,"hoeyde":48},"kan":{"v":510,"h":702,"t":459,"b":507,"w":192,"hoeyde":48},"nav":{"v":32,"h":728,"t":557,"b":605,"w":696,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":8,"h":193,"t":645,"b":689,"w":185,"hoeyde":44},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, høyrehendt, lys, teksten | 760 px innhold i 760 px vindu |
 | ✓ | bolk 3, 760 px, høyrehendt, lys, teksten: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke | {"foer":false,"etterRamme":true,"fokusPaaKortet":true,"etterKort":false,"etterMellomrom":false} |
 | ✓ | bolk 3, 760 px, høyrehendt, lys, teksten: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet | {"iRammen":true,"underKortet":true,"overKnappene":true,"klikkSnurIkke":true} |
-| ✓ | bolk 3, 760 px, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":32,"h":728,"t":237,"b":537,"w":696,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":34,"h":726,"t":239,"b":463,"w":692,"hoeyde":224},"maa":{"v":58,"h":250,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":510,"h":702,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":32,"h":728,"t":561,"b":609,"w":696,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":8,"h":172,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 760 px, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":32,"h":728,"t":237,"b":537,"w":696,"hoeyde":300},"rammeVisning":"flex","kortKant":"0px","kort":{"v":34,"h":726,"t":239,"b":463,"w":692,"hoeyde":224},"maa":{"v":58,"h":250,"t":463,"b":511,"w":192,"hoeyde":48},"kan":{"v":510,"h":702,"t":463,"b":511,"w":192,"hoeyde":48},"nav":{"v":32,"h":728,"t":561,"b":609,"w":696,"hoeyde":48},"synlige":1,"iHeader":0,"lenke":{"v":8,"h":172,"t":649,"b":693,"w":164,"hoeyde":44},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, høyrehendt, lys, mappen | 760 px innhold i 760 px vindu |
-| ✓ | bolk 3, 760 px, 200 % tekst, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":64,"h":696,"t":608,"b":1316,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":610,"b":1058,"w":628,"hoeyde":448},"maa":{"v":114,"h":498,"t":1058,"b":1150,"w":384,"hoeyde":92},"kan":{"v":114,"h":498,"t":1174,"b":1266,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1364,"b":1456,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":387,"t":1536,"b":1624,"w":371,"hoeyde":88},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 760 px, 200 % tekst, høyrehendt, lys, teksten: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":64,"h":696,"t":608,"b":1316,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":610,"b":1058,"w":628,"hoeyde":448},"maa":{"v":114,"h":498,"t":1058,"b":1150,"w":384,"hoeyde":92},"kan":{"v":114,"h":498,"t":1174,"b":1266,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1364,"b":1456,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":387,"t":1536,"b":1624,"w":371,"hoeyde":88},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, 200 % tekst, høyrehendt, lys, teksten | 760 px innhold i 760 px vindu |
-| ✓ | bolk 3, 760 px, 200 % tekst, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":64,"h":696,"t":616,"b":1324,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":618,"b":1066,"w":628,"hoeyde":448},"maa":{"v":114,"h":498,"t":1066,"b":1158,"w":384,"hoeyde":92},"kan":{"v":114,"h":498,"t":1182,"b":1274,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1372,"b":1464,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":343,"t":1544,"b":1632,"w":327,"hoeyde":88},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 760 px, 200 % tekst, høyrehendt, lys, mappen: knappene nederst i rammen («Må øve mer» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":null,"ramme":{"v":64,"h":696,"t":616,"b":1324,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":618,"b":1066,"w":628,"hoeyde":448},"maa":{"v":114,"h":498,"t":1066,"b":1158,"w":384,"hoeyde":92},"kan":{"v":114,"h":498,"t":1182,"b":1274,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1372,"b":1464,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":343,"t":1544,"b":1632,"w":327,"hoeyde":88},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, 200 % tekst, høyrehendt, lys, mappen | 760 px innhold i 760 px vindu |
-| ✓ | bolk 3, 760 px, 200 % tekst, venstrehendt, lys, teksten: knappene nederst i rammen («Har kontroll» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":64,"h":696,"t":608,"b":1316,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":610,"b":1058,"w":628,"hoeyde":448},"maa":{"v":262,"h":646,"t":1058,"b":1150,"w":384,"hoeyde":92},"kan":{"v":262,"h":646,"t":1174,"b":1266,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1364,"b":1456,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":387,"t":1536,"b":1624,"w":371,"hoeyde":88},"href":"/tekst/43ff14dd-8881-4aab-9e22-3d77ab376e92/oppgaver"} |
+| ✓ | bolk 3, 760 px, 200 % tekst, venstrehendt, lys, teksten: knappene nederst i rammen («Har kontroll» til venstre), og «Tilbake til oppgavene» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":64,"h":696,"t":608,"b":1316,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":610,"b":1058,"w":628,"hoeyde":448},"maa":{"v":262,"h":646,"t":1058,"b":1150,"w":384,"hoeyde":92},"kan":{"v":262,"h":646,"t":1174,"b":1266,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1364,"b":1456,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":387,"t":1536,"b":1624,"w":371,"hoeyde":88},"href":"/tekst/d290d740-c15f-49e2-a56a-32967745967e/oppgaver"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, 200 % tekst, venstrehendt, lys, teksten | 760 px innhold i 760 px vindu |
-| ✓ | bolk 3, 760 px, 200 % tekst, venstrehendt, lys, mappen: knappene nederst i rammen («Har kontroll» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":64,"h":696,"t":616,"b":1324,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":618,"b":1066,"w":628,"hoeyde":448},"maa":{"v":262,"h":646,"t":1066,"b":1158,"w":384,"hoeyde":92},"kan":{"v":262,"h":646,"t":1182,"b":1274,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1372,"b":1464,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":343,"t":1544,"b":1632,"w":327,"hoeyde":88},"href":"/mappe/d986b694-9f57-4067-b745-9e1a20217b71"} |
+| ✓ | bolk 3, 760 px, 200 % tekst, venstrehendt, lys, mappen: knappene nederst i rammen («Har kontroll» til venstre), og «Tilbake til mappen» én gang, nederst til venstre utenfor kortkanten, ikke øverst | {"hand":"venstre","ramme":{"v":64,"h":696,"t":616,"b":1324,"w":632,"hoeyde":708},"rammeVisning":"flex","kortKant":"0px","kort":{"v":66,"h":694,"t":618,"b":1066,"w":628,"hoeyde":448},"maa":{"v":262,"h":646,"t":1066,"b":1158,"w":384,"hoeyde":92},"kan":{"v":262,"h":646,"t":1182,"b":1274,"w":384,"hoeyde":92},"nav":{"v":64,"h":696,"t":1372,"b":1464,"w":632,"hoeyde":92},"synlige":1,"iHeader":0,"lenke":{"v":16,"h":343,"t":1544,"b":1632,"w":327,"hoeyde":88},"href":"/mappe/ab44ea04-0432-4ecb-9016-f113be2b0930"} |
 | ✓ | mobil uten sidelengs rulling: øvekort 760 px, 200 % tekst, venstrehendt, lys, mappen | 760 px innhold i 760 px vindu |
 | ✓ | venstrehendt (med JavaScript): «Venstrehendt» er en avkrysningsboks i en fieldset med legend, ikke valgt |  |
 | ✓ | venstrehendt (med JavaScript): «Lagre»-knappene har ulike navn, og hjelpetekstene er koblet til valgene | {"knapper":["Lagre","Lagre utseendet","Lagre valget for øvekortene"],"hjelp":"«Må øve mer» og «Har kontroll» står til venstre over kortet, så de er lette å nå med venstre tommel. På stor skjerm, der de står nederst i kortet, bytter de plass. Valget gjelder denne enheten.","hjelpIFieldset":true,"tema":"Valget gjelder denne enheten. «Følg enheten» bruker lys eller mørk modus etter innstillingen på telefonen eller PC-en."} |
@@ -325,12 +345,18 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | FR-10 telefon: trykk utenfor lukker |  |
 | ✓ | mobil uten sidelengs rulling: lesevisning etter forklaring | 375 px innhold i 375 px vindu |
 | ✓ | bolk 6, 375 px: Buddy (brillene 36 px) hilser ved «Hei!» med neste steg i boblen, aria-hidden | {"synlig":true,"skjult":true,"brille":36,"boble":"Klar for quizen om EM-bølger?","innenfor":true} |
-| ✓ | bolk 6, 375 px: viften er et ark nederst, med fem rader, og arket og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"andel":66,"ruller":false,"siden":false,"rader":5} |
-| ✓ | bolk 6, 375 px: arket er høyst 90 % av skjermen, og siden under ruller ikke | 66 % |
+| ✓ | bolk 5, 375 px: mappen er en stripe i full bredde med flik, «Mappe» foran tittelen og «1 tekst» | {"full":true,"fane":true,"foran":true,"merke":"Mappe","tekster":"1 tekst"} |
+| ✓ | bolk 5, 375 px: mappens ark har tekstkortet og de to samlede kortene som rader, med fokus på tekstkortet | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":47,"ruller":false,"siden":false,"rader":3} |
+| ✓ | mobil uten sidelengs rulling: arbeidsbord med åpent mappeark | 375 px innhold i 375 px vindu |
+| ✓ | axe: arbeidsbord med åpent mappeark (telefon) |  |
+| ✓ | bolk 5, 375 px: «Tilbake til mappen» står i arket, innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":82,"ruller":false,"siden":false,"rader":5} |
+| ✓ | bolk 6, 375 px: viften er et ark nederst, med fem rader, og arket og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":82,"ruller":false,"siden":false,"rader":5} |
+| ✓ | bolk 6, 375 px: arket er høyst 90 % av skjermen, og siden under ruller ikke | 82 % |
 | ✓ | bolk 6, arket: fokus på den første raden |  |
 | ✓ | bolk 6, arket: Tab og Shift+Tab holder fokus i arket | 0 av 11 trykk gikk ut |
 | ✓ | mobil uten sidelengs rulling: arbeidsbord med åpent ark | 375 px innhold i 375 px vindu |
 | ✓ | axe: arbeidsbord med åpent ark (telefon) |  |
+| ✓ | bolk 5, arket: «Tilbake til mappen» gir mappens tre rader og fokus på tekstkortet | {"rader":3,"fokus":true,"oppsett":"ark"} |
 | ✓ | bolk 6, arket: Esc lukker, har-ark er borte, siden ruller igjen, og fokus er tilbake på bunkens knapp | {"dialog":0,"harArk":false,"overflow":"visible","fokus":true} |
 | ✓ | bolk 6, arket: trykk på bakgrunnen lukker, har-ark er borte, siden ruller igjen, og fokus er tilbake på bunkens knapp | {"dialog":0,"harArk":false,"overflow":"visible","fokus":true} |
 | ✓ | bolk 6, arket: «Legg sammen» lukker, har-ark er borte, siden ruller igjen, og fokus er tilbake på bunkens knapp | {"dialog":0,"harArk":false,"overflow":"visible","fokus":true} |
@@ -356,15 +382,15 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | FR-52: forsøket står under «Tidligere forsøk» med lengden og antallet |  |
 | ✓ | overleveringen: en lenke i topplinjen trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false, /samling |
 | ✓ | overleveringen: «tilbake» trykket mens Buddy tenker, gir ingen avslutning | svar true, verten sett false (), /samling |
-| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/0c476295-7b89-4eaa-857d-1f4373ce80f6/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
+| ✓ | overleveringen: en omdirigering til ?fagordfeil gir ingen avslutning | /tekst/45daa987-de82-46ce-a81e-5033622a9633/lesing?fagordfeil=lagret_svar_mangler, verten sett false |
 | ✓ | overleveringen: verten har én statusregion, tom før noe venter | {"antall":1,"tekst":""} |
 | ✓ | overleveringen: en venting som ender med feil, gir ingen avslutning noe sted | {"antall":1,"tekst":""} |
-| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/3cdf4251-985c-445d-845e-fda87c1dad52/lesing |
+| ✓ | overleveringen, 375 px: «Videre» på en innlimt tekst gir avslutningen på lesevisningen | /tekst/d7979641-4e82-41c1-962d-3734d046b039/lesing |
 | ✓ | overleveringen, 375 px: pillen ligger fast nederst med mini-Buddy (28 px) som spiller avslutningen, og statusregionen sier «Teksten er klar.» | {"posisjon":"fixed","innenfor":true,"mini":true,"slutt":true,"merke":28,"regioner":1,"regionTekst":"Teksten er klar.","fokusIPillen":false,"variabel":"52px","hoeyde":52,"klasse":true} |
 | ✓ | overleveringen: pillen teller med i --tenker-pille og har-tenkepille, og fokus er ikke flyttet til den | 52px / 52px |
 | ✓ | axe: lesevisning med avslutningen i pillen (telefon) |  |
-| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5590 ms, {"antall":1,"tekst":""} |
-| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/3cdf4251-985c-445d-845e-fda87c1dad52/lesing {"antall":1,"tekst":"Fagordene er klare."} |
+| ✓ | overleveringen: pillen står gjennom avslutningen (4,5–5,9 s), er så borte, og html har ikke lenger har-tenkepille | 5509 ms, {"antall":1,"tekst":""} |
+| ✓ | overleveringen: «Prøv igjen» med ?fagordfeil lykkes, adressen er uten fagordfeil, og verten sier «Fagordene er klare.» | /tekst/d7979641-4e82-41c1-962d-3734d046b039/lesing {"antall":1,"tekst":"Fagordene er klare."} |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
 | ✓ | overleveringen: prøveteksten er ryddet bort |  |
@@ -412,21 +438,28 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | bolk 7, 375 px, 200 % tekst: «Lim inn», «PDF» og «Bilder» står på én rad, er like brede og navnet får plass i fanen | [{"navn":"Lim inn","topp":936,"bredde":104,"valgt":"true","flyter":false},{"navn":"PDF","topp":936,"bredde":104,"valgt":"false","flyter":false},{"navn":"Bilder","topp":936,"bredde":104,"valgt":"false","flyter":false}] |
 | ✓ | mobil uten sidelengs rulling: ny tekst 375 px, 200 % tekst, fanene | 375 px innhold i 375 px vindu |
 | ✓ | ingen tekst klippes: ny tekst 375 px, 200 % tekst, fanene |  |
+| ✓ | mobil uten sidelengs rulling: åpent mappeark 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
+| ✓ | ingen tekst klippes: åpent mappeark 320 px, 200 % tekst |  |
+| ✓ | bolk 5, 320 px, 200 % tekst: mappens ark er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":90,"ruller":true,"siden":false,"rader":3} |
 | ✓ | mobil uten sidelengs rulling: åpent ark 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: åpent ark 320 px, 200 % tekst |  |
-| ✓ | bolk 6, 320 px, 200 % tekst: arket ruller internt, er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"andel":90,"ruller":true,"siden":false,"rader":5} |
+| ✓ | bolk 6, 320 px, 200 % tekst: arket ruller internt, er høyst 90 % av skjermen, og «Legg sammen» er innenfor skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":90,"ruller":true,"siden":false,"rader":5} |
+| ✓ | bolk 5, 320 px, 200 % tekst: «Tilbake til mappen» er innenfor arket og skjermen | {"oppsett":"ark","posisjon":"fixed","arkInne":true,"lukkInne":true,"tilbakeInne":true,"andel":90,"ruller":true,"siden":false,"rader":5} |
+| ✓ | mobil uten sidelengs rulling: åpen mappe 1280 px, 200 % tekst | 1280 px innhold i 1280 px vindu |
+| ✓ | ingen tekst klippes: åpen mappe 1280 px, 200 % tekst |  |
 | ✓ | 1280 px, 200 % tekst: viften er et rutenett | data-oppsett=rutenett |
 | ✓ | mobil uten sidelengs rulling: åpen vifte 1280 px, 200 % tekst | 1280 px innhold i 1280 px vindu |
 | ✓ | ingen tekst klippes: åpen vifte 1280 px, 200 % tekst |  |
-| ✓ | 375 px: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, EM-bølger |
+| ✓ | 375 px: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, Eksamen, Prøve, Naturfag |
 | ✓ | bolk 6, 375 px: de små bunkene er striper i full bredde med «N av 5», og knappen heter fortsatt «Vis aktiviteter for …» | {"full":true,"dato":false,"synlig":"0 av 5","skjult":true,"lest":"0 av 5 påbegynt","navn":"Vis aktiviteter for Novelleanalyse"} |
+| ✓ | bolk 5: løse tekster og mapper deler de fem plassene, sortert etter sist aktiv, og «EM-bølger» er ikke egen bunke | tekst:Diktanalyse, tekst:Novelleanalyse, mappe:Eksamen, mappe:Prøve, mappe:Naturfag |
 | ✓ | bolk 6, arket: en tekst som bare er lagt inn, har fire låste rader (ikke lenker) etter Teksten | [{"lenke":true,"laast":false,"pil":true},{"lenke":false,"laast":true,"pil":false},{"lenke":false,"laast":true,"pil":false},{"lenke":false,"laast":true,"pil":false},{"lenke":false,"laast":true,"pil":false}] |
 | ✓ | bolk 6, arket: pilen vises på den åpne raden og ikke på de låste | pil - - - - |
 | ✓ | axe: arbeidsbord med åpent ark, låst tekst (telefon) |  |
-| ✓ | 320 px, 200 % tekst: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, EM-bølger |
+| ✓ | 320 px, 200 % tekst: ingen tittel i en liten bunke brytes midt i et ord («Novelleanalyse» på én linje) | Novelleanalyse, Eksamen, Prøve, Naturfag |
 | ✓ | mobil uten sidelengs rulling: arbeidsbord med striper 320 px, 200 % tekst | 320 px innhold i 320 px vindu |
 | ✓ | ingen tekst klippes: arbeidsbord med striper 320 px, 200 % tekst |  |
-| ✓ | 1280 px: ingen hilsen-Buddy (Buddy står på bordet), og datoen og «påbegynt» er synlige på alle bunkene | {"hilsen":false,"bordBuddy":true,"dato":[true,true,true],"paabegynt":[true,true,true]} |
+| ✓ | 1280 px: ingen hilsen-Buddy (Buddy står på bordet), og datoen og «påbegynt» er synlige på alle bunkene | {"hilsen":false,"bordBuddy":true,"dato":[true,true],"paabegynt":[true,true]} |
 | ✓ | 1280 px: viften har kort uten pil (pilen hører til arket på telefon) |  |
 | ✓ | FR-47: / uten innlogging gir 200 med landingssiden, ikke en omdirigering | status 200 |
 | ✓ | FR-47: landingssiden har «Logg inn» og «Registrer deg» |  |
@@ -489,25 +522,25 @@ Kjørt med `npm run sjekk:tilgjengelighet`: Chrome, PC (1280 px, lys og mørk mo
 | ✓ | rotasjon, landingsside 1280 → 375 px: trykkdemoen er tilbake, uten rester av effekt A | {"effektA":false,"knapper":4,"spenn":0,"paa":0,"klistret":false,"panel":"Trykk på et fagord i teksten, så forklarer Buddy det."} |
 | ✓ | rotasjon, landingsside 375 px igjen: et trykk på «mitose» viser forklaringen | mitoseCelledeling der én celle blir til  |
 | ✓ | mobil uten sidelengs rulling: landingsside etter rotasjon | 375 px innhold i 375 px vindu |
-| ✓ | rotasjon, arbeidsbord 375 px: arket er åpent | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
-| ✓ | rotasjon, arbeidsbord 375 → 1280 px med arket åpent: viften står åpen som vifte, uten har-ark, og resten av siden er fortsatt inert | {"dialog":true,"oppsett":"rundt","harArk":false,"overflow":"visible","inert":12,"fokusIDialog":true} |
+| ✓ | rotasjon, arbeidsbord 375 px: arket er åpent | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true,"tekstIMappe":true} |
+| ✓ | rotasjon, arbeidsbord 375 → 1280 px med arket åpent: viften står åpen som vifte, uten har-ark, og resten av siden er fortsatt inert | {"dialog":true,"oppsett":"rundt","harArk":false,"overflow":"visible","inert":12,"fokusIDialog":true,"tekstIMappe":true} |
 | ✓ | mobil uten sidelengs rulling: arbeidsbord med åpen vifte etter rotasjon | 1280 px innhold i 1280 px vindu |
-| ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true} |
-| ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false} |
+| ✓ | rotasjon, arbeidsbord 1280 → 375 px: viften er et ark igjen | {"dialog":true,"oppsett":"ark","harArk":true,"overflow":"hidden","inert":12,"fokusIDialog":true,"tekstIMappe":true} |
+| ✓ | rotasjon, arbeidsbord: Esc etter rotasjonene lukker, og ingen inert- eller har-ark-rester står igjen | {"dialog":false,"oppsett":null,"harArk":false,"overflow":"visible","inert":0,"fokusIDialog":false,"tekstIMappe":false} |
 | ✓ | rotasjon: ingen skriptfeil i nettleseren |  |
-| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/6dd2161a-f654-41b5-a5bb-d9ca3d43152b/gjennomsyn |
+| ✓ | gjennomsyn (pdf, lys): siden vises med redigeringsfeltet | /tekst/9dcc9004-e653-43fd-84c9-cde4e0faa073/gjennomsyn |
 | ✓ | gjennomsyn (pdf, lys): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (lys) |  |
-| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/6dd2161a-f654-41b5-a5bb-d9ca3d43152b/gjennomsyn |
+| ✓ | gjennomsyn (pdf, mørk): siden vises med redigeringsfeltet | /tekst/9dcc9004-e653-43fd-84c9-cde4e0faa073/gjennomsyn |
 | ✓ | gjennomsyn (pdf, mørk): innlesingsrapporten står over feltet |  |
 | ✓ | axe: gjennomsyn via pdf (mørk) |  |
-| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/edf91db3-d973-4d22-b4bf-21799758a97b/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(100, 39, 214)","pupillFarge":"rgb(20, 26, 58)","rammeFarge":"rgb(100, 39, 214)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.02058,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, lys): siden vises med redigeringsfeltet | /tekst/d474bd83-c0b9-452c-8a66-70412d69e110/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, lys): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(100, 39, 214)","pupillFarge":"rgb(20, 26, 58)","rammeFarge":"rgb(100, 39, 214)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00413,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, lys): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (lys) |  |
 | ✓ | axe: gjennomsyn via bilde (lys) |  |
-| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/edf91db3-d973-4d22-b4bf-21799758a97b/gjennomsyn |
-| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(74, 31, 58)","pupillFarge":"rgb(74, 31, 58)","rammeFarge":"rgb(183, 155, 255)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.0245,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
+| ✓ | gjennomsyn (bilde, mørk): siden vises med redigeringsfeltet | /tekst/d474bd83-c0b9-452c-8a66-70412d69e110/gjennomsyn |
+| ✓ | bolk 10, gjennomsyn (bilde, mørk): Buddy (64 px, aria-hidden) ser ned med bekymrede bryn til venstre i merknaden, og teksten er uendret | {"merke":true,"tilVenstre":true,"bryn":true,"brynFarge":"rgb(74, 31, 58)","pupillFarge":"rgb(74, 31, 58)","rammeFarge":"rgb(183, 155, 255)","animasjon":"u-flakk","brynAnimasjon":"u-bryn-v,u-bryn-h","nede":7.00412,"tekst":"Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av. Rett det som er feil før du går videre."} |
 | ✓ | bolk 10, gjennomsyn (bilde, mørk): med redusert bevegelse står pupillene nede og brynene stille | {"animasjon":"none","bryn":"none,none","nede":7} |
 | ✓ | axe: gjennomsyn via bilde, redusert bevegelse (mørk) |  |
 | ✓ | axe: gjennomsyn via bilde (mørk) |  |

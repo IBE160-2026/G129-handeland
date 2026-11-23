@@ -13,8 +13,16 @@
 export type Maal = { b: number; h: number };
 export type Punkt = { x: number; y: number };
 
-/** Fem kort: øverst, oppe til høyre, nede til høyre, nede til venstre, oppe til venstre. */
-const VINKLER = [-90, -18, 54, 126, 198].map((g) => (g * Math.PI) / 180);
+/**
+ * Kortene fordeles like langt fra hverandre rundt bunken, med det første
+ * øverst. Fem kort (en Tekst): øverst, oppe til høyre, nede til høyre, nede
+ * til venstre, oppe til venstre. En Mappe har opptil 8 Tekster og 2 samlede
+ * kort (runde 3, bolk 5), derav taket.
+ */
+export const MAKS_KORT = 10;
+function vinkler(antall: number): number[] {
+  return Array.from({ length: antall }, (_, i) => ((-90 + (i * 360) / antall) * Math.PI) / 180);
+}
 
 function overlapper(a: Punkt & Maal, b: Punkt & Maal, luft: number): boolean {
   return Math.abs(a.x - b.x) < (a.b + b.b) / 2 + luft && Math.abs(a.y - b.y) < (a.h + b.h) / 2 + luft;
@@ -23,7 +31,7 @@ function overlapper(a: Punkt & Maal, b: Punkt & Maal, luft: number): boolean {
 /**
  * @param bredde  bredden flaten har til rådighet
  * @param senter  bunken i midten
- * @param kort    kortene, i rekkefølge (høyst fem)
+ * @param kort    kortene, i rekkefølge (høyst `MAKS_KORT`)
  * @param luft    minste avstand mellom to flater, og til kanten
  * @returns høyden flaten trenger, midtpunktet til bunken, og midtpunktet til
  *          hvert kort (alt regnet fra flatens øvre venstre hjørne), eller
@@ -35,7 +43,8 @@ export function plasserRundt(
   kort: Maal[],
   luft = 24,
 ): { hoeyde: number; senter: Punkt; kort: Punkt[] } | null {
-  if (kort.length === 0 || kort.length > VINKLER.length) return null;
+  if (kort.length === 0 || kort.length > MAKS_KORT) return null;
+  const v = vinkler(kort.length);
   const kb = Math.max(...kort.map((k) => k.b));
   const kh = Math.max(...kort.map((k) => k.h));
 
@@ -45,7 +54,7 @@ export function plasserRundt(
   for (let forsoek = 0; forsoek < 40; forsoek++) {
     const flater = [
       { x: 0, y: 0, ...senter },
-      ...kort.map((k, i) => ({ x: Math.cos(VINKLER[i]) * rx, y: Math.sin(VINKLER[i]) * ry, ...k })),
+      ...kort.map((k, i) => ({ x: Math.cos(v[i]) * rx, y: Math.sin(v[i]) * ry, ...k })),
     ];
     let kollisjon = false;
     for (let i = 0; i < flater.length && !kollisjon; i++)

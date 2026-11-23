@@ -28,6 +28,16 @@
  *     Esc eller trykk på bakgrunnen, aldri med sveip eller dragging.
  *   - Smalere enn 760 px er de små bunkene striper i full bredde (utkast C):
  *     tittelen, framdriften og «N av 5». Stilen står i globals.css.
+ *
+ * Mapper (runde 3, bolk 5, avgjort 23.11): en Mappe med Tekster er én bunke
+ * med mappefane, merkelappen «Mappe» og «N tekster» (i stedet for «lagt
+ * inn …»). Knappen heter «Vis tekstene i mappen {tittel}», og uten
+ * JavaScript er den en lenke til `/mappe/{id}`. Viften for en Mappe har to
+ * nivåer i samme dialog: først Tekstene (tittel og «N av 5 påbegynt») og de
+ * to samlede kortene, «Øvekort for hele mappen» og «Quiz for hele mappen».
+ * Velges en Tekst, viser dialogen dens fem aktivitetskort med «Tilbake til
+ * mappen», og fokus går til det første aktivitetskortet; tilbake går fokus
+ * til tekstkortet eleven kom fra. Ellers gjelder de samme reglene.
  */
 
 import Link from "next/link";
@@ -38,7 +48,9 @@ import { KNAPP_SEKUNDAER } from "./knapper";
 import { BuddyMerke } from "./Merke";
 import { type Punkt, plasserRundt } from "./vifteplass";
 
+/** En Tekst på bordet, eller i en Mappe. */
 export type Visningsbunke = {
+  slag?: "tekst";
   id: string;
   tittel: string;
   /** «11. nov.» */
@@ -48,7 +60,18 @@ export type Visningsbunke = {
   kort: Kort[];
 };
 
-export type Hovedbunke = Visningsbunke & {
+/** En Mappe med minst én Tekst, som én bunke. Tekstene står med den som sist var aktiv, først. */
+export type Mappevisning = {
+  slag: "mappe";
+  id: string;
+  tittel: string;
+  tekster: Visningsbunke[];
+};
+
+export type Bordvisning = Visningsbunke | Mappevisning;
+
+export type Hovedbunke = Bordvisning & {
+  /** Neste steg. Er hovedbunken en Mappe, gjelder det Teksten som sist ble brukt, og tittelen står i lenken. */
   neste: { tekst: string; href: string };
   /** Buddys boble, som gjentar neste steg. Bare pynt. */
   boble: string;
@@ -60,7 +83,24 @@ type Oppsett =
   | { modus: "ark" }
   | { modus: "rundt"; hoeyde: number; senter: Punkt; kort: Punkt[] };
 
+/** Ett kort i viften: en aktivitet, en Tekst i Mappen, eller samlet øving for hele Mappen. */
+type Vifteelement =
+  | { slag: "aktivitet"; noekkel: string; kort: Kort }
+  | { slag: "tekst"; noekkel: string; tekst: Visningsbunke }
+  | { slag: "samlet"; noekkel: string; navn: string; status: string; href: string; ikon: string };
+
 const IKON: Record<Kort["navn"], string> = { Teksten: "T", Quiz: "?", Øvekort: "◫", Fagsamtale: "“", Minnevers: "♪" };
+
+/** Det første kortet i viften som kan få fokus (et låst kort er ikke en lenke). */
+const FOERSTE_KORT = ".vifte-kort a, .vifte-kort button";
+
+function antallTekster(n: number): string {
+  return n === 1 ? "1 tekst" : `${n} tekster`;
+}
+
+function paabegynt(t: Visningsbunke): string {
+  return `${t.framdrift.filter(Boolean).length} av ${t.framdrift.length} påbegynt`;
+}
 
 /** Usann på serveren og under hydrering, sann når skriptet kjører. */
 const ingenting = () => () => {};
@@ -72,23 +112,61 @@ function useHarSkript() {
   );
 }
 
-export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: Visningsbunke[]; antall: number }) {
+export function Arbeidsbord({
+  hoved,
+  smaa,
+  antall,
+  synlige,
+}: {
+  hoved: Hovedbunke;
+  smaa: Bordvisning[];
+  /** Alle elevens Tekster. */
+  antall: number;
+  /** Hvor mange ulike Tekster som kan nås fra bordet (også de i mappebunkene). */
+  synlige: number;
+}) {
   const harSkript = useHarSkript();
   const vifteId = useId();
   const [apen, settApen] = useState<string | null>(null);
+  /** I en Mappe: Teksten eleven har valgt, eller `null` når Mappens kort vises. */
+  const [valgtTekst, settValgtTekst] = useState<string | null>(null);
   const [oppsett, settOppsett] = useState<Oppsett>({ modus: "rutenett" });
   const rot = useRef<HTMLDivElement>(null);
   const vifte = useRef<HTMLDivElement>(null);
   const knapper = useRef(new Map<string, HTMLButtonElement>());
   const bunker = useRef(new Map<string, HTMLLIElement>());
   const tilbake = useRef<string | null>(null);
+  /**
+   * Satt når eleven bytter nivå i en Mappe: hvor fokus skal når kortene
+   * ligger der de skal. `null` er det første kortet, ellers tekstkortet med
+   * den id-en (tilbake til mappen).
+   */
+  const nyttFokus = useRef<{ tekst: string | null } | null>(null);
   const proeve = useRef<HTMLSpanElement>(null);
 
-  const alle = [hoved, ...smaa];
+  const alle: Bordvisning[] = [hoved, ...smaa];
   const valgt = alle.find((b) => b.id === apen) ?? null;
   // Teksten kan være borte etter en revalidering (slettet i en annen fane).
   // Da lukkes viften; ellers ble resten av siden stående inert uten dialog.
   if (apen !== null && !valgt) settApen(null);
+  const mappe = valgt?.slag === "mappe" ? valgt : null;
+  const tekstIMappe = (mappe && valgtTekst !== null && mappe.tekster.find((t) => t.id === valgtTekst)) || null;
+  // Den valgte Teksten er tatt ut av Mappen: tilbake til Mappens kort.
+  if (valgtTekst !== null && !tekstIMappe) settValgtTekst(null);
+  /** Det som står i midten av viften: Mappen, eller en Tekst (alene eller valgt i Mappen). */
+  const midt: Bordvisning | null = tekstIMappe ?? valgt;
+  /** Endres når kortene i viften byttes ut, så de måles på nytt. */
+  const nivaa = tekstIMappe ? `${apen}/${tekstIMappe.id}` : apen;
+
+  const elementer: Vifteelement[] = !midt
+    ? []
+    : midt.slag === "mappe"
+      ? [
+          ...midt.tekster.map((t): Vifteelement => ({ slag: "tekst", noekkel: `tekst:${t.id}`, tekst: t })),
+          { slag: "samlet", noekkel: "oevekort", navn: "Øvekort for hele mappen", status: "Fagordene fra alle tekstene", href: `/mappe/${midt.id}/oevekort`, ikon: IKON.Øvekort },
+          { slag: "samlet", noekkel: "quiz", navn: "Quiz for hele mappen", status: "Spørsmål fra alle tekstene", href: `/mappe/${midt.id}/quiz`, ikon: IKON.Quiz },
+        ]
+      : midt.kort.map((k): Vifteelement => ({ slag: "aktivitet", noekkel: `${midt.id}:${k.navn}`, kort: k }));
 
   /**
    * På telefon er viften et ark nedenfra. Ellers prøver den å legge kortene
@@ -103,21 +181,34 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
   }
   function apne(id: string) {
     tilbake.current = id;
+    nyttFokus.current = null;
+    settValgtTekst(null);
     settOppsett(startOppsett());
     settApen(id);
   }
   function lukk() {
     settApen(null);
   }
+  /** I en Mappe: vis Tekstens fem aktivitetskort i samme dialog. */
+  function velgTekst(id: string) {
+    nyttFokus.current = { tekst: null };
+    settValgtTekst(id);
+    settOppsett(startOppsett());
+  }
+  function tilbakeTilMappen() {
+    nyttFokus.current = { tekst: valgtTekst };
+    settValgtTekst(null);
+    settOppsett(startOppsett());
+  }
 
   // Mål kortene og bunken, og legg dem rundt bunken hvis det er plass. Før
   // første tegning, så eleven aldri ser målingen.
   useLayoutEffect(() => {
     const v = vifte.current;
-    if (!apen || !v || oppsett.modus !== "maal") return;
+    if (!apen || !nivaa || !v || oppsett.modus !== "maal") return;
     const senter = v.querySelector<HTMLElement>(".vifte-senter")!;
     const kort = [...v.querySelectorAll<HTMLElement>(".vifte-kort > li")];
-    const lukkKnapp = v.querySelector<HTMLElement>(".vifte-lukk")!;
+    const toppknapper = [...v.querySelectorAll<HTMLElement>(".vifte-topp > button")];
     const luft = parseFloat(getComputedStyle(document.documentElement).fontSize) * 1.25;
     const plass = plasserRundt(
       v.clientWidth,
@@ -129,15 +220,15 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
       settOppsett({ modus: "rutenett" });
       return;
     }
-    // Plass til «Legg sammen» øverst til høyre.
-    const topp = lukkKnapp.offsetHeight + luft;
+    // Plass til «Legg sammen» øverst til høyre (og «Tilbake til mappen» til venstre).
+    const topp = Math.max(...toppknapper.map((k) => k.offsetHeight)) + luft;
     settOppsett({
       modus: "rundt",
       hoeyde: plass.hoeyde + topp,
       senter: { x: plass.senter.x, y: plass.senter.y + topp },
       kort: plass.kort.map((p) => ({ x: p.x, y: p.y + topp })),
     });
-  }, [apen, oppsett.modus]);
+  }, [apen, nivaa, oppsett.modus]);
 
   // Når kortene ligger der de skal: regn ut hvor de flyr fra (bunkens plass),
   // start bevegelsen og flytt fokus til det første kortet.
@@ -163,8 +254,15 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
     }
     if (!v.classList.contains("klar")) {
       v.classList.add("klar");
-      v.querySelector<HTMLElement>(".vifte-kort a, .vifte-kort [tabindex]")?.focus({ preventScroll: true });
+      v.querySelector<HTMLElement>(FOERSTE_KORT)?.focus({ preventScroll: true });
       // Arket ligger fast nederst og ruller selv; siden skal ikke flytte seg.
+      if (oppsett.modus !== "ark") senter.scrollIntoView({ block: "nearest" });
+    } else if (nyttFokus.current) {
+      // Nytt nivå i en Mappe: det første aktivitetskortet, eller tekstkortet eleven kom fra.
+      const { tekst } = nyttFokus.current;
+      nyttFokus.current = null;
+      const maal = tekst !== null ? v.querySelector<HTMLElement>(`[data-tekst="${CSS.escape(tekst)}"]`) : null;
+      (maal ?? v.querySelector<HTMLElement>(FOERSTE_KORT))?.focus({ preventScroll: true });
       if (oppsett.modus !== "ark") senter.scrollIntoView({ block: "nearest" });
     }
   }, [apen, oppsett]);
@@ -258,7 +356,8 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
         <ul className="bunker">
           {alle.map((b, i) => {
             const erHoved = i === 0;
-            const navn = `Vis aktiviteter for ${b.tittel}`;
+            const erMappe = b.slag === "mappe";
+            const navn = erMappe ? `Vis tekstene i mappen ${b.tittel}` : `Vis aktiviteter for ${b.tittel}`;
             return (
               <li
                 key={b.id}
@@ -266,27 +365,36 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
                   if (e) bunker.current.set(b.id, e);
                   else bunker.current.delete(b.id);
                 }}
-                className={`bunke ${erHoved ? "bunke-hoved" : ""}`}
+                className={`bunke ${erHoved ? "bunke-hoved" : ""} ${erMappe ? "bunke-mappe" : ""}`}
               >
                 <div className="bunke-forside">
                   {erHoved && <p className="bunke-merkelapp">Sist brukt</p>}
+                  {erMappe && <p className="bunke-mappemerke">Mappe</p>}
                   <h2 className="bunke-tittel">{b.tittel}</h2>
-                  <p className="bunke-dato text-dempet">lagt inn {b.dato}</p>
+                  {erMappe ? (
+                    <p className="bunke-tekster text-dempet">{antallTekster(b.tekster.length)}</p>
+                  ) : (
+                    <p className="bunke-dato text-dempet">lagt inn {b.dato}</p>
+                  )}
                   {erHoved && (
                     <Link href={hoved.neste.href} className="bunke-neste">
                       {hoved.neste.tekst} <span aria-hidden="true">→</span>
                     </Link>
                   )}
-                  <span className="framdrift" aria-hidden="true">
-                    {b.framdrift.map((ja, n) => (
-                      <i key={n} className={ja ? "ja" : undefined} />
-                    ))}
-                  </span>
-                  {/* På stripene (telefon) står bare «N av 5»; «påbegynt» er da skjult tekst. */}
-                  <p className="bunke-antall text-dempet">
-                    {b.framdrift.filter(Boolean).length} av {b.framdrift.length}
-                    <span className={`bunke-paabegynt${erHoved ? "" : " max-[759.98px]:sr-only"}`}> påbegynt</span>
-                  </p>
+                  {!erMappe && (
+                    <>
+                      <span className="framdrift" aria-hidden="true">
+                        {b.framdrift.map((ja, n) => (
+                          <i key={n} className={ja ? "ja" : undefined} />
+                        ))}
+                      </span>
+                      {/* På stripene (telefon) står bare «N av 5»; «påbegynt» er da skjult tekst. */}
+                      <p className="bunke-antall text-dempet">
+                        {b.framdrift.filter(Boolean).length} av {b.framdrift.length}
+                        <span className={`bunke-paabegynt${erHoved ? "" : " max-[759.98px]:sr-only"}`}> påbegynt</span>
+                      </p>
+                    </>
+                  )}
                   {harSkript ? (
                     <button
                       type="button"
@@ -302,7 +410,7 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
                       <span className="sr-only">{navn}</span>
                     </button>
                   ) : (
-                    <a href={`/tekst/${b.id}/oppgaver`} className="bunke-knapp">
+                    <a href={erMappe ? `/mappe/${b.id}` : `/tekst/${b.id}/oppgaver`} className="bunke-knapp">
                       <span className="sr-only">{navn}</span>
                     </a>
                   )}
@@ -320,9 +428,9 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
         <Link href="/ny" className="bord-ny">
           + Legg en ny tekst på bordet
         </Link>
-        {/* FR-50: «Mappene dine» står ved siden av Samlingslenken. Bunkene (FR-48) er de samme. */}
+        {/* FR-50: «Mappene dine» står ved siden av Samlingslenken. */}
         <p className="bord-samling flex flex-wrap justify-center gap-x-6">
-          {antall > alle.length && (
+          {antall > synlige && (
             <Link href="/samling" className="inline-flex min-h-11 items-center text-dempet underline underline-offset-4">
               Se alle {antall} tekstene i Samlinger
             </Link>
@@ -334,8 +442,8 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
       </div>
 
       {/* Bakgrunnen bak arket: et trykk på den legger arket sammen. Pynt for skjermlesere. */}
-      {valgt && ark && <div className="vifte-bakgrunn" aria-hidden="true" onClick={lukk} />}
-      {valgt && (
+      {midt && ark && <div className="vifte-bakgrunn" aria-hidden="true" onClick={lukk} />}
+      {midt && (
         <div
           ref={vifte}
           id={vifteId}
@@ -352,28 +460,69 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
             if (e.target === e.currentTarget && oppsett.modus !== "ark") lukk();
           }}
         >
-          {/* Først i dialogen, fordi den står øverst (WCAG 2.4.3). Fokus går likevel til det første kortet. */}
-          <button type="button" className={`vifte-lukk gap-2 bg-flate ${KNAPP_SEKUNDAER}`} onClick={lukk}>
-            Legg sammen <span aria-hidden="true">✕</span>
-          </button>
-          <div className="bunke vifte-senter" style={plassering(rundt?.senter)}>
+          {/*
+            Først i dialogen, fordi de står øverst (WCAG 2.4.3): «Tilbake til mappen»
+            til venstre når en Tekst i en Mappe er valgt, og «Legg sammen» til høyre.
+            Fokus går likevel til det første kortet.
+          */}
+          <div className={`vifte-topp ${tekstIMappe ? "med-tilbake" : ""}`}>
+            {tekstIMappe && mappe && (
+              <button type="button" className={`vifte-tilbake gap-2 bg-flate ${KNAPP_SEKUNDAER}`} onClick={tilbakeTilMappen}>
+                {/* Mappens navn for skjermlesere: en Tekst kan ligge i flere Mapper. */}
+                <span aria-hidden="true">←</span> Tilbake til mappen<span className="sr-only"> «{mappe.tittel}»</span>
+              </button>
+            )}
+            <button type="button" className={`vifte-lukk gap-2 bg-flate ${KNAPP_SEKUNDAER}`} onClick={lukk}>
+              Legg sammen <span aria-hidden="true">✕</span>
+            </button>
+          </div>
+          <div className={`bunke vifte-senter ${midt.slag === "mappe" ? "bunke-mappe" : ""}`} style={plassering(rundt?.senter)}>
             <div className="bunke-forside">
+              {midt.slag === "mappe" && <p className="bunke-mappemerke">Mappe</p>}
               <h2 id={`${vifteId}-tittel`} className="bunke-tittel">
-                {valgt.tittel}
+                {midt.tittel}
               </h2>
-              <p className="text-dempet">lagt inn {valgt.dato}</p>
-              <p className="text-dempet">
-                {valgt.framdrift.filter(Boolean).length} av {valgt.framdrift.length} påbegynt
-              </p>
+              {midt.slag === "mappe" ? (
+                <p className="text-dempet">{antallTekster(midt.tekster.length)}</p>
+              ) : (
+                <>
+                  <p className="text-dempet">lagt inn {midt.dato}</p>
+                  <p className="text-dempet">{paabegynt(midt)}</p>
+                </>
+              )}
             </div>
           </div>
           <ul className="vifte-kort">
-            {valgt.kort.map((k, i) => (
+            {elementer.map((el, i) => (
               <li
-                key={k.navn}
-                style={{ "--i": i, "--r": `${(i % 2 ? 1 : -1) * (2 + i)}deg`, ...plassering(rundt?.kort[i]) } as CSSProperties}
+                key={el.noekkel}
+                style={{ "--i": i, "--r": `${(i % 2 ? 1 : -1) * (2 + (i % 5))}deg`, ...plassering(rundt?.kort[i]) } as CSSProperties}
               >
-                <Aktivitetskort kort={k} />
+                {el.slag === "aktivitet" ? (
+                  <Aktivitetskort kort={el.kort} />
+                ) : el.slag === "tekst" ? (
+                  <button type="button" className="kort kort-tekst" data-tekst={el.tekst.id} onClick={() => velgTekst(el.tekst.id)}>
+                    <span className="kort-ikon" aria-hidden="true">
+                      {IKON.Teksten}
+                    </span>
+                    <span className="kort-navn">{el.tekst.tittel}</span>
+                    <span className="kort-status">{paabegynt(el.tekst)}</span>
+                    <span className="kort-pil" aria-hidden="true">
+                      ›
+                    </span>
+                  </button>
+                ) : (
+                  <Link href={el.href} className="kort kort-samlet">
+                    <span className="kort-ikon" aria-hidden="true">
+                      {el.ikon}
+                    </span>
+                    <span className="kort-navn">{el.navn}</span>
+                    <span className="kort-status">{el.status}</span>
+                    <span className="kort-pil" aria-hidden="true">
+                      ›
+                    </span>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

@@ -507,6 +507,54 @@ async function enKjoering(nettleser) {
     await pc.locator(`main h3 a[href^="/tekst/${id}/"]`).waitFor({ timeout: 15000 });
   }
   sjekk("13b", "mappen har tekst A og bildeteksten", (await pc.locator("main h3 a[href^='/tekst/']").count()) === 2);
+  // Runde 3, bolk 5 (23.11): på arbeidsbordet er «Prøve» én mappebunke, og
+  // tekst A og bildeteksten er ikke egne bunker. Telefonteksten fra steg 10–12
+  // heter også «EM-bølger», men ligger ikke i mappen, så den er fortsatt en bunke.
+  await pc.goto(`${APP}/`);
+  const proeveBunke = pc.locator("button[aria-expanded]", { hasText: "Vis tekstene i mappen Prøve" });
+  await proeveBunke.waitFor({ timeout: 15000 });
+  const bord = await pc.evaluate(() =>
+    [...document.querySelectorAll(".bunker > li")].map((li) => ({
+      mappe: li.classList.contains("bunke-mappe"),
+      tittel: li.querySelector(".bunke-tittel")?.textContent,
+      merke: li.querySelector(".bunke-mappemerke")?.textContent ?? null,
+      tekster: li.querySelector(".bunke-tekster")?.textContent ?? null,
+    })),
+  );
+  const proeve = bord.find((b) => b.tittel === "Prøve");
+  sjekk(
+    "13b",
+    "arbeidsbordet viser «Prøve» som mappebunke («Mappe», «2 tekster»), og bildeteksten er ikke egen bunke",
+    !!proeve?.mappe && proeve.merke === "Mappe" && proeve.tekster === "2 tekster" && !bord.some((b) => !b.mappe && b.tittel === "Fra bilder"),
+    bord.map((b) => `${b.mappe ? "mappe" : "tekst"}:${b.tittel}`).join(", "),
+  );
+  // Tekst A ligger under mappen: åpne mappen og velg den, så peker aktivitetene til tekst A.
+  await proeveBunke.click({ position: { x: 24, y: 24 } });
+  await pc.locator("[role=dialog] button.kort-tekst").first().waitFor({ timeout: 15000 });
+  const iMappeViften = await pc.locator("[role=dialog] button.kort-tekst").evaluateAll((k) => k.map((e) => e.dataset.tekst));
+  await pc.locator(`[role=dialog] button.kort-tekst[data-tekst="${tekstAId}"]`).click();
+  await pc.locator("[role=dialog] .vifte-tilbake").waitFor({ timeout: 15000 });
+  const tekstAKort = await pc.locator("[role=dialog] .vifte-kort a").first().getAttribute("href");
+  // Bunkene for «EM-bølger» er like mange som tekstene med den tittelen som ikke ligger i en mappe (telefonteksten).
+  const loseEm = await pc.locator(".bunker .bunke-knapp", { hasText: "Vis aktiviteter for EM-bølger" }).count();
+  const utenMappe = (
+    await sql(
+      `SELECT count(*)::int AS n FROM tekst
+        WHERE tittel = 'EM-bølger'
+          AND konto_id = (SELECT id FROM "user" WHERE email = $1)
+          AND id NOT IN (SELECT tekst_id FROM mappe_tekst)`,
+      [epost],
+    )
+  )[0].n;
+  await pc.keyboard.press("Escape");
+  sjekk(
+    "13b",
+    "tekst A er ikke egen bunke, men står i mappens vifte og har sine fem aktiviteter der",
+    iMappeViften.includes(tekstAId) && iMappeViften.includes(bildetekstId) && !!tekstAKort?.startsWith(`/tekst/${tekstAId}/`) && loseEm === utenMappe,
+    `${iMappeViften.length} tekster i viften, første kort ${tekstAKort}, ${loseEm} løs «EM-bølger»-bunke (${utenMappe} uten mappe)`,
+  );
+  // Tilbake til mappesiden for resten av steget.
+  await pc.goto(mappeUrl);
   const bildeRad = pc.locator("main li", { has: pc.locator(`h3 a[href^="/tekst/${bildetekstId}/"]`) });
   sjekk(
     "13b",
