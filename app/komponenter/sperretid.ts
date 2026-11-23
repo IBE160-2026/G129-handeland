@@ -19,3 +19,29 @@ export function sekunderFraOverskrift(verdi: string | null | undefined): number 
 export function ventetekst(sek: number): string {
   return sek === 1 ? "1 sekund" : `${sek} sekunder`;
 }
+
+/** Meldingen ved 429, i §5-form: hva skjedde, og hva eleven kan gjøre. */
+export function sperremelding(sek: number): { melding: string; handling: string } {
+  return {
+    melding: "For mange forsøk på kort tid.",
+    handling: `Vent ${ventetekst(sek)}, og prøv igjen.`,
+  };
+}
+
+/** Teksten på send-knappen mens sperren står. */
+export function knappetekstUnderSperre(sek: number): string {
+  return `Vent ${sek} s`;
+}
+
+/** Det statusregionen sier én gang når sperren er over. */
+export const SPERRE_OVER = "Du kan prøve igjen nå.";
+
+/**
+ * Ett tikk i nedtellingen: sekunder som gjenstår til `slutt`, eller
+ * `"ferdig"` når tiden er ute. Regnes fra sluttidspunktet, så en fane som
+ * har ligget i bakgrunnen viser riktig tall når eleven kommer tilbake.
+ */
+export function nedtelling(slutt: number, naa: number): number | "ferdig" {
+  const sek = Math.ceil((slutt - naa) / 1000);
+  return sek > 0 ? sek : "ferdig";
+}

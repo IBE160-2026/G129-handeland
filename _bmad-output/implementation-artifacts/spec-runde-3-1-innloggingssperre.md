@@ -2,9 +2,10 @@
 title: 'Runde 3, bolk 1: innloggingssperre med nedtelling'
 type: 'feature'
 created: '2026-11-23'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
+baseline_commit: '5b4d73c41a6ee936db063e2df039af706739b38b'
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/oppdrag-design-runde-3.md'
 ---
@@ -50,17 +51,17 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `data/auth.ts` -- `customRules: { "/sign-in/email": { window: 60, max: 5 } }` med kommentar om hvorfor (elev som skriver feil, standarden 3/10 s) -- selve sperren.
-- [ ] `app/komponenter/sperretid.ts` (ny) -- rene funksjoner: `sekunderFraOverskrift(verdi: string | null): number` (heltall ≥ 1, ellers 60) og `ventetekst(sek)` («1 sekund»/«N sekunder») -- testbart uten DOM, som de andre `.test.ts` i mappa.
-- [ ] `app/komponenter/sperretid.test.ts` (ny) -- matrisens kanttilfeller.
-- [ ] `app/komponenter/KontoSkjemaer.tsx` -- `somFeil` tar sekunder for 429; en liten hook (`useSperre`) med `setInterval` som teller ned, sperrer knappen, fjerner feilen og setter en `aria-live="polite"`-status ved 0; brukt i begge skjemaene -- nedtellingen.
-- [ ] `data/auth.test.ts` -- oppdater de tre testene til 5 per 60 s; ny test: de fem første slipper gjennom, det sjette gir 429 med `X-Retry-After` > 10 og ≤ 60; ny test: `/sign-up/email` sperres fortsatt etter 3 -- låser regelen og avgrensningen.
-- [ ] `data/sjekk-innlogging.mjs` -- regel 14 «Innlogging tillater fem forsøk per minutt»: bytt `"/sign-in/email": { window: 60, max: 5 }` med en sti som ikke matcher.
-- [ ] `prd-lesevenn.md`, `gjennomgang-innlogging.md` -- FR-35: grensen og meldingen; FR-41/gjennomgangen: 14 regler og resultatet av kjøringen.
+- [x] `data/auth.ts` -- `customRules: { "/sign-in/email": { window: 60, max: 5 } }` med kommentar om hvorfor (elev som skriver feil, standarden 3/10 s) -- selve sperren.
+- [x] `app/komponenter/sperretid.ts` (ny) -- rene funksjoner: `sekunderFraOverskrift(verdi: string | null): number` (heltall ≥ 1, ellers 60) og `ventetekst(sek)` («1 sekund»/«N sekunder») -- testbart uten DOM, som de andre `.test.ts` i mappa.
+- [x] `app/komponenter/sperretid.test.ts` (ny) -- matrisens kanttilfeller.
+- [x] `app/komponenter/KontoSkjemaer.tsx` -- `somFeil` tar sekunder for 429; en liten hook (`useSperre`) med `setInterval` som teller ned, sperrer knappen, fjerner feilen og setter en `aria-live="polite"`-status ved 0; brukt i begge skjemaene -- nedtellingen.
+- [x] `data/auth.test.ts` -- oppdater de tre testene til 5 per 60 s; ny test: de fem første slipper gjennom, det sjette gir 429 med `X-Retry-After` > 10 og ≤ 60; ny test: `/sign-up/email` sperres fortsatt etter 3 -- låser regelen og avgrensningen.
+- [x] `data/sjekk-innlogging.mjs` -- regel 14 «Innlogging tillater fem forsøk per minutt»: bytt `"/sign-in/email": { window: 60, max: 5 }` med en sti som ikke matcher.
+- [x] `prd-lesevenn.md`, `gjennomgang-innlogging.md` -- FR-35: grensen og meldingen; FR-41/gjennomgangen: 14 regler og resultatet av kjøringen.
 
 **Acceptance Criteria:**
 - Given regel 14 er brutt, when `npm run sjekk:innlogging` kjøres, then minst én test feiler, og rapporten sier 14 av 14.
-- Given sperret innlogging, when eleven tabber til knappen, then den er `disabled` og viser gjenstående sekunder, og skjermleseren har lest meldingen én gang.
+- Given sperret innlogging, when eleven tabber til knappen, then den er `aria-disabled` (nås med Tab, sender ikke) og viser gjenstående sekunder, og skjermleseren har lest meldingen én gang.
 
 ## Verification
 
@@ -74,6 +75,13 @@ context:
 - Lokalt med `next build && next start` (sperren er bare på i produksjonsmodus): seks feil passord → melding med sekunder, nedtelling på knappen, «Logg inn» igjen ved 0.
 
 ## Implementation Notes
+
+- **Knappen er `aria-disabled`, ikke `disabled`, under sperren.** Akseptkriteriet krever at eleven kan tabbe til knappen og høre at den er sperret; en `disabled` knapp hoppes over av Tab og mister fokus hvis den hadde det. `aria-disabled="true"` leses som «utilgjengelig»/«dimmet», og `send()` nekter å sende mens sperren står (også ved Enter i et felt). Mens forespørselen går (`venter`) er knappen fortsatt `disabled` som før.
+- Nedtellingen regnes fra et sluttidspunkt (`Date.now() + sek*1000`), ikke ved å telle intervaller, så en strupet bakgrunnsfane viser riktig tall.
+- Statusregionen (`role="status"`, `aria-live="polite"`) står tom fra montering og fylles bare ved 0; knappeteksten er ingen levende region, så sekundene leses ikke opp.
+- `somFeil(feil, sekunder = 60)`: Logg ut og Slett konto bruker standarden, så en eventuell 429 der sier «Vent 60 sekunder».
+- Sekunder hentes i `onError(ctx)`: andre argument for `signIn.email`, inne i `fetchOptions` for `signUp.email` (der `fetchOptions` alt fantes).
+- **Matriserevisjon (hovedøkten):** meldingen, knappeteksten, nedtellingen og «Du kan prøve igjen nå.» er trukket ut som rene funksjoner i `sperretid.ts` (`sperremelding`, `knappetekstUnderSperre`, `nedtelling`, `SPERRE_OVER`) og testet, siden repoet ikke har DOM-testverktøy. 36 av 36 grønne.
 
 ## Spec Change Log
 

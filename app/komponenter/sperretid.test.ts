@@ -5,7 +5,41 @@
  */
 
 import { describe, expect, test } from "vitest";
-import { STANDARD_SPERRETID, sekunderFraOverskrift, ventetekst } from "./sperretid";
+import {
+  SPERRE_OVER,
+  STANDARD_SPERRETID,
+  knappetekstUnderSperre,
+  nedtelling,
+  sekunderFraOverskrift,
+  sperremelding,
+  ventetekst,
+} from "./sperretid";
+
+describe("meldingen og knappen under sperren", () => {
+  test("meldingen sier det faktiske antallet sekunder", () => {
+    expect(sperremelding(47)).toEqual({
+      melding: "For mange forsøk på kort tid.",
+      handling: "Vent 47 sekunder, og prøv igjen.",
+    });
+    expect(sperremelding(1).handling).toBe("Vent 1 sekund, og prøv igjen.");
+    expect(knappetekstUnderSperre(47)).toBe("Vent 47 s");
+  });
+});
+
+describe("nedtelling", () => {
+  const slutt = 100_000;
+  test("teller ned i hele sekunder, rundet opp", () => {
+    expect(nedtelling(slutt, slutt - 47_000)).toBe(47);
+    expect(nedtelling(slutt, slutt - 46_200)).toBe(47);
+    expect(nedtelling(slutt, slutt - 1)).toBe(1);
+  });
+
+  test("ferdig ved 0, også om tikket kommer for sent (bakgrunnsfane)", () => {
+    expect(nedtelling(slutt, slutt)).toBe("ferdig");
+    expect(nedtelling(slutt, slutt + 30_000)).toBe("ferdig");
+    expect(SPERRE_OVER).toBe("Du kan prøve igjen nå.");
+  });
+});
 
 describe("sekunderFraOverskrift", () => {
   test("et gyldig antall sekunder brukes som det er", () => {

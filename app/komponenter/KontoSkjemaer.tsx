@@ -23,7 +23,14 @@ import { slettEnhetsvalgHandling } from "../handlinger";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
-import { STANDARD_SPERRETID, sekunderFraOverskrift, ventetekst } from "./sperretid";
+import {
+  SPERRE_OVER,
+  STANDARD_SPERRETID,
+  knappetekstUnderSperre,
+  nedtelling,
+  sekunderFraOverskrift,
+  sperremelding,
+} from "./sperretid";
 
 /** `vilkaarslenke`: meldingen får en lenke til «Vilkår og personvern». */
 type Feil = { melding: string; handling: string; vilkaarslenke?: boolean };
@@ -54,12 +61,7 @@ function somFeil(
   feil: { status?: number; code?: string } | null | undefined,
   sekunder: number = STANDARD_SPERRETID,
 ): Feil {
-  if (feil?.status === 429) {
-    return {
-      melding: "For mange forsøk på kort tid.",
-      handling: `Vent ${ventetekst(sekunder)}, og prøv igjen.`,
-    };
-  }
+  if (feil?.status === 429) return sperremelding(sekunder);
   switch (feil?.code) {
     case "INVALID_EMAIL_OR_PASSWORD":
       return {
@@ -181,13 +183,13 @@ function useSperre(ferdig: () => void) {
   useEffect(() => {
     if (slutt === null) return;
     const t = setInterval(() => {
-      const sek = Math.ceil((slutt - Date.now()) / 1000);
-      if (sek > 0) return setIgjen(sek);
+      const sek = nedtelling(slutt, Date.now());
+      if (sek !== "ferdig") return setIgjen(sek);
       clearInterval(t);
       setSlutt(null);
       setIgjen(0);
       ferdigRef.current();
-      setStatus("Du kan prøve igjen nå.");
+      setStatus(SPERRE_OVER);
     }, 1000);
     return () => clearInterval(t);
   }, [slutt]);
@@ -249,7 +251,7 @@ function SendKnapp({
       aria-disabled={sperret || undefined}
       className={`${KNAPP} aria-disabled:cursor-not-allowed aria-disabled:opacity-60`}
     >
-      {sperret ? `Vent ${igjen} s` : children}
+      {sperret ? knappetekstUnderSperre(igjen) : children}
     </button>
   );
 }
