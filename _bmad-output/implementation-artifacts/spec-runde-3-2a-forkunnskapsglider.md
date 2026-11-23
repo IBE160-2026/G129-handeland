@@ -2,7 +2,7 @@
 title: 'Runde 3, bolk 2a: forkunnskapen som glider'
 type: 'feature'
 created: '2026-11-23'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '2bd6e45e1efbbba543ec84e6b88b7624542c9edf'
@@ -80,7 +80,30 @@ context:
 - `npm run demotest` med `LESEVENN_TESTMODUS=les` -- bestått uten modellkall
 
 ## Implementation Notes
+- Etter gjennomgangen (f8d17dc): pekertrinnet regnes fra `clientX` (`trinnFraPeker`), bare primærpeker, `onClick` → «Litt», låst til hydrert (`useSyncExternalStore`, som Arbeidsbord.tsx, fordi `set-state-in-effect` er en eslint-feil). Sjekker: vitest 35/35, tilgjengelighet 437/437, demotest 3/3 (les), README 9/9. Ikke prøvd på ekte iPhone.
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+| # | Lag | Funn | Verdikt | Begrunnelse | Rute |
+|---|---|---|---|---|---|
+| 1 | blind | iOS Safari flytter ikke håndtaket ved trykk på sporet, så `onPointerUp` leser 1 og lagrer «Litt» uansett hvor eleven trykker | high | Kjent WebKit-oppførsel; `onPointerUp` bruker `e.currentTarget.value`. Bryter «alle tre fra urørt med berøring» | patch (regn trinnet fra `clientX` mot sporets bredde) |
+| 2 | blind, edge | `onPointerUp` sjekker ikke `e.button`/`isPrimary`: høyre-/midtklikk velger «Litt» | low | Én betingelse | patch |
+| 3 | edge | Trykk startet utenfor og sluppet over glideren merker | low | Sjeldent; vakt krever ny tilstand | avvist |
+| 4 | edge | Rulling på telefon kan merke ved et uhell | maybe-false | `pan-y` gir `pointercancel` ved loddrett rulling, så `pointerup` kommer ikke; om Chrome flytter håndtaket på `pointerdown` før avbrytingen (og `change` fyrer), er uavklart | defer (medium, uverifisert) |
+| 5 | blind, edge | Uten skript / før hydrering ser glideren virksom ut, men ingenting lagres | low | Én `disabled` til komponenten er montert dekker begge | patch |
+| 6 | edge | VoiceOver/TalkBack: «Litt» fra urørt med dobbelttrykk | maybe-false | Hjelpemiddelet sender `click`, ikke nødvendigvis `pointerup` på håndtaket; `onClick` → `velgGjeldende` er ufarlig ved museklikk (samme trinn) | patch |
+| 7 | blind | Alle «Skjønner ikke overskriften»-knappene har samme navn | low | Én `aria-describedby` til `legend` | patch |
+| 8 | blind | Skjermleser på telefon er ikke beskrevet i EXPERIENCE.md | low | Tekst | patch |
+| 9 | blind, edge | `sjekk-readme.mjs` sjekker ikke at «Mye» ble satt; `boundingBox()` kan være `null` (også i demotest) | low | Tester som består uten å ha merket | patch |
+| 10 | edge | Sjekken av klikk på håndtaket hoppes stille over med færre enn tre overskrifter | low | Én `else`-gren | patch |
+| 11 | edge | Fjernet sjekk av ikke-farge-indikator (hake/fet trinn) | medium | DESIGN lover hake på knappen og fett trinnmerke; ingen sjekk igjen | patch |
+| 12 | blind | Testhull: PageUp/PageDown | low | Trivielt | patch |
+| 13 | verif | Toppkommentaren i `aktivering/page.tsx` beskriver fire likestilte valg | low | Kommentar | patch |
+| 14 | blind | Dempet håndtak: kontrast mot sporet, og står der «Litt» er | maybe-false | Håndtaket (28 px) er større enn sporet (8 px) og ligger mest mot sidebakgrunnen; plassering i midten er Arves avgjørelse, og statuslinjen sier «Ikke merket ennå» | avvist |
+| 15 | blind | `forced-colors` ikke testet; axe ikke kjørt på 320 px/200 % | low | Ny testinfrastruktur for liten gevinst | avvist |
+| 16 | blind | `somTrinn("")`/`null` gir 0 | low | Glideren gir aldri tom verdi | avvist |
+| 17 | blind | Merkene ved en feilrunde (skjemaet nullstilles) | maybe-false | Radioene ble nullstilt på samme måte før; uavklart om skjult felt/kontrollert glider kommer ut av takt etter `form reset` | defer |
+| 18 | edge | Knappen beskrives ikke lenger av spørsmålet | low | Gruppen (`legend`) gir sammenhengen; dekkes av #7 | avvist |
+| 19 | blind | Demotesten tester berøring i Chromium, ikke WebKit | medium | #1 ville ikke blitt fanget | defer |

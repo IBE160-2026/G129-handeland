@@ -87,3 +87,12 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2b-oevekort-og-samlinger.md`
   summary: Når øvekortrunden avsluttes («Ferdig» eller → på siste kort), avmonteres kortflaten og fokus faller til body; fokus bør flyttes til «Runden er ferdig».
   evidence: Gjaldt «Ferdig»-knappen også før runde 3; oppsummeringen er `role="status"` og leses opp, så skaden er at tastaturbrukeren mister plassen sin.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2a-forkunnskapsglider.md`
+  summary: Uverifisert (ville vært medium): på Android kan et rulleforsøk som starter på glidersporet merke overskriften, om Chrome flytter håndtaket før `pointercancel`.
+  evidence: Avgjøres ved å rulle aktiveringssiden på en Android-telefon med fingeren på et spor og se om statuslinjen endres.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2a-forkunnskapsglider.md`
+  summary: Uverifisert: etter en feilrunde i aktiveringen (f.eks. nettfeil) kan glideren og det skjulte feltet komme ut av takt når React nullstiller skjemaet.
+  evidence: Radioene ble nullstilt før også. Avgjøres ved å merke, slå av nettet, trykke «Videre» og se om merkene og det som sendes neste gang, stemmer.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2a-forkunnskapsglider.md`
+  summary: Demotestens telefonløp går i Chromium; WebKit (iPhone) bør med, siden glideren oppfører seg annerledes der.
+  evidence: iOS-feilen i gjennomgangen av 2a ble ikke fanget av noen test; krever at Playwright-WebKit er installert.
