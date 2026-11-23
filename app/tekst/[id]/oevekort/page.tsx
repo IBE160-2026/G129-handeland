@@ -10,6 +10,8 @@ import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
 import { Oevekort } from "../../../komponenter/Oevekort";
 import { Tusj } from "../../../komponenter/Tusj";
 
+const TILBAKE = "inline-flex min-h-11 items-center font-bold underline decoration-primaer underline-offset-4 hover:decoration-2";
+
 export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oevekort">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
   const t = await tilgang();
@@ -26,8 +28,16 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <p className="text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
+      {/* Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11). */}
+      <header>
+        <p>
+          <Link href={`/tekst/${id}/oppgaver`} className={TILBAKE}>
+            <span aria-hidden="true">←&nbsp;</span>Tilbake til oppgavene
+          </Link>
+        </p>
+        <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
+        <h1 className="mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
+      </header>
 
       <div className="mt-8">
         {sett.status === "klar" ? (
@@ -50,12 +60,6 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
           </div>
         )}
       </div>
-
-      <p className="mt-12 text-sm">
-        <Link href={`/tekst/${id}/oppgaver`} className="underline decoration-slate-500 dark:decoration-slate-400 underline-offset-4">
-          Tilbake til oppgavene
-        </Link>
-      </p>
     </main>
   );
 }

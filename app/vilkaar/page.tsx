@@ -225,7 +225,7 @@ export default function Vilkaar() {
       </p>
       <ul className={LISTE}>
         <li>
-          <strong>Slett en tekst:</strong> i Samlingen. Alt LeseBuddy har laget av den, slettes samtidig.
+          <strong>Slett en tekst:</strong> i Samlinger. Alt LeseBuddy har laget av den, slettes samtidig.
         </li>
         <li>
           <strong>Slett kontoen:</strong> på Konto-siden. Da slettes alt: tekstene, svarene, mappene og

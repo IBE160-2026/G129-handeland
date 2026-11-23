@@ -1,7 +1,7 @@
 /**
  * Venstrehendt — EXPERIENCE.md, Øvekortene (design runde 2, bolk 9).
  *
- * Valget speiler øvekortene, så «Må øve mer» og «Kan» står til venstre.
+ * Valget speiler øvekortene, så «Må øve mer» og «Har kontroll» står til venstre.
  * Det lagres i en informasjonskapsel per enhet, som temavalget (data/tema.ts):
  * ingen migrering og ingen tabell. Ren modul uten rammeverkskode, så både
  * rotlayouten og server action kan bruke den, og den kan testes alene.

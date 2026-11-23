@@ -92,7 +92,7 @@ export const PLASSER_PAA_BORDET = 5;
 
 /**
  * De fem som sist var aktive, med hovedbunken (den som sist var aktiv) først.
- * `antall` er alle tekstene, så siden kan vise «Se alle N tekstene i samlingen».
+ * `antall` er alle tekstene, så siden kan vise «Se alle N tekstene i Samlinger».
  */
 export function velgBordet<T extends Pick<Bunke, "id" | "sistAktiv" | "opprettet">>(
   bunker: readonly T[],
@@ -212,7 +212,7 @@ export function kortstatus(b: Bunke, konto: Kontostatus = {}): Kort[] {
     b.antallFagord === 0
       ? { navn: "Øvekort", href: `${rot}/oevekort`, status: INGEN_FAGORD, paabegynt: false }
       : b.antallMerket > 0 && b.antallFagord !== null
-        ? { navn: "Øvekort", href: `${rot}/oevekort`, status: `${b.antallKan} av ${b.antallFagord} kan du`, pille: `${b.antallKan} av ${b.antallFagord}`, paabegynt: true }
+        ? { navn: "Øvekort", href: `${rot}/oevekort`, status: `Har kontroll på ${b.antallKan} av ${b.antallFagord}`, pille: `${b.antallKan} av ${b.antallFagord}`, paabegynt: true }
         : { navn: "Øvekort", href: `${rot}/oevekort`, status: "Ikke øvd", paabegynt: false };
 
   const s = b.samtale;

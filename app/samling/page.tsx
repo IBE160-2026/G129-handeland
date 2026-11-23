@@ -59,7 +59,7 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
       <div className="flex flex-wrap items-end gap-4">
         <div className="min-w-0">
           <h1>
-            <Tusj>Samlingen</Tusj>
+            <Tusj>Samlinger</Tusj>
           </h1>
           {alle && alle.length > 0 && (
             <p className="mt-1 text-dempet">{alle.length === 1 ? "1 tekst" : `Alle de ${alle.length} tekstene dine`}.</p>
@@ -179,7 +179,7 @@ function Mapper({ mapper }: { mapper: Mapperad[] }) {
       )}
       {mapper.length >= MAPPEGRENSER.mapper ? (
         <p className="mt-4">
-          Du har {MAPPEGRENSER.mapper} mapper, og det er flest LeseBuddy tar, så Samlingen holder seg oversiktlig.
+          Du har {MAPPEGRENSER.mapper} mapper, og det er flest LeseBuddy tar, så Samlinger holder seg oversiktlig.
           Slett en mappe du ikke bruker lenger, så kan du lage en ny.
         </p>
       ) : (

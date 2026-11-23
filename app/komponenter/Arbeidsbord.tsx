@@ -324,7 +324,7 @@ export function Arbeidsbord({ hoved, smaa, antall }: { hoved: Hovedbunke; smaa: 
         <p className="bord-samling flex flex-wrap justify-center gap-x-6">
           {antall > alle.length && (
             <Link href="/samling" className="inline-flex min-h-11 items-center text-dempet underline underline-offset-4">
-              Se alle {antall} tekstene i samlingen
+              Se alle {antall} tekstene i Samlinger
             </Link>
           )}
           <Link href="/samling#mapper" className="inline-flex min-h-11 items-center text-dempet underline underline-offset-4">

@@ -2167,14 +2167,14 @@ button.ls-fagord[aria-expanded="true"] {
 
 /* --- Øvekortene (design runde 2, bolk 9) ----------------------------- */
 /*
- * Knappene for én hånd: «Må øve mer» og «Kan» står over hverandre, over kortet
- * til høyre, og «Forrige» og «Neste» ved siden av hverandre under. Med
+ * Knappene for én hånd: «Må øve mer» og «Har kontroll» står over hverandre, over kortet
+ * til høyre, og pilknappene (← og →, siste kort «Ferdig») ved siden av hverandre under. Med
  * «Venstrehendt» i Konto (`data-hand="venstre"` på <html>, satt på serveren)
  * står merkeknappene til venstre fra første tegning.
  *
  * I DOM-en kommer merkeknappene etter kortet, så Tab og skjermleseren går
- * kortet → «Må øve mer» → «Kan» → feilmeldingen → «Se hvor det står i teksten»
- * (når kortet er snudd) → «Forrige» → «Neste». `order` flytter knappene og
+ * kortet → «Må øve mer» → «Har kontroll» → feilmeldingen → «Se hvor det står i teksten»
+ * (når kortet er snudd) → «Forrige kort» → «Neste kort». `order` flytter knappene og
  * feilmeldingen bare visuelt over kortet.
  */
 .oevekort-flate {
@@ -2206,7 +2206,7 @@ button.ls-fagord[aria-expanded="true"] {
   gap: 0.75rem;
   margin-top: 1.5rem;
 }
-/* Med stor tekst på 320 px brytes «← Forrige» inne i knappen i stedet for å flyte ut. */
+/* Med stor tekst på 320 px brytes «Ferdig» inne i knappen i stedet for å flyte ut. */
 .oevekort-nav > button {
   min-width: 0;
   overflow-wrap: anywhere;

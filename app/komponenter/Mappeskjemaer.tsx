@@ -187,7 +187,7 @@ export function SlettMappeKnapp({ mappeId, tittel }: { mappeId: string; tittel: 
       <p className="font-bold">Slette mappen «{tittel}»?</p>
       <p className="mt-1">
         Mappen og forsøkene på den samlede quizen forsvinner. Tekstene står
-        igjen i Samlingen, med øvekortene og quizene sine.
+        igjen i Samlinger, med øvekortene og quizene sine.
       </p>
       {feilet && (
         <p role="alert" className="mt-2 font-bold text-fare">

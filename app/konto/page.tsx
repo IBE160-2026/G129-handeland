@@ -9,7 +9,7 @@
  * så det virker uten JavaScript. Valget gjelder denne enheten.
  *
  * «Venstrehendt» (design runde 2, bolk 9): speiler øvekortene, så «Må øve mer»
- * og «Kan» står til venstre. Lagres som temaet, i en informasjonskapsel på
+ * og «Har kontroll» står til venstre. Lagres som temaet, i en informasjonskapsel på
  * enheten, med en avkrysningsboks i et vanlig skjema.
  */
 
@@ -103,7 +103,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
               Venstrehendt
             </label>
             <p id="hand-hjelp" className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              «Må øve mer» og «Kan» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
+              «Må øve mer» og «Har kontroll» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
               gjelder denne enheten.
             </p>
           </fieldset>

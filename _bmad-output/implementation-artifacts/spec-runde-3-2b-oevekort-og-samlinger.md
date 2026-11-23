@@ -2,9 +2,10 @@
 title: 'Runde 3, bolk 2b: øvekortene (piler, tastatur, «Har kontroll») og «Samlinger»'
 type: 'feature'
 created: '2026-11-23'
-status: 'draft'
+status: 'in-review'
 route: 'dispatch'
 review_loop_iteration: 0
+baseline_commit: '7043a31cc3a6a927ba7c6c5a3b64f32be13eb8c3'
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/oppdrag-design-runde-3.md'
 ---
@@ -58,12 +59,12 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/komponenter/oevekorttaster.ts` (ny) + `oevekorttaster.test.ts` -- ren funksjon `tastehandling({ key, ctrl, alt, meta, maal })` → `"forrige" | "neste" | "snu" | null`, der `maal` beskriver fokuselementet (tag, rolle, contenteditable) -- matrisen kan testes uten DOM.
-- [ ] `app/komponenter/Oevekort.tsx` -- pilknapper (`←`/`→` synlig, `aria-label` «Forrige kort»/«Neste kort», siste: «Ferdig»); «Har kontroll» i knapp, teller («Har kontroll: N · Må øve: …») og sluttmelding («Du har kontroll på N av M fagord.»); `useEffect` med `keydown` på `document` som bruker `tastehandling` og `preventDefault` på det den håndterer; oppdater toppkommentaren.
-- [ ] `app/mappe/[id]/oevekort/page.tsx`, `app/tekst/[id]/oevekort/page.tsx` -- tilbakelenken øverst, over overskriften, som del av headeren; fjern den nederst.
-- [ ] «Samlingen»-filene i Code Map -- «Samlinger».
-- [ ] `maaling/sjekk-tilgjengelighet.mjs`, `maaling/demotest.mjs` -- nye navn og etiketter; legg til sjekk: pilknappene har tilgjengelig navn og er minst 44 × 44 px, og ←/→/mellomrom virker på øvekortsiden.
-- [ ] `EXPERIENCE.md`, `DESIGN.md`, `prd-lesevenn.md` (FR-16/17 der knappene nevnes, FR-49 navnet) -- datert 23.11.
+- [x] `app/komponenter/oevekorttaster.ts` (ny) + `oevekorttaster.test.ts` -- ren funksjon `tastehandling({ key, ctrl, alt, meta, maal })` → `"forrige" | "neste" | "snu" | null`, der `maal` beskriver fokuselementet (tag, rolle, contenteditable) -- matrisen kan testes uten DOM.
+- [x] `app/komponenter/Oevekort.tsx` -- pilknapper (`←`/`→` synlig, `aria-label` «Forrige kort»/«Neste kort», siste: «Ferdig»); «Har kontroll» i knapp, teller («Har kontroll: N · Må øve: …») og sluttmelding («Du har kontroll på N av M fagord.»); `useEffect` med `keydown` på `document` som bruker `tastehandling` og `preventDefault` på det den håndterer; oppdater toppkommentaren.
+- [x] `app/mappe/[id]/oevekort/page.tsx`, `app/tekst/[id]/oevekort/page.tsx` -- tilbakelenken øverst, over overskriften, som del av headeren; fjern den nederst.
+- [x] «Samlingen»-filene i Code Map -- «Samlinger».
+- [x] `maaling/sjekk-tilgjengelighet.mjs`, `maaling/demotest.mjs` -- nye navn og etiketter; legg til sjekk: pilknappene har tilgjengelig navn og er minst 44 × 44 px, og ←/→/mellomrom virker på øvekortsiden.
+- [x] `EXPERIENCE.md`, `DESIGN.md`, `prd-lesevenn.md` (FR-16/17 der knappene nevnes, FR-49 navnet) -- datert 23.11.
 
 **Acceptance Criteria:**
 - Given øvekortsiden med `data-hand="venstre"`, when den vises på 375 px, then merkeknappene står til venstre og pilknappene under kortet som før.
@@ -78,6 +79,9 @@ context:
 - `npm run demotest` -- bestått; kjøres med `LESEVENN_TESTMODUS=les` så den ikke gjør betalte modellkall; feiler den på `lagret_svar_mangler`, rapporter det i stedet for å slå modellen på
 
 ## Implementation Notes
+- Utenfor Code Map, samme regel: «Kan»/«samlingen» også i `data/arbeidsbord.ts` (status «Har kontroll på N av M»), `app/tekst/[id]/oppgaver/page.tsx`, `app/konto/page.tsx`, `data/mappegrenser.ts`, `app/komponenter/Arbeidsbord.tsx`. «Øv på de N du ikke kan ennå» → «… du vil øve mer på».
+- `maaling/demotest.mjs`: modusen var hardkodet til `fyll`; nå `process.env.LESEVENN_TESTMODUS ?? "fyll"`, så `=les` virker.
+- Sjekker: vitest 50/50, tilgjengelighet 424/424, demotest 3/3 (les), README 8/8.
 
 ## Spec Change Log
 

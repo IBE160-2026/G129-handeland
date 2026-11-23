@@ -3,10 +3,10 @@
 /**
  * Menyen i topplinjen — EXPERIENCE.md, Topplinje.
  *
- * «Arbeidsbord», «Samlingen» og «Konto». Aktivt valg har
+ * «Arbeidsbord», «Samlinger» og «Konto». Aktivt valg har
  * `aria-current="page"`, og vises med markeringsflate og understrek
  * (globals.css, .meny-lenke). På telefon nås «Arbeidsbord» via ordmerket, så
- * bare den lenken skjules der; «Samlingen» og «Konto» står fortsatt.
+ * bare den lenken skjules der; «Samlinger» og «Konto» står fortsatt.
  */
 
 import Link from "next/link";
@@ -16,7 +16,7 @@ const LENKE = "meny-lenke inline-flex min-h-11 items-center whitespace-nowrap ro
 
 const VALG = [
   { href: "/", tekst: "Arbeidsbord", skjulPaaTelefon: true },
-  { href: "/samling", tekst: "Samlingen", skjulPaaTelefon: false },
+  { href: "/samling", tekst: "Samlinger", skjulPaaTelefon: false },
   { href: "/konto", tekst: "Konto", skjulPaaTelefon: false },
 ] as const;
 

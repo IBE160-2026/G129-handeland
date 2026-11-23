@@ -448,7 +448,8 @@ Lesevenn lager ett Øvekort per Faguttrykk i Begrepssettet.
 Eleven går gjennom Øvekortene og markerer hva som satt.
 
 **Konsekvenser (testbare):**
-- Eleven kan snu kortet, gå videre og gå tilbake, og merke et kort som «kan» eller «må øve mer».
+- Eleven kan snu kortet, gå videre og gå tilbake, og merke et kort som «Har kontroll» eller «Må øve mer». *(Endret 23.11.2026: knappen het «Kan», som lovet for mye. Den lagrede verdien er fortsatt `kan`.)*
+- «Forrige» og «Neste» er pilknapper (← og →) med navnene «Forrige kort» og «Neste kort» for skjermleseren; på siste kort heter knappen «Ferdig». På øvekortsiden bytter piltastene kort og mellomrom snur kortet, men ikke i skjemafelt, ikke med Ctrl/Alt/Meta, og mellomrom på en knapp, lenke eller utfellbar del gjør det den alltid gjør. *(Lagt til 23.11.2026.)*
 - Kort merket «må øve mer» kan vises alene i en ny runde.
 - Merkingen lagres på Teksten, slik at en ny økt starter der forrige sluttet.
 
@@ -673,7 +674,7 @@ Eleven kan samle egne Tekster i Mapper.
 - Eleven kan legge egne Tekster i en Mappe og ta dem ut igjen. En Tekst kan ligge i flere Mapper, men bare én gang i hver. Valget for å legge til viser hvilke Tekster som alt er med.
 - Høyst **20 Mapper per konto** og høyst **8 Tekster per Mappe**. Når en grense er nådd, sier appen hvilken grense det er og hvorfor, og hva eleven kan gjøre (§5).
 - En Tekst som eies av en annen konto, kan ikke legges i Mappen, og en annen kontos Mappe finnes ikke (AD-8). Sletting av en Tekst eller kontoen rydder Mappene (FR-37).
-- Mappene står i en egen del øverst i Samlingen (FR-49), og Arbeidsbordet har en lenke dit. Arbeidsbordets fem bunker (FR-48) er uendret.
+- Mappene står i en egen del øverst i Samlinger (FR-49), og Arbeidsbordet har en lenke dit. Arbeidsbordets fem bunker (FR-48) er uendret.
 - Tekster som ikke er låst, mangler Begrepssett eller mangler Quiz, vises i Mappen med hva som mangler og en lenke til Teksten. Mappen lager aldri noe selv.
 
 #### FR-51: Samlet øving
@@ -682,7 +683,7 @@ Eleven kan øve på alle Øvekortene fra Tekstene i en Mappe samlet.
 
 **Konsekvenser (testbare):**
 - Kortene er Øvekortene til de låste Tekstene i Mappen (FR-16), Tekst for Tekst, med Teksten de er fra synlig på kortet og Kildeavsnittet på baksiden.
-- Merkingen «kan» / «må øve mer» er den samme som i Teksten (FR-17): et kort merket i Mappen står merket når Teksten åpnes alene.
+- Merkingen «Har kontroll» / «Må øve mer» er den samme som i Teksten (FR-17): et kort merket i Mappen står merket når Teksten åpnes alene.
 - En Tekst uten Faguttrykk gir ingen kort, og grunnen oppgis.
 
 #### FR-52: Samlet quiz
@@ -698,7 +699,7 @@ Eleven kan ta en samlet Quiz med spørsmålene Tekstene i Mappen allerede har.
 
 ### 4.10 Brukerkonto og lagring
 
-**Beskrivelse:** Kontoen finnes fordi tekstene skal samles på Arbeidsbordet og i Samlingen (FR-48, FR-49), og fordi eleven skal kunne komme tilbake til Øvekortene før prøven. Den er ikke en plattform: ingen deling, ingen sosiale funksjoner, ingen profil. Minst mulig data, fordi en stor del av brukergruppen er mindreårige og innholdet ofte er opphavsrettslig beskyttet lærebokstoff.
+**Beskrivelse:** Kontoen finnes fordi tekstene skal samles på Arbeidsbordet og i Samlinger (FR-48, FR-49), og fordi eleven skal kunne komme tilbake til Øvekortene før prøven. Den er ikke en plattform: ingen deling, ingen sosiale funksjoner, ingen profil. Minst mulig data, fordi en stor del av brukergruppen er mindreårige og innholdet ofte er opphavsrettslig beskyttet lærebokstoff.
 
 **Funksjonskrav:**
 
@@ -719,7 +720,7 @@ Eleven finner igjen tidligere arbeid.
 
 **Konsekvenser (testbare):**
 - Tekster, Begrepssett, Quizer med resultater, Øvekortmerking og Fagsamtaler lagres på kontoen.
-- Samlingen (FR-49) kan sorteres på dato og søkes i på tittel.
+- Samlinger (FR-49) kan sorteres på dato og søkes i på tittel.
 - Genererte elementer regenereres ikke ved gjenbesøk. De hentes fra lagring — for stabilitet (FR-11) og kostnad (§6).
 
 #### FR-37: Sletting
@@ -862,15 +863,17 @@ En innlogget elev kommer til et arbeidsbord, ikke rett til innlesing.
 - Arbeidsbordet viser de fem Tekstene med nyest aktivitet som bunker. Den nyeste er størst og viser neste steg, utledet av Tekstens tilstand og hva eleven har gjort.
 - En bunke kan åpnes og viser nøyaktig fem aktiviteter i fast rekkefølge: Teksten, Quiz, Øvekort, Fagsamtale og Minnevers, hver med status fra lagrede data. Aktiviteter som krever en låst Tekst, vises låst med en forklaring.
 - En bunke kan åpnes og lukkes med tastatur. Esc lukker, og fokus går tilbake til bunken.
-- Har eleven ingen Tekster, viser bordet én handling: legg inn en ny tekst. Har eleven flere enn fem, vises en lenke til Samlingen med antallet.
+- Har eleven ingen Tekster, viser bordet én handling: legg inn en ny tekst. Har eleven flere enn fem, vises en lenke til Samlinger med antallet.
 - Innlesing av en ny Tekst (FR-1, FR-2, FR-44) nås med én handling.
 
-#### FR-49: Samlingen
+#### FR-49: Samlinger
+
+*(Endret 23.11.2026: siden het «Samlingen». Den heter nå «Samlinger» i overskriften, menyen og teksten eleven ser. Domenebegrepet Mappe er uendret.)*
 
 Alle Tekstene er samlet på ett sted.
 
 **Konsekvenser (testbare):**
-- Samlingen viser alle elevens Tekster, kan sorteres på dato og søkes i på tittel (FR-36), og nås fra menyen og fra Arbeidsbordet.
+- Samlinger viser alle elevens Tekster, kan sorteres på dato og søkes i på tittel (FR-36), og nås fra menyen og fra Arbeidsbordet.
 - Hver Tekst kan åpnes og slettes herfra (FR-37).
 
 ## 5. Tverrgående krav

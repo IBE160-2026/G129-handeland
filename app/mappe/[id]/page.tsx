@@ -178,7 +178,7 @@ export default async function Mappeside({ params }: PageProps<"/mappe/[id]">) {
             Mappen har {MAPPEGRENSER.tekster} tekster, og det er flest en mappe kan ha, så den samlede quizen holder
             seg kort nok til én økt. Ta ut en tekst, eller lag en ny mappe i{" "}
             <Link href="/samling#mapper" className={`inline-flex min-h-11 items-center font-bold ${LENKE}`}>
-              Samlingen
+              Samlinger
             </Link>
             .
           </p>
@@ -204,7 +204,7 @@ export default async function Mappeside({ params }: PageProps<"/mappe/[id]">) {
 
       <p className="mt-10">
         <Link href="/samling#mapper" className={`${KNAPP_SEKUNDAER}`}>
-          Tilbake til Samlingen
+          Tilbake til Samlinger
         </Link>
       </p>
     </main>

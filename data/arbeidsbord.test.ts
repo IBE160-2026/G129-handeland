@@ -137,10 +137,10 @@ describe("Status på kortene i viften", () => {
     });
   });
 
-  test("Øvekort: «Ikke øvd», «9 av 14 kan du», og FR-16-teksten ved tomt Begrepssett", () => {
+  test("Øvekort: «Ikke øvd», «Har kontroll på 9 av 14», og FR-16-teksten ved tomt Begrepssett", () => {
     expect(kort(bunke(), "Øvekort")).toMatchObject({ status: "Ikke øvd", paabegynt: false });
-    expect(kort(bunke({ antallKan: 9, antallMerket: 11 }), "Øvekort")).toMatchObject({ status: "9 av 14 kan du", paabegynt: true });
-    expect(kort(bunke({ antallKan: 0, antallMerket: 2 }), "Øvekort")).toMatchObject({ status: "0 av 14 kan du", paabegynt: true });
+    expect(kort(bunke({ antallKan: 9, antallMerket: 11 }), "Øvekort")).toMatchObject({ status: "Har kontroll på 9 av 14", paabegynt: true });
+    expect(kort(bunke({ antallKan: 0, antallMerket: 2 }), "Øvekort")).toMatchObject({ status: "Har kontroll på 0 av 14", paabegynt: true });
     expect(kort(bunke({ antallFagord: 0 }), "Øvekort").status).toBe("Fant ingen fagord i teksten, så det er ingen kort å øve på.");
   });
 

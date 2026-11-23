@@ -75,7 +75,7 @@ export default async function Oppgaver({ params }: PageProps<"/tekst/[id]/oppgav
                 </Link>
               </p>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                {kort.length} kort · kan {kan} · må øve {maaOeve} · ikke merket {kort.length - kan - maaOeve}
+                {kort.length} kort · har kontroll {kan} · må øve {maaOeve} · ikke merket {kort.length - kan - maaOeve}
               </p>
             </>
           ) : (

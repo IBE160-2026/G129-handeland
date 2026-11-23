@@ -2,7 +2,7 @@
  * Topplinjen på alle sider: ordmerket (vei til forsiden) og menyen.
  *
  * To menyer, og siden bestemmer hvilken som vises:
- *   - inne i appen: «Arbeidsbord», «Samlingen» og «Konto» (Meny)
+ *   - inne i appen: «Arbeidsbord», «Samlinger» og «Konto» (Meny)
  *   - på landingssiden, for den som ikke er innlogget: «For lærere» (bare
  *     fra 760 px) og «Logg inn»
  *

@@ -38,7 +38,7 @@ export const MAPPE_AVVIST = {
   forMangeMapper: () =>
     new MappeAvvist(
       `Du har ${MAPPEGRENSER.mapper} mapper, og det er flest LeseBuddy tar.`,
-      "Grensen holder Samlingen oversiktlig. Slett en mappe du ikke bruker lenger, så kan du lage en ny.",
+      "Grensen holder Samlinger oversiktlig. Slett en mappe du ikke bruker lenger, så kan du lage en ny.",
     ),
   forMangeTekster: () =>
     new MappeAvvist(

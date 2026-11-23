@@ -5,25 +5,31 @@
  *
  * Forsiden viser Faguttrykket, baksiden forklaringen. Kildeavsnittet ligger
  * i en utfellbar del under kortet (FR-16, endret 11.11).
- * Eleven kan snu, gå fram og tilbake, og merke «kan» eller «må øve mer».
+ * Eleven kan snu, gå fram og tilbake, og merke «Har kontroll» eller «Må øve
+ * mer» (lagret som `kan` og `maa_oeve`).
  * Merkingen lagres med en gang, så en ny økt starter der forrige sluttet:
  * på første kort i runden som ikke er merket.
  *
  * Kort, merking og den utfellbare kilden er knapper eller summary-elementer,
- * så runden kan tas med tastatur alene (§5).
+ * så runden kan tas med tastatur alene (§5). I tillegg (runde 3, bolk 2b):
+ * ← og → bytter kort og mellomrom snur, uten å tabbe rundt. Lytteren finnes
+ * bare mens kortene vises; reglene (skjemafelt, modifikatorer, mellomrom på
+ * en knapp) står i oevekorttaster.ts.
  *
- * Knappene for én hånd (design runde 2, bolk 9): «Må øve mer» og «Kan» står
- * over hverandre, over kortet til høyre (til venstre med «Venstrehendt»), og
- * «Forrige» og «Neste» ved siden av hverandre under. Se .oevekort-flate i
+ * Knappene for én hånd (design runde 2, bolk 9): «Må øve mer» og «Har
+ * kontroll» står over hverandre, over kortet til høyre (til venstre med
+ * «Venstrehendt»), og pilknappene (← «Forrige kort», → «Neste kort», på siste
+ * kort «Ferdig») ved siden av hverandre under. Se .oevekort-flate i
  * globals.css.
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Merking, Oevekort as Kort } from "../../data/oevekort";
 import { merkKort } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
 import { Kildeavsnitt } from "./Kildeavsnitt";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "./knapper";
+import { tastehandling } from "./oevekorttaster";
 
 type Modus = "alle" | "maa_oeve";
 
@@ -55,7 +61,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
     Object.fromEntries(kort.map((k) => [k.id, k.merking])),
   );
   const [modus, setModus] = useState<Modus>("alle");
-  // Runden er fast mens den pågår: et kort som merkes «kan» underveis i en
+  // Runden er fast mens den pågår: et kort som merkes «Har kontroll» underveis i en
   // «må øve»-runde, skal ikke forsvinne under eleven.
   const [runde, setRunde] = useState<Kortet[]>(kort);
   const [indeks, setIndeks] = useState(() => startIndeks(kort, Object.fromEntries(kort.map((k) => [k.id, k.merking]))));
@@ -79,6 +85,33 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
     if (i >= runde.length) setFerdig(true);
     else setIndeks(Math.max(0, i));
   }
+
+  // Tastaturet (runde 3, bolk 2b): bare mens et kort vises. Lytteren legges
+  // på nytt ved hver tegning, så den alltid ser gjeldende kort.
+  const viserKort = !ferdig && !!gjeldende;
+  useEffect(() => {
+    if (!viserKort) return;
+    function trykk(e: KeyboardEvent) {
+      if (e.defaultPrevented) return;
+      const el = document.activeElement as HTMLElement | null;
+      const h = tastehandling({
+        key: e.key,
+        ctrl: e.ctrlKey,
+        alt: e.altKey,
+        meta: e.metaKey,
+        maal: el ? { tag: el.tagName, rolle: el.getAttribute("role"), redigerbar: el.isContentEditable } : null,
+      });
+      if (!h) return;
+      e.preventDefault();
+      if (h === "snu") setSnudd((s) => !s);
+      // Som knappene: ingenting før første kort, og → på siste avslutter runden.
+      else if (h === "forrige") {
+        if (indeks > 0) gaaTil(indeks - 1);
+      } else gaaTil(indeks + 1);
+    }
+    document.addEventListener("keydown", trykk);
+    return () => document.removeEventListener("keydown", trykk);
+  });
 
   async function merk(m: Merking) {
     if (!gjeldende) return;
@@ -109,14 +142,14 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
       <section role="status" className="rounded-md border border-slate-300 p-6 dark:border-slate-700">
         <h2 className="text-xl font-semibold tracking-tight">Runden er ferdig</h2>
         <p className="mt-2">
-          Du kan {telling.kan} av {kort.length} fagord.
+          Du har kontroll på {telling.kan} av {kort.length} fagord.
           {telling.maaOeve > 0 && ` ${telling.maaOeve} vil du øve mer på.`}
           {telling.ikke > 0 && ` ${telling.ikke} er ikke merket.`}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           {telling.maaOeve > 0 && (
             <button type="button" onClick={() => nyRunde("maa_oeve")} className={KNAPP_PRIMAER}>
-              Øv på de {telling.maaOeve} du ikke kan ennå
+              Øv på de {telling.maaOeve} du vil øve mer på
             </button>
           )}
           <button type="button" onClick={() => nyRunde("alle")} className={KNAPP}>
@@ -128,6 +161,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
   }
 
   const m = merking[gjeldende.id];
+  const sisteKort = indeks === runde.length - 1;
 
   return (
     <section aria-label="Øvekort">
@@ -137,7 +171,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
           {modus === "maa_oeve" && " — bare de du vil øve mer på"}
         </p>
         <p>
-          Kan: {telling.kan} · Må øve: {telling.maaOeve} · Ikke merket: {telling.ikke}
+          Har kontroll: {telling.kan} · Må øve: {telling.maaOeve} · Ikke merket: {telling.ikke}
         </p>
       </div>
 
@@ -178,7 +212,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
           til høyre, der tommelen når dem. `data-hand="venstre"` på <html>
           («Venstrehendt» i Konto) flytter dem til venstre. I DOM-en står de
           ETTER kortet, så Tab og skjermleseren tar kortet først, så merkingen,
-          så kilden (når kortet er snudd), så «Forrige» og «Neste». Plasseringen
+          så kilden (når kortet er snudd), så pilknappene. Plasseringen
           over kortet er bare CSS (`order` i .oevekort-flate, globals.css).
           Feilmeldingen fra merkingen står rett etter knappene, og over kortet
           sammen med dem, så den havner ved knappen eleven trykket på.
@@ -188,7 +222,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
             Må øve mer
           </button>
           <button type="button" onClick={() => merk("kan")} aria-pressed={m === "kan"} className={knapp(m === "kan")}>
-            Kan
+            Har kontroll
           </button>
         </div>
         {feil && (
@@ -210,12 +244,23 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
           </div>
         )}
 
+        {/*
+          Pilene er synlige, navnet er «Forrige kort» / «Neste kort», så
+          skjermleseren sier «Neste kort, knapp». Siste kort viser «Ferdig»:
+          en pil sier ikke at runden slutter.
+        */}
         <div className="oevekort-nav">
-          <button type="button" onClick={() => gaaTil(indeks - 1)} disabled={indeks === 0} className={KNAPP}>
-            ← Forrige
+          <button type="button" onClick={() => gaaTil(indeks - 1)} disabled={indeks === 0} aria-label="Forrige kort" className={KNAPP}>
+            <span aria-hidden="true" className="text-2xl leading-none">←</span>
           </button>
-          <button type="button" onClick={() => gaaTil(indeks + 1)} className={KNAPP}>
-            {indeks === runde.length - 1 ? "Ferdig" : "Neste →"}
+          {/* Samme knapp på alle kort, så fokuset blir stående når den blir «Ferdig». */}
+          <button
+            type="button"
+            onClick={() => gaaTil(indeks + 1)}
+            aria-label={sisteKort ? undefined : "Neste kort"}
+            className={KNAPP}
+          >
+            {sisteKort ? "Ferdig" : <span aria-hidden="true" className="text-2xl leading-none">→</span>}
           </button>
         </div>
       </div>

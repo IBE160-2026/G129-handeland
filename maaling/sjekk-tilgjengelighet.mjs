@@ -20,13 +20,13 @@
  *   - FR-48: tomt bord, hovedbunken med neste steg, viften som dialog
  *     (fem kort, fokus i dialogen, `inert`, Esc og «Legg sammen» gir fokus
  *     tilbake), og at Tab fra «+ Ny tekst» aldri treffer et usynlig element
- *   - FR-49: Samlingen, tittelen til neste steg, og søk uten treff
- *   - FR-50 til FR-52: en Mappe lages fra Samlingen, eksempelteksten legges
+ *   - FR-49: Samlinger, tittelen til neste steg, og søk uten treff
+ *   - FR-50 til FR-52: en Mappe lages fra Samlinger, eksempelteksten legges
  *     til, og mappesiden, de samlede øvekortene og den samlede quizen sjekkes
  *     med axe på PC, i mørk modus og på telefon (uten sidelengs rulling);
  *     arbeidsbordet lenker til «Mappene dine»
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
- *     på arbeidsbordet, i viften, i Samlingen og på Ny tekst
+ *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
  *     axe i lys og mørk modus, med og uten redusert bevegelse, uten
  *     JavaScript og på telefon; den statiske versjonen (alle steg, fire
@@ -89,12 +89,12 @@
  *     bildefanen står «Før du tar bildene» (fet og understreket «Før») til
  *     to bilder er valgt, og så «Etter at du har valgt bildene» rett over
  *     listen, med axe i lys og mørk modus
- *   - design bolk 9 (18.11): på 375 px står «Må øve mer» over «Kan» over
- *     øvekortet til høyre (like brede, minst 44 × 44 px), og «Forrige» og
- *     «Neste» ved siden av hverandre under; med `hand=venstre` står
- *     merkeknappene til venstre, og HTML-en fra serveren har allerede
- *     `data-hand="venstre"`. Tab etter kortet går «Må øve mer» → «Kan» →
- *     «Forrige» → «Neste». Samme plassering på 320 px, også med 200 % tekst,
+ *   - design bolk 9 (18.11, endret 23.11): på 375 px står «Må øve mer» over
+ *     «Har kontroll» over øvekortet til høyre (like brede, minst 44 × 44 px),
+ *     og pilknappene «Forrige kort» og «Neste kort» ved siden av hverandre
+ *     under; med `hand=venstre` står merkeknappene til venstre, og HTML-en
+ *     fra serveren har allerede `data-hand="venstre"`. Tab etter kortet går
+ *     «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort». Samme plassering på 320 px, også med 200 % tekst,
  *     axe i lys og mørk modus, og «Venstrehendt» på /konto setter og sletter
  *     informasjonskapselen, med og uten JavaScript
  *   - design bolk 10 (18.11): i gjennomsynet via bilde står Buddy (64 px,
@@ -799,12 +799,12 @@ try {
   }
   sjekk("Tab fra «+ Ny tekst» treffer aldri et usynlig element", usynlige.length === 0, usynlige.join(", "));
 
-  /* --- FR-49: Samlingen --------------------------------------------- */
+  /* --- FR-49: Samlinger --------------------------------------------- */
   await pc.goto(`${APP}/samling`);
   await axe(pc, "samling");
   const tittellenke = pc.locator("main h2 a", { hasText: "EM-bølger" });
   sjekk(
-    "FR-49: tittelen i Samlingen lenker til neste steg",
+    "FR-49: tittelen i Samlinger lenker til neste steg",
     (await tittellenke.getAttribute("href")) === `${tekstUrl.replace(APP, "")}/quiz`,
     `${await tittellenke.getAttribute("href")}`,
   );
@@ -813,14 +813,15 @@ try {
     "FR-49: søk uten treff sier det, med «Vis alle»",
     (await pc.locator("text=Ingen titler inneholder «mitose».").count()) === 1 && (await pc.locator("main a:has-text('Vis alle')").count()) === 1,
   );
-  sjekk("menyen markerer Samlingen som aktiv", (await pc.locator("nav a[aria-current=page]").textContent()) === "Samlingen");
+  sjekk("menyen markerer Samlinger som aktiv", (await pc.locator("nav a[aria-current=page]").textContent()) === "Samlinger");
+  sjekk("overskriften på /samling er «Samlinger»", (await pc.locator("main h1").textContent())?.trim() === "Samlinger");
   sjekk("innlogget (/samling): ingen «Logg inn» eller «For lærere» i topplinjen", await ingenLandingsmeny(pc));
 
   /* --- FR-50 til FR-52: Mapper lett ------------------------------------ */
-  // Mappen lages fra Samlingen, teksten legges til, og de tre mappesidene
+  // Mappen lages fra Samlinger, teksten legges til, og de tre mappesidene
   // sjekkes med axe. Ingen generator kalles fra mappesidene.
   await pc.goto(`${APP}/samling`);
-  sjekk("FR-50: Samlingen har «Mappene dine» øverst", (await pc.locator("#mapper h2", { hasText: "Mappene dine" }).count()) === 1);
+  sjekk("FR-50: Samlinger har «Mappene dine» øverst", (await pc.locator("#mapper h2", { hasText: "Mappene dine" }).count()) === 1);
   await pc.fill("#mapper input[name=tittel]", "Naturfag");
   await pc.click("#mapper button[type=submit]");
   await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/, { timeout: 60000 });
@@ -839,7 +840,7 @@ try {
     await axe(pc, navn);
   }
   // FR-51: et kort i mappen bærer sin egen Tekst. Kildeavsnittet lenker dit,
-  // og «Kan» lagres på begrepet, så teksten alene viser kortet som merket.
+  // og «Har kontroll» lagres på begrepet, så teksten alene viser kortet som merket.
   {
     const tekstSti = tekstUrl.replace(APP, "");
     await pc.goto(`${mappeUrl}/oevekort`);
@@ -847,14 +848,14 @@ try {
     await pc.locator("summary", { hasText: "Se hvor det står i teksten" }).click();
     const kilde = await pc.locator("a", { hasText: "Les avsnittet i teksten" }).getAttribute("href");
     sjekk("FR-51: kildeavsnittet i mappen lenker til kortets egen tekst", !!kilde && kilde.startsWith(`${tekstSti}/lesing`), kilde ?? "");
-    await pc.locator(".oevekort-merk button", { hasText: /^Kan$/ }).click();
-    const lagret = await pc.getByText(/Kan: 1 ·|Du kan 1 av/).first().waitFor({ timeout: 15000 }).then(
+    await pc.locator(".oevekort-merk button", { hasText: /^Har kontroll$/ }).click();
+    const lagret = await pc.getByText(/Har kontroll: 1 ·|Du har kontroll på 1 av/).first().waitFor({ timeout: 15000 }).then(
       () => true,
       () => false,
     );
     await pc.goto(`${tekstUrl}/oevekort`);
-    const iTeksten = (await pc.getByText(/Kan: 1 ·/).count()) === 1;
-    sjekk("FR-51: et kort merket «Kan» i mappen står som merket i teksten", lagret && iTeksten);
+    const iTeksten = (await pc.getByText(/Har kontroll: 1 ·/).count()) === 1;
+    sjekk("FR-51: et kort merket «Har kontroll» i mappen står som merket i teksten", lagret && iTeksten);
     // Sjekkene av øvekortene lenger ned venter umerkede kort.
     const pool = new pg.Pool({ connectionString: DB, max: 1 });
     try {
@@ -1126,21 +1127,22 @@ try {
     return side.evaluate(() => {
       const flate = document.querySelector(".oevekort-flate");
       const kort = flate?.querySelector(":scope > button[aria-pressed]");
-      const knapp = (re) => [...(flate?.querySelectorAll("button") ?? [])].find((b) => re.test(b.textContent.trim()));
+      // Navnet skjermleseren hører: aria-label om den finnes (pilknappene), ellers teksten.
+      const knapp = (re) => [...(flate?.querySelectorAll("button") ?? [])].find((b) => re.test(b.getAttribute("aria-label") ?? b.textContent.trim()));
       const r = (e) => {
         if (!e) return null;
         const b = e.getBoundingClientRect();
         return { v: Math.round(b.left), h: Math.round(b.right), t: Math.round(b.top), b: Math.round(b.bottom), w: Math.round(b.width), hoeyde: Math.round(b.height) };
       };
       const maa = knapp(/^Må øve mer$/);
-      const kan = knapp(/^Kan$/);
+      const kan = knapp(/^Har kontroll$/);
       return {
         hand: document.documentElement.dataset.hand ?? null,
         kort: r(kort),
         maa: r(maa),
         kan: r(kan),
-        forrige: r(knapp(/^← Forrige$/)),
-        neste: r(knapp(/^(Neste →|Ferdig)$/)),
+        forrige: r(knapp(/^Forrige kort$/)),
+        neste: r(knapp(/^(Neste kort|Ferdig)$/)),
         pressed: [maa?.getAttribute("aria-pressed"), kan?.getAttribute("aria-pressed")],
       };
     });
@@ -1151,7 +1153,7 @@ try {
     const side = venstre ? Math.abs(maa.v - kort.v) <= 1 && Math.abs(kan.v - kort.v) <= 1 : Math.abs(maa.h - kort.h) <= 1 && Math.abs(kan.h - kort.h) <= 1;
     return (
       side &&
-      maa.b <= kan.t && kan.b <= kort.t && // «Må øve mer» over «Kan» over kortet
+      maa.b <= kan.t && kan.b <= kort.t && // «Må øve mer» over «Har kontroll» over kortet
       Math.abs(maa.w - kan.w) <= 1 && // like brede
       [maa, kan, forrige, neste].every((k) => k.w >= 44 && k.hoeyde >= 44) &&
       forrige.t >= kort.b && Math.abs(forrige.t - neste.t) <= 1 && forrige.h <= neste.v && // ved siden av hverandre under
@@ -1184,31 +1186,36 @@ try {
     await side.locator(".oevekort-flate").waitFor();
     const o = await oevekortOppsett(side);
     sjekk(
-      `bolk 9, 375 px (${navn}): «Må øve mer» over «Kan» over kortet til ${venstre ? "venstre" : "høyre"}, like brede, og «Forrige» og «Neste» ved siden av hverandre under`,
+      `bolk 9, 375 px (${navn}): «Må øve mer» over «Har kontroll» over kortet til ${venstre ? "venstre" : "høyre"}, like brede, og pilknappene ved siden av hverandre under`,
       riktigOppsett(o, venstre),
       JSON.stringify(o),
     );
-    // Tab-rekkefølgen: kortet, «Må øve mer», «Kan», (feilmeldingen), (kilden når
-    // kortet er snudd), «Forrige», «Neste». På første
-    // kort er «Forrige» låst og hoppes over, så det sjekkes på et kort med en før.
+    // Tab-rekkefølgen: kortet, «Må øve mer», «Har kontroll», (feilmeldingen),
+    // (kilden når kortet er snudd), «Forrige kort», «Neste kort». På første
+    // kort er «Forrige kort» låst og hoppes over, så det sjekkes på et kort med en før.
     // Sjekken trenger minst to kort; med ett er «Neste» «Ferdig» og avslutter runden.
-    const ettKort =
-      (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled()) &&
-      (await side.locator(".oevekort-nav button", { hasText: /^Ferdig$/ }).count()) === 1;
-    if (!ettKort && (await side.locator(".oevekort-nav button", { hasText: "Forrige" }).isDisabled())) {
-      await side.locator(".oevekort-nav button", { hasText: /^Neste →$/ }).click();
+    const forrigeKnapp = side.locator(".oevekort-nav").getByRole("button", { name: "Forrige kort", exact: true });
+    const ettKort = (await forrigeKnapp.isDisabled()) && (await side.locator(".oevekort-nav button", { hasText: /^Ferdig$/ }).count()) === 1;
+    if (!ettKort && (await forrigeKnapp.isDisabled())) {
+      await side.locator(".oevekort-nav").getByRole("button", { name: "Neste kort", exact: true }).click();
     }
+    // Navnet skjermleseren hører, så Tab-rekka sammenlignes med det.
+    const fokusnavn = () =>
+      side.evaluate(() => {
+        const e = document.activeElement;
+        return e?.getAttribute("aria-label") ?? e?.textContent.trim() ?? "";
+      });
     const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
     if ((await kortet.count()) === 1) {
       await kortet.focus();
       const rekke = [];
       for (let i = 0; i < 4; i++) {
         await side.keyboard.press("Tab");
-        rekke.push(await side.evaluate(() => document.activeElement?.textContent.trim() ?? ""));
+        rekke.push(await fokusnavn());
       }
       sjekk(
-        `bolk 9 (${navn}): Tab etter kortet går «Må øve mer» → «Kan» → «Forrige» → «Neste»`,
-        rekke.slice(0, 3).join(" | ") === "Må øve mer | Kan | ← Forrige" && /^(Neste →|Ferdig)$/.test(rekke[3]),
+        `bolk 9 (${navn}): Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort»`,
+        rekke.slice(0, 3).join(" | ") === "Må øve mer | Har kontroll | Forrige kort" && /^(Neste kort|Ferdig)$/.test(rekke[3]),
         rekke.join(" | "),
       );
       // Snudd kort: «Se hvor det står i teksten» kommer etter merkeknappene.
@@ -1218,11 +1225,11 @@ try {
       const snudd = [];
       for (let i = 0; i < 4; i++) {
         await side.keyboard.press("Tab");
-        snudd.push(await side.evaluate(() => document.activeElement?.textContent.trim() ?? ""));
+        snudd.push(await fokusnavn());
       }
       sjekk(
-        `bolk 9 (${navn}): snudd kort, Tab går «Må øve mer» → «Kan» → «Se hvor det står i teksten» → «Forrige»`,
-        snudd.join(" | ") === "Må øve mer | Kan | Se hvor det står i teksten | ← Forrige",
+        `bolk 9 (${navn}): snudd kort, Tab går «Må øve mer» → «Har kontroll» → «Se hvor det står i teksten» → «Forrige kort»`,
+        snudd.join(" | ") === "Må øve mer | Har kontroll | Se hvor det står i teksten | Forrige kort",
         snudd.join(" | "),
       );
       await kortet.click();
@@ -1254,6 +1261,106 @@ try {
     await side.locator(".oevekort-flate").waitFor();
     const o = await oevekortOppsett(side);
     sjekk("bolk 9: hand=hoeyre ignoreres, og merkeknappene står til høyre", riktigOppsett(o, false), JSON.stringify(o));
+    await ctx.close();
+  }
+  // Runde 3, bolk 2b: pilknappene har navn og trykkflate, tilbakelenken står
+  // øverst, og ←/→/mellomrom virker på øvekortsiden uten å tabbe rundt.
+  {
+    const ctx = await nettleser.newContext({ viewport: { width: 375, height: 800 }, locale: "nb-NO" });
+    await ctx.addCookies(await pc.context().cookies());
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    await side.goto(`${tekstUrl}/oevekort`);
+    await side.locator(".oevekort-flate").waitFor();
+    const nav = side.locator(".oevekort-nav");
+    const forrige = nav.getByRole("button", { name: "Forrige kort", exact: true });
+    const neste = nav.getByRole("button", { name: /^(Neste kort|Ferdig)$/ });
+    const boks = async (l) => ((await l.count()) === 1 ? await l.boundingBox() : null);
+    const [bf, bn] = [await boks(forrige), await boks(neste)];
+    sjekk(
+      "bolk 2b: pilknappene heter «Forrige kort» og «Neste kort» (eller «Ferdig» på siste) og er minst 44 × 44 px",
+      !!bf &&
+        !!bn &&
+        [bf, bn].every((b) => b.width >= 44 && b.height >= 44) &&
+        (await nav.locator("button", { hasText: /Forrige|Neste/ }).count()) === 0,
+      JSON.stringify({ bf, bn }),
+    );
+    const tilbake = side.locator("main header a", { hasText: "Tilbake til oppgavene" });
+    const h1 = await side.locator("main h1").boundingBox();
+    const bt = await boks(tilbake);
+    sjekk(
+      "bolk 2b: «Tilbake til oppgavene» står øverst i headeren, over overskriften, og ikke nederst",
+      !!bt && !!h1 && bt.y + bt.height <= h1.y && (await side.locator("main a", { hasText: "Tilbake til oppgavene" }).count()) === 1,
+    );
+    const teller = side.locator("main p", { hasText: /^Kort \d+ av \d+/ }).first();
+    const kortnr = async () => Number((await teller.textContent()).match(/Kort (\d+)/)?.[1]);
+    const antall = Number((await teller.textContent()).match(/av (\d+)/)?.[1]);
+    const kortet = side.locator(".oevekort-flate > button[aria-pressed]");
+    const snudd = async () => (await kortet.getAttribute("aria-pressed")) === "true";
+    const slippFokus = () => side.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
+    // Fokus på body: ← på første gjør ingenting, mellomrom snur, → går videre med forsiden opp, ← tilbake.
+    await slippFokus();
+    const start = await kortnr();
+    const funnet = {};
+    if (start === 1) {
+      await side.keyboard.press("ArrowLeft");
+      funnet.venstrePaaFoerste = await kortnr();
+    }
+    await side.keyboard.press("Space");
+    funnet.mellomromSnur = await snudd();
+    await side.keyboard.press("Space");
+    funnet.mellomromSnurTilbake = !(await snudd());
+    if (start < antall) {
+      await side.keyboard.press("Space");
+      await side.keyboard.press("ArrowRight");
+      funnet.hoeyre = await kortnr();
+      funnet.forsidenOpp = !(await snudd());
+      await side.keyboard.press("ArrowLeft");
+      funnet.venstre = await kortnr();
+    }
+    // Ctrl+→ er nettleserens.
+    await side.keyboard.press("Control+ArrowRight");
+    funnet.ctrl = await kortnr();
+    // Mellomrom på kortknappen snur én gang, ikke to.
+    await kortet.focus();
+    await side.keyboard.press("Space");
+    funnet.paaKortet = await snudd();
+    // Mellomrom på «Se hvor det står i teksten» feller den ut; kortet snus ikke.
+    const kilde = side.locator("summary", { hasText: "Se hvor det står i teksten" });
+    await kilde.focus();
+    await side.keyboard.press("Space");
+    funnet.paaSummary = (await snudd()) && (await kilde.evaluate((e) => e.parentElement.open));
+    await kortet.click();
+    // Et skjemafelt på siden fanger ingenting: piltaster og mellomrom går til feltet.
+    await side.evaluate(() => {
+      const f = document.createElement("input");
+      f.id = "proevefelt";
+      document.querySelector("main").prepend(f);
+    });
+    await side.locator("#proevefelt").focus();
+    const foer = await kortnr();
+    await side.keyboard.press("ArrowRight");
+    await side.keyboard.press("Space");
+    funnet.iFeltet = (await kortnr()) === foer && !(await snudd()) && (await side.locator("#proevefelt").inputValue()) === " ";
+    await side.evaluate(() => document.getElementById("proevefelt")?.remove());
+    // → på siste kort avslutter runden, som «Ferdig».
+    await slippFokus();
+    const ferdig = side.locator("h2", { hasText: "Runden er ferdig" });
+    for (let i = 0; i <= antall && (await ferdig.count()) === 0; i++) await side.keyboard.press("ArrowRight");
+    funnet.ferdig = (await ferdig.count()) === 1;
+    sjekk(
+      "bolk 2b: ← (ikke på første), → (forsiden opp), mellomrom (én gang, også på kortet), ikke i skjemafelt, ikke med Ctrl, og → på siste avslutter runden",
+      (start !== 1 || funnet.venstrePaaFoerste === 1) &&
+        funnet.mellomromSnur &&
+        funnet.mellomromSnurTilbake &&
+        (start >= antall || (funnet.hoeyre === start + 1 && funnet.forsidenOpp && funnet.venstre === start)) &&
+        funnet.ctrl === start &&
+        funnet.paaKortet &&
+        funnet.paaSummary &&
+        funnet.iFeltet &&
+        funnet.ferdig,
+      JSON.stringify({ start, antall, ...funnet }),
+    );
     await ctx.close();
   }
   // Skjemaet på /konto: en avkrysningsboks, «Lagre» og informasjonskapselen, med og uten skript.
@@ -1288,7 +1395,7 @@ try {
       `venstrehendt (${hvordan}): «Lagre»-knappene har ulike navn, og hjelpetekstene er koblet til valgene`,
       navn.knapper.includes("Lagre utseendet") &&
         navn.knapper.includes("Lagre valget for øvekortene") &&
-        navn.hjelp.startsWith("«Må øve mer» og «Kan» står til venstre") &&
+        navn.hjelp.startsWith("«Må øve mer» og «Har kontroll» står til venstre") &&
         navn.hjelpIFieldset &&
         navn.tema.startsWith("Valget gjelder denne enheten."),
       JSON.stringify(navn),
@@ -1485,8 +1592,8 @@ try {
   await tlf.locator("[role=dialog] button:has-text('Legg sammen')").tap();
   await arketLukket("«Legg sammen»");
   sjekk(
-    "menyen på telefon viser Samlingen og Konto",
-    (await tlf.locator("nav a:visible", { hasText: "Samlingen" }).count()) === 1 && (await tlf.locator("nav a:visible", { hasText: "Konto" }).count()) === 1,
+    "menyen på telefon viser Samlinger og Konto",
+    (await tlf.locator("nav a:visible", { hasText: "Samlinger" }).count()) === 1 && (await tlf.locator("nav a:visible", { hasText: "Konto" }).count()) === 1,
   );
 
   /* --- Bolk 5: tenkepillen og Buddy i knappen, på telefon ----------- */
@@ -1781,7 +1888,7 @@ try {
         await tlf.locator("button[type=submit]", { hasText: "Videre" }).click();
         await tlf.locator(PILLE).waitFor({ timeout: 15000 });
         await vaktVert(tlf);
-        const lenke = tlf.locator("header a[href]:visible", { hasText: "Samlingen" }).first();
+        const lenke = tlf.locator("header a[href]:visible", { hasText: "Samlinger" }).first();
         await lenke.click();
         // React fletter navigeringen sammen med handlingen som venter, så
         // siden byttes først når handlingen har svart. Next forkaster svaret
@@ -2390,7 +2497,7 @@ try {
     "topplinjen på landingssiden: «For lærere» og «Logg inn», ikke appmenyen",
     (await land.locator("header a:visible", { hasText: "For lærere" }).count()) === 1 &&
       (await land.locator("header a:visible", { hasText: "Logg inn" }).count()) === 1 &&
-      (await land.locator("header a:visible", { hasText: "Samlingen" }).count()) === 0,
+      (await land.locator("header a:visible", { hasText: "Samlinger" }).count()) === 0,
   );
   sjekk(
     "skjermleser: ingen live-regioner på landingssiden, Følge-Buddy er aria-hidden",

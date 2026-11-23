@@ -691,7 +691,7 @@ function mappefeil(e: unknown): { feil: Feiltekst } {
     return {
       feil: {
         melding: "Fant ikke mappen eller teksten.",
-        handling: "Last siden på nytt. Er den slettet, finner du resten i Samlingen.",
+        handling: "Last siden på nytt. Er den slettet, finner du resten i Samlinger.",
       },
     };
   }
@@ -1432,7 +1432,7 @@ export async function velgTemaHandling(data: FormData): Promise<void> {
 
 /**
  * «Venstrehendt» (design runde 2, bolk 9): speiler øvekortene, så «Må øve
- * mer» og «Kan» står til venstre. Lagres som temaet: en informasjonskapsel på
+ * mer» og «Har kontroll» står til venstre. Lagres som temaet: en informasjonskapsel på
  * denne enheten, `venstre` eller ingen kapsel. En avkrysningsboks i et vanlig
  * skjema, så det virker uten JavaScript; uten kryss sendes ingenting, og
  * kapselen slettes. Rotlayouten leser kapselen og setter `data-hand`.

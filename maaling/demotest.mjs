@@ -310,13 +310,13 @@ async function loeype(s, { mobil, eksempel, brod }) {
   sjekk(`${p}7`, "kildeavsnittet folder seg ut", await kilde.evaluate((d) => d.open) && (await kilde.locator("blockquote").isVisible()));
   // Eksakt navn: når kortet er snudd, står forklaringen på kortknappen, og den
   // kan inneholde ordet «kan».
-  await trykk(s.getByRole("button", { name: "Kan", exact: true }));
-  await trykk(s.getByRole("button", { name: "Neste →", exact: true }));
+  await trykk(s.getByRole("button", { name: "Har kontroll", exact: true }));
+  await trykk(s.getByRole("button", { name: "Neste kort", exact: true }));
   await trykk(s.getByRole("button", { name: "Må øve mer", exact: true }));
   await s.waitForTimeout(1500);
   await s.goto(`${tekstUrl}/oppgaver`);
   // Synlig tekst, ikke kildekoden: React setter kommentarer mellom tekst og tall i HTML-en.
-  sjekk(`${p}7`, "to kort merket og lagret", (await s.locator("text=/kan 1 · må øve 1/").count()) > 0);
+  sjekk(`${p}7`, "to kort merket og lagret", (await s.locator("text=/har kontroll 1 · må øve 1/").count()) > 0);
 
   // Steg 8: fagsamtale, tre runder.
   await trykk(s.locator('button:has-text("Start en fagsamtale")'));
@@ -510,10 +510,10 @@ async function enKjoering(nettleser) {
   await pc.goto(`${mappeUrl}/oevekort`);
   sjekk("13b", "mappekortet viser hvilken tekst det er fra", (await pc.locator("text=Fra «EM-bølger»").count()) > 0);
   await pc.click('button:has-text("Trykk for å snu")');
-  await pc.getByRole("button", { name: "Kan", exact: true }).click();
+  await pc.getByRole("button", { name: "Har kontroll", exact: true }).click();
   await pc.waitForTimeout(1500);
   await pc.goto(`${tekstUrl}/oppgaver`);
-  sjekk("13b", "kort merket i mappen står merket i tekst A (kan 2 · må øve 1)", (await pc.locator("text=/kan 2 · må øve 1/").count()) > 0);
+  sjekk("13b", "kort merket i mappen står merket i tekst A (har kontroll 2 · må øve 1)", (await pc.locator("text=/har kontroll 2 · må øve 1/").count()) > 0);
 
   // Samlet quiz, lengde Middels: 4 av tekst A sine 8 spørsmål.
   await pc.goto(`${mappeUrl}/quiz`);
@@ -537,7 +537,7 @@ async function enKjoering(nettleser) {
     (await pc.locator("main li", { hasText: "Middels" }).filter({ hasText: /av 4 riktige/ }).count()) === 1,
   );
 
-  // Steg 14: slett tekst A (i Samlingen), logg ut. Tekst A er PC-teksten fra
+  // Steg 14: slett tekst A (i Samlinger), logg ut. Tekst A er PC-teksten fra
   // steg 2–9, den som ligger i mappen (steg 12 lager en til med samme tittel).
   await pc.goto(`${APP}/samling`);
   const forFoer = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
@@ -550,7 +550,7 @@ async function enKjoering(nettleser) {
   for (let i = 0; i < 20 && (await raden.count()) > 0; i++) await pc.waitForTimeout(500);
   const etter = (await sql(`SELECT count(*)::int AS n FROM tekst`))[0].n;
   sjekk("14", "testtekst A slettet", etter === forFoer - 1, `${forFoer} → ${etter} tekster`);
-  sjekk("14", "raden er borte fra Samlingen", (await raden.count()) === 0);
+  sjekk("14", "raden er borte fra Samlinger", (await raden.count()) === 0);
   // FR-50/FR-37: tekst A forsvinner fra mappen, og forsøket står med sitt antall.
   const iMappen = (await sql(`SELECT count(*)::int AS n FROM mappe_tekst WHERE mappe_id = $1`, [mappeId]))[0].n;
   const forsoekEtter = await sql(`SELECT antall_totalt FROM mappeforsoek WHERE mappe_id = $1`, [mappeId]);
@@ -581,7 +581,7 @@ async function enKjoering(nettleser) {
 
 const resultat = [];
 try {
-  console.log("Starter database i minnet og appen i testmodus «fyll» …");
+  console.log(`Starter database i minnet og appen i testmodus «${process.env.LESEVENN_TESTMODUS ?? "fyll"}» …`);
   start("npx", ["pglite-server", `--port=${DBPORT}`, "--max-connections=20"]);
   await vent(async () => {
     const c = new pg.Client(DB);
@@ -594,7 +594,8 @@ try {
   start("npx", ["next", "dev", "-p", String(APPPORT)], {
     DATABASE_URL: DB,
     DATABASE_URL_UNPOOLED: DB,
-    LESEVENN_TESTMODUS: "fyll",
+    // `LESEVENN_TESTMODUS=les npm run demotest` kjører uten modellkall.
+    LESEVENN_TESTMODUS: process.env.LESEVENN_TESTMODUS ?? "fyll",
     LESEVENN_BYGGEMAPPE: ".next-sjekk",
     LESEVENN_INVITASJONSKODE: KODE,
     BETTER_AUTH_SECRET: "lokal-hemmelighet-kun-for-demotesten",

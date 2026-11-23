@@ -11,10 +11,11 @@ import { notFound } from "next/navigation";
 import { tilgang } from "../../../../data/konto";
 import { hentMappe, hentMappekort, type Mappe, type Mappekort } from "../../../../data/mapper";
 import { IkkeFunnet } from "../../../../data/tilgang";
-import { KNAPP_SEKUNDAER } from "../../../komponenter/knapper";
 import { kortmangel, Mangler } from "../../../komponenter/Mappemangler";
 import { Oevekort } from "../../../komponenter/Oevekort";
 import { Tusj } from "../../../komponenter/Tusj";
+
+const TILBAKE = "inline-flex min-h-11 items-center font-bold underline decoration-primaer underline-offset-4 hover:decoration-2";
 
 export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/oevekort">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -31,10 +32,18 @@ export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/o
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10">
-      <p className="text-dempet">Øvekort fra mappen</p>
-      <h1 className="mt-1 [overflow-wrap:anywhere]">
-        <Tusj>{mappe.tittel}</Tusj>
-      </h1>
+      {/* Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11). */}
+      <header>
+        <p>
+          <Link href={`/mappe/${mappe.id}`} className={TILBAKE}>
+            <span aria-hidden="true">←&nbsp;</span>Tilbake til mappen
+          </Link>
+        </p>
+        <p className="mt-4 text-dempet">Øvekort fra mappen</p>
+        <h1 className="mt-1 [overflow-wrap:anywhere]">
+          <Tusj>{mappe.tittel}</Tusj>
+        </h1>
+      </header>
 
       <div className="mt-8">
         {kort.length > 0 ? (
@@ -49,12 +58,6 @@ export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/o
       </div>
 
       <Mangler tekster={mappe.tekster} mangel={kortmangel} overskrift="Tekster uten øvekort" />
-
-      <p className="mt-12">
-        <Link href={`/mappe/${mappe.id}`} className={KNAPP_SEKUNDAER}>
-          Tilbake til mappen
-        </Link>
-      </p>
     </main>
   );
 }
