@@ -156,8 +156,14 @@ async function loeype(s, { mobil, eksempel, brod }) {
 
   // Steg 3: aktivering.
   sjekk(`${p}3`, "aktiveringen viser ikke brødteksten", !(await s.content()).includes(brod));
-  // FR-6 (endret 17.11, merkene 18.11): merk den første overskriften og skriv et spørsmål.
-  await trykk(s.locator("fieldset").first().locator("label", { hasText: "Ingenting ennå" }));
+  // FR-6 (endret 17.11, merkene 18.11, glideren 23.11): merk den første
+  // overskriften «Ingenting ennå» (trykk helt til venstre på glideren) og
+  // skriv et spørsmål.
+  const glider = s.locator("fieldset").first().locator("input[type=range]");
+  const gliderBoks = await glider.boundingBox();
+  const venstre = { position: { x: 4, y: gliderBoks.height / 2 } };
+  await (mobil ? glider.tap(venstre) : glider.click(venstre));
+  sjekk(`${p}3`, "glideren står på «Ingenting ennå» etter trykk til venstre", (await glider.getAttribute("aria-valuetext")) === "Ingenting ennå");
   await s.fill("#lurer-paa", "Hvorfor blir maten varm i mikrobølgeovnen?");
   // Hver side nettleseren lander på etter «Videre», så steg 4 kan vise at
   // gjennomsynet faktisk ble hoppet over, ikke bare at lesingen ble nådd.

@@ -66,14 +66,18 @@
  *     skriptfeil og uten `inert`- eller `har-ark`-rester
  *   - FR-3 fase 3b: gjennomsynet via PDF og via bilde (tekster lagt rett inn
  *     i databasen i tilstand `aktivert`), axe i lys og mørk modus
- *   - FR-6 (17.11): på 375 px er hver overskrift i aktiveringen en radiogruppe
- *     med navn (fieldset og legend), nådd med Tab og styrt med piltastene,
- *     og valgt merke har hake og fokusring; lesevisningen viser «Før du
- *     leste» med spørsmålet, lenken og overskriften eleven ikke skjønte.
- *     Merkene 18.11: fire valg («Mye», «Litt», «Ingenting ennå», «Skjønner
- *     ikke overskriften»), spørsmålet «Hva vet du om dette fra før?» én gang
- *     over gruppene og i hver gruppes beskrivelse, og på 320 px kuttes ingen
- *     knapp
+ *   - FR-6 (glideren 23.11): på 375 px har hver overskrift i aktiveringen en
+ *     glider (`input type=range`) navngitt av overskriften (legend) og
+ *     beskrevet av «Hva vet du om dette fra før?» (én gang over
+ *     overskriftene), med trinnmerkene «Ingenting ennå», «Litt», «Mye» og
+ *     knappen «Skjønner ikke overskriften» (aria-pressed) under. Urørt sier
+ *     den «Ikke merket ennå» og sender ingenting. Med tastaturet: Tab går
+ *     glider → knapp → neste glider, mellomrom gir «Litt» fra urørt, → «Mye»,
+ *     ← tilbake; knappen på gir «Satt til side» og `uklar`, av igjen gir
+ *     urørt eller verdien glideren hadde, og ← etter knappen slår den av. Klikk
+ *     på håndtaket i midten gir «Litt». Minst 44 px, synlig fokus, 320 px også
+ *     med 200 % tekst, axe i lys og mørk modus. Lesevisningen viser «Før du
+ *     leste» med spørsmålet, lenken og overskriften eleven ikke skjønte
  *   - overleveringen (17.11): når svaret sender eleven til en ny side, spilles
  *     avslutningen av verten i rotlayouten. På 375 px: en lenke i topplinjen
  *     trykket mens Buddy tenker, gir ingen avslutning (forlat-vernet); et
@@ -414,118 +418,226 @@ try {
   await axe(pc, "aktivering");
   sjekk("FR-5: brødteksten finnes ikke i kildekoden i aktiveringen", !(await lekker()));
 
-  /* --- FR-6 (endret 17.11, merkene 18.11): merkene, på 320 og 375 px og bare med tastatur --- */
+  /* --- FR-6 (glideren 23.11): forkunnskapen, på 320 og 375 px og bare med tastatur --- */
   await pc.setViewportSize({ width: 375, height: 800 });
   await axe(pc, "aktivering (375 px)");
-  const grupper = await pc.evaluate(() =>
-    [...document.querySelectorAll("main form fieldset")].map((f) => {
-      const radio = [...f.querySelectorAll("input[type=radio]")];
-      const beskrevet = (f.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
-      return {
-        navn: (f.querySelector(":scope > legend")?.textContent ?? "").trim(),
-        valg: radio.length,
-        feltnavn: new Set(radio.map((r) => r.name)).size,
-        beskrivelse: beskrevet.map((id) => document.getElementById(id)?.textContent.trim() ?? "").join(" | "),
-        etiketter: [...f.querySelectorAll(".merkevalg")].map((l) => l.textContent.trim()).join(" / "),
-      };
-    }),
-  );
-  sjekk(
-    "FR-6: hver overskrift er en radiogruppe med navn (fieldset med legend) og fire valg",
-    grupper.length >= 2 && grupper.every((g) => g.navn.length > 0 && g.valg === 4 && g.feltnavn === 1),
-    `${grupper.length} grupper: ${grupper.map((g) => `«${g.navn}» (${g.valg})`).join(", ")}`,
-  );
-  sjekk(
-    "FR-6 (18.11): valgene heter «Mye», «Litt», «Ingenting ennå» og «Skjønner ikke overskriften»",
-    grupper.every((g) => g.etiketter === "Mye / Litt / Ingenting ennå / Skjønner ikke overskriften"),
-    grupper[0]?.etiketter ?? "",
-  );
-  sjekk(
-    "FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over gruppene og beskriver hver gruppe (instruksen leses ikke på nytt for hver gruppe)",
-    (await pc.locator("main form #merke-spoersmaal", { hasText: "Hva vet du om dette fra før?" }).count()) === 1 &&
-      (await pc.locator("fieldset #merke-spoersmaal").count()) === 0 &&
-      grupper.every(
-        (g) => g.beskrivelse === "Hva vet du om dette fra før?",
+  // Det skjemaet ville sendt for merkene, lest fra skjemaet selv.
+  const sendtMerking = () =>
+    pc.evaluate(() =>
+      Object.fromEntries(
+        [...new FormData(document.querySelector("main form")).entries()].filter(([k]) => k.startsWith("merke-")),
       ),
-    grupper[0]?.beskrivelse ?? "",
-  );
-  // De fire valgene får plass på 320 px: de kan brytes til flere rader, men
-  // ingen knapp går utenfor gruppen eller får teksten kuttet.
-  await pc.setViewportSize({ width: 320, height: 800 });
-  const smalMerker = await pc.evaluate(() => {
-    const feil = [];
-    for (const f of document.querySelectorAll("main form fieldset")) {
-      const fb = f.getBoundingClientRect();
-      for (const l of f.querySelectorAll(".merkevalg")) {
-        const b = l.getBoundingClientRect();
-        if (b.left < fb.left - 0.5 || b.right > fb.right + 0.5 || l.scrollWidth > l.clientWidth + 1) {
-          feil.push(`${l.textContent.trim()} (${Math.round(b.left)}–${Math.round(b.right)} i ${Math.round(fb.left)}–${Math.round(fb.right)})`);
-        }
-      }
-    }
-    const foerste = document.querySelector("main form fieldset");
-    const rader = new Set(
-      [...(foerste?.querySelectorAll(".merkevalg") ?? [])].map((l) => Math.round(l.getBoundingClientRect().top)),
-    ).size;
-    return { feil, rader, sidelengs: document.documentElement.scrollWidth > window.innerWidth };
+    );
+  const grupper = await pc.evaluate(() => {
+    const tekstAv = (ider) =>
+      (ider ?? "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent.replace(/\s+/g, " ").trim() ?? "")
+        .join(" | ");
+    return [...document.querySelectorAll("main form fieldset")].map((f) => {
+        const glidere = [...f.querySelectorAll("input[type=range]")];
+        const g = glidere[0];
+        const knapp = f.querySelector(".forkunnskap-uklar button");
+        return {
+          navn: (f.querySelector(":scope > legend")?.textContent ?? "").trim(),
+          glidere: glidere.length,
+          felt: (g?.getAttribute("aria-labelledby") ?? "").replace(/-navn$/, ""),
+          gliderNavn: tekstAv(g?.getAttribute("aria-labelledby")),
+          legendNavn: (f.querySelector(":scope > legend")?.textContent ?? "").replace(/\s+/g, " ").trim(),
+          beskrivelse: tekstAv(g?.getAttribute("aria-describedby")),
+          verditekst: g?.getAttribute("aria-valuetext") ?? "",
+          status: f.querySelector(".forkunnskap-status")?.textContent.trim() ?? "",
+          gliderNavngitt: !!g?.getAttribute("name"),
+          trinn: [...f.querySelectorAll(".forkunnskap-trinn > *")].map((s) => s.textContent.trim()).join(" / "),
+          knapp: knapp?.textContent.trim() ?? "",
+          trykket: knapp?.getAttribute("aria-pressed") ?? "",
+          gliderHoeyde: g ? g.getBoundingClientRect().height : 0,
+          knappHoeyde: knapp ? knapp.getBoundingClientRect().height : 0,
+        };
+      });
   });
   sjekk(
-    "FR-6 (18.11): de fire valgene får plass på 320 px uten at noen knapp kuttes, og siden ruller ikke sidelengs",
-    smalMerker.feil.length === 0 && !smalMerker.sidelengs,
-    `${smalMerker.rader} rader${smalMerker.feil.length ? `; kuttet: ${smalMerker.feil.join(", ")}` : ""}`,
+    "FR-6 (23.11): hver overskrift har én glider navngitt av overskriften (legend), uten eget feltnavn",
+    grupper.length >= 2 && grupper.every((g) => g.navn.length > 0 && g.glidere === 1 && g.gliderNavn === g.legendNavn && !g.gliderNavngitt),
+    `${grupper.length} overskrifter: ${grupper.map((g) => `«${g.gliderNavn}» (${g.glidere})`).join(", ")}`,
+  );
+  sjekk(
+    "FR-6 (23.11): trinnmerkene «Ingenting ennå / Litt / Mye» står under glideren, og knappen heter «Skjønner ikke overskriften» (aria-pressed=false)",
+    grupper.every((g) => g.trinn === "Ingenting ennå / Litt / Mye" && g.knapp === "Skjønner ikke overskriften" && g.trykket === "false"),
+    `${grupper[0]?.trinn ?? ""}; «${grupper[0]?.knapp ?? ""}» ${grupper[0]?.trykket ?? ""}`,
+  );
+  sjekk(
+    "FR-6 (23.11): urørt sier glideren «Ikke merket ennå», synlig og som aria-valuetext, og skjemaet sender ingen merker",
+    grupper.every((g) => g.verditekst === "Ikke merket ennå" && g.status === "Ikke merket ennå") &&
+      Object.keys(await sendtMerking()).length === 0,
+    `${grupper[0]?.verditekst ?? ""} / ${grupper[0]?.status ?? ""}; ${JSON.stringify(await sendtMerking())}`,
+  );
+  sjekk(
+    "FR-6 (18.11): «Hva vet du om dette fra før?» står én gang over overskriftene og beskriver hver glider",
+    (await pc.locator("main form #merke-spoersmaal", { hasText: "Hva vet du om dette fra før?" }).count()) === 1 &&
+      (await pc.locator("fieldset #merke-spoersmaal").count()) === 0 &&
+      grupper.every((g) => g.beskrivelse === "Hva vet du om dette fra før?"),
+    grupper[0]?.beskrivelse ?? "",
+  );
+  sjekk(
+    "FR-6 (23.11): glideren og knappen har minst 44 px trykkflate",
+    grupper.every((g) => g.gliderHoeyde >= 44 && g.knappHoeyde >= 44),
+    grupper.map((g) => `${Math.round(g.gliderHoeyde)}/${Math.round(g.knappHoeyde)}`).join(", "),
+  );
+  await pc.emulateMedia({ colorScheme: "dark" });
+  await axe(pc, "aktivering (375 px, mørk modus)");
+  // Tilbake til lys (standarden i konteksten); null ville gitt systemets valg.
+  await pc.emulateMedia({ colorScheme: "light" });
+  // På 320 px, også med 200 % tekst: glideren, trinnmerkene og knappen
+  // holder seg innenfor overskriften, ingen tekst kuttes, og siden ruller
+  // ikke sidelengs.
+  await pc.setViewportSize({ width: 320, height: 800 });
+  const smalt = () =>
+    pc.evaluate(() => {
+      const feil = [];
+      for (const f of document.querySelectorAll("main form fieldset")) {
+        const fb = f.getBoundingClientRect();
+        for (const e of f.querySelectorAll(".forkunnskap-glider, .forkunnskap-trinn > *, .forkunnskap-uklar button, .forkunnskap-status")) {
+          const b = e.getBoundingClientRect();
+          if (b.left < fb.left - 0.5 || b.right > fb.right + 0.5 || e.scrollWidth > e.clientWidth + 1) {
+            feil.push(`${e.textContent.trim() || e.className} (${Math.round(b.left)}–${Math.round(b.right)} i ${Math.round(fb.left)}–${Math.round(fb.right)})`);
+          }
+        }
+      }
+      return { feil, sidelengs: document.documentElement.scrollWidth > window.innerWidth };
+    });
+  const smal1 = await smalt();
+  sjekk(
+    "FR-6 (23.11): på 320 px står glideren, trinnmerkene og knappen innenfor overskriften, og siden ruller ikke sidelengs",
+    smal1.feil.length === 0 && !smal1.sidelengs,
+    smal1.feil.join(", "),
   );
   await axe(pc, "aktivering (320 px)");
+  const stor = await pc.addStyleTag({ content: "html { font-size: 200% !important; }" });
+  const smal2 = await smalt();
+  sjekk(
+    "FR-6 (23.11): på 320 px med 200 % tekst kuttes ingenting, og siden ruller ikke sidelengs",
+    smal2.feil.length === 0 && !smal2.sidelengs,
+    smal2.feil.join(", "),
+  );
+  await stor.evaluate((e) => e.remove());
   await pc.setViewportSize({ width: 375, height: 800 });
   const aktiv = () =>
     pc.evaluate(() => {
       const e = document.activeElement;
-      const valg = e?.closest(".merkevalg");
+      const f = e?.closest("fieldset");
       return {
         type: e?.type ?? "",
-        navn: e?.name ?? "",
-        verdi: e?.value ?? "",
-        valgt: e?.checked ?? false,
-        hake: valg ? getComputedStyle(valg, "::before").content : "",
-        ring: valg ? getComputedStyle(valg).outlineStyle : "",
+        tag: e?.tagName ?? "",
+        tekst: e?.tagName === "BUTTON" ? e.textContent.trim() : "",
+        trykket: e?.getAttribute("aria-pressed") ?? "",
+        navn: e?.getAttribute("aria-labelledby") ?? "",
+        overskrift: f ? [...document.querySelectorAll("main form fieldset")].indexOf(f) : -1,
+        verditekst: f?.querySelector("input[type=range]")?.getAttribute("aria-valuetext") ?? "",
+        status: f?.querySelector(".forkunnskap-status")?.textContent.trim() ?? "",
+        ring: getComputedStyle(e).outlineStyle,
+        synlig: e?.matches(":focus-visible") ?? false,
         sidelengs: document.documentElement.scrollWidth > window.innerWidth,
       };
     });
-  // Tab fram til første radioknapp.
+  const kort = (a) => `${a.overskrift}:${a.type || a.tag} «${a.verditekst}» ${a.trykket}`;
+  // Tab fram til første glider.
   let foersteValg;
   for (let i = 0; i < 40; i++) {
     await pc.keyboard.press("Tab");
     foersteValg = await aktiv();
-    if (foersteValg.type === "radio") break;
+    if (foersteValg.type === "range") break;
   }
-  sjekk("FR-6: Tab når første radiogruppe", foersteValg.type === "radio" && foersteValg.navn === "merke-1", JSON.stringify(foersteValg));
+  sjekk(
+    "FR-6: Tab når første glider, med synlig fokusring",
+    foersteValg.type === "range" && foersteValg.overskrift === 0 && foersteValg.navn === `${grupper[0].felt}-navn` && foersteValg.synlig && foersteValg.ring === "solid",
+    JSON.stringify(foersteValg),
+  );
+  // «Litt» fra urørt med mellomrom, der håndtaket allerede står.
+  await pc.keyboard.press(" ");
+  const etterMellomrom = await aktiv();
+  sjekk(
+    "FR-6 (23.11): mellomrom på en urørt glider velger «Litt» (`litt`)",
+    etterMellomrom.verditekst === "Litt" && etterMellomrom.status === "Litt" && (await sendtMerking())[grupper[0].felt] === "litt",
+    `${kort(etterMellomrom)}; ${JSON.stringify(await sendtMerking())}`,
+  );
   await pc.keyboard.press("ArrowRight");
   const etterPil = await aktiv();
   sjekk(
-    "FR-6: piltasten velger neste merke i gruppen",
-    etterPil.navn === "merke-1" && etterPil.verdi === "litt" && etterPil.valgt,
-    JSON.stringify(etterPil),
+    "FR-6 (23.11): → gir «Mye» (aria-valuetext, det skjermleseren leser) og `kjent`",
+    etterPil.verditekst === "Mye" && (await sendtMerking())[grupper[0].felt] === "kjent",
+    `${kort(etterPil)}; ${JSON.stringify(await sendtMerking())}`,
   );
-  sjekk(
-    "FR-6: valgt merke har hake (ikke farge alene) og synlig fokusring",
-    etterPil.hake.includes("✓") && etterPil.ring === "solid",
-    `hake ${etterPil.hake}, ring ${etterPil.ring}`,
-  );
-  await pc.keyboard.press("Tab");
-  const andreGruppe = await aktiv();
-  sjekk(
-    "FR-6: Tab går videre til neste radiogruppe",
-    andreGruppe.type === "radio" && andreGruppe.navn !== "merke-1" && andreGruppe.navn.startsWith("merke-"),
-    JSON.stringify(andreGruppe),
-  );
-  // Pil venstre fra første valg går rundt til «Skjønner ikke overskriften» (18.11).
   await pc.keyboard.press("ArrowLeft");
-  const uklar = await aktiv();
+  const tilbake = await aktiv();
+  sjekk("FR-6 (23.11): ← går et trinn tilbake, til «Litt»", tilbake.verditekst === "Litt" && (await sendtMerking())[grupper[0].felt] === "litt", kort(tilbake));
+  await pc.keyboard.press("Tab");
+  const knapp1 = await aktiv();
+  await pc.keyboard.press("Tab");
+  const glider2 = await aktiv();
+  await pc.keyboard.press("Tab");
+  const knapp2 = await aktiv();
   sjekk(
-    "FR-6: «Skjønner ikke overskriften» kan velges med piltastene",
-    uklar.verdi === "uklar" && uklar.valgt,
-    JSON.stringify(uklar),
+    "FR-6 (23.11): Tab går glider → «Skjønner ikke overskriften» → neste glider → dens knapp",
+    knapp1.tekst === "Skjønner ikke overskriften" &&
+      knapp1.overskrift === 0 &&
+      glider2.type === "range" &&
+      glider2.overskrift === 1 &&
+      knapp2.tekst === "Skjønner ikke overskriften" &&
+      knapp2.overskrift === 1,
+    [knapp1, glider2, knapp2].map(kort).join(" → "),
   );
-  sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !uklar.sidelengs);
+  // Knappen på og av over en glider som aldri er rørt: urørt igjen.
+  await pc.keyboard.press(" ");
+  const paa = await aktiv();
+  sjekk(
+    "FR-6 (23.11): «Skjønner ikke overskriften» på: aria-pressed=true, glideren «Satt til side», `uklar` sendes",
+    paa.trykket === "true" && paa.verditekst === "Satt til side" && paa.status === "Satt til side" && (await sendtMerking())[grupper[1].felt] === "uklar",
+    `${kort(paa)}; ${JSON.stringify(await sendtMerking())}`,
+  );
+  await pc.keyboard.press(" ");
+  const av = await aktiv();
+  sjekk(
+    "FR-6 (23.11): av igjen over en urørt glider: «Ikke merket ennå», og ingenting sendes for overskriften",
+    av.trykket === "false" && av.verditekst === "Ikke merket ennå" && !(grupper[1].felt in (await sendtMerking())),
+    `${kort(av)}; ${JSON.stringify(await sendtMerking())}`,
+  );
+  // På igjen, og så ← på glideren: glideren gjelder, og knappen går av.
+  await pc.keyboard.press(" ");
+  await pc.keyboard.press("Shift+Tab");
+  await pc.keyboard.press("ArrowLeft");
+  const etterKnapp = await aktiv();
+  const knappEtter = await pc.locator("main form fieldset").nth(1).locator(".forkunnskap-uklar button").getAttribute("aria-pressed");
+  sjekk(
+    "FR-6 (23.11): ← etter «Skjønner ikke»: «Ingenting ennå» (`nytt`), og knappen går av",
+    etterKnapp.verditekst === "Ingenting ennå" && knappEtter === "false" && (await sendtMerking())[grupper[1].felt] === "nytt",
+    `${kort(etterKnapp)}, knapp ${knappEtter}; ${JSON.stringify(await sendtMerking())}`,
+  );
+  // Knappen på og av over en rørt glider: verdien kommer tilbake. Så på igjen,
+  // og den blir stående på (lesevisningen sjekker overskriften under).
+  await pc.keyboard.press("Tab");
+  await pc.keyboard.press(" ");
+  await pc.keyboard.press(" ");
+  const avIgjen = await aktiv();
+  sjekk(
+    "FR-6 (23.11): av igjen over en rørt glider: glideren har sin verdi («Ingenting ennå»)",
+    avIgjen.trykket === "false" && avIgjen.verditekst === "Ingenting ennå" && (await sendtMerking())[grupper[1].felt] === "nytt",
+    kort(avIgjen),
+  );
+  await pc.keyboard.press(" ");
+  sjekk("FR-6 (23.11): knappen på igjen sender `uklar`", (await sendtMerking())[grupper[1].felt] === "uklar", JSON.stringify(await sendtMerking()));
+  // Klikk på håndtaket i midten av en urørt glider gir «Litt».
+  if (grupper.length >= 3) {
+    await pc.locator("main form fieldset").nth(2).locator("input[type=range]").click();
+    const klikket = await pc.locator("main form fieldset").nth(2).locator("input[type=range]").getAttribute("aria-valuetext");
+    sjekk(
+      "FR-6 (23.11): klikk på håndtaket i midten av en urørt glider velger «Litt»",
+      klikket === "Litt" && (await sendtMerking())[grupper[2].felt] === "litt",
+      `${klikket}; ${JSON.stringify(await sendtMerking())}`,
+    );
+  }
+  sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !(await aktiv()).sidelengs);
   await pc.setViewportSize({ width: 1280, height: 900 });
 
   await pc.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
@@ -613,8 +725,10 @@ try {
     merketTekst.replace(/\s+/g, " ").slice(0, 120),
   );
   sjekk(
-    "FR-6: låst aktivering har verken radioknapper eller spørsmålsfelt",
-    (await pc.locator("input[type=radio]").count()) === 0 && (await pc.locator("#lurer-paa").count()) === 0,
+    "FR-6: låst aktivering har verken glidere, «Skjønner ikke»-knapper eller spørsmålsfelt",
+    (await pc.locator("input[type=range]").count()) === 0 &&
+      (await pc.locator(".forkunnskap-uklar button").count()) === 0 &&
+      (await pc.locator("#lurer-paa").count()) === 0,
   );
   // Tilbake til lesevisningen, der FR-10 under fortsetter.
   await pc.goto(lesing);
@@ -1898,7 +2012,8 @@ try {
       await tlf.goto(`${APP}/tekst/${forlatt}/aktivering`);
       // Et svar i skjemaet, så handlingen ikke bare svarer med oppfordringen.
       await tlf.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
-      await tlf.locator("input[type=radio]").first().check({ force: true });
+      await tlf.locator("input[type=range]").first().focus();
+      await tlf.keyboard.press("ArrowRight");
       const forlatHold = await holdHandlinger(tlf);
       let forlatOk = false;
       let forlatDetaljer = "";

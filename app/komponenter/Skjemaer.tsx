@@ -21,7 +21,8 @@ import type { Handlingssvar } from "../handlinger";
 import { oppdaterUtenFeil } from "./oppdaterUtenFeil";
 import { NETTFEIL, type Feiltekst } from "../kifeil";
 import { GRENSER } from "../../opplasting/pdf-tekst";
-import { MAKS_LURER_PAA, MERKENAVN, MERKER, MERKESPOERSMAAL, merkefelt } from "../../tekst/forkunnskap";
+import { MAKS_LURER_PAA, MERKESPOERSMAAL } from "../../tekst/forkunnskap";
+import { Forkunnskapsvalg } from "./Forkunnskapsvalg";
 import { KNAPP_PRIMAER } from "./knapper";
 import { Tenker } from "./Tenker";
 
@@ -89,18 +90,20 @@ export type Aktiveringstittel = {
   morsmaal?: ReactNode;
 };
 
-/** Id-en til spørsmålet over radiogruppene, som hver gruppe beskrives av. */
+/** Id-en til spørsmålet over overskriftene, som hver glider beskrives av. */
 const SPOERSMAAL_ID = "merke-spoersmaal";
 
 /**
- * FR-6 (endret 17.11.2026, merkene 18.11): over overskriftene står ett
- * spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver
- * overskrift «Mye», «Litt», «Ingenting ennå» eller «Skjønner ikke
- * overskriften». Hun kan skrive ett spørsmål. Merkene er vanlige radioknapper
- * i en `fieldset` per overskrift, så de virker med tastatur (Tab inn i
- * gruppen, piltaster mellom valgene) og uten skript. Gruppen er navngitt av
- * overskriften (`legend`) og beskrevet av spørsmålet og instruksen på siden
- * (`aria-describedby`). Utseendet står i globals.css (`.merkevalg`).
+ * FR-6 (endret 17.11.2026, merkene 18.11, glideren 23.11): over overskriftene
+ * står ett spørsmål, «Hva vet du om dette fra før?», og eleven svarer for
+ * hver overskrift med en glider i tre trinn, «Ingenting ennå» – «Litt» –
+ * «Mye», eller med av/på-knappen «Skjønner ikke overskriften» under den
+ * (Forkunnskapsvalg.tsx). Hver overskrift er en `fieldset`; glideren er
+ * navngitt av overskriften (`legend`) og beskrevet av spørsmålet. Urørt
+ * sender ingenting, og kodene er de samme som før, så `lesMerking` og
+ * handlingen er uendret. Glideren krever skript: uten skript sendes ingen
+ * merker, og eleven får oppfordringen én gang og slipper videre. Hun kan
+ * skrive ett spørsmål.
  */
 export function AktiveringSkjema({
   handling,
@@ -136,10 +139,9 @@ export function AktiveringSkjema({
           {titler.map((o) => (
             <fieldset
               key={o.nummer}
-              aria-describedby={SPOERSMAAL_ID}
               className="rounded-md border border-slate-300 p-4 dark:border-slate-700"
             >
-              <legend className="px-1 text-lg font-medium">
+              <legend id={`merke-${o.nummer}-navn`} className="px-1 text-lg font-medium">
                 {o.innhold}
                 {o.laget && (
                   <span className="ml-2 align-middle text-xs font-normal text-slate-500 dark:text-slate-400">
@@ -148,14 +150,7 @@ export function AktiveringSkjema({
                 )}
               </legend>
               {o.morsmaal}
-              <div className="mt-2 flex flex-wrap gap-2">
-                {MERKER.map((m) => (
-                  <label key={m} className="merkevalg">
-                    <input type="radio" name={merkefelt(o.nummer)} value={m} />
-                    {MERKENAVN[m]}
-                  </label>
-                ))}
-              </div>
+              <Forkunnskapsvalg nummer={o.nummer} navnId={`merke-${o.nummer}-navn`} beskrivelseId={SPOERSMAAL_ID} />
             </fieldset>
           ))}
         </div>

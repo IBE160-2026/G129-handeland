@@ -131,8 +131,11 @@ try {
   await s.click("text=Overskriftene stemmer — videre");
   await s.waitForURL(/\/aktivering$/);
   sjekk("innliming og overskriftskontroll", true);
-  // FR-6 (endret 17.11, merkene 18.11): ett merke og et spørsmål.
-  await s.locator("fieldset").first().locator("label", { hasText: "Mye" }).click();
+  // FR-6 (endret 17.11, merkene 18.11, glideren 23.11): ett merke («Mye»,
+  // helt til høyre på glideren) og et spørsmål.
+  const glider = s.locator("fieldset").first().locator("input[type=range]");
+  const gliderBoks = await glider.boundingBox();
+  await glider.click({ position: { x: gliderBoks.width - 4, y: gliderBoks.height / 2 } });
   await s.fill("#lurer-paa", "Hva er en bølge?");
   await s.click("text=Videre");
   // FR-3 (11.11): innlimt tekst låses i aktiveringen og går rett til lesingen.

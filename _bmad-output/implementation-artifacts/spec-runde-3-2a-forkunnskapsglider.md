@@ -2,9 +2,10 @@
 title: 'Runde 3, bolk 2a: forkunnskapen som glider'
 type: 'feature'
 created: '2026-11-23'
-status: 'draft'
+status: 'in-review'
 route: 'dispatch'
 review_loop_iteration: 0
+baseline_commit: '2bd6e45e1efbbba543ec84e6b88b7624542c9edf'
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/oppdrag-design-runde-3.md'
 ---
@@ -59,12 +60,12 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `app/komponenter/forkunnskapsglider.ts` (ny) + `.test.ts` -- rene funksjoner: tilstand `{ rort, trinn, uklar }` → sendt kode (eller tom) og `aria-valuetext`; overganger for glider-endring, «Litt» fra urørt og av/på-knapp -- matrisen uten DOM.
-- [ ] `app/komponenter/Forkunnskapsvalg.tsx` (ny, `"use client"`) -- glider + trinnmerker + knapp + skjult `input name={merkefelt(nummer)}` med koden; bruker funksjonene over.
-- [ ] `app/komponenter/Skjemaer.tsx` -- `AktiveringSkjema` bruker `Forkunnskapsvalg` per overskrift; oppdater kommentaren.
-- [ ] `app/globals.css` -- stil for glideren (spor, trinnmerker, dempet urørt håndtak, fokus, `forced-colors`) og knappen.
-- [ ] `maaling/sjekk-tilgjengelighet.mjs`, `maaling/demotest.mjs`, `maaling/sjekk-readme.mjs` -- skriv om sjekkene: navn og `aria-valuetext`, urørt sender ingenting, piltaster, «Litt» fra urørt, «Skjønner ikke» på/av, Tab-rekkefølge, 44 px, 320 px/200 %, axe i lys og mørk.
-- [ ] `EXPERIENCE.md`, `DESIGN.md`, `prd-lesevenn.md` FR-6 -- datert 23.11; stryk «virker uten skript» for merkene.
+- [x] `app/komponenter/forkunnskapsglider.ts` (ny) + `.test.ts` -- rene funksjoner: tilstand `{ rort, trinn, uklar }` → sendt kode (eller tom) og `aria-valuetext`; overganger for glider-endring, «Litt» fra urørt og av/på-knapp -- matrisen uten DOM.
+- [x] `app/komponenter/Forkunnskapsvalg.tsx` (ny, `"use client"`) -- glider + trinnmerker + knapp + skjult `input name={merkefelt(nummer)}` med koden; bruker funksjonene over.
+- [x] `app/komponenter/Skjemaer.tsx` -- `AktiveringSkjema` bruker `Forkunnskapsvalg` per overskrift; oppdater kommentaren.
+- [x] `app/globals.css` -- stil for glideren (spor, trinnmerker, dempet urørt håndtak, fokus, `forced-colors`) og knappen.
+- [x] `maaling/sjekk-tilgjengelighet.mjs`, `maaling/demotest.mjs`, `maaling/sjekk-readme.mjs` -- skriv om sjekkene: navn og `aria-valuetext`, urørt sender ingenting, piltaster, «Litt» fra urørt, «Skjønner ikke» på/av, Tab-rekkefølge, 44 px, 320 px/200 %, axe i lys og mørk.
+- [x] `EXPERIENCE.md`, `DESIGN.md`, `prd-lesevenn.md` FR-6 -- datert 23.11; stryk «virker uten skript» for merkene.
 
 **Acceptance Criteria:**
 - Given en overskrift eleven merket «Mye» før 23.11, when teksten åpnes låst, then «du merket: Mye» vises som før.

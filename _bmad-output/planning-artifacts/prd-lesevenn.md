@@ -240,18 +240,20 @@ Aktiveringssiden viser Tekstens overskrifter i dokumentrekkefølge, uten brødte
 
 #### FR-6: Elevens forkunnskap
 
-Over overskriftene står ett spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver overskrift «Mye», «Litt», «Ingenting ennå» eller «Skjønner ikke overskriften» med ett trykk. Hun kan skrive ett valgfritt spørsmål («Noe du lurer på før du leser?»), og går videre.
+Over overskriftene står ett spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver overskrift med en glider i tre trinn, «Ingenting ennå» – «Litt» – «Mye», eller med knappen «Skjønner ikke overskriften» under den (endret 23.11). Hun kan skrive ett valgfritt spørsmål («Noe du lurer på før du leser?»), og går videre.
 
 **Konsekvenser (testbare):**
 - Merkingen lagres på Teksten med overskriftens tekst og merket, og spørsmålet lagres (høyst 500 tegn). Begge er tilgjengelige for eleven senere i løypen: Lesevisningen har, rett før «Ferdig med å lese?», en del «Før du leste» som viser spørsmålet («Du lurte på: … Fikk du svar?», med lenke til fagsamtalen), hvilke overskrifter som var helt nye, og hvilke hun ikke skjønte («Disse overskriftene skjønte du ikke: … Gir de mening nå?»). «Fikk du svar?» er en oppfordring og lagres ikke.
 - Ingenting får vurdering, retting eller poengsum, og Buddy svarer ikke på spørsmålet. Forkunnskapen sendes aldri til språkmodellen.
-- Merkingen er vanlige radioknapper, én gruppe per overskrift med overskriften som navn og spørsmålet som beskrivelse, og virker med tastatur og uten skript. De fire valgene får plass på 320 px; de kan brytes til flere rader, men ingen knapp kuttes.
+- Merkingen er en glider (`<input type="range">`) per overskrift med overskriften som navn, spørsmålet som beskrivelse og trinnets navn som `aria-valuetext`, og en av/på-knapp «Skjønner ikke overskriften» (`aria-pressed`) under. En urørt glider er ikke merket: den sier «Ikke merket ennå», og ingenting lagres for overskriften. Alle tre trinnene kan velges fra urørt med mus, berøring og tastatur. «Skjønner ikke» overstyrer glideren til den røres igjen. Merkingen virker med tastatur og på 320 px med 200 % tekst, men krever skript; uten skript lagres ingen merker, og eleven slipper videre etter oppfordringen.
 - Eleven kan gå videre uten merking og uten spørsmål etter én oppfordring om å prøve. Steget skal ikke bli en sperre for den eleven som allerede synes dette er vanskelig.
 - Tekster fra før endringen, som har et fritt svar, viser det under «Før du leste». Har en tekst ingenting, vises ikke delen.
 
 *Endret 17.11.2026:* kravet var et fritt felt, «Hva tror du teksten handler om?». Utviklerens egen test viste at feltet ikke satte i gang noe — det var tomt og uinspirerende — og at svaret aldri ble vist igjen, selv om kravet lovte det, så eleven skrev ut i løse luften. Merkingen krever ett trykk per overskrift, spørsmålet gir eleven en grunn til å lese, og «Før du leste» gir det hun gjorde en ende. Det frie svaret beholdes i databasen for eldre tekster.
 
 *Endret 18.11.2026:* merkene var «Dette kan jeg», «Har hørt om» og «Helt nytt». Utviklerens test viste at «Dette kan jeg» lovet for mye, at «Har hørt om» var vagt, og at det manglet et svar for overskrifter eleven ikke skjønner. Nå står ett spørsmål over overskriftene med fire svar, og «Før du leste» har en egen linje for overskriftene eleven ikke skjønte. Kodene som lagres, er de samme (`kjent` = «Mye», `litt` = «Litt», `nytt` = «Ingenting ennå»), så merker fra før vises med de nye navnene uten migrasjon. Det er et bevisst valg at gamle svar tolkes om: «Dette kan jeg» leses som «Mye» og «Har hørt om» som «Litt». Den nye koden er `uklar`.
+
+*Endret 23.11.2026:* tre av de fire merkene er en skala, men de så ut som fire like knapper. Nå er skalaen en glider med tre trinn, og «Skjønner ikke overskriften» en egen av/på-knapp under den. Kodene er de samme, så lagrede merker, «Før du leste» og den låste visningen er uendret, uten migrasjon. Kravet om at merkene virker uten skript er strøket; et tomt skjema uten skript gir oppfordringen og slipper eleven videre, som før.
 
 ### 4.3 Begrepssett og lesevisning
 
