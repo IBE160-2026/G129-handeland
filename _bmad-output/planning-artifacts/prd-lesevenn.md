@@ -710,7 +710,7 @@ Eleven kan opprette konto og logge inn.
 - Registrering krever e-post og passord. Ingen navn, skole, klasse, alder eller fødselsdato samles inn.
 - *(Lagt til 19. november.)* Aldersgrensen er **15 år**. Registrering krever at eleven krysser av for «Jeg er 15 år eller eldre» — en egenerklæring, ikke en kontroll — og serveren avviser registreringen uten den. Bare bekreftelsen lagres (konto, vilkårsversjon, tidspunkt), aldri alderen. Se FR-53.
 - Passord lagres aldri i klartekst.
-- *(Lagt til 23. november.)* Innloggingen tillater **5 forsøk per 60 sekunder** fra samme adresse; det sjette sperres til minuttet er gått. Registreringen beholder Better Auths standard, 3 forsøk per 10 sekunder. Ved sperre sier skjemaet hvor lenge den varer, i faktiske sekunder fra serveren («Vent 47 sekunder, og prøv igjen.»), og knappen viser «Vent N s» og sender ikke før tiden er ute. Meldingen leses opp én gang, ikke hvert sekund; når sperren er over, får skjermlesere beskjed om at eleven kan prøve igjen.
+- *(Lagt til 23. november, `_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`.)* Innloggingen slipper gjennom **fem forsøk på rad** fra samme adresse, med under et minutt mellom hvert; det sjette sperres til det har gått **et minutt siden det siste som slapp gjennom** (telleren er glidende). Registreringen beholder Better Auths standard, 3 forsøk per 10 sekunder. Ved sperre sier skjemaet hvor lenge den varer, i faktiske sekunder fra serveren («Vent 47 sekunder, og prøv igjen.»), og knappen viser «Vent N s» og sender ikke før tiden er ute. Meldingen leses opp én gang, ikke hvert sekund; når sperren er over, får skjermlesere beskjed om at eleven kan prøve igjen.
 - Innhold er alltid privat for kontoen som eier det. Det finnes ingen delingsfunksjon i v1.
 
 #### FR-36: Lagring og historikk
@@ -793,7 +793,7 @@ Den KI-genererte koden er gjennomgått, testet og sporbar.
 
   *Endret 15.10.2026 fra «gjennomgått linje for linje».* Utvikleren er nybegynner i programmering, og en lesing linje for linje viste seg i praksis ikke å gi en reell vurdering: det er vanskelig å se om kode gjør det kommentaren sier uten å kunne lese den flytende. Metodene over krever ikke det, og de er etterprøvbare — mutasjonstesten kan kjøres om av sensor. Begrensningen: de dekker reglene noen har tenkt på å teste, ikke feil ingen har forestilt seg.
 
-  *(Oppdatert 23. november.)* Mutasjonstesten har 14 regler; den 14. er at innloggingen tillater fem forsøk per minutt (FR-35). Kjørt 23.11.2026: 14 av 14 brudd oppdaget (`maaling/resultater/2026-11-23-innlogging-mutasjoner.md`, gjennomgang-innlogging.md).
+  *(Oppdatert 23. november.)* Mutasjonstesten har 14 regler; den 14. er at innloggingen slipper gjennom fem forsøk på rad før sperren (FR-35, `_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`). Kjørt 23.11.2026: 14 av 14 brudd oppdaget (`maaling/resultater/2026-11-23-innlogging-mutasjoner.md`, `_bmad-output/planning-artifacts/gjennomgang-innlogging.md`).
 - Minst tre konkrete feil eller svakheter i KI-generert kode er dokumentert med hvordan de ble funnet — test, gjennomgang eller feilsøking i drift.
 
 #### FR-42: Etikk og jus

@@ -108,15 +108,34 @@ siden telleren er byttet ut.
 
 ### Utvidet 23.11.2026 — innloggingssperre med nedtelling
 
-Innloggingen sperres nå etter 5 forsøk per 60 sekunder i stedet for Better
-Auths standard, 3 per 10 sekunder, som var for strengt for en elev som skriver
-feil (`spec-runde-3-1-innloggingssperre.md`, FR-35). Regelen står i
-`rateLimit.customRules` i `data/auth.ts` og bruker den samme hashede telleren;
-registreringen beholder standarden. Skjemaet viser antall sekunder fra
-`X-Retry-After` og teller ned på knappen. To nye tester låser grensen (fem
-slipper gjennom, det sjette gir 429 med over 10 og høyst 60 sekunder) og
-avgrensningen (registreringen sperres fortsatt etter tre). Én ny regel i
-mutasjonstesten, og alle 13 gamle er kjørt på nytt.
+Innloggingen slipper nå gjennom fem forsøk på rad, med under et minutt mellom
+hvert, og sperrer det sjette til det har gått et minutt siden det siste som
+slapp gjennom. Før gjaldt Better Auths standard, 3 per 10 sekunder, som var for
+strengt for en elev som skriver feil
+(`_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`,
+FR-35). Telleren er glidende: hvert forsøk som slipper gjennom flytter
+tidspunktet, så den nullstilles 60 s etter det siste, ikke det første. Regelen
+står i `rateLimit.customRules` i `data/auth.ts` og bruker den samme hashede
+telleren; registreringen beholder standarden. Skjemaet viser antall sekunder
+fra `X-Retry-After` og teller ned på knappen.
+
+Testene som er endret og lagt til:
+
+- **Endret i `data/auth.test.ts`**, fordi de antok 3 per 10 s: «gjentatte feil
+  passord stoppes» (6 → 7 forsøk, de fem første uten 429), «etter tidsvinduet
+  slipper telleren gjennom igjen» (5 → 6 forsøk, og forrige forsøk flyttes
+  61 000 ms tilbake i stedet for 60 000) og «en annen IP-adresse sperres ikke
+  av den første» (5 → 6 forsøk).
+- **Nye i `data/auth.test.ts`:** én låser grensen (fem slipper gjennom, det
+  sjette gir 429 med over 10 og høyst 60 sekunder), og én låser avgrensningen
+  (registreringen gir 403, 403, 403 for manglende kode, så 429 med 1–10
+  sekunder).
+- **Ny fil `app/komponenter/sperretid.test.ts`:** sekundene fra
+  `X-Retry-After` (mangler eller ugyldig gir 60, over 600 kappes), meldingen
+  («1 sekund», «47 sekunder», og «et minutt» når serveren ikke har gitt et
+  tall), knappeteksten, nedtellingen og at skjemaet ikke sender under sperren.
+
+Én ny regel i mutasjonstesten, og alle 13 gamle er kjørt på nytt.
 
 Kjørt 23.11.2026: **14 av 14 brudd ble oppdaget av testene.** Full tabell i
 `maaling/resultater/2026-11-23-innlogging-mutasjoner.md`.
@@ -143,7 +162,7 @@ Tabellene i databasen ser du i Neon-konsollen → prosjektet → *Tables*.
 |---|---|---|
 | A | Den som ikke er innlogget, slipper ikke inn | Åpne <https://lesevenn.vercel.app> og <https://lesevenn.vercel.app/konto> i et **privat** nettleservindu. Begge skal sende meg til innloggingssiden |
 | B | Når kontoen slettes, forsvinner alt | Lag en testkonto, lim inn en kort tekst, og slett kontoen på kontosiden. Se i Neon at tabellen `tekst` ikke har teksten lenger, og at `user` ikke har testkontoen |
-| C | Mange feil passord på rad blir stoppet | Logg inn med feil passord 6 ganger innen et minutt. De fem første skal si at passordet er feil; det sjette skal gi «For mange forsøk på kort tid.» med antall sekunder, og knappen skal vise «Vent N s» til den blir «Logg inn» igjen *(endret 23.11: før var grensen 3 per 10 s)* |
+| C | Mange feil passord på rad blir stoppet | Logg inn med feil passord 6 ganger raskt etter hverandre (under et minutt mellom hvert). De fem første skal si at passordet er feil; det sjette skal gi «For mange forsøk på kort tid.» med antall sekunder, og knappen skal vise «Vent N s» til den blir «Logg inn» igjen *(endret 23.11: før var grensen 3 per 10 s)* |
 
 ### A. Uinnloggede slipper ikke inn
 - Hva jeg gjorde: Jeg åpnet lenkene i et privat nettleservindu, i motsettning til det vanlige nettleservinduet

@@ -26,9 +26,10 @@ import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
 import {
   SPERRE_OVER,
   STANDARD_SPERRETID,
+  kanSende,
   knappetekstUnderSperre,
   nedtelling,
-  sekunderFraOverskrift,
+  sekunderFraSvar,
   sperremelding,
 } from "./sperretid";
 
@@ -55,11 +56,12 @@ function VisFeil({ feil }: { feil: Feil }) {
  * engelske teksten fra biblioteket.
  *
  * `sekunder`: hvor lenge sperren varer ved 429 (fra `X-Retry-After`).
- * Meldingen sier det faktiske tallet, ikke «et minutt».
+ * Meldingen sier det faktiske tallet. Uten tallet (utlogging, sletting)
+ * står det «et minutt».
  */
 function somFeil(
   feil: { status?: number; code?: string } | null | undefined,
-  sekunder: number = STANDARD_SPERRETID,
+  sekunder?: number,
 ): Feil {
   if (feil?.status === 429) return sperremelding(sekunder);
   switch (feil?.code) {
@@ -213,19 +215,17 @@ function useSperre(ferdig: () => void) {
 
 /**
  * Statusregionen for sperren. Finnes tom fra montering, ellers leser
- * skjermleseren den ikke opp når den fylles (som `LagretMelding`).
+ * skjermleseren den ikke opp når den fylles (som `LagretMelding`). Tom er
+ * den `sr-only`, ikke skjult: `display: none` tar regionen ut av
+ * tilgjengelighetstreet, og da kan kunngjøringen ved 0 gå tapt. Slik tar
+ * den heller ikke plass i skjemaet mens den er tom.
  */
 function Sperrestatus({ tekst }: { tekst: string }) {
   return (
-    <p role="status" aria-live="polite" className="font-medium empty:hidden">
+    <p role="status" aria-live="polite" className="font-medium empty:sr-only">
       {tekst}
     </p>
   );
-}
-
-/** Sekundene i `X-Retry-After` på et 429-svar fra Better Auth. */
-function lesSperretid(ctx: { response: Response }) {
-  return sekunderFraOverskrift(ctx.response.headers.get("X-Retry-After"));
 }
 
 /**
@@ -268,7 +268,7 @@ export function InnloggingSkjema() {
     e.preventDefault();
     // Knappen er bare aria-disabled under sperren, og Enter i et felt sender
     // skjemaet uansett. Derfor stoppes det her.
-    if (venter || sperre.sperret) return;
+    if (!kanSende({ venter, sperret: sperre.sperret })) return;
     const data = new FormData(e.currentTarget);
     setVenter(true);
     setFeil(null);
@@ -281,7 +281,7 @@ export function InnloggingSkjema() {
       },
       {
         onError(ctx) {
-          sekunder = lesSperretid(ctx);
+          sekunder = sekunderFraSvar(ctx.response);
         },
       },
     );
@@ -323,7 +323,7 @@ export function RegistreringSkjema() {
 
   async function send(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (venter || sperre.sperret) return;
+    if (!kanSende({ venter, sperret: sperre.sperret })) return;
     const data = new FormData(e.currentTarget);
     const passord = String(data.get("passord") ?? "");
 
@@ -354,7 +354,7 @@ export function RegistreringSkjema() {
           [VILKAAR_HEADER]: data.get("vilkaar") === "ja" ? VILKAARSVERSJON : "",
         },
         onError(ctx) {
-          sekunder = lesSperretid(ctx);
+          sekunder = sekunderFraSvar(ctx.response);
         },
       },
     });

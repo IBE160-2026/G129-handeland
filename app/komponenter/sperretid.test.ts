@@ -6,11 +6,14 @@
 
 import { describe, expect, test } from "vitest";
 import {
+  LENGSTE_SPERRETID,
   SPERRE_OVER,
   STANDARD_SPERRETID,
+  kanSende,
   knappetekstUnderSperre,
   nedtelling,
   sekunderFraOverskrift,
+  sekunderFraSvar,
   sperremelding,
   ventetekst,
 } from "./sperretid";
@@ -23,6 +26,28 @@ describe("meldingen og knappen under sperren", () => {
     });
     expect(sperremelding(1).handling).toBe("Vent 1 sekund, og prøv igjen.");
     expect(knappetekstUnderSperre(47)).toBe("Vent 47 s");
+  });
+
+  test("uten sekunder fra serveren: «et minutt», som før", () => {
+    expect(sperremelding().handling).toBe("Vent et minutt, og prøv igjen.");
+  });
+});
+
+describe("sekunderFraSvar og kanSende", () => {
+  test("sekundene leses fra X-Retry-After i svaret", () => {
+    const svar = new Response(null, { status: 429, headers: { "X-Retry-After": "47" } });
+    expect(sekunderFraSvar(svar)).toBe(47);
+  });
+
+  test("mangler overskriften: 60 sekunder", () => {
+    expect(sekunderFraSvar(new Response(null, { status: 429 }))).toBe(60);
+  });
+
+  test("skjemaet sender ikke mens et forsøk går eller sperren står", () => {
+    expect(kanSende({ venter: false, sperret: false })).toBe(true);
+    expect(kanSende({ venter: true, sperret: false })).toBe(false);
+    expect(kanSende({ venter: false, sperret: true })).toBe(false);
+    expect(kanSende({ venter: true, sperret: true })).toBe(false);
   });
 });
 
@@ -53,6 +78,13 @@ describe("sekunderFraOverskrift", () => {
     for (const verdi of [null, undefined, "", "abc", "0", "-3", "1.5", "12abc"]) {
       expect(sekunderFraOverskrift(verdi), String(verdi)).toBe(60);
     }
+  });
+
+  test("for lang sperre kappes til 600 sekunder", () => {
+    expect(LENGSTE_SPERRETID).toBe(600);
+    expect(sekunderFraOverskrift("999999")).toBe(600);
+    expect(sekunderFraOverskrift("600")).toBe(600);
+    expect(sekunderFraOverskrift("601")).toBe(600);
   });
 });
 

@@ -311,9 +311,14 @@ describe("begrensning av innloggingsforsøk", () => {
       );
     const statuser: number[] = [];
     for (let i = 0; i < 4; i++) statuser.push((await forsoek()).status);
-    expect(statuser.slice(0, 3)).not.toContain(429);
+    // De tre første avvises for manglende kode, ikke av sperren.
+    expect(statuser.slice(0, 3)).toEqual([403, 403, 403]);
     expect(statuser[3]).toBe(429);
-    expect(Number((await forsoek()).headers.get("X-Retry-After"))).toBeLessThanOrEqual(10);
+    const femte = await forsoek();
+    expect(femte.status).toBe(429);
+    const sek = Number(femte.headers.get("X-Retry-After"));
+    expect(sek).toBeGreaterThan(0);
+    expect(sek).toBeLessThanOrEqual(10);
   });
 
   test("telleren lagrer ikke IP-adressen i klartekst — kodefunn 28", async () => {
