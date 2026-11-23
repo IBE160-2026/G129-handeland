@@ -6,8 +6,10 @@
  * hendelsen og fokuselementet til `Taster` og gjør det som kommer tilbake.
  *
  * - Ingenting fanges i skjemafelt (`input`, `textarea`, `select`,
- *   `contenteditable` og felt-roller), eller med Ctrl, Alt eller Meta, så
- *   nettleserens egne snarveier virker.
+ *   `contenteditable` og felt-roller), eller med Ctrl, Alt, Meta eller Shift,
+ *   så nettleserens egne snarveier virker (Shift+mellomrom ruller opp).
+ * - En tast som holdes inne (`repeat`), teller bare første gang: ellers raser
+ *   → til «Runden er ferdig» og mellomrom blinker.
  * - Mellomrom snur bare når fokus IKKE står på en knapp, lenke eller
  *   `summary`. Der gjør mellomrom det det alltid gjør: på kortknappen snur det
  *   kortet én gang (ikke to), på «Har kontroll» merker det.
@@ -30,6 +32,9 @@ export type Taster = {
   ctrl?: boolean;
   alt?: boolean;
   meta?: boolean;
+  shift?: boolean;
+  /** `KeyboardEvent.repeat`: tasten holdes inne. */
+  repeat?: boolean;
   /** Fokuselementet; `null` når ingenting har fokus. */
   maal: Fokusmaal | null;
 };
@@ -49,8 +54,8 @@ function mellomromHarEgenVirkning(m: Fokusmaal): boolean {
   return MELLOMROM_EGEN_TAG.has(m.tag.toLowerCase()) || MELLOMROM_EGEN_ROLLE.has((m.rolle ?? "").toLowerCase());
 }
 
-export function tastehandling({ key, ctrl, alt, meta, maal }: Taster): Tastehandling | null {
-  if (ctrl || alt || meta) return null;
+export function tastehandling({ key, ctrl, alt, meta, shift, repeat, maal }: Taster): Tastehandling | null {
+  if (ctrl || alt || meta || shift || repeat) return null;
   if (maal && erSkjemafelt(maal)) return null;
   if (key === "ArrowLeft") return "forrige";
   if (key === "ArrowRight") return "neste";

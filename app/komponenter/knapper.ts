@@ -27,3 +27,10 @@ export const KNAPP_FARE =
  */
 export const KNAPP_LENKE =
   "inline-flex min-h-11 min-w-11 items-center justify-center px-1 font-bold underline underline-offset-4 hover:decoration-2 disabled:opacity-60";
+
+/**
+ * Tilbakelenken øverst i headeren på øvekortsidene (runde 3, bolk 2b): fet og
+ * understreket, med ← foran i markeringen, og minst 44 px høy.
+ */
+export const LENKE_TILBAKE =
+  "inline-flex min-h-11 items-center font-bold underline decoration-primaer underline-offset-4 hover:decoration-2";

@@ -23,7 +23,7 @@
  * globals.css.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Merking, Oevekort as Kort } from "../../data/oevekort";
 import { merkKort } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
@@ -89,7 +89,17 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
   // Tastaturet (runde 3, bolk 2b): bare mens et kort vises. Lytteren legges
   // på nytt ved hver tegning, så den alltid ser gjeldende kort.
   const viserKort = !ferdig && !!gjeldende;
+  const kortRef = useRef<HTMLButtonElement>(null);
+  const etterTast = useRef(false);
   useEffect(() => {
+    // Sto fokus på noe som forsvant med tasten (kilden finnes bare på et snudd
+    // kort), havner det på kortet i stedet for på body. Er runden ferdig,
+    // finnes ikke kortet, og ingenting flyttes.
+    if (etterTast.current) {
+      etterTast.current = false;
+      const aktiv = document.activeElement;
+      if ((!aktiv || aktiv === document.body) && kortRef.current) kortRef.current.focus();
+    }
     if (!viserKort) return;
     function trykk(e: KeyboardEvent) {
       if (e.defaultPrevented) return;
@@ -99,15 +109,19 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
         ctrl: e.ctrlKey,
         alt: e.altKey,
         meta: e.metaKey,
+        shift: e.shiftKey,
+        repeat: e.repeat,
         maal: el ? { tag: el.tagName, rolle: el.getAttribute("role"), redigerbar: el.isContentEditable } : null,
       });
       if (!h) return;
       e.preventDefault();
-      if (h === "snu") setSnudd((s) => !s);
       // Som knappene: ingenting før første kort, og → på siste avslutter runden.
-      else if (h === "forrige") {
-        if (indeks > 0) gaaTil(indeks - 1);
-      } else gaaTil(indeks + 1);
+      // etterTast settes bare når noe faktisk tegnes på nytt.
+      if (h === "forrige" && indeks === 0) return;
+      etterTast.current = true;
+      if (h === "snu") setSnudd((s) => !s);
+      else if (h === "forrige") gaaTil(indeks - 1);
+      else gaaTil(indeks + 1);
     }
     document.addEventListener("keydown", trykk);
     return () => document.removeEventListener("keydown", trykk);
@@ -184,6 +198,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
       */}
       <div className="oevekort-flate">
         <button
+          ref={kortRef}
           type="button"
           onClick={() => setSnudd((s) => !s)}
           aria-pressed={snudd}

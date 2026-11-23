@@ -1285,13 +1285,31 @@ try {
         (await nav.locator("button", { hasText: /Forrige|Neste/ }).count()) === 0,
       JSON.stringify({ bf, bn }),
     );
-    const tilbake = side.locator("main header a", { hasText: "Tilbake til oppgavene" });
-    const h1 = await side.locator("main h1").boundingBox();
-    const bt = await boks(tilbake);
-    sjekk(
-      "bolk 2b: «Tilbake til oppgavene» står øverst i headeren, over overskriften, og ikke nederst",
-      !!bt && !!h1 && bt.y + bt.height <= h1.y && (await side.locator("main a", { hasText: "Tilbake til oppgavene" }).count()) === 1,
-    );
+    // Tilbakelenken på begge øvekortsidene: én gang, i headeren over overskriften,
+    // minst 44 px høy, og til riktig side.
+    for (const [url, tekst, riktigHref] of [
+      [`${mappeUrl}/oevekort`, "Tilbake til mappen", (h) => h === mappeUrl.replace(APP, "")],
+      [`${tekstUrl}/oevekort`, "Tilbake til oppgavene", (h) => h === `${tekstUrl.replace(APP, "")}/oppgaver`],
+    ]) {
+      await side.goto(url);
+      await side.locator("main h1").waitFor();
+      const tilbake = side.locator("main header a", { hasText: tekst });
+      const h1 = await side.locator("main h1").boundingBox();
+      const bt = await boks(tilbake);
+      const href = bt ? await tilbake.getAttribute("href") : null;
+      sjekk(
+        `bolk 2b: «${tekst}» står én gang øverst i headeren, over overskriften, minst 44 px høy, og lenker til ${tekst === "Tilbake til mappen" ? "mappen" : "oppgavene"}`,
+        !!bt &&
+          !!h1 &&
+          bt.y + bt.height <= h1.y &&
+          bt.height >= 44 &&
+          !!href &&
+          riktigHref(href) &&
+          (await side.locator("main a", { hasText: tekst }).count()) === 1,
+        JSON.stringify({ bt, href }),
+      );
+    }
+    await side.locator(".oevekort-flate").waitFor();
     const teller = side.locator("main p", { hasText: /^Kort \d+ av \d+/ }).first();
     const kortnr = async () => Number((await teller.textContent()).match(/Kort (\d+)/)?.[1]);
     const antall = Number((await teller.textContent()).match(/av (\d+)/)?.[1]);

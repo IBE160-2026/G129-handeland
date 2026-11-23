@@ -581,7 +581,7 @@ async function enKjoering(nettleser) {
 
 const resultat = [];
 try {
-  console.log(`Starter database i minnet og appen i testmodus «${process.env.LESEVENN_TESTMODUS ?? "fyll"}» …`);
+  console.log(`Starter database i minnet og appen i testmodus «${process.env.LESEVENN_TESTMODUS || "fyll"}» …`);
   start("npx", ["pglite-server", `--port=${DBPORT}`, "--max-connections=20"]);
   await vent(async () => {
     const c = new pg.Client(DB);
@@ -595,7 +595,7 @@ try {
     DATABASE_URL: DB,
     DATABASE_URL_UNPOOLED: DB,
     // `LESEVENN_TESTMODUS=les npm run demotest` kjører uten modellkall.
-    LESEVENN_TESTMODUS: process.env.LESEVENN_TESTMODUS ?? "fyll",
+    LESEVENN_TESTMODUS: process.env.LESEVENN_TESTMODUS || "fyll",
     LESEVENN_BYGGEMAPPE: ".next-sjekk",
     LESEVENN_INVITASJONSKODE: KODE,
     BETTER_AUTH_SECRET: "lokal-hemmelighet-kun-for-demotesten",

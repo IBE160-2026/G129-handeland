@@ -12,10 +12,9 @@ import { tilgang } from "../../../../data/konto";
 import { hentMappe, hentMappekort, type Mappe, type Mappekort } from "../../../../data/mapper";
 import { IkkeFunnet } from "../../../../data/tilgang";
 import { kortmangel, Mangler } from "../../../komponenter/Mappemangler";
+import { LENKE_TILBAKE } from "../../../komponenter/knapper";
 import { Oevekort } from "../../../komponenter/Oevekort";
 import { Tusj } from "../../../komponenter/Tusj";
-
-const TILBAKE = "inline-flex min-h-11 items-center font-bold underline decoration-primaer underline-offset-4 hover:decoration-2";
 
 export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/oevekort">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -35,7 +34,7 @@ export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/o
       {/* Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11). */}
       <header>
         <p>
-          <Link href={`/mappe/${mappe.id}`} className={TILBAKE}>
+          <Link href={`/mappe/${mappe.id}`} className={LENKE_TILBAKE}>
             <span aria-hidden="true">←&nbsp;</span>Tilbake til mappen
           </Link>
         </p>

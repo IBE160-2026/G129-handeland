@@ -7,10 +7,9 @@ import { notFound, redirect } from "next/navigation";
 import { tilgang } from "../../../../data/konto";
 import { hentOevekort } from "../../../../data/oevekort";
 import { IkkeFunnet, hentTekst } from "../../../../data/tilgang";
+import { LENKE_TILBAKE } from "../../../komponenter/knapper";
 import { Oevekort } from "../../../komponenter/Oevekort";
 import { Tusj } from "../../../komponenter/Tusj";
-
-const TILBAKE = "inline-flex min-h-11 items-center font-bold underline decoration-primaer underline-offset-4 hover:decoration-2";
 
 export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oevekort">) {
   // FR-35: hentes før noen try-blokk, se data/konto.ts.
@@ -31,7 +30,7 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
       {/* Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11). */}
       <header>
         <p>
-          <Link href={`/tekst/${id}/oppgaver`} className={TILBAKE}>
+          <Link href={`/tekst/${id}/oppgaver`} className={LENKE_TILBAKE}>
             <span aria-hidden="true">←&nbsp;</span>Tilbake til oppgavene
           </Link>
         </p>

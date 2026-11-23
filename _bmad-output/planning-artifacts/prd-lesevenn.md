@@ -450,7 +450,7 @@ Eleven går gjennom Øvekortene og markerer hva som satt.
 **Konsekvenser (testbare):**
 - Eleven kan snu kortet, gå videre og gå tilbake, og merke et kort som «Har kontroll» eller «Må øve mer». *(Endret 23.11.2026: knappen het «Kan», som lovet for mye. Den lagrede verdien er fortsatt `kan`.)*
 - «Forrige» og «Neste» er pilknapper (← og →) med navnene «Forrige kort» og «Neste kort» for skjermleseren; på siste kort heter knappen «Ferdig». På øvekortsiden bytter piltastene kort og mellomrom snur kortet, men ikke i skjemafelt, ikke med Ctrl/Alt/Meta, og mellomrom på en knapp, lenke eller utfellbar del gjør det den alltid gjør. *(Lagt til 23.11.2026.)*
-- Kort merket «må øve mer» kan vises alene i en ny runde.
+- Kort merket «Må øve mer» kan vises alene i en ny runde.
 - Merkingen lagres på Teksten, slik at en ny økt starter der forrige sluttet.
 
 ### 4.6 Skriftlig fagsamtale

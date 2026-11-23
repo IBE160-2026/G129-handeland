@@ -23,6 +23,17 @@ describe("pilene", () => {
     expect(tastehandling({ key: "ArrowRight", maal: { tag: "SUMMARY" } })).toBe("neste");
   });
 
+  test("en tast som holdes inne, teller bare første gang", () => {
+    expect(tastehandling({ key: "ArrowRight", repeat: true, maal: body })).toBeNull();
+    expect(tastehandling({ key: "ArrowLeft", repeat: true, maal: body })).toBeNull();
+    expect(tastehandling({ key: " ", repeat: true, maal: body })).toBeNull();
+  });
+
+  test("Shift gir nettleserens egen (Shift+mellomrom ruller opp)", () => {
+    expect(tastehandling({ key: " ", shift: true, maal: body })).toBeNull();
+    expect(tastehandling({ key: "ArrowRight", shift: true, maal: body })).toBeNull();
+  });
+
   test("Ctrl, Alt og Meta gir nettleserens egen", () => {
     expect(tastehandling({ key: "ArrowRight", ctrl: true, maal: body })).toBeNull();
     expect(tastehandling({ key: "ArrowLeft", alt: true, maal: body })).toBeNull();
@@ -45,7 +56,13 @@ describe("mellomrom", () => {
   test("på lenke, summary og knapperoller gjør elementet det selv", () => {
     expect(tastehandling({ key: " ", maal: { tag: "A" } })).toBeNull();
     expect(tastehandling({ key: " ", maal: { tag: "summary" } })).toBeNull();
-    expect(tastehandling({ key: " ", maal: { tag: "div", rolle: "button" } })).toBeNull();
+  });
+
+  test("på hver rolle der mellomrom virker fra før, gjør elementet det selv", () => {
+    for (const rolle of ["button", "link", "checkbox", "radio", "switch", "menuitem", "tab", "option"]) {
+      expect(tastehandling({ key: " ", maal: { tag: "div", rolle } })).toBeNull();
+      expect(tastehandling({ key: "ArrowRight", maal: { tag: "div", rolle } })).toBe("neste");
+    }
   });
 });
 
@@ -56,7 +73,7 @@ describe("skjemafelt", () => {
       { tag: "textarea" },
       { tag: "SELECT" },
       { tag: "div", redigerbar: true },
-      { tag: "div", rolle: "textbox" },
+      ...["textbox", "searchbox", "combobox", "spinbutton", "slider"].map((rolle) => ({ tag: "div", rolle })),
     ]) {
       expect(tastehandling({ key: "ArrowRight", maal })).toBeNull();
       expect(tastehandling({ key: "ArrowLeft", maal })).toBeNull();

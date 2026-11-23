@@ -19,7 +19,7 @@ LeseBuddy er en responsiv nettapp: Next.js (App Router) med Tailwind CSS v4 og e
 Designfasen endrer **inngangen og rammen** rundt det som finnes:
 - landingssiden (FR-47)
 - arbeidsbordet (FR-48)
-- samlingen (FR-49)
+- Samlinger (FR-49)
 - tenkeindikatoren
 - den nye visuelle identiteten
 
@@ -34,7 +34,7 @@ Navnet byttes bare utad, til «LeseBuddy». Det gjelder all tekst eleven kan se,
 | Landingsside (FR-47) | `/` uten innlogging | Forklare hva LeseBuddy er, for elev og lærer, og sende videre til innlogging eller registrering |
 | Logg inn | Landingssiden, topplinjen | Uendret (FR-35) |
 | Registrer deg | Landingssiden, «Har du fått en kode fra læreren?» | Uendret. Krever invitasjonskode |
-| **Arbeidsbord** (FR-48) | `/` med innlogging, ordmerket, menyen | Siste tekst og neste steg, de fem siste tekstene som bunker, og vei til ny tekst og samlingen |
+| **Arbeidsbord** (FR-48) | `/` med innlogging, ordmerket, menyen | Siste tekst og neste steg, de fem siste tekstene som bunker, og vei til ny tekst og Samlinger |
 | **Samlinger** (FR-49; het «Samlingen» til 23.11) | Menyen, «Se alle N tekstene i Samlinger» | Alle tekstene, med søk, sortering og sletting. Gjenbruker dagens tekstliste fra startsiden (FR-36, FR-37) |
 | **Ny tekst** | «+ Ny tekst», «Legg en ny tekst på bordet» | Innlesing (FR-1, FR-2, FR-44). Det som er startsiden i dag, flyttet til egen side |
 | Tekstens løype | En bunke, et aktivitetskort, neste steg | Aktivering → (gjennomsyn for PDF og bilde) → Lesevisning → Quiz, Øvekort, Fagsamtale, Minnevers. Sidene finnes i dag under `/tekst/[id]/…` |
@@ -48,7 +48,7 @@ Navnet byttes bare utad, til «LeseBuddy». Det gjelder all tekst eleven kan se,
 
 `[MERKNAD TIL ARKITEKTUR]` «Sist aktiv» trengs for å velge hvilke fem bunker som ligger på bordet og hvilken som er hovedbunke (se State Patterns). Datamodellen har ingen slik tid i dag. Anbefalingen er et felt på Teksten som oppdateres ved hver aktivitet.
 
-**Visuelle referanser:** Flyt 1 vises i [mockups/landingsside-1.html](mockups/landingsside-1.html), Flyt 2 og viften i [mockups/arbeidsbord-1.html](mockups/arbeidsbord-1.html). Samlingen og Ny tekst har ingen mock. De bygges etter dette dokumentet. Mockene er visuelle utkast. Oppførselen og tilgjengeligheten følger dette dokumentet, ikke koden i mockene, og dokumentet gjelder ved uenighet.
+**Visuelle referanser:** Flyt 1 vises i [mockups/landingsside-1.html](mockups/landingsside-1.html), Flyt 2 og viften i [mockups/arbeidsbord-1.html](mockups/arbeidsbord-1.html). Samlinger og Ny tekst har ingen mock. De bygges etter dette dokumentet. Mockene er visuelle utkast. Oppførselen og tilgjengeligheten følger dette dokumentet, ikke koden i mockene, og dokumentet gjelder ved uenighet.
 
 ## Voice and Tone
 
@@ -109,7 +109,7 @@ Hvordan komponentene oppfører seg. Hvordan de ser ut, står i DESIGN.md, under 
 | Økten har løpt ut | Arbeidsbordet, løypen | Innloggingssiden med «Du er logget ut. Logg inn igjen for å fortsette.», og eleven kommer tilbake dit hun var etter innlogging. |
 | Ny elev, ingen tekster | Arbeidsbordet | Tomt bord med Buddy (brilleansiktet) i midten: «Her blir tekstene dine liggende. Legg den første på bordet.» og én primærknapp, «+ Ny tekst». |
 | 1–5 tekster | Arbeidsbordet | Hovedbunke og de som finnes, uten tomme plasser. «Samlinger» i topplinjen fører til hele listen. |
-| Flere enn 5 tekster | Arbeidsbordet | De fem som sist var aktive, ligger på bordet. «Se alle N tekstene i samlingen» vises på bordet. |
+| Flere enn 5 tekster | Arbeidsbordet | De fem som sist var aktive, ligger på bordet. «Se alle N tekstene i Samlinger» vises på bordet. |
 | Henting feiler | Arbeidsbordet | Bordet tegnes på serveren, så det finnes ingen egen lastetilstand. Feiler hentingen: «Vi fikk ikke hentet tekstene dine.» med «Prøv igjen». |
 | Lang tittel | Bunke | Tittelen brytes. Over tre linjer avkortes den visuelt, men står i sin helhet i knappens navn og øverst i viften. |
 
