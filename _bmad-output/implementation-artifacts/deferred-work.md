@@ -81,3 +81,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`
   summary: Uverifisert (ville vært medium): `/api/auth//sign-in/email` med dobbel skråstrek kan gå forbi både `customRules` og Better Auths standardregel.
   evidence: `normalizePathname` i @better-auth/core fjerner bare avsluttende skråstreker. Avgjøres ved å sende en POST med dobbel skråstrek mot ruten og se om den svarer annet enn 404.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-2b-oevekort-og-samlinger.md`
+  summary: Runde 3, bolk 2a — forkunnskapen som glider (Ingenting ennå – Litt – Mye), «Skjønner ikke» som av/på-knapp under; urørt glider = ikke merket (Arve, 23.11).
+  evidence: Delt fra bolk 2 fordi glideren erstatter radioknappene som 15–20 sjekker bygger på; bygges som neste spec.
