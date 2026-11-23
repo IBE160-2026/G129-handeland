@@ -792,6 +792,8 @@ Den KI-genererte koden er gjennomgått, testet og sporbar.
 - KI-generert kode i de delene som håndterer innlogging, lagring og sletting (§4.10) er gjennomgått med forklaring, verifisert ved testing i appen, og dekket av automatiske tester som er vist å oppdage feil når koden ødelegges med vilje (mutasjonstesting, `npm run sjekk:innlogging`). Gjennomgangen er dokumentert. Dette er delene der en KI-generert snarvei gjør mest skade.
 
   *Endret 15.10.2026 fra «gjennomgått linje for linje».* Utvikleren er nybegynner i programmering, og en lesing linje for linje viste seg i praksis ikke å gi en reell vurdering: det er vanskelig å se om kode gjør det kommentaren sier uten å kunne lese den flytende. Metodene over krever ikke det, og de er etterprøvbare — mutasjonstesten kan kjøres om av sensor. Begrensningen: de dekker reglene noen har tenkt på å teste, ikke feil ingen har forestilt seg.
+
+  *(Oppdatert 23. november.)* Mutasjonstesten har 14 regler; den 14. er at innloggingen tillater fem forsøk per minutt (FR-35). Kjørt 23.11.2026: 14 av 14 brudd oppdaget (`maaling/resultater/2026-11-23-innlogging-mutasjoner.md`, gjennomgang-innlogging.md).
 - Minst tre konkrete feil eller svakheter i KI-generert kode er dokumentert med hvordan de ble funnet — test, gjennomgang eller feilsøking i drift.
 
 #### FR-42: Etikk og jus

@@ -106,6 +106,34 @@ siden telleren er byttet ut.
 
 - Hva jeg tenker om resultatet: 
 
+### Utvidet 23.11.2026 — innloggingssperre med nedtelling
+
+Innloggingen sperres nå etter 5 forsøk per 60 sekunder i stedet for Better
+Auths standard, 3 per 10 sekunder, som var for strengt for en elev som skriver
+feil (`spec-runde-3-1-innloggingssperre.md`, FR-35). Regelen står i
+`rateLimit.customRules` i `data/auth.ts` og bruker den samme hashede telleren;
+registreringen beholder standarden. Skjemaet viser antall sekunder fra
+`X-Retry-After` og teller ned på knappen. To nye tester låser grensen (fem
+slipper gjennom, det sjette gir 429 med over 10 og høyst 60 sekunder) og
+avgrensningen (registreringen sperres fortsatt etter tre). Én ny regel i
+mutasjonstesten, og alle 13 gamle er kjørt på nytt.
+
+Kjørt 23.11.2026: **14 av 14 brudd ble oppdaget av testene.** Full tabell i
+`maaling/resultater/2026-11-23-innlogging-mutasjoner.md`.
+
+| Nr | Regelen som ble brutt | Oppdaget av |
+|---|---|---|
+| 14 | Innlogging tillater fem forsøk per minutt | 2 tester |
+
+Regel 14 brytes ved å gi regelen en sti som ikke finnes, så standarden gjelder
+igjen; da sperres det fjerde forsøket, og testene som krever fem fanger det.
+Nr. 12 fanges nå av fem tester i stedet for to, fordi de nye sperretestene også
+krever at telleren virker. Nr. 1–11 og 13 ble oppdaget som før.
+
+Del 3-test **C** er beskrevet på nytt under, og bør gjøres etter utrullingen.
+
+- Hva jeg tenker om resultatet: 
+
 ## Del 3 — tester i appen
 
 Lag testkontoer med invitasjonskoden, og slett dem på kontosiden etterpå.
@@ -115,7 +143,7 @@ Tabellene i databasen ser du i Neon-konsollen → prosjektet → *Tables*.
 |---|---|---|
 | A | Den som ikke er innlogget, slipper ikke inn | Åpne <https://lesevenn.vercel.app> og <https://lesevenn.vercel.app/konto> i et **privat** nettleservindu. Begge skal sende meg til innloggingssiden |
 | B | Når kontoen slettes, forsvinner alt | Lag en testkonto, lim inn en kort tekst, og slett kontoen på kontosiden. Se i Neon at tabellen `tekst` ikke har teksten lenger, og at `user` ikke har testkontoen |
-| C | Mange feil passord på rad blir stoppet | Logg inn med feil passord 5–6 ganger raskt etter hverandre. Jeg skal få «For mange forsøk på kort tid.» |
+| C | Mange feil passord på rad blir stoppet | Logg inn med feil passord 6 ganger innen et minutt. De fem første skal si at passordet er feil; det sjette skal gi «For mange forsøk på kort tid.» med antall sekunder, og knappen skal vise «Vent N s» til den blir «Logg inn» igjen *(endret 23.11: før var grensen 3 per 10 s)* |
 
 ### A. Uinnloggede slipper ikke inn
 - Hva jeg gjorde: Jeg åpnet lenkene i et privat nettleservindu, i motsettning til det vanlige nettleservinduet
