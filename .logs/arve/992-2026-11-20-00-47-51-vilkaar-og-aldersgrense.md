@@ -44,3 +44,10 @@ Rull ut vilkår og aldersgrense.
 
 ### Åpne punkter
 - Registrer en ny testkonto i prod (på telefon), og prøv feil passord flere ganger på rad (del 3-test C).
+
+## Tillegg 2026-11-23: ny invitasjonskode
+
+- Den gamle `LESEVENN_INVITASJONSKODE` lå som Sensitive i Vercel og kunne ikke leses tilbake, så Arve fant den ikke for registreringstesten.
+- Byttet med en ny, kort kode (Production, Sensitive), og rullet ut main 3478cca på nytt (lesevenn-855fqf37h, Ready). Koden står ikke i repoet.
+- Kontroll: forsiden 200, registrering med feil kode gir 403 «Invitasjonskoden er feil.».
+- Lærdom: lagre koden i en passordbehandler når den lages.
