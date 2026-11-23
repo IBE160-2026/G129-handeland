@@ -75,3 +75,9 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-vilkaar-og-aldersgrense.md`
   summary: Test at registreringsskjemaet viser riktig tekst for FR-53-feilkodene (særlig VILKAAR_ENDRET), ikke «Invitasjonskoden er feil».
   evidence: Ingen test dekker `somFeil` i KontoSkjemaer.tsx; stien nås først ved neste versjonsbytte av vilkårene. Kan legges som steg i sjekk-tilgjengelighet.mjs som sender en gammel x-lesevenn-vilkaarsversjon.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`
+  summary: Telleren for innloggingsforsøk er per IP-adresse, så en klasse bak samme skole-NAT deler fem forsøk og kan sperre hverandre ute.
+  evidence: Better Auth lager nøkkelen `<ip>|<sti>`; fantes før runde 3. Vurder nøkkel på IP + e-post, eller dokumenter som kjent begrensning.
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-1-innloggingssperre.md`
+  summary: Uverifisert (ville vært medium): `/api/auth//sign-in/email` med dobbel skråstrek kan gå forbi både `customRules` og Better Auths standardregel.
+  evidence: `normalizePathname` i @better-auth/core fjerner bare avsluttende skråstreker. Avgjøres ved å sende en POST med dobbel skråstrek mot ruten og se om den svarer annet enn 404.
