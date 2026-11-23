@@ -2346,8 +2346,9 @@ button.ls-fagord[aria-expanded="true"] {
     margin-top: 0.75rem;
     border: 2px solid var(--color-slate-300);
     border-radius: var(--radius-lg);
-    background: #ffffff;
+    background: var(--color-white);
     box-shadow: var(--shadow-sm);
+    cursor: pointer;
     @variant dark {
       border-color: var(--color-slate-600);
       background: var(--color-slate-900);
@@ -2365,6 +2366,7 @@ button.ls-fagord[aria-expanded="true"] {
   .oevekort-ramme > .oevekort-feil {
     order: 1;
     margin: 0 1.5rem 0.75rem;
+    cursor: auto;
   }
   .oevekort-ramme > .oevekort-merk {
     order: 2;
@@ -2372,8 +2374,9 @@ button.ls-fagord[aria-expanded="true"] {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin: 0;
-    padding: 0 1.5rem 1.5rem;
+    /* Marg, ikke polstring: flaten rundt gruppen er rammen, og et klikk der snur kortet. */
+    margin: 0 1.5rem 1.5rem;
+    cursor: auto;
   }
   /* align-self også her: regelen for venstrehendt under 760 px (flex-start) er mer spesifikk. */
   :root[data-hand="venstre"] .oevekort-ramme > .oevekort-merk {

@@ -206,16 +206,22 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
           Runde 3, bolk 3: rammen rundt kortet, merkeknappene og feilmeldingen.
           Kortet er en knapp og kan ikke inneholde knapper, så «inne i kortet»
           er en felles ramme (kant, bakgrunn, skygge) fra 760 px. Et klikk på
-          rammen utenfor knappene og feilmeldingen snur kortet, som et klikk på
-          kortet. Det er bare for mus og trykk: med tastatur er kortknappen den
-          samme som før, og rammen tar aldri fokus. Klikk på en knapp i rammen
-          (også kortet selv) håndteres av knappen.
+          rammen utenfor merkegruppen og feilmeldingen snur kortet, som et klikk
+          på kortet, og fokus settes på kortet. Bare fra 760 px (under er rammen
+          `display: contents` og har ingen flate), aldri i merkegruppen (heller
+          ikke mellom knappene, så et bom ved siden av en knapp ikke snur) og
+          aldri når tekst er markert. Det er bare for mus og trykk: med tastatur
+          er kortknappen den samme som før, og rammen tar aldri fokus. Klikk på
+          kortet selv håndteres av kortknappen.
         */}
         <div
           className="oevekort-ramme"
           onClick={(e) => {
-            if ((e.target as Element).closest("button, a, .oevekort-feil")) return;
+            if (!window.matchMedia("(min-width: 760px)").matches) return;
+            if ((e.target as Element).closest("button, a, .oevekort-merk, .oevekort-feil")) return;
+            if (window.getSelection()?.toString()) return;
             setSnudd((s) => !s);
+            kortRef.current?.focus();
           }}
         >
           <button

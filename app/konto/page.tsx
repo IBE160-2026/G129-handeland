@@ -103,7 +103,7 @@ export default async function Konto({ searchParams }: PageProps<"/konto">) {
               Venstrehendt
             </label>
             <p id="hand-hjelp" className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              «Må øve mer» og «Har kontroll» står til venstre over kortet, så de er lette å nå med venstre tommel. Valget
+              «Må øve mer» og «Har kontroll» står til venstre over kortet, så de er lette å nå med venstre tommel. På stor skjerm, der de står nederst i kortet, bytter de plass. Valget
               gjelder denne enheten.
             </p>
           </fieldset>

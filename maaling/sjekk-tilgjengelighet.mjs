@@ -1336,6 +1336,15 @@ try {
       riktigOppsett(o, venstre),
       JSON.stringify(o),
     );
+    // Runde 3, bolk 3: rammen rundt kortet er display: contents under 760 px, og
+    // et trykk i mellomrommet mellom merkeknappene snur ikke kortet.
+    if (o.maa && o.kan) {
+      const pressed = () => side.locator(".oevekort-ramme > button[aria-pressed]").getAttribute("aria-pressed");
+      const foer = await pressed();
+      await side.mouse.click(Math.round((o.maa.v + o.maa.h) / 2), Math.round((o.maa.b + o.kan.t) / 2));
+      const etter = await pressed();
+      sjekk(`bolk 3, 375 px (${navn}): trykk mellom merkeknappene snur ikke kortet`, foer === etter, `${foer} → ${etter}`);
+    }
     // Tab-rekkefølgen: kortet, «Må øve mer», «Har kontroll», (feilmeldingen),
     // (kilden når kortet er snudd), «Forrige kort», «Neste kort». På første
     // kort er «Forrige kort» låst og hoppes over, så det sjekkes på et kort med en før.
@@ -1626,65 +1635,85 @@ try {
       );
       await ingenSiderulling(side, `øvekort ${hvor}`);
       if (iTeksten && !stor) {
-        // Klikk i rammen utenfor knappene (nede til venstre, i margen rundt
-        // knappene) snur kortet; et klikk på kortflaten snur det tilbake.
+        // Klikk i rammen utenfor merkegruppen (nede til venstre, i margen rundt
+        // gruppen) snur kortet og setter fokus på det; et klikk på kortflaten
+        // snur det tilbake. Et klikk i mellomrommet mellom merkeknappene snur ikke.
         const kortet = side.locator(".oevekort-ramme > button[aria-pressed]");
         const snudd = async () => (await kortet.getAttribute("aria-pressed")) === "true";
         const foer = await snudd();
         await side.locator(".oevekort-ramme").click({ position: { x: 8, y: o.ramme.hoeyde - 8 } });
         const etterRamme = await snudd();
+        const fokusPaaKortet = await kortet.evaluate((k) => document.activeElement === k);
         await kortet.click({ position: { x: 20, y: 20 } });
         const etterKort = await snudd();
+        const [vk, hk] = venstre ? [o.kan, o.maa] : [o.maa, o.kan];
+        await side.mouse.click(Math.round((vk.h + hk.v) / 2), Math.round((o.maa.t + o.maa.b) / 2));
+        const etterMellomrom = await snudd();
         sjekk(
-          `bolk 3, ${hvor}: klikk i rammen utenfor knappene snur kortet, og klikk på kortflaten snur det tilbake`,
-          !foer && etterRamme && !etterKort,
-          JSON.stringify({ foer, etterRamme, etterKort }),
+          `bolk 3, ${hvor}: klikk i rammen utenfor merkegruppen snur kortet (fokus på kortet), klikk på kortflaten snur det tilbake, og klikk mellom merkeknappene snur ikke`,
+          !foer && etterRamme && fokusPaaKortet && !etterKort && !etterMellomrom,
+          JSON.stringify({ foer, etterRamme, fokusPaaKortet, etterKort, etterMellomrom }),
         );
         // Feilmeldingen fra merkingen står i rammen rett over knappene. Merkingen
         // feiler ikke på bestilling, så plasseringen sjekkes med en innsatt
-        // .oevekort-feil der komponenten setter den (sist i rammen).
+        // .oevekort-feil der komponenten setter den (sist i rammen). Et klikk på
+        // den snur ikke kortet.
         const feil = await side.evaluate(() => {
           const ramme = document.querySelector(".oevekort-ramme");
           const d = document.createElement("div");
           d.className = "oevekort-feil";
+          d.id = "proevefeil";
           d.textContent = "Prøvefeil";
           ramme.append(d);
           const r = (e) => e.getBoundingClientRect();
           const [f, k, m, ra] = [r(d), r(ramme.querySelector(":scope > button")), r(ramme.querySelector(".oevekort-merk")), r(ramme)];
-          d.remove();
           return { iRammen: f.left >= ra.left && f.right <= ra.right && f.bottom <= ra.bottom, underKortet: f.top >= k.bottom - 1, overKnappene: f.bottom <= m.top + 1 };
         });
-        sjekk(`bolk 3, ${hvor}: feilmeldingen fra merkingen står i rammen, over knappene`, feil.iRammen && feil.underKortet && feil.overKnappene, JSON.stringify(feil));
+        await side.locator("#proevefeil").click();
+        feil.klikkSnurIkke = !(await snudd());
+        await side.evaluate(() => document.getElementById("proevefeil")?.remove());
+        sjekk(
+          `bolk 3, ${hvor}: feilmeldingen fra merkingen står i rammen, over knappene, og et klikk på den snur ikke kortet`,
+          feil.iRammen && feil.underKortet && feil.overKnappene && feil.klikkSnurIkke,
+          JSON.stringify(feil),
+        );
         if (bredde === 1280) {
           // Tab: kortet, «Må øve mer», «Har kontroll», pilene, og så tilbakelenken.
           // På første kort er «Forrige kort» låst, så det sjekkes på et kort med en før.
+          // Med bare ett kort heter høyre pil «Ferdig» og avslutter runden, så da
+          // kan rekkefølgen ikke sjekkes.
           const nav = side.locator(".oevekort-nav");
-          if (await nav.getByRole("button", { name: "Forrige kort", exact: true }).isDisabled()) {
-            await nav.getByRole("button", { name: "Neste kort", exact: true }).click();
+          const forrigeLaast = await nav.getByRole("button", { name: "Forrige kort", exact: true }).isDisabled();
+          const ettKort = forrigeLaast && (await nav.getByRole("button", { name: "Ferdig", exact: true }).count()) === 1;
+          if (ettKort) {
+            sjekk(`bolk 3, ${hvor}: Tab-rekkefølgen`, false, "testteksten har bare ett øvekort; sjekken trenger minst to");
+          } else {
+            if (forrigeLaast) await nav.getByRole("button", { name: "Neste kort", exact: true }).click();
+            const fokusnavn = () =>
+              side.evaluate(() => {
+                const e = document.activeElement;
+                return (e?.getAttribute("aria-label") ?? e?.textContent ?? "").replace(/^←\s*/, "").trim();
+              });
+            await kortet.focus();
+            const rekke = [];
+            for (let i = 0; i < 5; i++) {
+              await side.keyboard.press("Tab");
+              rekke.push(await fokusnavn());
+            }
+            sjekk(
+              `bolk 3, ${hvor}: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «${tekst}»`,
+              rekke[0] === "Må øve mer" &&
+                rekke[1] === "Har kontroll" &&
+                rekke[2] === "Forrige kort" &&
+                /^(Neste kort|Ferdig)$/.test(rekke[3]) &&
+                rekke[4] === tekst,
+              rekke.join(" | "),
+            );
           }
-          const fokusnavn = () =>
-            side.evaluate(() => {
-              const e = document.activeElement;
-              return (e?.getAttribute("aria-label") ?? e?.textContent ?? "").replace(/^←\s*/, "").trim();
-            });
-          await kortet.focus();
-          const rekke = [];
-          for (let i = 0; i < 5; i++) {
-            await side.keyboard.press("Tab");
-            rekke.push(await fokusnavn());
-          }
-          sjekk(
-            `bolk 3, ${hvor}: Tab etter kortet går «Må øve mer» → «Har kontroll» → «Forrige kort» → «Neste kort» → «${tekst}»`,
-            rekke[0] === "Må øve mer" &&
-              rekke[1] === "Har kontroll" &&
-              rekke[2] === "Forrige kort" &&
-              /^(Neste kort|Ferdig)$/.test(rekke[3]) &&
-              rekke[4] === tekst,
-            rekke.join(" | "),
-          );
         }
         if (bredde === 1280) await axe(side, `øvekort ${navn}`);
       }
+      if (!iTeksten && bredde === 1280) await axe(side, `øvekort fra mappen ${navn}`);
     }
     await ctx.close();
   }

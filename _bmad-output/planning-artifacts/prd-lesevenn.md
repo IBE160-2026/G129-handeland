@@ -452,7 +452,7 @@ Eleven går gjennom Øvekortene og markerer hva som satt.
 **Konsekvenser (testbare):**
 - Eleven kan snu kortet, gå videre og gå tilbake, og merke et kort som «Har kontroll» eller «Må øve mer». *(Endret 23.11.2026: knappen het «Kan», som lovet for mye. Den lagrede verdien er fortsatt `kan`.)*
 - «Forrige» og «Neste» er pilknapper (← og →) med navnene «Forrige kort» og «Neste kort» for skjermleseren; på siste kort heter knappen «Ferdig». På øvekortsiden bytter piltastene kort og mellomrom snur kortet, men ikke i skjemafelt, ikke med Ctrl/Alt/Meta, og mellomrom på en knapp, lenke eller utfellbar del gjør det den alltid gjør. *(Lagt til 23.11.2026.)*
-- På stor skjerm (fra 760 px) er kortet bredere (opptil omtrent 960 px), og «Må øve mer» og «Har kontroll» står nederst inne i kortet, side om side («Venstrehendt» bytter dem om). Tilbakelenken står da nederst på siden, til venstre, i stedet for øverst. Rekkefølgen for tastatur og skjermleser er uendret. *(Lagt til 23.11.2026.)*
+- På stor skjerm (fra 760 px) er kortet bredere (opptil omtrent 960 px), og «Må øve mer» og «Har kontroll» står nederst inne i kortet, side om side («Venstrehendt» bytter dem om). Tilbakelenken står da nederst på siden, til venstre, i stedet for øverst, så den kommer sist for tastatur og skjermleser (etter pilene) i stedet for først. Rekkefølgen for kortet, merkeknappene og pilene er uendret. *(Lagt til 23.11.2026.)*
 - Kort merket «Må øve mer» kan vises alene i en ny runde.
 - Merkingen lagres på Teksten, slik at en ny økt starter der forrige sluttet.
 
