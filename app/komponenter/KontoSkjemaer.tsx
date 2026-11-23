@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { INVITASJONSKODE_HEADER } from "../../data/invitasjon";
 import {
   ALDER_BEKREFTET,
@@ -23,6 +23,7 @@ import { slettEnhetsvalgHandling } from "../handlinger";
 import { authKlient } from "./authKlient";
 import { Feilmelding } from "./Feilmelding";
 import { KNAPP_FARE, KNAPP_PRIMAER } from "./knapper";
+import { STANDARD_SPERRETID, sekunderFraOverskrift, ventetekst } from "./sperretid";
 
 /** `vilkaarslenke`: meldingen får en lenke til «Vilkår og personvern». */
 type Feil = { melding: string; handling: string; vilkaarslenke?: boolean };
@@ -45,14 +46,18 @@ function VisFeil({ feil }: { feil: Feil }) {
  * Oversetter Better Auths feilkoder til §5-form: hva som gikk galt, og hva
  * eleven kan gjøre. Ukjente koder får en generell melding framfor den
  * engelske teksten fra biblioteket.
+ *
+ * `sekunder`: hvor lenge sperren varer ved 429 (fra `X-Retry-After`).
+ * Meldingen sier det faktiske tallet, ikke «et minutt».
  */
 function somFeil(
   feil: { status?: number; code?: string } | null | undefined,
+  sekunder: number = STANDARD_SPERRETID,
 ): Feil {
   if (feil?.status === 429) {
     return {
       melding: "For mange forsøk på kort tid.",
-      handling: "Vent et minutt, og prøv igjen.",
+      handling: `Vent ${ventetekst(sekunder)}, og prøv igjen.`,
     };
   }
   switch (feil?.code) {
@@ -150,22 +155,139 @@ async function glemEnhetsvalg() {
 
 /* ------------------------------------------------------------------ */
 
+/**
+ * Sperren etter for mange forsøk (429), med nedtelling — FR-35.
+ *
+ * `sperr(sek)` starter den. Mens den står, er `igjen` antall sekunder som
+ * gjenstår, og skjemaet sender ikke. Knappen viser tallet, men er ingen
+ * levende region, så nedtellingen leses ikke opp hvert sekund; meldingen
+ * om sperren leses opp én gang av `Feilmelding` (`role="alert"`). Ved 0
+ * kalles `ferdig` (skjemaet fjerner feilen), og statusregionen sier én gang,
+ * høflig, at eleven kan prøve igjen.
+ *
+ * Tiden regnes fra et sluttidspunkt, ikke ved å telle intervaller, så en fane
+ * som har ligget i bakgrunnen (der nettleseren struper tidtakere) viser
+ * riktig tall når eleven kommer tilbake.
+ */
+function useSperre(ferdig: () => void) {
+  const [slutt, setSlutt] = useState<number | null>(null);
+  const [igjen, setIgjen] = useState(0);
+  const [status, setStatus] = useState("");
+  const ferdigRef = useRef(ferdig);
+  useEffect(() => {
+    ferdigRef.current = ferdig;
+  });
+
+  useEffect(() => {
+    if (slutt === null) return;
+    const t = setInterval(() => {
+      const sek = Math.ceil((slutt - Date.now()) / 1000);
+      if (sek > 0) return setIgjen(sek);
+      clearInterval(t);
+      setSlutt(null);
+      setIgjen(0);
+      ferdigRef.current();
+      setStatus("Du kan prøve igjen nå.");
+    }, 1000);
+    return () => clearInterval(t);
+  }, [slutt]);
+
+  return {
+    /** Sekunder som gjenstår; 0 når skjemaet ikke er sperret. */
+    igjen: slutt === null ? 0 : igjen,
+    status,
+    sperret: slutt !== null,
+    sperr(sek: number) {
+      setStatus("");
+      setIgjen(sek);
+      setSlutt(Date.now() + sek * 1000);
+    },
+    /** Et nytt forsøk: statusmeldingen fra forrige sperre fjernes. */
+    nyttForsoek() {
+      setStatus("");
+    },
+  };
+}
+
+/**
+ * Statusregionen for sperren. Finnes tom fra montering, ellers leser
+ * skjermleseren den ikke opp når den fylles (som `LagretMelding`).
+ */
+function Sperrestatus({ tekst }: { tekst: string }) {
+  return (
+    <p role="status" aria-live="polite" className="font-medium empty:hidden">
+      {tekst}
+    </p>
+  );
+}
+
+/** Sekundene i `X-Retry-After` på et 429-svar fra Better Auth. */
+function lesSperretid(ctx: { response: Response }) {
+  return sekunderFraOverskrift(ctx.response.headers.get("X-Retry-After"));
+}
+
+/**
+ * Send-knappen i innloggings- og registreringsskjemaet. Under sperren viser
+ * den «Vent N s» og er `aria-disabled`, ikke `disabled`: en `disabled` knapp
+ * hoppes over av Tab og mister fokuset den hadde, så eleven ville ikke
+ * funnet ut hvorfor ingenting skjer. Skjemaet nekter selv å sende (`send`).
+ */
+function SendKnapp({
+  venter,
+  igjen,
+  children,
+}: {
+  venter: boolean;
+  igjen: number;
+  children: string;
+}) {
+  const sperret = igjen > 0;
+  return (
+    <button
+      type="submit"
+      disabled={venter}
+      aria-disabled={sperret || undefined}
+      className={`${KNAPP} aria-disabled:cursor-not-allowed aria-disabled:opacity-60`}
+    >
+      {sperret ? `Vent ${igjen} s` : children}
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
 export function InnloggingSkjema() {
   const router = useRouter();
   const [feil, setFeil] = useState<Feil | null>(null);
   const [venter, setVenter] = useState(false);
+  const sperre = useSperre(() => setFeil(null));
 
   async function send(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // Knappen er bare aria-disabled under sperren, og Enter i et felt sender
+    // skjemaet uansett. Derfor stoppes det her.
+    if (venter || sperre.sperret) return;
     const data = new FormData(e.currentTarget);
     setVenter(true);
     setFeil(null);
-    const { error } = await authKlient.signIn.email({
-      email: String(data.get("epost") ?? ""),
-      password: String(data.get("passord") ?? ""),
-    });
+    sperre.nyttForsoek();
+    let sekunder = STANDARD_SPERRETID;
+    const { error } = await authKlient.signIn.email(
+      {
+        email: String(data.get("epost") ?? ""),
+        password: String(data.get("passord") ?? ""),
+      },
+      {
+        onError(ctx) {
+          sekunder = lesSperretid(ctx);
+        },
+      },
+    );
     setVenter(false);
-    if (error) return setFeil(somFeil(error));
+    if (error) {
+      if (error.status === 429) sperre.sperr(sekunder);
+      return setFeil(somFeil(error, sekunder));
+    }
     router.push("/");
     router.refresh();
   }
@@ -173,6 +295,7 @@ export function InnloggingSkjema() {
   return (
     <form onSubmit={send} className="space-y-4">
       {feil && <VisFeil feil={feil} />}
+      <Sperrestatus tekst={sperre.status} />
       <div>
         <label htmlFor="epost" className="block font-medium">E-post</label>
         <input id="epost" name="epost" type="email" autoComplete="email" required className={FELT} />
@@ -181,9 +304,9 @@ export function InnloggingSkjema() {
         <label htmlFor="passord" className="block font-medium">Passord</label>
         <input id="passord" name="passord" type="password" autoComplete="current-password" required className={FELT} />
       </div>
-      <button type="submit" disabled={venter} className={KNAPP}>
+      <SendKnapp venter={venter} igjen={sperre.igjen}>
         {venter ? "Logger inn…" : "Logg inn"}
-      </button>
+      </SendKnapp>
     </form>
   );
 }
@@ -194,9 +317,11 @@ export function RegistreringSkjema() {
   const router = useRouter();
   const [feil, setFeil] = useState<Feil | null>(null);
   const [venter, setVenter] = useState(false);
+  const sperre = useSperre(() => setFeil(null));
 
   async function send(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (venter || sperre.sperret) return;
     const data = new FormData(e.currentTarget);
     const passord = String(data.get("passord") ?? "");
 
@@ -211,6 +336,8 @@ export function RegistreringSkjema() {
 
     setVenter(true);
     setFeil(null);
+    sperre.nyttForsoek();
+    let sekunder = STANDARD_SPERRETID;
     const { error } = await authKlient.signUp.email({
       email: String(data.get("epost") ?? ""),
       password: passord,
@@ -224,10 +351,16 @@ export function RegistreringSkjema() {
           [ALDER_HEADER]: data.get("alder") === "ja" ? ALDER_BEKREFTET : "",
           [VILKAAR_HEADER]: data.get("vilkaar") === "ja" ? VILKAARSVERSJON : "",
         },
+        onError(ctx) {
+          sekunder = lesSperretid(ctx);
+        },
       },
     });
     setVenter(false);
-    if (error) return setFeil(somFeil(error));
+    if (error) {
+      if (error.status === 429) sperre.sperr(sekunder);
+      return setFeil(somFeil(error, sekunder));
+    }
     router.push("/");
     router.refresh();
   }
@@ -235,6 +368,7 @@ export function RegistreringSkjema() {
   return (
     <form onSubmit={send} className="space-y-4">
       {feil && <VisFeil feil={feil} />}
+      <Sperrestatus tekst={sperre.status} />
       <div>
         <label htmlFor="kode" className="block font-medium">Invitasjonskode</label>
         <input id="kode" name="kode" type="text" autoComplete="off" required className={FELT} />
@@ -297,9 +431,9 @@ export function RegistreringSkjema() {
           (åpnes i en ny fane). Der står det hva som lagres, hvor tekstene dine går, og hvordan du sletter alt.
         </p>
       </div>
-      <button type="submit" disabled={venter} className={KNAPP}>
+      <SendKnapp venter={venter} igjen={sperre.igjen}>
         {venter ? "Oppretter konto…" : "Opprett konto"}
-      </button>
+      </SendKnapp>
     </form>
   );
 }

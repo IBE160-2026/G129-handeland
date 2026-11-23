@@ -241,7 +241,7 @@ describe("begrensning av innloggingsforsøk", () => {
     await registrer("gjett@test.no", "riktig-passord-her");
 
     const statuser: number[] = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       const svar = await begrenset.handler(
         new Request(`${BASE}/api/auth/sign-in/email`, {
           method: "POST",
@@ -256,8 +256,64 @@ describe("begrensning av innloggingsforsøk", () => {
       statuser.push(svar.status);
     }
     expect(statuser).toContain(429);
-    // De tre første er innenfor grensen (3 per 10 s); sperren kom etterpå.
+    // De fem første er innenfor grensen (5 per 60 s); sperren kom etterpå.
+    expect(statuser.slice(0, 5)).not.toContain(429);
+  });
+
+  test("innlogging: fem forsøk slipper gjennom, det sjette sperres i opptil 60 s", async () => {
+    const begrenset = lagAuth(db, {
+      secret: "x".repeat(32),
+      baseURL: BASE,
+      begrensForsoek: true,
+    });
+    const forsoek = () =>
+      begrenset.handler(
+        new Request(`${BASE}/api/auth/sign-in/email`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            origin: BASE,
+            "x-forwarded-for": "198.51.100.40",
+          },
+          body: JSON.stringify({ email: "ingen@test.no", password: "feil-passord-xx" }),
+        }),
+      );
+    const statuser: number[] = [];
+    for (let i = 0; i < 5; i++) statuser.push((await forsoek()).status);
+    expect(statuser).not.toContain(429);
+
+    const sperret = await forsoek();
+    expect(sperret.status).toBe(429);
+    // Sekundene skjemaet viser. Over 10 betyr at det ikke er standarden (3 per 10 s).
+    const sek = Number(sperret.headers.get("X-Retry-After"));
+    expect(sek).toBeGreaterThan(10);
+    expect(sek).toBeLessThanOrEqual(60);
+  });
+
+  test("registrering sperres fortsatt etter tre forsøk (3 per 10 s)", async () => {
+    const begrenset = lagAuth(db, {
+      secret: "x".repeat(32),
+      baseURL: BASE,
+      begrensForsoek: true,
+    });
+    const forsoek = () =>
+      begrenset.handler(
+        new Request(`${BASE}/api/auth/sign-up/email`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            origin: BASE,
+            "x-forwarded-for": "198.51.100.41",
+          },
+          // Uten invitasjonskode: avvises med 403 til sperren slår inn.
+          body: JSON.stringify({ email: "ny@test.no", password: "et-langt-passord", name: "" }),
+        }),
+      );
+    const statuser: number[] = [];
+    for (let i = 0; i < 4; i++) statuser.push((await forsoek()).status);
     expect(statuser.slice(0, 3)).not.toContain(429);
+    expect(statuser[3]).toBe(429);
+    expect(Number((await forsoek()).headers.get("X-Retry-After"))).toBeLessThanOrEqual(10);
   });
 
   test("telleren lagrer ikke IP-adressen i klartekst — kodefunn 28", async () => {
@@ -299,14 +355,14 @@ describe("begrensning av innloggingsforsøk", () => {
         }),
       );
     const statuser: number[] = [];
-    for (let i = 0; i < 5; i++) statuser.push((await forsoek()).status);
+    for (let i = 0; i < 6; i++) statuser.push((await forsoek()).status);
     expect(statuser).toContain(429);
 
-    // Flytt forrige forsøk tilbake forbi vinduet (10 s for innlogging).
+    // Flytt forrige forsøk tilbake forbi vinduet (60 s for innlogging).
     const key = hashTellernoekkel(`${ip}|/sign-in/email`, "x".repeat(32));
     await db
       .update(skjema.rateLimit)
-      .set({ lastRequest: Date.now() - 60_000 })
+      .set({ lastRequest: Date.now() - 61_000 })
       .where(eq(skjema.rateLimit.key, key));
 
     expect((await forsoek()).status).not.toBe(429);
@@ -336,7 +392,7 @@ describe("begrensning av innloggingsforsøk", () => {
         }),
       );
     const statuser: number[] = [];
-    for (let i = 0; i < 5; i++) statuser.push((await forsoek("198.51.100.20")).status);
+    for (let i = 0; i < 6; i++) statuser.push((await forsoek("198.51.100.20")).status);
     expect(statuser).toContain(429);
     expect((await forsoek("198.51.100.21")).status).not.toBe(429);
   });

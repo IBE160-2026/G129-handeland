@@ -261,6 +261,15 @@ export function lagAuth(
     rateLimit: {
       enabled: valg.begrensForsoek,
       customStorage: hashetTeller(database as unknown as Drizzle, hemmelighet),
+      // Innlogging: 5 forsøk per 60 s. Better Auths standard for /sign-in er
+      // 3 per 10 s, som sperrer en elev som skriver feil passord to–tre
+      // ganger på rad. Fem per minutt gir rom for skrivefeil og er fortsatt
+      // for lite til å gjette passord. Registreringen beholder standarden.
+      // Stien er uten /api/auth; telleren rydder rader eldre enn 10 min,
+      // som er lengre enn vinduet.
+      customRules: {
+        "/sign-in/email": { window: 60, max: 5 },
+      },
     },
 
     advanced: {

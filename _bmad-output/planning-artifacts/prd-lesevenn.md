@@ -710,6 +710,7 @@ Eleven kan opprette konto og logge inn.
 - Registrering krever e-post og passord. Ingen navn, skole, klasse, alder eller fødselsdato samles inn.
 - *(Lagt til 19. november.)* Aldersgrensen er **15 år**. Registrering krever at eleven krysser av for «Jeg er 15 år eller eldre» — en egenerklæring, ikke en kontroll — og serveren avviser registreringen uten den. Bare bekreftelsen lagres (konto, vilkårsversjon, tidspunkt), aldri alderen. Se FR-53.
 - Passord lagres aldri i klartekst.
+- *(Lagt til 23. november.)* Innloggingen tillater **5 forsøk per 60 sekunder** fra samme adresse; det sjette sperres til minuttet er gått. Registreringen beholder Better Auths standard, 3 forsøk per 10 sekunder. Ved sperre sier skjemaet hvor lenge den varer, i faktiske sekunder fra serveren («Vent 47 sekunder, og prøv igjen.»), og knappen viser «Vent N s» og sender ikke før tiden er ute. Meldingen leses opp én gang, ikke hvert sekund; når sperren er over, får skjermlesere beskjed om at eleven kan prøve igjen.
 - Innhold er alltid privat for kontoen som eier det. Det finnes ingen delingsfunksjon i v1.
 
 #### FR-36: Lagring og historikk

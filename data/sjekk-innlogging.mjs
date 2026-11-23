@@ -113,6 +113,14 @@ const FEIL = [
     fra: "const utloept = sql`${rl.lastRequest} <= ${vinduStart}`;",
     til: "const utloept = sql`false`;",
   },
+  // Lagt til 23.11.2026 (spec-runde-3-1-innloggingssperre).
+  {
+    regel: "Innlogging tillater fem forsøk per minutt",
+    fil: "data/auth.ts",
+    // Regelen matcher ingen sti: Better Auths standard (3 per 10 s) gjelder igjen.
+    fra: `"/sign-in/email": { window: 60, max: 5 },`,
+    til: `"/feil-sti": { window: 60, max: 5 },`,
+  },
 ];
 
 /* ------------------------------------------------------------------ */
