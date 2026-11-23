@@ -65,3 +65,8 @@
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Fyll ut «Hva jeg tenker om resultatet» i gjennomgang-innlogging.md
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Les KI-logg nr. 26
 - [x] 2026-11-20 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen samling-tusj (krever ja) (rullet ut 2026-11-20, main = 3759cd3)
+- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Bolk 4 (Samlinger på stor skjerm, dra og slipp + «Legg i mappe») og bolk 5 (arbeidsbordet grupperer etter Mappe) gjenstår før kodefrys 27.11
+- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test i prod på iPhone: forkunnskapsglideren (trykk ytterst på sporet, dra, VoiceOver) og øvekortenes piler
+- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0
+- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester
+- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Innloggingssperren teller per IP: en klasse på samme skolenett deler fem forsøk (deferred-work.md)
