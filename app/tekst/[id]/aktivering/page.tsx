@@ -6,10 +6,12 @@
  * lese den kaldt. Viser vi brødteksten her, er det ikke lenger en aktivering —
  * det er bare lesing med et spørsmål foran.
  *
- * FR-6 (endret 17.11.2026, merkene 18.11): over overskriftene står ett
- * spørsmål, «Hva vet du om dette fra før?», og eleven svarer for hver
- * overskrift «Mye», «Litt», «Ingenting ennå» eller «Skjønner ikke
- * overskriften». Hun kan skrive ett spørsmål hun lurer på. Det frie
+ * FR-6 (endret 17.11.2026, merkene 18.11, glideren 23.11): over overskriftene
+ * står ett spørsmål, «Hva vet du om dette fra før?», og eleven svarer for
+ * hver overskrift med en glider i tre trinn, «Ingenting ennå» – «Litt» –
+ * «Mye», eller med av/på-knappen «Skjønner ikke overskriften» under den
+ * (Forkunnskapsvalg.tsx). Urørt er ikke merket. Hun kan skrive ett spørsmål
+ * hun lurer på. Det frie
  * feltet «Hva tror du teksten handler om?» er borte; utviklerens egen test
  * viste at det ikke satte i gang noe. Det hun merket og spurte om, vises igjen
  * i lesevisningen under «Før du leste».

@@ -71,6 +71,24 @@ export function velgTrinn(_t: Glidertilstand, trinn: unknown): Glidertilstand {
 }
 
 /**
+ * Trinnet nærmest pekeren på glideren. Håndtakets midtpunkt går fra
+ * `venstre + halvTommel` (trinn 0) til `venstre + bredde - halvTommel`
+ * (trinn 2), så det regnes mot den strekningen, ikke hele bredden. Utenfor
+ * endene blir det endetrinnet. Brukes ved `pointerup`, fordi et trykk på
+ * sporet i iOS Safari ikke flytter håndtaket, og verdien da ville stått på
+ * midten.
+ */
+export function trinnFraPeker(
+  clientX: number,
+  boks: { left: number; width: number },
+  halvTommel = 0,
+): Trinn {
+  const strekning = boks.width - 2 * halvTommel;
+  if (!(strekning > 0)) return MIDTEN;
+  return somTrinn(((clientX - boks.left - halvTommel) / strekning) * 2);
+}
+
+/**
  * Eleven velger trinnet håndtaket står på (klikk på håndtaket, mellomrom
  * eller Enter). Fra urørt er det «Litt».
  */

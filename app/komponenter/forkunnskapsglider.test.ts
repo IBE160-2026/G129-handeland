@@ -14,6 +14,7 @@ import {
   sendtKode,
   somTrinn,
   TRINN,
+  trinnFraPeker,
   vedTast,
   velgGjeldende,
   velgTrinn,
@@ -71,6 +72,26 @@ describe("glideren", () => {
     expect(sendtKode(tast(URORT, "Enter"))).toBe("litt");
   });
 
+  test("pekeren: nærmeste av de tre trinnene, regnet mot håndtakets strekning", () => {
+    // Glideren 100–300 px, håndtaket 28 px (halvt 14): trinnene ligger på 114, 200 og 286.
+    const boks = { left: 100, width: 200 };
+    expect(trinnFraPeker(114, boks, 14)).toBe(0);
+    expect(trinnFraPeker(150, boks, 14)).toBe(0);
+    expect(trinnFraPeker(160, boks, 14)).toBe(1);
+    expect(trinnFraPeker(200, boks, 14)).toBe(1);
+    expect(trinnFraPeker(240, boks, 14)).toBe(1);
+    expect(trinnFraPeker(250, boks, 14)).toBe(2);
+    expect(trinnFraPeker(286, boks, 14)).toBe(2);
+  });
+
+  test("pekeren utenfor endene gir endetrinnet; uten bredde midten", () => {
+    const boks = { left: 100, width: 200 };
+    expect(trinnFraPeker(90, boks, 14)).toBe(0);
+    expect(trinnFraPeker(400, boks, 14)).toBe(2);
+    expect(trinnFraPeker(150, { left: 0, width: 0 }, 14)).toBe(1);
+    expect(trinnFraPeker(299, boks)).toBe(2);
+  });
+
   test("ugyldige verdier blir et gyldig trinn", () => {
     expect(somTrinn(7)).toBe(2);
     expect(somTrinn(-3)).toBe(0);
@@ -85,6 +106,12 @@ describe("tastaturet", () => {
     expect(sendtKode(tast(URORT, "ArrowLeft"))).toBe("nytt");
     expect(sendtKode(tast(URORT, "ArrowUp"))).toBe("kjent");
     expect(sendtKode(tast(URORT, "ArrowDown"))).toBe("nytt");
+  });
+
+  test("PageUp og PageDown går et trinn, som piltastene", () => {
+    expect(sendtKode(tast(URORT, "PageUp"))).toBe("kjent");
+    expect(sendtKode(tast(URORT, "PageDown"))).toBe("nytt");
+    expect(sendtKode(tast(velgTrinn(URORT, 0), "PageUp"))).toBe("litt");
   });
 
   test("Home og End går til endene", () => {

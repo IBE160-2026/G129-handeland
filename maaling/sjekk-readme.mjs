@@ -133,9 +133,15 @@ try {
   sjekk("innliming og overskriftskontroll", true);
   // FR-6 (endret 17.11, merkene 18.11, glideren 23.11): ett merke («Mye»,
   // helt til høyre på glideren) og et spørsmål.
-  const glider = s.locator("fieldset").first().locator("input[type=range]");
+  // Glideren er låst til siden er hydrert, så det ventes til den kan brukes.
+  const glider = s.locator("fieldset").first().locator("input[type=range]:not([disabled])");
+  await glider.waitFor({ state: "visible" });
   const gliderBoks = await glider.boundingBox();
+  if (!gliderBoks) throw new Error("fant ikke glideren til første overskrift (boundingBox er null)");
   await glider.click({ position: { x: gliderBoks.width - 4, y: gliderBoks.height / 2 } });
+  const mye = await glider.getAttribute("aria-valuetext");
+  sjekk("glideren står på «Mye» etter klikk helt til høyre", mye === "Mye", `«${mye}»`);
+  if (mye !== "Mye") throw new Error(`glideren sier «${mye}» etter klikk helt til høyre, ikke «Mye»`);
   await s.fill("#lurer-paa", "Hva er en bølge?");
   await s.click("text=Videre");
   // FR-3 (11.11): innlimt tekst låses i aktiveringen og går rett til lesingen.

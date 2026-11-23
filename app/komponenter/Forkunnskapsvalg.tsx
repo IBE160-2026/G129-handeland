@@ -10,8 +10,13 @@
  *
  * - `onChange`: eleven drar eller trykker på sporet (og skjermlesere på
  *   telefon, som sveiper opp og ned).
- * - `onPointerUp`: klikk eller trykk på håndtaket der det står. Det gir ingen
- *   `change`, men skal velge «Litt» fra urørt.
+ * - `onPointerUp` (bare primærpekeren, venstre knapp): trinnet nærmest
+ *   pekeren (`trinnFraPeker`). Et klikk på håndtaket gir ingen `change`, men
+ *   skal velge «Litt» fra urørt, og i iOS Safari flytter et trykk på sporet
+ *   ikke håndtaket.
+ * - `onClick`: skjermlesere på telefon kan aktivere med bare `click`; da
+ *   velges trinnet håndtaket står på.
+ * - Glideren og knappen er `disabled` til komponenten er hydrert.
  * - `onKeyDown`: piltastene, Home/End, PageUp/PageDown, mellomrom og Enter
  *   styres her, så → fra urørt gir «Mye» og mellomrom gir «Litt».
  *
@@ -23,18 +28,25 @@
  * globals.css (`.forkunnskap`).
  */
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { MERKENAVN, merkefelt } from "../../tekst/forkunnskap";
 import {
   TRINN,
   URORT,
+  trinnFraPeker,
   dempet,
   sendtKode,
   vedTast,
+  velgGjeldende,
   velgTrinn,
   verditekst,
   vekslUklar,
 } from "./forkunnskapsglider";
+
+const ingenAbonnement = () => () => {};
+
+/** Halve bredden på håndtaket (1,75 rem i globals.css), i rem. */
+const HALV_TOMMEL_REM = 0.875;
 
 export function Forkunnskapsvalg({
   nummer,
@@ -49,6 +61,11 @@ export function Forkunnskapsvalg({
   beskrivelseId: string;
 }) {
   const [t, settT] = useState(URORT);
+  // Uten skript, og før hydreringen, lagres ingenting: da er glideren og
+  // knappen låst, så de ikke ser brukbare ut. Serveren og hydreringen gir
+  // `false`, nettleseren etterpå `true` (samme mønster som Arbeidsbord.tsx,
+  // uten setState i en effekt).
+  const klar = useSyncExternalStore(ingenAbonnement, () => true, () => false);
   const kode = sendtKode(t);
   const tekst = verditekst(t);
   const valgt = !dempet(t) ? t.trinn : null;
@@ -68,14 +85,26 @@ export function Forkunnskapsvalg({
         aria-labelledby={navnId}
         aria-describedby={beskrivelseId}
         aria-valuetext={tekst}
+        disabled={!klar}
         onChange={(e) => {
           // Verdien leses nå: `currentTarget` er null når React kjører oppdateringen senere.
           const verdi = e.currentTarget.value;
           settT((f) => velgTrinn(f, verdi));
         }}
         onPointerUp={(e) => {
-          const verdi = e.currentTarget.value;
-          settT((f) => velgTrinn(f, verdi));
+          // Bare primærpekeren og venstre knapp. Trinnet regnes fra pekerens
+          // plass, fordi et trykk på sporet i iOS Safari ikke flytter håndtaket.
+          if (!e.isPrimary || e.button !== 0) return;
+          const boks = e.currentTarget.getBoundingClientRect();
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const trinn = trinnFraPeker(e.clientX, boks, HALV_TOMMEL_REM * rem);
+          settT((f) => velgTrinn(f, trinn));
+        }}
+        onClick={() => {
+          // Skjermlesere på telefon kan aktivere med bare `click` (dobbelttrykk):
+          // da velges trinnet håndtaket står på, «Litt» fra urørt. Etter et
+          // museklikk er det samme trinn som `pointerup` nettopp valgte.
+          settT(velgGjeldende);
         }}
         onKeyDown={(e) => {
           const ny = vedTast(t, { key: e.key, ctrl: e.ctrlKey, alt: e.altKey, meta: e.metaKey });
@@ -92,7 +121,13 @@ export function Forkunnskapsvalg({
         ))}
       </div>
       <div className="forkunnskap-uklar">
-        <button type="button" aria-pressed={t.uklar} onClick={() => settT(vekslUklar)}>
+        <button
+          type="button"
+          aria-pressed={t.uklar}
+          aria-describedby={navnId}
+          disabled={!klar}
+          onClick={() => settT(vekslUklar)}
+        >
           {MERKENAVN.uklar}
         </button>
       </div>

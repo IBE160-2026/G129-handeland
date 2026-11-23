@@ -420,6 +420,8 @@ try {
 
   /* --- FR-6 (glideren 23.11): forkunnskapen, på 320 og 375 px og bare med tastatur --- */
   await pc.setViewportSize({ width: 375, height: 800 });
+  // Glideren og knappen er låst (`disabled`) til siden er hydrert.
+  await pc.locator("main form input[type=range]:not([disabled])").first().waitFor();
   await axe(pc, "aktivering (375 px)");
   // Det skjemaet ville sendt for merkene, lest fra skjemaet selv.
   const sendtMerking = () =>
@@ -562,6 +564,25 @@ try {
     etterMellomrom.verditekst === "Litt" && etterMellomrom.status === "Litt" && (await sendtMerking())[grupper[0].felt] === "litt",
     `${kort(etterMellomrom)}; ${JSON.stringify(await sendtMerking())}`,
   );
+  // Ikke farge alene: valgt trinnmerke er fet (og understreket), de andre ikke.
+  const trinnmerke = await pc.locator("main form fieldset").first().evaluate((f) =>
+    [...f.querySelectorAll(".forkunnskap-trinn > *")].map((m) => ({
+      tekst: m.textContent.trim(),
+      valgt: m.hasAttribute("data-valgt"),
+      vekt: Number(getComputedStyle(m).fontWeight),
+      strek: getComputedStyle(m).textDecorationLine,
+    })),
+  );
+  const valgtMerke = trinnmerke.filter((m) => m.valgt);
+  sjekk(
+    "FR-6 (23.11): valgt trinn ses uten farge alene: «Litt» under sporet er fet og understreket, de andre ikke",
+    valgtMerke.length === 1 &&
+      valgtMerke[0].tekst === "Litt" &&
+      valgtMerke[0].vekt >= 700 &&
+      valgtMerke[0].strek.includes("underline") &&
+      trinnmerke.filter((m) => !m.valgt).every((m) => m.vekt < 700 && !m.strek.includes("underline")),
+    JSON.stringify(trinnmerke),
+  );
   await pc.keyboard.press("ArrowRight");
   const etterPil = await aktiv();
   sjekk(
@@ -591,6 +612,11 @@ try {
   // Knappen på og av over en glider som aldri er rørt: urørt igjen.
   await pc.keyboard.press(" ");
   const paa = await aktiv();
+  const hake = await pc.evaluate(() => {
+    const k = document.activeElement;
+    return k?.tagName === "BUTTON" ? getComputedStyle(k, "::before").content : "";
+  });
+  sjekk("FR-6 (23.11): «Skjønner ikke overskriften» på har hake (ikke farge alene)", hake.includes("✓"), hake);
   sjekk(
     "FR-6 (23.11): «Skjønner ikke overskriften» på: aria-pressed=true, glideren «Satt til side», `uklar` sendes",
     paa.trykket === "true" && paa.verditekst === "Satt til side" && paa.status === "Satt til side" && (await sendtMerking())[grupper[1].felt] === "uklar",
@@ -635,6 +661,12 @@ try {
       "FR-6 (23.11): klikk på håndtaket i midten av en urørt glider velger «Litt»",
       klikket === "Litt" && (await sendtMerking())[grupper[2].felt] === "litt",
       `${klikket}; ${JSON.stringify(await sendtMerking())}`,
+    );
+  } else {
+    sjekk(
+      "FR-6 (23.11): klikk på håndtaket i midten av en urørt glider velger «Litt»",
+      false,
+      `trenger tre overskrifter for å prøve en urørt glider, fant ${grupper.length}`,
     );
   }
   sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !(await aktiv()).sidelengs);
@@ -2012,7 +2044,8 @@ try {
       await tlf.goto(`${APP}/tekst/${forlatt}/aktivering`);
       // Et svar i skjemaet, så handlingen ikke bare svarer med oppfordringen.
       await tlf.fill("#lurer-paa", "Hvorfor kan vi ikke se radiobølger?");
-      await tlf.locator("input[type=range]").first().focus();
+      // Glideren er låst til siden er hydrert.
+      await tlf.locator("input[type=range]:not([disabled])").first().focus();
       await tlf.keyboard.press("ArrowRight");
       const forlatHold = await holdHandlinger(tlf);
       let forlatOk = false;

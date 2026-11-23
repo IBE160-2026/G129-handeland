@@ -357,6 +357,12 @@ legend {
   color: var(--lb-primaer);
   font-weight: 700;
 }
+/* Låst til skriptet har lastet (uten skript lagres ingenting). */
+.forkunnskap-glider:disabled,
+.forkunnskap-uklar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 .forkunnskap-uklar button:hover {
   background: var(--lb-markering);
 }
