@@ -645,7 +645,7 @@ const bestaatt = resultat.filter((r) => r.ok).length;
 const linjer = [
   `# Demotest (§9.5) — ${dato}`,
   "",
-  `Kjørt med \`npm run demotest\`: ${KJOERINGER} kjøringer etter hverandre, hver på en tom database, uten inngrep. Chrome, PC (1280 px) og telefon (390 px, berøring). Testmodus \`fyll\`: lagrede modellsvar der de finnes, ellers ett ekte kall som lagres.`,
+  `Kjørt med \`npm run demotest\`: ${KJOERINGER} kjøringer etter hverandre, hver på en tom database, uten inngrep. Chrome, PC (1280 px) og telefon (390 px, berøring). Testmodus \`${process.env.LESEVENN_TESTMODUS || "fyll"}\`: ${(process.env.LESEVENN_TESTMODUS || "fyll") === "fyll" ? "lagrede modellsvar der de finnes, ellers ett ekte kall som lagres" : "bare lagrede modellsvar, ingen modellkall"}.`,
   "",
   `**${bestaatt} av ${KJOERINGER} kjøringer gikk gjennom.** ${bestaatt === KJOERINGER && KJOERINGER >= 3 ? "Demotesten er bestått." : "Demotesten er ikke bestått."}`,
   "",
