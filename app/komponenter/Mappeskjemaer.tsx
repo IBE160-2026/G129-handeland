@@ -9,7 +9,7 @@
  */
 
 import { useRouter } from "next/navigation";
-import { useActionState, useId, useState } from "react";
+import { type ReactNode, useActionState, useId, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { MAPPEGRENSER } from "../../data/mappegrenser";
 import type { Handlingssvar, Mappesvar } from "../handlinger";
@@ -48,6 +48,52 @@ function Send({
   );
 }
 
+/** Lengden slik serveren teller den (`tolkTittel`): uten mellomrom i endene, og flere mellomrom som ett. */
+function navnelengde(raa: string): number {
+  return raa.trim().replace(/\s+/g, " ").length;
+}
+
+/**
+ * Navnefeltet for en Mappe (runde 3, bolk 6, prodtesten 24.11). Feltet tar
+ * imot et for langt navn (ingen `maxLength`, som kuttet stille), og under
+ * det står at navnet er for langt og hvor mange tegn det har. Bare «Navnet
+ * er for langt.» står i statusregionen, så skjermleseren leser det én gang
+ * når grensen passeres, ikke for hvert tegn; antallet står ved siden av, og
+ * feltet er `aria-invalid` og beskrevet av hele meldingen. Sendes skjemaet
+ * likevel, avviser serveren navnet (`MAPPE_AVVIST.langTittel`).
+ *
+ * Feltet er kontrollert: React setter da standardverdien lik verdien, så når
+ * React nullstiller skjemaet etter en avvisning, står teksten eleven skal
+ * korte ned, meldingen og fokuset der de var.
+ */
+function Navnefelt({ id, start = "", plassholder, children }: { id: string; start?: string; plassholder?: string; children: ReactNode }) {
+  const [verdi, settVerdi] = useState(start);
+  const lengde = navnelengde(verdi);
+  const forLangt = lengde > MAPPEGRENSER.tittel;
+  return (
+    <>
+      <div className="mt-1 flex flex-wrap items-end gap-3">
+        <input
+          id={id}
+          name="tittel"
+          required
+          value={verdi}
+          placeholder={plassholder}
+          aria-invalid={forLangt || undefined}
+          aria-describedby={forLangt ? `${id}-lengde` : undefined}
+          onChange={(e) => settVerdi(e.currentTarget.value)}
+          className={`min-w-0 grow basis-60 placeholder:text-dempet aria-invalid:border-2 aria-invalid:border-fare ${FELT.replace("w-full ", "")}`}
+        />
+        {children}
+      </div>
+      <p id={`${id}-lengde`} className={`navnelengde${forLangt ? " mt-1" : ""} font-bold text-fare [overflow-wrap:anywhere]`}>
+        <span role="status">{forLangt ? "Navnet er for langt." : ""}</span>
+        {forLangt && ` Det har ${lengde} tegn, og en mappe kan hete høyst ${MAPPEGRENSER.tittel}.`}
+      </p>
+    </>
+  );
+}
+
 /** Ny Mappe: et navn på 1–80 tegn. Serveren sender eleven til den nye Mappen. */
 export function NyMappeSkjema({ handling }: { handling: Handling }) {
   const [svar, send] = useActionState(handling, TOMT);
@@ -58,20 +104,9 @@ export function NyMappeSkjema({ handling }: { handling: Handling }) {
       <label htmlFor={id} className="font-bold">
         Navn på en ny mappe
       </label>
-      <p id={`${id}-hjelp`} className="text-dempet">
-        For eksempel faget eller prøven. Høyst {MAPPEGRENSER.tittel} tegn.
-      </p>
-      <div className="mt-1 flex flex-wrap items-end gap-3">
-        <input
-          id={id}
-          name="tittel"
-          required
-          maxLength={MAPPEGRENSER.tittel}
-          aria-describedby={`${id}-hjelp`}
-          className={`min-w-0 grow basis-60 ${FELT.replace("w-full ", "")}`}
-        />
+      <Navnefelt id={id} plassholder="Eks. Samfunnsfag: demokrati">
         <Send klar="Lag mappe" venter="Lager mappen …" klasse={KNAPP_SEKUNDAER} />
-      </div>
+      </Navnefelt>
     </form>
   );
 }
@@ -90,17 +125,9 @@ export function NyttNavnSkjema({ handling, tittel }: { handling: Handling; titte
         <label htmlFor={id} className="font-bold">
           Nytt navn
         </label>
-        <div className="mt-1 flex flex-wrap items-end gap-3">
-          <input
-            id={id}
-            name="tittel"
-            required
-            defaultValue={tittel}
-            maxLength={MAPPEGRENSER.tittel}
-            className={`min-w-0 grow basis-60 ${FELT.replace("w-full ", "")}`}
-          />
+        <Navnefelt id={id} start={tittel}>
           <Send klar="Lagre navnet" venter="Lagrer …" klasse={KNAPP_SEKUNDAER} />
-        </div>
+        </Navnefelt>
       </form>
     </details>
   );
@@ -148,6 +175,33 @@ export function lagtIMeldingen(tittel: string, lagtI: NonNullable<Mappesvar["lag
   return lagtI.altMed
     ? `«${tittel}» ligger alt i «${lagtI.mappetittel}». Ingenting er endret.`
     : `«${tittel}» ligger nå i «${lagtI.mappetittel}».`;
+}
+
+/** En melding om å legge en Tekst i en Mappe: mens det skjer, lagt i, eller alt med (ingenting endret). */
+export type Melding = { tekst: string; slag: "venter" | "lagt" | "uendret" };
+
+const MELDINGSIKON: Record<Melding["slag"], string> = { venter: "…", lagt: "✓", uendret: "i" };
+
+/**
+ * Statusregionen for meldingen etter «Legg i mappe» og etter et slipp
+ * (runde 3, bolk 6, prodtesten 24.11). Regionen står alltid i siden, tom, så
+ * meldingen leses opp når den kommer. Med en melding er den en fremhevet
+ * boks (globals.css, .meldingsboks): ikon, fet skrift, kant og flate. Ikonet
+ * er pynt; teksten sier hva som skjedde.
+ */
+export function Meldingsboks({ melding, className = "" }: { melding: Melding | null; className?: string }) {
+  return (
+    <p role="status" data-slag={melding?.slag} className={`meldingsboks ${className} [overflow-wrap:anywhere]`}>
+      {melding && (
+        <>
+          <span aria-hidden="true" className="meldingsboks-ikon">
+            {MELDINGSIKON[melding.slag]}
+          </span>
+          <span>{melding.tekst}</span>
+        </>
+      )}
+    </p>
+  );
 }
 
 /**
@@ -212,9 +266,9 @@ export function LeggIMappeSkjema({
         </form>
       </details>
       {svar.feil && <Feilmelding {...svar.feil} fokus={false} />}
-      <p role="status" className="[overflow-wrap:anywhere]">
-        {svar.lagtI ? lagtIMeldingen(tittel, svar.lagtI) : ""}
-      </p>
+      <Meldingsboks
+        melding={svar.lagtI ? { tekst: lagtIMeldingen(tittel, svar.lagtI), slag: svar.lagtI.altMed ? "uendret" : "lagt" } : null}
+      />
     </div>
   );
 }

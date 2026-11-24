@@ -15,15 +15,27 @@
  * Mappekortet (`Slippmaal`) tar imot, og `Slippmelding` står i Mappene og
  * kunngjør resultatet i en `role="status"`-region, eller viser Feilmelding.
  * Antallet på Mappen oppdateres fordi handlingen revaliderer `/samling`.
+ *
+ * Runde 3, bolk 6 (prodtesten 24.11): et musedrag som starter på knappene
+ * («Legg i mappe», valget, «Legg i mappen», «Slett») flytter ikke raden, og
+ * tittellenken (`Tekstlenke`) er ikke dragbar selv mens draget er på, så
+ * nettleseren aldri legger adressen i draget (den ble satt inn i søkefeltet).
+ * En dragbar rad har grep-ikonet (⠿) og en markeringsflate ved hover, og
+ * «Dra en tekst til en mappe.» står over tekstene (`Drahint`), bare når
+ * draget er på. Meldingen etter et slipp står i en fremhevet boks
+ * (`Meldingsboks`).
  */
 
+import Link from "next/link";
 import {
+  type ComponentProps,
   createContext,
   type Dispatch,
   type DragEvent,
   type ReactNode,
   type SetStateAction,
   useContext,
+  useRef,
   useState,
   useSyncExternalStore,
   useTransition,
@@ -31,7 +43,7 @@ import {
 import type { Feiltekst } from "../kifeil";
 import { leggTekstIMappe } from "../handlinger";
 import { Feilmelding } from "./Feilmelding";
-import { lagtIMeldingen } from "./Mappeskjemaer";
+import { lagtIMeldingen, type Melding, Meldingsboks } from "./Mappeskjemaer";
 
 const STOR = "(min-width: 760px)";
 /**
@@ -39,6 +51,9 @@ const STOR = "(min-width: 760px)";
  * navnet på en ny mappe), skal ikke tittelen skrives inn der.
  */
 const TYPE = "application/x-lesebuddy-tekst";
+
+/** Knappene på raden. Et drag som starter der, flytter ikke raden (prodtesten 24.11, punkt 6). */
+const KNAPPENE = ".tekstrad-knapper";
 
 /** Usann på serveren og under hydrering, sann når skriptet kjører. */
 const ingenting = () => () => {};
@@ -73,7 +88,7 @@ type Dra = {
   slutt: () => void;
   settOver: Dispatch<SetStateAction<string | null>>;
   slipp: (mappeId: string, mappetittel: string) => void;
-  melding: string;
+  melding: Melding | null;
   feil: (Feiltekst & { n: number }) | null;
 };
 
@@ -89,7 +104,7 @@ export function DraTilMappe({ harMapper, children }: { harMapper: boolean; child
   const aktiv = useStorSkjerm() && harMapper;
   const [dras, settDras] = useState<Tekst | null>(null);
   const [over, settOver] = useState<string | null>(null);
-  const [melding, settMelding] = useState("");
+  const [melding, settMelding] = useState<Melding | null>(null);
   const [feil, settFeil] = useState<Dra["feil"]>(null);
   const [, startTransition] = useTransition();
 
@@ -99,16 +114,16 @@ export function DraTilMappe({ harMapper, children }: { harMapper: boolean; child
     settOver(null);
     if (!tekst) return;
     settFeil(null);
-    settMelding(`Legger «${tekst.tittel}» i «${mappetittel}» …`);
+    settMelding({ tekst: `Legger «${tekst.tittel}» i «${mappetittel}» …`, slag: "venter" });
     const data = new FormData();
     data.set("mappeId", mappeId);
     data.set("tekstId", tekst.id);
     startTransition(async () => {
       const svar = await leggTekstIMappe({}, data).catch(() => ({ feil: NETTFEIL, lagtI: undefined }));
       if (svar.lagtI) {
-        settMelding(lagtIMeldingen(tekst.tittel, svar.lagtI));
+        settMelding({ tekst: lagtIMeldingen(tekst.tittel, svar.lagtI), slag: svar.lagtI.altMed ? "uendret" : "lagt" });
       } else {
-        settMelding("");
+        settMelding(null);
         // Ny `n` hver gang, så samme feil to ganger leses opp på nytt.
         settFeil((f) => ({ ...(svar.feil ?? NETTFEIL), n: (f?.n ?? 0) + 1 }));
       }
@@ -140,24 +155,34 @@ export function DraTilMappe({ harMapper, children }: { harMapper: boolean; child
 
 function useDra() {
   const d = useContext(Kontekst);
-  if (!d) throw new Error("DragbarTekst, Slippmaal og Slippmelding må stå inne i DraTilMappe.");
+  if (!d) throw new Error("DragbarTekst, Tekstlenke, Drahint, Slippmaal og Slippmelding må stå inne i DraTilMappe.");
   return d;
 }
 
 /** En tekstrad (`<li>`) som kan dras til en Mappe når draget er på. */
 export function DragbarTekst({ tekstId, tittel, className, children }: { tekstId: string; tittel: string; className: string; children: ReactNode }) {
   const d = useDra();
+  /**
+   * Om pekeren ble trykket ned på knappene. Starter draget på en knapp, et
+   * valg eller en `<summary>`, er `e.target` i dragstart den dragbare raden
+   * selv, så det må huskes fra `pointerdown`.
+   */
+  const fraKnappene = useRef(false);
   return (
     <li
       draggable={d.aktiv || undefined}
+      onPointerDown={(e) => {
+        fraKnappene.current = !!(e.target as Element).closest(KNAPPENE);
+      }}
       onDragStart={(e) => {
         if (!d.aktiv) return;
-        // Et lite musedrag på «Legg i mappe», valget eller «Slett» skal ikke flytte raden.
-        if ((e.target as Element).closest(".tekstrad-knapper")) {
+        // Et lite musedrag på «Legg i mappe», valget, «Legg i mappen» eller «Slett» skal ikke flytte raden.
+        if (fraKnappene.current || (e.target as Element).closest(KNAPPENE)) {
           e.preventDefault();
           return;
         }
-        // Raden kan dras fra lenken også; da er det likevel Teksten som flyttes.
+        // Bare Tekstens id i draget, ingen adresse eller tittel et tekstfelt kan ta imot (punkt 7).
+        e.dataTransfer.clearData();
         e.dataTransfer.setData(TYPE, tekstId);
         e.dataTransfer.effectAllowed = "copy";
         // Etter hendelsen: Chrome avbryter draget om DOM-en endres mens dragstart
@@ -170,7 +195,41 @@ export function DragbarTekst({ tekstId, tittel, className, children }: { tekstId
       className={`${className}${d.dras?.id === tekstId ? " tekstrad-dras" : ""}`}
     >
       {children}
+      {/* Sist i raden, så tekst og knapper står først som før; plassert til venstre i globals.css. */}
+      {d.aktiv && (
+        <span aria-hidden="true" className="tekstrad-grep">
+          ⠿
+        </span>
+      )}
     </li>
+  );
+}
+
+/**
+ * Tittellenken på en tekstrad. Mens draget er på, er den ikke dragbar selv:
+ * da er det raden som dras, også fra lenken, og nettleseren legger ikke
+ * adressen i draget.
+ */
+export function Tekstlenke(props: Omit<ComponentProps<typeof Link>, "draggable">) {
+  const d = useDra();
+  return <Link {...props} draggable={d.aktiv ? false : undefined} />;
+}
+
+/**
+ * Over tekstene: at radene kan dras. Bare når draget er på (fra 760 px, med
+ * minst én Mappe). Skjult for skjermlesere, fordi draget bare gjelder mus;
+ * for dem er «Legg i mappe» veien.
+ */
+export function Drahint() {
+  const d = useDra();
+  if (!d.aktiv) return null;
+  return (
+    <p aria-hidden="true" className="drahint mt-8 text-dempet">
+      <span className="drahint-grep">
+        ⠿
+      </span>{" "}
+      Dra en tekst til en mappe.
+    </p>
   );
 }
 
@@ -213,16 +272,15 @@ export function Slippmaal({ mappeId, tittel, className, children }: { mappeId: s
 
 /**
  * Over Mappekortene: hvordan draget brukes (bare når det er på), og
- * resultatet av et slipp, som status-melding eller Feilmelding (§5).
+ * resultatet av et slipp, som status-melding i en fremhevet boks eller
+ * Feilmelding (§5).
  */
 export function Slippmelding() {
   const d = useDra();
   return (
     <>
       {d.aktiv && <p className="mt-1 text-dempet">Dra en tekst hit, eller bruk «Legg i mappe» under teksten.</p>}
-      <p role="status" className="slippmelding [overflow-wrap:anywhere]">
-        {d.melding}
-      </p>
+      <Meldingsboks melding={d.melding} className="slippmelding" />
       {d.feil && <Feilmelding key={d.feil.n} melding={d.feil.melding} handling={d.feil.handling} fokus={false} />}
     </>
   );

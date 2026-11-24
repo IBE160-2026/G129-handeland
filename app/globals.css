@@ -39,6 +39,7 @@
   --lb-paa-aksent: #141a3a;
   --lb-tusj: #ff4d9d;
   --lb-markering: #ffe0ee;
+  --lb-lilla: #ede5fc; /* tekstkortene i mappeviften (bolk 6, 24.11): tekst 13,9:1, dempet 5,7:1, primær 6,1:1 */
   --lb-fare: #b3261e;
   --lb-fareflate: #fde7e9;
   color-scheme: light dark;
@@ -64,6 +65,7 @@
     --lb-paa-aksent: #141a3a;
     --lb-tusj: #8a2457;
     --lb-markering: #4a1f3a;
+    --lb-lilla: #2e2758; /* tekst 12,0:1, dempet 6,3:1, primær 5,9:1 */
     --lb-fare: #ff8a80;
     --lb-fareflate: #3d1a22;
   }
@@ -82,6 +84,7 @@
   --color-paa-aksent: var(--lb-paa-aksent);
   --color-tusj: var(--lb-tusj);
   --color-markering: var(--lb-markering);
+  --color-lilla: var(--lb-lilla);
   --color-fare: var(--lb-fare);
   --color-fareflate: var(--lb-fareflate);
 
@@ -1310,7 +1313,8 @@ html.har-tenkepille body {
   background: transparent;
   cursor: pointer;
 }
-.bunke-knapp:focus-visible {
+.bunke-knapp:focus-visible,
+.bunke-knapp[data-fokus-flyttet]:focus {
   outline-offset: 4px;
 }
 /* Neste steg ligger over knappen, ikke inni den. */
@@ -1433,9 +1437,30 @@ button.kort {
 a.kort:hover,
 a.kort:focus-visible,
 button.kort:hover,
-button.kort:focus-visible {
+button.kort:focus-visible,
+.vifte .kort[data-fokus-flyttet]:focus {
   transform: scale(1.06);
   border-color: var(--lb-primaer);
+}
+/*
+ * Fokus som koden flytter etter et museklikk (runde 3, bolk 6, prodtesten
+ * 24.11): når viften åpnes, ved nivåbytte i en Mappe og tilbake til bunkens
+ * knapp når den lukkes. Nettleseren gir da ikke `:focus-visible`, så
+ * Arbeidsbord.tsx merker elementet, og det får den vanlige fokusringen.
+ */
+.vifte [data-fokus-flyttet]:focus,
+.bunke-knapp[data-fokus-flyttet]:focus {
+  outline: 3px solid var(--lb-primaer);
+}
+/* Bunkens knapp har 4 px avstand, som .bunke-knapp:focus-visible. */
+.vifte [data-fokus-flyttet]:focus {
+  outline-offset: 2px;
+}
+@media (forced-colors: active) {
+  .vifte [data-fokus-flyttet]:focus,
+  .bunke-knapp[data-fokus-flyttet]:focus {
+    outline-color: Highlight;
+  }
 }
 .kort-ikon {
   display: grid;
@@ -1446,6 +1471,26 @@ button.kort:focus-visible {
   background: var(--lb-markering);
   color: var(--lb-primaer);
   font-weight: 700;
+}
+/*
+ * Kortene i mappeviften (runde 3, bolk 6, avgjort av Arve 24.11): to farger,
+ * bare her. Tekstkortene har lilla flate og en stripe i primærfargen på
+ * startsiden; «Øvekort for hele mappen» og «Quiz for hele mappen» har rosa
+ * flate og dobbel kant. Navnene og statusene sier det samme, og stripen og
+ * den doble kanten står også i kontrastmodus, så forskjellen aldri bare er
+ * farge. Tekstens fem aktivitetskort er uendret.
+ */
+.kort-tekst {
+  border-inline-start: 6px solid var(--lb-primaer);
+  background: var(--lb-lilla);
+}
+.kort-samlet {
+  border: 4px double var(--lb-primaer);
+  background: var(--lb-markering);
+}
+.kort-tekst .kort-ikon,
+.kort-samlet .kort-ikon {
+  background: var(--lb-flate);
 }
 .kort-navn {
   font-family: var(--font-instrument), Georgia, serif;
@@ -1678,6 +1723,30 @@ html.har-ark body {
   transform: none;
   background: var(--lb-markering);
 }
+/*
+ * Mappens rader på arket har de samme fargene og formene som kortene (bolk 6).
+ * Hover beholder flaten og får en ring i primærfargen i stedet.
+ */
+.vifte[data-oppsett="ark"] .vifte-kort > li:has(> .kort-tekst, > .kort-samlet) {
+  border-top: 0;
+  padding-block: 0.25rem;
+}
+.vifte[data-oppsett="ark"] .kort-tekst,
+.vifte[data-oppsett="ark"] button.kort-tekst:hover,
+.vifte[data-oppsett="ark"] button.kort-tekst:focus-visible {
+  border-inline-start: 6px solid var(--lb-primaer);
+  background: var(--lb-lilla);
+}
+.vifte[data-oppsett="ark"] .kort-samlet,
+.vifte[data-oppsett="ark"] a.kort-samlet:hover,
+.vifte[data-oppsett="ark"] a.kort-samlet:focus-visible {
+  border: 4px double var(--lb-primaer);
+  background: var(--lb-markering);
+}
+.vifte[data-oppsett="ark"] button.kort-tekst:hover,
+.vifte[data-oppsett="ark"] a.kort-samlet:hover {
+  box-shadow: inset 0 0 0 2px var(--lb-primaer);
+}
 .vifte[data-oppsett="ark"] .kort-ikon {
   grid-area: ikon;
 }
@@ -1735,6 +1804,35 @@ html.har-ark body {
 }
 
 /* --- Menyen i topplinjen ------------------------------------------- */
+
+/*
+ * Mens viften er åpen, er topplinjen `inert` (Arbeidsbord.tsx), og den
+ * dempes, så eleven ser at ordmerket og menyen ikke kan brukes nå (runde 3,
+ * bolk 6, prodtesten 24.11). I kontrastmodus står den i GrayText, systemets
+ * farge for det som ikke kan brukes.
+ */
+body > header[inert] {
+  opacity: 0.35;
+}
+body > header[inert],
+body > header[inert] * {
+  cursor: default;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body > header {
+    transition: opacity 0.3s ease;
+  }
+}
+@media (forced-colors: active) {
+  body > header[inert] {
+    opacity: 1;
+  }
+  body > header[inert],
+  body > header[inert] * {
+    color: GrayText;
+    border-color: GrayText;
+  }
+}
 
 .meny-lenke[aria-current="page"] {
   background: var(--lb-markering);
@@ -2525,12 +2623,17 @@ button.ls-fagord[aria-expanded="true"] {
  * er et slippmål for en tekst som dras (DraTilMappe.tsx). Tekstradene i den
  * smale kolonnen stables: tittel, tilstand og dato, neste steg, så knappene
  * («Legg i mappe» og «Slett»).
+ *
+ * Runde 3, bolk 6 (prodtesten 24.11): mer luft mellom kolonnene (3 rem, og
+ * 4 rem fra 1024 px). En rad som kan dras, har grep-ikonet (⠿) til venstre
+ * og markeringsflaten ved hover, og «Dra en tekst til en mappe.» står over
+ * tekstene; alt dette finnes bare når draget er på (DraTilMappe.tsx).
  */
 @media (min-width: 760px) {
   .samling-oppsett {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
-    column-gap: 2rem;
+    column-gap: 3rem;
     align-items: start;
   }
   .samling-oppsett > .samling-tekster {
@@ -2550,7 +2653,28 @@ button.ls-fagord[aria-expanded="true"] {
     max-width: 100%;
   }
   .samling-tekster .tekstrad[draggable="true"] {
+    position: relative;
     cursor: grab;
+    padding-inline: 1.75rem 0.5rem;
+  }
+  .samling-tekster .tekstrad[draggable="true"]:hover {
+    background: var(--lb-markering);
+  }
+  /* Grep-ikonet: til venstre for tittelen, pynt for skjermlesere (aria-hidden). */
+  .tekstrad-grep {
+    position: absolute;
+    inset-inline-start: 0.375rem;
+    top: 1.375rem;
+    color: var(--lb-dempet);
+    font-size: 1.125rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .drahint-grep {
+    color: var(--lb-dempet);
+  }
+  .drahint + .tekstliste {
+    margin-top: 0.75rem;
   }
   .mappekort-liste {
     display: grid;
@@ -2597,8 +2721,14 @@ button.ls-fagord[aria-expanded="true"] {
     opacity: 0.6;
   }
 }
+@media (min-width: 1024px) {
+  .samling-oppsett {
+    column-gap: 4rem;
+  }
+}
 @media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
-  .mappekort-liste > .mappekort {
+  .mappekort-liste > .mappekort,
+  .samling-tekster .tekstrad[draggable="true"] {
     transition:
       box-shadow 120ms ease-out,
       background-color 120ms ease-out;
@@ -2607,5 +2737,57 @@ button.ls-fagord[aria-expanded="true"] {
 @media (forced-colors: active) {
   .mappekort-liste > .mappekort.slippmaal-over {
     outline: 3px solid Highlight;
+  }
+}
+
+/*
+ * Meldingen etter «Legg i mappe» og etter et slipp (runde 3, bolk 6,
+ * prodtesten 24.11): statusregionen er tom til meldingen kommer, og er da en
+ * fremhevet boks med ikon, fet skrift, kant i primærfargen og
+ * markeringsflaten (tekst 13,8:1). Ikonet er pynt, og teksten sier hva som
+ * skjedde. I kontrastmodus står kanten, og ikonet får egen kant.
+ */
+.meldingsboks:not(:empty) {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+  border: 2px solid var(--lb-primaer);
+  border-radius: var(--radius-md);
+  background: var(--lb-markering);
+  padding: 0.75rem 1rem;
+  color: var(--lb-tekst);
+  font-weight: 700;
+}
+.meldingsboks-ikon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: var(--lb-primaer);
+  color: var(--lb-paa-primaer);
+  line-height: 1;
+}
+/*
+ * Mens det skjer («…») og når ingenting ble endret («i»): dempet, så bare
+ * «lagt i» ser ut som et ferdig resultat. Dempet tekst har 5,7:1 (6,3:1 i
+ * mørk modus) mot markeringsflaten og 7,0:1 mot flaten.
+ */
+.meldingsboks[data-slag="venter"],
+.meldingsboks[data-slag="uendret"] {
+  border-color: var(--lb-dempet);
+  font-weight: 400;
+}
+.meldingsboks[data-slag="venter"] .meldingsboks-ikon,
+.meldingsboks[data-slag="uendret"] .meldingsboks-ikon {
+  border: 2px solid var(--lb-dempet);
+  background: var(--lb-flate);
+  color: var(--lb-dempet);
+}
+@media (forced-colors: active) {
+  .meldingsboks-ikon {
+    border: 2px solid CanvasText;
   }
 }

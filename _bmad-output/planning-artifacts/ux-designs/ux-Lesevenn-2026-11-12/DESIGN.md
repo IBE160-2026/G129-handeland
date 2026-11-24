@@ -2,7 +2,7 @@
 name: LeseBuddy
 description: Visuell identitet for LeseBuddy (kodenavn Lesevenn), lesestøtte for videregående. Next.js med Tailwind CSS v4 og egne komponenter, uten komponentbibliotek. Lys og mørk modus.
 status: final
-updated: 2026-11-18
+updated: 2026-11-24
 sources:
   - ../../prd-lesevenn.md
   - ../../product-brief-lesevenn.md
@@ -23,6 +23,7 @@ colors:
   on-accent: '#141A3A'
   highlighter: '#FF4D9D'       # markeringstusjen; text oppå 5,5:1
   highlight: '#FFE0EE'         # Faguttrykk og forklaringspanel; text 13,8:1
+  lilla: '#EDE5FC'             # tekstkortene i mappeviften (runde 3, bolk 6, 24.11); text 13,9:1, text-muted 5,7:1, primary 6,1:1
   danger: '#B3261E'            # 6,1:1 mot background
   danger-surface: '#FDE7E9'    # text 14,4:1, danger 5,5:1
   background-dark: '#0F1226'
@@ -36,6 +37,7 @@ colors:
   on-accent-dark: '#141A3A'
   highlighter-dark: '#8A2457'  # markeringstusjen i mørk modus; text-dark oppå 7,5:1
   highlight-dark: '#4A1F3A'    # text-dark 12,0:1
+  lilla-dark: '#2E2758'        # text-dark 12,0:1, text-muted-dark 6,3:1, primary-dark 5,9:1
   danger-dark: '#FF8A80'       # 8,1:1
   danger-surface-dark: '#3D1A22'
 typography:
@@ -275,6 +277,19 @@ components:
     foreground: '{colors.text}'
     borderInlineStart: 4px solid {colors.danger}
     radius: '{rounded.md}'
+  status-message:               # meldingen etter «Legg i mappe» og etter et slipp (runde 3, bolk 6, 24.11)
+    background: '{colors.highlight}'
+    foreground: '{colors.text}'
+    border: 2px solid {colors.primary}
+    radius: '{rounded.md}'
+    fontWeight: '700'
+    icon: 1.75rem rund, {colors.primary} med {colors.on-primary}; ✓ lagt i
+    muted: «…» venter og «i» uendret er dempet — vanlig vekt, kant i {colors.text-muted}, ikonet på {colors.surface} med {colors.text-muted} (5,7:1 / 6,3:1 mot markeringen, 7,0:1 mot flaten)
+  folder-fan-cards:             # kortene i mappeviften (runde 3, bolk 6, avgjort av Arve 24.11)
+    text: flate {colors.lilla}, stripe 6px {colors.primary} på startsiden
+    combined: flate {colors.highlight}, kant 4px double {colors.primary}
+    icon: ikonruten på {colors.surface}
+    contrast: lilla og rosa er like lyse (1,00:1 i begge moduser), så stripen, den doble kanten og teksten bærer forskjellen, ikke fargen
 ---
 
 ## Brand & Style
@@ -299,7 +314,8 @@ Paletten heter **Pop**. Den har rosahvit bakgrunn, fiolett primærfarge og rosa 
 - **Fiolett primærfarge (`#6427D6` / `#B79BFF`)** brukes til knapper, lenkestreker, fokusring, merket, «uddy» i ordmerket, kanten på hovedbunken og fylte framdriftsstreker. Mot markeringsflaten har den 6,1:1 (lys) og 5,9:1 (mørk), og det holder for understrek og fokus.
 - **Rosa aksent (`#FF4D9D` / `#FF7AB6`)** brukes **bare som flate med mørk tekst oppå**, for eksempel statuspiller og merkelappen «Sist brukt» (5,5:1 og 7,0:1). Som tekstfarge er den uleselig i lys modus (2,9:1).
 - **Markeringstusjen (`{colors.highlighter}` / `{colors.highlighter-dark}`)** er rosa i lys modus og mørk bringebær (`#8A2457`) i mørk modus. Lys tekst på den rosa aksenten ville bare gitt 2,1:1.
-- **Markering (`#FFE0EE` / `#4A1F3A`)** brukes til Faguttrykk i teksten, forklaringspanelet og glassene i merket. Fargen betyr «her hjelper Buddy deg».
+- **Markering (`#FFE0EE` / `#4A1F3A`)** brukes til Faguttrykk i teksten, forklaringspanelet og glassene i merket. Fargen betyr «her hjelper Buddy deg». Den er også flaten på de samlede kortene i mappeviften, meldingsboksen i Samlinger og en dragbar tekstrad ved hover (runde 3, bolk 6).
+- **Lilla (`#EDE5FC` / `#2E2758`)** brukes bare som flate på tekstkortene i mappeviften (runde 3, bolk 6, 24.11). Tekst har 13,9:1 og 12,0:1, dempet tekst 5,7:1 og 6,3:1, og primærfargen 6,1:1 og 5,9:1.
 - **Feil (`#B3261E` / `#FF8A80`)** med en lys feilflate. Brukes bare til feilmeldinger, og alltid sammen med tekst som sier hva som skjedde.
 - **Kant (`#F5DDE5`)** brukes bare til skillelinjer. Den bærer aldri informasjon, fordi den bare har 1,3:1 mot flatene.
 
@@ -360,6 +376,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De
 - Én regel for hele appen: `outline: 3px solid {colors.primary}` med 2 px avstand. Den erstatter dagens gulv i `globals.css`, som bruker `currentColor` og blir usynlig på fylte knapper.
 - På fylte knapper ligger en ytre ring i `{colors.background}` mellom knappen og fokusringen.
 - `outline: none` er ikke lov uten en like sterk erstatning. I kontrastmodus (`forced-colors`) brukes `Highlight`.
+- Fokus som appen flytter etter et museklikk (når viften åpnes, ved nivåbyttet i mappeviften og tilbake til bunkens knapp når den lukkes), får samme ring og samme forstørrelse av kortet, selv om nettleseren ikke gir `:focus-visible` da (runde 3, bolk 6, 24.11). Ringen står til fokus forlater elementet.
 
 **Merket (`{components.logo-mark}`)** I mørk modus er glassene `{colors.text-dark}` og pupillene `{colors.highlight-dark}`, så Buddy har lyse øyne og mørke pupiller som i lys modus.
 - **Brillene** er tegnet i en 120 × 120-flate med to avrundede firkantglass, hvert 39 × 32 med ytre hjørneradius 9. Neserommet ved broen er 10 bredt. Glassene har et neseinnhakk med radius 14 i det indre nedre hjørnet og radius 6 i det indre øvre. Rammen er 8,5 tykk. Broen er en bue over neserommet, og brillestengene går skrått opp fra de ytre øvre hjørnene.
@@ -390,7 +407,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De
 **Knapper og topplinje**
 - **Primærknappen** (`{components.button-primary}`) er fylt med fiolett, og **sekundærknappen** (`{components.button-secondary}`) har fiolett kant. Teksten brytes aldri.
 - *Hover:* knappen blir 6 % mørkere. *Fokus:* `{components.focus-ring}`. *Deaktivert:* knappen vises ikke deaktivert, men forklarer hvorfor den ikke virker (se EXPERIENCE.md, grensene).
-- **Topplinjen** (`{components.top-bar}`) har ordmerket til venstre, så menyen («Arbeidsbord», «Samlinger»; endret 23.11) og kontolenken til høyre. Aktivt menyvalg vises med markeringsflate *og* understrek.
+- **Topplinjen** (`{components.top-bar}`) har ordmerket til venstre, så menyen («Arbeidsbord», «Samlinger»; endret 23.11) og kontolenken til høyre. Aktivt menyvalg vises med markeringsflate *og* understrek. Mens viften er åpen, er topplinjen dempet til 35 % opasitet med vanlig peker; i kontrastmodus står den i `GrayText` med full opasitet (runde 3, bolk 6, 24.11).
 
 **Bunke** (`{components.stack-main}`, `{components.stack-small}`)
 - *Forsiden* viser tittel, dato («lagt inn 11. nov.») og framdrift.
@@ -412,6 +429,7 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De
 - **Statuspillen** (`{components.status-pill}`) brukes til tall, for eksempel «6 av 8».
 - *Låst kort:* et låseikon og teksten «Låst. Åpnes når du har lest teksten.» i full kontrast. Kortet nedtones ikke.
 - *Fokus og hover:* fokusringen, og kortet retter seg opp (rotasjon 0) og forstørres 6 %.
+- *Mappeviften* (`{components.folder-fan-cards}`, runde 3, bolk 6, avgjort av Arve 24.11): to farger, bare her. Tekstkortene har lilla flate og en stripe i `{colors.primary}` på startsiden; «Øvekort for hele mappen» og «Quiz for hele mappen» har rosa flate (`{colors.highlight}`) og dobbel kant i `{colors.primary}`. Ikonruten står på `{colors.surface}`. De to flatene er like lyse (1,00:1 i lys og mørk modus), så det er stripen og den doble kanten, sammen med navnene og statusene, som bærer forskjellen, ikke fargen. Navnene og statusene skiller dem også, og stripen og den doble kanten står i kontrastmodus. På arket har radene samme flate og form, og hover gir en ring i primærfargen i stedet for ny flate. Tekstens fem aktivitetskort er uendret.
 
 **Faguttrykk og forklaringspanel** (`{components.fagord}`, `{components.explanation-panel}`)
 - *Faguttrykket i teksten* får markeringsflate, fiolett understrek (`text-decoration`, ikke skygge, så den overlever kontrastmodus) og fet skrift. *Fokus:* fokusringen rundt ordet.
@@ -433,7 +451,9 @@ Små rotasjoner (−7° til 6°) er en del av formspråket på arbeidsbordet. De
 
 **Øvekortene på stor skjerm (runde 3, bolk 3; 23.11):** fra 760 px er siden opptil 1024 px bred med 32 px marg, så kortet blir opptil 960 px. Kortknappen, feilmeldingen og merkeknappene står i én ramme (`.oevekort-ramme`: 2 px kant i slate-300, slate-600 i mørk modus, `rounded.lg`, flate hvit / slate-900, liten skygge), og kortknappen har ingen egen kant. «Må øve mer» og «Har kontroll» står nederst i rammen, side om side mot hver sin kant med 24 px marg, like brede (12 rem, krymper ved behov); med `data-hand="venstre"` byttes de om. Med stor tekst brytes de til to rader. Feilmeldingen står mellom kortflaten og knappene. Tilbakelenken står nederst på siden, 24 px til venstre for kortkanten, med samme stil og minst 44 px høyde; lenken øverst i headeren er skjult fra 760 px. Under 760 px er rammen `display: contents`, og oppsettet er som over.
 
-**Samlinger på stor skjerm (runde 3, bolk 4; 23.11):** fra 760 px er siden opptil 72 rem (1152 px) bred og todelt i et rutenett 3 : 7 med 32 px mellomrom (`.samling-oppsett` i `globals.css`): søket og tekstene til venstre, mappene til høyre, i flukt øverst. Mappene er kort i et rutenett (minst 13 rem brede, 16 px mellomrom) inne i mappedelen: 2 px kant i slate-300 (slate-600 i mørk modus), `rounded.lg`, flaten i bakgrunnsfargen, navnet som lenke øverst og antallet under. «Ny mappe»-skjemaet står under kortene. Tekstradene i den smale kolonnen stables: tittel, tilstand og dato, neste steg, så knappene («Legg i mappe» og «Slett»). En rad som kan dras, har `cursor: grab`, og raden som dras, får 60 % opasitet. Mens en tekst dras, får alle kortene stiplet kant i primærfargen; kortet den er over, får heltrukken 2 px kant og en 3 px ring (box-shadow) i primærfargen, markeringsflaten og teksten «Slipp for å legge i mappen» i fet skrift (ikke understreket, for understrek betyr lenke), så markeringen ikke hviler på farge alene. Overgangen er 120 ms og faller bort ved redusert bevegelse; i kontrastmodus får kortet en ramme i Highlight. Under 760 px er mappene en liste med skillelinjer som før, øverst på siden.
+**Samlinger på stor skjerm (runde 3, bolk 4; 23.11; endret 24.11):** fra 760 px er siden opptil 72 rem (1152 px) bred og todelt i et rutenett 3 : 7 med 3 rem mellomrom, 4 rem fra 1024 px (32 px til 24.11) (`.samling-oppsett` i `globals.css`): søket og tekstene til venstre, mappene til høyre, i flukt øverst. Mappene er kort i et rutenett (minst 13 rem brede, 16 px mellomrom) inne i mappedelen: 2 px kant i slate-300 (slate-600 i mørk modus), `rounded.lg`, flaten i bakgrunnsfargen, navnet som lenke øverst og antallet under. «Ny mappe»-skjemaet står under kortene. Tekstradene i den smale kolonnen stables: tittel, tilstand og dato, neste steg, så knappene («Legg i mappe» og «Slett»). En rad som kan dras, har `cursor: grab`, og raden som dras, får 60 % opasitet. Mens en tekst dras, får alle kortene stiplet kant i primærfargen; kortet den er over, får heltrukken 2 px kant og en 3 px ring (box-shadow) i primærfargen, markeringsflaten og teksten «Slipp for å legge i mappen» i fet skrift (ikke understreket, for understrek betyr lenke), så markeringen ikke hviler på farge alene. Overgangen er 120 ms og faller bort ved redusert bevegelse; i kontrastmodus får kortet en ramme i Highlight. Under 760 px er mappene en liste med skillelinjer som før, øverst på siden.
+
+**Dra-tegn og melding i Samlinger (runde 3, bolk 6, avgjort av Arve 24.11):** bare når draget er på (fra 760 px og med minst én mappe). Hver dragbar rad har grep-ikonet ⠿ i `{colors.text-muted}` til venstre for tittelen (skjult for skjermlesere), 1,75 rem luft på startsiden, og markeringsflaten ved hover (120 ms, ingen overgang ved redusert bevegelse). Over tekstene står «⠿ Dra en tekst til en mappe.» i dempet tekst. Meldingen etter et slipp og etter «Legg i mappe» står i `{components.status-message}`: ikon, fet skrift, 2 px kant i primærfargen og markeringsflaten. Mens det skjer («…») og når ingenting ble endret («i»), er boksen dempet: vanlig vekt og kant og ikon i dempet tekstfarge, så bare «lagt i» (✓) ser ut som et ferdig resultat. Setningen over tekstene er skjult for skjermlesere, fordi draget bare gjelder mus. Statusregionen er tom og uten boks til meldingen kommer. Navnefeltet for en mappe har plassholderen «Eks. Samfunnsfag: demokrati» i dempet tekst; er navnet for langt, får feltet 2 px kant i `{colors.danger}`, og under står meldingen i fet `{colors.danger}`.
 
 **Forkunnskapsglideren (FR-6, runde 3, bolk 2a, 23.11):** per overskrift i aktiveringen en glider med tre trinn, «Ingenting ennå» – «Litt» – «Mye». Glideren er 44 px høy (trykkflaten), sporet 8 px i `{colors.text-muted}` og håndtaket 28 px. Valgt: håndtaket er fylt i `{colors.primary}` med en ring i flatefargen, og trinnmerket under er fet og understreket, så valget ses uten farge alene. Urørt eller satt til side: håndtaket er hult med kant i dempet tekstfarge, og statusen over («Ikke merket ennå» / «Satt til side») står i dempet tekst. Trinnmerkene står under sporet, venstre, midten og høyre, og brytes på 320 px med 200 % tekst. Under, sentrert, står «Skjønner ikke overskriften» som button-secondary, fylt button-primary med hake når den er på. Fokus er den vanlige ringen. I tvungne farger er sporet `CanvasText`, håndtaket `Highlight` (hult `Canvas` når det er dempet), og knappen på `Highlight`. Stilen står i `globals.css` (`.forkunnskap`). Til 23.11 var merkene fire radioknapper som sekundærknapper (`.merkevalg`).
 

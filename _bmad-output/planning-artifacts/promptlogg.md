@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**491 prompter i 43 økter**, 2026-09-17 til 2026-11-16.
+**556 prompter i 54 økter**, 2026-09-17 til 2026-11-24.
 
 ---
 
@@ -3088,7 +3088,11 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 
 > jupp, kjør dem nå
 
-<details><summary>Commits i økta (8)</summary>
+**22:48**
+
+> ja
+
+<details><summary>Commits i økta (15)</summary>
 
 - `f4cbc45` feat(design): bolk 6 – mobilflatene (striper, ark, trykkdemo) og animasjonsbanene
 - `21f42c2` Logg: mobilbolkene 4–6
@@ -3098,5 +3102,495 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 - `59239a8` feat(PRD §6.4): bruksgrenser – 5 tekster og 5 fagsamtaler per konto per døgn, 30 kr per døgn for appen
 - `80449ae` Logg: KI-feil og bruksgrenser
 - `cf9248e` Logg: utrulling av KI-feil og bruksgrenser
+- `cee7f82` chore: småting fra gjennomgangene (deferred-work.md)
+- `ee4d7cb` Logg: småting fra gjennomgangene løst i deferred-work.md, og målingene
+- `b0fa5b2` fix: funnene fra gjennomgangen av småting-bolken
+- `4d4ec91` Småting: triagelogg, lagrede modellsvar og promptlogg
+- `8a9d37d` Logg: småting fra gjennomgangene
+- `54bd5d0` Måling: README-test 16.11
+- `fcab908` Logg: utrulling av småtingene
+
+</details>
+
+---
+
+## 2026-11-16 · økt `cbc96016` · claude-opus-5-5
+
+**23:36**
+
+> [kommando: /clear]
+
+**23:37**
+
+> HEidu! Jeg syns at den "forkunnskapsbiten" av appen vår funker ganske dårlig. Jeg blir ikke inspirert til å skrive noe der, og tviler på at elever får lyst heller.
+>
+> I tillegg, så er minneordene skikkelig dårlige. Kan vi merke den enda tydeligere med at det en uferdig?
+
+<details><summary>Commits i økta (1)</summary>
+
+- `339ba8a` Minnevers merket som uferdig i viften, på oppgavesiden og på verssiden
+
+</details>
+
+---
+
+## 2026-11-17 · økt `cbc96016` · claude-opus-5-5
+
+**00:19**
+
+> Vi kjører som du foreslo, c+d med a som belønning.
+>
+> Jeg testa litt istad på mobilen, og da kom den animasjonen (tenke-briller over til B) kun ett sted i quizen, aldri ellers. Dette kunne gjerne blitt sett mer på.
+
+**09:10**
+
+> dette ser bra ut. Jeg vil likevel at du endrer tekst til: "Dette kan jeg", "Har hørt om", "Helt nytt"
+>
+> sett i gang med tenkeindikator
+
+<details><summary>Commits i økta (3)</summary>
+
+- `2842272` feat(FR-6): forkunnskap som merking av overskriftene og ett «lurer på»-spørsmål
+- `0b95ed7` Måling: README-test 17.11 (FR-6)
+- `eb63c37` FR-6: merkene heter «Dette kan jeg», «Har hørt om» og «Helt nytt»
+
+</details>
+
+---
+
+## 2026-11-18 · økt `cbc96016` · claude-opus-5-5
+
+**11:22**
+
+> Hva foreslår du? utulling nå, eller teste først
+
+**11:24**
+
+> Fint, vi gjør det slik da
+
+**15:22**
+
+> Designting:
+> 1. Nå ligger "ta bilder" på en rad under "lim inn tekst" og "last opp pdf". Jeg vil gjerne ha dem på samme.
+> 2. Når jeg la inn flere bilder samtidig fra telefonen, så bør det kanskje komme opp en ekstra melding om at jeg må passe på at de står i riktig rekkefølge. Da kan kanskje boksen "før du tar bildene" byttes ut med "etter at du har lastet opp bildene". Generelt kunne denne boksen stukket seg litt mer ut. Nå er det veldig lett å overse. Kanskje uthev "[før] du tar bildene" litt mer.
+> 3. Syns overgangsanimasjonen- hvor det går fra buddy til B, kunne forsvunnet litt raskere. Kanskje snakk om 0,4s kjappere, etter at det har blitt til en B. Etter at pupillene har forsvunnet kan det også gå bittelitt raskere over til en B.
+> 4. Jeg syns ikke mine forslag om "dette kan jeg", "har hørt om" og "helt nytt" funka så bra. Forslag til endring? Kanskje det burde vært en knapp for "forstår ikke hva handler om", når overskriftene er litt diffuse.
+> 5. Under "se gjennom" burde kanksje ha enda tydeligere forklaring og oppfordring til å lese gjennom.
+> Kanskje noe slikt: "Når du laster opp bilder, hender det at Buddy leser feil. Les gjennom teksten under for å se at den er lik teksten du tok bilde av." Her kunne kanskje buddy-animasjonen sett litt skyldbetynget/ beklagende ut. Pupillene kan peke nedover mot bakken (og bevege seg litt), og kanskje innføre noen øyenbryn som synes gjennom brillene. En slags tolkning av The pensive face emoji (😔) .
+>
+> 6. Lesekortene: Jeg kunne tenkt meg å kun hatt "forrige" og "neste" under kortet, og ved siden av hverandre, slik at det er litt mer intuitiv å trykke på dem. Spørsmålet er da: hva med "må øve mer" og "kan". Kunne de stått over kortet på høyre side, enten ved siden av hverandre eller over/under. Da er det lett å trykke om man holder den med én hånd (høyre).
+>
+> 7. Generelle tanker: Jeg kunne gjerne tenkt meg at vi brukte mer av denne rosafargen som vi har på landingssida, som understreker "leser" gjennom appen.  F.eks. på Oppgaver Bedrift, Quiz: Bedrift osv.
+> Apropos: kunne denne understrekinga, sett litt mer ut som et pennestrøk, eller noe gjort for hånd?
+>
+> 8. Kunne man hatt en "venstrehendt" versjon av plassering av knapper som kan toggles under "konto"?F.eks. da med øvekortene, kunne knappene da ligget på venstre side i stedet for høyre.
+>
+>
+> Ang. dine poeng:
+> - 1: jupp
+> - 2: Ingenting skjedde, den gikk bare raskt videre, og viste ingen B
+> - 3: jupp
+> - 4: jupp
+> - 5: Korrekt, den avbrøt med en gang
+> - 6: Ja!
+
+**21:56**
+
+> Unnskyldende Buddy: B, pennestrøk: A.
+
+<details><summary>Commits i økta (2)</summary>
+
+- `1ba24cb` Logg: utrulling av forkunnskap og tenkeindikator
+- `53dcb41` Design runde 2, bolk 7: fanene på én rad, før/etter-boksen for bildene og gjennomsynsteksten
+
+</details>
+
+---
+
+## 2026-11-19 · økt `cbc96016` · claude-opus-5-5
+
+**14:49**
+
+> gjenoppta
+
+**15:26**
+
+> Gjenta det siste her på norsk
+
+**15:51**
+
+> Bare rull ut.
+> 1: god ide! Gjør endring.
+> 2: Nei, ikke på dette tidspunktet.
+
+<details><summary>Commits i økta (5)</summary>
+
+- `5ed88dc` Design runde 2, bolk 10: rettelser etter gjennomgangen
+- `3820e96` Måling: README-test 19.11 (design runde 2)
+- `aa49f43` Logg: design runde 2
+- `4045ecd` Bildefanen: «Etter at du har valgt bildene» i stedet for «lastet opp»
+- `20f04be` Logg: utrulling av design runde 2
+
+</details>
+
+---
+
+## 2026-11-19 · økt `9429159d` · claude-opus-5-5
+
+**16:15**
+
+> [kommando: /clear]
+
+**16:16**
+
+> Hei, hvordan vil det være å begynne på mappe-løsningen som vi snakket om i starten som en mulig utvidelse?
+
+**16:19**
+
+> Jeg vil gå for B
+
+**16:27**
+
+> godkjenn og fortsett
+
+**22:42**
+
+> Utdyp demotest
+
+**22:57**
+
+> jepp, gjør det
+
+**23:06**
+
+> Rull ut!
+
+**23:13**
+
+> JEg vil alltid ha svar på norsk
+
+**23:17**
+
+> 1,  hva er da forskjellen i praksis?
+> 2., fint enig!
+> 3, Ja, det er fint!
+>
+> Gjør det bare for nye kontoer.
+
+**23:20**
+
+> språk
+
+**23:22**
+
+> Hva sier vilkår og personvernerklæring per nå?
+
+**23:25**
+
+> Ja, skriv utkast
+
+**23:43**
+
+> Innspill: Har skrevet litt om. I tillegg: har vi ikke snakket om å slette tekster etter endt skoleår?
+>
+> vedr. merknader til meg:
+>
+> 1: hvor mye koster det å endre koden?
+> 2: det er greit. I utgangspunktet så er det da bare epost, passord, og tekster jeg da må gi? Og alt dette ligger vel i neon?
+>
+> 3:  Lagt inn forslag.
+> 4: Fint.
+> 5. ok
+
+**23:48**
+
+> Yes, gjør dette!
+
+**23:50**
+
+> språk
+
+**23:51**
+
+> Godkjenn og fortsett
+
+<details><summary>Commits i økta (9)</summary>
+
+- `2a94092` feat: Mapper lett — samle tekster, samlet øving og samlet quiz (FR-50–52)
+- `24b0883` Logg: mapper-lett
+- `f9c16e1` Demotest: steg 13b for Mapper lett, og SM-13
+- `a15fada` Logg: mapper-lett (demotest)
+- `064293b` Logg: utrulling av Mapper lett
+- `9a33ec1` Spesifikasjon og godkjent tekst: vilkår og aldersgrense
+- `0df9ec4` Vilkår og aldersgrense 15 år ved registrering (FR-53)
+- `50d0181` Dokumentasjon: FR-53, kodefunn 28, KI-logg 26 og mutasjonstest 12 av 12
+- `a9f3744` Måling: tilgjengelighet 419 av 419 og README-test 8 av 8 med vilkårene
+
+</details>
+
+---
+
+## 2026-11-20 · økt `9429159d` · claude-opus-5-5
+
+**00:51**
+
+> Kjør utrulling
+
+**00:57**
+
+> Ha gjerne dette rosa "pennestrøket" på "samling" også
+
+**11:43**
+
+> rull ut
+
+<details><summary>Commits i økta (4)</summary>
+
+- `a355819` Logg: utrulling av vilkår og aldersgrense
+- `38244f6` Samlingen: markeringstusjen på overskriften
+- `3759cd3` Logg: design-runde-2 (tusj på Samlingen)
+- `3478cca` Logg: utrulling av tusj på Samlingen
+
+</details>
+
+---
+
+## 2026-11-22 · økt `9429159d` · claude-opus-5-5
+
+**22:19**
+
+> Hei, hva gjenstår nå?
+
+---
+
+## 2026-11-23 · økt `9429159d` · claude-opus-5-5
+
+**11:01**
+
+> Hvordan er kontekstvinduet?
+
+**11:02**
+
+> Okei, da forstetter vi. Jeg går i gang med 1.
+> Hva var koden for registrering?
+> Hvorfor må ios safari testes?
+
+**11:10**
+
+> Er du sikker på det med koden? Jeg får opp at det er feil invitasjonskode, og jeg mente at det var to koder i sving: denne enviroment variablen som skulle være veldig hemmelig, samt en annen en som var en del kortere
+
+**11:13**
+
+> jeg finner ikke den korte
+
+**11:16**
+
+> Okei, endre
+
+**11:18**
+
+> rull ut
+
+**11:22**
+
+> 1: funka.
+> 2: beskjeden om at jeg måtte vente kom opp, men jeg fikk fremdeles lov til å sende inn, og når jeg da skrev riktig så gikk det fint. Kanskje deaktivere formen for en hvis tid?
+
+**11:51**
+
+> Hva menes med VoiceOver?
+
+**11:56**
+
+> VoiceOver funka.
+> da har jeg følgende tanker
+>
+> [innlimt tekst, 1691 tegn, første del:]
+>
+> På "hva vet du om dette fra før"? Kunne vi gjort det om til en glider med tre trinn: Mye, ltt, ingenting ennå? Syns det bare ble så veldig mange div-er og knapper å se på. Og gjerne sentrere skjønner ikke overskriften under. Og gå fra ingenting på venstre side til mye på høyre.
+>
+> På øvekort, kan vi bare ta piler, ikke "forrige" og "neste"? Og "tilbake til mappen, kan godt være øverst, som en del av headeren.
+>
+> I stedet for "Samlingen" øverst, la det stå "Samlinger".
+>
+> Går det an å gjøre slik at når en tekst ligger i en samling, så er det samlingen man først ser på arbeidsbordet, ikke bare den teksten. Slik at man først åpner samlingen, så kan man velge en tekst i samlingen, og så ser det ut som det gjorde før. Det kan gjerne være en visuell indikator som peker på at dette ikke bare er én tekst, men en samling.
+>
+> For stor skjerm, inne på samlinger: hadde det vært mulig å ha en litt mer todelt skjerm (kanskje 30%-70%) hvor  søkefunksjonen og "mine tekster" ligger til venstre, og så kan man se dem litt mer parallelt med mappene, og kanskje til-og-med drag-og-droppe dem inn i riktige mapper?
+>
+> For stor skjerm: øvekortgreiene kunne gjerne tatt opp litt mer av hele skjermen. Nå er det veldig mye luft på sidene, og så blir det nesten litt kompakt på midten. Kan det også gjøres at man kan bytte kort med piltaster, og snu kortet med space?
+> Her kan gjerne "tilbake itl mappen" ligge nede til venstre, men gjerne litt lenger mot venstre og ned (som nevnt mtp. ikke virke for kompakt).
+> I d …
+
+<details><summary>Commits i økta (2)</summary>
+
+- `0636a58` Logg: ny invitasjonskode i prod
+- `2047866` Oppdrag: design runde 3 og innloggingssperre (Arves avgjørelser 23.11)
+
+</details>
+
+---
+
+## 2026-11-23 · økt `1db2d48f` · claude-opus-5-5
+
+**12:02**
+
+> Bygg oppdrag-design-runde-3.md med bmad-build, bolk for bolk.
+
+**12:09**
+
+> Godkjenn og fortsett
+
+**13:01**
+
+> fint! bolk 2!
+
+**13:24**
+
+> Godkjenn og bygg
+
+**14:39**
+
+> Liten pause: Nå fikk jeg mail om at min claude API credi balance er lav, med bare 2,48$ igjen. Hvor er det jeg da skal fylle på, hvor mye har vi brukt, og er dette en løpende kostnad, eller en del av abonnementet?
+
+**14:46**
+
+> Okei, takk. Gå i gang med 2a da?
+
+**14:53**
+
+> Godkjenn og fortsett
+
+**18:28**
+
+> Okei, kan vi gå i gang med nr. 3?
+
+**18:31**
+
+> Jeg må gå fra nå i noen timer. Hvilke godkjenninger må jeg gjøre for at du kan stå å jobbe med 2a, utrulling og 3?
+
+**22:19**
+
+> Har det stoppet opp?
+
+**22:24**
+
+> Okei, skal vi prøve å rulle ut?
+
+**22:36**
+
+> Bør jeg comprimere, cleare eller åpne et nytt vindu før vi går i gang med bolk 4?
+
+**22:36**
+
+> push loggen først du
+
+<details><summary>Commits i økta (21)</summary>
+
+- `5b4d73c` Spec: runde 3, bolk 1 — innloggingssperre med nedtelling
+- `7c55247` Innloggingssperre: 5 forsøk per 60 s, nedtelling i skjemaet
+- `4a41ec9` Mutasjonstest 14 av 14; FR-41 og gjennomgangen oppdatert
+- `592a52d` Sjekker etter innloggingssperren: tilgjengelighet 420/420, demotest 3/3, README 8/8
+- `3c556cd` Sperren: meldingen og nedtellingen som rene funksjoner, med tester
+- `58e7a6a` Sperren etter gjennomgang: tak på 600 s, sekunderFraSvar og kanSende, statusregionen i treet
+- `8fc4433` feat: innloggingssperre med nedtelling (runde 3, bolk 1) — gjennomgått, 14/14
+- `7043a31` Spec: runde 3, bolk 2b — øvekortene og «Samlinger»
+- `024bee8` Øvekortene: piler, tastatur, «Har kontroll»; «Samlinger» (runde 3, bolk 2b)
+- `a7246ee` Øvekortene: rettinger etter review (runde 3, bolk 2b)
+- `561b33e` feat: øvekortene og «Samlinger» (runde 3, bolk 2b) — gjennomgått
+- `2bd6e45` Spec: runde 3, bolk 2a — forkunnskapen som glider
+- `5fef75e` Forkunnskapen som glider (runde 3, bolk 2a)
+- `f8d17dc` Forkunnskapsglideren: rettinger etter review (runde 3, bolk 2a)
+- `113675c` Spec: runde 3, bolk 3 — øvekortene på stor skjerm (godkjent)
+- `5f9881e` feat: forkunnskapen som glider (runde 3, bolk 2a) — gjennomgått
+- `4a22505` Øvekortene på stor skjerm (runde 3, bolk 3)
+- `63f292e` Øvekortene på stor skjerm: rettinger etter review (runde 3, bolk 3)
+- `d73ae02` feat: øvekortene på stor skjerm (runde 3, bolk 3) — gjennomgått
+- `4151a67` Demotest: rapporten sier hvilken testmodus som faktisk ble brukt
+- `278109f` Logg: design-runde-3
+
+</details>
+
+---
+
+## 2026-11-23 · økt `14cbc0a9` · claude-opus-5-5
+
+**22:37**
+
+> [kommando: /clear]
+
+**22:37**
+
+> Bygg bolk 4 i oppdrag-design-runde-3.md med bmad-build, på grenen design-runde-3.
+
+**22:37**
+
+> Sånn, skulle bare skru opp effort. Nå: gå i gang med å bygge bolk 4
+
+**23:53**
+
+> Kjører den fortsatt?
+
+**23:54**
+
+> kjør du
+
+**23:55**
+
+> Vi kjører på med bolk 5 før vi ruller ut
+
+<details><summary>Commits i økta (2)</summary>
+
+- `0b3119f` feat: Samlinger på stor skjerm med dra og slipp (runde 3, bolk 4)
+- `3f8de8c` README-test etter runde 3, bolk 4: 9 av 9
+
+</details>
+
+---
+
+## 2026-11-24 · økt `14cbc0a9` · claude-opus-5-5
+
+**00:00**
+
+> Jeg går og legger meg nå. Kan du godkjenne alt videre som har med bolk 5 å gjøre, og deretter rulle ut både bolk 4 og 5?
+
+**08:08**
+
+> Hvordan ligger vi an?
+
+**08:10**
+
+> Gjør klar til at jeg kan prøve i prod
+
+**09:43**
+
+> Jeg har litt notater her, og så kopierer jeg notatene over fra nettsiden etterpå. Du trenger ikke skrive noe her mellom dem.
+>
+> Når man åpner mappen på arbeidsbordet, så kunne jeg tenkt meg at det var litt tydeligere hva som er hva. Kanskje tekster kunne hatt én farge, quiz én og øvekort én? (evt. den samme for quiz og øvekort)
+>
+> Inne på samlinger kunne jeg gjerne hatt litt mer luft mellom de to områdene.
+>
+> Det bør komme tydeligere frem at det er mulig å dra.
+>
+> Beskjeden når jeg har dratt over tekster til mapper kunne vært enda litt fremhevet.
+>
+> De vanlige knappene er uendret i uteseende  når viften er åpen, men kan ikke trykkes på (ny tekst, arbeidsbord, samlinger, konto). Kanksje disse kunne blitt grået ut, eller fått økt opacity eller noe liknende, slik at det er tydelig at de ikke kan trykkes på?
+>
+> I samling: under "Navn på ny mappe", kan vi fjerne det som står under. Så kan vi føre inn en eksempeltekst i feltet: "Eks. Samfunnsfag: demokrati", og ikke skrive noe om maks-grense, men heller gi beksjed dersom det overskrider 80 tegn.
+
+**09:43**
+
+> [innlimt tekst:]
+>
+> Prodtest runde 3 (bolk 4 og 5), main 002b6ab
+> OK: 1, 2, 3, 4, 5, 8, 9, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24
+> Ikke testet: 10, 25
+> AVVIK 6. Dra fra knappene på raden: Joda, det starter flytting av rad, og legges til i mappene
+> AVVIK 7. Slipp en tekst på søkefeltet: jo, hele lenka til teksten legges til i søkefeltet. (http://lesevenn...)
+> AVVIK 15. Velg et tekstkort: Tror ikke fokus stod noe sted. (kanskje på mappen)
+
+<details><summary>Commits i økta (2)</summary>
+
+- `50fd9d3` feat: arbeidsbordet grupperer etter Mappe (runde 3, bolk 5)
+- `002b6ab` README-test etter runde 3, bolk 5: 9 av 9
 
 </details>

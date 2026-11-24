@@ -12,6 +12,11 @@
  * og under 760 px står de øverst som før (FR-50). En tekst legges i en Mappe
  * med «Legg i mappe» på raden, eller dras til Mappen på stor skjerm
  * (DraTilMappe). Oppsettet står i globals.css (.samling-oppsett).
+ *
+ * Runde 3, bolk 6 (prodtesten 24.11): mer luft mellom kolonnene, og når
+ * draget er på, står «Dra en tekst til en mappe.» over tekstene (Drahint),
+ * og hver rad har grep-ikonet. Tittellenken er Tekstlenke, som ikke er
+ * dragbar selv mens draget er på.
  */
 
 import Link from "next/link";
@@ -21,7 +26,7 @@ import { tilgang } from "../../data/konto";
 import { listMapper, MAPPEGRENSER, mapperPerTekst, type Mapperad } from "../../data/mapper";
 import { filtrerTekster, tolkSortering } from "../../data/tekstliste";
 import { leggTekstIMappe, opprettMappeHandling } from "../handlinger";
-import { DragbarTekst, DraTilMappe, Slippmaal, Slippmelding } from "../komponenter/DraTilMappe";
+import { DragbarTekst, Drahint, DraTilMappe, Slippmaal, Slippmelding, Tekstlenke } from "../komponenter/DraTilMappe";
 import { LeggIMappeSkjema, NyMappeSkjema } from "../komponenter/Mappeskjemaer";
 import { Hentefeil } from "../komponenter/Hentefeil";
 import { KNAPP_PRIMAER, KNAPP_SEKUNDAER } from "../komponenter/knapper";
@@ -137,45 +142,48 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
                       </Link>
                     </p>
                   ) : (
-                    <ul className="mt-8 divide-y divide-kant border-y border-kant">
-                      {tekster.map((b) => {
-                        const steg = nesteSteg(b, konto);
-                        const med = medlemskap.get(b.id) ?? [];
-                        return (
-                          <DragbarTekst
-                            key={b.id}
-                            tekstId={b.id}
-                            tittel={b.tittel}
-                            className="tekstrad flex flex-wrap items-start justify-between gap-x-6 gap-y-2 py-5"
-                          >
-                            <div className="min-w-0 basis-80 grow">
-                              <h2 className="text-[1.5rem] [overflow-wrap:anywhere]">
-                                <Link href={steg.href} aria-describedby={`steg-${b.id}`} className={LENKE}>
-                                  {b.tittel}
-                                </Link>
-                              </h2>
-                              <p className="mt-1 text-dempet">
-                                {tilstandsord(b.tilstand)} · lagt inn {DATO.format(b.opprettet)}
-                              </p>
-                              <p id={`steg-${b.id}`} className="mt-1">
-                                {steg.tekst}
-                              </p>
-                            </div>
-                            <div className="tekstrad-knapper flex min-w-0 max-w-full flex-col items-start">
-                              {mapper.length > 0 && (
-                                <LeggIMappeSkjema
-                                  handling={leggTekstIMappe}
-                                  tekstId={b.id}
-                                  tittel={b.tittel}
-                                  mapper={mapper.map((m) => ({ id: m.id, tittel: m.tittel, erMed: med.includes(m.id) }))}
-                                />
-                              )}
-                              <SlettTekstKnapp tekstId={b.id} tittel={b.tittel} />
-                            </div>
-                          </DragbarTekst>
-                        );
-                      })}
-                    </ul>
+                    <>
+                      <Drahint />
+                      <ul className="tekstliste mt-8 divide-y divide-kant border-y border-kant">
+                        {tekster.map((b) => {
+                          const steg = nesteSteg(b, konto);
+                          const med = medlemskap.get(b.id) ?? [];
+                          return (
+                            <DragbarTekst
+                              key={b.id}
+                              tekstId={b.id}
+                              tittel={b.tittel}
+                              className="tekstrad flex flex-wrap items-start justify-between gap-x-6 gap-y-2 py-5"
+                            >
+                              <div className="min-w-0 basis-80 grow">
+                                <h2 className="text-[1.5rem] [overflow-wrap:anywhere]">
+                                  <Tekstlenke href={steg.href} aria-describedby={`steg-${b.id}`} className={LENKE}>
+                                    {b.tittel}
+                                  </Tekstlenke>
+                                </h2>
+                                <p className="mt-1 text-dempet">
+                                  {tilstandsord(b.tilstand)} · lagt inn {DATO.format(b.opprettet)}
+                                </p>
+                                <p id={`steg-${b.id}`} className="mt-1">
+                                  {steg.tekst}
+                                </p>
+                              </div>
+                              <div className="tekstrad-knapper flex min-w-0 max-w-full flex-col items-start">
+                                {mapper.length > 0 && (
+                                  <LeggIMappeSkjema
+                                    handling={leggTekstIMappe}
+                                    tekstId={b.id}
+                                    tittel={b.tittel}
+                                    mapper={mapper.map((m) => ({ id: m.id, tittel: m.tittel, erMed: med.includes(m.id) }))}
+                                  />
+                                )}
+                                <SlettTekstKnapp tekstId={b.id} tittel={b.tittel} />
+                              </div>
+                            </DragbarTekst>
+                          );
+                        })}
+                      </ul>
+                    </>
                   )}
                 </>
               )}

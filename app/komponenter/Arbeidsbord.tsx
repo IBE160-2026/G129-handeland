@@ -38,6 +38,12 @@
  * Velges en Tekst, viser dialogen dens fem aktivitetskort med «Tilbake til
  * mappen», og fokus går til det første aktivitetskortet; tilbake går fokus
  * til tekstkortet eleven kom fra. Ellers gjelder de samme reglene.
+ *
+ * Runde 3, bolk 6 (prodtesten 24.11): fokus som koden flytter (åpne, bytte
+ * nivå, lukke), får fokusringen også etter et museklikk (`flyttFokus`). I mappeviften
+ * har tekstkortene en lilla flate og en stripe, og de samlede kortene en
+ * rosa flate og dobbel kant (globals.css), i tillegg til teksten. Mens
+ * viften er åpen, er topplinjen `inert` og dempet (globals.css, header[inert]).
  */
 
 import Link from "next/link";
@@ -100,6 +106,19 @@ function antallTekster(n: number): string {
 
 function paabegynt(t: Visningsbunke): string {
   return `${t.framdrift.filter(Boolean).length} av ${t.framdrift.length} påbegynt`;
+}
+
+/**
+ * Flytter fokus og gir det fokusringen også etter et museklikk, da
+ * nettleseren ikke gir `:focus-visible` til fokus koden flytter (prodtesten
+ * 24.11, punkt 15). Merket (globals.css, data-fokus-flyttet) står til fokus
+ * forlater elementet.
+ */
+function flyttFokus(e: HTMLElement | null | undefined, valg?: FocusOptions) {
+  if (!e) return;
+  e.dataset.fokusFlyttet = "";
+  e.addEventListener("blur", () => delete e.dataset.fokusFlyttet, { once: true });
+  e.focus(valg);
 }
 
 /** Usann på serveren og under hydrering, sann når skriptet kjører. */
@@ -254,15 +273,15 @@ export function Arbeidsbord({
     }
     if (!v.classList.contains("klar")) {
       v.classList.add("klar");
-      v.querySelector<HTMLElement>(FOERSTE_KORT)?.focus({ preventScroll: true });
+      flyttFokus(v.querySelector<HTMLElement>(FOERSTE_KORT), { preventScroll: true });
       // Arket ligger fast nederst og ruller selv; siden skal ikke flytte seg.
       if (oppsett.modus !== "ark") senter.scrollIntoView({ block: "nearest" });
     } else if (nyttFokus.current) {
       // Nytt nivå i en Mappe: det første aktivitetskortet, eller tekstkortet eleven kom fra.
       const { tekst } = nyttFokus.current;
       nyttFokus.current = null;
-      const maal = tekst !== null ? v.querySelector<HTMLElement>(`[data-tekst="${CSS.escape(tekst)}"]`) : null;
-      (maal ?? v.querySelector<HTMLElement>(FOERSTE_KORT))?.focus({ preventScroll: true });
+      const maal = (tekst !== null ? v.querySelector<HTMLElement>(`[data-tekst="${CSS.escape(tekst)}"]`) : null) ?? v.querySelector<HTMLElement>(FOERSTE_KORT);
+      flyttFokus(maal, { preventScroll: true });
       if (oppsett.modus !== "ark") senter.scrollIntoView({ block: "nearest" });
     }
   }, [apen, oppsett]);
@@ -326,7 +345,7 @@ export function Arbeidsbord({
   // Fokus tilbake til bunkens knapp når viften lukkes.
   useEffect(() => {
     if (apen !== null || tilbake.current === null) return;
-    knapper.current.get(tilbake.current)?.focus();
+    flyttFokus(knapper.current.get(tilbake.current));
     tilbake.current = null;
   }, [apen]);
 

@@ -51,6 +51,22 @@
  *     til mappen»; 320 px og 1280 px med 200 % tekst uten sidelengs rulling;
  *     axe i lys og mørk modus på begge nivåene. Vifte-, ark- og
  *     rotasjonssjekkene lenger ned åpner «EM-bølger» via mappen
+ *   - runde 3, bolk 6 (24.11, prodtesten): uten mapper ingen dra-tegn; «Ny
+ *     mappe» har plassholder og ingen hjelpetekst eller maxlength, og 81 tegn
+ *     eller mer gir aria-invalid og meldingen med antallet (statusregionen
+ *     får «Navnet er for langt.» én gang), og serveren avviser det likevel
+ *     sendte navnet. På 1280 px grep-ikonet og «Dra en tekst til en mappe.»,
+ *     4 rem mellom kolonnene (3 rem på 760 px), markeringsflaten ved hover og
+ *     tittellenken med draggable=false; ekte musedrag fra «Legg i mappe»,
+ *     «Legg i mappen» og «Slett» endrer ingenting (punkt 6), og tittellenken
+ *     dratt til søkefeltet og mappenavnfeltet setter ingenting inn (punkt 7,
+ *     med en ekstra tekst lagt rett i databasen og tatt bort). Meldingen
+ *     etter slipp og «Legg i mappe» står i en fremhevet boks. I mappeviften
+ *     har tekstkortet lilla flate og stripe, de samlede kortene rosa flate og
+ *     dobbel kant, og tekstens fem kort er uendret; museklikk på tekstkortet
+ *     og på «Tilbake til mappen» gir fokus med synlig ring (punkt 15); og
+ *     topplinjen er dempet og inert mens viften er åpen, også i
+ *     kontrastmodus. Axe i lys og mørk modus
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -1002,11 +1018,105 @@ try {
     draUten === "av" && (await pc.locator("main summary", { hasText: "Legg i mappe" }).count()) === 0 && (await pc.locator("main [draggable]").count()) === 0,
     `data-dra=${draUten}`,
   );
+  // Runde 3, bolk 6 (24.11): uten mapper finnes ingen dra-tegn.
+  {
+    const tegn = {
+      grep: await pc.locator("main .tekstrad-grep").count(),
+      setning: await pc.getByText("Dra en tekst til en mappe.").count(),
+    };
+    sjekk("bolk 6 (24.11): uten mapper finnes ingen dra-tegn (grep-ikon eller «Dra en tekst til en mappe.»)", tegn.grep === 0 && tegn.setning === 0, JSON.stringify(tegn));
+  }
+  // Runde 3, bolk 6: navnefeltet tar imot et for langt navn og sier fra. Bare
+  // «Navnet er for langt.» står i statusregionen, så den leses én gang, ikke
+  // for hvert tegn. Sendes skjemaet likevel, avviser serveren navnet.
+  {
+    const felt = pc.locator("#mapper input[name=tittel]");
+    const skjema = {
+      plassholder: await felt.getAttribute("placeholder"),
+      maxLength: await felt.getAttribute("maxlength"),
+      hjelp: await pc.locator("#mapper").getByText(/For eksempel faget eller prøven/).count(),
+    };
+    sjekk(
+      "bolk 6: «Ny mappe» har plassholderen «Eks. Samfunnsfag: demokrati», ingen hjelpetekst og ingen maxlength",
+      skjema.plassholder === "Eks. Samfunnsfag: demokrati" && skjema.maxLength === null && skjema.hjelp === 0,
+      JSON.stringify(skjema),
+    );
+    await felt.fill("x".repeat(80));
+    const ved80 = await felt.getAttribute("aria-invalid");
+    // Teller hver gang statusregionen får ny tekst.
+    await pc.evaluate(() => {
+      const region = document.querySelector("#mapper .navnelengde [role=status]");
+      window.__lengdemeldinger = [];
+      window.__lengdevakt = new MutationObserver(() => {
+        const t = region.textContent;
+        if (t && t !== window.__lengdemeldinger.at(-1)) window.__lengdemeldinger.push(t);
+      });
+      window.__lengdevakt.observe(region, { subtree: true, childList: true, characterData: true });
+    });
+    await felt.press("End");
+    await felt.pressSequentially("yzå");
+    const lang = await pc.evaluate(() => {
+      const f = document.querySelector("#mapper input[name=tittel]");
+      const beskrivelse = document.getElementById(f.getAttribute("aria-describedby") ?? "");
+      window.__lengdevakt.disconnect();
+      return { verdi: f.value.length, ugyldig: f.getAttribute("aria-invalid"), beskrivelse: beskrivelse?.textContent ?? null, opplest: window.__lengdemeldinger };
+    });
+    sjekk(
+      "bolk 6: 81 tegn og mer: feltet tar imot teksten, er aria-invalid, og meldingen sier at navnet er for langt og hvor mange tegn det har",
+      ved80 === null && lang.verdi === 83 && lang.ugyldig === "true" && lang.beskrivelse?.startsWith("Navnet er for langt.") && lang.beskrivelse.includes("83 tegn"),
+      JSON.stringify(lang),
+    );
+    sjekk(
+      "bolk 6: statusregionen får «Navnet er for langt.» én gang, ikke for hvert tegn",
+      JSON.stringify(lang.opplest) === JSON.stringify(["Navnet er for langt."]),
+      JSON.stringify(lang.opplest),
+    );
+    await axe(pc, "samling, for langt mappenavn");
+    await pc.click("#mapper button[type=submit]");
+    const avvist = await pc
+      .locator("#mapper [role=alert]", { hasText: "Navnet er på 83 tegn." })
+      .waitFor({ timeout: 30000 })
+      .then(() => true, () => false);
+    sjekk(
+      "bolk 6: sendes et for langt navn likevel, avviser serveren det (MAPPE_AVVIST.langTittel), og ingen mappe lages",
+      avvist && new URL(pc.url()).pathname === "/samling",
+      pc.url(),
+    );
+    // Etter avvisningen står teksten eleven skal korte ned, og meldingen om lengden.
+    const etterAvvisning = await pc.evaluate(() => {
+      const f = document.querySelector("#mapper input[name=tittel]");
+      return { verdi: f.value.length, ugyldig: f.getAttribute("aria-invalid"), melding: document.getElementById(f.getAttribute("aria-describedby") ?? "")?.textContent ?? null };
+    });
+    sjekk(
+      "bolk 6: etter avvisningen står det lange navnet fortsatt i feltet, med aria-invalid og samme lengdemelding",
+      etterAvvisning.verdi === 83 && etterAvvisning.ugyldig === "true" && etterAvvisning.melding === lang.beskrivelse,
+      JSON.stringify(etterAvvisning),
+    );
+    await pc.goto(`${APP}/samling`);
+  }
   await pc.fill("#mapper input[name=tittel]", "Naturfag");
   await pc.click("#mapper button[type=submit]");
   await pc.waitForURL(/\/mappe\/[0-9a-f-]{36}$/, { timeout: 60000 });
   const mappeUrl = pc.url();
   await axe(pc, "mappe uten tekster");
+  // Runde 3, bolk 6: «Gi mappen nytt navn» starter med mappenavnet og sier fra om et for langt navn.
+  {
+    await pc.locator("main summary", { hasText: "Gi mappen nytt navn" }).click();
+    const felt = pc.locator("main details input[name=tittel]");
+    const start = await felt.inputValue();
+    await felt.fill("y".repeat(81));
+    const nytt = await pc.evaluate(() => {
+      const f = document.querySelector("main details input[name=tittel]");
+      const beskrivelse = document.getElementById(f.getAttribute("aria-describedby") ?? "");
+      return { ugyldig: f.getAttribute("aria-invalid"), beskrivelse: beskrivelse?.textContent ?? null, status: beskrivelse?.querySelector("[role=status]")?.textContent ?? null };
+    });
+    sjekk(
+      "bolk 6: «Gi mappen nytt navn» starter med mappenavnet, og 81 tegn gir aria-invalid, lengdemeldingen og «Navnet er for langt.» i statusregionen",
+      start === "Naturfag" && nytt.ugyldig === "true" && nytt.beskrivelse?.includes("81 tegn") && nytt.status === "Navnet er for langt.",
+      JSON.stringify({ start, ...nytt }),
+    );
+    await pc.goto(mappeUrl);
+  }
   await pc.click("main button:has-text('Legg til')");
   await pc.locator("main h3 a", { hasText: "EM-bølger" }).waitFor();
   sjekk("FR-50: teksten ligger i mappen", (await pc.locator("main h3 a", { hasText: "EM-bølger" }).count()) === 1);
@@ -1098,9 +1208,132 @@ try {
     sjekk("bolk 4, 1280 px: tekstraden er dragbar når eleven har mapper", (await rad.getAttribute("draggable")) === "true");
     sjekk("bolk 4: «Prøve» og «Eksamen» starter tomme", (await antall("Prøve")) === "0 tekster" && (await antall("Eksamen")) === "0 tekster");
 
-    // Dra med musen: slippmålet markeres med kant, skygge og tekst mens noe er over det.
+    /* Runde 3, bolk 6 (prodtesten 24.11): rettinger og dra-tegn ---------- */
+    {
+      const tegn = await pc.evaluate(() => {
+        const rader = [...document.querySelectorAll("main li.tekstrad[draggable=true]")];
+        const hint = document.querySelector(".samling-tekster p.drahint");
+        const liste = document.querySelector(".samling-tekster ul.tekstliste");
+        return {
+          rader: rader.length,
+          grep: rader.every((li) => {
+            const g = li.querySelector(":scope > .tekstrad-grep");
+            return !!g && g.getAttribute("aria-hidden") === "true" && g.textContent.trim() === "⠿" && g.getBoundingClientRect().right <= li.querySelector("h2").getBoundingClientRect().left + 1;
+          }),
+          setning: hint?.textContent.replace(/\s+/g, " ").trim() ?? null,
+          overTekstene: !!hint && !!liste && hint.getBoundingClientRect().bottom <= liste.getBoundingClientRect().top,
+          gap: parseFloat(getComputedStyle(document.querySelector(".samling-oppsett")).columnGap) / parseFloat(getComputedStyle(document.documentElement).fontSize),
+          lenke: rader[0]?.querySelector("h2 a")?.getAttribute("draggable") ?? null,
+        };
+      });
+      sjekk(
+        "bolk 6 (24.11), 1280 px: hver dragbar rad har grep-ikonet (⠿, aria-hidden) til venstre, og «Dra en tekst til en mappe.» står over tekstene",
+        tegn.rader > 0 && tegn.grep && tegn.setning === "⠿ Dra en tekst til en mappe." && tegn.overTekstene,
+        JSON.stringify(tegn),
+      );
+      sjekk("bolk 6, 1280 px: 4 rem mellom kolonnene", tegn.gap === 4, `${tegn.gap} rem`);
+      sjekk("bolk 6: tittellenken er ikke dragbar selv mens draget er på (draggable=false)", tegn.lenke === "false", `${tegn.lenke}`);
+      // Hover gir markeringsflaten (overgangen er 120 ms).
+      const flate = () => rad.evaluate((li) => getComputedStyle(li).backgroundColor);
+      const foer = await flate();
+      await rad.hover({ position: { x: 8, y: 8 } });
+      await pc.waitForTimeout(400);
+      const over = await flate();
+      const markering = await pc.evaluate(() => {
+        const p = document.createElement("p");
+        p.style.background = "var(--lb-markering)";
+        document.body.append(p);
+        const farge = getComputedStyle(p).backgroundColor;
+        p.remove();
+        return farge;
+      });
+      sjekk("bolk 6: en dragbar rad får markeringsflaten ved hover", over === markering && foer !== markering, `${foer} → ${over}`);
+      await pc.mouse.move(0, 0);
+
+      // Punkt 6: et ekte musedrag som starter på knappene, flytter ikke raden.
+      const draFra = async (kilde, maal) => {
+        const a = await kilde.boundingBox();
+        const b = await maal.boundingBox();
+        await pc.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
+        await pc.mouse.down();
+        await pc.mouse.move(a.x + a.width / 2 + 12, a.y + a.height / 2 + 6, { steps: 3 });
+        await pc.mouse.move(b.x + 20, b.y + 20, { steps: 10 });
+        await pc.mouse.move(b.x + 24, b.y + 22, { steps: 2 });
+        await pc.mouse.up();
+        await pc.waitForTimeout(800);
+      };
+      /**
+       * Registrerer hvert dragstart på siden (etter Reacts behandling): om det
+       * ble avbrutt, og hvilke typer draget bar. Viser at draFra faktisk
+       * starter et drag, så sjekkene under ikke er grønne av seg selv.
+       */
+      const registrerDrag = () =>
+        pc.evaluate(() => {
+          window.__drag = [];
+          window.addEventListener("dragstart", (e) => window.__drag.push({ avbrutt: e.defaultPrevented, typer: [...e.dataTransfer.types] }));
+        });
+      const dragene = () => pc.evaluate(() => window.__drag);
+      await registrerDrag();
+      const summaryRad = rad.locator("summary", { hasText: "Legg i mappe" });
+      await draFra(summaryRad, kort("Eksamen"));
+      await draFra(rad.locator(".tekstrad-knapper button", { hasText: /^Slett/ }), kort("Eksamen"));
+      await summaryRad.click();
+      await draFra(rad.locator("button[type=submit]", { hasText: "Legg i mappen" }), kort("Eksamen"));
+      await summaryRad.click();
+      await pc.waitForTimeout(1500);
+      const etterKnapper = {
+        drag: await dragene(),
+        antall: await antall("Eksamen"),
+        melding: (await pc.locator(".slippmelding").textContent())?.trim() ?? "",
+        bekreftelse: await rad.locator("[role=alertdialog]").count(),
+        dras: await pc.locator(".tekstrad-dras").count(),
+      };
+      sjekk(
+        "bolk 6 (punkt 6): et musedrag fra «Legg i mappe», «Legg i mappen» og «Slett» til en mappe endrer ingenting",
+        etterKnapper.drag.length === 3 && etterKnapper.drag.every((d) => d.avbrutt) &&
+          etterKnapper.antall === "0 tekster" && etterKnapper.melding === "" && etterKnapper.bekreftelse === 0 && etterKnapper.dras === 0,
+        JSON.stringify(etterKnapper),
+      );
+
+      // Punkt 7: tittellenken dratt til søkefeltet eller mappenavnfeltet setter
+      // ingenting inn. Søkefeltet vises bare med to tekster, så en tekst til
+      // legges rett i databasen og tas bort etterpå.
+      const pool = new pg.Pool({ connectionString: DB, max: 1 });
+      let ekstra = null;
+      try {
+        const [{ id: kontoId }] = (await pool.query(`select id from "user" where email = $1`, [EPOST])).rows;
+        ekstra = (
+          await pool.query(
+            `insert into tekst (konto_id, tittel, raatekst, redigert_tekst, vei, tilstand, overskrifter_godkjent)
+             values ($1, 'Dra-prøve', $2, $2, 'liming', 'innlest', now()) returning id`,
+            [kontoId, "Et kort avsnitt om dra og slipp."],
+          )
+        ).rows[0].id;
+        await pc.goto(`${APP}/samling`);
+        await pc.locator("main [data-dra='på']").waitFor({ timeout: 30000 });
+        const lenke = rad.locator("h2 a");
+        await registrerDrag();
+        await draFra(lenke, pc.locator("#sok"));
+        await draFra(lenke, pc.locator("#mapper input[name=tittel]"));
+        const felt = { drag: await dragene(), sok: await pc.locator("#sok").inputValue(), mappenavn: await pc.locator("#mapper input[name=tittel]").inputValue(), antall: await antall("Eksamen") };
+        sjekk(
+          "bolk 6 (punkt 7): tittellenken dratt til søkefeltet og mappenavnfeltet setter ingenting inn i feltene",
+          felt.drag.length === 2 &&
+            felt.drag.every((d) => !d.avbrutt && JSON.stringify(d.typer) === JSON.stringify(["application/x-lesebuddy-tekst"])) &&
+            felt.sok === "" && felt.mappenavn === "" && felt.antall === "0 tekster",
+          JSON.stringify(felt),
+        );
+      } finally {
+        if (ekstra) await pool.query(`delete from tekst where id = $1`, [ekstra]).catch(() => {});
+        await pool.end();
+      }
+      await pc.goto(`${APP}/samling`);
+      await rad.and(pc.locator("[draggable=true]")).waitFor({ timeout: 15000 }).catch(() => {});
+    }
+
+    // Dra med musen fra tittellenken: slippmålet markeres med kant, skygge og tekst mens noe er over det.
     const proeveUrl = await kort("Prøve").locator("a").getAttribute("href");
-    await rad.locator("h2").hover();
+    await rad.locator("h2 a").hover();
     await pc.mouse.down();
     await kort("Prøve").hover();
     await kort("Prøve").hover({ position: { x: 20, y: 20 } });
@@ -1120,6 +1353,25 @@ try {
       .then(() => true, () => false);
     await pc.waitForFunction(() => [...document.querySelectorAll("#mapper li.mappekort")].some((k) => /^Prøve$/.test(k.querySelector("a")?.textContent ?? "") && k.querySelector(".mappekort-antall")?.textContent === "1 tekst"), null, { timeout: 30000 }).catch(() => {});
     sjekk("bolk 4: dra «EM-bølger» til «Prøve» gir status-melding, og antallet øker til 1", lagt && (await antall("Prøve")) === "1 tekst", `${await antall("Prøve")}`);
+    /** Bolk 6: meldingen står i en fremhevet boks (ikon, fet skrift, kant og flate). */
+    const boksen = (region) =>
+      region.evaluate((p) => {
+        const s = getComputedStyle(p);
+        return {
+          rolle: p.getAttribute("role"),
+          kant: `${s.borderTopStyle} ${parseFloat(s.borderTopWidth)}`,
+          flate: s.backgroundColor !== "rgba(0, 0, 0, 0)",
+          fet: parseInt(s.fontWeight, 10) >= 700,
+          ikon: p.querySelector(".meldingsboks-ikon[aria-hidden=true]")?.textContent ?? null,
+          slag: p.dataset.slag ?? null,
+        };
+      });
+    const slippboks = await boksen(pc.locator(".slippmelding"));
+    sjekk(
+      "bolk 6: meldingen etter slippet står i en fremhevet boks (role=status, ikon, fet skrift, kant og flate)",
+      slippboks.rolle === "status" && slippboks.kant === "solid 2" && slippboks.flate && slippboks.fet && slippboks.ikon === "✓",
+      JSON.stringify(slippboks),
+    );
     // Allerede med: ingenting endres, og meldingen sier det.
     // Fra øvre venstre hjørne: midten av den stablede raden kan være knappene, som ikke starter et drag.
     await rad.dragTo(kort("Prøve"), { sourcePosition: { x: 8, y: 8 } });
@@ -1128,6 +1380,12 @@ try {
       .waitFor({ timeout: 30000 })
       .then(() => true, () => false);
     sjekk("bolk 4: dra til en mappe teksten alt ligger i, endrer ingenting og sier det", altMed && (await antall("Prøve")) === "1 tekst");
+    const altMedBoks = await boksen(pc.locator(".slippmelding"));
+    sjekk(
+      "bolk 6: «alt med»-meldingen har ikonet «i» og dempet stil (data-slag=uendret, vanlig vekt)",
+      altMedBoks.ikon === "i" && altMedBoks.slag === "uendret" && !altMedBoks.fet && altMedBoks.kant === "solid 2",
+      JSON.stringify(altMedBoks),
+    );
 
     // «Legg i mappe» med tastaturet: summary → Enter → Tab til valget → Tab til knappen → Enter.
     await pc.goto(`${APP}/samling`);
@@ -1161,6 +1419,12 @@ try {
       "bolk 4: «Legg i mappe» med bare tastaturet: valget, knappen og meldingen nås, og «Eksamen» får 1 tekst",
       valgFokus && knappFokus && knappLagt && (await antall("Eksamen")) === "1 tekst",
       JSON.stringify({ valgFokus, knappFokus, knappLagt, antall: await antall("Eksamen") }),
+    );
+    const knappeboks = await boksen(rad.locator(".meldingsboks", { hasText: "ligger nå i «Eksamen»" }));
+    sjekk(
+      "bolk 6: meldingen fra «Legg i mappe» står i den samme fremhevede boksen",
+      knappeboks.rolle === "status" && knappeboks.kant === "solid 2" && knappeboks.flate && knappeboks.fet && knappeboks.ikon === "✓",
+      JSON.stringify(knappeboks),
     );
     await axe(pc, "samling med mapper og åpen «Legg i mappe»");
     // Mappesiden viser teksten som ble dratt dit.
@@ -1210,6 +1474,7 @@ try {
           tekstbredde: Math.round(t.width),
           toKolonner: getComputedStyle(document.querySelector(".samling-oppsett")).display === "grid" && m.left >= t.right,
           sidelengs: document.documentElement.scrollWidth > window.innerWidth,
+          gap: parseFloat(getComputedStyle(document.querySelector(".samling-oppsett")).columnGap) / parseFloat(getComputedStyle(document.documentElement).fontSize),
         };
       });
       sjekk(
@@ -1217,6 +1482,7 @@ try {
         dra === "på" && stor.toKolonner && !stor.sidelengs,
         JSON.stringify({ dra, ...stor }),
       );
+      sjekk("bolk 6, 760 px: 3 rem mellom kolonnene", stor.gap === 3, `${stor.gap} rem`);
       await ingenKlipping(s, "samling 760 px, 200 % tekst");
       await s.context().close();
     }
@@ -1416,7 +1682,114 @@ try {
     await mappeknapp.click(HJOERNE);
     await dialog.waitFor();
     sjekk("bolk 5: viften åpner alltid på mappens kort", (await dialog.locator(".vifte-tilbake").count()) === 0 && (await dialog.locator("button.kort-tekst").count()) === 1);
-    await pc.keyboard.press("Escape");
+
+    /* Runde 3, bolk 6 (prodtesten 24.11) --------------------------------- */
+    await pc.waitForTimeout(1000);
+    // Kortfargene: to farger, bare i mappeviften, og formen sier det også (stripe og dobbel kant).
+    const fargeAv = (uttrykk) =>
+      pc.evaluate((u) => {
+        const p = document.createElement("p");
+        p.style.background = u;
+        document.body.append(p);
+        const f = getComputedStyle(p).backgroundColor;
+        p.remove();
+        return f;
+      }, uttrykk);
+    const [lilla, rosa, flate] = [await fargeAv("var(--lb-lilla)"), await fargeAv("var(--lb-markering)"), await fargeAv("var(--lb-flate)")];
+    const mappekortene = await dialog.evaluate((d) =>
+      [...d.querySelectorAll(".vifte-kort > li > .kort")].map((k) => {
+        const s = getComputedStyle(k);
+        return { slag: k.classList.contains("kort-tekst") ? "tekst" : k.classList.contains("kort-samlet") ? "samlet" : "annet", flate: s.backgroundColor, start: `${s.borderLeftStyle} ${parseFloat(s.borderLeftWidth)}`, kant: s.borderTopStyle };
+      }),
+    );
+    sjekk(
+      "bolk 6 (24.11): i mappeviften har tekstkortet lilla flate og stripe, og de samlede kortene rosa flate og dobbel kant",
+      mappekortene.length === 3 &&
+        mappekortene[0].slag === "tekst" && mappekortene[0].flate === lilla && mappekortene[0].start === "solid 6" &&
+        mappekortene.slice(1).every((k) => k.slag === "samlet" && k.flate === rosa && k.kant === "double"),
+      JSON.stringify({ lilla, rosa, mappekortene }),
+    );
+    // Topplinjen er dempet og inert mens viften er åpen, også i kontrastmodus.
+    const topplinje = () =>
+      pc.evaluate(() => {
+        const h = document.querySelector("body > header");
+        const lenke = h.querySelector(".meny-app a") ?? h.querySelector("nav a");
+        // Systemfargen GrayText slik nettleseren løser den akkurat nå.
+        const p = document.createElement("p");
+        p.style.color = "GrayText";
+        p.style.forcedColorAdjust = "none";
+        document.body.append(p);
+        const graa = getComputedStyle(p).color;
+        p.remove();
+        return { inert: h.inert, opasitet: parseFloat(getComputedStyle(h).opacity), peker: getComputedStyle(lenke).cursor, farge: getComputedStyle(lenke).color, graa };
+      });
+    const aapen = await topplinje();
+    await pc.emulateMedia({ forcedColors: "active" });
+    await pc.waitForTimeout(500); // opasiteten har en overgang på 0,3 s
+    const aapenTvungen = await topplinje();
+    await pc.emulateMedia({ forcedColors: "none" });
+    await pc.waitForTimeout(500);
+    sjekk(
+      "bolk 6: mens viften er åpen, er ordmerket og menyen dempet (opasitet, vanlig peker) og inert",
+      aapen.inert && aapen.opasitet <= 0.5 && aapen.peker === "default",
+      JSON.stringify(aapen),
+    );
+    sjekk(
+      "bolk 6, kontrastmodus: topplinjen er inert og dempet med GrayText i menyen, uten nedsatt opasitet",
+      aapenTvungen.inert && aapenTvungen.opasitet === 1 && aapenTvungen.farge === aapenTvungen.graa,
+      JSON.stringify(aapenTvungen),
+    );
+    // Punkt 15: med musen får fokuset som flyttes ved nivåbytte, synlig fokusring.
+    const fokusring = () =>
+      pc.evaluate(() => {
+        const e = document.activeElement;
+        const s = getComputedStyle(e);
+        return {
+          kort: e.closest(".vifte-kort") ? (e.querySelector(".kort-navn")?.textContent.trim() ?? "") : null,
+          tekstkort: e.classList.contains("kort-tekst"),
+          bunke: e.classList.contains("bunke-knapp") ? e.textContent.trim() : null,
+          ring: `${s.outlineStyle} ${parseFloat(s.outlineWidth)}`,
+        };
+      });
+    // Viften ble åpnet med et museklikk på mappebunken: det første kortet har ringen.
+    const etterAapning = await fokusring();
+    sjekk(
+      "bolk 6 (punkt 15): åpnet med musen har det første kortet i viften fokus med synlig fokusring",
+      etterAapning.tekstkort && etterAapning.ring === "solid 3" && (await synligFokus()),
+      JSON.stringify(etterAapning),
+    );
+    await dialog.locator("button.kort-tekst", { hasText: "EM-bølger" }).click();
+    await dialog.locator(".vifte-tilbake").waitFor();
+    await pc.waitForTimeout(1000);
+    const etterKlikk = await fokusring();
+    const aktivitetene = await dialog.evaluate((d) => [...d.querySelectorAll(".vifte-kort > li > .kort")].map((k) => getComputedStyle(k).backgroundColor));
+    sjekk(
+      "bolk 6 (punkt 15): museklikk på tekstkortet gir fokus på det første aktivitetskortet, med synlig fokusring",
+      etterKlikk.kort?.startsWith("Teksten") && etterKlikk.ring === "solid 3" && (await synligFokus()),
+      JSON.stringify(etterKlikk),
+    );
+    sjekk("bolk 6: tekstens fem aktivitetskort har uendret flate", aktivitetene.length === 5 && aktivitetene.every((f) => f === flate), JSON.stringify(aktivitetene));
+    await dialog.locator(".vifte-tilbake").click();
+    await dialog.locator(".vifte-tilbake").waitFor({ state: "detached" });
+    await pc.waitForTimeout(800);
+    const etterTilbakeKlikk = await fokusring();
+    sjekk(
+      "bolk 6 (punkt 15): museklikk på «Tilbake til mappen» gir fokus på tekstkortet, med synlig fokusring",
+      etterTilbakeKlikk.tekstkort && etterTilbakeKlikk.ring === "solid 3" && (await synligFokus()),
+      JSON.stringify(etterTilbakeKlikk),
+    );
+    // Lukket med musen: fokus tilbake på mappebunken, med ringen.
+    await pc.click("[role=dialog] button:has-text('Legg sammen')");
+    await dialog.waitFor({ state: "detached" });
+    await pc.waitForTimeout(500);
+    const etterLukking = await fokusring();
+    sjekk(
+      "bolk 6 (punkt 15): lukket med «Legg sammen» og musen går fokus til mappebunken, med synlig fokusring",
+      etterLukking.bunke === "Vis tekstene i mappen Naturfag" && etterLukking.ring === "solid 3" && (await synligFokus()),
+      JSON.stringify(etterLukking),
+    );
+    const lukket = await topplinje();
+    sjekk("bolk 6: når viften er lukket, er topplinjen ikke dempet eller inert", !lukket.inert && lukket.opasitet === 1, JSON.stringify(lukket));
 
     // Kontrastmodus: fanen og «Mappe» har kant.
     await pc.emulateMedia({ forcedColors: "active" });
@@ -1482,6 +1855,21 @@ try {
   await moerk.locator("[role=dialog] .vifte-tilbake").waitFor();
   await moerk.waitForTimeout(1000);
   await axe(moerk, "arbeidsbord med åpen vifte, tekst valgt i mappe (mørk)");
+  // Bolk 6: Samlinger med dra-tegnene, meldingsboksen etter et slipp og meldingen om for langt navn.
+  await moerk.goto(`${APP}/samling`);
+  await moerk.locator("main [data-dra='på']").waitFor({ timeout: 30000 });
+  await moerk
+    .locator("main li.tekstrad", { hasText: "EM-bølger" })
+    .locator("h2 a")
+    .dragTo(moerk.locator("#mapper li.mappekort", { has: moerk.locator("a", { hasText: /^Prøve$/ }) }));
+  const moerkBoks = await moerk
+    .locator(".slippmelding", { hasText: "Ingenting er endret." })
+    .waitFor({ timeout: 30000 })
+    .then(() => true, () => false);
+  await moerk.fill("#mapper input[name=tittel]", "x".repeat(81));
+  await moerk.locator("#mapper .navnelengde", { hasText: "81 tegn" }).waitFor({ timeout: 15000 }).catch(() => {});
+  sjekk("bolk 6, mørk modus: meldingsboksen etter et slipp og meldingen om for langt navn vises", moerkBoks && (await moerk.locator("#mapper .navnelengde", { hasText: "81 tegn" }).count()) === 1);
+  await axe(moerk, "samling med dra-tegn, meldingsboks og for langt mappenavn (mørk)");
   await moerk.goto(lesing);
   await moerk.locator("article button[aria-expanded]").first().focus();
   await moerk.locator("article [role=dialog]").waitFor();
@@ -2350,6 +2738,33 @@ try {
       (await tlf.evaluate(() => !!document.activeElement?.classList.contains("kort-tekst") && document.activeElement.textContent.includes("EM-bølger"))),
     JSON.stringify(tMappe),
   );
+  // Runde 3, bolk 6: radene på arket har de samme fargene og formene som kortene på 1280 px.
+  {
+    const arkrader = await tlf.evaluate(() => {
+      const farge = (u) => {
+        const p = document.createElement("p");
+        p.style.background = u;
+        document.body.append(p);
+        const f = getComputedStyle(p).backgroundColor;
+        p.remove();
+        return f;
+      };
+      const [lilla, rosa] = [farge("var(--lb-lilla)"), farge("var(--lb-markering)")];
+      const rader = [...document.querySelectorAll("[role=dialog] .vifte-kort > li > .kort")].map((k) => {
+        const s = getComputedStyle(k);
+        return { slag: k.classList.contains("kort-tekst") ? "tekst" : k.classList.contains("kort-samlet") ? "samlet" : "annet", flate: s.backgroundColor, start: `${s.borderLeftStyle} ${parseFloat(s.borderLeftWidth)}`, kant: s.borderTopStyle };
+      });
+      return { lilla, rosa, rader };
+    });
+    const [t, ...samlet] = arkrader.rader;
+    sjekk(
+      "bolk 6 (24.11), 375 px: på arket har tekstraden lilla flate og stripe, og de samlede radene rosa flate og dobbel kant",
+      arkrader.rader.length === 3 &&
+        t.slag === "tekst" && t.flate === arkrader.lilla && t.start === "solid 6" &&
+        samlet.every((k) => k.slag === "samlet" && k.flate === arkrader.rosa && k.kant === "double"),
+      JSON.stringify(arkrader),
+    );
+  }
   await ingenSiderulling(tlf, "arbeidsbord med åpent mappeark");
   await axe(tlf, "arbeidsbord med åpent mappeark (telefon)");
   await tlf.keyboard.press("Enter");
