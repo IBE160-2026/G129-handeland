@@ -102,3 +102,6 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-4-samlinger-stor-skjerm.md`
   summary: «Legg i mappe» uten JavaScript er ikke testet.
   evidence: Spesifikasjonen og FR-50 lover at skjemaet virker uten JavaScript, men ingen kontekst med javaScriptEnabled: false sender det; avgjøres med en slik e2e-sjekk (gjennomgang 23.11, funn 11, maybe-false).
+- source_spec: `_bmad-output/implementation-artifacts/spec-runde-3-7-mapper-som-mapper.md`
+  summary: Sjekkene for sidelengs rulling (`scrollWidth > innerWidth`) kan bomme i kontekster med `isMobile: true`, der nettleseren kan zoome ut så `innerWidth` vokser (unverified, medium).
+  evidence: Mønsteret brukes i hele maaling/sjekk-tilgjengelighet.mjs (linje 255, 560, 593, 1242, 1263, 1551, 1580). Avgjøres ved å lage en side med innhold som stikker ut i en `isMobile: true`-kontekst og sammenligne `scrollWidth` med bredden fra oppsettet i stedet for `innerWidth` (gjennomgang 25.11, funn E2).

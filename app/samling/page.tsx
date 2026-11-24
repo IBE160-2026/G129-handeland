@@ -197,13 +197,14 @@ export default async function Samling({ searchParams }: PageProps<"/samling">) {
 
 /**
  * FR-50: Mappene, øverst i Samlinger på telefon (beslutning 19.11) og til
- * høyre fra 760 px, der hver Mappe er et kort og hele kortet er et slippmål.
+ * høyre fra 760 px. Hver Mappe er et kort med mappefane på alle bredder
+ * (runde 3, bolk 7, 24.11), og fra 760 px er hele kortet et slippmål.
  * Hver Mappe er en lenke med antall Tekster. Er grensen på 20 nådd, står det
  * i stedet for skjemaet, med hvorfor og hva eleven kan gjøre (§5).
  */
 function Mapper({ mapper }: { mapper: Mapperad[] }) {
   return (
-    <section id="mapper" aria-labelledby="mapper-tittel" className="samling-mapper mt-8 rounded-lg border border-kant bg-flate p-5">
+    <section id="mapper" aria-labelledby="mapper-tittel" className="samling-mapper mt-8 rounded-lg border border-kant bg-flate px-[16px] py-5 min-[760px]:px-5">
       <h2 id="mapper-tittel" className="text-[1.75rem]">
         Mappene dine
       </h2>
@@ -212,13 +213,13 @@ function Mapper({ mapper }: { mapper: Mapperad[] }) {
       </p>
       {mapper.length > 0 && <Slippmelding />}
       {mapper.length > 0 && (
-        <ul className="mappekort-liste mt-4 divide-y divide-kant border-y border-kant">
+        <ul className="mappekort-liste">
           {mapper.map((m) => (
             <Slippmaal
               key={m.id}
               mappeId={m.id}
               tittel={m.tittel}
-              className="mappekort flex flex-wrap items-baseline justify-between gap-x-4 py-2"
+              className="mappekort flex"
             >
               <Link href={`/mappe/${m.id}`} className={`inline-flex min-h-11 items-center text-[1.25rem] font-bold [overflow-wrap:anywhere] ${LENKE}`}>
                 {m.tittel}

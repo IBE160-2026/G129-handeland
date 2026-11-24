@@ -1278,8 +1278,12 @@ html.har-tenkepille body {
  * Fanen står på forsiden, ikke på bunken, så den følger kanten (2 px i
  * primærfargen på hovedbunken og midt i viften). `bottom: 100%` er regnet fra
  * innsiden av kanten, så fanen dekker forsidens kant der de møtes.
+ *
+ * Mappekortene i Samlinger (runde 3, bolk 7, 24.11) har den samme fanen;
+ * resten av reglene for dem står ved `.mappekort-liste`.
  */
-.bunke-mappe > .bunke-forside::before {
+.bunke-mappe > .bunke-forside::before,
+.mappekort-liste > .mappekort::before {
   content: "";
   position: absolute;
   bottom: 100%;
@@ -1858,8 +1862,9 @@ body > header[inert] * {
   .pille {
     border: 1px solid CanvasText;
   }
-  /* Mappefanen og «Mappe» står med kant også i kontrastmodus. */
+  /* Mappefanen og «Mappe» står med kant også i kontrastmodus, også på mappekortene i Samlinger. */
   .bunke-mappe > .bunke-forside::before,
+  .mappekort-liste > .mappekort::before,
   .bunke-mappemerke {
     border-color: CanvasText;
   }
@@ -2615,6 +2620,98 @@ button.ls-fagord[aria-expanded="true"] {
 }
 
 /*
+ * Mappekortene (runde 3, bolk 7, avgjort av Arve 24.11): på alle bredder er
+ * hver Mappe et kort med mappefanen fra arbeidsbordet (regelen står ved
+ * `.bunke-mappe > .bunke-forside::before`). Under 760 px er kortene lave
+ * striper i én kolonne, som mappestripen på arbeidsbordet: navnet til
+ * venstre og antallet til høyre (under navnet når det ikke er plass). Fra
+ * 760 px er de kort i et rutenett, minst 7 rem høye, med antallet under
+ * navnet. Fanen er pynt (tomt `content`, ikke i tilgjengelighetstreet);
+ * navnet er lenken. Det er ingen merkelapp «Mappe»: alt under «Mappene
+ * dine» er mapper.
+ *
+ * Fanen er 0.875 rem høy og står over kortet, så det er 1.5 rem luft over
+ * listen og mellom radene: fanen dekker aldri kortet over, overskriften eller
+ * meldingsboksen, og alt følger tekststørrelsen.
+ */
+.mappekort-liste {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem 1rem;
+  margin-top: 1.5rem;
+}
+.mappekort-liste > .mappekort {
+  position: relative;
+  border: 2px solid var(--color-slate-300);
+  border-radius: var(--radius-lg);
+  background: var(--lb-bakgrunn);
+  @variant dark {
+    border-color: var(--color-slate-600);
+  }
+}
+/*
+ * Fanen arver kant og flate fra kortet (`border: inherit`, `background:
+ * inherit`), så den følger draget av seg selv. Ringen på slippmålet er en
+ * skygge også på fanen; klippet nederst, så den ikke tegnes inn i kortet der
+ * fanen møter kanten.
+ */
+.mappekort-liste > .mappekort::before {
+  clip-path: inset(-3px -3px 0 -3px);
+  /* Et smalt kort (320 px med 200 % tekst): fanen står innenfor kortet. */
+  max-width: calc(100% - 2.5rem);
+}
+/*
+ * På telefon en stripe: navnet vokser, og antallet står til høyre uten å
+ * brytes, eller faller ned under navnet når de ikke får plass på én linje.
+ * Sidepolstringen er i px, som sidemargene på telefonbordet, så navnet har
+ * plass også med 200 % tekst på 320 px (lik 1rem ved vanlig tekst).
+ */
+@media (max-width: 759.98px) {
+  .mappekort-liste > .mappekort {
+    flex-flow: row wrap;
+    align-items: center;
+    column-gap: 1rem;
+    padding: 0.25rem 16px;
+  }
+  .mappekort-liste > .mappekort > a {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .mappekort-liste > .mappekort > .mappekort-antall {
+    margin-inline-start: auto;
+    white-space: nowrap;
+  }
+}
+/* Fra 760 px et kort: navnet øverst, antallet nederst. */
+@media (min-width: 760px) {
+  .mappekort-liste > .mappekort {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 7rem;
+    padding: 0.75rem 1rem;
+  }
+}
+/* Mens en tekst dras: alle kortene viser at de tar imot (stiplet kant, også på fanen). */
+.mappekort-liste > .mappekort.slippmaal-klar {
+  border-style: dashed;
+  border-color: var(--lb-primaer);
+}
+/*
+ * Kortet teksten er over: heltrukken 2 px kant og en 3 px ring
+ * (box-shadow) i primærfargen rundt kortet og fanen, markeringsflaten og
+ * teksten «Slipp for å legge i mappen» i fet skrift — ikke bare farge.
+ */
+.mappekort-liste > .mappekort.slippmaal-over {
+  border-style: solid;
+  border-color: var(--lb-primaer);
+  box-shadow: 0 0 0 3px var(--lb-primaer);
+  background: var(--lb-markering);
+}
+.mappekort-liste > .mappekort.slippmaal-over::before {
+  box-shadow: 0 0 0 3px var(--lb-primaer);
+}
+/*
  * Samlinger på stor skjerm (runde 3, bolk 4, avgjort av Arve 23.11): fra
  * 760 px er siden todelt, søket og tekstene til venstre (3 av 10 deler) og
  * Mappene til høyre (7 av 10). Kildekoden har Mappene først, så Tab går
@@ -2676,42 +2773,9 @@ button.ls-fagord[aria-expanded="true"] {
   .drahint + .tekstliste {
     margin-top: 0.75rem;
   }
+  /* Mappekortene i et rutenett, minst 13 rem brede. */
   .mappekort-liste {
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
-    gap: 1rem;
-    border: 0;
-  }
-  /* Kortene har egen kant; skillelinjene fra listen på telefon tas bort. */
-  .mappekort-liste > .mappekort {
-    position: relative;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    min-height: 7rem;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--color-slate-300);
-    border-radius: var(--radius-lg);
-    background: var(--lb-bakgrunn);
-    @variant dark {
-      border-color: var(--color-slate-600);
-    }
-  }
-  /* Mens en tekst dras: alle kortene viser at de tar imot (stiplet kant). */
-  .mappekort-liste > .mappekort.slippmaal-klar {
-    border-style: dashed;
-    border-color: var(--lb-primaer);
-  }
-  /*
-   * Kortet teksten er over: heltrukken 2 px kant og en 3 px ring
-   * (box-shadow) i primærfargen, markeringsflaten og teksten «Slipp for å
-   * legge i mappen» i fet skrift — ikke bare farge.
-   */
-  .mappekort-liste > .mappekort.slippmaal-over {
-    border-style: solid;
-    border-color: var(--lb-primaer);
-    box-shadow: 0 0 0 3px var(--lb-primaer);
-    background: var(--lb-markering);
   }
   /* Bare fet: understrek betyr lenke i appen. */
   .slippmaal-hint {
@@ -2728,15 +2792,30 @@ button.ls-fagord[aria-expanded="true"] {
 }
 @media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
   .mappekort-liste > .mappekort,
+  .mappekort-liste > .mappekort::before,
   .samling-tekster .tekstrad[draggable="true"] {
     transition:
       box-shadow 120ms ease-out,
       background-color 120ms ease-out;
   }
 }
+/*
+ * Kontrastmodus: kortet har kant i CanvasText (etter grunnregelen, ellers
+ * vinner kantfargen der). Skygger faller bort: slippmålet får en ramme i
+ * Highlight rundt kort og fane.
+ */
 @media (forced-colors: active) {
-  .mappekort-liste > .mappekort.slippmaal-over {
+  .mappekort-liste > .mappekort {
+    border-color: CanvasText;
+  }
+  .mappekort-liste > .mappekort.slippmaal-over,
+  .mappekort-liste > .mappekort.slippmaal-over::before {
+    border-color: Highlight;
     outline: 3px solid Highlight;
+  }
+  /* Over kortets ramme, så rammen ikke går tvers over foten av fanen. */
+  .mappekort-liste > .mappekort.slippmaal-over::before {
+    z-index: 1;
   }
 }
 

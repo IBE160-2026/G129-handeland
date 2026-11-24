@@ -67,6 +67,16 @@
  *     og på «Tilbake til mappen» gir fokus med synlig ring (punkt 15); og
  *     topplinjen er dempet og inert mens viften er åpen, også i
  *     kontrastmodus. Axe i lys og mørk modus
+ *   - runde 3, bolk 7 (24.11): hvert mappekort i Samlinger har mappefanen
+ *     (pynt, samme kant og flate som kortet, øverst til venstre, innenfor
+ *     «Mappene dine»), uten merkelapp «Mappe»; ingen fane dekker kortet over,
+ *     overskriften eller meldingen på 1280 px, 760 px, 375 px og 320 px, også
+ *     med 200 % tekst (fanens plass målt fra `bottom` og kortets
+ *     `position`). Fra 760 px er kortene minst 7 rem høye; på telefon er
+ *     mappene lave striper i én kolonne uten skillelinjer, med navnet og
+ *     antallet på én linje på 375 px. Under et drag er fanen stiplet, og
+ *     heltrukken med ringen rundt kort og fane på slippmålet; i kontrastmodus
+ *     kant i CanvasText og ramme i Highlight; i mørk modus kant i slate-600
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -1176,6 +1186,80 @@ try {
     const rad = pc.locator("main li.tekstrad", { hasText: "EM-bølger" });
     const kort = (navn) => pc.locator("#mapper li.mappekort", { has: pc.locator("a", { hasText: new RegExp(`^${navn}$`) }) });
     const antall = async (navn) => (await kort(navn).locator(".mappekort-antall").textContent())?.trim();
+    /**
+     * Bolk 7 (24.11): mappefanen på hvert mappekort, målt fra kortet og
+     * `::before` (et pseudoelement har ingen egen boks i DOM-en). Fanens
+     * `bottom` (100 %) løses mot kortets polstringsboks når kortet er
+     * posisjonert, så foten står på innsiden av kortets kant. Uten
+     * `position: relative` står fanen et annet sted, og det fanges også.
+     */
+    const fanene = (side) =>
+      side.evaluate(() => {
+        const px = (v) => parseFloat(v) || 0;
+        const seksjon = document.querySelector("#mapper");
+        const m = seksjon.getBoundingClientRect();
+        const liste = seksjon.querySelector(".mappekort-liste");
+        const kortene = [...liste.children];
+        const faner = kortene.map((li) => {
+          const r = li.getBoundingClientRect();
+          const s = getComputedStyle(li);
+          const f = getComputedStyle(li, "::before");
+          const kant = f.boxSizing === "border-box" ? 0 : 1;
+          // Polstringsboksens bunn minus `bottom` = fanens fot, der den faktisk står.
+          const bunn = r.bottom - px(s.borderBottomWidth) - px(f.bottom);
+          const venstre = r.left + px(s.borderLeftWidth) + px(f.left);
+          const hoeyde = px(f.height) + kant * px(f.borderTopWidth);
+          const bredde = px(f.width) + kant * (px(f.borderLeftWidth) + px(f.borderRightWidth));
+          return {
+            topp: bunn - hoeyde, bunn, venstre, hoeyre: venstre + bredde, hoeyde, bredde,
+            kort: { topp: r.top, bunn: r.bottom, venstre: r.left, hoeyre: r.right },
+            pynt: f.content === '""' && f.position === "absolute" && s.position === "relative",
+            sammeKant: f.borderTopStyle === s.borderTopStyle && f.borderTopColor === s.borderTopColor && f.borderTopWidth === s.borderTopWidth && px(f.borderBottomWidth) === 0,
+            sammeFlate: f.backgroundColor === s.backgroundColor,
+            radius: `${f.borderTopLeftRadius} ${f.borderTopRightRadius} ${f.borderBottomRightRadius} ${f.borderBottomLeftRadius}`,
+            kortkant: ["Top", "Right", "Bottom", "Left"].every((k) => px(s[`border${k}Width`]) === 2 && s[`border${k}Style`] === "solid"),
+            innhold: [...li.children].map((b) => (b.tagName === "A" ? "lenke" : b.className.split(" ")[0])).join(","),
+            minHoeyde: px(s.minHeight),
+            // Navnet og antallet på samme linje, antallet til høyre (stripen på telefon).
+            enRad: (() => {
+              const a = li.querySelector("a").getBoundingClientRect();
+              const n = li.querySelector(".mappekort-antall").getBoundingClientRect();
+              return n.top < a.bottom && n.bottom > a.top && n.left >= a.right - 1;
+            })(),
+          };
+        });
+        // Det som står over listen (overskrift, ingress, meldingsboks, feilmelding).
+        const foer = [...seksjon.children].slice(0, [...seksjon.children].indexOf(liste)).map((e) => e.getBoundingClientRect()).filter((r) => r.height > 0);
+        const oeversteFane = Math.min(...faner.map((f) => f.topp));
+        const rem = px(getComputedStyle(document.documentElement).fontSize);
+        return {
+          kort: faner.length,
+          pynt: faner.every((f) => f.pynt),
+          // 4.5 × 0.875 rem som mappebunken; på et smalt kort så bred det er plass til (1.25 rem fra hver side).
+          form: faner.every((f) => {
+            const inni = f.kort.hoeyre - f.kort.venstre - 4;
+            return Math.abs(f.hoeyde - 0.875 * rem) < 1 && Math.abs(f.bredde - Math.min(4.5 * rem, inni - 2.5 * rem)) < 1 && f.radius === "10px 10px 0px 0px";
+          }),
+          kantOgFlate: faner.every((f) => f.sammeKant && f.sammeFlate),
+          oeverstTilVenstre: faner.every((f) => f.bunn - f.kort.topp >= 0 && f.bunn - f.kort.topp <= 3 && f.venstre - f.kort.venstre > 0 && f.hoeyre < f.kort.hoeyre),
+          iMapper: faner.every((f) => f.topp >= m.top && f.venstre >= m.left && f.hoeyre <= m.right),
+          // Ingen fane dekker et kort som står over den (i rutenettet eller i kolonnen).
+          dekkerKort: faner.some((f) => faner.some((a) => a !== f && a.kort.topp < f.kort.topp && a.kort.venstre < f.hoeyre && a.kort.hoeyre > f.venstre && a.kort.bunn > f.topp + 0.5)),
+          dekkerOverListen: foer.some((r) => r.bottom > oeversteFane + 0.5),
+          kolonner: new Set(faner.map((f) => Math.round(f.kort.venstre))).size,
+          rader: new Set(faner.map((f) => Math.round(f.kort.topp))).size,
+          skillelinjer: px(getComputedStyle(liste).borderTopWidth) + px(getComputedStyle(liste).borderBottomWidth) > 0 || !faner.every((f) => f.kortkant),
+          merkelapp: seksjon.querySelectorAll(".bunke-mappemerke").length > 0,
+          minHoeyde: Math.max(...faner.map((f) => f.minHoeyde)) / rem,
+          enRad: faner.every((f) => f.enRad),
+          innhold: [...new Set(faner.map((f) => f.innhold))],
+          sidelengs: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+    /** Bolk 7: fanen er der og dekker ingenting, på alle bredder. */
+    const fanenStaar = (f) =>
+      f.kort >= 2 && f.pynt && f.form && f.kantOgFlate && f.oeverstTilVenstre && f.iMapper && !f.dekkerKort && !f.dekkerOverListen && !f.skillelinjer && !f.merkelapp &&
+      f.innhold.length === 1 && f.innhold[0] === "lenke,mappekort-antall" && !f.sidelengs;
     await rad.and(pc.locator("[draggable=true]")).waitFor({ timeout: 15000 }).catch(() => {});
 
     const oppsett = await pc.evaluate(() => {
@@ -1199,6 +1283,13 @@ try {
       JSON.stringify(oppsett),
     );
     sjekk("bolk 4, 1280 px: mappene er kort i et rutenett, og står først i kildekoden (Tab går gjennom dem før tekstene)", oppsett.rutenett && oppsett.mapperFoerst);
+    const fane1280 = await fanene(pc);
+    sjekk(
+      "runde 3, bolk 7 (24.11), 1280 px: hvert mappekort har en fane øverst til venstre i samme kant og flate som kortet (pynt, tomt innhold), innenfor «Mappene dine», uten å dekke kort, overskrift eller melding; ingen merkelapp «Mappe»",
+      fanenStaar(fane1280) && fane1280.kolonner > 1 && Math.abs(fane1280.minHoeyde - 7) < 0.01,
+      JSON.stringify(fane1280),
+    );
+    if (process.env.SKJERMBILDE) await pc.locator("#mapper").screenshot({ path: path.join(process.env.SKJERMBILDE, "samling-mapper-1280.png") });
     // Tekstraden stables i den smale kolonnen: knappene under teksten.
     const stablet = await rad.evaluate((li) => {
       const [tekst, knapper] = li.children;
@@ -1346,6 +1437,33 @@ try {
       markering.klasse && markering.skygge && markering.kant === "solid" && markering.tekst,
       JSON.stringify(markering),
     );
+    // Bolk 7: fanen følger kanten under draget, og ringen går rundt fanen også (overgangen er 120 ms).
+    await pc.waitForTimeout(400);
+    const fanerIDraget = await pc.evaluate(() => {
+      const p = document.createElement("p");
+      p.style.color = "var(--lb-primaer)";
+      document.body.append(p);
+      const primaer = getComputedStyle(p).color;
+      p.remove();
+      const kortene = [...document.querySelectorAll("#mapper li.mappekort")].map((li) => {
+        const s = getComputedStyle(li);
+        const f = getComputedStyle(li, "::before");
+        return { over: li.classList.contains("slippmaal-over"), kort: s.borderTopStyle, fane: f.borderTopStyle, farge: f.borderTopColor === primaer && s.borderTopColor === primaer, ring: f.boxShadow, kortring: s.boxShadow, klipp: f.clipPath };
+      });
+      return { primaer, kortene };
+    });
+    const over = fanerIDraget.kortene.filter((k) => k.over);
+    const andre = fanerIDraget.kortene.filter((k) => !k.over);
+    sjekk(
+      "runde 3, bolk 7, drag: fanen er stiplet i primærfargen på alle kortene; på kortet teksten er over er den heltrukken, og ringen (3 px) går rundt både kort og fane",
+      over.length === 1 && andre.length >= 1 &&
+        andre.every((k) => k.kort === "dashed" && k.fane === "dashed" && k.farge && k.ring === "none") &&
+        over[0].kort === "solid" && over[0].fane === "solid" && over[0].farge &&
+        /3px$/.test(over[0].ring) && over[0].ring === over[0].kortring && over[0].ring.includes(fanerIDraget.primaer) &&
+        /^inset\(-3px -3px 0px( -3px)?\)$/.test(over[0].klipp),
+      JSON.stringify(fanerIDraget),
+    );
+    if (process.env.SKJERMBILDE) await pc.locator("#mapper").screenshot({ path: path.join(process.env.SKJERMBILDE, "samling-mapper-drag.png") });
     await pc.mouse.up();
     const lagt = await pc
       .locator("[role=status]", { hasText: "«EM-bølger» ligger nå i «Prøve»." })
@@ -1486,6 +1604,100 @@ try {
       await ingenKlipping(s, "samling 760 px, 200 % tekst");
       await s.context().close();
     }
+
+    /* Runde 3, bolk 7 (avgjort av Arve 24.11): mappene ser ut som mapper --- */
+    // Fanen på alle bredder: på telefon er mappene lave striper i én kolonne
+    // (ingen skillelinjer), fra 760 px kort på minst 7 rem, og med 200 % tekst
+    // flere rader også på 1280 px. 760 px er der rutenettet og draget slår inn.
+    for (const [bredde, stor] of [[1280, true], [760, false], [760, true], [375, false], [375, true], [320, true]]) {
+      const tlf = bredde < 760;
+      const s = await (await nettleser.newContext({ viewport: { width: bredde, height: 900 }, locale: "nb-NO", isMobile: tlf, hasTouch: tlf })).newPage();
+      s.setDefaultTimeout(120000);
+      await s.context().addCookies(await pc.context().cookies());
+      await s.goto(`${APP}/samling`);
+      if (stor) await s.addStyleTag({ content: "html { font-size: 200% !important; }" });
+      await s.locator("main [data-dra]").waitFor({ timeout: 30000 }).catch(() => {});
+      const f = await fanene(s);
+      const navn = `${bredde} px${stor ? " med 200 % tekst" : ""}`;
+      sjekk(
+        `runde 3, bolk 7, ${navn}: hvert mappekort har fanen, ${tlf ? "i én kolonne uten skillelinjer, " : "minst 7 rem høyt, "}og ingen fane dekker kortet over, overskriften eller meldingen; ingen sidelengs rulling`,
+        fanenStaar(f) && (tlf ? f.kolonner === 1 : Math.abs(f.minHoeyde - 7) < 0.01) && f.rader > 1,
+        JSON.stringify(f),
+      );
+      if (tlf && !stor) {
+        sjekk(
+          `runde 3, bolk 7, ${navn}: mappen er en lav stripe som på arbeidsbordet, uten minstehøyde, med navnet til venstre og antallet til høyre på samme linje`,
+          f.minHoeyde === 0 && f.enRad,
+          JSON.stringify({ minHoeyde: f.minHoeyde, enRad: f.enRad }),
+        );
+      }
+      // Det lengste navnet en Mappe kan ha (80 tegn, ekte ord): navnet brytes
+      // inne i kortet, fanen står fast og dekker ingenting, og siden ruller
+      // ikke sidelengs. Navnet byttes bare i siden, så testdataene er urørt.
+      if (bredde === 1280 || bredde === 320) {
+        await s.evaluate(() => {
+          const lenke = document.querySelector("#mapper li.mappekort a");
+          lenke.textContent = "Samfunnsfag og historie: demokrati, valgordninger og menneskerettigheter i Norge".slice(0, 80);
+        });
+        const lang = await fanene(s);
+        const brytes = await s.evaluate(() => {
+          const li = document.querySelector("#mapper li.mappekort");
+          const a = li.querySelector("a");
+          const l = li.getBoundingClientRect(), r = a.getBoundingClientRect();
+          return { flereLinjer: r.height > parseFloat(getComputedStyle(a).lineHeight || "0") * 1.5 || a.getClientRects().length > 1, inni: r.left >= l.left - 0.5 && r.right <= l.right + 0.5 };
+        });
+        sjekk(
+          `runde 3, bolk 7, ${navn}, navn på 80 tegn: navnet brytes over flere linjer inne i kortet, fanen står fast og dekker ingenting, og siden ruller ikke sidelengs`,
+          fanenStaar(lang) && brytes.flereLinjer && brytes.inni,
+          JSON.stringify({ brytes, sidelengs: lang.sidelengs, dekkerKort: lang.dekkerKort, oeverstTilVenstre: lang.oeverstTilVenstre }),
+        );
+      }
+      if (process.env.SKJERMBILDE) await s.locator("#mapper").screenshot({ path: path.join(process.env.SKJERMBILDE, `samling-mapper-${bredde}${stor ? "-200" : ""}.png`) });
+      await s.context().close();
+    }
+
+    // Kontrastmodus: fanen og kortet har kant i CanvasText, og slippmålet en
+    // ramme i Highlight rundt kort og fane (klassen settes for hånd, som under et drag).
+    await pc.goto(`${APP}/samling`);
+    await pc.emulateMedia({ forcedColors: "active" });
+    const tvungenFane = await pc.evaluate(() => {
+      const system = (farge) => {
+        const p = document.createElement("p");
+        p.style.color = farge;
+        p.style.forcedColorAdjust = "none";
+        document.body.append(p);
+        const c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      };
+      const tekst = system("CanvasText");
+      const lys = system("Highlight");
+      const kortene = [...document.querySelectorAll("#mapper li.mappekort")];
+      const kant = (s) => ({ stil: s.borderTopStyle, bredde: parseFloat(s.borderTopWidth), farge: s.borderTopColor });
+      const hvile = kortene.map((li) => ({ kort: kant(getComputedStyle(li)), fane: kant(getComputedStyle(li, "::before")) }));
+      const li = kortene[0];
+      li.classList.add("slippmaal-over");
+      const s = getComputedStyle(li);
+      const f = getComputedStyle(li, "::before");
+      const omriss = (x) => `${x.outlineStyle} ${parseFloat(x.outlineWidth)} ${x.outlineColor === lys}`;
+      const slipp = { kort: omriss(s), fane: omriss(f), kant: s.borderTopColor === lys && f.borderTopColor === lys };
+      li.classList.remove("slippmaal-over");
+      return { tekst, lys, hvile, slipp };
+    });
+    if (process.env.SKJERMBILDE) {
+      await pc.locator("#mapper").screenshot({ path: path.join(process.env.SKJERMBILDE, "samling-mapper-tvungen.png") });
+      await pc.evaluate(() => document.querySelector("#mapper li.mappekort").classList.add("slippmaal-over"));
+      await pc.locator("#mapper").screenshot({ path: path.join(process.env.SKJERMBILDE, "samling-mapper-tvungen-slipp.png") });
+      await pc.evaluate(() => document.querySelector("#mapper li.mappekort").classList.remove("slippmaal-over"));
+    }
+    await pc.emulateMedia({ forcedColors: "none" });
+    sjekk(
+      "runde 3, bolk 7, kontrastmodus: fanen og kortet har heltrukken kant i CanvasText, og slippmålet en ramme i Highlight rundt både kort og fane",
+      tvungenFane.hvile.length >= 2 &&
+        tvungenFane.hvile.every((k) => [k.kort, k.fane].every((x) => x.stil === "solid" && x.bredde > 0 && x.farge === tvungenFane.tekst)) &&
+        tvungenFane.slipp.kort === "solid 3 true" && tvungenFane.slipp.fane === "solid 3 true" && tvungenFane.slipp.kant,
+      JSON.stringify(tvungenFane),
+    );
   }
 
   /* --- Runde 3, bolk 5: arbeidsbordet grupperer etter Mappe ----------- */
@@ -1870,6 +2082,31 @@ try {
   await moerk.locator("#mapper .navnelengde", { hasText: "81 tegn" }).waitFor({ timeout: 15000 }).catch(() => {});
   sjekk("bolk 6, mørk modus: meldingsboksen etter et slipp og meldingen om for langt navn vises", moerkBoks && (await moerk.locator("#mapper .navnelengde", { hasText: "81 tegn" }).count()) === 1);
   await axe(moerk, "samling med dra-tegn, meldingsboks og for langt mappenavn (mørk)");
+  // Runde 3, bolk 7: kortet og fanen har kant i slate-600 i mørk modus, på PC og telefon.
+  const moerkeKanter = {};
+  for (const bredde of [1280, 375]) {
+    await moerk.setViewportSize({ width: bredde, height: 900 });
+    await moerk.goto(`${APP}/samling`);
+    moerkeKanter[bredde] = await moerk.evaluate(() => {
+      const p = document.createElement("p");
+      p.style.border = "2px solid var(--color-slate-600)";
+      document.body.append(p);
+      const slate600 = getComputedStyle(p).borderTopColor;
+      p.remove();
+      const kortene = [...document.querySelectorAll("#mapper li.mappekort")];
+      return {
+        slate600,
+        kort: kortene.length,
+        alle: kortene.every((li) => getComputedStyle(li).borderTopColor === slate600 && getComputedStyle(li, "::before").borderTopColor === slate600),
+      };
+    });
+  }
+  await moerk.setViewportSize({ width: 1280, height: 900 });
+  sjekk(
+    "runde 3, bolk 7, mørk modus: mappekortet og fanen har kant i slate-600 på 1280 og 375 px",
+    Object.values(moerkeKanter).every((k) => k.kort >= 2 && k.alle),
+    JSON.stringify(moerkeKanter),
+  );
   await moerk.goto(lesing);
   await moerk.locator("article button[aria-expanded]").first().focus();
   await moerk.locator("article [role=dialog]").waitFor();
