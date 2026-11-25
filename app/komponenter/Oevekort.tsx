@@ -209,10 +209,14 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
             {modus === "maa_oeve" && " — bare de du vil øve mer på"}
           </p>
           <p>
-            {/* Linjen brytes bare mellom delene, aldri inne i «Ikke merket» (Arve, 25.11). */}
+            {/* Linjen brytes bare mellom delene, aldri inne i «Ikke merket». Under 760 px
+                står «Ikke merket» alltid på egen linje, uten prikk foran (Arve, 25.11). */}
             <span className="whitespace-nowrap">Har kontroll: {telling.kan} ·</span>{" "}
-            <span className="whitespace-nowrap">Må øve: {telling.maaOeve} ·</span>{" "}
-            <span className="whitespace-nowrap">Ikke merket: {telling.ikke}</span>
+            <span className="whitespace-nowrap">
+              Må øve: {telling.maaOeve}
+              <span className="hidden min-[760px]:inline"> ·</span>
+            </span>{" "}
+            <span className="block whitespace-nowrap min-[760px]:inline">Ikke merket: {telling.ikke}</span>
           </p>
         </div>
 
