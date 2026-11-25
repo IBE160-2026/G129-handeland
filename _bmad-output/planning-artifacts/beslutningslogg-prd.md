@@ -11,6 +11,37 @@ Teksten er nesten ordrett fra PRD-en slik den så ut før runde 2 (commit `1ce6d
 
 Loggen er delt etter hvor i PRD-en teksten sto, og innenfor hver del per krav, i datorekkefølge.
 
+## Runde 2 (25.11.2026): endringer i hva kravene sier
+
+Det meste i runde 2 er flytting. Disse punktene endret likevel hva PRD-en sier, etter gjennomgangene i `reviews/prd-runde-2/` (rubrikk, troskap, adversarisk). Valg merket «Arve» er tatt av utvikleren; resten er rettinger av faktafeil eller motsigelser.
+
+- **FR-8, Gullsett Faguttrykk:** de to tabellene hadde ulike ordtall, og tekst 3 het «Lyriske virkemidler ~500 ord». Rettet til tallene i `testdata/gullsett/*.meta.json` (som målingen bruker), og tekst 3 er nå den sammensatte teksten «Språklige bilder: metafor, allegori og allusjon» (1 175 ord). Budsjettene ble 9, 7, 14, 7, 7 og 8, som i resultatfilene.
+- **FR-8, FR-14, FR-31, SM-2, SM-7 (Arve):** «null i det som vises eleven» er skrevet om til «null i Gullsettet», med én setning om restrisikoen. Quizen og forklaringene lages fra elevens egen tekst, så det kan ikke utvikleren ha sett.
+- **FR-8 og §11 pkt. 9 og 17 (Arve):** `[ÅPENT]`-merket om budsjettet er lukket. Taket i FR-7 og tersklene beholdes; annoteringen ligger innenfor budsjettet, og utviklerens samsvar med seg selv (0,62) er under tersklene.
+- **§9.6 og §10 (Arve):** SM-2, SM-3 og SM-8 står som ikke nådd, med hva det betyr for eleven. Tersklene er ikke flyttet. SM-10 er ikke gjort ennå og er planlagt før levering.
+- **FR-54 Bruksgrenser (Arve):** nytt krav som beskriver det som ble bygget 16.11 (grensene i §6.4). BF-6 og BF-7 er lagt til i FR-44, og bildeinnlesingen har dermed sju navngitte feiltilstander.
+- **FR-28:** «ikke består begrepsankeret **og** den eksterne vurderingen» er rettet til **eller**; med «og» holdt det å bestå én av dem. Tilbakeoversettelsen og «andre maskinoversettelsesverktøy» er skilt i to setninger.
+- **FR-30:** at eleven kan be om Suno-prompten, er gjort betinget («Når Suno-prompten tilbys …»), fordi den er satt på pause. Den gamle teksten motsa pausen.
+- **FR-7:** «Kildeavsnittet er brødtekst, aldri en overskrift» er lagt til. Det er det koden og prompt v4 gjør (kodefunn 23).
+- **FR-6:** «Åpnes Aktiveringen igjen etter at Teksten er låst, vises spørsmålet og overskriftene med elevens merke, uten skjema» er tatt inn igjen. Den sto før bare i et endringsnotat.
+- **FR-48:** «Lukkes bunken, går fokus tilbake til bunkens knapp» er tatt inn igjen.
+- **FR-44 og §6.2:** «Bildene lagres ikke etter at uttrekket er godkjent» er rettet til «lagres aldri (AD-16)», som er det koden gjør.
+- **DK-5 og §12 pkt. 8:** Gullsett Faguttrykk har ingen yrkesfagtekst (programfagtekstene er Teknologiforståelse), så yrkesfaghypotesen er uprøvd i v1. Kravet til rapporten sier det nå.
+- **§9.1–9.3:** FR-11, FR-37 og FR-46 er lagt i M0, FR-12 i M1, og FR-53 og FR-54 i slakken (Bård §4.5). FR-53 kan ikke kuttes, fordi behandlingsgrunnlaget i §6.2 henger på det. §9.2 krever fortsatt bare én dokumentert forbedring i Promptregisteret.
+- **§9.6 (ny):** statustabellen er også terskeltabellen DK-3 krever. DK-2 og DK-3 står som delvis: forbedringen v2 → v3 ligger innenfor spredningen, og FR-2 (20 sekunder) og FR-11 er ikke målt slik kravene sier.
+
+### Til refleksjonsrapporten
+
+Den gamle PRD-en sa at disse punktene hører hjemme i rapporten. De står nå i loggen under kravene de kom fra:
+
+- At tilgang til én person avgjør hva prosjektet kan påstå om oversettelsen (§4.7).
+- Den kontrafaktiske testen i FR-21.
+- Hvorfor FR-39 (DK-2) ble omformulert 8. oktober.
+- At prosjektet er bygget av én person, som rammebetingelse (§11 pkt. 2).
+- Talebasert fagsamtale som videreføring (§8.2).
+- Avviket mellom Råtekst og redigert tekst for bilder som spor (FR-45).
+- Tersklene i FR-8 mot annoteringsstøyen (0,62), og bruddene i SM-2, SM-3 og SM-8 (§9.6).
+
 ## Del 1: §0–§4.2 (om dokumentet, visjon, brukere, ordliste, FR-1–FR-6, FR-44, FR-45)
 Teksten under er tatt ut av kravteksten i runde 2 (25.11.2026). Nesten ordrett, med hvor den kom fra.
 
@@ -457,7 +488,7 @@ Linjenumrene viser til `prd-lesevenn.md` før runde 2 (1151 linjer).
 - **Begrunnelse** (l. 1103) — SM-11: «**Merk at dette ikke er en kvalitetspåstand:** metrikken sier at veien finnes og virker ende til ende, ikke at uttrekket er treffsikkert. Det siste er umålt i v1, og det står i FR-45.» (står igjen i kortere form)
 - **Begrunnelse** (l. 1104) — SM-12: «de er lagret på forhånd, og sier derfor ingenting om hvordan appen svarer på en ny tekst.»
 - **Begrunnelse** (l. 1089) — SM-7: «(samme terskel som FR-14)» er utvidet til «rapportert med konfidensintervall (samme terskel og rapportering som FR-14)», etter Bårds forslag i §4.1. FR-14 krever alt intervallet.
-- **Begrunnelse** (l. 1113) — SM-C4: «Motvekt til hele §4.11 — dette er den enkleste og mest forlokkende måten å gjøre kvalitetssikringen verdiløs på.» Nå «(§4.11, §13)», fordi DK-1 til DK-6 flyttes til §13.
+- **Begrunnelse** (l. 1113) — SM-C4: «Motvekt til hele §4.11 — dette er den enkleste og mest forlokkende måten å gjøre kvalitetssikringen verdiløs på.» Nå «(§13)», fordi DK-1 til DK-6 er flyttet til §13.
 
 ### §11 Åpne spørsmål
 - **25.9.2026** (pkt. 1, l. 1117) — «Milepælsplanen i §9 var alt lagt mot den datoen og trenger ingen endring. Gjenstår én praktisk detalj: 5. desember er en **lørdag**, så finn klokkeslettet i Canvas og planlegg å levere fredag 4. desember. Går noe galt med innleveringen på en lørdag, er det ingen å spørre.»
