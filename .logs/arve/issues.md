@@ -42,33 +42,34 @@
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobil: velg mini-Buddy (M1/M2/M3) og mobilflater (A–E) fra runde 10, og bygg dem (M1 + A–E bygget 2026-11-16 på grenen mobil)
 - [x] 2026-11-13 [designfase](997-2026-11-13-01-23-51-designfase.md) — Mobilfeil i prod: tomt felt under fagorddemoen på landingssiden (375 px), og titler som brytes midt i ordet i de små bunkene (rettet i bolk 4, b7a4460)
 - [x] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Rull ut grenen mobil (bolk 4–6, b7a4460..f4cbc45), krever ja (rullet ut 2026-11-16, main = 3db9022)
-- [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden
+- [x] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Test på ekte telefon (iOS Safari): arket, tenkepillen, overflow hidden (løst 2026-11-25: telefonsjekklistens punkt 5–7 OK)
 - [ ] 2026-11-16 [designfase](997-2026-11-13-01-23-51-designfase.md) — Temavalget følger enheten (informasjonskapsel); skal det følge kontoen, trengs migrering
 - [x] 2026-11-16 [996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser](996-2026-11-16-15-35-46-ki-feil-og-bruksgrenser.md) — Rull ut grenen grenser: Neon-migrering 0007, merge og vercel --prod (krever ja) (rullet ut 2026-11-16, main = 80449ae)
 - [x] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Rull ut grenene forkunnskap og tenkeindikator: merge til main, Neon-migrering 0008 og vercel --prod (krever ja) (rullet ut 2026-11-18, main = 750474a)
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — «Før du leste» mangler morsmålslinje (deferred-work.md)
-- [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Tenkeindikatoren: prøv med ekte skjermleser at «… er klar» leses opp ved sidebytte
+- [x] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Tenkeindikatoren: prøv med ekte skjermleser at «… er klar» leses opp ved sidebytte (løst 2026-11-25: VoiceOver, punkt 13 OK)
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Samtalesiden: nettlesersjekk av feilet-sperren, RevurderKnapp og oppdaterUtenFeil (deferred-work.md)
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Ingen app/error.tsx: en serverhandling som kaster kan gi «… er klar» over feilsiden
 - [ ] 2026-11-18 [forkunnskap-og-tenkeindikator](995-2026-11-18-11-02-25-forkunnskap-og-tenkeindikator.md) — Demotesten lager nye lagrede oversettelsessvar hver kjøring (nøklene er ikke faste), og det koster modellkall
 - [x] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen design-runde-2 (bolk 7–10): merge til main og vercel --prod (krever ja) (rullet ut 2026-11-19, main = 4045ecd)
 - [x] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Avgjør: «Etter at du har lastet opp bildene» → «valgt»? (endret til «valgt» 2026-11-19)
 - [x] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Avgjør: skal «Skjønner ikke overskriften» føre videre (for eksempel til fagsamtalen)? (avgjort 2026-11-19: nei, ikke nå)
-- [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Telefontest: fanenavn med stor tekst, tusjen i VoiceOver, Buddy-merknaden på 320 px med 200 % tekst
+- [x] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Telefontest: fanenavn med stor tekst, tusjen i VoiceOver, Buddy-merknaden på 320 px med 200 % tekst (løst 2026-11-25: punkt 9–11 OK)
 - [ ] 2026-11-19 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Fanene på /ny mangler aria-controls, tabpanel og piltaster (deferred-work.md)
 - [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Rull ut grenen mapper: Neon-migrering 0009 før koden, merge til main og vercel --prod (krever ja) (rullet ut 2026-11-19, main = a15fada)
 - [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Les og rett KI-logg nr. 25 (skrevet i din stemme av agenten), og vurder å føre inn hva du selv kontrollerte
 - [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Avgjør om Mapper skal ha egen suksessmetrikk eller et steg i demotesten (§9.5) (løst 2026-11-19: steg 13b og SM-13)
-- [ ] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Test mappene på telefon i prod
+- [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Test mappene på telefon i prod (løst 2026-11-25: punkt 8 OK, og mappene i Samlinger er striper med fane, bolk 7)
 - [x] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Rull ut grenen vilkaar: Neon-migrering 0010 før koden, merge og vercel --prod (krever ja) (rullet ut 2026-11-20, main = dddbfea)
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Etter utrulling: del 3-test C (feil passord på rad) i prod på nytt, og registrer en ny testkonto i prod
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Fyll ut «Hva jeg tenker om resultatet» i gjennomgang-innlogging.md
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Les KI-logg nr. 26
 - [x] 2026-11-20 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen samling-tusj (krever ja) (rullet ut 2026-11-20, main = 3759cd3)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Bolk 4 (Samlinger på stor skjerm, dra og slipp + «Legg i mappe») og bolk 5 (arbeidsbordet grupperer etter Mappe) gjenstår før kodefrys 27.11 (løst 2026-11-24: rullet ut med bolk 6, main = 2fa5ff2)
-- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test i prod på iPhone: forkunnskapsglideren (trykk ytterst på sporet, dra, VoiceOver) og øvekortenes piler, og mappene i Samlinger og på bordet med VoiceOver (sjekklistens punkt 25)
+- [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test i prod på iPhone: forkunnskapsglideren (trykk ytterst på sporet, dra, VoiceOver) og øvekortenes piler, og mappene i Samlinger og på bordet med VoiceOver (sjekklistens punkt 25) (løst 2026-11-25: punkt 4, 12 og 14 OK; glideren hoppet ved drag, rettet i bolk 8 og godkjent i prod, main = 9846a90)
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Innloggingssperren teller per IP: en klasse på samme skolenett deler fem forsøk (deferred-work.md)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Skjermleser på PC: «Legg i mappe» leses med valg, «alt med» og meldingen etter sending (sjekklistens punkt 10)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Feilveien i draget (full mappe, nettfeil) og «Legg i mappe» uten JavaScript er ikke testet i nettleseren (deferred-work.md)
+- [ ] 2026-11-25 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — E2: sjekken for sidelengs rulling sammenligner scrollWidth med innerWidth i en isMobile-kontekst og kan bomme (deferred-work.md)
