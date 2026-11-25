@@ -77,6 +77,17 @@
  *     antallet på én linje på 375 px. Under et drag er fanen stiplet, og
  *     heltrukken med ringen rundt kort og fane på slippmålet; i kontrastmodus
  *     kant i CanvasText og ramme i Highlight; i mørk modus kant i slate-600
+ *   - runde 3, bolk 8 (25.11, telefontesten): på 390 × 664 og 375 × 553 (også
+ *     venstrehendt) er bunnen av pilene innenfor synsfeltet uten rulling på
+ *     første kort, på begge øvekortsidene; under 760 px står tellingen til
+ *     venstre for merkeknappene (til høyre med «Venstrehendt»), i flukt med
+ *     «Må øve mer» og før kortet i DOM-en, og på 320 px med 200 % tekst ved
+ *     siden av eller over knappene uten å dekke dem; fra 760 px står den over
+ *     kortet som før. Glideren: et ekte musedrag fra «Litt» glir fritt
+ *     (verdien mellom trinnene, `step="any"`), trinnet nærmest lyser og
+ *     aria-valuetext er trinnets navn; slipp nærmest «Mye» smetter inn på
+ *     «Mye» (`kjent`, step 1), og slipp utenfor glideren smetter inn på
+ *     trinnet nærmest der håndtaket sto
  *   - 320 px og 200 % tekst: ingen sidelengs rulling og ingen klippet tekst
  *     på arbeidsbordet, i viften, i Samlinger og på Ny tekst
  *   - FR-47: landingssiden på `/` uten innlogging (200, ikke omdirigering),
@@ -720,6 +731,160 @@ try {
       false,
       `trenger tre overskrifter for å prøve en urørt glider, fant ${grupper.length}`,
     );
+  }
+  // Runde 3, bolk 8 (telefontest 25.11): et ekte pekerdrag (mus i Chromium)
+  // på første glider, som står på «Litt». Draget stopper mellom «Litt» og
+  // «Mye», nærmest «Mye»: under draget står håndtaket mellom trinnene
+  // (verdien er ikke et helt trinn), trinnet nærmest lyser, og aria-valuetext
+  // er alltid et trinnavn. Etter slipp står det på «Mye», `step` er 1 igjen,
+  // og skjemaet sender `kjent`. Så et drag mot «Ingenting ennå» som slippes
+  // utenfor glideren: håndtaket smetter inn på trinnet nærmest der det sto.
+  {
+    const glider = pc.locator("main form fieldset").first().locator("input[type=range]");
+    await glider.scrollIntoViewIfNeeded();
+    const boks = await glider.boundingBox();
+    // Håndtakets midtpunkt går fra venstre + halvt håndtak til høyre − halvt håndtak (1,75 rem).
+    const halv = await pc.evaluate(() => 0.875 * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16));
+    const x = (v) => boks.x + halv + (v / 2) * (boks.width - 2 * halv);
+    const y = boks.y + boks.height / 2;
+    const tilstand = () =>
+      glider.evaluate((g) => ({
+        verdi: Number(g.value),
+        tekst: g.getAttribute("aria-valuetext"),
+        step: g.getAttribute("step"),
+        lyser: [...g.closest(".forkunnskap").querySelectorAll(".forkunnskap-trinn > [data-valgt]")].map((s) => s.textContent.trim()).join(", "),
+      }));
+    const foer = await tilstand();
+    await pc.mouse.move(x(1), y);
+    await pc.mouse.down();
+    const underveis = [];
+    for (const v of [1.15, 1.3, 1.42, 1.58, 1.7]) {
+      await pc.mouse.move(x(v), y, { steps: 3 });
+      underveis.push({ maal: v, ...(await tilstand()) });
+    }
+    await pc.mouse.up();
+    const etter = await tilstand();
+    const kode = (await sendtMerking())[grupper[0].felt];
+    const vis = (u) => `${u.maal ?? ""}→${u.verdi.toFixed(2)} «${u.tekst}» lyser «${u.lyser}» step ${u.step}`;
+    sjekk(
+      "bolk 8: under et musedrag fra «Litt» glir håndtaket fritt (verdien følger pekeren, mellom trinnene, uten hopp)",
+      foer.tekst === "Litt" &&
+        underveis.every((u) => Math.abs(u.verdi - u.maal) <= 0.08 && !Number.isInteger(u.verdi) && u.step === "any") &&
+        underveis.every((u, i) => i === 0 || u.verdi > underveis[i - 1].verdi),
+      [foer, ...underveis].map(vis).join(" | "),
+    );
+    sjekk(
+      "bolk 8: under draget lyser trinnet nærmest, og aria-valuetext er trinnets navn («Litt», så «Mye»), aldri et desimaltall",
+      underveis.map((u) => u.tekst).join(",") === "Litt,Litt,Litt,Mye,Mye" &&
+        underveis.every((u) => u.lyser === u.tekst),
+      underveis.map(vis).join(" | "),
+    );
+    sjekk(
+      "bolk 8: slipp nærmest «Mye»: håndtaket smetter inn på «Mye» (verdi 2, step 1), og skjemaet sender `kjent`",
+      etter.verdi === 2 && etter.tekst === "Mye" && etter.lyser === "Mye" && etter.step === "1" && kode === "kjent",
+      `${vis(etter)}; ${kode}`,
+    );
+    // Dra mot venstre, til nærmest «Ingenting ennå», og slipp under glideren.
+    await pc.mouse.move(x(2), y);
+    await pc.mouse.down();
+    await pc.mouse.move(x(0.3), y, { steps: 6 });
+    const foerSlipp = await tilstand();
+    await pc.mouse.move(x(0.3), boks.y + boks.height + 120, { steps: 3 });
+    await pc.mouse.up();
+    const utenfor = await tilstand();
+    const kode2 = (await sendtMerking())[grupper[0].felt];
+    sjekk(
+      "bolk 8: slipp utenfor glideren: håndtaket smetter inn på trinnet nærmest der det sto («Ingenting ennå», `nytt`)",
+      Math.abs(foerSlipp.verdi - 0.3) <= 0.08 &&
+        foerSlipp.tekst === "Ingenting ennå" &&
+        utenfor.verdi === 0 &&
+        utenfor.tekst === "Ingenting ennå" &&
+        utenfor.step === "1" &&
+        kode2 === "nytt",
+      `${vis(foerSlipp)} → ${vis(utenfor)}; ${kode2}`,
+    );
+  }
+  // Runde 3, bolk 8: trykket uten drag og det avbrutte draget, i en egen fane
+  // med den samme aktiveringen, så glidere her er urørte og skjemaet over står
+  // som det er. Et trykk i iOS Safari flytter ikke håndtaket: pointerdown og
+  // pointerup på glideren uten input/change imellom, som her med syntetiske
+  // hendelser, så trinnet regnes fra pekeren (`trinnFraPeker`).
+  {
+    const fane = await pc.context().newPage();
+    fane.setDefaultTimeout(120000);
+    await fane.setViewportSize({ width: 375, height: 800 });
+    await fane.goto(pc.url());
+    await fane.locator("main form input[type=range]:not([disabled])").first().waitFor();
+    const merkingI = () =>
+      fane.evaluate(() =>
+        Object.fromEntries([...new FormData(document.querySelector("main form")).entries()].filter(([k]) => k.startsWith("merke-"))),
+      );
+    const trykk = (nr, side) =>
+      fane.evaluate(
+        ({ nr, side }) => {
+          const g = document.querySelectorAll("main form fieldset")[nr].querySelector("input[type=range]");
+          const b = g.getBoundingClientRect();
+          const felles = { bubbles: true, cancelable: true, composed: true, isPrimary: true, button: 0, pointerId: 41, pointerType: "touch", clientX: side === "høyre" ? b.right - 3 : b.left + 3, clientY: b.top + b.height / 2 };
+          g.dispatchEvent(new PointerEvent("pointerdown", { ...felles, buttons: 1 }));
+          g.dispatchEvent(new PointerEvent("pointerup", { ...felles, buttons: 0 }));
+        },
+        { nr, side },
+      );
+    const les = (nr) =>
+      fane.evaluate((nr) => {
+        const g = document.querySelectorAll("main form fieldset")[nr].querySelector("input[type=range]");
+        return { verdi: g.value, tekst: g.getAttribute("aria-valuetext"), step: g.getAttribute("step") };
+      }, nr);
+    const urort = [await les(0), await les(1)];
+    await trykk(0, "høyre");
+    const hoeyre = await les(0);
+    await trykk(1, "venstre");
+    const venstre = await les(1);
+    const sendt = await merkingI();
+    sjekk(
+      "bolk 8: trykk uten drag ytterst til høyre på en urørt glider (iOS Safari): «Mye» og `kjent`",
+      urort[0].tekst === "Ikke merket ennå" && hoeyre.tekst === "Mye" && hoeyre.verdi === "2" && hoeyre.step === "1" && sendt[grupper[0].felt] === "kjent",
+      `${JSON.stringify(urort[0])} → ${JSON.stringify(hoeyre)}; ${JSON.stringify(sendt)}`,
+    );
+    sjekk(
+      "bolk 8: trykk uten drag ytterst til venstre på en urørt glider (iOS Safari): «Ingenting ennå» og `nytt`",
+      urort[1].tekst === "Ikke merket ennå" && venstre.tekst === "Ingenting ennå" && venstre.verdi === "0" && venstre.step === "1" && sendt[grupper[1].felt] === "nytt",
+      `${JSON.stringify(urort[1])} → ${JSON.stringify(venstre)}; ${JSON.stringify(sendt)}`,
+    );
+    // Avbrutt drag: et musedrag på den tredje (urørte) glideren til om lag
+    // 1,3, så `pointercancel` på window med musens pointerId før slipp.
+    if (grupper.length >= 3) {
+      const glider = fane.locator("main form fieldset").nth(2).locator("input[type=range]");
+      await glider.scrollIntoViewIfNeeded();
+      const boks = await glider.boundingBox();
+      const halv = await fane.evaluate(() => 0.875 * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16));
+      const x = (v) => boks.x + halv + (v / 2) * (boks.width - 2 * halv);
+      const y = boks.y + boks.height / 2;
+      await fane.evaluate(() => window.addEventListener("pointerdown", (e) => (window.__pekerId = e.pointerId), { capture: true, once: true }));
+      await fane.mouse.move(x(1), y);
+      await fane.mouse.down();
+      await fane.mouse.move(x(1.3), y, { steps: 4 });
+      const underveis = await les(2);
+      await fane.evaluate(() => window.dispatchEvent(new PointerEvent("pointercancel", { pointerId: window.__pekerId, isPrimary: true, bubbles: true })));
+      const avbrutt = await les(2);
+      await fane.mouse.up();
+      const etterSlipp = await les(2);
+      sjekk(
+        "bolk 8: et drag avbrutt med pointercancel smetter inn på trinnet nærmest («Litt», verdi 1, step 1)",
+        Math.abs(Number(underveis.verdi) - 1.3) <= 0.08 &&
+          underveis.step === "any" &&
+          avbrutt.step === "1" &&
+          avbrutt.verdi === "1" &&
+          avbrutt.tekst === "Litt" &&
+          etterSlipp.verdi === "1" &&
+          etterSlipp.tekst === "Litt",
+        `${JSON.stringify(underveis)} → ${JSON.stringify(avbrutt)} → slipp ${JSON.stringify(etterSlipp)}`,
+      );
+    } else {
+      sjekk("bolk 8: et drag avbrutt med pointercancel smetter inn på trinnet nærmest", false, `trenger tre overskrifter, fant ${grupper.length}`);
+    }
+    await fane.close();
+    await pc.bringToFront();
   }
   sjekk("FR-6: aktiveringen ruller ikke sidelengs på 375 px", !(await aktiv()).sidelengs);
   await pc.setViewportSize({ width: 1280, height: 900 });
@@ -2342,9 +2507,56 @@ try {
         kan: r(kan),
         forrige: r(knapp(/^Forrige kort$/)),
         neste: r(knapp(/^(Neste kort|Ferdig)$/)),
+        telling: r(flate?.querySelector(".oevekort-telling")),
+        // Tellingen står før kortet i DOM-en, så skjermleseren leser den først.
+        tellingFoerKortet: !!(kort && flate?.querySelector(".oevekort-telling")?.compareDocumentPosition(kort) & Node.DOCUMENT_POSITION_FOLLOWING),
         pressed: [maa?.getAttribute("aria-pressed"), kan?.getAttribute("aria-pressed")],
       };
     });
+  }
+  /**
+   * Runde 3, bolk 8: under 760 px står tellingen ved siden av merkeknappene,
+   * til venstre for dem (til høyre med «Venstrehendt»), med toppen i flukt
+   * med «Må øve mer», og innenfor kortets bredde. Med `kanGaaOver` (smalt og
+   * stor tekst) kan den i stedet stå over knappene. Den dekker aldri en knapp.
+   */
+  function tellingVedKnappene(o, venstre, { kanGaaOver = false } = {}) {
+    const { telling: t, maa, kan, kort } = o;
+    if (!t || !maa || !kan || !kort) return false;
+    const overlapp = (a, b) => a.v < b.h && b.v < a.h && a.t < b.b && b.t < a.b;
+    const innenfor = t.v >= kort.v - 1 && t.h <= kort.h + 1;
+    const vedSiden = Math.abs(t.t - maa.t) <= 2 && (venstre ? t.v >= maa.h - 1 : t.h <= maa.v + 1);
+    const over = t.b <= maa.t + 1;
+    return o.tellingFoerKortet && innenfor && !overlapp(t, maa) && !overlapp(t, kan) && t.b <= kort.t && (vedSiden || (kanGaaOver && over));
+  }
+  /**
+   * Runde 3, bolk 8: under 760 px står feilmeldingen fra merkingen mellom
+   * merkeknappene og kortet. Merkingen feiler ikke på bestilling, så det
+   * sjekkes med en innsatt .oevekort-feil der komponenten setter den (sist i
+   * rammen), som fra 760 px (bolk 3).
+   */
+  async function feilmeldingPaaTelefon(side) {
+    const f = await side.evaluate(() => {
+      const ramme = document.querySelector(".oevekort-ramme");
+      const d = document.createElement("div");
+      d.className = "oevekort-feil";
+      d.id = "proevefeil";
+      d.textContent = "Prøvefeil";
+      ramme.append(d);
+      const r = (e) => e.getBoundingClientRect();
+      const knapper = [...ramme.querySelectorAll(".oevekort-merk button")].map(r);
+      const [m, k] = [r(d), r(ramme.querySelector(":scope > button[aria-pressed]"))];
+      const ut = {
+        feilTopp: Math.round(m.top),
+        feilBunn: Math.round(m.bottom),
+        knappBunn: Math.round(Math.max(...knapper.map((b) => b.bottom))),
+        kortTopp: Math.round(k.top),
+        iBredden: m.left >= k.left - 1 && m.right <= k.right + 1,
+      };
+      d.remove();
+      return ut;
+    });
+    return { ...f, ok: f.feilTopp >= f.knappBunn - 1 && f.feilBunn <= f.kortTopp + 1 && f.iBredden };
   }
   function riktigOppsett(o, venstre) {
     const { kort, maa, kan, forrige, neste } = o;
@@ -2389,6 +2601,13 @@ try {
       riktigOppsett(o, venstre),
       JSON.stringify(o),
     );
+    sjekk(
+      `bolk 8, 375 px (${navn}): «Kort N av M» og tellingen står til ${venstre ? "høyre" : "venstre"} for merkeknappene, i flukt med «Må øve mer», og før kortet i DOM-en`,
+      tellingVedKnappene(o, venstre),
+      JSON.stringify({ telling: o.telling, maa: o.maa, kort: o.kort, foer: o.tellingFoerKortet }),
+    );
+    const feil375 = await feilmeldingPaaTelefon(side);
+    sjekk(`bolk 8, 375 px (${navn}): feilmeldingen fra merkingen står mellom «Har kontroll» og kortet`, feil375.ok, JSON.stringify(feil375));
     // Runde 3, bolk 3: rammen rundt kortet er display: contents under 760 px, og
     // et trykk i mellomrommet mellom merkeknappene snur ikke kortet.
     if (o.maa && o.kan) {
@@ -2455,7 +2674,118 @@ try {
       const smalt = `320 px${stor ? ", 200 % tekst" : ""}`;
       const o2 = await oevekortOppsett(side);
       sjekk(`bolk 9, ${smalt} (${navn}): samme plassering`, riktigOppsett(o2, venstre), JSON.stringify(o2));
+      sjekk(
+        `bolk 8, ${smalt} (${navn}): tellingen står ${stor ? "ved siden av eller over" : "ved siden av"} merkeknappene og dekker ingen knapp`,
+        tellingVedKnappene(o2, venstre, { kanGaaOver: stor }),
+        JSON.stringify({ telling: o2.telling, maa: o2.maa, kan: o2.kan, kort: o2.kort }),
+      );
+      const feil320 = await feilmeldingPaaTelefon(side);
+      sjekk(`bolk 8, ${smalt} (${navn}): feilmeldingen fra merkingen står mellom «Har kontroll» og kortet`, feil320.ok, JSON.stringify(feil320));
       await ingenSiderulling(side, `øvekort ${smalt} (${navn})`);
+    }
+    await ctx.close();
+  }
+  // Runde 3, bolk 8 (telefontest 25.11): på iPhone 14 (390 × 664) og iPhone
+  // SE (375 × 553), den synlige høyden i Safari, synes pilene uten rulling på
+  // første kort, på begge øvekortsidene, med vanlig tekst; tellingen står ved
+  // merkeknappene, og tilbakelenken er fortsatt minst 44 px høy.
+  for (const [bredde, hoeyde, venstre] of [
+    [390, 664, false],
+    [375, 553, false],
+    [375, 553, true],
+  ]) {
+    const ctx = await nettleser.newContext({ viewport: { width: bredde, height: hoeyde }, locale: "nb-NO", isMobile: true, hasTouch: true });
+    await ctx.addCookies([...(await pc.context().cookies()), ...(venstre ? [handKake("venstre")] : [])]);
+    const side = await ctx.newPage();
+    side.setDefaultTimeout(120000);
+    for (const [url, hva] of [
+      [`${tekstUrl}/oevekort`, "teksten"],
+      [`${mappeUrl}/oevekort`, "mappen"],
+    ]) {
+      await side.goto(url);
+      await side.locator(".oevekort-flate").waitFor();
+      await side.evaluate(() => document.fonts.ready);
+      const o = await oevekortOppsett(side);
+      const syn = await side.evaluate(() => {
+        const lenke = [...document.querySelectorAll("main header a")].find((a) => /Tilbake til/.test(a.textContent));
+        return {
+          rullet: Math.round(window.scrollY),
+          hoeyde: window.innerHeight,
+          lenke: lenke ? Math.round(lenke.getBoundingClientRect().height) : 0,
+          kortnr: document.querySelector(".oevekort-telling p")?.textContent.trim() ?? "",
+        };
+      });
+      const navn = `${bredde} × ${hoeyde}${venstre ? ", venstrehendt" : ""}, ${hva}`;
+      sjekk(
+        `bolk 8, ${navn}: bunnen av «Forrige kort» og «Neste kort» er innenfor synsfeltet uten rulling, på første kort`,
+        !!o.forrige &&
+          !!o.neste &&
+          syn.rullet === 0 &&
+          /^Kort 1 av/.test(syn.kortnr) &&
+          o.forrige.b <= syn.hoeyde &&
+          o.neste.b <= syn.hoeyde,
+        JSON.stringify({ ...syn, forrige: o.forrige, neste: o.neste, kort: o.kort }),
+      );
+      sjekk(
+        `bolk 8, ${navn}: oppsettet er som før (knappene over kortet, pilene under), tellingen ved merkeknappene, og tilbakelenken minst 44 px høy`,
+        riktigOppsett(o, venstre) && tellingVedKnappene(o, venstre) && syn.lenke >= 44,
+        JSON.stringify({ telling: o.telling, maa: o.maa, kort: o.kort, lenke: syn.lenke }),
+      );
+      // Testtittelen er kort. En vanlig lang tittel går over to linjer, og
+      // «bare de du vil øve mer på»-runden har lengre telling; pilene skal
+      // likevel synes. Tittelen byttes i siden, og runden startes slik eleven
+      // gjør det: ett kort merket «Må øve mer», runden ferdig, «Øv på de …».
+      // Lang nok til to linjer også på 390 px (én linje holder ikke der med 1,75 rem).
+      const LANG_TITTEL = "Elektromagnetiske bølger og stråling fra sola";
+      const langTittel = () =>
+        side.evaluate((t) => {
+          const h1 = document.querySelector("main h1");
+          h1.textContent = t;
+          return { linjer: Math.round(h1.getBoundingClientRect().height / parseFloat(getComputedStyle(h1).lineHeight)) };
+        }, LANG_TITTEL);
+      const pilene = async () => {
+        // Øverst på siden, som når den åpnes (et klikk kan ha rullet den).
+        await side.evaluate(() => window.scrollTo(0, 0));
+        const p = await oevekortOppsett(side);
+        return {
+          ok: !!p.forrige && !!p.neste && p.forrige.b <= syn.hoeyde && p.neste.b <= syn.hoeyde,
+          forrige: p.forrige,
+          neste: p.neste,
+          kort: p.kort,
+        };
+      };
+      const lang = await langTittel();
+      const medLang = await pilene();
+      sjekk(
+        `bolk 8, ${navn}: med en tittel over to linjer («${LANG_TITTEL}») synes pilene fortsatt uten rulling`,
+        lang.linjer >= 2 && medLang.ok,
+        JSON.stringify({ ...lang, ...medLang }),
+      );
+      await side.locator(".oevekort-merk button", { hasText: /^Må øve mer$/ }).click();
+      await side.getByText(/Må øve: 1 ·/).waitFor();
+      await side.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
+      const ferdig = side.locator("h2", { hasText: "Runden er ferdig" });
+      for (let i = 0; i < 40 && (await ferdig.count()) === 0; i++) await side.keyboard.press("ArrowRight");
+      await side.getByRole("button", { name: /^Øv på de 1 du vil øve mer på$/ }).click();
+      await side.locator(".oevekort-flate").waitFor();
+      const runde = (await side.locator(".oevekort-telling p").first().textContent()).trim();
+      const lang2 = await langTittel();
+      const maaOeve = await pilene();
+      sjekk(
+        `bolk 8, ${navn}: i runden «bare de du vil øve mer på», med tittelen over to linjer, synes pilene uten rulling`,
+        /— bare de du vil øve mer på$/.test(runde) && lang2.linjer >= 2 && maaOeve.ok,
+        JSON.stringify({ runde, ...lang2, ...maaOeve }),
+      );
+      // Merkingen tilbake, så neste side og sjekkene lenger ned starter umerket.
+      const pool = new pg.Pool({ connectionString: DB, max: 1 });
+      try {
+        await pool.query(
+          "update begrep set merking = null where begrepssett_id in (select id from begrepssett where tekst_id = $1)",
+          [tekstUrl.split("/").pop()],
+        );
+      } finally {
+        await pool.end();
+      }
     }
     await ctx.close();
   }
@@ -2621,6 +2951,7 @@ try {
         maa: r(knapp(/^Må øve mer$/)),
         kan: r(knapp(/^Har kontroll$/)),
         nav: r(document.querySelector(".oevekort-nav")),
+        telling: r(document.querySelector(".oevekort-telling")),
         synlige: synlige.length,
         iHeader: synlige.filter((a) => a.closest("header")).length,
         lenke: r(synlige[0]),
@@ -2685,6 +3016,13 @@ try {
           o.href === riktigHref &&
           (await side.getByRole("link", { name: tekst }).count()) === 1,
         JSON.stringify(o),
+      );
+      // Runde 3, bolk 8 endrer bare telefonen: fra 760 px står tellingen over
+      // rammen, i rammens bredde, som før.
+      sjekk(
+        `bolk 8, ${hvor}: tellingen står over kortet som før, i hele kortets bredde`,
+        !!o.telling && !!o.ramme && o.telling.b <= o.ramme.t && Math.abs(o.telling.v - o.ramme.v) <= 1 && Math.abs(o.telling.h - o.ramme.h) <= 1,
+        JSON.stringify({ telling: o.telling, ramme: o.ramme }),
       );
       await ingenSiderulling(side, `øvekort ${hvor}`);
       if (iTeksten && !stor) {

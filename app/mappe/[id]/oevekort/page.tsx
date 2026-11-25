@@ -30,7 +30,7 @@ export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/o
   }
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-10 min-[760px]:max-w-[64rem] min-[760px]:px-8">
+    <main className="mx-auto w-full max-w-2xl px-4 pt-2 pb-10 min-[760px]:max-w-[64rem] min-[760px]:px-8 min-[760px]:pt-10">
       {/*
         Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11).
         Runde 3, bolk 3: bare under 760 px. Fra 760 px står den nederst på siden
@@ -44,13 +44,13 @@ export default async function Mappeoevekort({ params }: PageProps<"/mappe/[id]/o
             <span aria-hidden="true">←&nbsp;</span>Tilbake til mappen
           </Link>
         </p>
-        <p className="mt-4 min-[760px]:mt-0 text-dempet">Øvekort fra mappen</p>
-        <h1 className="mt-1 [overflow-wrap:anywhere]">
+        <p className="mt-1 min-[760px]:mt-0 text-dempet">Øvekort fra mappen</p>
+        <h1 className="oevekort-tittel mt-1 [overflow-wrap:anywhere]">
           <Tusj>{mappe.tittel}</Tusj>
         </h1>
       </header>
 
-      <div className="mt-8">
+      <div className="mt-3 min-[760px]:mt-8">
         {kort.length > 0 ? (
           <Oevekort kort={kort} />
         ) : (

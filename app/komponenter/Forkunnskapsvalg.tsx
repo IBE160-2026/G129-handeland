@@ -10,10 +10,21 @@
  *
  * - `onChange`: eleven drar eller trykker på sporet (og skjermlesere på
  *   telefon, som sveiper opp og ned).
- * - `onPointerUp` (bare primærpekeren, venstre knapp): trinnet nærmest
- *   pekeren (`trinnFraPeker`). Et klikk på håndtaket gir ingen `change`, men
- *   skal velge «Litt» fra urørt, og i iOS Safari flytter et trykk på sporet
- *   ikke håndtaket.
+ * - Draget (runde 3, bolk 8, 25.11): fra `pointerdown` (bare primærpekeren,
+ *   venstre knapp) til `pointerup`/`pointercancel` har glideren
+ *   `step="any"`, så håndtaket glir fritt i stedet for å hoppe, og trinnet
+ *   nærmest lyser opp (`underDrag`). Ved slipp eller avbrudd, også utenfor
+ *   glideren (lytterne står på `window`), smetter håndtaket inn på trinnet
+ *   nærmest der det sto (`smettInn`), og `step` er 1 igjen. Det er to veier:
+ *   - Håndtaket har flyttet seg (`change` under trykket): trinnet nærmest
+ *     gliderens verdi. Det gjelder et drag, og i Chromium også et trykk på
+ *     sporet, der håndtaket flytter seg dit med en gang.
+ *   - Håndtaket har ikke flyttet seg (et trykk på håndtaket, som ikke gir
+ *     `change`, men skal velge «Litt» fra urørt, eller et trykk på sporet i
+ *     iOS Safari, som ikke flytter håndtaket): trinnet nærmest pekeren
+ *     (`trinnFraPeker`), men bare når pekeren slippes på glideren. Ellers,
+ *     og ved `pointercancel`, endres ingenting.
+ * - Piltaster mens pekeren holdes nede, gjør ingenting (draget gjelder).
  * - `onClick`: skjermlesere på telefon kan aktivere med bare `click`; da
  *   velges trinnet håndtaket står på.
  * - Glideren og knappen er `disabled` til komponenten er hydrert.
@@ -28,14 +39,18 @@
  * globals.css (`.forkunnskap`).
  */
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { MERKENAVN, merkefelt } from "../../tekst/forkunnskap";
 import {
   TRINN,
   URORT,
+  type Trinn,
   trinnFraPeker,
   dempet,
+  dragPosisjon,
   sendtKode,
+  smettInn,
+  underDrag,
   vedTast,
   velgGjeldende,
   velgTrinn,
@@ -66,6 +81,14 @@ export function Forkunnskapsvalg({
   // `false`, nettleseren etterpå `true` (samme mønster som Arbeidsbord.tsx,
   // uten setState i en effekt).
   const klar = useSyncExternalStore(ingenAbonnement, () => true, () => false);
+  // Draget (runde 3, bolk 8): null i ro. Under draget er `pos` håndtakets
+  // frie posisjon, eller null til det har flyttet seg. Refen er det
+  // hendelsene leser (lytterne på `window` ser ikke ny tilstand), tilstanden
+  // det som tegnes.
+  const [drag, settDrag] = useState<{ pos: number | null } | null>(null);
+  const dragRef = useRef<{ pos: number | null } | null>(null);
+  const avsluttDrag = useRef<(() => void) | null>(null);
+  useEffect(() => () => avsluttDrag.current?.(), []);
   const kode = sendtKode(t);
   const tekst = verditekst(t);
   const valgt = !dempet(t) ? t.trinn : null;
@@ -79,8 +102,8 @@ export function Forkunnskapsvalg({
         type="range"
         min={0}
         max={2}
-        step={1}
-        value={t.trinn}
+        step={drag ? "any" : 1}
+        value={drag?.pos ?? t.trinn}
         className="forkunnskap-glider"
         aria-labelledby={navnId}
         aria-describedby={beskrivelseId}
@@ -89,16 +112,50 @@ export function Forkunnskapsvalg({
         onChange={(e) => {
           // Verdien leses nå: `currentTarget` er null når React kjører oppdateringen senere.
           const verdi = e.currentTarget.value;
-          settT((f) => velgTrinn(f, verdi));
+          if (dragRef.current) {
+            // Under draget: håndtaket står der pekeren er, tilstanden på trinnet nærmest.
+            const pos = dragPosisjon(verdi);
+            dragRef.current = { pos };
+            settDrag({ pos });
+            settT((f) => underDrag(f, verdi).tilstand);
+          } else {
+            settT((f) => velgTrinn(f, verdi));
+          }
         }}
-        onPointerUp={(e) => {
-          // Bare primærpekeren og venstre knapp. Trinnet regnes fra pekerens
-          // plass, fordi et trykk på sporet i iOS Safari ikke flytter håndtaket.
+        onPointerDown={(e) => {
+          // Bare primærpekeren og venstre knapp.
           if (!e.isPrimary || e.button !== 0) return;
-          const boks = e.currentTarget.getBoundingClientRect();
-          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-          const trinn = trinnFraPeker(e.clientX, boks, HALV_TOMMEL_REM * rem);
-          settT((f) => velgTrinn(f, trinn));
+          avsluttDrag.current?.();
+          const glider = e.currentTarget;
+          const pekerId = e.pointerId;
+          const rydd = () => {
+            window.removeEventListener("pointerup", slutt);
+            window.removeEventListener("pointercancel", slutt);
+            avsluttDrag.current = null;
+          };
+          function slutt(ev: PointerEvent) {
+            if (ev.pointerId !== pekerId) return;
+            rydd();
+            const pos = dragRef.current?.pos ?? null;
+            dragRef.current = null;
+            settDrag(null);
+            // Et trykk uten drag regnes fra pekerens plass, men bare når den
+            // slippes på glideren (som før, da dette var `pointerup` på
+            // glideren). En berøring er fanget av glideren, så den slippes
+            // alltid der.
+            let peker: Trinn | null = null;
+            if (ev.type === "pointerup" && pos === null && ev.target === glider) {
+              const boks = glider.getBoundingClientRect();
+              const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+              peker = trinnFraPeker(ev.clientX, boks, HALV_TOMMEL_REM * rem);
+            }
+            settT((f) => smettInn(f, { pos, peker }));
+          }
+          window.addEventListener("pointerup", slutt);
+          window.addEventListener("pointercancel", slutt);
+          avsluttDrag.current = rydd;
+          dragRef.current = { pos: null };
+          settDrag({ pos: null });
         }}
         onClick={() => {
           // Skjermlesere på telefon kan aktivere med bare `click` (dobbelttrykk):
@@ -109,6 +166,12 @@ export function Forkunnskapsvalg({
         onKeyDown={(e) => {
           const ny = vedTast(t, { key: e.key, ctrl: e.ctrlKey, alt: e.altKey, meta: e.metaKey });
           if (!ny) return;
+          // Mens pekeren holdes nede, gjelder draget: en piltast ville bare
+          // blitt overskrevet når håndtaket smetter inn ved slipp.
+          if (dragRef.current) {
+            e.preventDefault();
+            return;
+          }
           e.preventDefault();
           settT(ny);
         }}

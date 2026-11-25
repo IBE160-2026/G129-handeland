@@ -11,10 +11,14 @@ import {
   SATT_TIL_SIDE,
   URORT,
   dempet,
+  dragPosisjon,
+  naermesteTrinn,
   sendtKode,
+  smettInn,
   somTrinn,
   TRINN,
   trinnFraPeker,
+  underDrag,
   vedTast,
   velgGjeldende,
   velgTrinn,
@@ -99,7 +103,85 @@ describe("glideren", () => {
   });
 });
 
+describe("draget (runde 3, bolk 8)", () => {
+  test("posisjonen under draget er fri mellom endene, ikke avrundet", () => {
+    expect(dragPosisjon("1.37")).toBeCloseTo(1.37);
+    expect(dragPosisjon(0.04)).toBeCloseTo(0.04);
+    expect(dragPosisjon(-1)).toBe(0);
+    expect(dragPosisjon(3)).toBe(2);
+    expect(dragPosisjon("tull")).toBe(1);
+    expect(dragPosisjon("")).toBe(1);
+  });
+
+  test("trinnet nærmest posisjonen lyser opp", () => {
+    expect(naermesteTrinn(0.2)).toBe(0);
+    expect(naermesteTrinn(0.6)).toBe(1);
+    expect(naermesteTrinn(1.4)).toBe(1);
+    expect(naermesteTrinn(1.6)).toBe(2);
+  });
+
+  test("dra fra «Litt» mot høyre: håndtaket følger uten hopp, og «Mye» lyser når det er nærmest", () => {
+    const litt = velgTrinn(URORT, 1);
+    const steg = [1.1, 1.3, 1.49, 1.51, 1.8].map((v) => underDrag(litt, String(v)));
+    expect(steg.map((s) => s.pos)).toEqual([1.1, 1.3, 1.49, 1.51, 1.8]);
+    expect(steg.map((s) => verditekst(s.tilstand))).toEqual(["Litt", "Litt", "Litt", "Mye", "Mye"]);
+  });
+
+  test("under draget er aria-valuetext et trinnavn og det som sendes et helt trinn, aldri et desimaltall", () => {
+    for (const v of ["0.01", "0.5", "0.77", "1.25", "1.99"]) {
+      const { tilstand } = underDrag(URORT, v);
+      expect(["Ingenting ennå", "Litt", "Mye"]).toContain(verditekst(tilstand));
+      expect(["nytt", "litt", "kjent"]).toContain(sendtKode(tilstand));
+      expect(Number.isInteger(tilstand.trinn)).toBe(true);
+    }
+  });
+
+  test("draget slår av «Skjønner ikke overskriften»", () => {
+    expect(underDrag(vekslUklar(URORT), "1.8").tilstand).toEqual({ rort: true, trinn: 2, uklar: false });
+  });
+
+  test("slipp mellom «Litt» og «Mye», nærmest «Mye»: smetter til «Mye» og sender `kjent`", () => {
+    const { pos, tilstand } = underDrag(velgTrinn(URORT, 1), "1.7");
+    const t = smettInn(tilstand, { pos, peker: null });
+    expect(t).toEqual({ rort: true, trinn: 2, uklar: false });
+    expect(verditekst(t)).toBe("Mye");
+    expect(sendtKode(t)).toBe("kjent");
+  });
+
+  test("slipp utenfor glideren eller avbrutt drag (`pointercancel`): trinnet nærmest der håndtaket sto", () => {
+    // Pekeren er sluppet utenfor (eller avbrutt), så `peker` er null; posisjonen avgjør.
+    expect(smettInn(velgTrinn(URORT, 1), { pos: 0.3, peker: null }).trinn).toBe(0);
+    expect(smettInn(velgTrinn(URORT, 0), { pos: 1.2, peker: null }).trinn).toBe(1);
+    // Posisjonen går foran pekeren: håndtaket kan være grepet litt ved siden av midten.
+    expect(smettInn(URORT, { pos: 1.6, peker: 1 }).trinn).toBe(2);
+  });
+
+  test("trykk uten drag: trinnet nærmest pekeren, også ytterst på sporet (iOS Safari)", () => {
+    const boks = { left: 100, width: 200 };
+    const ytterstVenstre = smettInn(URORT, { pos: null, peker: trinnFraPeker(101, boks, 14) });
+    expect(ytterstVenstre).toEqual({ rort: true, trinn: 0, uklar: false });
+    expect(verditekst(ytterstVenstre)).toBe("Ingenting ennå");
+    expect(sendtKode(smettInn(URORT, { pos: null, peker: trinnFraPeker(299, boks, 14) }))).toBe("kjent");
+    expect(sendtKode(smettInn(URORT, { pos: null, peker: trinnFraPeker(200, boks, 14) }))).toBe("litt");
+  });
+
+  test("urørt og avbrutt uten at håndtaket flyttet seg: ingenting endres, og ingenting sendes", () => {
+    const t = smettInn(URORT, { pos: null, peker: null });
+    expect(t).toEqual(URORT);
+    expect(sendtKode(t)).toBe("");
+    expect(verditekst(t)).toBe(IKKE_MERKET);
+    expect(smettInn(vekslUklar(URORT), { pos: null, peker: null })).toEqual(vekslUklar(URORT));
+  });
+});
+
 describe("tastaturet", () => {
+  test("→ fra urørt, deretter ←: «Mye», så «Litt»; aldri desimaler", () => {
+    const mye = tast(URORT, "ArrowRight");
+    const litt = tast(mye, "ArrowLeft");
+    expect([verditekst(mye), verditekst(litt)]).toEqual(["Mye", "Litt"]);
+    expect([mye.trinn, litt.trinn]).toEqual([2, 1]);
+  });
+
   test("→ fra urørt: `kjent` («Mye»); ← fra urørt: `nytt`", () => {
     expect(sendtKode(tast(URORT, "ArrowRight"))).toBe("kjent");
     expect(verditekst(tast(URORT, "ArrowRight"))).toBe("Mye");

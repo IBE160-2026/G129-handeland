@@ -88,6 +88,51 @@ export function trinnFraPeker(
   return somTrinn(((clientX - boks.left - halvTommel) / strekning) * 2);
 }
 
+/*
+ * Draget (runde 3, bolk 8, avgjort av Arve 25.11): mens primærpekeren drar,
+ * glir håndtaket fritt (glideren har da `step="any"`), og trinnet nærmest
+ * lyser opp. Tilstanden står hele tiden på det nærmeste trinnet, så
+ * `aria-valuetext` og det skjemaet sender alltid er et helt trinn; bare
+ * posisjonen under draget er et desimaltall. Ved slipp eller avbrudd smetter
+ * håndtaket inn på trinnet nærmest der det sto. Tastaturet og skjermleseren
+ * går fortsatt ett trinn om gangen (`vedTast`, `step={1}` i ro).
+ */
+
+/** Håndtakets posisjon under draget: gliderens verdi, fritt mellom 0 og 2 (ikke avrundet). */
+export function dragPosisjon(verdi: unknown): number {
+  const n = typeof verdi === "string" && verdi.trim() === "" ? NaN : Number(verdi);
+  if (!Number.isFinite(n)) return MIDTEN;
+  return Math.min(2, Math.max(0, n));
+}
+
+/** Trinnet nærmest en posisjon: det som lyser opp under draget, og det håndtaket smetter til. */
+export const naermesteTrinn = (pos: number): Trinn => somTrinn(dragPosisjon(pos));
+
+/** Under draget: håndtaket står på `pos`, og tilstanden på trinnet nærmest (knappen går av). */
+export function underDrag(t: Glidertilstand, verdi: unknown): { pos: number; tilstand: Glidertilstand } {
+  const pos = dragPosisjon(verdi);
+  return { pos, tilstand: velgTrinn(t, naermesteTrinn(pos)) };
+}
+
+/**
+ * Slipp (`pointerup`) eller avbrudd (`pointercancel`): håndtaket smetter inn.
+ *
+ * - Har håndtaket flyttet seg (`pos`), smetter det inn på trinnet nærmest der
+ *   det sto, også når eleven slipper utenfor glideren eller draget avbrytes.
+ * - Ellers var det et trykk: trinnet nærmest pekeren (`peker`, fra
+ *   `trinnFraPeker`), fordi et trykk på sporet i iOS Safari ikke flytter
+ *   håndtaket. `peker` er null når pekeren ble sluppet utenfor glideren eller
+ *   draget ble avbrutt, og da endres ingenting: urørt forblir urørt.
+ */
+export function smettInn(
+  t: Glidertilstand,
+  { pos, peker }: { pos: number | null; peker: Trinn | null },
+): Glidertilstand {
+  if (pos !== null) return velgTrinn(t, naermesteTrinn(pos));
+  if (peker !== null) return velgTrinn(t, peker);
+  return t;
+}
+
 /**
  * Eleven velger trinnet håndtaket står på (klikk på håndtaket, mellomrom
  * eller Enter). Fra urørt er det «Litt».

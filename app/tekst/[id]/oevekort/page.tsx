@@ -26,7 +26,7 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
   if (tekst.tilstand !== "laast") redirect(`/tekst/${id}/aktivering`);
 
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-10 min-[760px]:max-w-[64rem] min-[760px]:px-8">
+    <main className="mx-auto w-full max-w-2xl px-4 pt-2 pb-10 min-[760px]:max-w-[64rem] min-[760px]:px-8 min-[760px]:pt-10">
       {/*
         Runde 3, bolk 2b: tilbakelenken øverst, som del av headeren (telefontest 23.11).
         Runde 3, bolk 3: bare under 760 px. Fra 760 px står den nederst på siden
@@ -40,11 +40,11 @@ export default async function Oevekortside({ params }: PageProps<"/tekst/[id]/oe
             <span aria-hidden="true">←&nbsp;</span>Tilbake til oppgavene
           </Link>
         </p>
-        <p className="mt-4 min-[760px]:mt-0 text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
+        <p className="mt-1 min-[760px]:mt-0 text-sm text-slate-600 dark:text-slate-400">Øvekort</p>
+        <h1 className="oevekort-tittel mt-1 text-2xl font-semibold tracking-tight"><Tusj>{tekst.tittel}</Tusj></h1>
       </header>
 
-      <div className="mt-8">
+      <div className="mt-3 min-[760px]:mt-8">
         {sett.status === "klar" ? (
           <Oevekort tekstId={id} kort={sett.kort} />
         ) : sett.status === "tomt" ? (

@@ -20,7 +20,10 @@
  * kontroll» står over hverandre, over kortet til høyre (til venstre med
  * «Venstrehendt»), og pilknappene (← «Forrige kort», → «Neste kort», på siste
  * kort «Ferdig») ved siden av hverandre under. Se .oevekort-flate i
- * globals.css.
+ * globals.css. Runde 3, bolk 8 (telefontest 25.11): under 760 px står
+ * tellingen («Kort N av M» og merkingene) til venstre for merkeknappene (til
+ * høyre med «Venstrehendt»), og luften og kortet er mindre, så pilene synes
+ * uten rulling på en iPhone.
  *
  * Stor skjerm (runde 3, bolk 3, fra 760 px): kortet, merkeknappene og
  * feilmeldingen står i én ramme (.oevekort-ramme), og knappene står nederst
@@ -184,16 +187,6 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
 
   return (
     <section aria-label="Øvekort">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm text-slate-600 dark:text-slate-400">
-        <p>
-          Kort {indeks + 1} av {runde.length}
-          {modus === "maa_oeve" && " — bare de du vil øve mer på"}
-        </p>
-        <p>
-          Har kontroll: {telling.kan} · Må øve: {telling.maaOeve} · Ikke merket: {telling.ikke}
-        </p>
-      </div>
-
       {/*
         Kortet. aria-live, så skjermleseren leser baksiden når den snus.
 
@@ -202,6 +195,24 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
         forklaringen» — aldri selve fagordet. Funnet av axe-core 16.10.
       */}
       <div className="oevekort-flate">
+        {/*
+          Tellingen står først i DOM-en, så skjermleseren leser den før kortet.
+          Runde 3, bolk 8 (telefontest 25.11): under 760 px står den til
+          venstre for merkeknappene (til høyre med «Venstrehendt»), der det
+          ellers er tomt, så pilene under kortet synes uten rulling (plasseringen
+          står i .oevekort-flate i globals.css). Fra 760 px står den over kortet
+          som før, lagt ut av Tailwind-klassene under (min-[760px]:…).
+        */}
+        <div className="oevekort-telling flex flex-col gap-1 text-sm text-slate-600 dark:text-slate-400 min-[760px]:flex-row min-[760px]:flex-wrap min-[760px]:items-baseline min-[760px]:justify-between min-[760px]:gap-2">
+          <p>
+            Kort {indeks + 1} av {runde.length}
+            {modus === "maa_oeve" && " — bare de du vil øve mer på"}
+          </p>
+          <p>
+            Har kontroll: {telling.kan} · Må øve: {telling.maaOeve} · Ikke merket: {telling.ikke}
+          </p>
+        </div>
+
         {/*
           Runde 3, bolk 3: rammen rundt kortet, merkeknappene og feilmeldingen.
           Kortet er en knapp og kan ikke inneholde knapper, så «inne i kortet»
@@ -229,14 +240,19 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
             type="button"
             onClick={() => setSnudd((s) => !s)}
             aria-pressed={snudd}
-            className="mt-3 block min-h-56 w-full rounded-lg border-2 border-slate-300 bg-white p-6 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900"
+            className="mt-3 block min-h-34 w-full rounded-lg border-2 border-slate-300 bg-white p-4 text-left shadow-sm hover:border-slate-500 dark:border-slate-600 dark:bg-slate-900 min-[760px]:min-h-56 min-[760px]:p-6"
           >
+            {/*
+              Runde 3, bolk 8: under 760 px er kortet lavere (minst 8,5 rem, før
+              14 rem) og har mindre polstring og luft, så pilene synes uten
+              rulling. Det er minstehøyder: innholdet får alltid plass.
+            */}
             <div aria-live="polite">
               {!snudd ? (
-                <div className="flex min-h-44 flex-col items-center justify-center text-center">
-                  {gjeldende.tekst && <p className="mb-3 text-base text-dempet">Fra «{gjeldende.tekst.tittel}»</p>}
+                <div className="flex min-h-[calc(6.5rem-4px)] flex-col items-center justify-center text-center min-[760px]:min-h-44">
+                  {gjeldende.tekst && <p className="mb-2 text-base text-dempet min-[760px]:mb-3">Fra «{gjeldende.tekst.tittel}»</p>}
                   <p className="text-3xl font-semibold tracking-tight">{gjeldende.uttrykk}</p>
-                  <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Hva betyr det? Trykk for å snu.</p>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 min-[760px]:mt-4">Hva betyr det? Trykk for å snu.</p>
                 </div>
               ) : (
                 <div>
@@ -285,7 +301,7 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
           kort, så den er alltid lukket på et nytt kort.
         */}
         {snudd && (
-          <div className="mt-3">
+          <div className="oevekort-kilde mt-3">
             <Kildeavsnitt tekstId={tekstFor(gjeldende)} {...gjeldende.kildeavsnitt} />
           </div>
         )}

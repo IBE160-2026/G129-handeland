@@ -2513,7 +2513,8 @@ button.ls-fagord[aria-expanded="true"] {
  * I DOM-en kommer merkeknappene etter kortet, så Tab og skjermleseren går
  * kortet → «Må øve mer» → «Har kontroll» → feilmeldingen → «Se hvor det står i teksten»
  * (når kortet er snudd) → «Forrige kort» → «Neste kort». `order` flytter knappene og
- * feilmeldingen bare visuelt over kortet.
+ * feilmeldingen bare visuelt over kortet. Tellingen («Kort N av M» og
+ * merkingene) står først i .oevekort-flate, så den leses før kortet.
  */
 .oevekort-flate {
   display: flex;
@@ -2524,23 +2525,12 @@ button.ls-fagord[aria-expanded="true"] {
   display: contents;
 }
 .oevekort-merk {
-  order: -1;
-  align-self: flex-end;
   /* Like brede: kolonnen er så bred som den bredeste knappen, og begge strekkes. */
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.75rem;
   max-width: 100%;
-  margin-top: 0.75rem;
-}
-:root[data-hand="venstre"] .oevekort-merk {
-  align-self: flex-start;
-}
-/* Feilmeldingen fra merkingen står over kortet, rett etter knappene eleven trykket på. */
-.oevekort-feil {
-  order: -1;
-  margin-top: 0.75rem;
 }
 .oevekort-nav {
   display: grid;
@@ -2552,6 +2542,74 @@ button.ls-fagord[aria-expanded="true"] {
 .oevekort-nav > button {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/*
+ * Telefon (under 760 px; runde 3, bolk 8, avgjort av Arve 25.11, etter
+ * telefontesten der pilene havnet under skjermkanten): tellingen står til
+ * venstre for merkeknappene, i flukt med toppen av «Må øve mer», der det
+ * ellers var tomt. Med «Venstrehendt» står knappene til venstre og tellingen
+ * til høyre for dem. Rekkefølgen på skjermen er tellingen og knappene, så
+ * feilmeldingen, kortet, kilden og pilene.
+ *
+ * .oevekort-flate er en flex-rad som brytes: hver del er en hel linje, unntatt
+ * tellingen og knappene, som deler den første. Tellingen er minst 7 rem bred;
+ * er det ikke plass (320 px med stor tekst), går den over knappene i full
+ * bredde, og knappene står under, mot sin kant. Ingenting dekker noe, og
+ * siden ruller ikke sidelengs. DOM-en og Tab er uendret (`order`).
+ */
+@media (max-width: 759.98px) {
+  /* Sidetittelen er mindre, så en tittel over to linjer ikke skyver pilene ned (h1 er 2,25 rem ellers). */
+  .oevekort-tittel {
+    font-size: 1.75rem;
+  }
+  .oevekort-flate {
+    flex-flow: row wrap;
+    align-items: flex-start;
+    column-gap: 0.75rem;
+  }
+  .oevekort-flate > *,
+  .oevekort-ramme > * {
+    flex: 0 0 100%;
+    min-width: 0;
+    order: 3;
+  }
+  .oevekort-flate > .oevekort-telling {
+    order: 1;
+    flex: 1 1 7rem;
+    /* Luft til «Må øve mer» når tellingen går over knappene. Ved siden av dem er
+       tellingen lavere enn knappene, så margen tar ingen plass. Ikke row-gap:
+       den ville lagt luft mellom alle linjene. */
+    margin-bottom: 0.5rem;
+  }
+  .oevekort-ramme > .oevekort-merk {
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+  /* Feilmeldingen fra merkingen står over kortet, rett under knappene eleven trykket på. */
+  .oevekort-ramme > .oevekort-feil {
+    order: 3;
+    margin-top: 0.75rem;
+  }
+  .oevekort-ramme > button[aria-pressed] {
+    order: 4;
+  }
+  .oevekort-flate > .oevekort-kilde {
+    order: 5;
+  }
+  .oevekort-flate > .oevekort-nav {
+    order: 6;
+    margin-top: 0.75rem;
+  }
+  /* Speilet: knappene mot venstre kant, tellingen til høyre for dem (eller over, uten plass). */
+  :root[data-hand="venstre"] .oevekort-flate {
+    flex-direction: row-reverse;
+  }
+  :root[data-hand="venstre"] .oevekort-ramme > .oevekort-merk {
+    margin-left: 0;
+    margin-right: auto;
+  }
 }
 
 /*
@@ -2606,9 +2664,7 @@ button.ls-fagord[aria-expanded="true"] {
     margin: 0 1.5rem 1.5rem;
     cursor: auto;
   }
-  /* align-self også her: regelen for venstrehendt under 760 px (flex-start) er mer spesifikk. */
   :root[data-hand="venstre"] .oevekort-ramme > .oevekort-merk {
-    align-self: stretch;
     flex-direction: row-reverse;
   }
   /* Like brede, og med stor tekst brytes navnet inne i knappen heller enn å flyte ut. */
