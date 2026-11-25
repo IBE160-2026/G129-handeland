@@ -61,13 +61,13 @@
 - [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Avgjør om Mapper skal ha egen suksessmetrikk eller et steg i demotesten (§9.5) (løst 2026-11-19: steg 13b og SM-13)
 - [x] 2026-11-19 [mapper-lett](993-2026-11-19-17-01-37-mapper-lett.md) — Test mappene på telefon i prod (løst 2026-11-25: punkt 8 OK, og mappene i Samlinger er striper med fane, bolk 7)
 - [x] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Rull ut grenen vilkaar: Neon-migrering 0010 før koden, merge og vercel --prod (krever ja) (rullet ut 2026-11-20, main = dddbfea)
-- [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Etter utrulling: del 3-test C (feil passord på rad) i prod på nytt, og registrer en ny testkonto i prod
+- [x] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Etter utrulling: del 3-test C (feil passord på rad) i prod på nytt, og registrer en ny testkonto i prod (løst 2026-11-25: telefonsjekklistens punkt 1 og 2 OK på iPhone)
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Fyll ut «Hva jeg tenker om resultatet» i gjennomgang-innlogging.md
 - [ ] 2026-11-20 [vilkaar-og-aldersgrense](992-2026-11-20-00-47-51-vilkaar-og-aldersgrense.md) — Les KI-logg nr. 26
 - [x] 2026-11-20 [design-runde-2](994-2026-11-19-14-59-26-design-runde-2.md) — Rull ut grenen samling-tusj (krever ja) (rullet ut 2026-11-20, main = 3759cd3)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Bolk 4 (Samlinger på stor skjerm, dra og slipp + «Legg i mappe») og bolk 5 (arbeidsbordet grupperer etter Mappe) gjenstår før kodefrys 27.11 (løst 2026-11-24: rullet ut med bolk 6, main = 2fa5ff2)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test i prod på iPhone: forkunnskapsglideren (trykk ytterst på sporet, dra, VoiceOver) og øvekortenes piler, og mappene i Samlinger og på bordet med VoiceOver (sjekklistens punkt 25) (løst 2026-11-25: punkt 4, 12 og 14 OK; glideren hoppet ved drag, rettet i bolk 8 og godkjent i prod, main = 9846a90)
-- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0
+- [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0 (løst 2026-11-25: punkt 2 OK)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester (fylt på 2026-11-25)
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Innloggingssperren teller per IP: en klasse på samme skolenett deler fem forsøk (deferred-work.md)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Skjermleser på PC: «Legg i mappe» leses med valg, «alt med» og meldingen etter sending (sjekklistens punkt 10)
