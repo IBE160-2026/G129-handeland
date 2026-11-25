@@ -68,7 +68,7 @@
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Bolk 4 (Samlinger på stor skjerm, dra og slipp + «Legg i mappe») og bolk 5 (arbeidsbordet grupperer etter Mappe) gjenstår før kodefrys 27.11 (løst 2026-11-24: rullet ut med bolk 6, main = 2fa5ff2)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test i prod på iPhone: forkunnskapsglideren (trykk ytterst på sporet, dra, VoiceOver) og øvekortenes piler, og mappene i Samlinger og på bordet med VoiceOver (sjekklistens punkt 25) (løst 2026-11-25: punkt 4, 12 og 14 OK; glideren hoppet ved drag, rettet i bolk 8 og godkjent i prod, main = 9846a90)
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0
-- [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester
+- [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester (fylt på 2026-11-25)
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Innloggingssperren teller per IP: en klasse på samme skolenett deler fem forsøk (deferred-work.md)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Skjermleser på PC: «Legg i mappe» leses med valg, «alt med» og meldingen etter sending (sjekklistens punkt 10)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Feilveien i draget (full mappe, nettfeil) og «Legg i mappe» uten JavaScript er ikke testet i nettleseren (deferred-work.md)
