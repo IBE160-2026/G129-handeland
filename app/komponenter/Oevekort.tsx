@@ -209,7 +209,10 @@ export function Oevekort({ tekstId, kort }: { tekstId?: string; kort: Kortet[] }
             {modus === "maa_oeve" && " — bare de du vil øve mer på"}
           </p>
           <p>
-            Har kontroll: {telling.kan} · Må øve: {telling.maaOeve} · Ikke merket: {telling.ikke}
+            {/* Linjen brytes bare mellom delene, aldri inne i «Ikke merket» (Arve, 25.11). */}
+            <span className="whitespace-nowrap">Har kontroll: {telling.kan} ·</span>{" "}
+            <span className="whitespace-nowrap">Må øve: {telling.maaOeve} ·</span>{" "}
+            <span className="whitespace-nowrap">Ikke merket: {telling.ikke}</span>
           </p>
         </div>
 
