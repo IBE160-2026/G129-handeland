@@ -70,6 +70,8 @@
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Test sperren i prod: seks feil passord → nedtelling, «Du kan prøve igjen nå.» ved 0 (løst 2026-11-25: punkt 2 OK)
 - [x] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Fyll på API-kreditten (2,48 $ igjen 23.11) og sett grense i Claude Console før elevtester (fylt på 2026-11-25)
 - [ ] 2026-11-23 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Innloggingssperren teller per IP: en klasse på samme skolenett deler fem forsøk (deferred-work.md)
-- [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Skjermleser på PC: «Legg i mappe» leses med valg, «alt med» og meldingen etter sending (sjekklistens punkt 10)
+- [x] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Skjermleser på PC: «Legg i mappe» leses med valg, «alt med» og meldingen etter sending (sjekklistens punkt 10) (løst 2026-11-28: godkjent av Arve før kodefrysen)
 - [ ] 2026-11-24 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — Feilveien i draget (full mappe, nettfeil) og «Legg i mappe» uten JavaScript er ikke testet i nettleseren (deferred-work.md)
 - [ ] 2026-11-25 [design-runde-3](991-2026-11-23-22-32-36-design-runde-3.md) — E2: sjekken for sidelengs rulling sammenligner scrollWidth med innerWidth i en isMobile-kontekst og kan bomme (deferred-work.md)
+- [ ] 2026-11-28 [kodefrys](990-2026-11-28-11-16-40-kodefrys.md) — Refleksjonsrapporten: skriv ✍️-feltene, fyll inn Student-ID, leveringsdato, prod-URL og skjermbilder, slett 📎-linjene
+- [ ] 2026-11-28 [kodefrys](990-2026-11-28-11-16-40-kodefrys.md) — Beskriv de fire kjente begrensningene i dokumentasjonen (error.tsx, sperre per IP, ARIA på /ny-fanene, feilveien i draget)
