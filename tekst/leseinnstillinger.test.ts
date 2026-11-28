@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, test } from "vitest";
-import { LINJELENGDE_CH, STANDARD, lesestil, tolkInnstillinger } from "./leseinnstillinger";
+import { LINJELENGDE_EM, STANDARD, lesestil, tolkInnstillinger } from "./leseinnstillinger";
 
 describe("FR-12 — leseinnstillinger", () => {
   test("gyldige trinn tolkes som de er", () => {
@@ -20,8 +20,8 @@ describe("FR-12 — leseinnstillinger", () => {
     expect(tolkInnstillinger({ tekststorrelse: "constructor" }).tekststorrelse).toBe("normal");
   });
 
-  test("linjelengden regnes i tegn, så den følger tekststørrelsen", () => {
-    expect(lesestil(STANDARD).maxWidth).toBe(`${LINJELENGDE_CH}ch`);
+  test("linjelengden regnes i em, så den følger tekststørrelsen", () => {
+    expect(lesestil(STANDARD).maxWidth).toBe(`${LINJELENGDE_EM}em`);
     expect(lesestil({ tekststorrelse: "ekstra", linjeavstand: "tett" })).toMatchObject({ fontSize: "2rem", lineHeight: 1.5, "--avsnittsavstand": "0.8em" });
   });
 });

@@ -146,8 +146,18 @@ export default async function Lesing({
   // FR-6: delen «Før du leste», eller null når det ikke er noe å vise.
   const foer = foerDuLeste(tekst);
 
+  // Ekstra stor: fagordlisten under teksten, ellers er det ikke plass til
+  // linjer på om lag 70 tegn ved siden av den. Forklaringene åpnes ved ordet.
+  const fagordUnder = innstillinger.tekststorrelse === "ekstra";
+
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-10">
+    <main className="mx-auto w-full max-w-5xl px-4 py-10 lg:max-w-[70rem] lg:px-5">
+      {/*
+       * Fra lg samme ramme som topplinjen (28.11): med fast 64 rem fikk teksten
+       * aldri mer enn 664 px, så linjene ble kortere jo større skrift eleven
+       * valgte (42 tegn på Ekstra stor). Fagordene står mot høyre kant
+       * (justify-between under), og på Ekstra stor under teksten.
+       */}
       <p className="text-sm text-slate-600 dark:text-slate-400">
         {stegtekst(tekst.vei, "lesing")} — les teksten
       </p>
@@ -170,8 +180,8 @@ export default async function Lesing({
         </p>
       )}
 
-      <div className="mt-8 gap-10 lg:flex">
-        {/* FR-12: størrelse og linjeavstand fra kontoen; linjelengden i ch holder ca. 70 tegn. */}
+      <div className={`mt-8 gap-10 ${fagordUnder ? "" : "lg:flex lg:justify-between"}`}>
+        {/* FR-12: størrelse og linjeavstand fra kontoen; linjelengden i em holder ca. 70 tegn. */}
         <article id="lesetekst" style={lesestil(innstillinger)} className="min-w-0 flex-1">
           <UthevAvsnitt />
           {avsnitt.map((a) => (
@@ -185,7 +195,7 @@ export default async function Lesing({
           ))}
         </article>
 
-        <aside className="mt-10 shrink-0 lg:mt-0 lg:w-72">
+        <aside className={fagordUnder ? "mt-10 max-w-[34rem]" : "mt-10 shrink-0 lg:mt-0 lg:w-72"}>
           <h2 className="font-semibold tracking-tight">Fagord i teksten</h2>
 
           {sett === null ? (

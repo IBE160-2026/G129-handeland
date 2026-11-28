@@ -127,7 +127,7 @@ spacing:
   gutter: 20px
   content-max: 1080px
   board-max: 1120px
-  reading-measure: 70ch
+  reading-measure: 37em  # ≈ 77 tegn; 70ch ga ca. 95 tegn (målt 28.11.2026)
   lead-measure: 62ch
   target-min: 44px
 elevation:

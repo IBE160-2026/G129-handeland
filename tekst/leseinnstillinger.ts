@@ -4,9 +4,12 @@
  * Trinnene står her, ett sted. Databasen lagrer navnet på trinnet, så et
  * trinn kan gjøres litt større uten migrasjon.
  *
- * Linjelengden regnes i `ch` (bredden av et tegn i gjeldende skrift). Da
- * holder den seg på om lag 70 tegn også når eleven gjør skriften større —
- * en fast bredde i rem ville gitt kortere og kortere linjer.
+ * Linjelengden regnes i `em`, så den vokser med skriften og holder seg på om
+ * lag 70 tegn også når eleven gjør skriften større — en fast bredde i rem
+ * ville gitt kortere og kortere linjer. Ikke i `ch`: `ch` er bredden av «0»,
+ * og et vanlig tegn i brødteksten er smalere, så 70ch ga om lag 95 tegn
+ * (målt 28.11.2026: 664 px ga 77 tegn med 18 px skrift, altså ca. 0,48 em
+ * per tegn).
  */
 
 export const TEKSTSTORRELSER = {
@@ -34,8 +37,11 @@ export type Leseinnstillinger = { tekststorrelse: Tekststorrelse; linjeavstand: 
 
 export const STANDARD: Leseinnstillinger = { tekststorrelse: "normal", linjeavstand: "normal" };
 
-/** FR-12: om lag 70 tegn per linje. */
-export const LINJELENGDE_CH = 70;
+/**
+ * FR-12 og PRD §5: om lag 70 tegn per linje. 37 em ≈ 77 tegn, samme bredde
+ * som Normal hadde før 28.11 (Arve ville ikke ha teksten smalere).
+ */
+export const LINJELENGDE_EM = 37;
 
 /**
  * Tolker lagrede eller innsendte verdier. Ukjent trinn gir standarden, aldri en
@@ -58,7 +64,7 @@ export function lesestil(i: Leseinnstillinger) {
   return {
     fontSize: `${TEKSTSTORRELSER[i.tekststorrelse].rem}rem`,
     lineHeight: LINJEAVSTANDER[i.linjeavstand].faktor,
-    maxWidth: `${LINJELENGDE_CH}ch`,
+    maxWidth: `${LINJELENGDE_EM}em`,
     [AVSNITTSVARIABEL]: `${LINJEAVSTANDER[i.linjeavstand].avsnitt}em`,
   };
 }
