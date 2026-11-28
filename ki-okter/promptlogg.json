@@ -4448,6 +4448,158 @@
       "slutt": "2026-11-24T10:10:18.077Z",
       "modell": "claude-opus-5-5",
       "tekst": "[innlimt tekst:]\n\nProdtest runde 3 (bolk 4 og 5), main 002b6ab\nOK: 1, 2, 3, 4, 5, 8, 9, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24\nIkke testet: 10, 25\nAVVIK 6. Dra fra knappene på raden: Joda, det starter flytting av rad, og legges til i mappene\nAVVIK 7. Slipp en tekst på søkefeltet: jo, hele lenka til teksten legges til i søkefeltet. (http://lesevenn...)\nAVVIK 15. Velg et tekstkort: Tror ikke fokus stod noe sted. (kanskje på mappen)"
+    },
+    {
+      "uuid": "5337f962-51b6-46d4-b396-b79263df6893",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-24T11:49:04.277Z",
+      "slutt": "2026-11-24T11:49:04.749Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "ja, kjør"
+    },
+    {
+      "uuid": "8abd328c-2f51-40b6-8884-9be176230b33",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-24T22:11:16.319Z",
+      "slutt": "2026-11-24T22:21:50.922Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Flott! Neste steg?"
+    },
+    {
+      "uuid": "d9aaffcb-fe54-43c4-a0a7-d5579ca6116f",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-24T22:21:51.060Z",
+      "slutt": "2026-11-24T22:27:05.495Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "1: gudd, og godkjent. \n2: kjør!"
+    },
+    {
+      "uuid": "368d4713-21f6-4423-b89f-cfc1460e16f0",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-24T22:27:05.517Z",
+      "slutt": "2026-11-24T23:04:18.580Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Inne på \"Samlinger\" så kan gjerne mappene se ut som mapper der også. \nLag sjekkliste for telefonpunktene"
+    },
+    {
+      "uuid": "7d607c77-10ac-4da5-9fac-4c4c2cb3d978",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-24T23:04:18.602Z",
+      "slutt": "2026-11-24T23:15:45.416Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "En tanke her, og så kopierer jeg fra nettsiden. \nEn ting jeg tenkte på når jeg åpnet quizen på mobilen: når siden lastes først, så blir pilene dyttet ned utenfor skjermen, slik at jeg må scrolle ned for å se dem. Er det noe å gjøre med det? Gjøre \"tilbake til oppgavene\" litt høyere og/eller mindre? Flytte oversikten \"kort 3 av 5, Har kontroll, må øve\" slik at de enten står på samme linje som knappene \"må øve mer\" og \"kontroll\", eller på samme linje som overskriften?"
+    },
+    {
+      "uuid": "0815ca38-3a8d-4b3f-b51b-e69cfc995dc6",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T08:03:34.626Z",
+      "slutt": "2026-11-25T08:03:35.076Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Rull ut"
+    },
+    {
+      "uuid": "5a5cf760-f08e-41ee-a4b5-166d09b07973",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T09:19:12.587Z",
+      "slutt": "2026-11-25T09:34:56.765Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Glider er gudd!\nØvekort: Nå er det fint, men det er linjebrudd mellom \"Ikke\" og \"merket\". Kan hele den flyttes til neste rad. \n3: topp!"
+    },
+    {
+      "uuid": "8a115f6d-91bc-4335-bb06-d0304ecc092a",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T09:34:56.824Z",
+      "slutt": "2026-11-25T09:49:02.810Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "rull"
+    },
+    {
+      "uuid": "beef0037-c5b6-44a7-a072-1e63673d57ae",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T09:49:02.745Z",
+      "slutt": "2026-11-25T09:55:50.869Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Liten ting: nå står det en prikk (skilletegn) etter Må øve \"tall\". Kan den fjernes, siden vi nå har et linjeskift trengs den ikke"
+    },
+    {
+      "uuid": "02ae4428-40a7-4146-b053-5ac01c2b7822",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T09:55:50.892Z",
+      "slutt": "2026-11-25T10:02:29.056Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "tull"
+    },
+    {
+      "uuid": "f5d9a3c7-961a-4eb8-829c-a8daf5dd77ff",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:02:29.100Z",
+      "slutt": "2026-11-25T10:05:04.162Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "rull ut"
+    },
+    {
+      "uuid": "76a4160c-5546-41f6-a553-f27acbb164ec",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:05:04.182Z",
+      "slutt": "2026-11-25T10:18:43.411Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Fint! Hva nå?"
+    },
+    {
+      "uuid": "aa17909b-7314-4db3-acab-4dfc6f980ce3",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:18:43.461Z",
+      "slutt": "2026-11-25T10:27:10.113Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Jeg finner ikke invitasjonskoden i vercel. lag ny. \nApi er fylt på."
+    },
+    {
+      "uuid": "21b9b691-0a2e-4fbb-8ba2-12759cdea838",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:27:10.137Z",
+      "slutt": "2026-11-25T10:30:37.896Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "rull ut"
+    },
+    {
+      "uuid": "b0be9cb9-c8db-4ce9-a684-e99e0c85d89c",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:30:37.922Z",
+      "slutt": "2026-11-25T10:36:58.778Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "har det noe å si om det er på pc eller mobil?"
+    },
+    {
+      "uuid": "9b3d8396-5136-474e-92a4-a84f2e27add0",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T10:36:58.835Z",
+      "slutt": "2026-11-25T11:11:44.505Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Begge deler fungerte bra"
+    },
+    {
+      "uuid": "b791b521-1641-4830-97cb-95c46da884e5",
+      "okt": "14cbc0a9-2858-416d-8b2d-eb5d984bfe7c",
+      "tid": "2026-11-25T11:11:44.552Z",
+      "slutt": "2026-11-25T11:25:34.462Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "yes, start prd2"
+    },
+    {
+      "uuid": "60852167-2da7-4fc5-aa92-e9f879d4da38",
+      "okt": "cedf4615-d757-49c7-8299-d6c034e24b95",
+      "tid": "2026-11-28T09:43:37.856Z",
+      "slutt": "2026-11-28T09:46:41.228Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "[kommando: /clear]"
+    },
+    {
+      "uuid": "1593d88f-026a-43f3-bce9-9aabb1862188",
+      "okt": "cedf4615-d757-49c7-8299-d6c034e24b95",
+      "tid": "2026-11-28T09:46:41.291Z",
+      "slutt": "2026-11-28T09:47:35.530Z",
+      "modell": "claude-opus-5-5",
+      "tekst": "Hei, jeg har vært syk, og ligger derfor bak mtp. kodefrys, men innleveringsfristen er 15. desember, så det bør gå fint. Vi prøver likevel forholde oss til den opprinnelige innleveringsfristen. \nJeg vil ta det som trengs gjøres for kodefrys nå. Gi meg en gjennomgang."
     }
   ]
 }

@@ -12,7 +12,7 @@ Hver prompt jeg har skrevet til Claude Code i IBE160-prosjektet, **ordrett**, me
 
 Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte tekster er kortet ned. Nøkler og passord fjernes automatisk.
 
-**556 prompter i 54 økter**, 2026-09-17 til 2026-11-24.
+**575 prompter i 56 økter**, 2026-09-17 til 2026-11-28.
 
 ---
 
@@ -3588,9 +3588,116 @@ Systemmeldinger fra verktøyet og innholdet i vedlegg er utelatt; lange innlimte
 > AVVIK 7. Slipp en tekst på søkefeltet: jo, hele lenka til teksten legges til i søkefeltet. (http://lesevenn...)
 > AVVIK 15. Velg et tekstkort: Tror ikke fokus stod noe sted. (kanskje på mappen)
 
-<details><summary>Commits i økta (2)</summary>
+**12:49**
+
+> ja, kjør
+
+**23:11**
+
+> Flott! Neste steg?
+
+**23:21**
+
+> 1: gudd, og godkjent.
+> 2: kjør!
+
+**23:27**
+
+> Inne på "Samlinger" så kan gjerne mappene se ut som mapper der også.
+> Lag sjekkliste for telefonpunktene
+
+<details><summary>Commits i økta (6)</summary>
 
 - `50fd9d3` feat: arbeidsbordet grupperer etter Mappe (runde 3, bolk 5)
 - `002b6ab` README-test etter runde 3, bolk 5: 9 av 9
+- `5830333` fix: rettinger etter prodtesten av runde 3 (bolk 6)
+- `2fa5ff2` README-test etter runde 3, bolk 6: 9 av 9
+- `e79f7b7` Logg: design-runde-3
+- `3ba0049` Logg: design-runde-3 (åpne punkter)
 
 </details>
+
+---
+
+## 2026-11-25 · økt `14cbc0a9` · claude-opus-5-5
+
+**00:04**
+
+> En tanke her, og så kopierer jeg fra nettsiden.
+> En ting jeg tenkte på når jeg åpnet quizen på mobilen: når siden lastes først, så blir pilene dyttet ned utenfor skjermen, slik at jeg må scrolle ned for å se dem. Er det noe å gjøre med det? Gjøre "tilbake til oppgavene" litt høyere og/eller mindre? Flytte oversikten "kort 3 av 5, Har kontroll, må øve" slik at de enten står på samme linje som knappene "må øve mer" og "kontroll", eller på samme linje som overskriften?
+
+**09:03**
+
+> Rull ut
+
+**10:19**
+
+> Glider er gudd!
+> Øvekort: Nå er det fint, men det er linjebrudd mellom "Ikke" og "merket". Kan hele den flyttes til neste rad.
+> 3: topp!
+
+**10:34**
+
+> rull
+
+**10:49**
+
+> Liten ting: nå står det en prikk (skilletegn) etter Må øve "tall". Kan den fjernes, siden vi nå har et linjeskift trengs den ikke
+
+**10:55**
+
+> tull
+
+**11:02**
+
+> rull ut
+
+**11:05**
+
+> Fint! Hva nå?
+
+**11:18**
+
+> Jeg finner ikke invitasjonskoden i vercel. lag ny.
+> Api er fylt på.
+
+**11:27**
+
+> rull ut
+
+**11:30**
+
+> har det noe å si om det er på pc eller mobil?
+
+**11:36**
+
+> Begge deler fungerte bra
+
+**12:11**
+
+> yes, start prd2
+
+<details><summary>Commits i økta (7)</summary>
+
+- `a79c4b8` feat: mappene i Samlinger ser ut som mapper (runde 3, bolk 7)
+- `8c5b8ca` fix: øvekortenes piler synes på telefon, og glideren glir (runde 3, bolk 8)
+- `17ed5fd` fix: tellingen på øvekortene brytes ikke inne i «Ikke merket»
+- `9846a90` fix: «Ikke merket» på egen linje uten prikk foran på telefon
+- `9d63ebf` Logg: design-runde-3 (telefontest, bolk 7 og 8, 25.11)
+- `6872ea5` Logg: ny invitasjonskode og API-kreditt (25.11)
+- `1ce6de3` Logg: registrering og innloggingssperren testet i prod (25.11)
+
+</details>
+
+---
+
+## 2026-11-28 · økt `cedf4615` · claude-opus-5-5
+
+**10:43**
+
+> [kommando: /clear]
+
+**10:46**
+
+> Hei, jeg har vært syk, og ligger derfor bak mtp. kodefrys, men innleveringsfristen er 15. desember, så det bør gå fint. Vi prøver likevel forholde oss til den opprinnelige innleveringsfristen.
+> Jeg vil ta det som trengs gjøres for kodefrys nå. Gi meg en gjennomgang.
